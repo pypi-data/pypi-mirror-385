@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c \"\nimport sys\nsys.path.insert(0, ''/Users/benhandzo/Developer/mcposprint'')\nfrom mcposprint.server import todo_list_cards_from_markdown\nresult = todo_list_cards_from_markdown(''sample_cards.md'', no_print=True)\nprint(''Generated files:'')\nfor f in result:\n    print(f''  - {f}'')\n\")",
+      "Bash(python3 -c \"\nimport inspect\nfrom mcposprint import server\n\n# Get all functions decorated with mcp tools\nprint(''MCP Tools registered in server.py:'')\nfor name in dir(server):\n    obj = getattr(server, name)\n    if callable(obj) and not name.startswith(''_''):\n        # Check if it has mcp metadata\n        if hasattr(obj, ''__wrapped__'') or name in [''todo_list_cards_from_markdown'', ''task_cards_from_notion'', ''print_only'', ''test_printer_connection'', ''run_diagnostics'', ''info'', ''create_sample_files'']:\n            sig = inspect.signature(obj)\n            params = list(sig.parameters.keys())\n            print(f''  - {name}({'', ''.join(params)})'')\n\")"
+    ],
+    "deny": [],
+    "ask": []
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "mcposprint"
+  ]
+}
