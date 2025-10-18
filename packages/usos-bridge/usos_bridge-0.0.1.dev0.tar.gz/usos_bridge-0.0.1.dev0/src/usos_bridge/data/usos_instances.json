@@ -1,0 +1,13 @@
+[
+  {
+    "instance_id": "pwr",
+    "auth_page_url": "https://login.pwr.edu.pl/auth/realms/pwr.edu.pl/protocol/cas/login?service=https%3A%2F%2Fweb.usos.pwr.edu.pl%2Fkontroler.php%3F_action%3Dlogowaniecas%2Findex&locale=pl",
+    "proxy_endpoint": "https://web.usos.pwr.edu.pl/usosapiProxy.php",
+    "proxy_api_method_param_key": "_method_",
+    "session_cookie_name": "PHPSESSID",
+    "login_form_selector": "form.login-form",
+    "csrf_token_page": "https://web.usos.pwr.edu.pl/kontroler.php?_action=home/usos_mail/historia",
+    "csrf_token_regex": "csrftoken\\s*=\\s*\"(\\d{4}-\\d{2}-\\d{2}-[a-f0-9]{16})\";",
+    "csrf_token_data_key": "_csrftoken_"
+  }
+]
