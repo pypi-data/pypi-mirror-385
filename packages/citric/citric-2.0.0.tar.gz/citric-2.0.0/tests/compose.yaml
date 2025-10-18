@@ -1,0 +1,59 @@
+services:
+  limesurvey:
+    image: martialblog/limesurvey:${LS_IMAGE_TAG:-6-apache}
+    volumes:
+      - "surveys:/var/www/html/upload/surveys"
+      - "apache:/var/log/apache2"
+      - "./resources/config.php:/var/www/html/application/config/config.php"
+    depends_on:
+      - db
+    ports:
+      - "${LS_PORT:-8001}:8080"
+    environment:
+      DB_TYPE: pgsql
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: limesurvey
+      DB_USERNAME: limesurvey
+      DB_PASSWORD: secret
+      ADMIN_USER: ${LS_USER:-iamadmin}
+      ADMIN_NAME: Lime Administrator
+      ADMIN_PASSWORD: ${LS_PASSWORD:-secret}
+      EMAIL_SMTPHOST: ${LS_SMTP_HOST:-mailpit:1025}
+      EMAIL_SMTPUSER: ${LS_SMTP_USER:-citric@example.com}
+      EMAIL_SMTPPASSWORD: ${LS_SMTP_PASSWORD:-secret}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/index.php/admin"]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+
+  db:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: limesurvey
+      POSTGRES_DB: limesurvey
+      POSTGRES_PASSWORD: secret
+    volumes:
+      - "limedb:/var/lib/postgresql/data"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "limesurvey"]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+
+  mailpit:
+    image: axllent/mailpit:v1.27
+    environment:
+      MP_SMTP_AUTH: "citric@example.com:secret"
+      MP_SMTP_AUTH_ALLOW_INSECURE: "true"
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+volumes:
+  apache:
+  limedb:
+  surveys:
+  object_storage:

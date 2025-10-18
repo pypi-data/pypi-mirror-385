@@ -1,0 +1,368 @@
+name: Tests
+
+permissions: {}
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+    paths:
+    - examples/**
+    - src/**
+    - tests/**
+    - docker-compose*.yml
+    - noxfile.py
+    - pyproject.toml
+    - requirements/requirements*.txt
+    - uv.lock
+    - .github/workflows/tests.yml
+    - .github/workflows/resources/tags.json
+    - .github/actions/install-tools/action.yml
+  push:
+    branches:
+    - 'main'
+    paths:
+    - examples/**
+    - src/**
+    - tests/**
+    - docker-compose*.yml
+    - noxfile.py
+    - pyproject.toml
+    - requirements/requirements*.txt
+    - uv.lock
+    - .github/workflows/tests.yml
+    - .github/workflows/resources/tags.json
+    - .github/actions/install-tools/action.yml
+  schedule:
+  - cron: "25 7 * * 1"
+  workflow_dispatch:
+    inputs:
+      all_integrations:
+        description: "Test against all the latest LimeSurvey docker image tags and all database engines"
+        required: true
+        default: false
+        type: boolean
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+env:
+  FORCE_COLOR: "1"
+  # renovate: datasource=pypi depName=nox
+  NOX_VERSION: 2025.5.1
+  # renovate: datasource=pypi depName=uv
+  UV_VERSION: 0.9.2
+
+jobs:
+  tests:
+    name: "Python ${{ matrix.python-version }} / ${{ matrix.os }}"
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
+    env:
+      COVERAGE_FILE: ".coverage.unit"
+      NOXFORCEPYTHON: "${{ matrix.python-version }}"
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - python-version: "3.14"
+          os: ubuntu-24.04
+
+        - python-version: "3.13"
+          os: ubuntu-24.04
+
+        - python-version: "3.12"
+          os: ubuntu-24.04
+
+        - python-version: "3.11"
+          os: ubuntu-24.04
+
+        - python-version: "3.10"
+          os: ubuntu-24.04
+
+        - python-version: "3.9"
+          os: ubuntu-24.04
+
+        - python-version: "pypy3.11"
+          os: ubuntu-24.04
+
+        - python-version: "3.15"
+          os: ubuntu-24.04
+
+        - python-version: "3.14"
+          os: windows-2025
+
+        - python-version: "3.14"
+          os: macos-15
+
+    steps:
+    - name: Check out the repository
+      uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      with:
+        persist-credentials: false
+
+    - name: Setup Python ${{ matrix.python-version }}
+      uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c # v6.0.0
+      with:
+        python-version: ${{ matrix.python-version }}
+        architecture: x64
+        allow-prereleases: true
+
+    - name: Install tools
+      uses: ./.github/actions/install-tools
+      with:
+        nox-version: ${{ env.NOX_VERSION }}
+        uv-version: ${{ env.UV_VERSION }}
+
+    - name: Run Tests
+      run: |
+        nox --verbose -s tests -- --junit-xml=tests.xml
+
+    - name: Upload coverage data
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+      with:
+        include-hidden-files: true
+        name: "coverage-unit-${{ matrix.os }}-${{ matrix.python-version }}"
+        path: ".coverage.*"
+
+    - name: Upload test results to Codecov
+      if: ${{ !cancelled() }}
+      uses: codecov/test-results-action@47f89e9acb64b76debcd5ea40642d25a4adced9f # v1.1.1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: tests.xml
+        flags: unit-${{ matrix.os }}-${{ matrix.python-version }}
+
+    - name: Run Doctests
+      run: |
+        nox -s xdoctest
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+
+    steps:
+    - name: Check out the repository
+      uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      with:
+        persist-credentials: false
+
+    - uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c # v6.0.0
+      with:
+        python-version: 3.x
+
+    - name: Install tools
+      uses: ./.github/actions/install-tools
+      with:
+        nox-version: ${{ env.NOX_VERSION }}
+        uv-version: ${{ env.UV_VERSION }}
+
+    - uses: j178/prek-action@91fd7d7cf70ae1dee9f4f44e7dfa5d1073fe6623 # v1.0.11
+    - run: nox -t lint
+
+  docker_tags:
+    name: Get Docker tags
+    runs-on: ubuntu-24.04
+    outputs:
+      tags: ${{ steps.tags.outputs.tags }}
+    permissions:
+      contents: read
+    steps:
+    - name: Check out the repository
+      uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      with:
+        persist-credentials: false
+
+    - name: Output tags
+      id: tags
+      run: |
+        echo "tags=$(cat .github/workflows/resources/tags.json | jq -c .)" >> $GITHUB_OUTPUT
+
+  integration:
+    name: "Python ${{ matrix.python-version }} / ${{ matrix.image_tag || matrix.ref }} / ${{ matrix.database }}"
+    runs-on: ubuntu-24.04
+    continue-on-error: true
+    needs: [docker_tags]
+    permissions:
+      contents: read
+    env:
+      COVERAGE_FILE: ".coverage.integration"
+      LS_IMAGE_TAG: ${{ matrix.image_tag }}
+      LS_USER: citric_ci
+      LS_PASSWORD: notverysecret
+      NOXSESSION: integration
+      NOXFORCEPYTHON: "${{ matrix.python-version }}"
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.14"]
+        database: ["postgres"]
+        ref: [""]
+        context: [""]
+        image_tag: ${{ fromJson(needs.docker_tags.outputs.tags) }}
+        include:
+        # Test on other Python versions
+        - python-version: "3.9"
+          image_tag: "6-apache"
+          database: postgres
+
+        - python-version: "3.10"
+          image_tag: "6-apache"
+          database: postgres
+
+        - python-version: "3.11"
+          image_tag: "6-apache"
+          database: postgres
+
+        - python-version: "3.12"
+          image_tag: "6-apache"
+          database: postgres
+
+        - python-version: "3.13"
+          image_tag: "6-apache"
+          database: postgres
+
+        - python-version: "3.15"
+          image_tag: "6-apache"
+          database: postgres
+
+        - python-version: "pypy3.11"
+          image_tag: "6-apache"
+          database: postgres
+
+        - python-version: "3.14"
+          image_tag: "6-apache"
+          database: mysql
+
+        - python-version: "3.14"
+          image_tag: "5-apache"
+          database: mysql
+
+        # Test Limesurvey/LimeSurvey branches
+        - python-version: "3.14"
+          ref: refs/heads/develop
+          context: https://github.com/martialblog/docker-limesurvey.git#master:6.0/apache
+          database: postgres
+
+        - python-version: "3.14"
+          ref: refs/heads/master
+          context: https://github.com/martialblog/docker-limesurvey.git#master:6.0/apache
+          database: postgres
+
+        # - python-version: "3.12"
+        #   ref: refs/pull/3860/head
+        #   context: https://github.com/martialblog/docker-limesurvey.git#master:6.0/apache
+        #   database: postgres
+
+    steps:
+    - name: Check out the repository
+      uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      with:
+        persist-credentials: false
+
+    - name: Setup Python ${{ matrix.python-version }}
+      uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c # v6.0.0
+      with:
+        python-version: ${{ matrix.python-version }}
+        architecture: x64
+        allow-prereleases: true
+
+    - name: Install tools
+      uses: ./.github/actions/install-tools
+      with:
+        nox-version: ${{ env.NOX_VERSION }}
+        uv-version: ${{ env.UV_VERSION }}
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 # v3.11.1
+
+    - name: Get Docker
+      uses: actions-hub/docker/cli@f5fdbfc3f9d2a9265ead8962c1314108a7b7ec5d # v1.0.3
+      env:
+        SKIP_LOGIN: true
+
+    - name: Run Nox
+      id: nox-integration
+      env:
+        LS_DATABASE_TYPE: ${{ matrix.database }}
+        LS_DOCKER_CONTEXT: ${{ matrix.context }}
+        LS_DOCKERFILE: Dockerfile
+      run: |
+        nox -- --junit-xml=integration.xml
+
+    - name: Upload test results to Codecov
+      if: ${{ !cancelled() }}
+      uses: codecov/test-results-action@47f89e9acb64b76debcd5ea40642d25a4adced9f # v1.1.1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: integration.xml
+        flags: integration-${{ matrix.python-version }}-${{ matrix.image_tag || matrix.ref }}-${{ matrix.database }}
+
+    - if: always()
+      env:
+        REF: ${{ matrix.ref }}
+      run: |
+        echo "CLEAN_REF=$(echo "$REF" | tr / -)" >> $GITHUB_ENV
+
+    - name: Upload coverage data
+      if: always()
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+      with:
+        include-hidden-files: true
+        name: "coverage-integration-${{ matrix.python-version }}-${{ matrix.image_tag || env.CLEAN_REF }}-${{ matrix.database }}"
+        path: ".coverage.*"
+
+  coverage:
+    name: Coverage
+    runs-on: ubuntu-24.04
+    needs: [tests, integration]
+    permissions:
+      contents: read
+    env:
+      NOXSESSION: coverage
+    strategy:
+      matrix:
+        flag: ["unit", "integration"]
+      fail-fast: false
+    steps:
+    - name: Check out the repository
+      uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      with:
+        persist-credentials: false
+
+    - name: Set up Python
+      uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c # v6.0.0
+      with:
+        python-version: "3.x"
+
+    - name: Install tools
+      uses: ./.github/actions/install-tools
+      with:
+        nox-version: ${{ env.NOX_VERSION }}
+        uv-version: ${{ env.UV_VERSION }}
+
+    - name: Download coverage data
+      uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+      with:
+        pattern: "coverage-${{ matrix.flag }}-*"
+        merge-multiple: true
+
+    - name: Combine coverage data and display human readable report
+      continue-on-error: true
+      run: |
+        nox
+
+    - name: Create coverage report
+      run: |
+        nox -- xml
+
+    - name: Upload coverage report
+      uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: ./coverage.xml
+        fail_ci_if_error: true
+        flags: ${{ matrix.flag }}

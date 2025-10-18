@@ -1,0 +1,74 @@
+name: Build
+
+on:
+  push:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "Publish to PyPI?"
+        required: true
+        default: false
+        type: boolean
+      tag:
+        description: "Tag to use for release"
+        required: true
+
+permissions: {}
+
+jobs:
+  build:
+    name: Build wheel and sdist
+    runs-on: ubuntu-24.04
+    outputs:
+      version: ${{ steps.baipp.outputs.package_version }}
+    steps:
+    - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      with:
+        ref: ${{ github.event.inputs.tag || github.ref }}
+        persist-credentials: false
+    - uses: hynek/build-and-inspect-python-package@efb823f52190ad02594531168b7a2d5790e66516 # v2.14.0
+      id: baipp
+
+  publish:
+    name: Publish to PyPI
+    if: startsWith(github.ref, 'refs/tags/') || github.event.inputs.publish == 'true'
+    runs-on: ubuntu-24.04
+    needs: [build]
+    environment:
+      name: pypi
+      url: https://pypi.org/project/citric/${{ needs.build.outputs.version }}
+    permissions:
+      id-token: write # IMPORTANT: mandatory for trusted publishing
+
+    steps:
+    - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+      with:
+        name: Packages
+        path: dist
+    - uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e # v1.13.0
+
+  sign:
+    name: Sign the distribution package
+    if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-24.04
+    needs: [build]
+    permissions:
+      contents: write     # IMPORTANT: mandatory for making GitHub Releases
+      id-token: write     # IMPORTANT: mandatory for attestations
+      attestations: write # IMPORTANT: mandatory for attestations
+
+    steps:
+      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+        with:
+          name: Packages
+          path: dist
+      - uses: actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a # v3.0.0
+        id: attest
+        with:
+          subject-path: "./dist/citric*"
+      - uses: svenstaro/upload-release-action@81c65b7cd4de9b2570615ce3aad67a41de5b1a13 # 2.11.2
+        with:
+          file: ${{ steps.attest.outputs.bundle-path }}
+          tag: ${{ github.event.inputs.tag || github.ref }}
+          overwrite: false
+          asset_name: attestations.intoto.jsonl  # codespell:ignore intoto

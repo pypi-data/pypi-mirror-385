@@ -1,0 +1,65 @@
+changesDir: .changes
+unreleasedDir: unreleased
+headerPath: header.tpl.md
+versionHeaderPath: ""
+versionFooterPath: ""
+changelogPath: CHANGELOG.md
+versionExt: md
+versionFormat: '## {{.Version}} - {{.Time.Format "2006-01-02"}}'
+kindFormat: '### {{.Kind}}'
+changeFormat: '- [#{{.Custom.Issue}}](https://github.com/edgarrmondragon/citric/issues/{{.Custom.Issue}}) {{.Body}}'
+headerFormat: ""
+footerFormat: ""
+newlines:
+  beforeChangelogVersion: 1
+  afterKind: 1
+  afterChange: 1
+  afterVersion: 1
+kinds:
+- label: Added
+  auto: minor
+  format: "### ✨ {{.Kind}}"
+- label: Changed
+  auto: major
+  format: "### 🔄 {{.Kind}}"
+- label: Deprecated
+  auto: patch
+  format: "### ⚠️ {{.Kind}}"
+- label: Removed
+  auto: major
+  format: "### 🗑️ {{.Kind}}"
+- label: Fixed
+  auto: patch
+  format: "### 🐛 {{.Kind}}"
+- label: Security
+  auto: patch
+  format: "### 🔒 {{.Kind}}"
+- label: Refactored
+  auto: patch
+  format: "### 🛠️ {{.Kind}}"
+- label: Documentation
+  auto: patch
+  format: "### 📚 {{.Kind}}"
+- label: Typing
+  auto: patch
+  format: "### 🏷️ {{.Kind}}"
+- label: Packaging
+  auto: patch
+  format: "### 📦 {{.Kind}}"
+replacements:
+- path: pyproject.toml
+  find: "^version = \".*\"$"
+  replace: "version = \"{{.VersionNoPrefix}}\""
+- path: src/citric/client.py
+  find: "NEXT_VERSION"
+  replace: "{{.VersionNoPrefix}}"
+- path: .github/ISSUE_TEMPLATE/BUG.yml
+  find: "^      placeholder: \".*\"$"
+  replace: "      placeholder: \"{{.VersionNoPrefix}}\""
+- path: CITATION.cff
+  find: "^version: \".*\"$"
+  replace: "version: \"{{.VersionNoPrefix}}\""
+custom:
+- key: Issue
+  type: int
+  minInt: 1

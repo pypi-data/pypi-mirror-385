@@ -1,0 +1,116 @@
+name: Generate release Pull Request
+
+on:
+  workflow_dispatch:
+    inputs:
+      next-version:
+        description: 'Next version use vX.Y.Z, patch, minor or major'
+        default: 'auto'
+        required: true
+      changie-version:
+        description: Version of Changie to use
+        default: latest
+        required: false
+      prerelease:
+        description: Prerelease values to append to version
+        required: false
+      metadata:
+        description: Metadata values to append to version
+        required: false
+
+permissions: {}
+
+env:
+  FORCE_COLOR: "1"
+  # renovate: datasource=pypi depName=uv
+  UV_VERSION: 0.9.2
+
+jobs:
+  generate-pr:
+    name: Generate release Pull Request
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write       # to create a github release
+      pull-requests: write  # to create and update PRs
+      discussions: write    # to create a discussion
+    steps:
+    - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      with:
+        persist-credentials: false
+    - name: Batch changes
+      uses: miniscruff/changie-action@5036dffa79ffc007110dc7f75eca7ef72780e147 # v2.1.0
+      with:
+        version: ${{ github.event.inputs.changie-version }}
+        args: "\
+          batch
+          ${{ github.event.inputs.next-version }}
+          ${{ github.event.inputs.prerelease && format('-p {0}', github.event.inputs.prerelease) }}
+          ${{ github.event.inputs.metadata && format('-m {0}', github.event.inputs.metadata) }}"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Merge changes
+      uses: miniscruff/changie-action@5036dffa79ffc007110dc7f75eca7ef72780e147 # v2.1.0
+      with:
+        version: ${{ github.event.inputs.changie-version }}
+        args: merge
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Get the latest version
+      id: latest
+      uses: miniscruff/changie-action@5036dffa79ffc007110dc7f75eca7ef72780e147 # v2.1.0
+      with:
+        version: ${{ github.event.inputs.changie-version }}
+        args: latest
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Setup uv
+      uses: astral-sh/setup-uv@3259c6206f993105e3a61b142c2d97bf4b9ef83d # v7.1.0
+      with:
+        version: ${{ env.UV_VERSION }}
+
+    - name: Lock dependencies
+      run: uv lock
+
+    - name: Draft Release
+      id: draft-release
+      if: ${{ github.event.inputs.prerelease == '' }}
+      uses: softprops/action-gh-release@6da8fa9354ddfdc4aeace5fc48d7f679b5214090 # v2.4.1
+      with:
+        draft: true
+        body_path: ".changes/${{ steps.latest.outputs.output }}.md"
+        tag_name: ${{ steps.latest.outputs.output }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - uses: actions/create-github-app-token@bf559f85448f9380bcfa2899dbdc01eb5b37be3a # v3.0.0-beta.2
+      id: generate-token
+      with:
+        app-id: ${{ vars.APP_ID }}
+        private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7.0.8
+      with:
+        token: ${{ steps.generate-token.outputs.token }}
+        title: "chore: Release ${{ steps.latest.outputs.output }}"
+        branch: release/${{ steps.latest.outputs.output }}
+        commit-message: "chore: Release ${{ steps.latest.outputs.output }}"
+        body: |
+          Prepare release for `${{ steps.latest.outputs.output }}`.
+
+          Checklist:
+
+          - [ ] Check that the right version is set in all the files.
+          - [ ] Groom the changelog for wording or missing entries.
+          - [ ] Check that the integration tests table is up to date.
+
+          [Release Draft](${{ steps.draft-release.outputs.url }})
+        reviewers: |
+          edgarrmondragon
+        assignees: |
+          edgarrmondragon
+        delete-branch: true
+        labels: Release

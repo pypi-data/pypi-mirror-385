@@ -1,0 +1,35 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+
+  // https://docs.renovatebot.com/configuration-options/#extends
+  "extends": [
+    // https://github.com/edgarrmondragon/.github/blob/main/renovate/python.json5
+    "edgarrmondragon/.github//renovate/python.json5",
+
+    // https://github.com/edgarrmondragon/.github/blob/main/renovate/uv.json5
+    "edgarrmondragon/.github//renovate/uv.json5",
+  ],
+
+  // https://docs.renovatebot.com/configuration-options/#reviewers
+  "reviewers": ["edgarrmondragon"],
+
+  "ignorePaths": [
+    "requirements/requirements-*.txt",
+  ],
+
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": [
+        "\\.github/workflows/tests\\.yml",
+      ],
+      "matchStrings": [
+        "os: (?<depName>[^\\s]+?)-(?<currentValue>[^\\s]+?)\\n"
+      ],
+      "datasourceTemplate": "github-runners"
+    }
+  ],
+
+  // https://docs.renovatebot.com/configuration-options/#rebasewhen
+  "rebaseWhen": "conflicted",
+}
