@@ -1,0 +1,51 @@
+services:
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: pyncette
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  localstack:
+    image: localstack/localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=dynamodb
+
+  mysql:
+    image: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "1"
+      MYSQL_DATABASE: pyncette
+      MYSQL_USER: pyncette
+      MYSQL_PASSWORD: password
+
+  shell:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: bash
+    working_dir: /src
+    environment:
+      POSTGRES_URL: "postgres://postgres:postgres@postgres/pyncette"
+      REDIS_URL: "redis://redis"
+      DYNAMODB_ENDPOINT: "http://localstack:4566"
+      LOCALSTACK_HOST: "localstack"
+      AWS_ACCESS_KEY_ID: "foobar"
+      AWS_SECRET_ACCESS_KEY: "foobar"
+      MYSQL_HOST: "mysql"
+    volumes:
+      - type: bind
+        source: .
+        target: /src

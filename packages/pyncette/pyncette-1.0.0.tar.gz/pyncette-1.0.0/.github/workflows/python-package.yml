@@ -1,0 +1,129 @@
+name: Python package
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install uv
+      uses: astral-sh/setup-uv@v5
+      with:
+        version: "latest"
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+    - name: Install dependencies
+      run: uv sync --extra all --extra dev
+    - name: Run pre-commit
+      run: uv run pre-commit run --all-files --show-diff-on-failure
+    - name: Run ty
+      run: uv run ty check src examples
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install uv
+      uses: astral-sh/setup-uv@v5
+      with:
+        version: "latest"
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: uv sync --extra all --extra dev
+    - name: Run unit tests
+      run: uv run pytest --cov --cov-report=term-missing --cov-report=xml -vv -m "not integration" --backend=default tests
+    - name: Upload coverage
+      uses: codecov/codecov-action@v5
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: ./coverage.xml
+        flags: py${{ matrix.python-version }}
+
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: pyncette
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      redis:
+        image: redis
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+      localstack:
+        image: localstack/localstack
+        env:
+          SERVICES: dynamodb
+        ports:
+          - 4566:4566
+        options: >-
+          --health-cmd "curl -fso /dev/null http://localhost:4566/_localstack/health"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      mysql:
+        image: mysql
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: "1"
+          MYSQL_DATABASE: pyncette
+          MYSQL_USER: pyncette
+          MYSQL_PASSWORD: password
+        options: >-
+          --health-cmd "mysqladmin ping --silent"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 3306:3306
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install uv
+      uses: astral-sh/setup-uv@v5
+      with:
+        version: "latest"
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+    - name: Install dependencies
+      run: uv sync --extra all --extra dev
+    - name: Run integration tests
+      env:
+        POSTGRES_URL: postgres://postgres:postgres@localhost/postgres
+        AWS_ACCESS_KEY_ID: "foobar"
+        AWS_SECRET_ACCESS_KEY: "foobar"
+      run: uv run pytest --cov --cov-report=term-missing --cov-report=xml -vv tests
+    - name: Upload coverage
+      uses: codecov/codecov-action@v5
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: ./coverage.xml
+        flags: integration
