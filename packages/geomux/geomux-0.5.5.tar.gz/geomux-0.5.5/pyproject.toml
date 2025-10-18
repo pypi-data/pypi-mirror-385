@@ -1,0 +1,32 @@
+[project]
+name = "geomux"
+version = "0.5.5"
+description = "A tool to assign identifiers to cell barcodes"
+authors = [{ name = "Noam Teyssier" }]
+requires-python = ">=3.10"
+readme = "README.md"
+dependencies = [
+    "anndata>=0.10.9",
+    "joblib>=1.5.2",
+    "numpy>=2.1.1",
+    "polars>=1.33.1",
+    "pyarrow>=21.0.0",
+    "scikit-learn>=1.7.2",
+    "scipy>=1.14.1",
+    "threadpoolctl>=3.6.0",
+    "typer>=0.16.0",
+]
+
+[project.scripts]
+geomux = "geomux.__main__:main"
+
+[tool.uv]
+dev-dependencies = [
+    "pytest>=8.3.3",
+    "muxsim>=0.1.0",
+    "marimo>=0.14.17",
+    "ruff>=0.12.9",
+    "pyarrow>=21.0.0",
+    "joblib>=1.5.2",
+]
+package = true
