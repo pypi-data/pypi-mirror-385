@@ -1,0 +1,41 @@
+#pyproject.toml  08Oct2025  graphics_braille
+[build-system]
+requires = [
+    "setuptools",
+  ]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "graphics_braille"
+version = "0.1.30"
+authors = [
+  { name="Ray Smith", email="raysmith619@gmail.com" },
+]
+description = "Create Braille maps for simple Turtle program output"
+readme = "README.md"
+requires-python = ">=3.9,<4.1"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+
+dependencies = [
+  "numpy",
+  "pysinewave",
+  "pyttsx3",
+  "pyttsx4",
+  "sounddevice",
+  "wxpython",
+]
+#[tool.setuptools.packages.find]
+#include = ["*.py"]
+#recursive-include = ["*"] # Include all directories
+
+[tool.setuptools.package-data]
+Docs = ["Docs/*.*"]
+
+[project.urls]
+Homepage = "https://github.com/raysmith619/graphics_braille"
+Issues = "https://github.com/raysmith619/graphics_braille/issues"
