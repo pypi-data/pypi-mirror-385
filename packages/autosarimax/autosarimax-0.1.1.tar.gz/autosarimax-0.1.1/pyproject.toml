@@ -1,0 +1,20 @@
+[project]
+name = "autosarimax"
+version = "0.1.1"
+description = "Using the River and Optuna packages to provide an automatically optimized ARIMA-derived model with the possibility of online updates."
+authors = [
+    {name = "danttis",email = "juniordante01@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "pandas", "numpy", "river", "optuna", "holidays"
+]
+
+[tool.poetry]
+packages = [{include = "autosarimax", from = "src"}]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
