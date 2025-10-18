@@ -1,0 +1,72 @@
+[tool.poetry]
+
+name = "experiment_server"
+version = "0.3.6"
+description = "Server for experiments to get configuarations from"
+
+license = "MIT"
+
+authors = ["Ahmed Shariff <shariff.mfa@outlook.com>"]
+
+readme = "README.md"
+
+keywords = [ "experiment", "study-design" ]
+homepage = "https://shariff-faleel.com/experiment_server/"
+documentation = "https://shariff-faleel.com/experiment_server/documentation/"
+repository = "https://github.com/ahmed-shariff/experiment_server"
+
+classifiers = [
+    "Development Status :: 1 - Planning",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+]
+include = [ "experiment_server/static/*", "sample_config.toml" ]
+
+[tool.poetry.dependencies]
+
+python = ">=3.8"
+loguru = "^0.5"
+click = ">=6.0"
+pandas = ">=1"
+easydict = ">=1"
+tabulate = ">=0.8.9"
+requests = ">=2.25.1"
+tornado = ">=6.2"
+asyncio = ">=3.4.3"
+Jinja2 = ">=3.1.2"
+toml = ">=0.10.2"
+watchdog = ">=2.1.9"
+importlib-metadata = ">=6.8.0"
+click-aliases = ">=1.0.4"
+
+
+[tool.poetry.scripts]
+
+experiment-server = "experiment_server.cli:cli"
+
+[tool.poetry.group.dev.dependencies]
+pytest = ">=6"
+pytest-mock = ">=3"
+pytest-cov = ">=2"
+deepdiff = ">=5.8.1"
+mypy = ">=0.990"
+debugpy = ">=1.6.3"
+mkdocs = ">=1.5.3"
+pymdown-extensions = ">=10.7.1"
+mkdocstrings = {extras = ["python"], version = ">=0.26.1"}
+mkdocs-material = ">=9.5.15"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+addopts = "--color=yes --durations=5 --code-highlight=yes --showlocals --verbose --cov=experiment_server"
+testpaths = ["test"]
+console_output_style = "progress"
+
+[tool.mypy]
+ignore_missing_imports = true
