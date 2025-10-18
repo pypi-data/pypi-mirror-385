@@ -1,0 +1,204 @@
+definitions:
+  Feature:
+    type: object
+    title: Feature
+    description: A geo feature
+    properties:
+      type:
+        const: Feature
+      geometry:
+        oneOf:
+          - type: object
+            properties:
+              type:
+                const: Point
+          - type: object
+            properties:
+              type:
+                const: LineString
+          - type: "null"
+      properties: {}
+    allOf:
+      - if:
+          properties:
+            geometry:
+              type: object
+              properties:
+                type:
+                  const: Point
+              required:
+                - type
+        then:
+          $ref: '#/definitions/Waypoint'
+      - if:
+          properties:
+            geometry:
+              type: object
+              properties:
+                type:
+                  const: LineString
+              required:
+                - type
+        then:
+          $ref: '#/definitions/Track'
+      - if:
+          properties:
+            geometry:
+              type: "null"
+        then:
+          $ref: '#/definitions/LookupFeature'
+    required:
+      - type
+      - properties
+      - geometry
+    unevaluatedProperties: false
+
+  Waypoint:
+    title: Waypoint
+    allOf:
+      - properties:
+          geometry:
+            type: object
+            properties:
+              type:
+                const: Point
+              coordinates:
+                $ref: '#/definitions/Coordinates'
+          properties:
+            allOf:
+              - $ref: '#/definitions/PropertyBase'
+              - $ref: '#/definitions/WaypointProperties'
+            unevaluatedProperties: false
+
+  Track:
+    title: Track
+    allOf:
+      - properties:
+          geometry:
+            type: object
+            properties:
+              type:
+                const: LineString
+              coordinates:
+                type: array
+                items:
+                  $ref: '#/definitions/Coordinates'
+          properties:
+            allOf:
+              - $ref: '#/definitions/PropertyBase'
+              - $ref: '#/definitions/TrackProperties'
+            unevaluatedProperties: false
+
+  WaypointProperties:
+    title: WaypointProperties
+    properties:
+      timestamp:
+        type: string
+        format: date-time
+      name:
+        type: string
+      type:
+        type: string
+      symbol:
+        type: string
+    required: []
+
+  TrackProperties:
+    title: TrackProperties
+    properties:
+      timestamps:
+        type: array
+        items:
+          type: string
+          format: date-time
+      names:
+        type: array
+        items:
+          type: string
+      types:
+        type: array
+        items:
+          type: string
+      symbols:
+        type: array
+        items:
+          type: string
+    required: []
+
+  LookupFeature:
+    title: Lookup
+    properties:
+      geometry:
+        type: "null"
+      properties:
+        allOf:
+          - $ref: '#/definitions/PropertyBase'
+          - type: object
+            properties:
+              lookup:
+                anyOf:
+                  - type: array
+                    items:
+                      $ref: '#/definitions/LookupItem'
+                  - $ref: '#/definitions/LookupItem'
+          - if:
+              properties:
+                lookup:
+                  type: array
+            then:
+              allOf:
+                - $ref: '#/definitions/PropertyBase'
+                - properties:
+                    lookup: {}
+                - $ref: '#/definitions/TrackProperties'
+              unevaluatedProperties: false
+          - if:
+              properties:
+                lookup:
+                  not:
+                    type: array
+            then:
+              allOf:
+                - $ref: '#/definitions/PropertyBase'
+                - properties:
+                    lookup: {}
+                - $ref: '#/definitions/WaypointProperties'
+              unevaluatedProperties: false
+
+  PropertyBase:
+    title: PropertyBase
+    description: Common properties
+    type: object
+    properties:
+      name:
+        type: string
+    required:
+      - name
+
+  LookupItem:
+    anyOf:
+      - type: string
+      - $ref: '#/definitions/Coordinates'
+
+  Coordinates:
+    type: array
+    items:
+      type: number
+    minItems: 2
+    maxItems: 3
+
+
+type: object
+title: FeatureCollection
+description: The list of geo features
+properties:
+  type:
+    const: FeatureCollection
+  features:
+    type: array
+    items:
+      $ref: '#/definitions/Feature'
+required:
+  - type
+  - features
+additionalProperties: false
