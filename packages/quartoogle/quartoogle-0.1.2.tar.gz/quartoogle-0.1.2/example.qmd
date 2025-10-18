@@ -1,0 +1,78 @@
+---
+title: "Quartoogle Demo Report"
+author: "Quartoogle"
+date: today
+format: pdf
+execute:
+  echo: false
+  warning: false
+---
+
+## About This Report
+
+This is a demonstration of **quartoogle**, a tool for compiling Quarto documents directly to Google Drive. This report was generated dynamically using Python code, and all values you see below are computed at render time.
+
+## Dynamic Calculations
+
+```{python}
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+# Calculate some metrics about quartoogle usage
+total_reports = 42
+reports_this_month = 7
+success_rate = 98.5
+avg_compile_time = 2.3
+```
+
+Here is a dynamically-generated value showing reports compiled this month: **`{python} reports_this_month`**
+
+Here is another dynamically-generated value showing the average compile time: **`{python} f"{avg_compile_time:.1f} seconds"`**
+
+## Usage Statistics
+
+The table below shows fake metrics rendered from a pandas DataFrame:
+
+```{python}
+#| label: tbl-example
+#| tbl-cap: "Your table caption here"
+
+df = pd.DataFrame({
+    'Metric': [
+        'Total Reports Compiled',
+        'Reports This Month',
+        'Success Rate'
+    ],
+    'Value': [
+        total_reports,
+        reports_this_month,
+        f"{success_rate}%"
+    ]
+})
+
+from great_tables import GT
+GT(df)
+```
+
+## Compilation Times
+
+```{python}
+#| label: fig-compile-times
+#| fig-cap: "Recent Compilation Times"
+
+# Generate sample compilation times
+compile_times = [2.1, 2.5, 1.9, 2.8, 2.2, 2.4, 2.0]
+report_numbers = list(range(1, len(compile_times) + 1))
+
+fig, ax = plt.subplots(figsize=(6, 4))
+ax.plot(report_numbers, compile_times, marker='o', linewidth=2, markersize=6, color='#FF6B35')
+ax.set_xlabel('Report Number')
+ax.set_ylabel('Compile Time (seconds)')
+ax.set_title('Quartoogle Compilation Performance')
+ax.grid(axis='y', alpha=0.3, linestyle='--')
+ax.set_ylim(0, max(compile_times) * 1.2)
+
+plt.tight_layout()
+plt.show()
+```
