@@ -1,0 +1,80 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dbbasic-forms"
+version = "1.0.0"
+description = "A git-friendly form builder using TSV storage"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "AskRobots Contributors"}
+]
+keywords = ["forms", "tsv", "git", "form-builder", "no-database", "static-forms"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+    "dbbasic-tsv>=1.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/askrobots/dbbasic-forms"
+Documentation = "https://github.com/askrobots/dbbasic-forms#readme"
+Repository = "https://github.com/askrobots/dbbasic-forms"
+Issues = "https://github.com/askrobots/dbbasic-forms/issues"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "black>=22.0",
+    "isort>=5.0",
+    "flake8>=5.0",
+]
+
+[tool.setuptools]
+packages = ["dbbasic_forms", "dbbasic_forms.api", "dbbasic_forms.api.forms"]
+
+[tool.setuptools.package-data]
+dbbasic_forms = ["templates/**/*.html", "templates/**/*.css"]
+
+[tool.black]
+line-length = 100
+target-version = ['py38', 'py39', 'py310', 'py311', 'py312']
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+addopts = "-v --tb=short"
+
+[tool.coverage.run]
+source = ["dbbasic_forms"]
+omit = ["*/tests/*", "*/test_*.py"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if __name__ == .__main__.:",
+    "raise NotImplementedError",
+    "if TYPE_CHECKING:",
+]
