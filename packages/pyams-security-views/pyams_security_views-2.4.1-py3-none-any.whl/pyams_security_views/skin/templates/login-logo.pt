@@ -1,0 +1,9 @@
+<div class="text-center p-2"
+	 tal:define="logo view.logo">
+	<tal:if condition="logo">
+		${structure:tales:picture(logo, alt='Logo', css_class='mw-100')}
+	</tal:if>
+	<tal:if condition="not:logo">
+		<img src="/--static--/myams/img/pyams.png" alt="PyAMS logo" class="mw-100" />
+	</tal:if>
+</div>
