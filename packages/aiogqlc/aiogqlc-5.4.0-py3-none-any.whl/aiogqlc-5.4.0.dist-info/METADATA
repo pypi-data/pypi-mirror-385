@@ -1,0 +1,183 @@
+Metadata-Version: 2.4
+Name: aiogqlc
+Version: 5.4.0
+Summary: aiohttp based GraphQL client
+Author-email: Jonathan Ehwald <github@ehwald.info>
+License: MIT
+License-File: LICENSE
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Web Environment
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Classifier: Topic :: Internet :: WWW/HTTP
+Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: <4.0,>=3.9
+Requires-Dist: aiohttp<4.0.0,>=3.6.0
+Description-Content-Type: text/markdown
+
+# Asynchronous/IO GraphQL client
+
+[![Versions][versions-image]][versions-url]
+[![PyPI][pypi-image]][pypi-url]
+[![Downloads][downloads-image]][downloads-url]
+[![Codecov][codecov-image]][codecov-url]
+[![License][license-image]][license-url]
+
+[versions-image]: https://img.shields.io/pypi/pyversions/aiogqlc
+[versions-url]: https://github.com/DoctorJohn/aiogqlc/blob/main/pyproject.toml
+[pypi-image]: https://img.shields.io/pypi/v/aiogqlc
+[pypi-url]: https://pypi.org/project/aiogqlc/
+[downloads-image]: https://img.shields.io/pypi/dm/aiogqlc
+[downloads-url]: https://pypi.org/project/aiogqlc/
+[codecov-image]: https://codecov.io/gh/DoctorJohn/aiogqlc/branch/main/graph/badge.svg
+[codecov-url]: https://codecov.io/gh/DoctorJohn/aiogqlc
+[license-image]: https://img.shields.io/pypi/l/aiogqlc
+[license-url]: https://github.com/DoctorJohn/aiogqlc/blob/main/LICENSE
+
+A Python asynchronous/IO GraphQL client based on [aiohttp][aiohttp-url].
+
+In addition to standard HTTP POST `queries` and `mutations` this client fully supports
+the [GraphQL multipart form requests spec][multipart-specs-url] for file uploads
+and the [graphql-ws subprotocol][graphql-ws-url] for WebSocket based `subscriptions`.
+
+**[Read the documentation][docs-url]**
+
+## Installation
+
+```sh
+pip install aiogqlc
+```
+
+## Basic usage
+
+Check the [documentation][docs-url] for detailed and more advanced usage examples.
+
+### Queries
+
+```python
+import asyncio
+import aiohttp
+from aiogqlc import GraphQLClient
+
+endpoint = "https://swapi-graphql.netlify.app/graphql"
+
+document = """
+    query {
+        allFilms {
+            films {
+                title
+            }
+        }
+    }
+"""
+
+
+async def main():
+    async with aiohttp.ClientSession() as session:
+        client = GraphQLClient(endpoint, session=session)
+        response = await client.execute(document)
+        print(await response.json())
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+### Mutations
+
+```python
+import aiohttp
+from aiogqlc import GraphQLClient
+
+document = """
+    mutation ($userId: ID!) {
+        deleteUser (id: $userId) {
+            id
+        }
+    }
+"""
+
+variables = {
+    "userId": "42",
+}
+
+
+async def main():
+    async with aiohttp.ClientSession() as session:
+        client = GraphQLClient("https://example.com/graphql/", session=session)
+        response = await client.execute(document, variables=variables)
+        print(await response.json())
+```
+
+### File uploads
+
+```python
+import aiohttp
+from aiogqlc import GraphQLClient
+
+document = """
+    mutation($file: Upload!) {
+        uploadFile(file: $file) {
+            size
+        }
+    }
+"""
+
+variables = {
+    "file": open("test.txt", "rb")
+}
+
+
+async def foo():
+    async with aiohttp.ClientSession() as session:
+        client = GraphQLClient("https://example.com/graphql/", session=session)
+        response = await client.execute(document, variables=variables)
+        print(await response.json())
+
+```
+
+### Subscriptions
+
+```python
+import aiohttp
+from aiogqlc import GraphQLClient
+
+document = """
+    subscription($postId: ID!) {
+        likeAdded(postId: $postId)
+    }
+"""
+
+variables = {
+    "postId": "42"
+}
+
+
+async def main():
+    async with aiohttp.ClientSession() as session:
+        client = GraphQLClient("https://example.com/graphql/", session=session)
+
+        async with client.connect() as connection:
+            async for payload in connection.subscribe(document, variables=variables):
+                print(payload)
+```
+
+## [Documentation][docs-url]
+
+[Read the documentation][docs-url] to learn more about queries, mutations, subscriptions, file uploads and even authentication.
+
+[aiohttp-url]: https://github.com/aio-libs/aiohttp
+[multipart-specs-url]: https://github.com/jaydenseric/graphql-multipart-request-spec
+[graphql-ws-url]: https://github.com/apollographql/subscriptions-transport-ws
+[docs-url]: https://doctorjohn.github.io/aiogqlc/
