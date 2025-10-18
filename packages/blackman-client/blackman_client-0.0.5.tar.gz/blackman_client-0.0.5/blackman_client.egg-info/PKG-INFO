@@ -1,0 +1,210 @@
+Metadata-Version: 2.4
+Name: blackman_client
+Version: 0.0.5
+Summary: Blackman AI API
+Home-page: https://github.com/blackman-ai/python-sdk
+Author: Blackman AI
+Author-email: Blackman AI Support <team@openapitools.org>
+License-Expression: MIT
+Project-URL: Repository, https://github.com/GIT_USER_ID/GIT_REPO_ID
+Keywords: OpenAPI,OpenAPI-Generator,Blackman AI API
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: urllib3<3.0.0,>=2.1.0
+Requires-Dist: python-dateutil>=2.8.2
+Requires-Dist: pydantic>=2
+Requires-Dist: typing-extensions>=4.7.1
+Dynamic: author
+Dynamic: home-page
+Dynamic: license-file
+Dynamic: requires-python
+
+# blackman-client
+
+Official Python SDK for [Blackman AI](https://www.useblackman.ai) - The AI API proxy that optimizes token usage to reduce costs.
+
+## Features
+
+- 🚀 Drop-in replacement for OpenAI, Anthropic, and other LLM APIs
+- 💰 Automatic token optimization (save 20-40% on costs)
+- 📊 Built-in analytics and cost tracking
+- 🔒 Enterprise-grade security with SSO support
+- ⚡ Low latency overhead (<50ms)
+- 🎯 Semantic caching for repeated queries
+
+## Installation
+
+```bash
+pip install blackman-client
+```
+
+Or with Poetry:
+
+```bash
+poetry add blackman-client
+```
+
+## Quick Start
+
+```python
+import blackman_client
+from blackman_client import CompletionRequest
+
+configuration = blackman_client.Configuration(
+    host="https://app.useblackman.ai",
+    access_token="sk_your_blackman_api_key"  # Get from https://app.useblackman.ai
+)
+
+with blackman_client.ApiClient(configuration) as api_client:
+    api = blackman_client.CompletionsApi(api_client)
+    response = api.completions(
+        CompletionRequest(
+            provider="OpenAI",
+            model="gpt-4o",
+            messages=[{"role": "user", "content": "Explain quantum computing in simple terms"}]
+        )
+    )
+
+    print(response.choices[0].message.content)
+    print(f"Tokens used: {response.usage.total_tokens}")
+    print(f"Prompt tokens: {response.usage.prompt_tokens}")
+```
+
+## Authentication
+
+Get your API key from the [Blackman AI Dashboard](https://app.useblackman.ai/settings/api-keys).
+
+```python
+configuration = blackman_client.Configuration(
+    host="https://app.useblackman.ai",
+    access_token="sk_your_blackman_api_key"
+)
+```
+
+## Async Support
+
+The SDK supports async operations:
+
+```python
+import asyncio
+import blackman_client
+from blackman_client import CompletionRequest
+
+async def main():
+    configuration = blackman_client.Configuration(
+        host="https://app.useblackman.ai",
+        access_token="sk_your_blackman_api_key"
+    )
+
+    async with blackman_client.ApiClient(configuration) as api_client:
+        api = blackman_client.CompletionsApi(api_client)
+        response = await api.completions_async(
+            CompletionRequest(
+                provider="OpenAI",
+                model="gpt-4o",
+                messages=[{"role": "user", "content": "Hello!"}]
+            )
+        )
+        print(response.choices[0].message.content)
+
+asyncio.run(main())
+```
+
+## Framework Integration
+
+### Django
+
+```python
+# settings.py
+BLACKMAN_API_KEY = os.environ.get("BLACKMAN_API_KEY")
+BLACKMAN_HOST = "https://app.useblackman.ai"
+
+# views.py
+import blackman_client
+from django.conf import settings
+
+def chat_view(request):
+    configuration = blackman_client.Configuration(
+        host=settings.BLACKMAN_HOST,
+        access_token=settings.BLACKMAN_API_KEY
+    )
+
+    with blackman_client.ApiClient(configuration) as api_client:
+        api = blackman_client.CompletionsApi(api_client)
+        # ... use api
+```
+
+### FastAPI
+
+```python
+from fastapi import FastAPI, Depends
+import blackman_client
+
+app = FastAPI()
+
+def get_blackman_api():
+    configuration = blackman_client.Configuration(
+        host="https://app.useblackman.ai",
+        access_token=os.environ["BLACKMAN_API_KEY"]
+    )
+    with blackman_client.ApiClient(configuration) as api_client:
+        yield blackman_client.CompletionsApi(api_client)
+
+@app.post("/chat")
+async def chat(api: blackman_client.CompletionsApi = Depends(get_blackman_api)):
+    response = await api.completions_async(...)
+    return response
+```
+
+## Advanced Usage
+
+### Custom Timeouts
+
+```python
+configuration = blackman_client.Configuration(
+    host="https://app.useblackman.ai",
+    access_token="sk_your_api_key"
+)
+configuration.timeout = 60  # 60 seconds
+
+with blackman_client.ApiClient(configuration) as api_client:
+    api = blackman_client.CompletionsApi(api_client)
+    # ... use api with custom timeout
+```
+
+### Error Handling
+
+```python
+from blackman_client.exceptions import ApiException
+
+try:
+    response = api.completions(request)
+except ApiException as e:
+    print(f"API error: {e.status} - {e.reason}")
+    print(f"Response body: {e.body}")
+```
+
+## Documentation
+
+- [Full API Reference](https://app.useblackman.ai/docs)
+- [Getting Started Guide](https://app.useblackman.ai/docs/getting-started)
+- [Python Examples](https://github.com/blackman-ai/python-sdk/tree/main/examples)
+- [Migration from OpenAI Python SDK](https://app.useblackman.ai/docs/migration/openai-python)
+
+## Requirements
+
+- Python 3.7+
+- urllib3 >= 1.25.3
+- python-dateutil
+- pydantic >= 1.10.5, < 2
+
+## Support
+
+- 📧 Email: [support@blackman.ai](mailto:support@blackman.ai)
+- 💬 Discord: [Join our community](https://discord.gg/blackman-ai)
+- 🐛 Issues: [GitHub Issues](https://github.com/blackman-ai/python-sdk/issues)
+
+## License
+
+MIT © Blackman AI
