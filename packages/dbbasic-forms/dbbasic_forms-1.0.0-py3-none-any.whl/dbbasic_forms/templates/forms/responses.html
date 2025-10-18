@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Responses - dbbasic-forms</title>
+    <link rel="stylesheet" href="../../static/css/admin.css">
+    <style>
+        .responses-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        .responses-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .stat-change {
+            font-size: 0.75rem;
+            color: var(--success);
+            margin-top: 0.25rem;
+        }
+
+        .responses-table-container {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        .table-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg);
+        }
+
+        .search-box {
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .responses-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .responses-table th {
+            background: var(--bg);
+            padding: 0.875rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .responses-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.875rem;
+        }
+
+        .responses-table tbody tr {
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .responses-table tbody tr:hover {
+            background: var(--bg);
+        }
+
+        .responses-table tbody tr.selected {
+            background: #eff6ff;
+        }
+
+        .timestamp {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+        }
+
+        .response-status {
+            display: inline-block;
+            padding: 0.25rem 0.625rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-new {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-read {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--border);
+            background: var(--bg);
+        }
+
+        .pagination-info {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .pagination-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border-radius: 0.5rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.25rem;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            padding: 0;
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.25rem;
+        }
+
+        .close-modal:hover {
+            background: var(--bg);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .response-field {
+            margin-bottom: 1.5rem;
+        }
+
+        .response-field label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .response-field-value {
+            padding: 0.75rem;
+            background: var(--bg);
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 0.75rem;
+            padding: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+    </style>
+</head>
+<body>
+    <div class="studio-container">
+        <header class="studio-header">
+            <div class="logo">
+                <a href="list.html" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: inherit;">
+                    <span class="logo-icon">📋</span>
+                    <span class="logo-text">dbbasic-forms</span>
+                </a>
+            </div>
+            <div style="flex: 1; text-align: center;">
+                <h1 style="font-size: 1.125rem; font-weight: 600; margin: 0;">Contact Form Responses</h1>
+            </div>
+            <div class="header-actions">
+                <button class="btn-secondary">Export CSV</button>
+                <a href="editor.html" class="btn-primary">Edit Form</a>
+            </div>
+        </header>
+
+        <div class="studio-layout">
+            <nav class="sidebar">
+                <a href="list.html" class="nav-item">
+                    <span class="nav-icon">📋</span>
+                    <span class="nav-label">All Forms</span>
+                </a>
+                <a href="responses.html" class="nav-item active">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-label">Responses</span>
+                </a>
+                <div class="nav-divider"></div>
+                <a href="editor.html" class="nav-item">
+                    <span class="nav-icon">✏️</span>
+                    <span class="nav-label">Edit Form</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">⚙️</span>
+                    <span class="nav-label">Settings</span>
+                </a>
+            </nav>
+
+            <main class="main-content">
+                <!-- Stats Cards -->
+                <div class="responses-stats">
+                    <div class="stat-card">
+                        <div class="stat-value">47</div>
+                        <div class="stat-label">Total Responses</div>
+                        <div class="stat-change">↑ 12 this week</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">89%</div>
+                        <div class="stat-label">Completion Rate</div>
+                        <div class="stat-change">↑ 3% vs last week</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">2m 34s</div>
+                        <div class="stat-label">Avg. Time</div>
+                        <div class="stat-change">↓ 15s faster</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">8</div>
+                        <div class="stat-label">New Today</div>
+                        <div class="stat-change">↑ 2 vs yesterday</div>
+                    </div>
+                </div>
+
+                <!-- Responses Table -->
+                <div class="responses-table-container">
+                    <div class="table-controls">
+                        <input type="text" class="form-input search-box" placeholder="Search responses...">
+                        <select class="form-select" style="width: auto;">
+                            <option>All Status</option>
+                            <option>New</option>
+                            <option>Read</option>
+                        </select>
+                        <select class="form-select" style="width: auto;">
+                            <option>Last 30 days</option>
+                            <option>Last 7 days</option>
+                            <option>Today</option>
+                            <option>All time</option>
+                        </select>
+                    </div>
+
+                    <table class="responses-table">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Message Preview</th>
+                                <th>Submitted</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr onclick="openResponseModal(1)">
+                                <td><span class="response-status status-new">New</span></td>
+                                <td>Alice Johnson</td>
+                                <td>alice@example.com</td>
+                                <td style="color: var(--text-muted);">I'm interested in learning more about...</td>
+                                <td>
+                                    <div>2 hours ago</div>
+                                    <div class="timestamp">Jan 15, 2024 2:30 PM</div>
+                                </td>
+                                <td>
+                                    <button class="btn-secondary-small" onclick="event.stopPropagation()">View</button>
+                                </td>
+                            </tr>
+                            <tr onclick="openResponseModal(2)">
+                                <td><span class="response-status status-new">New</span></td>
+                                <td>Bob Smith</td>
+                                <td>bob@example.com</td>
+                                <td style="color: var(--text-muted);">Can you help me with pricing information...</td>
+                                <td>
+                                    <div>5 hours ago</div>
+                                    <div class="timestamp">Jan 15, 2024 11:15 AM</div>
+                                </td>
+                                <td>
+                                    <button class="btn-secondary-small" onclick="event.stopPropagation()">View</button>
+                                </td>
+                            </tr>
+                            <tr onclick="openResponseModal(3)" class="selected">
+                                <td><span class="response-status status-read">Read</span></td>
+                                <td>Charlie Davis</td>
+                                <td>charlie@example.com</td>
+                                <td style="color: var(--text-muted);">Thanks for the quick response! I'd like to...</td>
+                                <td>
+                                    <div>Yesterday</div>
+                                    <div class="timestamp">Jan 14, 2024 4:22 PM</div>
+                                </td>
+                                <td>
+                                    <button class="btn-secondary-small" onclick="event.stopPropagation()">View</button>
+                                </td>
+                            </tr>
+                            <tr onclick="openResponseModal(4)">
+                                <td><span class="response-status status-read">Read</span></td>
+                                <td>Diana Wilson</td>
+                                <td>diana@example.com</td>
+                                <td style="color: var(--text-muted);">I have a question about your services...</td>
+                                <td>
+                                    <div>Yesterday</div>
+                                    <div class="timestamp">Jan 14, 2024 1:45 PM</div>
+                                </td>
+                                <td>
+                                    <button class="btn-secondary-small" onclick="event.stopPropagation()">View</button>
+                                </td>
+                            </tr>
+                            <tr onclick="openResponseModal(5)">
+                                <td><span class="response-status status-read">Read</span></td>
+                                <td>Ethan Brown</td>
+                                <td>ethan@example.com</td>
+                                <td style="color: var(--text-muted);">Looking forward to working together...</td>
+                                <td>
+                                    <div>2 days ago</div>
+                                    <div class="timestamp">Jan 13, 2024 3:10 PM</div>
+                                </td>
+                                <td>
+                                    <button class="btn-secondary-small" onclick="event.stopPropagation()">View</button>
+                                </td>
+                            </tr>
+                            <tr onclick="openResponseModal(6)">
+                                <td><span class="response-status status-read">Read</span></td>
+                                <td>Fiona Martinez</td>
+                                <td>fiona@example.com</td>
+                                <td style="color: var(--text-muted);">This is exactly what I've been searching for...</td>
+                                <td>
+                                    <div>3 days ago</div>
+                                    <div class="timestamp">Jan 12, 2024 10:30 AM</div>
+                                </td>
+                                <td>
+                                    <button class="btn-secondary-small" onclick="event.stopPropagation()">View</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="pagination">
+                        <div class="pagination-info">Showing 1-10 of 47 responses</div>
+                        <div class="pagination-controls">
+                            <button class="btn-secondary-small" disabled>Previous</button>
+                            <button class="btn-secondary-small">1</button>
+                            <button class="btn-secondary-small">2</button>
+                            <button class="btn-secondary-small">3</button>
+                            <button class="btn-secondary-small">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Response Detail Modal -->
+    <div class="modal" id="responseModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Response Details</h2>
+                <button class="close-modal" onclick="closeResponseModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="response-field">
+                    <label>Name</label>
+                    <div class="response-field-value">Alice Johnson</div>
+                </div>
+                <div class="response-field">
+                    <label>Email</label>
+                    <div class="response-field-value">alice@example.com</div>
+                </div>
+                <div class="response-field">
+                    <label>Message</label>
+                    <div class="response-field-value">
+                        I'm interested in learning more about your services. I've been looking for a solution like this for a while, and your product seems to be exactly what I need. Could we schedule a call to discuss pricing and implementation details?
+                    </div>
+                </div>
+                <div class="response-field">
+                    <label>Submitted</label>
+                    <div class="response-field-value">January 15, 2024 at 2:30 PM</div>
+                </div>
+                <div class="response-field">
+                    <label>Response ID</label>
+                    <div class="response-field-value">resp_8f3a9b2c1d</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary">Mark as Read</button>
+                <button class="btn-secondary">Export</button>
+                <button class="btn-danger-outline">Delete</button>
+                <button class="btn-primary" style="margin-left: auto;">Reply via Email</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openResponseModal(id) {
+            document.getElementById('responseModal').classList.add('active');
+        }
+
+        function closeResponseModal() {
+            document.getElementById('responseModal').classList.remove('active');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('responseModal').addEventListener('click', (e) => {
+            if (e.target.id === 'responseModal') {
+                closeResponseModal();
+            }
+        });
+    </script>
+</body>
+</html>

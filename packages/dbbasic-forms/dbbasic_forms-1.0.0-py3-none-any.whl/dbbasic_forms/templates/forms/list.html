@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forms - dbbasic-forms</title>
+    <link rel="stylesheet" href="../../static/css/admin.css">
+</head>
+<body>
+    <div class="studio-container">
+        <header class="studio-header">
+            <div class="logo">
+                <span class="logo-icon">📋</span>
+                <span class="logo-text">dbbasic-forms</span>
+            </div>
+            <div class="header-actions">
+                <button class="btn-primary">+ New Form</button>
+            </div>
+        </header>
+
+        <div class="studio-layout">
+            <nav class="sidebar">
+                <a href="list.html" class="nav-item active">
+                    <span class="nav-icon">📋</span>
+                    <span class="nav-label">All Forms</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-label">Analytics</span>
+                </a>
+                <div class="nav-divider"></div>
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">⚙️</span>
+                    <span class="nav-label">Settings</span>
+                </a>
+            </nav>
+
+            <main class="main-content">
+                <div class="content-header">
+                    <div>
+                        <h1>Forms</h1>
+                        <div class="breadcrumb">Dashboard / Forms</div>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn-primary">+ New Form</button>
+                    </div>
+                </div>
+
+                <!-- Forms Grid -->
+                <div class="db-tables-grid">
+                    <div class="db-table-card">
+                        <div class="db-table-header">
+                            <div class="db-table-icon">📝</div>
+                            <div class="db-table-info">
+                                <h3>Contact Form</h3>
+                                <div class="db-table-meta">47 responses • Created 2 days ago</div>
+                            </div>
+                            <button class="btn-icon">⋮</button>
+                        </div>
+                        <div class="db-table-columns">
+                            <div class="column-tag">Name</div>
+                            <div class="column-tag">Email</div>
+                            <div class="column-tag">Message</div>
+                        </div>
+                        <div class="db-table-actions">
+                            <a href="editor.html" class="btn-secondary-small">Edit</a>
+                            <a href="responses.html" class="btn-secondary-small">Responses</a>
+                            <button class="btn-secondary-small">Share</button>
+                        </div>
+                    </div>
+
+                    <div class="db-table-card">
+                        <div class="db-table-header">
+                            <div class="db-table-icon">📊</div>
+                            <div class="db-table-info">
+                                <h3>Survey 2024</h3>
+                                <div class="db-table-meta">128 responses • Created 1 week ago</div>
+                            </div>
+                            <button class="btn-icon">⋮</button>
+                        </div>
+                        <div class="db-table-columns">
+                            <div class="column-tag">Age</div>
+                            <div class="column-tag">Occupation</div>
+                            <div class="column-tag">Rating</div>
+                            <div class="column-tag">+2 more</div>
+                        </div>
+                        <div class="db-table-actions">
+                            <a href="editor.html" class="btn-secondary-small">Edit</a>
+                            <a href="responses.html" class="btn-secondary-small">Responses</a>
+                            <button class="btn-secondary-small">Share</button>
+                        </div>
+                    </div>
+
+                    <div class="db-table-card">
+                        <div class="db-table-header">
+                            <div class="db-table-icon">🎟️</div>
+                            <div class="db-table-info">
+                                <h3>Event Registration</h3>
+                                <div class="db-table-meta">203 responses • Created 2 weeks ago</div>
+                            </div>
+                            <button class="btn-icon">⋮</button>
+                        </div>
+                        <div class="db-table-columns">
+                            <div class="column-tag">Name</div>
+                            <div class="column-tag">Email</div>
+                            <div class="column-tag">Ticket Type</div>
+                            <div class="column-tag">+1 more</div>
+                        </div>
+                        <div class="db-table-actions">
+                            <a href="editor.html" class="btn-secondary-small">Edit</a>
+                            <a href="responses.html" class="btn-secondary-small">Responses</a>
+                            <button class="btn-secondary-small">Share</button>
+                        </div>
+                    </div>
+
+                    <!-- New Form Card -->
+                    <div class="db-table-card" style="border: 2px dashed var(--border); display: flex; align-items: center; justify-content: center; min-height: 200px; cursor: pointer;">
+                        <div style="text-align: center; color: var(--text-muted);">
+                            <div style="font-size: 3rem; margin-bottom: 0.5rem;">➕</div>
+                            <div style="font-weight: 500;">Create New Form</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="card" style="margin-top: 2rem;">
+                    <h2>Overview</h2>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-number">378</div>
+                            <div class="stat-label">Total Responses</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">3</div>
+                            <div class="stat-label">Active Forms</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">89%</div>
+                            <div class="stat-label">Completion Rate</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">24</div>
+                            <div class="stat-label">Today</div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+</html>
