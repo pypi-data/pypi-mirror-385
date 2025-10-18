@@ -1,0 +1,78 @@
+{
+    "ProblemType": "Structural_Mechanics",
+    "AnalysisType": "StaticAnalysis",
+    "Mesh": {
+        "ElemType": "FRAME02",
+        "Nodes": [
+            {
+                "x": 0.0,
+                "y": 0.0
+            },
+            {
+                "x": 0.0,
+                "y": 3.0
+            },
+            {
+                "x": 3.0,
+                "y": 3.0
+            },
+            {
+                "x": 3.0,
+                "y": 0.0
+            }
+        ],
+        "Elements": [
+            {
+                "Connectivities": [1, 2],
+                "MaterialId": 1
+            },
+            {
+                "Connectivities": [2, 3],
+                "MaterialId": 1
+            },
+            {
+                "Connectivities": [3, 4],
+                "MaterialId": 1
+            }
+        ]
+    },
+    "Materials": [
+        {
+            "Young": 210.0e9,
+            "Area": 0.00335,
+            "Inertia": 0.0000214
+        }
+    ],
+    "Constraints": [
+        {
+            "Node": 1,
+            "Activation": [1, 1, 1],
+            "Values": [0.0, 0.0, 0.0]
+        },
+        {
+            "Node": 4,
+            "Activation": [1, 1, 1],
+            "Values": [0.0, 0.0, 0.0]
+        }
+    ],
+    "Loads": {
+        "Point_Loads": [
+            {
+                "Node": 2,
+                "Values": [10.0e3, 0.0, 0.0]
+            }
+        ],
+        "Line_Loads": [
+            {
+                "Node_ini": 2,
+                "Node_end": 3,
+                "qy": -100e3
+            }
+        ]
+    },
+    "Postprocess": {
+        "Show_displacements": true,
+        "Show_forces": true,
+        "Show_reactions": true
+    }
+}
