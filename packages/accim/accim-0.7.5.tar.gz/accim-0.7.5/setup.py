@@ -1,0 +1,145 @@
+import setuptools
+from os import path
+from setuptools.command.install import install
+import accim
+
+
+class PostInstallCommand(install):
+    """Post-installation for installation mode."""
+    messages = []
+
+    def run(self):
+        install.run(self)
+        # PUT YOUR POST-INSTALL SCRIPT HERE or CALL A FUNCTION
+        import os
+        import shutil
+
+        # Creating a dictionary with IDD paths, IDD backups paths and the first line to modify
+        dict_lines = {
+            'EnergyPlus 25.1.0': [r"C:\EnergyPlusV25-1-0\Energy+.idd", r"C:\EnergyPlusV25-1-0\Energy+_backup.idd", 84912],
+            'EnergyPlus 24.2.0': [r"C:\EnergyPlusV24-2-0\Energy+.idd", r"C:\EnergyPlusV24-2-0\Energy+_backup.idd", 84877],
+            'EnergyPlus 24.1.0': [r"C:\EnergyPlusV24-1-0\Energy+.idd", r"C:\EnergyPlusV24-1-0\Energy+_backup.idd", 84380],
+            'EnergyPlus 23.2.0': [r"C:\EnergyPlusV23-2-0\Energy+.idd", r"C:\EnergyPlusV23-2-0\Energy+_backup.idd", 84284],
+            'EnergyPlus 23.1.0': [r"C:\EnergyPlusV23-1-0\Energy+.idd", r"C:\EnergyPlusV23-1-0\Energy+_backup.idd", 83101],
+            'EnergyPlus 22.2.0': [r"C:\EnergyPlusV22-2-0\Energy+.idd", r"C:\EnergyPlusV22-2-0\Energy+_backup.idd", 82643],
+            'EnergyPlus 22.1.0': [r"C:\EnergyPlusV22-1-0\Energy+.idd", r"C:\EnergyPlusV22-1-0\Energy+_backup.idd", 81925],
+            'EnergyPlus 9.6.0': [r"C:\EnergyPlusV9-6-0\Energy+.idd", r"C:\EnergyPlusV9-6-0\Energy+_backup.idd", 81798],
+            'EnergyPlus 9.5.0': [r"C:\EnergyPlusV9-5-0\Energy+.idd", r"C:\EnergyPlusV9-5-0\Energy+_backup.idd", 80493],
+            'EnergyPlus 9.4.0': [r"C:\EnergyPlusV9-4-0\Energy+.idd", r"C:\EnergyPlusV9-4-0\Energy+_backup.idd", 80526],
+            'EnergyPlus 9.3.0': [r"C:\EnergyPlusV9-3-0\Energy+.idd", r"C:\EnergyPlusV9-3-0\Energy+_backup.idd", 80397],
+            'EnergyPlus 9.2.0': [r"C:\EnergyPlusV9-2-0\Energy+.idd", r"C:\EnergyPlusV9-2-0\Energy+_backup.idd", 79641],
+            'EnergyPlus 9.1.0': [r"C:\EnergyPlusV9-1-0\Energy+.idd", r"C:\EnergyPlusV9-1-0\Energy+_backup.idd", 79116],
+            'EnergyPlus 9.0.0': [r"C:\EnergyPlusV9-0-0\Energy+.idd", r"C:\EnergyPlusV9-0-0\Energy+_backup.idd", 78635],
+        }
+
+        new_lines_no = 7500
+
+        # global messages
+        # messages = []
+
+        # Iterating through EnergyPlus versions
+        for i in dict_lines:
+            # Renaming the original IDD file to keep it as a backup
+            try:
+                os.rename(dict_lines[i][0], dict_lines[i][1])
+            except FileExistsError:
+                message = f'The file Energy+_backup.idd already exists, therefore this script has already been run for {i}.'
+                print(message)
+                PostInstallCommand.messages.append(message)
+                os.remove(dict_lines[i][0])
+                # os.rename(dict_lines[i][1], dict_lines[i][0])
+                shutil.copy(dict_lines[i][1], dict_lines[i][0])
+                # continue
+            except FileNotFoundError:
+                message = f'The file Energy+.idd has not been found, therefore {i} is not installed at default path.'
+                print(message)
+                PostInstallCommand.messages.append(message)
+                continue
+            # Reading the content of the IDD
+            with open(dict_lines[i][1], 'r') as file:
+                data = file.readlines()
+            # Making amendments in variable data
+            data[dict_lines[i][2]] = data[dict_lines[i][2]].replace(';', ',')
+            for j in range(503, new_lines_no + 1):
+                if j == 503:
+                    line = dict_lines[i][2] + 1
+                if j == new_lines_no:
+                    data.insert(line, f'A{j};\n')
+                else:
+                    data.insert(line, f'A{j},\n')
+                line = line + 1
+
+            # Overwriting the IDD with the amendments in variable data
+            with open(dict_lines[i][0], 'w') as file:
+                file.writelines(data)
+                message = f"{i}'s IDD has been correctly modified. {new_lines_no} lines have been added to the object EnergyManagementSystem:Program."
+            print(message)
+            PostInstallCommand.messages.append(message)
+
+
+
+this_directory = path.abspath(path.dirname(__file__))
+with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
+    long_description = f.read()
+
+setuptools.setup(
+    name='accim',
+    version=accim.__version__,
+    description='Transforms PMV-based into adaptive setpoint temperature EnergyPlus building energy models',
+    long_description=long_description,
+    long_description_content_type='text/markdown',
+    url='https://github.com/dsanchez-garcia/accim',
+    author='Daniel Sánchez-García',
+    author_email='daniel.sanchezgarcia@uca.es',
+    license='GPL-3.0-or-later',
+    license_files=('LICENSE',),
+    classifiers=[
+        'Programming Language :: Python :: 3',
+        'Intended Audience :: Science/Research',
+        'Operating System :: Microsoft :: Windows',
+        'Topic :: Scientific/Engineering'
+        ],
+    packages=setuptools.find_packages(),
+    # package_data={
+    #    '': [
+    #        '*.csv',
+    #        '*.idf',
+    #        '*.epw',
+    #        '*.eso',
+    #        '*.jpg',
+    #        '*.png',
+    #        '*.xlsx',
+    #        '*.xls',
+    #        '*.ipynb'
+    #         ]
+    #    },
+    include_package_data=True,
+    python_requires='<3.10',
+    install_requires=[
+        'scikit-learn',
+        'eppy>=0.5.63',
+        'pycountry',
+        # 'geopy',
+        'matplotlib<=3.7',
+        'numpy<2.0.0',
+        'pandas',
+        'datapackage',
+        'unidecode',
+        'besos',
+        # 'shutil',
+        # 'glob'
+        ],
+    # scripts=['bin/addAccis.py'],
+    keywords=[
+        'adaptive thermal comfort',
+        'building energy model',
+        'building performance simulation',
+        'energy efficiency'
+        ],
+    cmdclass={
+        'install': PostInstallCommand
+    }
+    )
+
+# print('IDD modifications:')
+# print(PostInstallCommand.messages, sep='\n')
