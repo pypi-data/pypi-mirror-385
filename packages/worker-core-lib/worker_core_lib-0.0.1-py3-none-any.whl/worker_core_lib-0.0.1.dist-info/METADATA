@@ -1,0 +1,138 @@
+Metadata-Version: 2.1
+Name: worker-core-lib
+Version: 0.0.1
+Summary: Core library for worker services
+Author-email: Jordane Masson <masson.jordan@gmail.com>
+Project-URL: Homepage, https://github.com/Mesh-Sync/Mesh-Sync
+Project-URL: Bug Tracker, https://github.com/Mesh-Sync/Mesh-Sync
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: pydantic-settings ~=2.0.0
+Requires-Dist: sqlalchemy ~=2.0.0
+Requires-Dist: boto3 ~=1.28.0
+Requires-Dist: bullmq <2.16.0,>=2.15.0
+Requires-Dist: gdown ~=4.7.0
+Requires-Dist: google-api-python-client ~=2.90.0
+Requires-Dist: google-auth-httplib2 ~=0.1.0
+Requires-Dist: google-auth-oauthlib ~=1.0.0
+Requires-Dist: pysftp ~=0.2.9
+Requires-Dist: requests ~=2.31.0
+Requires-Dist: paramiko ~=3.3.0
+Requires-Dist: cryptography ~=41.0.5
+Requires-Dist: pytest ~=7.4.0
+Requires-Dist: watchfiles ~=0.19.0
+Requires-Dist: python-dotenv ~=1.0.0
+Requires-Dist: redis <6.0.0,>=5.0.0
+Requires-Dist: psycopg2-binary ~=2.9.0
+Requires-Dist: Pillow ~=10.0.0
+Requires-Dist: minio ~=7.1.0
+Requires-Dist: ffmpeg-python ~=0.2.0
+Requires-Dist: python-dateutil ~=2.8.0
+Requires-Dist: pytz ~=2023.3
+
+# Worker Core Library
+
+Core library for worker services in the Mesh-Sync platform.
+
+## Overview
+
+This is a Python library that provides shared functionality for worker services, including:
+- BullMQ integration
+- Storage providers (S3, Google Drive, SFTP)
+- Authentication and credentials management
+- Database utilities
+- Common utility functions
+
+## Installation
+
+### From Source
+
+```bash
+pip install -e .
+```
+
+### From GitHub Container Registry (GHCR)
+
+The Docker image is automatically built and published to GHCR:
+
+```bash
+docker pull ghcr.io/mesh-sync/worker-core-lib:latest
+```
+
+## Development
+
+### Building Locally
+
+Build the Python package:
+```bash
+pip install build
+python -m build
+```
+
+Build the Docker image:
+```bash
+docker build -t worker-core-lib:local .
+```
+
+### Running Tests
+
+```bash
+pip install -e .
+pytest
+```
+
+## CI/CD Pipeline
+
+This repository uses GitHub Actions for continuous integration and deployment:
+
+### Workflow: Build, Test, and Deploy to GHCR
+
+**Location**: `.github/workflows/docker-publish.yml`
+
+**Triggers**:
+- Push to `master` or `main` branches
+- Pull requests to `master` or `main` branches
+- Release published
+
+**Jobs**:
+1. **Build and Test**:
+   - Sets up Python 3.10 (matching Dockerfile)
+   - Installs dependencies
+   - Runs pytest (if tests exist)
+   - Builds Python package
+   - Builds Docker image
+   - Pushes to GHCR (only on push/release, not PRs)
+
+**Container Registry**: Images are published to GitHub Container Registry (GHCR) at `ghcr.io/mesh-sync/worker-core-lib`
+
+**Tags**:
+- `latest` - Latest build from default branch
+- `<branch>` - Branch-specific builds
+- `<branch>-<sha>` - Build with commit SHA
+- `v<version>` - Semantic version tags (on releases)
+
+### Accessing Container Images
+
+Images are publicly available from GHCR:
+
+```bash
+# Pull latest
+docker pull ghcr.io/mesh-sync/worker-core-lib:latest
+
+# Pull specific version
+docker pull ghcr.io/mesh-sync/worker-core-lib:v0.0.1
+
+# Pull specific branch
+docker pull ghcr.io/mesh-sync/worker-core-lib:master
+```
+
+## Usage
+
+See the example in `main.py` for a complete demonstration of using the core libraries.
+
+## License
+
+MIT License
