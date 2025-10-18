@@ -1,0 +1,79 @@
+# JackSocialChecker
+
+أداة بايثون للتحقق مما إذا كان البريد الإلكتروني مرتبطًا بحسابات Snapchat أو Twitter أو Instagram.
+`
+
+```bash
+pip install jack_social_checker
+```
+
+## الاستخدام
+
+1.  **إنشاء `email.txt`:** قم بإنشاء ملف يسمى `email.txt` في نفس دليل تشغيل السكريبت. يجب أن يحتوي هذا الملف على قائمة بعناوين البريد الإلكتروني، كل عنوان في سطر منفصل.
+
+    ```
+    email1@example.com
+    email2@example.com
+    ```
+
+2.  **إنشاء `proxies.txt` (اختياري):** إذا كنت ترغب في استخدام بروكسيات، فقم بإنشاء ملف يسمى `proxies.txt` يحتوي على قائمة بالبروكسيات، كل بروكسي في سطر منفصل. يمكن أن تكون البروكسيات بتنسيق `IP:PORT`.
+
+    ```
+    192.168.1.1:8080
+    192.168.1.2:8080
+    ```
+
+3.  **تشغيل الأداة:**
+
+    ```python
+    from jack_social_checker.checker import JackSocialChecker
+    import sys
+
+    try:
+        with open("email.txt", "r") as text:
+            emails_to_check = text.read().strip().splitlines()
+    except FileNotFoundError:
+        print("email.txt not found. Please create it with emails to check.")
+        sys.exit(1)
+
+    try:
+        with open("proxies.txt", "r") as pro:
+            proxy_list = pro.read().strip().splitlines()
+    except FileNotFoundError:
+        print("proxies.txt not found. Please create it with proxies.")
+        proxy_list = []
+
+    print("""
+    [+] 1 - للجميع (تويتر، انستغرام، سناب شات)[+]
+    [===================================================]
+    [+] 2 - فحص بريد تويتر [+]
+    [===================================================]
+    [+] 3 - فحص بريد انستغرام [+]
+    [===================================================]
+    [+] 4 - فحص بريد سناب شات [+]
+
+    مثال على اختيار متعدد: 2 3 أو 4 3 هكذا :)
+
+    """)
+
+    user_choice = str(input("أدخل الرقم من فضلك:"))
+    num_threads = int(input("[+] أدخل عدد الثريدات [+]:"))
+    proxy_type_choice = int(input("[1] Http/Https ---- [2] socks4 ------ [3] socks5 [أدخل الرقم فقط]:"))
+
+    checker = JackSocialChecker(emails_to_check, proxy_list, user_choice, num_threads)
+    checker.start(proxy_type_choice)
+    ```
+
+## الميزات
+
+*   التحقق من ارتباط البريد الإلكتروني بحسابات Instagram و Twitter و Snapchat.
+*   دعم البروكسيات (HTTP/HTTPS، SOCKS4، SOCKS5).
+*   العمل متعدد الخيوط (Multithreading) لتحسين الأداء.
+
+## الاعتمادات
+
+*   `requests`
+*   `threading`
+*   `queue`
+
+
