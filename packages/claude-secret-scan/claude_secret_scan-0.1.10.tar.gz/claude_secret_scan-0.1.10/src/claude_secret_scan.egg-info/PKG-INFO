@@ -1,0 +1,37 @@
+Metadata-Version: 2.4
+Name: claude-secret-scan
+Version: 0.1.10
+Summary: Secret scanning CLI for Claude Code (shared core, zero deps)
+Author-email: MintMCP <support@mintmcp.com>
+License: Apache-2.0
+Project-URL: Homepage, https://github.com/mintmcp/agent-security
+Project-URL: Issues, https://github.com/mintmcp/agent-security/issues
+Project-URL: Source, https://github.com/mintmcp/agent-security
+Keywords: secrets,security,claude,hooks,agent-security
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Security
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+
+Claude Secret Scan
+===================
+
+CLI wrapper for the Claude Code secret scanning hooks. Provides `claude-secret-scan`.
+
+Usage:
+
+  echo '{"hook_event_name":"UserPromptSubmit","prompt":"hello"}' | claude-secret-scan --mode=pre
+
+See https://github.com/mintmcp/agent-security for source and docs.
+

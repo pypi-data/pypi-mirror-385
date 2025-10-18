@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "claude-secret-scan"
+version = "0.1.10"
+description = "Secret scanning CLI for Claude Code (shared core, zero deps)"
+readme = "README.md"
+requires-python = ">=3.7"
+license = { text = "Apache-2.0" }
+authors = [
+  { name = "MintMCP", email = "support@mintmcp.com" }
+]
+keywords = ["secrets", "security", "claude", "hooks", "agent-security"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: Apache Software License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Security",
+  "Topic :: Software Development :: Libraries :: Python Modules"
+]
+
+[project.urls]
+Homepage = "https://github.com/mintmcp/agent-security"
+Issues = "https://github.com/mintmcp/agent-security/issues"
+Source = "https://github.com/mintmcp/agent-security"
+
+[project.scripts]
+claude-secret-scan = "claude_secret_scan.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["claude_secret_scan*"]
+exclude = ["tests*"]
+
