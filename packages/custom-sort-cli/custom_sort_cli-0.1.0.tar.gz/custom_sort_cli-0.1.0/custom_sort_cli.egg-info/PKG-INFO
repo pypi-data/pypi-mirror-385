@@ -1,0 +1,139 @@
+Metadata-Version: 2.4
+Name: custom-sort-cli
+Version: 0.1.0
+Summary: A custom sort command line tool using Python and Click.
+Home-page: https://github.com/bohdanfariyon/custom-sort
+Author: Bohdan
+Author-email: your.email@example.com
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+Requires-Dist: click
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+### 📜 Для проєкту `custom-sort` (`README.md`)
+
+````markdown
+# Custom Sort CLI (`csort`)
+
+[![PyPI version](https://badge.fury.io/py/custom-sort-cli.svg)](https://badge.fury.io/py/custom-sort-cli)
+[![Build Status](https://github.com/bohdanfariyon/custom-sort/actions/workflows/publish.yml/badge.svg)](https://github.com/bohdanfariyon/custom-sort/actions)
+
+A simple, lightweight command-line utility written in Python to sort lines of text files, mimicking the basic functionality of the GNU `sort` command. This tool is built using the `click` library.
+
+---
+
+## 🚀 Features
+
+* **Standard Input/Output**: Works with files or standard I/O streams (`stdin`/`stdout`).
+* **Reverse Sort**: Sort lines in descending order.
+* **Numeric Sort**: Sort based on the numerical value of lines.
+* **Unique Lines**: Output only unique lines from the input.
+* **File Output**: Write the sorted result directly to a specified file.
+* **Dockerized**: Comes with a `Dockerfile` for easy containerization.
+
+---
+
+## 📦 Installation
+
+You can install the package directly from PyPI:
+
+```bash
+pip install custom-sort-cli
+````
+
+-----
+
+## 🛠️ Usage
+
+The main command is `csort`. You can pass it a file path or pipe data into it.
+
+### **Basic Sorting**
+
+Sort lines in `myfile.txt` and print to the console.
+
+```bash
+csort myfile.txt
+```
+
+### **Sorting from Standard Input**
+
+```bash
+cat myfile.txt | csort
+```
+
+### **Command Options**
+
+  * **`-r, --reverse`**: Sort in reverse (descending) order.
+
+    ```bash
+    csort -r myfile.txt
+    ```
+
+  * **`-n, --numeric`**: Perform a numeric sort. Useful for files containing numbers.
+
+    ```bash
+    # For a file `numbers.txt` with:
+    # 10
+    # 2
+    # 1
+    # 50
+    csort -n numbers.txt
+    # Output:
+    # 1
+    # 2
+    # 10
+    # 50
+    ```
+
+  * **`-u, --unique`**: Filter out duplicate lines.
+
+    ```bash
+    csort -u duplicates.txt
+    ```
+
+  * **`-o, --output <filename>`**: Write the output to a file instead of the console.
+
+    ```bash
+    csort myfile.txt -o sorted_file.txt
+    ```
+
+-----
+
+## 🐳 Docker Usage
+
+You can also build and run this tool as a Docker container.
+
+1.  **Build the image:**
+
+    ```bash
+    docker build -t csort-app .
+    ```
+
+2.  **Run the container:**
+
+    To see the help message:
+
+    ```bash
+    docker run --rm csort-app --help
+    ```
+
+    To sort a file from your current directory, you need to mount it as a volume:
+
+    ```bash
+    # This command mounts the current directory to /data inside the container
+    # and tells csort to read the file /data/myfile.txt
+    docker run --rm -v "$(pwd)":/data csort-app /data/myfile.txt
+    ```
+
+```
