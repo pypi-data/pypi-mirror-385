@@ -1,0 +1,179 @@
+Metadata-Version: 2.3
+Name: claude-cache-savings
+Version: 0.1.0
+Summary: Calculates Anthropic Claude cost savings from use of prompt caching
+License: MIT
+Keywords: Athropic,Claude,Cost,Cache,Caching,Price,Usage,Statistics,Stats
+Author: jojje
+Author-email: tinjon+pypi@gmail.com
+Requires-Python: >=3.10,<4.0
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: Topic :: Utilities
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Operating System :: MacOS
+Classifier: Operating System :: Microsoft :: Windows
+Project-URL: Homepage, https://github.com/jojje/claude-cache-savings
+Project-URL: Issues, https://github.com/jojje/claude-cache-savings/issues
+Project-URL: Repository, https://github.com/jojje/claude-cache-savings
+Description-Content-Type: text/markdown
+
+
+# claude-cache-savings
+
+Calculates Anthropic Claude cost savings from use of prompt caching
+
+Provides light-weight analytics about how valuable "prompt caching" is to _your_ specific use of the claude models, what models you gravitate towards and how that use translates to what you pay.
+
+# Installation
+
+`pip install claude-cache-savings`
+
+# Usage
+
+1. Export API usage CSV files from Antropic's [API usage dashboard](https://console.anthropic.com/usage?group_by=token_type). Click the `Export` button.
+2. Have the script analyze one or several of those files, each covering period up to one month of usage: `claude-cache-savings *.csv`
+
+## Options
+
+```
+usage: claude-cache-savings [-m] files
+
+Provides Anthropic Claude caching, model use and cost statistics
+
+positional arguments:
+  file        Exported API usage CSV files from the console
+
+options:
+  -m          Show per-model breakdown
+```
+
+
+## Examples
+
+Aggregate statistics
+
+```
+claude-cache-savings claude_api_tokens_*.csv
+
+==[ Total ]====================================
+
+Input cache hit   71 %
+Input savings     52 %
+Total savings     44 %
+
+Total cost        $ 41.12
+Est cache-less    $ 74.04
+
+Input tokens      11,146,779   | $ 29.87
+Output tokens     409,695      | $ 11.25
+Input/output tok  27x
+```
+
+Per model break-down, ordered by the fractional cost incurred by use of the respective models with the ones having the highest spend listed first.
+
+```
+claude-cache-savings -m claude_api_tokens_*.csv
+
+==[ Total ]====================================
+
+Input cache hit   71 %
+Input savings     52 %
+Total savings     44 %
+
+Total cost        $ 41.12
+Est cache-less    $ 74.04
+
+Input tokens      11,146,779   | $ 29.87
+Output tokens     409,695      | $ 11.25
+Input/output tok  27x
+
+==[ Per model ]================================
+
+claude-opus-4-1-20250805    (use-cost: 22% 63%)
+  Input cache hit   60 %
+  Input savings     46 %
+  Total savings     39 %
+
+  Total cost        $ 25.99
+  Est cache-less    $ 42.45
+
+  Input tokens      2,407,472    | $ 19.65
+  Output tokens     84,467       | $ 6.34
+  Input/output tok  29x
+
+claude-sonnet-4-20250514    (use-cost: 78% 36%)
+  Input cache hit   74 %
+  Input savings     62 %
+  Total savings     52 %
+
+  Total cost        $ 14.80
+  Est cache-less    $ 30.97
+
+  Input tokens      8,701,412    | $ 9.93
+  Output tokens     324,578      | $ 4.87
+  Input/output tok  27x
+
+claude-opus-4-20250514      (use-cost: 0% 1%)
+  Input cache hit   66 %
+  Input savings     51 %
+  Total savings     47 %
+
+  Total cost        $ 0.33
+  Est cache-less    $ 0.62
+
+  Input tokens      37,895       | $ 0.28
+  Output tokens     650          | $ 0.05
+  Input/output tok  58x
+```
+
+## Fields
+
+* `Input cache hit`: ratio of input tokens that were retrieved from previously cached data (at significant discount price) vs total number of input tokens, incl. those that were not previously cached, and incurred a 25% extra cost to put them into the anthropic prompt cache for subsequence referencing.
+* `Input savings`: Percent of how much money was saved on input token processing by using caching vs. if caching had Not been used at all. This takes into account the higher price for initial prompt caching writes. Worst case would be a negative percentage where there are always cache misses and no cache hits, as the input cost would then be higher than not using caching at all. As long as this percentage is positive money is saved.
+* `Total savings`: As the term implies, factors in the output token cost as well. It's `(cached-input-cost + output-cost) / (uncached-input-cost + output-cost) - 1`
+* `Total cost`: What was being charged by anthropic overall. This doesn't use anthropic's billing statement but derives the cost from the published pricing information that's been translated into the pricing configuration for the project. As long as this number lines up with your billing statement for the period the csv files cover, you know the pricing information this project uses is correct. If there is a difference, then anthropic has likely changed their pricing so the pricing information for the project should be adjusted accordingly.
+* `Est cache-less`: An estimate of what the total cost would have been if caching had not been used at all.
+* `Input tokens`: Total number of input tokens processed during the covered period. The dollar value at the end is the calculated actual cost for those input tokens.
+* `Output tokens`: Total number of output tokens generated during the covered period. The dollar value at the end is the calculated actual cost for those output tokens.
+* `Input/output tok`: Ratio between input and output tokens. Useful to get a sens of how you use different models, or models overall; if your usage is context heavy where you want models to answer based on information your provide / engage in long conversations, or mostly context free zero-shot like "tell me a joke". It's mostly a trivia statistic about _you_ and your model use.
+
+Of all the statistics, the Cache hit and Input savings are the most important. The former tells you how well (or poorly) you use Anthropic's caching, something you can affect with your model use behavior. The latter how valuable caching is to your specific use of the caching feature. The other stats are mostly derived from those two.
+
+Finally, in the per-model break-down, there are two percentage values in braces following the model name such as `(use-cost: 22% 63%)`. The two fractions respectively communicate that specific model's contribution to the total token use (input+output) and total cost. I.e. 22% in the example means the input token use for `claude-opus-4-1-20250805` contributed 22% of the total tokens processed by anthropic for the period. The second fraction; 63% means the cost contribution for those tokens in relation to all models used for the period.
+
+These numbers are useful to get a sense of "bang for buck". For instance, is the output of Opus really worth the extremely high cost, or are you perhaps using Opus for things where Sonnet might have sufficed? 
+
+Like for Input/output token ratio, these numbers are mostly about you and _your_ behavioral use of the models, trying to surface dimensions that _might_ save you even more money if you changed your model use slightly. For a very model-concious user it would of course mean something slightly different. In the example above; that there is a significant number of tasks / questions for where Sonnet simply isn't good enough, and where one has to _pay through the nose_ by using Opus instead to get the output quality required. In other words, these numbers just help surface usage information and how that usage contributes to what you pay. What the numbers mean is entirely dependent on what you prioritize and need. They are just statistics about your use and the relative cost of that specific use.
+
+## Updating pricing / Staying up-to-date
+
+This script uses a pricing file derived from Anthropic's published model pricing pages since Anthropic does not provide an API for fetching this information automtically. As such this snapshot-information is likely to become stale if anthropic either introduces new models or changes the pricing for any of them, including the caching discounts.
+
+For that reason the pricing information embedded is saved as a JSON file upon first use to your home directory, in the folder `$HOME/.config/claude-cache-savings/config.json` or on windows ``%HOMEPATH%\.config\claude-cache-savings\config.json`.
+
+If pricing changes, you can just revise the numbers in that file.
+
+### Config file (& missing model-id warning)
+
+The config file has two elements to it:
+1. The pricing dimensions for each model **family**, in $ (USD) / 1M tokens as shown on the provider's pricing related web pages.
+2. A mapping between a specific model ID and a model family.
+
+The reason for this separation is to make it as simple as possible to deal with new model variants in a given family, and the pricing, which is set for an entire model family and not for a specific model in that family. I.e. there is a many-to-one relationship between models and a model family.
+
+If the pricing changes, then it changes for an entire family, so you just have to revise the changed pricing value for _that_ specific family and it will take effect for all models of that family. If a new model is introduced, such as an update to Sonnet, then that model will have a _new_ model ID, so you just add that new model ID to the second section, and the Sonnet family pricing will automatically be applied to this model as well.
+
+If you've used a model (id) not covered by this script, the script will tell you about it when run. For instance `[!] Warning: the following model-ids do not have a pricing link established and will be excluded from the statistics calculation: {'claude-opus-4-1-20250805'}`. This means you have to add `claude-opus-4-1-20250805` to the Opus family in the config file so the script knows what price to assign for this model's API usage. Once done, the warning goes away and the usage + cost incurreed by this model will be included in the statistics as well. I.e. link this model ID to the family by adding the following to the `pricing` section of the config file: `"claude-opus-4-1-20250805": "Opus"`
+
+The pricing information specified and required for a model family is as follows:
+
+* `input`: Normal input token pricing without caching.
+* `output`: Output token generation cost.
+* `cache_write`: Cost of input tokens that aren't already cached when you leverage the Claude caching feature in your programs / APIs.
+* `cache_read`: Cost for input tokens that were retrieved from the claude cache (cache hits).
+* `cache_write_1h`: A recent caching variant with a separate pricing, where anthropic will cache the input tokens for 1 hour instead of the normal 10 minutes only.
+
+All prices are in $/1M tokens.
+
