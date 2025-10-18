@@ -1,0 +1,10 @@
+<div i18n:domain="pyams_security_views"
+	 tal:define="results view.get_subforms();
+				 (has_subforms, subforms) tales:boolean_iter(results);"
+	 tal:condition="has_subforms">
+	<h4 class="px-3"
+		i18n:translate="">Inherited roles</h4>
+	<tal:loop repeat="subform subforms">
+		${structure:subform.render()}
+	</tal:loop>
+</div>
