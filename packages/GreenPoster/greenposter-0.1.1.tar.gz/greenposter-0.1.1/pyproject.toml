@@ -1,0 +1,18 @@
+[project]
+name = "GreenPoster"
+version = "0.1.1"
+description = "..."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }   # メインはMITでOK（コード用）
+authors = [{ name = "Codedash" }]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+license-files = ["LICENSE", "OFL.txt"]
+
+[tool.setuptools.package-data]
+greenposter = ["fonts/*.ttf", "fonts/*.otf"]
