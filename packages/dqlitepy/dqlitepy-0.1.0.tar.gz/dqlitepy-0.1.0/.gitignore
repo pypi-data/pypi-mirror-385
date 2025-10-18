@@ -1,0 +1,62 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.dylib
+*.dll
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Vendor build artifacts
+vendor/dqlite-*/
+vendor/raft-*/
+vendor/build/
+vendor/vendor/
+vendor/install/
+
+# Keep vendor tarballs only
+!vendor/*.tar.gz
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.log
+*.tmp
+.temp/
+
+# Generated API documentation (auto-generated from source)
+docusaurus/docs/api/*.md
+!docusaurus/docs/api/_category_.json
+
+# Built shared libraries (included in wheel, not source)
+# Match .so, .so.0, .so.1, etc.
+dqlitepy/_lib/**/*.so*
+dqlitepy/_lib/**/*.dylib
+dqlitepy/_lib/**/*.dll
+!dqlitepy/_lib/**/.gitkeep
+!dqlitepy/_lib/**/libdqlitepy.h
