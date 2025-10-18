@@ -1,0 +1,65 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cdmn-mcp-server"
+version = "1.0.0"
+authors = [
+    {name = "rickjang", email = "rickjang@example.com"},
+]
+description = "FastMCP 기반 DMN 서버로 자연어 입력을 받아 DMN 규칙을 실행하고 결과를 반환하는 MCP 서버"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.11"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Office/Business :: Financial",
+]
+keywords = ["mcp", "dmn", "decision", "rules", "engine", "fastmcp", "llm", "natural language"]
+dependencies = [
+    "fastmcp>=0.1.0",
+    "cdmn>=0.1.0",
+    "pydantic>=2.0.0",
+    "lxml>=4.9.0",
+    "uvloop>=0.17.0",
+    "aiofiles>=23.0.0",
+    "python-multipart>=0.0.6",
+    "httpx>=0.24.0",
+    "openai>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "httpx>=0.24.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/rickjang/cdmn-mcp-server"
+Documentation = "https://github.com/rickjang/cdmn-mcp-server#readme"
+Repository = "https://github.com/rickjang/cdmn-mcp-server"
+"Bug Tracker" = "https://github.com/rickjang/cdmn-mcp-server/issues"
+
+[project.scripts]
+cdmn-mcp-server = "cdmn_mcp_server.server_fully_generic:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["cdmn_mcp_server*"]
+
+[tool.setuptools.package-data]
+cdmn_mcp_server = [
+    "rules/*.dmn.xml",
+    "prompts/*.md",
+    "prompts/*.py",
+]

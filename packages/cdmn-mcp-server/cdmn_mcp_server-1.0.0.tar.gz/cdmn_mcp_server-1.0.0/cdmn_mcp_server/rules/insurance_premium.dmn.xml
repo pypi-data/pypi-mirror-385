@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/"
+             xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/"
+             xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/"
+             xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/"
+             xmlns:kie="http://www.drools.org/kie/dmn/1.2"
+             xmlns:feel="http://www.omg.org/spec/DMN/20180521/FEEL/"
+             id="insurance-premium"
+             name="Insurance Premium Calculation"
+             typeLanguage="http://www.omg.org/spec/DMN/20180521/FEEL/"
+             namespace="https://example.com/dmn/insurance">
+  
+  <decision id="riskCategory" name="Risk Category">
+    <decisionTable id="riskTable" hitPolicy="FIRST">
+      <input id="ageInput" label="Age">
+        <inputExpression typeRef="number">
+          <text>age</text>
+        </inputExpression>
+      </input>
+      <input id="smokerInput" label="Smoker">
+        <inputExpression typeRef="boolean">
+          <text>smoker</text>
+        </inputExpression>
+      </input>
+      <input id="healthScoreInput" label="Health Score">
+        <inputExpression typeRef="number">
+          <text>health_score</text>
+        </inputExpression>
+      </input>
+      <output id="riskOutput" label="Risk Category" typeRef="string"/>
+      <rule id="rule1">
+        <inputEntry id="age1">
+          <text>&gt;= 60</text>
+        </inputEntry>
+        <inputEntry id="smoker1">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="health1">
+          <text>&lt; 50</text>
+        </inputEntry>
+        <outputEntry id="risk1">
+          <text>"Very High"</text>
+        </outputEntry>
+      </rule>
+      <rule id="rule2">
+        <inputEntry id="age2">
+          <text>&gt;= 60</text>
+        </inputEntry>
+        <inputEntry id="smoker2">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="health2">
+          <text>&gt;= 50</text>
+        </inputEntry>
+        <outputEntry id="risk2">
+          <text>"High"</text>
+        </outputEntry>
+      </rule>
+      <rule id="rule3">
+        <inputEntry id="age3">
+          <text>&gt;= 40</text>
+        </inputEntry>
+        <inputEntry id="smoker3">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="health3">
+          <text>&lt; 50</text>
+        </inputEntry>
+        <outputEntry id="risk3">
+          <text>"High"</text>
+        </outputEntry>
+      </rule>
+      <rule id="rule4">
+        <inputEntry id="age4">
+          <text>&gt;= 40</text>
+        </inputEntry>
+        <inputEntry id="smoker4">
+          <text>false</text>
+        </inputEntry>
+        <inputEntry id="health4">
+          <text>&gt;= 50</text>
+        </inputEntry>
+        <outputEntry id="risk4">
+          <text>"Medium"</text>
+        </outputEntry>
+      </rule>
+      <rule id="rule5">
+        <inputEntry id="age5">
+          <text>&lt; 40</text>
+        </inputEntry>
+        <inputEntry id="smoker5">
+          <text>false</text>
+        </inputEntry>
+        <inputEntry id="health5">
+          <text>&gt;= 50</text>
+        </inputEntry>
+        <outputEntry id="risk5">
+          <text>"Low"</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  
+  <decision id="premium" name="Premium Calculation">
+    <decisionTable id="premiumTable" hitPolicy="FIRST">
+      <input id="riskCategoryInput" label="Risk Category">
+        <inputExpression typeRef="string">
+          <text>riskCategory</text>
+        </inputExpression>
+      </input>
+      <output id="premiumOutput" label="Premium" typeRef="number"/>
+      <rule id="premiumRule1">
+        <inputEntry id="risk1">
+          <text>"Very High"</text>
+        </inputEntry>
+        <outputEntry id="premium1">
+          <text>200000</text>
+        </outputEntry>
+      </rule>
+      <rule id="premiumRule2">
+        <inputEntry id="risk2">
+          <text>"High"</text>
+        </inputEntry>
+        <outputEntry id="premium2">
+          <text>150000</text>
+        </outputEntry>
+      </rule>
+      <rule id="premiumRule3">
+        <inputEntry id="risk3">
+          <text>"Medium"</text>
+        </inputEntry>
+        <outputEntry id="premium3">
+          <text>100000</text>
+        </outputEntry>
+      </rule>
+      <rule id="premiumRule4">
+        <inputEntry id="risk4">
+          <text>"Low"</text>
+        </inputEntry>
+        <outputEntry id="premium4">
+          <text>50000</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  
+</definitions>
