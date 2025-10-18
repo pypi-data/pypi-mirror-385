@@ -1,0 +1,142 @@
+Metadata-Version: 2.4
+Name: mcp-server-excel-sql
+Version: 0.1.1
+Summary: MCP server that exposes Excel files as SQL-queryable tables via DuckDB
+Author-email: Ivan <ivan@eriad.com>
+License-Expression: MIT
+Project-URL: Homepage, https://github.com/ivan-loh/mcp-excel
+Project-URL: Repository, https://github.com/ivan-loh/mcp-excel
+Project-URL: Issues, https://github.com/ivan-loh/mcp-excel/issues
+Keywords: mcp,excel,sql,duckdb,server
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Database
+Classifier: Topic :: Office/Business
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: fastmcp>=1.0.0
+Requires-Dist: duckdb>=1.0.0
+Requires-Dist: pyyaml>=6.0
+Requires-Dist: click>=8.1
+Requires-Dist: pandas>=2.1
+Requires-Dist: openpyxl>=3.1
+Requires-Dist: watchdog>=3.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.4; extra == "dev"
+Requires-Dist: pytest-cov>=4.1; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.23; extra == "dev"
+Dynamic: license-file
+
+# mcp-server-excel-sql
+
+MCP server exposing Excel files as SQL-queryable DuckDB views.
+
+## Features
+
+- SQL queries on Excel via DuckDB in-memory views
+- RAW (all_varchar) or ASSISTED (sheet_overrides) modes
+- Multi-row headers, type hints, unpivot, column renames
+- Auto-refresh on file changes (--watch)
+- Thread-safe timeout enforcement via conn.interrupt()
+
+## Installation
+
+```bash
+pipx install mcp-server-excel-sql
+```
+
+## Usage
+
+```bash
+mcp-excel --path /data/excel --watch --overrides config.yaml
+```
+
+## MCP Tools
+
+**tool_load_dir** - Load Excel directory into views
+**tool_query** - Execute SELECT (read-only, timeout/limit enforced)
+**tool_list_tables** - List views with metadata
+**tool_get_schema** - DESCRIBE table
+**tool_refresh** - Rescan filesystem (incremental or full)
+
+## Table Naming
+
+**Format**: `<alias>.<filepath>.<sheet>` (dot-separated, lowercase, sanitized)
+
+**Sanitization**:
+- Spaces → `_`
+- Special chars → removed
+- Allowed: `[a-z0-9_$]`
+
+**Alias**: Auto-generated from directory name
+
+**Examples**:
+```
+/data/sales/Q1-2024.xlsx → "sales.q12024.summary"
+/reports/P&L (Final).xlsx → "reports.plfinal.sheet1"
+```
+
+**IMPORTANT**: Dots require quoted identifiers in SQL:
+```sql
+SELECT * FROM "sales.q12024.summary"  -- correct
+SELECT * FROM sales.q12024.summary    -- fails (Catalog Error)
+```
+
+## System Views
+
+`<alias>.__files` - File metadata (path, sheet_count, total_rows, mtime)
+`<alias>.__tables` - Table metadata (table_name, file, sheet, mode, est_rows)
+
+Query: `SELECT * FROM "sales.__files"`
+
+## Modes
+
+**RAW**: `read_xlsx(..., all_varchar=true, header=false)`
+**ASSISTED**: Apply per-sheet overrides
+
+```yaml
+sales.xlsx:
+  sheet_overrides:
+    Summary:
+      skip_rows: 3
+      skip_footer: 2
+      header_rows: 2
+      drop_regex: "^Total:"
+      column_renames:
+        "col_0": "region"
+      type_hints:
+        amount: "DECIMAL(10,2)"
+        date: "DATE"
+      unpivot:
+        id_vars: ["Region"]
+        value_vars: ["Jan", "Feb"]
+        var_name: "Month"
+        value_name: "Sales"
+```
+
+## Security
+
+- Read-only: BEGIN TRANSACTION READ ONLY (DuckDB-enforced, blocks all write operations)
+- Path-confined: Root path validation, no traversal
+- Timeout: threading.Timer → conn.interrupt()
+- Row limit: fetchmany(max_rows + 1)
+
+## Development
+
+```bash
+pip install -e ".[dev]"
+pytest --cov=mcp_excel tests/
+python -m build
+```
+
+**Coverage**: 78% (567 statements, 126 missed)
+**Tests**: 53 passing
+
+## License
+
+MIT
