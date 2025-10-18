@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "matinverse"
+# version will be taken from matinverse/__init__.py
+dynamic = ["version"]
+description = "Multiphysics Topology Optimization"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [
+  { name="Giuseppe Romano", email="romanog@mit.edu" }
+]
+requires-python = ">=3.10"
+dependencies = [
+  "numpy",
+  "lineax",
+  "equinox",
+  "diffrax",
+  "optimistix",
+  "plotly",
+  "jax[cpu] <=0.6.1",
+  "nlopt",
+  "interpax",
+  "msgpack",
+  "imageruler",
+  "msgpack-numpy",
+  "matplotlib",
+  "scipy"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest",
+  "nbmake",
+]
+docs = [
+  "sphinx>=7",
+  "sphinx-book-theme>=1.1.4",
+  "sphinx-copybutton",
+  "sphinxcontrib-video",
+  "setuptools-scm",
+  "roman",
+  "sphinx-autodoc-typehints",
+  "nbsphinx",
+]
+
+[tool.setuptools.dynamic]
+version = { attr = "matinverse.__version__" }
+
+[tool.setuptools.packages.find]
+include = ["matinverse*"]
+
+

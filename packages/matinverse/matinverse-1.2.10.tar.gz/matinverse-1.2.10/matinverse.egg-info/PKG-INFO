@@ -1,0 +1,46 @@
+Metadata-Version: 2.4
+Name: matinverse
+Version: 1.2.10
+Summary: Multiphysics Topology Optimization
+Author-email: Giuseppe Romano <romanog@mit.edu>
+License-Expression: MIT
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy
+Requires-Dist: lineax
+Requires-Dist: equinox
+Requires-Dist: diffrax
+Requires-Dist: optimistix
+Requires-Dist: plotly
+Requires-Dist: jax[cpu]<=0.6.1
+Requires-Dist: nlopt
+Requires-Dist: interpax
+Requires-Dist: msgpack
+Requires-Dist: imageruler
+Requires-Dist: msgpack-numpy
+Requires-Dist: matplotlib
+Requires-Dist: scipy
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: nbmake; extra == "dev"
+Provides-Extra: docs
+Requires-Dist: sphinx>=7; extra == "docs"
+Requires-Dist: sphinx-book-theme>=1.1.4; extra == "docs"
+Requires-Dist: sphinx-copybutton; extra == "docs"
+Requires-Dist: sphinxcontrib-video; extra == "docs"
+Requires-Dist: setuptools-scm; extra == "docs"
+Requires-Dist: roman; extra == "docs"
+Requires-Dist: sphinx-autodoc-typehints; extra == "docs"
+Requires-Dist: nbsphinx; extra == "docs"
+Dynamic: license-file
+
+MatInverse is a code for multiphysics Topology optimization written in JAX
+
+To install:
+
+```bash
+
+  pip install matinverse
+
+```
