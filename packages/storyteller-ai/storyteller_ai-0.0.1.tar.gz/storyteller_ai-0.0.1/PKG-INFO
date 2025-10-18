@@ -1,0 +1,154 @@
+Metadata-Version: 2.4
+Name: storyteller-ai
+Version: 0.0.1
+Summary: A storyteller project - where your imagination meets state-of-the-art AI creativity.
+Author-email: Artur Barseghyan <artur.barseghyan@gmail.com>, Dale Richardson <artur.barseghyan@gmail.com>
+Maintainer-email: Artur Barseghyan <artur.barseghyan@gmail.com>, Dale Richardson <artur.barseghyan@gmail.com>
+License-Expression: MIT
+Project-URL: Homepage, https://github.com/storyteller-project/storyteller
+Project-URL: Issues, https://github.com/storyteller-project/storyteller/issues
+Project-URL: Documentation, https://storyteller.readthedocs.io/
+Project-URL: Repository, https://github.com/storyteller-project/storyteller
+Project-URL: Changelog, https://storyteller.readthedocs.io/en/latest/changelog.html
+Keywords: storyteller,ai,storyteller-ai
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python
+Classifier: Topic :: Software Development
+Description-Content-Type: text/x-rst
+Requires-Dist: fal-client
+Requires-Dist: langchain
+Requires-Dist: langchain-community
+Requires-Dist: langchain-core
+Requires-Dist: langchain-openai
+Requires-Dist: sentence-transformers
+Requires-Dist: traitlets
+Requires-Dist: vega-datasets
+Requires-Dist: markdown
+Requires-Dist: httpx
+Requires-Dist: openai
+Requires-Dist: openpyxl
+Requires-Dist: pandoc
+Requires-Dist: protobuf
+Requires-Dist: pyarrow
+Requires-Dist: pydantic
+Requires-Dist: fastapi
+Requires-Dist: google-cloud-secret-manager
+Requires-Dist: google-crc32c
+Requires-Dist: google-genai
+Requires-Dist: itsdangerous
+Requires-Dist: httpx
+Requires-Dist: anywidget
+Requires-Dist: authlib
+Requires-Dist: pypandoc
+Requires-Dist: cloudpathlib[gs]
+Requires-Dist: Pillow
+Requires-Dist: marimo
+Requires-Dist: altair
+Requires-Dist: python-dotenv
+Requires-Dist: python-multipart
+Requires-Dist: reportlab
+Requires-Dist: starlette
+Requires-Dist: tiktoken
+Provides-Extra: all
+Requires-Dist: fake.py[dev,docs,test]; extra == "all"
+Provides-Extra: dev
+Requires-Dist: build; extra == "dev"
+Requires-Dist: detect-secrets; extra == "dev"
+Requires-Dist: doc8; extra == "dev"
+Requires-Dist: IPython; extra == "dev"
+Requires-Dist: mypy; extra == "dev"
+Requires-Dist: pkginfo; extra == "dev"
+Requires-Dist: pydoclint; extra == "dev"
+Requires-Dist: ruff; extra == "dev"
+Requires-Dist: twine; extra == "dev"
+Requires-Dist: uv; extra == "dev"
+Requires-Dist: wheel; extra == "dev"
+Provides-Extra: test
+Requires-Dist: fake.py; extra == "test"
+Requires-Dist: pytest; extra == "test"
+Requires-Dist: pytest-cov; extra == "test"
+Requires-Dist: pytest-codeblock; extra == "test"
+Provides-Extra: docs
+Requires-Dist: sphinx<6.0; extra == "docs"
+Requires-Dist: pygments; extra == "docs"
+Requires-Dist: sphinx-autobuild; extra == "docs"
+Requires-Dist: sphinx-rtd-theme>=1.3.0; extra == "docs"
+Requires-Dist: sphinx-no-pragma; extra == "docs"
+Requires-Dist: sphinx-design; extra == "docs"
+Requires-Dist: sphinx-revealjs; extra == "docs"
+
+===========
+Storyteller
+===========
+.. image:: storyteller.jpg
+   :width: 100%
+   :alt: Storyteller - where your imagination meets state-of-the-art AI creativity
+   :align: center
+
+A storyteller project - where your imagination meets state-of-the-art AI creativity.
+
+Concept
+=======
+
+Simply share a brief message outlining the story you envision, upload photos of characters (or even multiple images to bring diverse personas to life), and select key settings that shape tone, setting, and style. The system converts these inputs into an engaging narrative using OpenAI's LLMs while DALL-E3 generates amazing visuals - all compiled into a polished PDF that tells your own unique personalised fairytale.
+
+Background
+==========
+When my first son (now 20) was little, around age of 3 and beyond, he enjoyed listening to the stories I made up for him. These stories were about his favourite things, places he wanted to go, with him being the lead character.
+
+I told many stories over the years. Whether we were riding bikes, waiting for a bus, relaxing at home, or even as a bedtime story alternative, these moments became very special to both of us.
+
+I love to read and I love art.
+
+Around that time, about 15 years ago, I was considering turning my experience into a small side hobby/business where parents would request a personalised stories for their children that I would work on from both visual and narrative perspective and produce a printed book - a special gift to their beloved child, almost exactly as I described in the Concept section. However, as time went on and other responsibilities took over, I set the idea aside.
+
+When LLM breakout happened, the first thing that came into my mind was that I actually can revisit my concept and bring it to life.
+
+Quick start
+===========
+Create venv and install requirements
+------------------------------------
+.. code-block:: sh
+
+    make create-venv
+    make install
+
+Run the marimo app
+------------------
+.. code-block:: sh
+
+    make run
+
+Open
+----
+
+Go to `localhost:8000/storyteller/ <http://localhost:8000/storyteller/>`_
+
+
+Presentation
+============
+See the `presentation.rst`.
+
+Build
+-----
+.. code-block:: sh
+
+    make revealjs
+
+Serve
+-----
+.. code-block:: sh
+
+    make serve-docs
+
+Open
+----
+
+Go to `localhost:5001/revealjs/ <http://localhost:5001/revealjs/>`_
