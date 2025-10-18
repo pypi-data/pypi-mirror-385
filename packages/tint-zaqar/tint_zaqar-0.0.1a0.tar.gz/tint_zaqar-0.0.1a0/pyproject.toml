@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tint-zaqar"
+version = "0.0.1a"
+description = "A lightweight Python library that adds color and style to your terminal output."
+readme = "README.md"
+authors = [{name = "zaqar", email = "hakobyanzaqar3@gmail.com"}]
+license = {text = "MIT"}
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Terminals",
+                                                    
+]
+requires-python = ">=3.7"
+keywords = ["color", "terminal", "ansi", "cli", "styling"]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/tint"
+Repository = "https://github.com/yourusername/tint"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-dir]
+"" = "src"
