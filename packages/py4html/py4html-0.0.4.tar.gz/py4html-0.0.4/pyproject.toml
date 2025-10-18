@@ -1,0 +1,26 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "py4html"
+version = "0.0.4"
+authors = [
+  { name="Sreehari P V", email="sreehari.mras@gmail.com" },
+]
+
+description = "Use Python for front end web development"
+readme = "README.md"
+requires-python = ">=3"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[tool.hatch.build]
+sources = ["src"] 
+
+[project.urls]
+Homepage = "https://github.com/Rubarion/py4html"
+Issues = "https://github.com/Rubarion/py4html/issues"
