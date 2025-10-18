@@ -1,0 +1,24 @@
+[project]
+name = "dashai_deepseek_model_package"
+version = "0.0.6"
+
+dependencies = ['llama-cpp-python>=0.2.90', 'huggingface-hub>=0.29.1']
+
+authors = [{ name = "DashAI team" }, { email = "dashaisoftware@gmail.com" }]
+
+keywords = ["DashAI", "Model"]
+
+description = "DeepSeek Model for DashAI"
+readme = "README.md"
+requires-python = ">=3.8"
+
+[project.entry-points.'dashai.plugins']
+DeepSeekModel = 'dashai_deepseek_model_package.deepseek_model:DeepSeekModel'
+
+[project.urls]
+Homepage = "https://github.com/DashAISoftware/DashAI"
+Issues = "https://github.com/DashAISoftware/DashAI/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
