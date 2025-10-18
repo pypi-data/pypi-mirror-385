@@ -1,0 +1,1 @@
+from .tiktok_checker import check_tiktok_account
