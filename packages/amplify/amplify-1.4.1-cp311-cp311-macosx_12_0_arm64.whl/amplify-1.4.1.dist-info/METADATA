@@ -1,0 +1,42 @@
+Metadata-Version: 2.4
+Name: amplify
+Version: 1.4.1
+Summary: Amplify SDK for Quantum Annealing and Ising Machines
+Author-email: "Fixstars Amplify Corp." <y_matsuda@fixstars.com>
+Maintainer-email: Yoshiki Matsuda <y_matsuda@fixstars.com>
+License-Expression: LicenseRef-Fixstars-Amplify-SDK-2023-03-17
+Project-URL: Homepage, https://amplify.fixstars.com/
+Project-URL: Documentation, https://amplify.fixstars.com/docs/amplify/v1/
+Project-URL: Changelog, https://amplify.fixstars.com/docs/amplify/v1/changelog.html
+Project-URL: Tutorial, https://amplify.fixstars.com/demo
+Keywords: quantum,quantum annealing,annealer,annealing machine,QUBO,quadratic unconstrained binary optimization,d-wave,digital annealer,sdk,sbm,simulated bifurcation,simulated annealing,Ising machine,Ising model,fixstars,fixstars amplify
+Classifier: Environment :: Console
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Scientific/Engineering
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: MacOS :: MacOS X
+Classifier: Programming Language :: C++
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE.txt
+License-File: open_source_license.txt
+Requires-Dist: numpy!=1.24.0
+Requires-Dist: typing-extensions
+Provides-Extra: extra
+Requires-Dist: dwave-system>=1.33.0; extra == "extra"
+Dynamic: license-file
+
+## About Fixstars Amplify
+
+Fixstars Amplify SDK is a middleware library for Ising machines developed by Fixstars Amplify Corporation. Ising machines specialize in solving optimization problems described by quadratic polynomials of binary variables. Various types of Ising machines implemented with digital circuits and GPUs have been released, starting with the quantum annealing machine by D-Wave Systems. This middleware is an intermediate layer between hardware and applications using Ising machines. We provide various functions that improve the convenience of the machines and enable highly efficient application software development.
+
+[![Fixstars Amplify](https://img.shields.io/badge/-Fixstars%20Amplify-333333.svg?logo=data:image/png;base64,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&style=popout-square)](https://amplify.fixstars.com/) [![PyPI](https://img.shields.io/pypi/v/amplify)](https://pypi.org/project/amplify/) [![Downloads](https://static.pepy.tech/personalized-badge/amplify?period=total&units=international_system&left_color=grey&right_color=orange&left_text=Downloads)](https://pepy.tech/project/amplify)
