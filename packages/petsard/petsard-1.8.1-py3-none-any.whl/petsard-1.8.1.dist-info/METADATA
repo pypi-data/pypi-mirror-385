@@ -1,0 +1,131 @@
+Metadata-Version: 2.3
+Name: petsard
+Version: 1.8.1
+Summary: Facilitates data generation algorithm and their evaluation processes
+Keywords: petsard,data preprocessing,data generation,data evaluation,synthetic data,privacy,privacy enhancing technologies,PETS,anonymization,differential privacy,data science,machine learning
+Author: matheme-justyn
+Author-email: matheme-justyn <matheme.justyn@gmail.com>
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Natural Language :: English
+Classifier: Natural Language :: Chinese (Traditional)
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Financial and Insurance Industry
+Classifier: Intended Audience :: Legal Industry
+Requires-Dist: ipykernel>=6.30.1,<7 ; extra == 'all'
+Requires-Dist: ipython>=8.3.0,<9 ; python_full_version < '3.11' and extra == 'all'
+Requires-Dist: ipython>=9.4.0,<10 ; python_full_version >= '3.11' and extra == 'all'
+Requires-Dist: jupyterlab>=4.4.7,<5 ; extra == 'all'
+Requires-Dist: notebook>=7.4.5,<8 ; extra == 'all'
+Requires-Dist: pyzmq>=27.0.2,<28 ; extra == 'all'
+Requires-Dist: debugpy>=1.8.16,<2 ; extra == 'all'
+Requires-Dist: decorator>=5.2.1,<6 ; extra == 'all'
+Requires-Dist: ipython-pygments-lexers>=1.1.1,<2 ; python_full_version >= '3.11' and extra == 'all'
+Requires-Dist: prompt-toolkit>=3.0.52,<4 ; extra == 'all'
+Requires-Dist: psutil>=7.0.0,<8 ; extra == 'all'
+Requires-Dist: openpyxl>=3.1.5,<4 ; extra == 'all'
+Requires-Dist: requests>=2.32.5,<3 ; extra == 'all'
+Requires-Dist: ipykernel>=6.30.1,<7 ; extra == 'dev'
+Requires-Dist: ipython>=8.3.0,<9 ; python_full_version < '3.11' and extra == 'dev'
+Requires-Dist: ipython>=9.4.0,<10 ; python_full_version >= '3.11' and extra == 'dev'
+Requires-Dist: jupyterlab>=4.4.7,<5 ; extra == 'dev'
+Requires-Dist: notebook>=7.4.5,<8 ; extra == 'dev'
+Requires-Dist: pyzmq>=27.0.2,<28 ; extra == 'dev'
+Requires-Dist: debugpy>=1.8.16,<2 ; extra == 'dev'
+Requires-Dist: decorator>=5.2.1,<6 ; extra == 'dev'
+Requires-Dist: ipython-pygments-lexers>=1.1.1,<2 ; python_full_version >= '3.11' and extra == 'dev'
+Requires-Dist: prompt-toolkit>=3.0.52,<4 ; extra == 'dev'
+Requires-Dist: psutil>=7.0.0,<8 ; extra == 'dev'
+Requires-Dist: openpyxl>=3.1.5,<4 ; extra == 'dev'
+Requires-Dist: requests>=2.32.5,<3 ; extra == 'dev'
+Requires-Dist: pip-audit>=2.7.3 ; extra == 'dev'
+Requires-Dist: pytest>=8.4.2 ; extra == 'dev'
+Requires-Dist: pytest-cov>=6.3.0 ; extra == 'dev'
+Requires-Dist: python-semantic-release>=10.3.2 ; extra == 'dev'
+Requires-Dist: ruff>=0.12.12 ; extra == 'dev'
+Requires-Dist: trove-classifiers>=2025.8.26.11 ; extra == 'dev'
+Requires-Dist: ipykernel>=6.30.1,<7 ; extra == 'ds'
+Requires-Dist: ipython>=8.3.0,<9 ; python_full_version < '3.11' and extra == 'ds'
+Requires-Dist: ipython>=9.4.0,<10 ; python_full_version >= '3.11' and extra == 'ds'
+Requires-Dist: jupyterlab>=4.4.7,<5 ; extra == 'ds'
+Requires-Dist: notebook>=7.4.5,<8 ; extra == 'ds'
+Requires-Dist: pyzmq>=27.0.2,<28 ; extra == 'ds'
+Requires-Dist: debugpy>=1.8.16,<2 ; extra == 'ds'
+Requires-Dist: decorator>=5.2.1,<6 ; extra == 'ds'
+Requires-Dist: ipython-pygments-lexers>=1.1.1,<2 ; python_full_version >= '3.11' and extra == 'ds'
+Requires-Dist: prompt-toolkit>=3.0.52,<4 ; extra == 'ds'
+Requires-Dist: psutil>=7.0.0,<8 ; extra == 'ds'
+Requires-Python: >=3.10, <3.12
+Project-URL: Bug Tracker, https://github.com/nics-tw/petsard/issues
+Project-URL: Documentation, https://nics-tw.github.io/petsard/
+Project-URL: Repository, https://github.com/nics-tw/petsard
+Provides-Extra: all
+Provides-Extra: dev
+Provides-Extra: ds
+Description-Content-Type: text/markdown
+
+<p align="center"><img width=75% src="https://raw.githubusercontent.com/nics-tw/petsard/main/.github/assets/PETsARD-logo.png"></p>
+
+![Python 3.10](https://img.shields.io/badge/python-v3.10-blue.svg)
+![Python 3.11](https://img.shields.io/badge/python-v3.11-blue.svg)
+![Contributions welcome](https://img.shields.io/badge/contributions-welcome-orange.svg)
+![PyPI - Status](https://img.shields.io/pypi/status/petsard)
+
+`PETsARD` (Privacy Enhancing Technologies Analysis, Research, and Development, /pəˈtɑrd/) is a Python library for facilitating data generation algorithm and their evaluation processes.
+
+The main functionalities include dataset description, various dataset generation algorithms, and the measurements on privacy protection and utility.
+
+`PETsARD`（隱私強化技術分析、研究與開發）是一套為了促進資料生成演算法及其評估過程而設計的 Python 程式庫。
+
+其主要功能包括描述資料集、執行各種資料集生成算法，以及對隱私保護和效用進行測量。
+
+# **📚 Documentation 文件**
+
+## [**🏠 Main Site 主要網站: PETsARD**](https://nics-tw.github.io/petsard/)
+
+Project homepage with overview and foundation information
+Website: https://nics-tw.github.io/petsard/
+
+專案首頁，提供專案概觀與基礎資訊
+網站：https://nics-tw.github.io/petsard/
+
+## [**📖 Docs 文件**](https://nics-tw.github.io/petsard/docs/)
+
+- The User Guide aims to assist developers in rapidly acquiring the necessary skills for utilising `PETsARD` in data synthesis, evaluating synthesized data, and enhancing the research efficiency in Privacy Enhancing Technologies-related fields.
+- 使用者指南旨在幫助開發者迅速獲得必要的技能，以使用 `PETsARD` 進行資料合成、合成資料的評估，以及提升開發者隱私增強相關領域的研究效率。
+
+
+  ### [**🚀 Get Started 入門指南**](https://nics-tw.github.io/petsard/docs/get-started/)
+  - Quick installation guide and basic usage examples
+  - Complete framework structure and configuration details
+  - 快速安裝指引與基本使用範例
+  - 完整框架結構與設定說明
+
+  ### [**📝 Tutorial 教學**](https://nics-tw.github.io/petsard/docs/tutorial/)
+
+  - Practical examples from basic to advanced usage
+  - Guidance and Colab demo for common use cases
+  - 從基礎到進階的實作範例
+  - 提供常見使用情境的說明與 Colab 展示
+
+    #### [**⚙️ YAML Configuration YAML 設定**](https://nics-tw.github.io/petsard/docs/tutorial/yaml-config)
+
+    - Comprehensive configuration writing guide
+    - Experiment workflow and parameter settings
+    - 完整的設定檔撰寫指南
+    - 實驗流程與參數設定詳解
+
+  ### [**🔬 API Documentation API 文件**](https://nics-tw.github.io/petsard/docs/api/)
+
+  - Detailed technical documentation for modules and components
+  - Covers configuration, execution, pipeline components, and data management
+  - 模組與元件的詳細技術文件
+  - 涵蓋設定、執行、管線組件與資料管理
+
+## [**ℹ️ About 關於**](https://nics-tw.github.io/petsard/about/)
+
+- Project background and license information
+- Academic citations and related literature
+- 專案背景與授權資訊
+- 學術引用與相關文獻
