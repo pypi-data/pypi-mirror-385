@@ -1,0 +1,33 @@
+Metadata-Version: 2.4
+Name: laakhay
+Version: 0.1.4
+Summary: Brand wrapper for Laakhay Open Source Wings
+Author-email: Laakhay Corporation <laakhay.corp@gmail.com>
+License: MIT
+Project-URL: Homepage, https://laakhay.com
+Project-URL: Repository, https://github.com/laakhay/laakhay
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+
+# Laakhay
+
+Brand wrapper for Laakhay Open Source Wings.
+
+## Usage
+
+First, install `laakhay` and the sub-package `laakhay-quantlab`.
+
+```bash
+pip install laakhay laakhay-quantlab
+```
+
+Then you can access quantlab modules, for example:
+
+```python
+from laakhay.quantlab import hello
+
+hello()
+```
