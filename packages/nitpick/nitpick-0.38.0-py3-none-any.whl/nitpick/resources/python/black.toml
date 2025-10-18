@@ -1,0 +1,22 @@
+[nitpick.meta]
+name = "Black"
+url = "https://github.com/psf/black"
+
+["pyproject.toml".tool.black]
+line-length = 120
+
+[[".pre-commit-config.yaml".repos]]
+# Mirror that's 2x faster, recommended by
+# https://github.com/psf/black/blob/58f31a70efe6509ce8213afac998bc5d5bb7e34d/.pre-commit-hooks.yaml#L1-L2
+repo = "https://github.com/psf/black-pre-commit-mirror"
+
+[[".pre-commit-config.yaml".repos.hooks]]
+id = "black"
+args = ["--safe", "--quiet"]
+
+[[".pre-commit-config.yaml".repos]]
+repo = "https://github.com/asottile/blacken-docs"
+
+[[".pre-commit-config.yaml".repos.hooks]]
+id = "blacken-docs"
+additional_dependencies = ["black==23.7.0"]

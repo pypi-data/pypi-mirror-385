@@ -1,0 +1,25 @@
+[nitpick.meta]
+name = "isort"
+url = "https://github.com/PyCQA/isort"
+
+["setup.cfg".isort]
+line_length = 120
+skip = ".tox,build"
+known_first_party = "tests"
+
+# The configuration below is needed for compatibility with black.
+# https://github.com/python/black#how-black-wraps-lines
+# https://github.com/PyCQA/isort#multi-line-output-modes
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+combine_as_imports = true
+
+[[".pre-commit-config.yaml".repos]]
+repo = "https://github.com/PyCQA/isort"
+
+[[".pre-commit-config.yaml".repos.hooks]]
+id = "isort"
+
+[nitpick.files."setup.cfg"]
+comma_separated_values = ["isort.skip", "isort.known_first_party"]

@@ -1,0 +1,10 @@
+[nitpick.meta]
+name = "Prettier"
+url = "https://github.com/prettier/prettier"
+
+[[".pre-commit-config.yaml".repos]]
+repo = "https://github.com/pre-commit/mirrors-prettier"
+
+[[".pre-commit-config.yaml".repos.hooks]]
+id = "prettier"
+stages = ["pre-commit"]

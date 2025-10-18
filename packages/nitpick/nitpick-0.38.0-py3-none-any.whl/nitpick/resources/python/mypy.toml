@@ -1,0 +1,28 @@
+[nitpick.meta]
+name = "Mypy"
+url = "https://github.com/python/mypy"
+
+# https://mypy.readthedocs.io/en/latest/config_file.html
+["setup.cfg".mypy]
+ignore_missing_imports = true
+
+# https://mypy.readthedocs.io/en/stable/running_mypy.html#follow-imports
+follow_imports = "normal"
+
+# Treat Optional per PEP 484
+strict_optional = true
+
+# Ensure all execution paths are returning
+warn_no_return = true
+
+# Lint-style cleanliness for typing
+warn_redundant_casts = true
+# False positives when running on local machine... it works on pre-commit.ci ¯\_(ツ)_/¯
+warn_unused_ignores = false
+
+[[".pre-commit-config.yaml".repos]]
+repo = "https://github.com/pre-commit/mirrors-mypy"
+
+[[".pre-commit-config.yaml".repos.hooks]]
+id = "mypy"
+args = ["--show-error-codes"]

@@ -1,0 +1,13 @@
+[console_scripts]
+nitpick=nitpick.__main__:main
+
+[flake8.extension]
+NIP=nitpick.flake8:NitpickFlake8Extension
+
+[nitpick]
+ini=nitpick.plugins.ini
+json=nitpick.plugins.json
+text=nitpick.plugins.text
+toml=nitpick.plugins.toml
+yaml=nitpick.plugins.yaml
+

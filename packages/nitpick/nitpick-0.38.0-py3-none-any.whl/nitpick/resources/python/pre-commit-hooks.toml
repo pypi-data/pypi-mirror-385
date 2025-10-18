@@ -1,0 +1,22 @@
+[nitpick.meta]
+name = "pre-commit hooks for Python projects"
+url = "https://pre-commit.com/hooks"
+
+[".pre-commit-config.yaml".default_language_version]
+# https://pre-commit.com/#top_level-default_language_version
+python = "python3.11"
+
+[[".pre-commit-config.yaml".repos]]
+repo = "https://github.com/pre-commit/pygrep-hooks"
+
+[[".pre-commit-config.yaml".repos.hooks]]
+id = "python-check-mock-methods"
+
+[[".pre-commit-config.yaml".repos.hooks]]
+id = "rst-backticks"
+
+[[".pre-commit-config.yaml".repos]]
+repo = "https://github.com/pre-commit/pre-commit-hooks"
+
+[[".pre-commit-config.yaml".repos.hooks]]
+id = "debug-statements"
