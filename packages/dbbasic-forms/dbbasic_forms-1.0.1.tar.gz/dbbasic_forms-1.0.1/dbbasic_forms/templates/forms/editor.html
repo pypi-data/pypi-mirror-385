@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Editor - dbbasic-forms</title>
+    <link rel="stylesheet" href="../../static/css/admin.css">
+    <style>
+        .editor-container {
+            display: grid;
+            grid-template-columns: 300px 1fr 350px;
+            gap: 1.5rem;
+            height: calc(100vh - 60px);
+        }
+
+        .field-palette {
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .field-type {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.875rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 0.375rem;
+            margin-bottom: 0.75rem;
+            cursor: move;
+            transition: all 0.15s;
+        }
+
+        .field-type:hover {
+            border-color: var(--primary);
+            transform: translateY(-1px);
+        }
+
+        .field-icon {
+            font-size: 1.25rem;
+        }
+
+        .form-canvas {
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .form-preview {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 2rem;
+        }
+
+        .form-field {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border: 2px dashed transparent;
+            border-radius: 0.375rem;
+            transition: all 0.15s;
+        }
+
+        .form-field:hover {
+            border-color: var(--primary);
+            background: var(--bg);
+        }
+
+        .form-field.selected {
+            border-color: var(--primary);
+            background: #eff6ff;
+        }
+
+        .field-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.15s;
+        }
+
+        .form-field:hover .field-actions {
+            opacity: 1;
+        }
+
+        .properties-panel {
+            background: var(--surface);
+            border-left: 1px solid var(--border);
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .empty-canvas {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-muted);
+        }
+
+        .drop-zone {
+            border: 2px dashed var(--border);
+            border-radius: 0.5rem;
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <div class="studio-container">
+        <header class="studio-header">
+            <div class="logo">
+                <a href="list.html" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: inherit;">
+                    <span class="logo-icon">📋</span>
+                    <span class="logo-text">dbbasic-forms</span>
+                </a>
+            </div>
+            <div style="flex: 1; text-align: center;">
+                <input type="text" value="Contact Form" style="font-size: 1.125rem; font-weight: 600; border: none; background: transparent; text-align: center; padding: 0.5rem;">
+            </div>
+            <div class="header-actions">
+                <button class="btn-secondary">Preview</button>
+                <button class="btn-primary">Save & Publish</button>
+            </div>
+        </header>
+
+        <div class="editor-container">
+            <!-- Left: Field Palette -->
+            <div class="field-palette">
+                <h3 style="margin-bottom: 1rem;">Add Fields</h3>
+
+                <div class="field-type">
+                    <span class="field-icon">📝</span>
+                    <div>
+                        <div style="font-weight: 500; font-size: 0.875rem;">Short Text</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">Single line input</div>
+                    </div>
+                </div>
+
+                <div class="field-type">
+                    <span class="field-icon">📧</span>
+                    <div>
+                        <div style="font-weight: 500; font-size: 0.875rem;">Email</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">Email validation</div>
+                    </div>
+                </div>
+
+                <div class="field-type">
+                    <span class="field-icon">📄</span>
+                    <div>
+                        <div style="font-weight: 500; font-size: 0.875rem;">Long Text</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">Multi-line textarea</div>
+                    </div>
+                </div>
+
+                <div class="field-type">
+                    <span class="field-icon">🔢</span>
+                    <div>
+                        <div style="font-weight: 500; font-size: 0.875rem;">Number</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">Numeric input</div>
+                    </div>
+                </div>
+
+                <div class="field-type">
+                    <span class="field-icon">☑️</span>
+                    <div>
+                        <div style="font-weight: 500; font-size: 0.875rem;">Multiple Choice</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">Radio buttons</div>
+                    </div>
+                </div>
+
+                <div class="field-type">
+                    <span class="field-icon">✅</span>
+                    <div>
+                        <div style="font-weight: 500; font-size: 0.875rem;">Checkboxes</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">Multiple select</div>
+                    </div>
+                </div>
+
+                <div class="field-type">
+                    <span class="field-icon">📅</span>
+                    <div>
+                        <div style="font-weight: 500; font-size: 0.875rem;">Date</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">Date picker</div>
+                    </div>
+                </div>
+
+                <div class="field-type">
+                    <span class="field-icon">📎</span>
+                    <div>
+                        <div style="font-weight: 500; font-size: 0.875rem;">File Upload</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">Upload files</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Center: Form Canvas -->
+            <div class="form-canvas">
+                <div class="form-preview">
+                    <h2 style="margin-bottom: 0.5rem;">Contact Form</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 2rem;">Get in touch with us</p>
+
+                    <!-- Example Fields -->
+                    <div class="form-field">
+                        <label style="display: block; font-weight: 500; margin-bottom: 0.5rem;">
+                            Name <span style="color: var(--danger);">*</span>
+                        </label>
+                        <input type="text" class="form-input" placeholder="Enter your name">
+                        <div class="field-actions">
+                            <button class="btn-secondary-small">Edit</button>
+                            <button class="btn-secondary-small">Duplicate</button>
+                            <button class="btn-danger-outline-small">Delete</button>
+                        </div>
+                    </div>
+
+                    <div class="form-field selected">
+                        <label style="display: block; font-weight: 500; margin-bottom: 0.5rem;">
+                            Email <span style="color: var(--danger);">*</span>
+                        </label>
+                        <input type="email" class="form-input" placeholder="you@example.com">
+                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">
+                            We'll never share your email
+                        </div>
+                        <div class="field-actions">
+                            <button class="btn-secondary-small">Edit</button>
+                            <button class="btn-secondary-small">Duplicate</button>
+                            <button class="btn-danger-outline-small">Delete</button>
+                        </div>
+                    </div>
+
+                    <div class="form-field">
+                        <label style="display: block; font-weight: 500; margin-bottom: 0.5rem;">
+                            Message
+                        </label>
+                        <textarea class="form-textarea" rows="4" placeholder="What's on your mind?"></textarea>
+                        <div class="field-actions">
+                            <button class="btn-secondary-small">Edit</button>
+                            <button class="btn-secondary-small">Duplicate</button>
+                            <button class="btn-danger-outline-small">Delete</button>
+                        </div>
+                    </div>
+
+                    <!-- Drop Zone -->
+                    <div class="drop-zone">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">📋</div>
+                        <div>Drag fields here or click to add</div>
+                    </div>
+
+                    <button class="btn-primary" style="margin-top: 1.5rem; width: 100%;">Submit</button>
+                </div>
+            </div>
+
+            <!-- Right: Properties Panel -->
+            <div class="properties-panel">
+                <h3 style="margin-bottom: 1rem;">Field Properties</h3>
+
+                <div class="form-group">
+                    <label>Field Label</label>
+                    <input type="text" class="form-input" value="Email">
+                </div>
+
+                <div class="form-group">
+                    <label>Placeholder</label>
+                    <input type="text" class="form-input" value="you@example.com">
+                </div>
+
+                <div class="form-group">
+                    <label>Help Text</label>
+                    <input type="text" class="form-input" value="We'll never share your email">
+                </div>
+
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                        <input type="checkbox" checked>
+                        <span>Required</span>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label>Field Type</label>
+                    <select class="form-select">
+                        <option>Email</option>
+                        <option>Text</option>
+                        <option>Number</option>
+                        <option>Date</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Validation</label>
+                    <select class="form-select">
+                        <option>Email format</option>
+                        <option>None</option>
+                        <option>URL</option>
+                        <option>Phone</option>
+                    </select>
+                </div>
+
+                <hr style="border: none; border-top: 1px solid var(--border); margin: 1.5rem 0;">
+
+                <h3 style="margin-bottom: 1rem;">Form Settings</h3>
+
+                <div class="form-group">
+                    <label>Form Title</label>
+                    <input type="text" class="form-input" value="Contact Form">
+                </div>
+
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea class="form-textarea" rows="2">Get in touch with us</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Success Message</label>
+                    <textarea class="form-textarea" rows="2">Thanks! We'll get back to you soon.</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Button Text</label>
+                    <input type="text" class="form-input" value="Submit">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
