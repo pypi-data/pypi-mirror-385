@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "describealign"
+authors = [{ name = "Julian Brown", email = "julbean@proton.me" }]
+description = "Combines videos with matching audio files (e.g. audio descriptions)"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Operating System :: OS Independent",
+]
+license = "GPL-3.0-only"
+license-files = ["LICENSE"]
+dynamic = ["version", "dependencies"]
+keywords = ["audio", "description", "alignment", "describe", "align", "video", "media", "stretch", "time-scale", "match", "combine", "fit", "blind", "impaired", "track", "sync", "synchronize", "register", "accessible", "accessibility", "descriptive", "narration", "visual", "low-vision", "disability", "access", "assistive"]
+
+[tool.setuptools.dynamic]
+version = { file = "version" }
+dependencies = { file = "requirements.txt" }
+
+[project.scripts]
+describealign = "describealign:command_line_interface"
+
+[project.urls]
+"Homepage" = "https://github.com/julbean/describealign"
+"Bug Tracker" = "https://github.com/julbean/describealign/issues"
