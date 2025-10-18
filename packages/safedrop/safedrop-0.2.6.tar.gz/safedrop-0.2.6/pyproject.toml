@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "safedrop"
+version = "0.2.6"
+description = "The Official Safedrop Package"
+authors = [{ name = "Safedrop", email = "dev@safedrop.com" }]
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.8"
+
+[tool.setuptools]
+package-dir = {"" = "."}
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["safedrop*"]
+
+[tool.setuptools.package-data]
+safedrop = ["lib/*.so", "lib/*.dylib", "lib/*.dll"]
