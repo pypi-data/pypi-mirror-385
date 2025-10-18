@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "usos_bridge"
+version = "0.0.1.dev1"
+description = "Access the USOS API using your standard web credentials"
+authors = [{ name = "Piotr Ginał", email = "ginal.piotr11@gmail.com" }]
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+dynamic = ["dependencies"]
+
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+include-package-data = true
+
+[tool.setuptools.package-data]
+"usos_bridge" = ["data/*"]
+
+[tool.setuptools.dynamic]
+dependencies = { file = "requirements/base.txt" }
+
+[tool.ruff]
+lint.select = ["ALL", "E302"]
+line-length = 120
+lint.ignore = [
+  "D100",
+  "D101",
+  "D102",
+  "D103",
+  "D104",
+  "D105",
+  "D107",
+  "N818",
+  "D213",
+  "D211",
+  "S311",
+  "FIX002",
+  "TD003",
+  "CPY001",
+]
+preview = true
