@@ -1,0 +1,425 @@
+# 参数管理系统 Python 客户端
+
+一个支持类似pandas DataFrame点号访问方式的Python客户端，专门为参数管理系统设计。**v2.0.0版本新增内置完整后端服务功能！**
+
+## 主要特性
+
+🎯 **点号访问**: 支持 `project.category_name.parameter_name` 的直观访问方式
+📊 **属性丰富**: 每个参数都包含值、单位、描述、类型等完整信息
+🔄 **类型安全**: 自动处理各种参数类型（数值、列表、布尔值等）
+📝 **元数据完整**: 支持访问参数和分类的所有元数据信息
+🐍 **Pythonic**: 完全符合Python编程习惯，支持迭代、索引等操作
+🔧 **Pyomo集成**: 完美支持在Pyomo优化建模中使用
+🚀 **内置后端**: 新版本内置完整的FastAPI后端服务，无需单独部署
+💾 **数据库支持**: 内置SQLite数据库，支持完整的CRUD操作
+📤 **导入导出**: 支持Excel、JSON、文本等多种格式的参数导入导出
+🔐 **用户认证**: 支持JWT用户认证和权限管理
+
+## 安装
+
+```bash
+pip install param-management-client
+```
+
+## 快速开始
+
+### 方式1: 使用内置后端服务（推荐）
+
+```python
+from param_management_client import ParameterClient, run_embedded_server
+import threading
+import time
+
+# 启动内置后端服务
+def start_server():
+    run_embedded_server(host="127.0.0.1", port=8000)
+
+# 在后台线程启动服务器
+server_thread = threading.Thread(target=start_server, daemon=True)
+server_thread.start()
+time.sleep(2)  # 等待服务器启动
+
+# 创建客户端并加载项目
+client = ParameterClient(
+    host="127.0.0.1",
+    port=8000,
+    project_name="energy_optimization_params"
+)
+
+# 获取项目对象
+project = client.get_project()
+```
+
+### 方式2: 连接远程服务器
+
+```python
+from param_management_client import ParameterClient
+
+# 创建客户端并加载项目
+client = ParameterClient(
+    host="localhost",
+    port=8000,
+    project_name="energy_optimization_params"
+)
+
+# 获取项目对象
+project = client.get_project()
+
+# 访问项目基本信息
+print(f"项目名称: {project.name}")
+print(f"项目英文名: {project.name_en}")
+print(f"时间范围: {project.time_horizon} 年")
+print(f"参数分类: {project.categories}")
+```
+
+### 分类访问
+
+```python
+# 通过点号访问分类
+wind_params = project.wind_params
+print(f"分类名称: {wind_params.name}")
+print(f"分类描述: {wind_params.description}")
+print(f"参数列表: {wind_params.list_parameters()}")
+```
+
+### 参数访问
+
+```python
+# 访问单个参数
+capital_ratio = project.wind_params.capital_ratio
+print(f"参数值: {capital_ratio.value}")
+print(f"参数单位: {capital_ratio.unit}")
+print(f"参数描述: {capital_ratio.description}")
+print(f"参数类型: {capital_ratio.param_type}")
+
+# 访问列表参数
+electricity_price = project.wind_params.electricity_price
+print(f"列表长度: {len(electricity_price)}")
+print(f"第一年电价: {electricity_price[0]}")
+print(f"最后一年电价: {electricity_price[-1]}")
+
+# 遍历列表参数
+for i, price in enumerate(electricity_price):
+    year = project.start_year + i * project.year_step
+    print(f"{year}年电价: {price}")
+```
+
+### 在Pyomo中使用
+
+```python
+import pyomo.environ as pyo
+
+# 创建Pyomo模型
+model = pyo.ConcreteModel()
+model.T = pyo.Set(initialize=range(project.time_horizon))
+
+# 从参数系统获取数据（自动类型转换）
+wind_capital_ratio = project.wind_params.capital_ratio.value
+wind_unit_cost = project.wind_params.unit_investment_cost.value
+wind_electricity_price = project.wind_params.electricity_price.value
+
+# 定义Pyomo参数
+model.wind_capital_ratio = pyo.Param(initialize=wind_capital_ratio)
+model.wind_unit_cost = pyo.Param(initialize=wind_unit_cost)
+model.electricity_price = pyo.Param(
+    model.T, 
+    initialize=lambda m, t: wind_electricity_price[t] if t < len(wind_electricity_price) else 0
+)
+
+# 定义决策变量和目标函数
+model.wind_capacity = pyo.Var(model.T, domain=pyo.NonNegativeReals)
+model.objective = pyo.Objective(
+    expr=sum(model.wind_unit_cost * model.wind_capacity[t] * model.wind_capital_ratio for t in model.T),
+    sense=pyo.minimize
+)
+```
+
+## API 参考
+
+### ParameterClient 类
+
+#### 构造函数
+
+```python
+ParameterClient(host="localhost", port=8000, project_name=None)
+```
+
+**参数:**
+- `host` (str): 服务器地址
+- `port` (int): 服务器端口，默认8000
+- `project_name` (str, 可选): 项目英文名称
+
+#### 主要方法
+
+##### `load_project(project_name=None)`
+加载项目数据
+
+**参数:**
+- `project_name` (str, 可选): 项目英文名称
+
+**返回:**
+- `Project`: 项目对象
+
+##### `get_project()`
+获取项目对象
+
+**返回:**
+- `Project`: 项目对象
+
+##### `refresh_project()`
+刷新项目数据
+
+**返回:**
+- `Project`: 更新后的项目对象
+
+### Project 类
+
+#### 属性
+
+- `name`: 项目中文名称
+- `name_en`: 项目英文名称
+- `description`: 项目描述
+- `time_horizon`: 时间长度
+- `start_year`: 起始年份
+- `year_step`: 年份步长
+- `end_year`: 结束年份
+- `categories`: 参数分类列表
+
+#### 方法
+
+##### `get_category(name)`
+获取指定分类
+
+**参数:**
+- `name` (str): 分类英文名称
+
+**返回:**
+- `ParameterCategory`: 分类对象
+
+##### `list_categories()`
+列出所有分类名称
+
+**返回:**
+- `list`: 分类名称列表
+
+### ParameterCategory 类
+
+#### 属性
+
+- `name`: 分类中文名称
+- `name_en`: 分类英文名称
+- `description`: 分类描述
+- `id`: 分类ID
+
+#### 方法
+
+##### `get_parameter(name)`
+获取指定参数
+
+**参数:**
+- `name` (str): 参数英文名称
+
+**返回:**
+- `ParameterValue`: 参数值对象
+
+##### `list_parameters()`
+列出所有参数名称
+
+**返回:**
+- `list`: 参数名称列表
+
+### ParameterValue 类
+
+#### 属性
+
+- `value`: 参数值
+- `unit`: 参数单位
+- `description`: 参数描述
+- `name`: 参数中文名称
+- `name_en`: 参数英文名称
+- `param_type`: 参数类型
+- `is_list`: 是否为列表参数
+- `is_year_related`: 是否关联年份
+- `list_length`: 列表长度
+
+#### 方法
+
+##### `__getitem__(index)`
+支持列表索引访问
+
+##### `__len__()`
+支持len()函数
+
+##### `__iter__()`
+支持迭代
+
+## 使用示例
+
+### 示例1: 基本参数访问
+
+```python
+from param_management_client import ParameterClient
+
+# 创建客户端
+client = ParameterClient(
+    host="localhost",
+    port=8000,
+    project_name="energy_optimization_params"
+)
+
+project = client.get_project()
+
+# 访问项目信息
+print(f"项目: {project.name} ({project.name_en})")
+print(f"时间范围: {project.time_horizon} 年")
+print(f"分类: {project.categories}")
+
+# 访问风能参数
+wind_params = project.wind_params
+print(f"风能参数: {wind_params.name}")
+print(f"参数列表: {wind_params.list_parameters()}")
+
+# 访问具体参数
+capital_ratio = wind_params.capital_ratio
+print(f"资本比例: {capital_ratio.value} {capital_ratio.unit}")
+print(f"描述: {capital_ratio.description}")
+```
+
+### 示例2: 列表参数操作
+
+```python
+# 获取电价列表
+electricity_price = project.wind_params.electricity_price
+
+# 基本操作
+print(f"电价列表长度: {len(electricity_price)}")
+print(f"第一年电价: {electricity_price[0]}")
+print(f"最后一年电价: {electricity_price[-1]}")
+
+# 遍历列表
+for i, price in enumerate(electricity_price):
+    year = project.start_year + i * project.year_step
+    print(f"{year}年电价: {price}")
+
+# 切片操作
+first_5_years = [electricity_price[i] for i in range(5)]
+print(f"前5年电价: {first_5_years}")
+```
+
+### 示例3: 参数验证
+
+```python
+def validate_parameters(project):
+    """验证参数完整性"""
+    
+    # 检查必需分类
+    required_categories = ["wind_params", "pv_params", "storage_params"]
+    missing = [cat for cat in required_categories if cat not in project.categories]
+    
+    if missing:
+        print(f"❌ 缺少必需分类: {missing}")
+        return False
+    
+    # 检查参数类型
+    for category_name in project.categories:
+        category = getattr(project, category_name)
+        print(f"\n分类: {category.name_en}")
+        
+        for param_name in category.list_parameters():
+            param = getattr(category, param_name)
+            print(f"  {param.name_en}: {param.param_type} {'(列表)' if param.is_list else ''}")
+    
+    return True
+
+# 使用验证函数
+validate_parameters(project)
+```
+
+## 错误处理
+
+### 常见错误类型
+
+1. **AttributeError**: 访问不存在的分类或参数
+2. **TypeError**: 对非列表参数使用索引访问
+3. **KeyError**: 使用get_category()或get_parameter()访问不存在的项目
+4. **ValueError**: 项目未加载时调用get_project()
+
+### 错误处理示例
+
+```python
+try:
+    client = ParameterClient(
+        host="localhost",
+        port=8000,
+        project_name="energy_optimization_params"
+    )
+    project = client.get_project()
+    
+    # 尝试访问不存在的分类
+    try:
+        nonexistent_category = project.nonexistent_category
+    except AttributeError as e:
+        print(f"分类不存在: {e}")
+    
+    # 尝试访问不存在的参数
+    try:
+        nonexistent_param = project.wind_params.nonexistent_param
+    except AttributeError as e:
+        print(f"参数不存在: {e}")
+    
+    # 尝试对非列表参数使用索引
+    try:
+        capital_ratio = project.wind_params.capital_ratio
+        value = capital_ratio[0]  # 这应该会失败
+    except TypeError as e:
+        print(f"非列表参数不能使用索引: {e}")
+        
+except Exception as e:
+    print(f"客户端错误: {e}")
+```
+
+## 开发
+
+### 安装开发依赖
+
+```bash
+pip install -e ".[dev]"
+```
+
+### 运行测试
+
+```bash
+pytest
+```
+
+### 代码格式化
+
+```bash
+black param_management_client/
+```
+
+### 类型检查
+
+```bash
+mypy param_management_client/
+```
+
+## 许可证
+
+本项目使用 MIT 许可证。
+
+## 更新日志
+
+- **v2.0.0**: 重大更新，新增内置后端服务功能
+  - 🚀 内置完整的FastAPI后端服务，无需单独部署
+  - 💾 内置SQLite数据库支持
+  - 📤 支持Excel、JSON、文本等多种格式的参数导入导出
+  - 🔐 支持JWT用户认证和权限管理
+  - 🛠️ 完整的CRUD API接口
+  - 📊 支持参数一致性验证
+  - 🔄 支持项目备份和恢复功能
+- **v1.0.0**: 初始版本，支持点号访问功能
+  - 支持完整的参数元数据访问
+  - 支持列表参数操作
+  - 完善的错误处理机制
+  - 支持Pyomo集成
