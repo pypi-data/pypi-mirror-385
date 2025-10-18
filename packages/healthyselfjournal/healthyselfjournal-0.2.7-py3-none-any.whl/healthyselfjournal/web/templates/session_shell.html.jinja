@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Healthyself Journal (Web)</title>
+    <link rel="stylesheet" href="/static/css/app.css" />
+  </head>
+  <body data-session-id="{{ session_id }}"
+        data-upload-url="/session/{{ session_id }}/upload"
+        data-reveal-endpoint="/session/{{ session_id }}/reveal"
+        data-short-duration="{{ short_duration }}"
+        data-short-voiced="{{ short_voiced }}"
+        data-voice-rms-dbfs-threshold="{{ voice_rms_dbfs_threshold }}"
+        data-voice-enabled="{{ voice_attr }}"
+        data-tts-endpoint="/session/{{ session_id }}/tts"
+        data-tts-mime="{{ tts_mime }}"
+        data-total-seconds="{{ total_seconds }}"
+        data-total-hms="{{ total_hms }}"
+        data-total-minutes-text="{{ total_minutes_text }}"
+        data-job-poll-interval-ms="750">
+
+    <main class="hsj-container">
+      {% if not static_assets_ready %}
+      <div class="hsj-warning-banner" style="background:#fff4e5;border:1px solid #f0b37e;padding:0.75rem 1rem;border-radius:6px;margin-bottom:1rem;">
+        <strong>Static assets missing.</strong>
+        <span>Run <code>npm install</code> and <code>npm run build</code> to regenerate <code>static/js/app.js</code>.</span>
+      </div>
+      {% endif %}
+      {% if pending_count > 0 %}
+      <div class="hsj-warning-banner" style="background:#fef9c3;border:1px solid #f59e0b;padding:0.75rem 1rem;border-radius:6px;margin-bottom:1rem;">
+        <strong>{{ pending_count }} pending transcription{{ 's' if pending_count != 1 else '' }}.</strong>
+        <span>Run <code>{{ reconcile_command }}</code> to backfill.</span>
+      </div>
+      {% endif %}
+      <header class="hsj-header">
+        <h1>Healthyself Journal</h1>
+        <p class="hsj-session-id">Session {{ sessions_dir_name }}/<a id="reveal-session" href="/session/{{ session_id }}/reveal" title="Reveal in Finder">{{ session_id }}</a></p>
+        <p class="hsj-total-duration">Total duration so far: <span id="total-duration">{{ total_minutes_text }}</span></p>
+        <p>
+          <a id="reveal-sessions-folder" href="/reveal/sessions" title="Reveal Sessions Folder">Reveal Sessions Folder</a>
+          <span style="margin:0 0.5rem; color:#9ca3af;">|</span>
+          <a id="open-preferences" href="/settings" title="Preferences">Preferences…</a>
+        </p>
+        <div class="hsj-voice-toggle">
+          <label>
+            <input type="checkbox" id="voice-toggle" {% if voice_attr == 'true' %}checked{% endif %} {% if voice_attr != 'true' and voice_disabled_reason %}disabled{% endif %} />
+            Voice mode
+          </label>
+          {% if voice_attr != 'true' and voice_disabled_reason %}
+          <small style="display:block;color:#6b7280;margin-top:0.25rem;">
+            {% if voice_disabled_reason == 'privacy' %}
+              Disabled in privacy mode.
+            {% else %}
+              Disabled by settings.
+            {% endif %}
+          </small>
+          {% endif %}
+        </div>
+      </header>
+
+      <section class="hsj-question">
+        <h2>Current prompt</h2>
+        <p id="current-question">{{ question }}</p>
+      </section>
+
+      <section class="hsj-controls">
+        <button id="record-button" data-state="idle">Start recording</button>
+        <div id="level-meter" aria-hidden="true">
+          <div class="bar"></div>
+        </div>
+        <p id="record-timer" class="hsj-record-timer" hidden>Recording: <span id="record-timer-value">0:00</span></p>
+        <p id="status-text">Click start to begin recording.</p>
+        <p id="partial-transcript" class="hsj-partial" hidden></p>
+      </section>
+
+      <section class="hsj-history">
+        <h2>Session history</h2>
+        <div id="history-list"></div>
+      </section>
+
+      <section class="hsj-debug">
+        <details>
+          <summary>Debug / Config</summary>
+          <div class="hsj-debug-grid">
+            <div>
+              <h3>Server</h3>
+              <ul>
+                <li><strong>Host</strong>: {{ server_host }}</li>
+                <li><strong>Port</strong>: {{ server_port }}</li>
+                <li><strong>Reload</strong>: {{ 'true' if server_reload else 'false' }}</li>
+                <li><strong>Resume</strong>: {{ 'true' if server_resume else 'false' }}</li>
+                <li><strong>Sessions dir</strong>: {{ sessions_dir }}</li>
+                <li><strong>App version</strong>: {{ app_version }}</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Session</h3>
+              <ul>
+                <li><strong>Session ID</strong>: {{ session_id }}</li>
+                <li><strong>Total</strong>: {{ total_hms }} ({{ total_seconds }}s)</li>
+              </ul>
+            </div>
+            <div>
+              <h3>LLM</h3>
+              <ul>
+                <li><strong>Model</strong>: {{ llm_model }}</li>
+              </ul>
+            </div>
+            <div>
+              <h3>STT</h3>
+              <ul>
+                <li><strong>Backend</strong>: {{ stt_backend }}</li>
+                <li><strong>Model</strong>: {{ stt_model }}</li>
+                <li><strong>Compute</strong>: {{ stt_compute }}</li>
+                <li><strong>Formatting</strong>: {{ stt_formatting }}</li>
+                {% if stt_auto_reason %}
+                <li><strong>Auto-private</strong>: {{ stt_auto_reason }}</li>
+                {% endif %}
+                {% if stt_warnings and stt_warnings|length > 0 %}
+                <li><strong>Warnings</strong>:
+                  <ul>
+                  {% for w in stt_warnings %}
+                    <li>{{ w }}</li>
+                  {% endfor %}
+                  </ul>
+                </li>
+                {% endif %}
+              </ul>
+            </div>
+            <div>
+              <h3>Client thresholds</h3>
+              <ul>
+                <li><strong>Short duration</strong>: {{ short_duration }}s</li>
+                <li><strong>Short voiced</strong>: {{ short_voiced }}s</li>
+                <li><strong>Voice RMS threshold</strong>: {{ voice_rms_dbfs_threshold }} dBFS</li>
+                <li><strong>JS ready</strong>: {{ 'true' if static_assets_ready else 'false' }}</li>
+              </ul>
+            </div>
+          </div>
+        </details>
+      </section>
+    </main>
+
+    <script type="module" src="/static/js/app.js"></script>
+  </body>
+</html>
