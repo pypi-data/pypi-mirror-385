@@ -1,0 +1,59 @@
+{% extends "app/base.html" %}
+
+{% block head %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'app/output.css' %}">
+<link rel="stylesheet" href="{% static 'app/main_styles.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+<div class="flex items-center justify-center h-screen">
+
+    <form 
+    class="flex flex-col gap-3 rounded px-5 pb-16"
+    action="{% url 'auth-request' %}"
+    method="post"
+    >
+    
+        <h1 class="text-3xl">Welcome!</h1>
+        <p class="mb-5">You need to log in before viewing this page.</p>
+        
+        {% csrf_token %}
+
+        <input 
+        type="text" 
+        name="username"
+        placeholder="username"
+        class="w-full py-3 px-4 rounded outline outline-stone-500 focus:outline-2 focus:outline-sky-700
+            bg-white "/>
+
+        <input 
+        type="password"
+        name="password" 
+        placeholder="password"
+        class="w-full py-3 px-4 rounded outline outline-stone-500 focus:outline-2 focus:outline-sky-700
+            bg-white "/>
+
+        <input
+        type="submit"
+        class="px-4 py-3 btn text-white rounded cursor-pointer outline-none focus:underline"
+        value="Log In" />
+
+        <div class="relative mt-5 w-full">
+
+            {% if messages %}
+            <ul class="messages absolute bg-red-50/50 border-2 border-red-800 rounded p-3 error w-full">
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+    </form>
+
+</div>
+
+{% endblock %}

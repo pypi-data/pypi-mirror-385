@@ -1,0 +1,63 @@
+{% extends "app/base.html" %}
+
+{% block head %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'app/output.css' %}">
+<link rel="stylesheet" href="{% static 'app/main_styles.css' %}">
+<link rel="stylesheet" href="{% static 'app/chart_animations.css' %}">
+<link rel="stylesheet" href="{% static 'app/spinner.css' %}">
+<link rel="stylesheet" href="{% static 'app/notifications.css' %}">
+<script defer src="{% static 'app/htmxIncludeChartDimensions.js' %}"></script>
+
+{% endblock %}
+
+{% block content %}
+
+<main class="flex flex-row relative">
+    {% if navbar %}
+        {% include "app/navbar.html" %}
+    {% endif %}
+    {% if titles %}
+
+    <!-- TODO: find a better way to add titles to document flow without duplicating -->
+    <div class="flex flex-col p-5 text-transparent">
+        {% for title in titles %}
+
+            <a class="text-{{ title.navbar_text_size }} hover:underline 
+            {% if title.level == 1 %}italic{% endif %}
+            {% if title.navbar_margin_y %}my-{{ title.navbar_margin_y }}{% endif %}
+            {% if title.navbar_margin_start %}ms-{{ title.navbar_margin_start }}{% endif %}" 
+            href="#{{ title.id }}"
+            >
+                {{ title.title }}
+            </a>
+        
+        {% endfor %}
+    </div>
+    <!-- END TODO -->
+
+    <div class="flex flex-col fixed p-5 text-stone-800">
+        {% for title in titles %}
+
+            <a class="text-{{ title.navbar_text_size }} hover:underline 
+            {% if title.level == 1 %}italic{% endif %}
+            {% if title.navbar_margin_y %}my-{{ title.navbar_margin_y }}{% endif %}
+            {% if title.navbar_margin_start %}ms-{{ title.navbar_margin_start }}{% endif %}" 
+            href="#{{ title.id }}"
+            >
+                {{ title.title }}
+            </a>
+        
+        {% endfor %}
+    </div>
+    {% endif %}
+    <div class="flex-1"></div>
+    <div class="grow" style="max-width: 700px;">
+        {{ content }}
+    </div>
+    <div class="flex-2"></div>
+    {% include "app/notifications.html" %}
+</main>
+
+{% endblock %}

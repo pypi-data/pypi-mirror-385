@@ -1,0 +1,23 @@
+[project]
+name = "newsflash"
+version = "0.1.12"
+description = "A new library for Python dashboards and data apps"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "django>=5.2.6",
+    "fonttools>=4.60.1",
+    "pydantic>=2.11.9",
+]
+
+[project.scripts]
+newsflash_setup = "newsflash.setup:main"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.13.2",
+]
+
+[build-system]
+requires = ["hatchling >= 1.27"]
+build-backend = "hatchling.build"
