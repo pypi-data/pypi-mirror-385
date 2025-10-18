@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wdlc"
+version = "0.8.0"
+description = "Web DL Compiler - Lightweight deep learning compiler utilities"
+readme = "README.md"
+authors = [{ name = "Mohamed Khaled", email = "you@example.com" }]
+license = { text = "MIT" }
+requires-python = ">=3.8"
+dependencies = [
+    "torch",
+    "numpy",
+    "psutil>=5.9"
+]
+
+[project.scripts]
+wdlc = "wdlc.cli:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
