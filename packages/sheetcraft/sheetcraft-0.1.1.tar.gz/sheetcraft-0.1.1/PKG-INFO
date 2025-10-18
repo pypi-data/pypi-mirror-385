@@ -1,0 +1,540 @@
+Metadata-Version: 2.4
+Name: sheetcraft
+Version: 0.1.1
+Summary: Flexible, intuitive Excel processing library for .xlsx and .xls
+Author-email: Your Team <dev@example.com>
+License: Apache License
+                                   Version 2.0, January 2004
+                                http://www.apache.org/licenses/
+        
+           TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+        
+           1. Definitions.
+        
+              "License" shall mean the terms and conditions for use, reproduction,
+              and distribution as defined by Sections 1 through 9 of this document.
+        
+              "Licensor" shall mean the copyright owner or entity authorized by
+              the copyright owner that is granting the License.
+        
+              "Legal Entity" shall mean the union of the acting entity and all
+              other entities that control, are controlled by, or are under common
+              control with that entity. For the purposes of this definition,
+              "control" means (i) the power, direct or indirect, to cause the
+              direction or management of such entity, whether by contract or
+              otherwise, or (ii) ownership of fifty percent (50%) or more of the
+              outstanding shares, or (iii) beneficial ownership of such entity.
+        
+              "You" (or "Your") shall mean an individual or Legal Entity
+              exercising permissions granted by this License.
+        
+              "Source" form shall mean the preferred form for making modifications,
+              including but not limited to software source code, documentation
+              source, and configuration files.
+        
+              "Object" form shall mean any form resulting from mechanical
+              transformation or translation of a Source form, including but
+              not limited to compiled object code, generated documentation,
+              and conversions to other media types.
+        
+              "Work" shall mean the work of authorship, whether in Source or
+              Object form, made available under the License, as indicated by a
+              copyright notice that is included in or attached to the work
+              (an example is provided in the Appendix below).
+        
+              "Derivative Works" shall mean any work, whether in Source or Object
+              form, that is based on (or derived from) the Work and for which the
+              editorial revisions, annotations, elaborations, or other modifications
+              represent, as a whole, an original work of authorship. For the purposes
+              of this License, Derivative Works shall not include works that remain
+              separable from, or merely link (or bind by name) to the interfaces of,
+              the Work and Derivative Works thereof.
+        
+              "Contribution" shall mean any work of authorship, including
+              the original version of the Work and any modifications or additions
+              to that Work or Derivative Works thereof, that is intentionally
+              submitted to Licensor for inclusion in the Work by the copyright owner
+              or by an individual or Legal Entity authorized to submit on behalf of
+              the copyright owner. For the purposes of this definition, "submitted"
+              means any form of electronic, verbal, or written communication sent
+              to the Licensor or its representatives, including but not limited to
+              communication on electronic mailing lists, source code control systems,
+              and issue tracking systems that are managed by, or on behalf of, the
+              Licensor for the purpose of discussing and improving the Work, but
+              excluding communication that is conspicuously marked or otherwise
+              designated in writing by the copyright owner as "Not a Contribution."
+        
+              "Contributor" shall mean Licensor and any individual or Legal Entity
+              on behalf of whom a Contribution has been received by Licensor and
+              subsequently incorporated within the Work.
+        
+           2. Grant of Copyright License. Subject to the terms and conditions of
+              this License, each Contributor hereby grants to You a perpetual,
+              worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+              copyright license to reproduce, prepare Derivative Works of,
+              publicly display, publicly perform, sublicense, and distribute the
+              Work and such Derivative Works in Source or Object form.
+        
+           3. Grant of Patent License. Subject to the terms and conditions of
+              this License, each Contributor hereby grants to You a perpetual,
+              worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+              (except as stated in this section) patent license to make, have made,
+              use, offer to sell, sell, import, and otherwise transfer the Work,
+              where such license applies only to those patent claims licensable
+              by such Contributor that are necessarily infringed by their
+              Contribution(s) alone or by combination of their Contribution(s)
+              with the Work to which such Contribution(s) was submitted. If You
+              institute patent litigation against any entity (including a
+              cross-claim or counterclaim in a lawsuit) alleging that the Work
+              or a Contribution incorporated within the Work constitutes direct
+              or contributory patent infringement, then any patent licenses
+              granted to You under this License for that Work shall terminate
+              as of the date such litigation is filed.
+        
+           4. Redistribution. You may reproduce and distribute copies of the
+              Work or Derivative Works thereof in any medium, with or without
+              modifications, and in Source or Object form, provided that You
+              meet the following conditions:
+        
+              (a) You must give any other recipients of the Work or
+                  Derivative Works a copy of this License; and
+        
+              (b) You must cause any modified files to carry prominent notices
+                  stating that You changed the files; and
+        
+              (c) You must retain, in the Source form of any Derivative Works
+                  that You distribute, all copyright, patent, trademark, and
+                  attribution notices from the Source form of the Work,
+                  excluding those notices that do not pertain to any part of
+                  the Derivative Works; and
+        
+              (d) If the Work includes a "NOTICE" text file as part of its
+                  distribution, then any Derivative Works that You distribute must
+                  include a readable copy of the attribution notices contained
+                  within such NOTICE file, excluding those notices that do not
+                  pertain to any part of the Derivative Works, in at least one
+                  of the following places: within a NOTICE text file distributed
+                  as part of the Derivative Works; within the Source form or
+                  documentation, if provided along with the Derivative Works; or,
+                  within a display generated by the Derivative Works, if and
+                  wherever such third-party notices normally appear. The contents
+                  of the NOTICE file are for informational purposes only and
+                  do not modify the License. You may add Your own attribution
+                  notices within Derivative Works that You distribute, alongside
+                  or as an addendum to the NOTICE text from the Work, provided
+                  that such additional attribution notices cannot be construed
+                  as modifying the License.
+        
+              You may add Your own copyright statement to Your modifications and
+              may provide additional or different license terms and conditions
+              for use, reproduction, or distribution of Your modifications, or
+              for any such Derivative Works as a whole, provided Your use,
+              reproduction, and distribution of the Work otherwise complies with
+              the conditions stated in this License.
+        
+           5. Submission of Contributions. Unless You explicitly state otherwise,
+              any Contribution intentionally submitted for inclusion in the Work
+              by You to the Licensor shall be under the terms and conditions of
+              this License, without any additional terms or conditions.
+              Notwithstanding the above, nothing herein shall supersede or modify
+              the terms of any separate license agreement you may have executed
+              with Licensor regarding such Contributions.
+        
+           6. Trademarks. This License does not grant permission to use the trade
+              names, trademarks, service marks, or product names of the Licensor,
+              except as required for reasonable and customary use in describing the
+              origin of the Work and reproducing the content of the NOTICE file.
+        
+           7. Disclaimer of Warranty. Unless required by applicable law or
+              agreed to in writing, Licensor provides the Work (and each
+              Contributor provides its Contributions) on an "AS IS" BASIS,
+              WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+              implied, including, without limitation, any warranties or conditions
+              of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A
+              PARTICULAR PURPOSE. You are solely responsible for determining the
+              appropriateness of using or redistributing the Work and assume any
+              risks associated with Your exercise of permissions under this License.
+        
+           8. Limitation of Liability. In no event and under no legal theory,
+              whether in tort (including negligence), contract, or otherwise,
+              unless required by applicable law (such as deliberate and grossly
+              negligent acts) or agreed to in writing, shall any Contributor be
+              liable to You for damages, including any direct, indirect, special,
+              incidental, or consequential damages of any character arising as a
+              result of this License or out of the use or inability to use the
+              Work (including but not limited to damages for loss of goodwill,
+              work stoppage, computer failure or malfunction, or any and all
+              other commercial damages or losses), even if such Contributor
+              has been advised of the possibility of such damages.
+        
+           9. Accepting Warranty or Additional Liability. While redistributing
+              the Work or Derivative Works thereof, You may choose to offer,
+              and charge a fee for, acceptance of support, warranty, indemnity,
+              or other liability obligations and/or rights consistent with this
+              License. However, in accepting such obligations, You may act only
+              on Your own behalf and on Your sole responsibility, not on behalf
+              of any other Contributor, and only if You agree to indemnify,
+              defend, and hold each Contributor harmless for any liability
+              incurred by, or claims asserted against, such Contributor by reason
+              of your accepting any such warranty or additional liability.
+        
+           END OF TERMS AND CONDITIONS
+        
+           APPENDIX: How to apply the Apache License to your work.
+        
+              To apply the Apache License to your work, attach the following
+              boilerplate notice, with the fields enclosed by brackets "[]"
+              replaced with your own identifying information. (Don't include
+              the brackets!)  The text should be enclosed in the appropriate
+              comment syntax for the file format. We also recommend that a
+              file or class name and description of purpose be included on the
+              same "printed page" as the copyright notice for easier
+              identification within third-party archives.
+        
+           Copyright [2025] [GetAIx contributors]
+        
+           Licensed under the Apache License, Version 2.0 (the "License");
+           you may not use this file except in compliance with the License.
+           You may obtain a copy of the License at
+        
+               http://www.apache.org/licenses/LICENSE-2.0
+        
+           Unless required by applicable law or agreed to in writing, software
+           distributed under the License is distributed on an "AS IS" BASIS,
+           WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+           See the License for the specific language governing permissions and
+           limitations under the License.
+Project-URL: Homepage, https://github.com/getaix/sheetcraft
+Project-URL: Repository, https://github.com/getaix/sheetcraft.git
+Keywords: excel,xlsx,xls,openpyxl,xlsxwriter,xlwt,template,data validation,images
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Apache Software License
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+License-File: NOTICE
+Requires-Dist: openpyxl>=3.1.2
+Provides-Extra: images
+Requires-Dist: Pillow>=9.0.0; extra == "images"
+Provides-Extra: xls
+Requires-Dist: xlwt>=1.3.0; extra == "xls"
+Requires-Dist: xlrd<2.0.0; extra == "xls"
+Provides-Extra: fast
+Requires-Dist: XlsxWriter>=3.2.0; extra == "fast"
+Provides-Extra: template
+Requires-Dist: Jinja2>=3.1.2; extra == "template"
+Provides-Extra: formula
+Requires-Dist: xlcalculator>=0.4.0; extra == "formula"
+Provides-Extra: all
+Requires-Dist: Pillow>=9.0.0; extra == "all"
+Requires-Dist: xlwt>=1.3.0; extra == "all"
+Requires-Dist: xlrd<2.0.0; extra == "all"
+Requires-Dist: XlsxWriter>=3.2.0; extra == "all"
+Requires-Dist: Jinja2>=3.1.2; extra == "all"
+Requires-Dist: xlcalculator>=0.4.0; extra == "all"
+Provides-Extra: dev
+Requires-Dist: pytest>=7.4.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.1.0; extra == "dev"
+Requires-Dist: pytest-benchmark>=4.0.0; extra == "dev"
+Dynamic: license-file
+
+# sheetcraft
+
+一个灵活、直观的 Python Excel 处理库。
+
+- 支持 `.xlsx`（默认使用 openpyxl；可选 xlsxwriter 提升写入性能）
+- 支持旧版 `.xls`（通过 xlwt，图片自动使用 BMP 回退）
+- 高级导出能力：可定制单元格样式与格式
+- 模板渲染（Jinja2），支持变量与块重复
+- 图片插入（PNG/JPG；`.xls` 自动转 BMP）
+- 数据有效性（Data Validation）辅助 API
+- 公式书写与可选评估（xlcalculator）
+- 多工作表操作
+- 面向大数据集的性能优化
+
+## Installation
+
+```bash
+# 默认推荐：安装全部组件
+pip install 'sheetcraft[all]'
+
+# 或仅安装核心（不含可选组件）
+pip install sheetcraft
+
+# 分组件安装（可选）：
+pip install 'sheetcraft[images]'      # 图片支持（Pillow）
+pip install 'sheetcraft[xls]'         # 旧版 `.xls` 支持（xlwt/xlrd）
+pip install 'sheetcraft[fast]'        # 更快的 `.xlsx` 写入（xlsxwriter）
+pip install 'sheetcraft[template]'    # 模板渲染支持（Jinja2）
+pip install 'sheetcraft[formula]'     # 公式评估（xlcalculator）
+```
+
+## Quick Start
+
+```python
+from sheetcraft import ExcelWorkbook
+
+# Create a fast .xlsx export using xlsxwriter
+wb = ExcelWorkbook(output_path='out.xlsx', fast=True)
+ws = wb.add_sheet('Report')
+
+# Write header with style
+header_style = {
+    'font': {'bold': True, 'size': 12},
+    'fill': {'color': '#DDEEFF'},
+    'align': {'horizontal': 'center'},
+    'border': {'left': True, 'right': True, 'top': True, 'bottom': True}
+}
+wb.write_row(ws, 1, ['Item', 'Qty', 'Price', 'Total'], styles=[header_style]*4)
+
+# Write data rows
+rows = [
+    ['Widget A', 5, 19.99, '=B2*C2'],
+    ['Widget B', 2, 29.50, '=B3*C3'],
+]
+wb.write_rows(ws, start_row=2, rows=rows)
+
+# Data validation for Qty column (whole number, >= 0)
+from sheetcraft.workbook import DataValidationSpec
+wb.add_data_validation(ws, 'B2:B100', DataValidationSpec(type='whole', operator='>=', formula1='0'))
+
+# Insert an image
+wb.insert_image(ws, 1, 6, 'logo.png', scale_x=0.5, scale_y=0.5)
+
+# Set column widths
+wb.set_column_width(ws, 1, 18)
+wb.set_column_width(ws, 2, 10)
+wb.set_column_width(ws, 3, 12)
+wb.set_column_width(ws, 4, 12)
+
+# Save
+wb.save()
+```
+
+## Template Rendering (.xlsx)
+
+Use Jinja2 placeholders in cell values and native `{% for %}` loops for repetition.
+
+- `{{ title }}` replaces with `data['title']`
+- `{% for item in items %}` ... `{% endfor %}` renders rows within the block capacity using `{{ item.field }}`.
+  - Single-line form: place `{% for %}` on the row with templates and `{% endfor %}` on a later row; only the first item is rendered.
+  - Multi-line block: put multiple template rows between `{% for %}` and `{% endfor %}`; capacity equals the number of template rows.
+
+```python
+from sheetcraft import ExcelTemplate, ExcelWorkbook
+
+# Build a simple template that uses Jinja2 for (capacity=2)
+wb = ExcelWorkbook(output_path='template.xlsx')
+ws = wb.get_sheet()
+wb.write_cell(ws, 1, 1, '{{ title }}')
+wb.write_cell(ws, 3, 1, '{% for item in items %}')
+wb.write_row(ws, 4, ['{{ item.name }}', '{{ item.qty }}', '{{ item.price }}', '=B4*C4'])
+wb.write_row(ws, 5, ['{{ item.name }}', '{{ item.qty }}', '{{ item.price }}', '=B5*C5'])
+wb.write_cell(ws, 6, 1, '{% endfor %}')
+wb.save()
+
+renderer = ExcelTemplate()
+renderer.render('template.xlsx', {
+    'title': 'Sales Report',
+    'items': [
+        {'name': 'Widget A', 'qty': 5, 'price': 19.99},
+        {'name': 'Widget B', 'qty': 2, 'price': 29.50},
+    ]
+}, 'rendered.xlsx')
+```
+
+> 注意：旧版 `[[repeat ...]]` 语法已移除。请在模板中使用标准的 Jinja2 `{% for %}` 块。
+
+## 格式修复模块（可选开关）
+
+当生成的 `.xlsx` 在某些前端/预览组件中表现异常（如绘图锚点命名空间缺失），可以启用“格式修复”进行无损结构修补。
+
+- 核心能力：`FormatFixConfig`（配置）、`FixReport`（结果报告）、`fix_xlsx(path, config)`（对文件进行修补）
+- 目前内置规则：`prefix_drawing_anchors=True`，为绘图锚点标签增加 `xdr:` 前缀，并在根 `wsDr` 上补充 `xmlns:xdr` 命名空间。
+
+启用方式：
+
+- 在 `ExcelWorkbook` 层：
+  - `apply_format_fix_on_save=True` 仅对 `.xlsx` 在 `save()` 后进行修补；`preview_temp()` 也会应用；`get_bytes()` 不做修改。
+  - `format_fix_config=FormatFixConfig(...)` 配置具体规则。
+
+```python
+from sheetcraft import ExcelWorkbook, FormatFixConfig
+
+wb = ExcelWorkbook(
+    output_path='out.xlsx',
+    fast=True,
+    apply_format_fix_on_save=True,
+    format_fix_config=FormatFixConfig(prefix_drawing_anchors=True)
+)
+ws = wb.add_sheet('Report')
+# ... 写入数据 ...
+wb.save()  # 保存后自动进行格式修复（仅 .xlsx）
+```
+
+- 在 `ExcelTemplate` 渲染层：
+  - `apply_format_fix=True` 在渲染保存后对 `.xlsx` 进行修补。
+  - `format_fix_config=FormatFixConfig(...)` 配置具体规则。
+
+```python
+from sheetcraft import ExcelTemplate, FormatFixConfig
+
+renderer = ExcelTemplate(
+    apply_format_fix=True,
+    format_fix_config=FormatFixConfig(prefix_drawing_anchors=True)
+)
+renderer.render('template.xlsx', data, 'rendered.xlsx')
+```
+
+说明：修复过程只调整结构与命名空间，不改变单元格数据。若修复失败不会中断主流程（会记录报告或抛出详细异常用于排查）。
+
+## Styles and Formatting
+
+A simple style dict can include:
+
+- `font`: `name`, `size`, `bold`, `italic`, `underline`, `color`
+- `align`: `horizontal` (`left|center|right`), `vertical` (`top|center|bottom`), `wrap`
+- `fill`: `color` (e.g., `#FFEECC`)
+- `border`: `left|right|top|bottom` flags and optional `color`
+- `number_format`: Excel number format string (e.g., `"#,##0.00"`, `"yyyy-mm-dd"`)
+
+```python
+price_style = {'number_format': '#,##0.00'}
+wb.write_cell(ws, 2, 3, 19.99, price_style)
+```
+
+## Data Validation
+
+```python
+# Allow only values from a list
+wb.add_data_validation(ws, 'E2:E100', DataValidationSpec(type='list', formula1='"Small,Medium,Large"'))
+
+# Date between two bounds
+wb.add_data_validation(ws, 'F2:F100', DataValidationSpec(type='date', operator='between', formula1='DATE(2024,1,1)', formula2='DATE(2024,12,31)'))
+```
+
+Note: `.xls` (xlwt) does not support data validation creation.
+
+## Formula Support
+
+Write formulas with `set_formula` or pass strings starting with `=` in `write_cell`.
+
+Optional evaluation using xlcalculator:
+
+```python
+from sheetcraft.formulas import evaluate_xlsx_formulas
+results = evaluate_xlsx_formulas('out.xlsx')
+for (sheet, cell), value in results.items():
+    print(sheet, cell, value)
+```
+
+## Multi-Sheet Operations
+
+```python
+wb = ExcelWorkbook(output_path='multi.xlsx', fast=False)
+ws1 = wb.add_sheet('Summary')
+ws2 = wb.add_sheet('Data')
+wb.write_cell(ws1, 1, 1, 'Overview')
+wb.write_rows(ws2, 1, [[1,2,3],[4,5,6],[7,8,9]])
+wb.save()
+```
+
+## Legacy .xls Support
+
+```python
+wb = ExcelWorkbook(output_path='legacy.xls', file_format='xls')
+ws = wb.add_sheet('Sheet1')
+wb.write_rows(ws, 1, [["A", 1], ["B", 2]])
+wb.insert_image(ws, 1, 3, 'logo.jpg')  # converted to BMP automatically
+wb.save()
+```
+
+Constraints: `.xls` has limited styling, image, and no data validation creation.
+
+## Performance for Large Datasets
+
+- Use `fast=True` to write with xlsxwriter for very large `.xlsx` exports.
+- For openpyxl, set `write_only=True` to stream rows efficiently.
+
+```python
+wb = ExcelWorkbook(output_path='big.xlsx', fast=True)
+ws = wb.add_sheet('Data')
+for i in range(2, 100_002):
+    wb.write_row(ws, i, [f'Item {i}', i, i * 1.23])
+wb.save()
+```
+
+## 技术实现细节概览
+
+- 引擎选择：
+  - `.xlsx` 默认使用 `openpyxl`；`fast=True` 时使用 `xlsxwriter`（更快写入，部分功能有限制）。
+  - `.xls` 使用 `xlwt`（样式支持有限、无数据验证创建能力）。
+  - `write_only=True` 可在 `openpyxl` 下流式写入以降低内存。
+- 核心抽象：
+  - `ExcelWorkbook` 提供工作表管理（`add_sheet/get_sheet`）、单元格与行写入（`write_cell/row/rows`）、行列尺寸、合并单元格、图片插入、数据验证等。
+  - 样式通过统一字典进行描述，内部映射到不同引擎：`styles.py` 中的颜色规范化（`_normalize_color`）、`xlsxwriter_format_from_dict` 与 `xlwt_style_from_dict` 等。
+- 模板渲染：
+  - `ExcelTemplate.render` 基于 Jinja2，将单元格中的占位符与 `{% for %}` 块解析并渲染；多行块容量=模板行数，兼容常见导出场景。
+- 格式修复：
+  - `format_fix.py` 与生成流程解耦，仅在保存后对 `.xlsx` 进行结构性修补（如补全绘图锚点命名空间），保证数据不变。
+- 公式评估：
+  - `formulas.py` 提供 `evaluate_xlsx_formulas`，可选依赖 `xlcalculator` 进行公式计算并返回结果字典。
+- 预览与字节：
+  - `ExcelWorkbook.preview_temp()` 生成临时文件用于前端预览（若启用修复则也应用）；`get_bytes()` 直接返回内存字节，不做修复。
+- 日志与错误：
+  - 关键路径使用 `logging` 记录修复与渲染报告；异常均尽量包含上下文，便于定位问题。
+
+## Project Structure
+
+```
+sheetcraft/
+  __init__.py
+  workbook.py
+  styles.py
+  images.py
+  validation.py
+  template.py
+  formulas.py
+examples/
+  export_basic.py
+  template_render.py
+  image_insert.py
+  multi_sheet.py
+pyproject.toml
+README.md
+```
+
+## 致谢
+
+本项目感谢以下开源项目及其作者与维护者（致谢详情见 `NOTICE`）：
+- openpyxl、XlsxWriter、xlwt、xlrd、Jinja2、Pillow、xlcalculator
+- 开发工具：pytest、pytest-cov、pytest-benchmark
+
+## 兼容性与限制
+
+- `.xlsx`：
+  - `openpyxl` 功能更完整；适合多数样式与数据验证场景。
+  - `xlsxwriter` 在 `fast=True` 时用于更快写入，部分高级样式/特性可能有限制；建议大数据量导出使用。
+- `.xls`：
+  - 样式能力有限、图片需 BMP 回退、不可创建数据验证；适合兼容旧系统的基础导出。
+- 模板渲染：
+  - 支持单元格占位符与 `{% for %}` 重复块；多行块的容量=模板行数。
+  - 不支持跨工作表复杂引用的自动展开；如需更复杂逻辑建议用 Python 预处理数据。
+- 公式评估：
+  - 依赖 `xlcalculator`，仅对 `.xlsx` 提供可选评估；某些 Excel 特性（如外部引用、宏）不在支持范围内。
+- 格式修复模块：
+  - 仅对 `.xlsx` 在保存后进行结构修补；不改变单元格数据。
+  - 当前主要适用绘图锚点命名空间修补；后续可按需扩展更多规则。
+
+## License
+
+Apache License 2.0。详见 `LICENSE`。
+
+Repository: https://github.com/getaix/sheetcraft.git
