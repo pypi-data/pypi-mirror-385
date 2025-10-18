@@ -1,0 +1,83 @@
+Metadata-Version: 2.4
+Name: sharktuner
+Version: 3.8.1
+Summary: IREE Model and Dispatch Tuner
+Author: SHARK Authors
+License-Expression: Apache-2.0
+Project-URL: Repository, https://github.com/nod-ai/shark-ai
+Classifier: Development Status :: 3 - Alpha
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: iree-base-compiler
+Requires-Dist: iree-base-runtime
+Requires-Dist: numpy
+Requires-Dist: PyYAML
+Requires-Dist: typing_extensions
+Requires-Dist: tqdm>=4.66.4
+Requires-Dist: z3_solver>=4.13.0.0
+Provides-Extra: dev
+Requires-Dist: mypy==1.8.0; extra == "dev"
+Requires-Dist: pre-commit==3.8.0; extra == "dev"
+Requires-Dist: virtualenv==20.26.6; extra == "dev"
+Requires-Dist: types-setuptools>=80.9.0.20250822; extra == "dev"
+Requires-Dist: types-tqdm>=4.66.0.20240417; extra == "dev"
+
+# SHARK Tuner
+SHARK Tuner automates the dispatch-level and model-level tuning for the IREE (Intermediate Representation Execution Environment) ML Compiler on AMD GPUs.
+
+## Installation
+Install SHARK Tuner from PyPI:
+```shell
+pip install sharktuner
+```
+
+This will install all required dependencies including IREE compiler and runtime.
+
+You can use the latest nightly IREE python bindings:
+```shell
+pip install --upgrade --pre \
+    iree-base-compiler \
+    iree-base-runtime \
+    --find-links https://iree.dev/pip-release-links.html
+```
+
+Verify that the environment is set up correctly:
+```shell
+python -m model_tuner --help
+```
+
+or
+
+```shell
+python -m dispatch_tuner --help
+```
+
+### Model Tuner
+Use the Model Tuner to tune a dispatch and a model:
+```shell
+python -m model_tuner double_mmt.mlir mmt_benchmark.mlir \
+    --compile-flags-file=compile_flags.txt \
+    --model-benchmark-flags-file=model_benchmark_flags.txt \
+    --devices=hip://0 \
+    --num-candidates=30 \
+    --model-tuner-num-dispatch-candidates=5 \
+    --model-tuner-num-model-candidates=3`
+```
+
+Refer to [Mode Tuner README](https://github.com/nod-ai/shark-ai/tree/main/sharktuner/model_tuner) for detailed information on flags and MLIR files.
+
+### Dispatch Tuner
+Use the Dispatch Tuner to tune a dispatch:
+```shell
+python -m dispatch_tuner dispatch_sample.mlir dispatch_sample_benchmark.mlir \
+    --compile-flags-file=compile_flags.txt
+    --devices=hip://0 \
+    --num-candidates=30
+```
+
+Refer to [Dispatch Tuner README](https://github.com/nod-ai/shark-ai/tree/main/sharktuner/dispatch_tuner) for detailed information on flags and MLIR files.
