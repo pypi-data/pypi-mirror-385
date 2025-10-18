@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/"
+             xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/"
+             xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/"
+             xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/"
+             xmlns:kie="http://www.drools.org/kie/dmn/1.2"
+             xmlns:feel="http://www.omg.org/spec/DMN/20180521/FEEL/"
+             id="loan-approval"
+             name="Loan Approval Decision"
+             typeLanguage="http://www.omg.org/spec/DMN/20180521/FEEL/"
+             namespace="https://example.com/dmn/loan">
+  
+  <decision id="approvalScore" name="Approval Score">
+    <decisionTable id="scoreTable" hitPolicy="SUM">
+      <input id="creditScoreInput" label="Credit Score">
+        <inputExpression typeRef="number">
+          <text>credit_score</text>
+        </inputExpression>
+      </input>
+      <input id="incomeInput" label="Annual Income">
+        <inputExpression typeRef="number">
+          <text>income</text>
+        </inputExpression>
+      </input>
+      <input id="ageInput" label="Age">
+        <inputExpression typeRef="number">
+          <text>age</text>
+        </inputExpression>
+      </input>
+      <output id="scoreOutput" label="Score" typeRef="number"/>
+      <rule id="creditRule1">
+        <inputEntry id="credit1">
+          <text>&gt;= 700</text>
+        </inputEntry>
+        <inputEntry id="income1">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="age1">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="score1">
+          <text>40</text>
+        </outputEntry>
+      </rule>
+      <rule id="creditRule2">
+        <inputEntry id="credit2">
+          <text>&gt;= 600</text>
+        </inputEntry>
+        <inputEntry id="income2">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="age2">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="score2">
+          <text>25</text>
+        </outputEntry>
+      </rule>
+      <rule id="creditRule3">
+        <inputEntry id="credit3">
+          <text>&gt;= 500</text>
+        </inputEntry>
+        <inputEntry id="income3">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="age3">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="score3">
+          <text>10</text>
+        </outputEntry>
+      </rule>
+      <rule id="incomeRule1">
+        <inputEntry id="credit4">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="income4">
+          <text>&gt;= 50000</text>
+        </inputEntry>
+        <inputEntry id="age4">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="score4">
+          <text>30</text>
+        </outputEntry>
+      </rule>
+      <rule id="incomeRule2">
+        <inputEntry id="credit5">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="income5">
+          <text>&gt;= 30000</text>
+        </inputEntry>
+        <inputEntry id="age5">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="score5">
+          <text>20</text>
+        </outputEntry>
+      </rule>
+      <rule id="ageRule1">
+        <inputEntry id="credit6">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="income6">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="age6">
+          <text>&gt;= 25 and &lt;= 65</text>
+        </inputEntry>
+        <outputEntry id="score6">
+          <text>20</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  
+  <decision id="loanApproval" name="Loan Approval">
+    <decisionTable id="approvalTable" hitPolicy="FIRST">
+      <input id="approvalScoreInput" label="Approval Score">
+        <inputExpression typeRef="number">
+          <text>approvalScore</text>
+        </inputExpression>
+      </input>
+      <output id="approvedOutput" label="Approved" typeRef="boolean"/>
+      <output id="maxAmountOutput" label="Max Amount" typeRef="number"/>
+      <output id="interestRateOutput" label="Interest Rate" typeRef="number"/>
+      <rule id="approvalRule1">
+        <inputEntry id="score1">
+          <text>&gt;= 80</text>
+        </inputEntry>
+        <outputEntry id="approved1">
+          <text>true</text>
+        </outputEntry>
+        <outputEntry id="amount1">
+          <text>1000000</text>
+        </outputEntry>
+        <outputEntry id="rate1">
+          <text>3.5</text>
+        </outputEntry>
+      </rule>
+      <rule id="approvalRule2">
+        <inputEntry id="score2">
+          <text>&gt;= 60</text>
+        </inputEntry>
+        <outputEntry id="approved2">
+          <text>true</text>
+        </outputEntry>
+        <outputEntry id="amount2">
+          <text>500000</text>
+        </outputEntry>
+        <outputEntry id="rate2">
+          <text>4.5</text>
+        </outputEntry>
+      </rule>
+      <rule id="approvalRule3">
+        <inputEntry id="score3">
+          <text>&lt; 60</text>
+        </inputEntry>
+        <outputEntry id="approved3">
+          <text>false</text>
+        </outputEntry>
+        <outputEntry id="amount3">
+          <text>0</text>
+        </outputEntry>
+        <outputEntry id="rate3">
+          <text>0</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  
+</definitions>
