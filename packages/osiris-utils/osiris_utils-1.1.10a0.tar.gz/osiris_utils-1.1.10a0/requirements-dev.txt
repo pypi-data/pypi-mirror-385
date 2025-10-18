@@ -1,0 +1,10 @@
+# requirements-dev.txt
+# --------------------
+-r requirements.txt
+
+# Install the package *with* extras in editable mode
+-e .[dev,docs,plot]
+
+# Tooling that isn't in extras (optional)
+build>=1.2
+twine>=5.0
