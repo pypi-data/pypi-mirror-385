@@ -1,0 +1,106 @@
+[build-system]
+requires = [
+    "setuptools>=42",
+    "wheel",
+    "pybind11>=2.6.0",
+    "numpy>=1.15.0"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tiny-thermal-camera"
+version = "1.0.0"
+description = "Python bindings for P2/Tiny1C thermal camera SDK"
+readme = "README.md"
+requires-python = ">=3.6"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Thermal Camera SDK", email = "mail@matbee.com"},
+]
+keywords = ["thermal", "camera", "temperature", "imaging", "P2", "Tiny1C"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: C++",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Image Processing",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+dependencies = [
+    "numpy>=1.15.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+    "black",
+    "flake8",
+    "mypy",
+]
+visualization = [
+    "opencv-python>=4.0.0",
+    "matplotlib>=3.0.0",
+]
+all = [
+    "tiny-thermal-camera[dev,visualization]",
+]
+
+[project.urls]
+Homepage = "https://github.com/matbeedotcom/Tiny-1C-Python-Bindings"
+Documentation = "https://github.com/matbeedotcom/Tiny-1C-Python-Bindings/blob/main/README.md"
+Repository = "https://github.com/matbeedotcom/Tiny-1C-Python-Bindings.git"
+"Bug Tracker" = "https://github.com/matbeedotcom/Tiny-1C-Python-Bindings/issues"
+
+[tool.setuptools]
+py-modules = ["tiny_thermal_camera"]
+package-dir = {"" = "src"}
+
+[tool.setuptools.package-data]
+"tiny_thermal_camera" = ["dlls/*.dll", "libs/*.lib", "libs/*.so"]
+"*" = ["*.so", "*.pyd", "*.dll"]
+
+[tool.cibuildwheel]
+# Build for Python 3.8 through 3.12
+build = "cp38-* cp39-* cp310-* cp311-* cp312-*"
+
+# Skip 32-bit builds and musl-based Linux
+skip = "*-win32 *-manylinux_i686 *-musllinux*"
+
+# Skip tests (requires hardware)
+test-skip = "*"
+
+[tool.cibuildwheel.linux]
+# Install system packages before building any wheels
+before-all = "yum install -y libusb-devel"
+before-build = "pip install pybind11 numpy"
+repair-wheel-command = "auditwheel repair -w {dest_dir} {wheel}"
+
+# Build only x86_64 for Linux (aarch64 requires local cross-compilation)
+archs = ["x86_64"]
+
+# Use manylinux_2_28 (AlmaLinux 8) for working package repos
+manylinux-x86_64-image = "manylinux_2_28"
+
+# Environment to ensure static linking
+environment = {USE_SHARED = "0"}
+
+[tool.cibuildwheel.windows]
+before-build = "pip install pybind11 numpy"
+
+# Only build for x64 on Windows
+archs = ["AMD64"]
+
+# delvewheel will bundle DLLs with explicit path to avoid permission issues
+repair-wheel-command = "delvewheel repair --add-path libs/win/x64/dll -w {dest_dir} {wheel}"

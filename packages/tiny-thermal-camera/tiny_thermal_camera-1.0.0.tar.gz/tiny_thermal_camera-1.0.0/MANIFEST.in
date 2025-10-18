@@ -1,0 +1,38 @@
+# Include essential files
+include README.md
+include LICENSE
+include CLAUDE.md
+include pyproject.toml
+include setup.py
+include python_bindings_tiny.cpp
+
+# Include headers
+recursive-include include *.h *.hpp
+recursive-include libs/include *.h *.hpp
+
+# Include x86_64 Linux libraries (static only)
+graft libs/linux/x86-linux_libs
+
+# Include ALL Windows libraries (both 32 and 64-bit)
+graft libs/win
+
+# Exclude Linux ARM/MIPS architectures
+prune libs/linux/aarch64-linux-gnu_libs
+prune libs/linux/aarch64-none-linux-gnu_libs
+prune libs/linux/aarch64-v01c01-linux-musl_libs
+prune libs/linux/arm-buildroot-linux-uclibcgnueabihf_libs
+prune libs/linux/arm-himix100-linux_libs
+prune libs/linux/arm-himix200-linux_libs
+prune libs/linux/arm-hisiv300-linux-uclibcgnueabi_libs
+prune libs/linux/arm-hisiv500-linux-uclibcgnueabi_libs
+prune libs/linux/arm-linux-gnueabi_libs
+prune libs/linux/arm-linux-gnueabihf_libs
+prune libs/linux/mips-linux-gnu_libs
+
+# Exclude .so files from source distribution
+global-exclude *.so *.so.*
+
+# Exclude build artifacts
+global-exclude *.pyc __pycache__
+global-exclude *.o *.obj
+global-exclude .git* .DS_Store
