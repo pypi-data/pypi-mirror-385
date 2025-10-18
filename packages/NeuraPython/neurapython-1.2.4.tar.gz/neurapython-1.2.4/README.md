@@ -1,0 +1,157 @@
+# 🧠 NeuraPython — Unified AI, Science & System Framework (v1.2.4 Hybrid Edition)
+
+**Author:** Ibrahim Shahid  
+**Version:** 1.2.4 (Hybrid Edition)  
+**License:** MIT  
+
+---
+
+## 📘 Overview
+
+**NeuraPython 1.2.4** is a cutting-edge, **unified Python framework** that bridges the realms of **Artificial Intelligence**, **Machine Learning**, **Quantum Mechanics**, **Advanced Mathematics**, **Physics**, **Chemistry**, **Statistics**, and **Assembly-level System Programming** — all in one coherent ecosystem.
+
+The **Hybrid Edition** intelligently activates advanced analytical and visualization capabilities (via SciPy, Pandas, Statsmodels, Seaborn) when available, while maintaining a lightweight NumPy–Matplotlib core for high performance and portability.
+
+---
+
+## 🚀 Key Highlights
+
+| Category | Description |
+|-----------|-------------|
+| 🧠 **Artificial Intelligence** | Unified integration layer for ChatGPT, Gemini, and custom reasoning agents. |
+| 🤖 **Machine Learning** | Scikit-learn wrapper for streamlined dataset handling, model creation, and evaluation. |
+| 🧩 **Neural Networks** | PyTorch & TensorFlow compatible interface for deep learning workflows. |
+| ⚛️ **Quantum Engine** | Handles teleportation, tunneling, and quantum probability simulations. |
+| 📊 **Statistics (Hybrid v3.0)** | Enterprise-grade analytics: means, dispersions, tests, regressions, correlations, and dynamic graphing. |
+| 🧮 **Advanced Mathematics** | Algebra, calculus, probability, combinatorics, sequences, and matrix operations. |
+| 🔬 **Physics Engine** | Includes classical, relativistic, and quantum models with energy and field calculations. |
+| ⚗️ **Chemistry Tools** | Periodic table, molecular constants, and formula-based computations. |
+| 🧱 **Assembly Layer** | Custom interpretable assembly instructions for logical and arithmetic control. |
+| 🌐 **Web Server** | Flask-powered REST API and visualization hosting system. |
+| 🧾 **Converters** | PDF, DOCX, TXT, JSON, CSV, and HTML file transformation tools. |
+| 💾 **Database Manager** | SQLite wrapper with automatic schema creation and querying. |
+| 🧠 **Sensors & System** | PhysicalSensors class for temperature, motion, and light readings. |
+| 📈 **Visualization** | Matplotlib + Seaborn-based graphing engine with single and multi-frame plotting. |
+| **Translator** | Translation from any language to other desired language|
+---
+
+## ⚙️ Installation
+
+### 🔹 Core Installation
+```bash
+pip install neurapython
+```
+
+### 🔸 Upgrade Existing Version
+```bash
+pip install --upgrade neurapython
+```
+
+### 🔹 Full Analytical Stack
+To unlock all Hybrid Edition features:
+```bash
+pip install numpy scipy pandas seaborn statsmodels matplotlib
+```
+
+---
+
+## ⚡ Quick Examples
+
+### 🧠 Artificial Intelligence
+```python
+from neurapython import AI
+ai = AI()
+print(ai.ask("Explain quantum tunneling simply."))
+```
+
+### 🤖 Machine Learning
+```python
+from neurapython import NeuraPython_ML
+ml = NeuraPython_ML()
+X, y = ml.load_builtin_dataset("iris")
+ml.create_model("random_forest")
+ml.train("random_forest", X, y)
+print(ml.evaluate(y, ml.predict("random_forest", X)))
+```
+
+### ⚛️ Quantum Calculations
+```python
+from neurapython import QuantumCalculation
+qc = QuantumCalculation()
+qc.teleportation_simulation(qubits=3)
+qc.quantum_tunneling(potential=5.0, energy=3.5)
+```
+
+### 📊 Statistics
+```python
+from neurapython import Statistics
+import numpy as np
+
+data = np.random.normal(10, 2, 100)
+S = Statistics(data)
+print("Arithmetic Mean:", S.arithmetic_mean())
+print("Geometric Mean:", S.geometric_mean())
+S.plot_histogram(kde=True)
+```
+
+### ⚗️ Chemistry
+```python
+from neurapython import Chemistry
+chem = Chemistry()
+print(chem.atomic_mass("Oxygen"))
+```
+
+### ⚙️ Assembly Execution
+```python
+from neurapython import Assembly
+asm = Assembly()
+asm.load_code("""MOV AX, 5\nMOV BX, 3\nADD AX, BX\nOUT AX""")
+asm.run()
+```
+
+### 🌐 Web Server
+```python
+from neurapython import WebServer
+app = WebServer()
+app.simple_route('/', code='NeuraPython Web Active')
+app.run()
+```
+
+---
+
+## 🧩 Module Architecture
+
+```
+neurapython/
+│
+├── AI                     # ChatGPT / Gemini integration layer
+├── Assembly               # Assembly-level interpreter
+├── Advanced_Maths         # Calculus, algebra, probability
+├── Chemistry              # Elemental data & formulas
+├── Database               # SQLite wrapper
+├── Physics                # Mechanics, relativity, quantum
+├── QuantumCalculation     # Quantum computation class
+├── Statistics             # Full analytics + graphing engine
+├── Sensors                # Physical sensor simulations
+├── Visualizer2D / 3D      # Matplotlib-based plotting tools
+├── WebServer              # Flask REST API and web interface
+├── NeuralNetwork          # Deep learning backend manager
+└── Converter, Reader, Media, Utilities
+```
+
+---
+
+## 🧠 Author
+**Ibrahim Shahid**  
+📧 *ibrahimshahid7767@gmail.com*
+
+---
+
+## ⚖️ License
+**MIT License** — free to use, modify, and distribute with proper credit.
+
+---
+
+## ❤️ Credits
+Developed with ❤️ by **Ibrahim Shahid**  
+Powered by: TensorFlow · PyTorch · Flask · Scikit-learn · SymPy · NumPy · SciPy · Pandas · Statsmodels · Seaborn · OpenCV · Matplotlib · P
