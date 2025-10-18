@@ -1,0 +1,82 @@
+[build-system]
+requires = [
+    "setuptools>=61.0", 
+    "wheel", 
+    "build",
+    "setuptools-rust>=1.5.0",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pqcdualusb"
+version = "0.1.3"
+description = "Post-Quantum Cryptography Dual USB Token Library for secure backup operations"
+readme = "PYPI_README.md"
+license = "MIT"
+authors = [
+    { name = "Johnson Ajibi", email = "Johnsonajibi@gmail.com" }
+]
+maintainers = [
+    { name = "Johnson Ajibi", email = "Johnsonajibi@gmail.com" }
+]
+requires-python = ">=3.8"
+keywords = ["cryptography", "post-quantum", "usb", "backup", "security", "token"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security :: Cryptography",
+    "Topic :: System :: Archiving :: Backup",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "cryptography>=3.4.8",
+    "psutil>=5.9.0",
+    "tqdm>=4.62.0",
+    "argon2-cffi>=21.3.0",
+]
+
+[project.optional-dependencies]
+pqc = [
+    "oqs>=0.5.0",
+]
+dev = [
+    "pytest>=6.0.0",
+    "pytest-cov>=2.12.0",
+    "black>=21.0.0",
+    "isort>=5.9.0",
+    "flake8>=3.9.0",
+    "mypy>=0.910",
+]
+benchmarks = [
+    "matplotlib>=3.5.0",
+    "numpy>=1.21.0",
+]
+
+
+
+[project.urls]
+Homepage = "https://github.com/Johnsonajibi/PostQuantum-DualUSB-Token-Library"
+Documentation = "https://github.com/Johnsonajibi/PostQuantum-DualUSB-Token-Library/blob/master/README.md"
+Repository = "https://github.com/Johnsonajibi/PostQuantum-DualUSB-Token-Library.git"
+"Bug Tracker" = "https://github.com/Johnsonajibi/PostQuantum-DualUSB-Token-Library/issues"
+Changelog = "https://github.com/Johnsonajibi/PostQuantum-DualUSB-Token-Library/blob/master/CHANGELOG.md"
+
+[tool.setuptools]
+package-dir = {"" = "."}
+
+[tool.setuptools.packages.find]
+include = ["pqcdualusb*"]
+
+[tool.setuptools.package-data]
+pqcdualusb = ["*.md", "*.txt", "*.rst", "*.so", "*.pyd", "*.dylib"]
+
+[tool.setuptools-rust]
+debug = false
