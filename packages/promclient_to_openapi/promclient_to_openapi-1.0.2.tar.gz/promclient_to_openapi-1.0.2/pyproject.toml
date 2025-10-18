@@ -1,0 +1,66 @@
+[project]
+name = "promclient_to_openapi"
+version = "1.0.2"
+
+description = "Translates prometheus_client metrics into OpenAPI specification."
+readme = "README.md"
+license-files = ["LICEN[CS]E*"]
+authors = [
+    { name = "Alexander Pozlevich", email = "apozlevich@gmail.com" },
+]
+
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Topic :: System :: Monitoring",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.13",
+    "Typing :: Typed",
+]
+
+requires-python = ">=3.13"
+dependencies = [
+    "prometheus-client>=0.22.1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff"]
+
+[tool.ruff]
+line-length = 140                 # Maximum code line length
+indent-width = 4                  # Default intendation width
+preview = true                    # Enable preview features
+unsafe-fixes = true               # Hint unsafe fixes
+
+[tool.ruff.analyze]
+detect-string-imports = true      # Try to detect indirect imports
+
+[tool.ruff.format]
+preview = true                    # Enable preview features
+quote-style = "double"            # Double quotes by default
+indent-style = "space"            # Indent using spaces
+skip-magic-trailing-comma = false # Like Black, respect magic trailing commas
+line-ending = "auto"              # Like Black, automatically detect the appropriate line ending
+
+# Experimental features
+docstring-code-format = true
+docstring-code-line-length = "dynamic"
+
+[tool.ruff.lint]
+preview = true                    # Enable preview features
+dummy-variable-rgx = "^_+$"       # Ignore variables containing only underscores in names
+
+select = ["ALL"]
+fixable = ["ALL"]
+unfixable = []
+ignore = [
+    "CPY001", # No copyright for opensource project
+    "D202",   # No blank lines allowed after function docstring
+    "D203",   # Blank lines before class
+    "D212",   # Multi-line docstring summary should start at the first line
+    "D413",   # Missing blank line after last section
+    "S101",   # Asserts are used in tests only
+]
+
+[tool.ruff.lint.flake8-annotations]
+allow-star-arg-any = true         # Suppress missing annotations for *args and **kwargs
+suppress-dummy-args = true        # Suppress missing annotations underscores-only args
