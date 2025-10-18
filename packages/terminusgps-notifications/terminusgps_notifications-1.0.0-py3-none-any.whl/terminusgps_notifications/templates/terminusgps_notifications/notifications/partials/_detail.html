@@ -1,0 +1,5 @@
+<section id="{{ wialonnotification.pk }}" hx-target="this" hx-indicator="#loading">
+    <h3>{{ wialonnotification.name }}</h3>
+    <p>{{ wialonnotification.enabled|yesno:'Enabled,Disabled' }}</p>
+    <button hx-get="{% url 'terminusgps_notifications:update notifications' wialonnotification.pk %}" hx-trigger="click" type="button">Update</button>
+</section>
