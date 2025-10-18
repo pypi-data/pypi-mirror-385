@@ -1,0 +1,141 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mkmapdiary"
+dynamic = ["version"]
+description = 'A travel journal generator'
+readme = "README.md"
+requires-python = ">=3.8"
+license = "PolyForm-Noncommercial-1.0.0"
+keywords = []
+authors = [
+  { name = "Janna Hopp", email = "hopp.janna@gmail.com" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+
+dependencies = [
+    "click",
+    "pyyaml",
+    "pydantic",
+    "mkdocs-glightbox",
+    "mkdocs-material",
+    "mkdocs",
+    "doit",
+    "identify",
+    "Pillow",
+    "rawpy",
+    "imageio",
+    "pyexiftool",
+    "tabulate",
+    "libsass",
+    "requests",
+    "jsonschema",
+    "lxml",
+    "pydub",
+    "ollama",
+    "gpxpy",
+    "hdbscan",
+]
+
+[project.optional-dependencies]
+
+transcription = [
+    "openai-whisper",
+]
+
+all = [
+    "openai-whisper",
+]
+
+[project.scripts]
+mkmapdiary = "mkmapdiary.__main__:main"
+
+[project.urls]
+Documentation = "https://bytehexe.github.io/mkmapdiary/"
+Issues = "https://github.com/bytehexe/mkmapdiary/issues"
+Source = "https://github.com/bytehexe/mkmapdiary"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.version.vcs]
+fallback-version = "0.0.0"
+
+[tool.hatch.version.raw-options]
+local_scheme = "no-local-version"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "src/mkmapdiary/__about__.py"
+
+[tool.hatch.envs.default]
+features = ["all"]
+
+[tool.hatch.envs.min]
+features = []
+
+[tool.hatch.envs.types]
+extra-dependencies = [
+  "mypy>=1.0.0",
+]
+
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src/mkmapdiary tests}"
+
+[[tool.mypy.overrides]]
+module="exiftool.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module="doit.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module="hdbscan.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module="whisper.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module="rawpy.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module="pydub.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module="pytest.*"
+ignore_missing_imports = true
+
+[tool.coverage.run]
+source_pkgs = ["mkmapdiary", "tests"]
+branch = true
+parallel = true
+omit = [
+  "src/mkmapdiary/__about__.py",
+]
+
+[tool.coverage.paths]
+mkmapdiary = ["src/mkmapdiary", "*/mkmapdiary/src/mkmapdiary"]
+tests = ["tests", "*/mkmapdiary/tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
