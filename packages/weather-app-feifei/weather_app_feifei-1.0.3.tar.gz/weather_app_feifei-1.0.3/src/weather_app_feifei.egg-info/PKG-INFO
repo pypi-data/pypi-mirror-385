@@ -1,0 +1,382 @@
+Metadata-Version: 2.4
+Name: weather-app-feifei
+Version: 1.0.3
+Summary: 基于MCP框架的天气查询应用，包含客户端和服务器组件
+Author-email: Feifei <feifei@example.com>
+License: MIT
+Project-URL: Homepage, https://github.com/feifei/weather-app
+Project-URL: Repository, https://github.com/feifei/weather-app
+Project-URL: Documentation, https://github.com/feifei/weather-app/blob/main/README.md
+Project-URL: Issues, https://github.com/feifei/weather-app/issues
+Keywords: weather,mcp,api,client-server,openweather
+Classifier: Development Status :: 4 - Beta
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Operating System :: OS Independent
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Scientific/Engineering :: Atmospheric Science
+Classifier: Topic :: Internet :: WWW/HTTP :: Indexing/Search
+Requires-Python: >=3.13
+Description-Content-Type: text/markdown
+Requires-Dist: httpx>=0.28.1
+Requires-Dist: mcp>=1.17.0
+Requires-Dist: python-dotenv>=1.1.1
+Requires-Dist: openai>=1.30.0
+
+# weather-server 天气查询服务
+
+## 项目概述
+
+weather-server 是一个基于 MCP（Micro Communication Protocol）框架构建的现代化天气查询服务。该服务通过调用 OpenWeather API 获取指定城市的实时天气信息，并以友好的格式返回查询结果。项目采用异步编程模式，提供了高效、可靠的天气查询功能。
+
+本项目不仅提供基础的天气查询服务，还集成了DeepSeek大语言模型，为用户提供更智能的自然语言交互体验。项目采用客户端-服务器架构，服务器端通过MCP协议提供标准化的天气查询工具，客户端则通过自然语言与用户交互并调用服务器端的工具。
+
+主要功能包括：
+- 基于OpenWeather API的实时天气数据获取
+- 友好的天气信息格式化展示
+- 完善的错误处理机制
+- 通过MCP协议的标准化服务封装
+- 基于DeepSeek大语言模型的自然语言交互界面
+- 环境变量管理敏感信息（API密钥）
+- 完整的测试覆盖
+
+## 核心功能
+
+- **城市天气查询**：根据用户提供的城市名称，获取并返回实时天气数据
+- **数据格式化**：将 API 返回的原始 JSON 数据转换为易读的文本格式
+- **完善的错误处理**：对各种可能出现的错误（如网络问题、API 限制、城市不存在等）进行友好处理
+- **MCP 服务封装**：通过 MCP 框架将天气查询功能封装为标准化服务
+- **环境变量管理**：支持从环境变量安全读取 API 密钥
+- **智能自然语言交互**：集成DeepSeek大语言模型，提供更自然的用户交互体验
+- **客户端-服务器架构**：分离的客户端和服务器端设计，支持多种调用方式
+
+## 技术栈
+
+- **Python 3.13+**：基础编程语言
+- **MCP 1.17.0+**：微服务通信框架
+- **httpx 0.28.1+**：异步 HTTP 客户端库
+- **python-dotenv 1.1.1+**：环境变量管理
+- **OpenWeather API**：天气数据来源
+- **DeepSeek API**：大语言模型服务
+
+## 项目结构
+
+```
+example/
+├── .env.example             # 环境变量配置模板
+├── .gitignore               # Git忽略文件
+├── .python-version          # Python版本指定文件
+├── README.md                # 项目说明文档
+├── clean_cache.py           # 缓存清理工具脚本
+├── pyproject.toml           # 项目配置文件（包含依赖和构建信息）
+├── requirements.txt         # 依赖列表（兼容pip）
+├── uv.lock                  # uv包管理器锁文件
+├── src/                     # 源代码目录
+│   └── weather_app/          # 天气应用模块
+│       ├── __init__.py             # Python包标识文件
+│       ├── weather_client.py       # 天气查询客户端（集成DeepSeek API）
+│       ├── weather_client_detail.py # 客户端详细实现
+│       ├── weather_server.py       # 天气查询服务器（提供MCP工具）
+│       └── weather_server_detail.py # 服务器详细实现
+├── tests/                   # 测试代码目录
+│   ├── __init__.py                 # Python测试包标识文件
+│   ├── test_weather_client.py      # 客户端测试代码
+│   └── test_weather_server.py      # 服务器测试代码
+└── dist/                    # 分发打包目录
+    ├── weather_app-1.0.0-py3-none-any.whl  # Wheel格式的分发包，适用于快速安装，预编译的二进制格式
+    └── weather_app-1.0.0.tar.gz            # 源码格式的分发包，包含完整的源代码，可用于审查和自定义安装
+```
+
+## 安装指南
+
+### 前提条件
+
+- Python 3.13 或更高版本
+- 包管理器（uv 或 pip）
+
+### 安装步骤
+
+1. 克隆或下载项目到本地
+
+2. 进入项目目录
+```bash
+cd example
+```
+
+3. 安装项目依赖
+
+   使用 uv（推荐）：
+   ```bash
+   uv sync
+   ```
+
+   或使用 pip：
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+   或通过 dist 文件夹中的打包文件安装：
+   ```bash
+   # 安装 wheel 包
+   pip install dist/weather_app-1.0.0-py3-none-any.whl
+   
+   # 或安装源码包
+   pip install dist/weather_app-1.0.0.tar.gz
+   ```
+
+4. **配置 API 密钥**
+
+   复制 `.env.example` 为 `.env` 文件，并填入您的 OpenWeather API 密钥
+
+## 使用方法
+
+### 快速开始
+
+1. **配置环境变量**（首次使用）
+   ```bash
+   # 复制配置文件模板
+   cp .env.example .env
+   # 编辑.env文件，填入您的API密钥
+   ```
+
+2. **安装依赖**
+   ```bash
+   # 使用uv（推荐）
+   uv sync
+   
+   # 或使用pip
+   pip install -r requirements.txt
+   ```
+
+### 运行天气查询服务
+
+#### 方式一：完整交互模式（推荐）
+
+1. **启动服务器**（终端1）
+   ```bash
+   python src/weather_app/weather_server.py
+   ```
+   
+2. **启动客户端**（终端2）
+   ```bash
+   python src/weather_app/weather_client.py
+   ```
+
+#### 方式二：命令行工具模式
+
+安装项目后，可以使用配置的命令行工具：
+
+```bash
+# 启动服务器
+weather-server
+
+# 启动客户端（在另一个终端）
+weather-client
+```
+
+#### 方式三：模块方式运行
+
+```bash
+# 启动服务器
+python -m src.weather_app.weather_server
+
+# 启动客户端
+python -m src.weather_app.weather_client
+```
+
+### 交互示例
+
+客户端启动后，您可以使用自然语言查询天气：
+
+```
+> 今天北京的天气怎么样？
+城市: Beijing (CN)
+天气: 多云
+温度: 25.5°C
+湿度: 60%
+风速: 3.2 m/s
+
+> 查询上海的天气
+城市: Shanghai (CN)
+天气: 晴
+温度: 28.1°C
+湿度: 55%
+风速: 2.8 m/s
+
+> quit
+```
+
+### 项目维护
+
+**清理缓存**：
+```bash
+python clean_cache.py
+```
+
+此脚本会安全删除临时文件，保持项目整洁。
+
+客户端会与服务器建立MCP连接，并提供自然语言交互界面来查询天气信息。集成的DeepSeek大语言模型能够更好地理解和处理用户的查询请求。
+
+客户端启动后，您可以使用自然语言进行交互，例如：
+- "今天北京的天气怎么样？"
+- "请告诉我上海的天气情况"
+- "查询广州天气"
+
+输入 'quit' 或 '退出' 可以退出客户端。
+
+### 通过MCP框架调用
+
+通过MCP框架调用`query_weather_mcp`工具查询指定城市的天气：
+
+```python
+# 示例调用代码
+import asyncio
+from mcp.client import Client
+
+async def main():
+    # 创建MCP客户端
+    client = Client()
+    # 调用天气查询工具，传入城市名称（英文）
+    result = await client.call("query_weather_mcp", city="Beijing")
+    # 打印查询结果
+    print(result)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+## API 密钥配置
+
+项目已配置为从环境变量读取 OpenWeather API 密钥和 DeepSeek API 密钥，增强了安全性：
+
+1. 项目中已创建了 `.env.example` 文件作为模板
+2. 复制 `.env.example` 为 `.env` 文件
+3. 在 `.env` 文件中填入您的 OpenWeather API 密钥和 DeepSeek API 密钥
+
+```bash
+# 复制配置文件模板
+cp .env.example .env
+# 编辑.env文件，填入实际API密钥
+```
+
+代码已经实现了从环境变量读取API密钥的功能，同时保留了默认密钥作为后备方案（仅用于演示）：
+
+```python
+# 从环境变量读取OpenWeather API密钥，如果不存在则使用默认值
+OPENWEATHER_API_KEY = os.getenv("OPENWEATHER_API_KEY", "默认密钥")
+
+# 从环境变量读取DeepSeek API密钥
+DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY")
+```
+
+**安全提示**：
+- `.env`文件包含敏感信息，请确保不要提交到版本控制系统
+- 项目的`.gitignore`文件已配置忽略`.env`文件
+- 在生产环境中，建议完全移除代码中的默认密钥，强制从环境变量读取
+
+## 错误处理
+
+服务实现了全面的错误处理机制，包括：
+
+- HTTP 状态错误处理（404城市未找到、401 API密钥错误等）
+- 网络连接错误和超时处理
+- JSON 数据解析错误处理
+- 嵌套数据字段缺失的容错处理
+
+所有错误都会以清晰的格式返回给用户，避免程序崩溃。
+
+## 输出格式示例
+
+查询成功时的输出格式：
+
+```
+城市: Beijing (CN)
+天气: 多云
+温度: 25.5°C
+湿度: 60%
+风速: 3.2 m/s
+```
+
+错误时的输出格式：
+
+```
+查询天气失败: HTTP错误: 404
+```
+
+## 开发说明
+
+### 项目架构
+
+本项目采用客户端-服务器架构，通过MCP协议进行通信：
+
+1. **服务器端** (`weather_server.py`)：提供天气查询工具，通过MCP协议暴露服务
+2. **客户端端** (`weather_client.py`)：集成DeepSeek API，提供自然语言交互界面，调用服务器端工具
+
+### 添加新功能
+
+1. 在服务器端(`weather_server.py`)定义新的异步函数
+2. 使用`@mcp.tool()`装饰器注册为MCP工具
+3. 确保函数有完整的错误处理和文档注释
+4. 在客户端(`weather_client.py`)中更新提示词，使DeepSeek模型能够理解和使用新工具
+
+### 代码规范
+
+- **代码风格**：遵循 Python 最佳实践，使用类型注解提高代码可读性
+- **异步设计**：采用异步编程模式，提高并发性能
+- **模块化结构**：功能分离，易于扩展和维护
+- **文档完善**：每个函数都有详细的文档字符串，说明参数和返回值
+- **错误处理**：采用防御性编程，确保服务稳定运行
+
+### 运行测试
+
+项目包含了完整的测试代码：
+
+- `test_weather_server.py`：测试服务器端功能
+- `test_weather_client.py`：测试客户端功能
+
+使用以下命令运行测试：
+```bash
+python -m pytest tests/
+```
+
+## 项目优化
+
+本项目经过以下优化：
+
+1. **代码重构**：简化冗余注释，规范代码格式和风格
+2. **功能完善**：修复了函数调用错误，确保功能正常
+3. **配置增强**：完善了 pyproject.toml，添加了构建配置和命令行脚本
+4. **依赖管理**：添加了 requirements.txt 支持 pip 安装
+5. **安全性**：使用环境变量管理敏感信息
+6. **开发体验**：提供了示例代码和详细文档
+7. **维护工具**：添加了缓存清理脚本，方便保持项目整洁
+8. **架构优化**：采用客户端-服务器架构，通过MCP协议实现解耦
+9. **智能交互**：集成DeepSeek大语言模型，提供自然语言交互界面
+10. **测试覆盖**：添加了完整的单元测试，确保代码质量
+11. **分发打包**：添加了 dist 文件夹，包含项目打包文件（wheel 和 tar.gz 格式），便于分发和安装
+
+## 许可证
+
+本项目采用MIT许可证开源，详见LICENSE文件。
+
+## 未来扩展
+
+本项目具有良好的扩展性，可以轻松添加新功能：
+
+1. **更多天气服务**：可以集成更多天气API，提供更丰富的天气信息
+2. **多语言支持**：扩展客户端以支持多种语言的自然语言交互
+3. **Web界面**：可以基于现有服务器端开发Web前端界面
+4. **移动应用**：可以开发移动端应用，调用服务器端MCP服务
+5. **数据分析**：添加历史天气数据存储和分析功能
+6. **通知服务**：实现天气预警和定时通知功能
+
+## 注意事项
+
+- OpenWeather API有使用限制，请确保符合其使用条款
+- 在高并发环境下，可能需要添加请求缓存和速率限制机制
+- 考虑添加日志记录功能以便于调试和监控
+
+---
+
+*项目由飞飞开发维护*
