@@ -1,0 +1,34 @@
+[project]
+name = "asndb"
+version = "1.0.0"
+description = "A simple Python CLI + library for looking up ASNs by IP or AS number. Uses BBOT.IO API."
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+    {name = "TheTechromancer"}
+]
+dependencies = [
+    "cachetools>=6.2.1",
+    "httpx>=0.28.1",
+    "radixtarget>=4.0.1",
+    "typer>=0.19.2",
+]
+
+[tool.uv]
+package = true
+
+[tool.ruff]
+line-length = 119
+lint.ignore = ["E402", "E713", "E721", "E741", "F401", "F403", "F405"]
+
+[dependency-groups]
+dev = [
+    "maturin>=1.9.6",
+    "pytest>=8.4.2",
+    "pytest-asyncio>=1.2.0",
+    "pytest-cov>=7.0.0",
+    "ruff>=0.14.1",
+]
+
+[project.scripts]
+asndb = "asndb.main:main"
