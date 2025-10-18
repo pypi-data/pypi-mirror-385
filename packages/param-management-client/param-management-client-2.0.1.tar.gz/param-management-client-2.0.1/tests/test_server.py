@@ -1,0 +1,3 @@
+from param_management_client import run_embedded_server
+
+run_embedded_server()
