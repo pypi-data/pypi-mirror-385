@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "verbum-cli"
+version = "0.3.0"
+description = "Verbum is a Rich-powered command-line and API tool for reading, searching, and exploring the Bible interactively."
+readme = "README.md"
+requires-python = ">=3.10"
+
+authors = [
+  { name = "Jhans Oscar", email = "jhansoscar@icloud.com" }
+]
+
+license = "MIT"
+
+dependencies = [
+  "fastapi>=0.110",
+  "pydantic>=2.7",
+  "uvicorn>=0.23",
+  "rich>=13.0",
+  "pytest>=8.0"
+]
+
+keywords = ["bible", "cli", "scripture", "terminal", "rich"]
+
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Operating System :: OS Independent",
+  "Environment :: Console",
+  "Intended Audience :: End Users/Desktop",
+  "Topic :: Utilities"
+]
+
+[project.urls]
+Homepage = "https://github.com/jhans-oscar/verbum"
+Repository = "https://github.com/jhans-oscar/verbum"
+
+[project.scripts]
+verbum = "verbum.cli.main:main"
+
+[tool.setuptools]
+include-package-data = true
+license-files = ["LICENSE"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["verbum*"]
+
+[tool.setuptools.package-data]
+verbum = ["data/*.json"]
