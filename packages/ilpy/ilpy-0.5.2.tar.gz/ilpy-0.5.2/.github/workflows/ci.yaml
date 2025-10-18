@@ -1,0 +1,118 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: [v*]
+  pull_request: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Run pre-commit linting
+        run: pipx run pre-commit run --all-files
+
+  test:
+    runs-on: ${{ matrix.platform }}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+        platform: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - python-version: "3.9"
+            platform: ubuntu-latest
+          - python-version: "3.13"
+            platform: ubuntu-latest
+        exclude:
+          # getting segfaults on _get_coefficients...
+          # probably related to the recursion limit
+          - python-version: "3.10"
+            platform: macos-latest
+
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: add gurobi license
+        shell: bash
+        id: write-license
+        env:
+          LICENSE: ${{ secrets.GRB_LICENSE_FILE   }}
+        run: |
+          echo "$LICENSE" > $PWD/gurobi.lic
+          echo "grb_license_file=$PWD/gurobi.lic" >> $GITHUB_OUTPUT
+
+      - name: Set up Python
+        run: uv python install
+
+      - name: Install the project
+        run: uv sync --extra test
+
+      - name: run tests
+        run: uv run pytest --color yes -v --cov ilpy --cov-report=xml
+        env:
+          GRB_LICENSE_FILE: ${{ steps.write-license.outputs.grb_license_file }}
+
+      - name: upload coverage
+        uses: codecov/codecov-action@v5
+
+  test-motile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          path: ilpy
+          fetch-depth: 0
+      - uses: actions/checkout@v5
+        with:
+          path: motile
+          repository: funkelab/motile
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: 3.12
+      - name: Install
+        run: |
+          python -m pip install -U pip
+          python -m pip install ./ilpy
+          python -m  pip install ./motile[test]
+
+      - name: run tests
+        run: pytest --color=yes -W default
+        working-directory: motile
+
+  deploy:
+    needs: test
+    if: startsWith(github.ref, 'refs/tags')
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: 👷 Build
+        run: pipx run build
+
+      - name: 🚢 Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: "./dist/*"
