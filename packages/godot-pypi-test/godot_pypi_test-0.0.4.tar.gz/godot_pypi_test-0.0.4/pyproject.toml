@@ -1,0 +1,21 @@
+[project]
+name = "godot-pypi-test"
+version = "0.0.4"
+description = "一句话描述"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [{name = "hyooeewee", email = "hughie-ngai@outlook.com"}]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "build>=1.2.2.post1",
+    "python-dotenv>=1.0.1",
+    "twine>=6.1.0",
+]
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
