@@ -1,0 +1,110 @@
+Metadata-Version: 2.4
+Name: chordnet
+Version: 2.2.2
+Summary: Implementation of the chord peer-to-peer networking protocol, introduced by Stoica et al.
+Keywords: Chord,Chord protocol,distributed systems,peer-to-peer,P2P,hash table,lookup,scalability,Python,networking,decentralized,routing,overlay network,distributed hash table,DHT
+Author: Jack Lowrie
+License-Expression: MIT
+License-File: LICENSE
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: Topic :: Internet
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: System
+Classifier: Topic :: System :: Distributed Computing
+Classifier: Topic :: System :: Networking
+Classifier: Topic :: Utilities
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Typing :: Typed
+Requires-Dist: loguru>=0.7.3
+Requires-Python: >=3.10
+Project-URL: Documentation, https://jacklowrie.github.io/chordnet/chordnet.html
+Project-URL: History, https://github.com/jacklowrie/chordnet/releases
+Project-URL: Homepage, https://github.com/jacklowrie/chordnet
+Project-URL: Issues, https://github.com/jacklowrie/chordnet/issues
+Project-URL: PyPI, https://pypi.org/project/chordnet/
+Project-URL: Source, https://github.com/jacklowrie/chordnet
+Project-URL: download, https://github.com/jacklowrie/chordnet/releases
+Description-Content-Type: text/markdown
+
+# ChordNet
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/jacklowrie/chordnet/main.yml?logo=GitHub&label=Main%20Branch%20Build)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/jacklowrie/chordnet/release.yml?logo=GitHub&label=PyPI%20Published%20Build)
+
+![GitHub License](https://img.shields.io/github/license/jacklowrie/chordnet?logo=github)
+![PyPI - Types](https://img.shields.io/pypi/types/chordnet?logo=pypi)
+![PyPI - Version](https://img.shields.io/pypi/v/chordnet?logo=pypi)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/chordnet?logo=pypi)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/chordnet?logo=pypi)
+![PyPI - Implementation](https://img.shields.io/pypi/implementation/chordnet?logo=pypi)
+
+
+Python implementation of the chord protocol, introduced by Stoica et al.
+This library began as a [group project](https://github.com/jacklowrie/chord) for cs536 at Purdue University in
+Fall 2024.
+
+## Installation
+`pip install chordnet`
+
+`uv add chordnet`
+
+
+## Usage
+To stay consistent with the language from the original paper, we recommend
+naming your chordnet attribute `ring`:
+```python
+from chordnet import ChordNet
+
+ring = new ChordNet(...)
+ring.create() # or ring.join(...)
+#...application logic...
+ring.leave()
+# end program
+```
+This fits with the concept of "joining" an existing ring network, or creating a
+new one. Examples follow this practice.
+
+At present, this package only supports IP lookup. All application-dependent
+logic (state transfer, etc) must be handled by the application.
+The easiest way to do this is to initialize ChordNet as an attribute on
+an application class:
+```python
+class App:
+    """An example/template application that uses ChordNet."""
+    def __init__(self, ip: str, chordnet_port: int) -> None:
+        """Creates a new insance of the app."""
+        self._ring = ChordNet(ip, chordnet_port)
+
+    def start(
+        self, ip = None: str | None, port = None: int | None
+    ) -> None:
+        """Starts the app by joining an existing ring or creating a new one."""
+        if ip and port:
+            self._ring.join(ip, port)
+            # ...any state transfer logic, if part of this app...
+        elif not ip and not port:
+            self._ring.create()
+        else:
+            print("need both or neither")
+            return
+
+    #...application logic (probably using self._ring.lookup()...
+
+    def stop(self) -> None:
+        """Gracefully leaves the ring."""
+        # ...any state transfer logic (if using)...
+        self._ring.leave()
+```
+Not all distributed applications that ChordNet is suitable for will require
+state transfer logic (for example, search problems), and the nature of that
+logic will likely vary by app. In future versions, we hope to support
+in-library state transfer.
