@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mobius-activations"
+version = "0.4.0"
+authors = [
+  { name="seabe kgodisho phala", email="phalakgodisho3@gmail.com" },
+]
+description = "A  3D activation function for PyTorch and TensorFlow with geometric  properties."
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "numpy",
+    
+]
+
+[project.optional-dependencies]
+torch = ["torch"]
+tensorflow = ["tensorflow"]
+viz = ["matplotlib"]

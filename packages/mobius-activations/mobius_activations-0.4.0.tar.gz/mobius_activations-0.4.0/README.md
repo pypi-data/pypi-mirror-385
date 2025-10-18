@@ -1,0 +1,172 @@
+
+# Mobius Activations & Optimizer
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python version](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![PyTorch version](https://img.shields.io/badge/pytorch-1.9+-orange.svg)](https://pytorch.org/)
+[![TensorFlow version](https://img.shields.io/badge/tensorflow-2.6+-lightgrey.svg)](https://www.tensorflow.org/)
+
+**A Python package for geometric deep learning in PyTorch and TensorFlow, featuring a 3D activation function and a geometrically-aware optimizer.**
+
+This package provides two primary components for deep learning models that need to handle geometric or rotational data properties. The core idea is to apply transformations inspired by the non-orientable topology of a Mobius strip to high-dimensional feature vectors.
+
+> **Note:** This is an experimental package created for research and educational purposes. The concepts are unconventional and should be considered proofs of concept. Use in production environments is not recommended without extensive testing.
+
+## Components
+
+1.  **`MobiusActivation`**: A `torch.nn.Module` and `tf.keras.layers.Layer` that applies a learnable, rotational transformation to 3D vector spaces.
+2.  **`MobiusOptimizer`**: A `torch.optim.Optimizer` and `tf.keras.optimizers.Optimizer` that navigates the loss landscape using an orbital component in addition to standard gradient descent.
+
+## Installation
+
+The package can be installed with `pip`. Optional extras are available for the required deep learning framework and visualization dependencies.
+
+```bash
+# For PyTorch + Visualization tools
+pip install mobius-activations[torch,viz]
+
+# For TensorFlow + Visualization tools
+pip install mobius-activations[tensorflow,viz]
+```
+
+## 1. The `MobiusActivation` Layer
+
+The `MobiusActivation` layer contains one or more internal **`mobius_blocks`**. Each block applies a "Mobius twist"—a magnitude-preserving rotation—to a 3D feature vector.
+
+### Mathematical Formulation
+
+#### **ReMU: A Single, Pure Transformation**
+For a single **ReMU** block with input vector `z`, the transformation `a = F(z)` is calculated as follows:
+
+1.  The rotation angle `θ` is determined by the input's magnitude `||z||` and a learnable parameter `k` (twist tightness):
+    `θ = k * ||z||`
+
+2.  The input vector `z` is rotated by `θ` around a given axis. For a Z-axis rotation, the transformation is `a = R_z(θ)z`, where `R_z(θ)` is the rotation matrix:
+    ```
+        [ cos(θ)  -sin(θ)  0 ]
+    R_z(θ) = [ sin(θ)   cos(θ)  0 ]
+        [   0       0      1 ]
+    ```
+
+#### **S-ReMU: An Interference of Multiple Transformations**
+An **S-ReMU** calculates the final activation `a_final` as the weighted sum of multiple independent ReMU transformations (`a_i`), each with its own axis, twist tightness `k_i`, and learnable weight `w_i`:
+
+`a_final = Σ (w_i * a_i)`
+
+### Operational Modes & Configuration
+
+*   **`projection` Mode (Default):** The layer contains a single `mobius_block` and requires an input of exactly 3 features.
+*   **`grouped` Mode (Recommended):** The layer contains multiple `mobius_blocks` and operates on high-dimensional inputs. It automatically processes features in parallel groups of 3. **The `in_features` must be divisible by 3.**
+*   **Learnable Mode (Recommended):** Set `learnable=True`. The layer will create and train its own `k` and `w` parameters.
+
+### Example (PyTorch, Learnable & Grouped S-ReMU)
+
+```python
+import torch.nn as nn
+from mobius_activations.torch import MobiusActivation
+
+# Input has 12 features. This creates a layer with 4 parallel, 
+# learnable S-ReMU blocks (each with 3 realities for x, y, z axes).
+model = nn.Sequential(
+    nn.Linear(50, 12),
+    nn.BatchNorm1d(12),
+    MobiusActivation(in_features=12, mode='grouped', learnable=True, axes=['x', 'y', 'z']),
+    nn.Linear(12, 1)
+)
+```
+
+### Advanced Usage: Accessing Internal Parameters
+
+For testing, visualization, or advanced analysis, you may need to access the learnable parameters (`k_params`, `w_params`) of a `MobiusActivation` layer. These parameters are encapsulated within the internal `mobius_blocks`.
+
+Access is a multi-step process:
+1.  Get the main `MobiusActivation` layer from your model.
+2.  Access its `.mobius_blocks` attribute, which is a list (`ModuleList` in PyTorch).
+3.  Select the specific internal block you want to inspect by its index (e.g., `[0]`).
+4.  Access the parameters (`.k_params`, `.w_params`) from that specific block.
+
+```python
+# PyTorch Example: Accessing parameters from a trained grouped layer
+
+# Assume 'model' is the trained model from the example above
+# 1. Get the main layer
+mobius_layer = model[2]
+
+# 2. Access the list of blocks
+internal_blocks = mobius_layer.mobius_blocks
+print(f"The layer has {len(internal_blocks)} internal blocks.")
+
+# 3. Select the first internal block
+first_block = internal_blocks[0]
+
+# 4. Access the learnable parameters of that block
+k_params_of_first_block = first_block.k_params
+w_params_of_first_block = first_block.w_params
+
+print(f"First k parameter of the first block: {k_params_of_first_block[0].item()}")
+```
+
+## 2. The `MobiusOptimizer`
+
+This optimizer adds an **orbital component** to the standard momentum-based update, causing the optimization path to spiral. This is effective at escaping saddle points and finding wider minima.
+
+### Mathematical Formulation
+
+A standard Momentum optimizer updates weights `W` at step `t` using the gradient `g_t` and momentum `m_t`:
+
+1.  `m_t = β * m_{t-1} + (1-β) * g_t`
+2.  `W_{t+1} = W_t - η * m_t`  (where `η` is the learning rate)
+
+The **MobiusOptimizer** modifies this update rule:
+
+1.  **Descent Step:** `ΔW_descent = -η * m_t`
+2.  **Orbital Step:** `ΔW_orbital = -τ * (g_t ⟂ m_t)`
+    *   `τ` (tau) is the new `twist_rate` hyperparameter.
+    *   The `⟂` operator finds a vector perpendicular to the gradient and momentum. In the optimizer's 3D groups, this is the **cross-product**.
+3.  **Final Update:** `W_{t+1} = W_t + ΔW_descent + ΔW_orbital`
+
+### PyTorch Usage
+
+```python
+from mobius_activations.torch import MobiusOptimizer
+
+# model = YourPytorchModel()
+optimizer = MobiusOptimizer(model.parameters(), lr=1e-3, twist_rate=0.1)
+```
+
+### TensorFlow / Keras Usage
+
+```python
+from mobius_activations.tensorflow import MobiusOptimizer
+
+# model = YourKerasModel()
+optimizer = MobiusOptimizer(learning_rate=1e-3, twist_rate=0.1)
+# model.compile(optimizer=optimizer, loss='binary_crossentropy')
+```
+
+## 3. The Visualization Suite
+
+The package includes utilities to help interpret the geometric behavior of the components.
+
+*   **`visualize_optimizer_path`:** Shows the unique spiraling descent of the `MobiusOptimizer`.
+*   **`visualize_transformation_flow`:** Shows  how a `MobiusActivation` layer warps the entire feature space.
+*   **`visualize_neuron_state`:** Provides analysis of the transformation at a single point.
+
+```python
+from mobius_activations.visualize import visualize_optimizer_path
+
+# Example of visualizing the optimizer's path
+visualize_optimizer_path(start_point=[-4, 3.5], learning_rate=0.1, twist_rate=0.15)
+```
+
+## 4. Potential Applications
+
+These components are best suited for problems with underlying geometric or periodic properties.
+
+*   **Computer Vision:** Learning rotational invariance for object recognition.
+*   **Signal Processing:** Modeling phase shifts and harmonic interference.
+*   **Natural Language Processing:** Modeling semantic relationships as rotations in embedding space.
+*   **Physics & Robotics:** Modeling systems with real-world rotational dynamics.
+
+## License
+This project is licensed under the MIT License.
