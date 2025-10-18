@@ -1,0 +1,236 @@
+Metadata-Version: 2.4
+Name: panoptes-utils
+Version: 0.2.52
+Summary: Astronomical utilities for PANOPTES
+Project-URL: Homepage, https://github.com/panoptes/panoptes-utils
+Project-URL: Documentation, https://panoptes-utils.readthedocs.io
+Project-URL: POCS Documentation, https://pocs.readthedocs.io
+Project-URL: Project PANOPTES, https://www.projectpanoptes.org
+Project-URL: Forum, https://forum.projectpanoptes.org
+Author-email: PANOPTES Team <developers@projectpanoptes.org>
+License: The MIT License (MIT)
+        
+        Copyright (c) 2020 Project PANOPTES
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+License-File: AUTHORS.md
+License-File: LICENSE.txt
+Keywords: PANOPTES,astronomy,physics
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: POSIX
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Scientific/Engineering :: Astronomy
+Classifier: Topic :: Scientific/Engineering :: Physics
+Requires-Python: >=3.12
+Requires-Dist: astropy
+Requires-Dist: click-spinner
+Requires-Dist: click<8.3
+Requires-Dist: deprecated
+Requires-Dist: loguru
+Requires-Dist: numpy>=2
+Requires-Dist: pyserial>=3.4
+Requires-Dist: pytest-loguru
+Requires-Dist: python-dateutil
+Requires-Dist: requests
+Requires-Dist: ruamel-yaml
+Requires-Dist: typer
+Provides-Extra: config
+Requires-Dist: flask; extra == 'config'
+Requires-Dist: gevent; extra == 'config'
+Requires-Dist: pyyaml; extra == 'config'
+Requires-Dist: requests; extra == 'config'
+Requires-Dist: scalpl; extra == 'config'
+Provides-Extra: docs
+Requires-Dist: myst-parser; extra == 'docs'
+Requires-Dist: piccolo-theme; extra == 'docs'
+Requires-Dist: pytest-mpl; extra == 'docs'
+Requires-Dist: sphinx; extra == 'docs'
+Provides-Extra: examples
+Requires-Dist: matplotlib; extra == 'examples'
+Requires-Dist: pandas; extra == 'examples'
+Requires-Dist: seaborn; extra == 'examples'
+Requires-Dist: streamz; extra == 'examples'
+Provides-Extra: images
+Requires-Dist: matplotlib; extra == 'images'
+Requires-Dist: photutils; extra == 'images'
+Requires-Dist: pillow>=9.1.1; extra == 'images'
+Requires-Dist: scipy; extra == 'images'
+Requires-Dist: watchfiles; extra == 'images'
+Provides-Extra: testing
+Requires-Dist: coverage; extra == 'testing'
+Requires-Dist: pycodestyle; extra == 'testing'
+Requires-Dist: pytest; extra == 'testing'
+Requires-Dist: pytest-cov; extra == 'testing'
+Requires-Dist: pytest-doctestplus; extra == 'testing'
+Requires-Dist: pytest-mpl; extra == 'testing'
+Requires-Dist: pytest-remotedata>=0.3.1; extra == 'testing'
+Requires-Dist: python-dotenv; extra == 'testing'
+Requires-Dist: tox; extra == 'testing'
+Description-Content-Type: text/markdown
+
+PANOPTES Utilities
+==================
+
+<p align="center">
+<img src="https://www.gitbook.com/cdn-cgi/image/width=256,dpr=2,height=40,fit=contain,format=auto/https%3A%2F%2F1730110767-files.gitbook.io%2F~%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FDWxHUx4DyP5m2IEPanYp%252Flogo%252FKkSF3LQc9Zy10M3n5SQa%252F271B3C3C-4A2D-4679-884D-9892825C87E7.png%3Falt%3Dmedia%26token%3D6e7b448f-6f22-4afa-9c1c-2b3449b5f411" alt="PANOPTES Logo" />
+</p>
+<br>
+
+[![GHA Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fpanoptes%2Fpanoptes-utils%2Fbadge%3Fref%3Ddevelop&style=flat)](https://actions-badge.atrox.dev/panoptes/panoptes-utils/goto?ref=develop) 
+[![codecov](https://codecov.io/gh/panoptes/panoptes-utils/graph/badge.svg?token=YCzESBa7rK)](https://codecov.io/gh/panoptes/panoptes-utils)
+[![Documentation Status](https://readthedocs.org/projects/panoptes-utils/badge/?version=latest)](https://panoptes-utils.readthedocs.io/en/latest/?badge=latest) 
+[![PyPI version](https://badge.fury.io/py/panoptes-utils.svg)](https://badge.fury.io/py/panoptes-utils)
+
+Utility functions for use within the [Project PANOPTES](https://projectpanoptes.org) ecosystem and for general
+astronomical processing.
+
+This library defines a number of modules that contain useful functions as well as a few services.
+
+Install
+-------
+
+To install type:
+
+```bash
+pip install panoptes-utils
+```
+
+Full options for install:
+
+```bash
+pip install "panoptes-utils[config,docs,images,testing,social]"
+```
+
+See the full documentation at: https://panoptes-utils.readthedocs.io
+
+Dependencies
+------------
+
+There are a few system dependencies depending on what functionality you will be using.
+
+In particular, the plate solving requires `astrometry.net` and the appropriate index files.
+
+Use the following on a debian-based system (e.g. Ubuntu) to easily install all dependencies:
+
+```bash
+apt-get update && apt-get install --no-install-recommends --yes \
+  libffi-dev libssl-dev \
+  astrometry.net astrometry-data-tycho2 \
+  dcraw exiftool libcfitsio-dev libcfitsio-bin \
+  libfreetype6-dev libpng-dev libjpeg-dev libffi-dev
+```
+
+Command Line
+------------
+
+The `panoptes-utils` command line tool is available for use with subcommands
+corresponding to the modules in this library. Currently, the only implemented
+subcommand is `image`, which includes commands for converting `cr2` files into
+`jpg` and/or `fits` files as well as for plate-solving `fits` images.
+
+The `panoptes-utils image watch <path>` command will watch the given path for
+new files and convert them to `jpg` and/or `fits` files as they are added.
+
+See `panoptes-utils --help` and `panoptes-utils image --help` for details.
+
+
+Config Server
+-------------
+
+There is a simple key-value configuration server available as part of the module.
+
+After installing with the `config` option as above, type:
+
+```bash
+panoptes-config-server run --config-file <path-to-file.yaml>
+```
+
+### Development with Hatch
+
+This project uses the Hatch build system and environment management.
+
+Prerequisites:
+- Python 3.12+
+- Hatch: https://hatch.pypa.io (install via `pipx install hatch` or `pip install --user hatch`).
+
+Basic workflow:
+
+- Create and enter a dev environment with all testing tools:
+  ```bash
+  hatch env create
+  hatch shell
+  # or run commands without activating the shell using `hatch run ...`
+  ```
+
+- Install optional extras as needed (choose any):
+  ```bash
+  # Examples: google, focuser, sensors, weather
+  hatch run pip install -e ".[config,images,testing]"
+  ```
+
+- Run tests:
+  ```bash
+  # All tests with coverage, using pytest options from pyproject.toml
+  hatch run pytest
+
+  # Single test file
+  hatch run pytest tests/test_utils.py
+  ```
+
+- Lint / style checks:
+  ```bash
+  # Lint (Ruff)
+  hatch run lint
+  # Format (Ruff)
+  hatch run fmt
+  # Check formatting without changes
+  hatch run fmt-check
+  ```
+
+- Build the package (wheel and sdist):
+  ```bash
+  hatch build
+  ```
+
+- Run the CLI locally (Typer app):
+  ```bash
+  hatch run pocs --help
+  ```
+
+- Versioning:
+  Version is derived from git tags via hatch-vcs. To produce a new version, create and push a tag (e.g., `v0.1.0`).
+
+#### [Testing]
+
+To test the software, prefer running via Hatch so the right environment and options are used:
+
+```bash
+hatch run pytest
+```
+
+By default all tests will be run. If you want to run one specific test, give the specific filename as an argument to `pytest`:
+
+```bash
+hatch run pytest tests/test_mount.py
+```
