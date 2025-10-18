@@ -1,0 +1,22 @@
+{%- for line in top %}
+{{ line }}
+{%- endfor %}
+
+enum {{ enum.name }} {
+	{%- for entryName in enum.entries.keys() %}
+	{{ enum.prefix + entryName }} = {{ loop.index0 }},
+	{%- endfor %}
+};
+
+{% for propName, propParams in enum.properties.items() %}
+#define {{ propName }}{{ enum.name }}(ENTRY) \
+	_{{ propName }}{{ enum.name }}[ENTRY]
+{{ propParams.type }} _{{ propName }}{{ enum.name }}[] = {
+	{%- for entryName, entryProps in enum.entries.items() %}
+	{{ renderEntryValue(
+		entryName,
+		entryProps.get(propName, propParams.default)
+	) }},
+	{%- endfor %}
+};
+{% endfor %}

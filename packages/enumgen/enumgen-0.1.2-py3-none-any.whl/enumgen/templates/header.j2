@@ -1,0 +1,20 @@
+#ifndef {{ guard }}
+#define {{ guard }}
+
+{%- for line in top %}
+{{ line }}
+{%- endfor %}
+
+enum {{ enum.name }} {
+	{%- for entryName in enum.entries.keys() %}
+	{{ enum.prefix + entryName }} = {{ loop.index0 }},
+	{%- endfor %}
+};
+
+{% for propName, propParams in enum.properties.items() %}
+#define {{ propName }}{{ enum.name }}(ENTRY) \
+	_{{ propName }}{{ enum.name }}[ENTRY]
+extern {{ propParams.type }} _{{ propName }}{{ enum.name }}[];
+{% endfor %}
+
+#endif
