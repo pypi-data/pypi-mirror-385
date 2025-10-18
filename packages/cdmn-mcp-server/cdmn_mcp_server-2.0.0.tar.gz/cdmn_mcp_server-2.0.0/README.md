@@ -1,0 +1,249 @@
+# CDMN Decision MCP Server (Hybrid DMN)
+
+하이브리드 DMN MCP 서버 - cDMN API와 표준 XML 파싱을 모두 지원하는 FastMCP 기반 의사결정 서버입니다.
+
+## 🚀 Features
+
+### 핵심 기능
+- **🔄 하이브리드 DMN 엔진**: cDMN API와 표준 XML 파싱을 모두 지원
+- **🤖 자동 엔진 선택**: cDMN 실패 시 자동으로 XML 파서로 폴백
+- **📄 DMN XML 지원**: DMN 1.3 표준 XML 형식 완벽 지원
+- **🎯 다양한 Hit Policy**: FIRST, UNIQUE, ANY, PRIORITY 등 지원
+- **📊 의사결정 추적**: 실행 경로와 규칙 매칭 과정 상세 추적
+
+### 고급 기능
+- **완전히 제네릭한 의사결정 엔진**: 고정된 스키마 없이 key-value 형태의 유연한 입력 처리
+- **자연어 → DMN 호출 자동화**: LLM 기반 자연어 파싱으로 DMN 인퍼런스를 수행하고 결과를 반환
+- **Rule 관리 기능**: DMN XML을 로드, 저장, 조회 가능
+- **동적 스키마 조회**: 각 규칙의 입력 요구사항을 런타임에 확인 가능
+- **호출측 LLM 최적화**: 마크다운 생성은 호출측 LLM에서 처리하도록 설계
+- **확장 가능한 규칙 시스템**: 새로운 규칙을 동적으로 등록하고 실행 가능
+- **MCP 프로토콜 준수**: FastMCP 기반으로 LLM에서 함수 호출 및 응답 처리 가능
+
+## 📋 Requirements
+
+- Python 3.11+
+- FastMCP
+- cDMN (선택사항, 고급 DMN 기능 사용 시)
+- idp-engine (cDMN 사용 시 필요)
+
+## 🛠️ Installation
+
+### Using pip
+
+```bash
+pip install cdmn-mcp-server
+```
+
+### With cDMN support (recommended)
+
+```bash
+pip install cdmn-mcp-server cdmn idp-engine
+```
+
+### From source
+
+```bash
+git clone https://github.com/rickjang/cdmn-mcp-server.git
+cd cdmn-mcp-server
+pip install -e .
+```
+
+## 🚀 Usage
+
+### 1. Command Line
+
+```bash
+# 기본 실행
+cdmn-mcp-server
+
+# 또는 Python 모듈로 실행
+python -m cdmn_mcp_server.server_fully_generic
+```
+
+### 2. MCP 설정 파일
+
+Claude Desktop 등에서 사용하기 위한 설정:
+
+```json
+{
+  "mcpServers": {
+    "cdmn-mcp-server": {
+      "command": "uvx",
+      "args": ["cdmn-mcp-server"]
+    }
+  }
+}
+```
+
+### 3. Python API
+
+```python
+from cdmn_mcp_server.server_fully_generic import DMNModel
+
+# DMN 모델 초기화
+dmn_model = DMNModel()
+
+# 규칙 로드
+await dmn_model.load_rule("insurance_premium")
+
+# 의사결정 실행
+result = await dmn_model.evaluate_decision("insurance_premium", {
+    "age": 65,
+    "smoker": True,
+    "health_score": 30
+})
+
+print(result.result)  # {'Risk Category': 'Very High'}
+print(result.engine_used)  # 'cdmn' 또는 'xml'
+```
+
+## 📚 Available Tools
+
+### 1. `load_rule(rule_name: str)`
+DMN XML 규칙을 로드합니다.
+
+### 2. `save_rule(rule_name: str, xml_content: str)`
+새로운 DMN 규칙을 저장합니다.
+
+### 3. `list_rules()`
+등록된 DMN 규칙 목록을 조회합니다.
+
+### 4. `delete_rule(rule_name: str)`
+DMN 규칙을 삭제합니다.
+
+### 5. `get_rule_schema(rule_name: str)`
+규칙의 입력 스키마를 조회합니다.
+
+### 6. `infer_decision(rule_name: str, context_input: Dict[str, Any])`
+DMN 규칙을 기반으로 의사결정을 실행합니다.
+
+### 7. `register_rule(rule_name: str, rule_config: Dict[str, Any])`
+새로운 규칙을 동적으로 등록합니다.
+
+### 8. `check_engine_status()`
+하이브리드 엔진의 상태를 확인합니다.
+
+## 🎯 Examples
+
+### 보험료 계산
+
+```python
+# 규칙 로드
+await load_rule("insurance_premium")
+
+# 의사결정 실행
+result = await infer_decision("insurance_premium", {
+    "age": 65,
+    "smoker": True,
+    "health_score": 30
+})
+
+# 결과:
+# {
+#   "result": {"Risk Category": "Very High"},
+#   "engine_used": "xml",
+#   "execution_time": 0.0001,
+#   "trace": [...]
+# }
+```
+
+### 대출 승인
+
+```python
+result = await infer_decision("loan_approval", {
+    "credit_score": 750,
+    "income": 60000,
+    "age": 35
+})
+```
+
+## 🔧 Engine Types
+
+### cDMN API (고급)
+- ✅ 모델 확장: 모든 가능한 해를 찾을 수 있음
+- ✅ 전파: 입력값을 통해 출력값을 자동 계산
+- ✅ 불확실성 처리: 확정되지 않은 값들을 명시적으로 처리
+- ❌ 제한사항: 일부 DMN XML 형식과 호환되지 않을 수 있음
+
+### XML Parser (기본)
+- ✅ 범용성: 대부분의 표준 DMN XML 형식 지원
+- ✅ 호환성: 다양한 Hit Policy 지원
+- ✅ 안정성: cDMN 실패 시 안전한 폴백
+- ❌ 제한사항: 고급 기능(모델 확장 등)은 지원하지 않음
+
+## 📝 DMN XML Format
+
+지원되는 DMN XML 형식 예제:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/"
+             id="insurance-premium"
+             name="Insurance Premium Calculation">
+  
+  <decision id="riskCategory" name="Risk Category">
+    <decisionTable id="riskTable" hitPolicy="FIRST">
+      <input id="ageInput" label="Age">
+        <inputExpression typeRef="number">
+          <text>age</text>
+        </inputExpression>
+      </input>
+      <output id="riskOutput" label="Risk Category" typeRef="string"/>
+      
+      <rule id="rule1">
+        <inputEntry id="age1">
+          <text>age &gt;= 60</text>
+        </inputEntry>
+        <outputEntry id="risk1">
+          <text>"High Risk"</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  
+</definitions>
+```
+
+## 🐛 Troubleshooting
+
+### cDMN API 오류
+- cDMN API가 특정 XML 형식과 호환되지 않는 경우, 자동으로 XML 파서로 폴백됩니다.
+- 이는 정상적인 동작이며, 대부분의 경우 XML 파서로 충분히 처리할 수 있습니다.
+
+### XML 파싱 오류
+- XML 형식이 올바른지 확인하세요.
+- 네임스페이스와 태그 구조가 DMN 1.3 표준을 따르는지 확인하세요.
+- `<`, `>` 같은 특수 문자는 `&lt;`, `&gt;`로 이스케이프해야 합니다.
+
+## 📄 License
+
+MIT License
+
+## 👤 Author
+
+rickjang
+
+## 🔗 Links
+
+- [GitHub Repository](https://github.com/rickjang/cdmn-mcp-server)
+- [PyPI Package](https://pypi.org/project/cdmn-mcp-server/)
+- [cDMN Documentation](https://cdmn.readthedocs.io/)
+- [FastMCP Documentation](https://gofastmcp.com/)
+
+## 📈 Changelog
+
+### 2.0.0 (2025-10-18)
+- ✨ 하이브리드 DMN 엔진 추가 (cDMN + XML)
+- ✨ 자동 엔진 선택 및 폴백 메커니즘
+- ✨ DMN 1.3 표준 XML 완벽 지원
+- ✨ 다양한 Hit Policy 지원 (FIRST, UNIQUE, ANY, PRIORITY)
+- ✨ 실행 엔진 정보 추적 기능
+- 📚 문서 대폭 개선
+
+### 1.3.0
+- 초기 제네릭 버전 릴리스
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
