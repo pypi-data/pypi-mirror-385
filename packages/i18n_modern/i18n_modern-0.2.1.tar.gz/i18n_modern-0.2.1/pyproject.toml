@@ -1,0 +1,56 @@
+[project]
+name = "i18n_modern"
+version = "0.2.1"
+description = "A modern internationalization library for Python with support for JSON, YAML, and TOML"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [{ name = "Uriel Curiel", email = "urielcurrel@outlook.com" }]
+license = { text = "MIT" }
+keywords = [
+    "i18n",
+    "internationalization",
+    "translation",
+    "localization",
+    "l10n",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = []
+
+[project.optional-dependencies]
+yaml = ["pyyaml>=6.0"]
+toml = ["tomli>=2.3.0; python_version<'3.11'"]
+benchmark = [
+    "python-i18n>=0.3.9",
+    "pyi18n-v2>=1.2.0",
+    "cython>=3.0.0",
+    "i18nice",
+    "toml-i18n",
+]
+all = ["pyyaml>=6.0", "tomli>=2.3.0; python_version<'3.11'"]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "ruff",
+    "pyrefly",
+    "basedpyright",
+    "cython>=3.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/UrielCuriel/python_i18n_modern"
+Repository = "https://github.com/UrielCuriel/python_i18n_modern"
+Issues = "https://github.com/UrielCuriel/python_i18n_modern/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
