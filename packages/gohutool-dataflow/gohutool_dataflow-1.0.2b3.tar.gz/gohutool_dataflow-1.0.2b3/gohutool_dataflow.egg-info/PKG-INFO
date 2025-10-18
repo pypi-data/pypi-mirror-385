@@ -1,0 +1,24 @@
+Metadata-Version: 2.4
+Name: gohutool-dataflow
+Version: 1.0.2b3
+Summary: Dataflow is an open-source Python microservice framework that simplifies the development of stand-alone production-grade Spring applications.
+Author-email: joinsunsoft <793875613@qq.com>
+Maintainer-email: joinsunsoft <inthirties.liu@hotmail.com>
+License-Expression: Apache-2.0
+Project-URL: Homepage, https://github.com/gohutool/dataflow
+Project-URL: Repository, https://github.com/gohutool/dataflow
+Project-URL: Issues, https://github.com/gohutool/dataflow
+Requires-Python: >=3.12.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: fastapi>=0.117.1
+Requires-Dist: sqlalchemy>=2.0.43
+Requires-Dist: omegaconf>=2.3.0
+Requires-Dist: pydantic>=2.11.9
+Requires-Dist: uvicorn>=0.37.0
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"
+Dynamic: license-file
+
+Dataflow is an open-source Python microservice framework that simplifies the development of stand-alone, production-grade Spring applications. It provides embedded servers, auto-configuration, and minimal setup, allowing developers to build and run python apps quickly—no heavy XML or boilerplate code needed.
+Python microservice = a tiny, self-contained Java app that starts in seconds, exposes REST endpoints, and ships with its own server—ready to scale and deploy independently.
