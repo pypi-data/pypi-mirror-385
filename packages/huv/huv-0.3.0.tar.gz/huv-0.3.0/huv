@@ -1,0 +1,1516 @@
+#!/usr/bin/env python3
+"""
+huv - Hierarchical UV Virtual Environment Manager
+
+A wrapper around uv to create hierarchical virtual environments where child environments
+can inherit packages from parent environments with proper precedence handling.
+
+Features:
+- Create hierarchical virtual environments with automatic inheritance
+- Smart pip install that skips packages available from parent environments
+- pip uninstall with visibility into what remains available from parents
+- Full compatibility with uv and standard virtual environments
+
+Usage:
+    huv venv <path> [--parent <parent_path>] [other uv options]
+    huv pip install <packages...>
+    huv pip uninstall <packages...>
+    huv --help
+
+Version: 0.3.0
+"""
+
+import argparse
+import json
+import os
+import platform
+import re
+import subprocess
+import sys
+from pathlib import Path
+from typing import Dict, List, Union
+
+
+class DynamicArgumentParser:
+    """
+    Dynamic argument parser that queries 'uv venv --help' to build argument definitions.
+
+    This allows huv to automatically support all current and future uv venv options
+    without manual maintenance of argument definitions.
+    """
+
+    def __init__(self, uv_executable: str = "uv"):
+        """Initialize the dynamic parser."""
+        self.uv_executable = uv_executable
+        self._cached_parser = None
+        self._cached_help_output = None
+
+    def _get_uv_help_output(self) -> str:
+        """Get the output of 'uv venv --help'."""
+        if self._cached_help_output is None:
+            try:
+                result = subprocess.run(
+                    [self.uv_executable, "venv", "--help"],
+                    capture_output=True,
+                    text=True,
+                    check=True,
+                )
+                self._cached_help_output = result.stdout
+            except (subprocess.CalledProcessError, FileNotFoundError) as e:
+                raise RuntimeError(f"Failed to get uv venv help: {e}")
+        return self._cached_help_output
+
+    def _parse_argument_from_line(self, line: str) -> Dict[str, any] | None:
+        """Parse a single argument line from uv help output."""
+        line = line.strip()
+        if not line.startswith("-"):
+            return None
+
+        # Pattern for: -s, --long-option <ARG>  or  --long-option <ARG>  or  --flag
+        arg_pattern = r"^(?:(-\w),?\s*)?(-{2}[\w-]+)(?:\s+<([^>]+)>)?"
+        match = re.match(arg_pattern, line)
+
+        if not match:
+            return None
+
+        short_flag, long_flag, arg_type = match.groups()
+
+        arg_info = {
+            "dest": long_flag[2:].replace("-", "_"),  # --my-option -> my_option
+            "long": long_flag,
+            "takes_value": arg_type is not None,
+        }
+
+        if short_flag:
+            arg_info["short"] = short_flag
+
+        if arg_type:
+            arg_info["metavar"] = arg_type
+
+        # Detect if it's a repeatable option (action='append')
+        if "URLs" in line or "locations" in line.lower() or "files" in line.lower():
+            arg_info["action"] = "append"
+        elif not arg_info["takes_value"]:
+            arg_info["action"] = "store_true"
+
+        return arg_info
+
+    def _create_argument_parser(self) -> argparse.ArgumentParser:
+        """Create an ArgumentParser based on uv venv help output."""
+        help_output = self._get_uv_help_output()
+
+        parser = argparse.ArgumentParser(
+            description="Create a virtual environment with hierarchy support",
+            add_help=False,  # We'll handle help ourselves
+        )
+
+        # Add positional argument for path
+        parser.add_argument(
+            "path", nargs="?", help="The path to the virtual environment to create"
+        )
+
+        # Add huv-specific --parent argument
+        parser.add_argument(
+            "--parent", help="Parent virtual environment path for hierarchy"
+        )
+
+        # Parse the help output to extract argument definitions
+        in_options = False
+        for line in help_output.split("\n"):
+            if line.strip().startswith("Options:"):
+                in_options = True
+                continue
+            elif line.strip().endswith("options:") and in_options:
+                # Stop when we hit a new section like "Python options:"
+                break
+            elif in_options and line.strip().startswith("-"):
+                arg_info = self._parse_argument_from_line(line)
+                if arg_info:
+                    # Build arguments for add_argument
+                    args = []
+                    if arg_info.get("short"):
+                        args.append(arg_info["short"])
+                    args.append(arg_info["long"])
+
+                    kwargs = {"dest": arg_info["dest"]}
+
+                    if arg_info.get("action"):
+                        kwargs["action"] = arg_info["action"]
+
+                    if arg_info.get("metavar"):
+                        kwargs["metavar"] = arg_info["metavar"]
+
+                    # Add the argument to parser
+                    try:
+                        parser.add_argument(*args, **kwargs)
+                    except argparse.ArgumentError:
+                        # Skip if argument already exists or conflicts
+                        pass
+
+        return parser
+
+    def parse_args(self, args: List[str]) -> argparse.Namespace:
+        """Parse arguments using the dynamic parser."""
+        if self._cached_parser is None:
+            self._cached_parser = self._create_argument_parser()
+
+        # Split known and unknown args to allow passthrough
+        known_args, unknown_args = self._cached_parser.parse_known_args(args)
+
+        # Store unknown args for passthrough to uv
+        known_args.unknown_args = unknown_args
+
+        return known_args
+
+
+class HierarchicalUV:
+    """
+    Main class for managing hierarchical virtual environments with uv.
+
+    This class provides functionality to create and manage virtual environments
+    that can inherit packages from parent environments, enabling efficient
+    storage and dependency management across related projects.
+
+    Attributes:
+        uv_executable (str): Path to the uv executable
+        current_venv (str|None): Path to currently active virtual environment
+    """
+
+    def __init__(self) -> None:
+        """Initialize the HierarchicalUV manager."""
+        self.uv_executable = self._find_uv()
+        self.current_venv = self._get_current_venv()
+        self.is_windows = platform.system() == "Windows"
+
+    def _get_activation_script_path(
+        self, venv_path: Union[str, Path], script_name: str = "activate"
+    ) -> Path:
+        """
+        Get the platform-specific path to activation scripts.
+
+        Args:
+            venv_path (str|Path): Path to the virtual environment
+            script_name (str): Name of the activation script (without extension)
+
+        Returns:
+            Path: Platform-specific path to the activation script
+        """
+        venv_path = Path(venv_path)
+        if self.is_windows:
+            return venv_path / "Scripts" / f"{script_name}.bat"
+        else:
+            return venv_path / "bin" / script_name
+
+    def _get_python_executable_path(self, venv_path: Union[str, Path]) -> Path:
+        """
+        Get the platform-specific path to the Python executable.
+
+        Args:
+            venv_path (str|Path): Path to the virtual environment
+
+        Returns:
+            Path: Platform-specific path to the Python executable
+        """
+        venv_path = Path(venv_path)
+        if self.is_windows:
+            return venv_path / "Scripts" / "python.exe"
+        else:
+            return venv_path / "bin" / "python"
+
+    def _get_safe_path_string(
+        self, path_obj: Union[str, Path], for_windows_script: bool = False
+    ) -> str:
+        """
+        Convert a path to a safe string representation that won't cause Unicode escape issues.
+
+        On Windows, backslashes in paths can cause Unicode escape sequence errors when used
+        in f-strings (e.g., \\U, \\n, \\r, \\t). This method ensures all paths use forward
+        slashes to prevent these issues.
+
+        Args:
+            path_obj: Path object or string to convert
+            for_windows_script: Whether this path will be used in Windows batch/PowerShell scripts
+
+        Returns:
+            str: Safe path string with forward slashes
+        """
+        if isinstance(path_obj, str):
+            path_obj = Path(path_obj)
+
+        # Get the path as a string and ensure forward slashes to prevent Unicode escapes
+        # Note: as_posix() doesn't convert backslashes that are already in the path string,
+        # so we need to manually replace them for Unicode escape safety
+        path_str = str(path_obj)
+        return path_str.replace("\\", "/")
+
+    def _find_uv(self) -> str:
+        """
+        Find the uv executable in the system PATH.
+
+        Returns:
+            str: Path to the uv executable
+
+        Raises:
+            SystemExit: If uv is not found in PATH
+        """
+        import shutil
+
+        uv_path = shutil.which("uv")
+        if not uv_path:
+            print(
+                "Error: 'uv' not found in PATH. Please install uv first.",
+                file=sys.stderr,
+            )
+            print(
+                "Install with: curl -LsSf https://astral.sh/uv/install.sh | sh",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+        return uv_path
+
+    def _get_python_version(self, venv_path: Union[str, Path]) -> str | None:
+        """
+        Extract Python version from a virtual environment's pyvenv.cfg file.
+
+        Args:
+            venv_path (str|Path): Path to the virtual environment
+
+        Returns:
+            str|None: Python version (e.g., "3.11") or None if not found
+        """
+        pyvenv_cfg = Path(venv_path) / "pyvenv.cfg"
+        if not pyvenv_cfg.exists():
+            return None
+
+        try:
+            with open(pyvenv_cfg) as f:
+                for line in f:
+                    if line.startswith("version_info ="):
+                        # Extract version like "3.12.10" and return just "3.12"
+                        version_str = line.split("=", 1)[1].strip()
+                        version_parts = version_str.split(".")
+                        if len(version_parts) >= 2:
+                            return f"{version_parts[0]}.{version_parts[1]}"
+        except OSError:
+            pass
+
+        return None
+
+    def create_venv(
+        self,
+        venv_path: Union[str, Path],
+        parent_path: Union[str, Path] | None = None,
+        uv_args: List[str] | None = None,
+    ) -> None:
+        """
+        Create a Python virtual environment at the specified path, optionally establishing
+        a parent-child hierarchy with another virtual environment.
+
+        Args:
+            venv_path (str or Path): The target directory for the new virtual environment.
+            parent_path (str or Path, optional): Path to the parent virtual environment, if any.
+            uv_args (list, optional): Additional arguments to pass to the 'uv venv' command.
+
+        Behavior:
+            - Checks if the target directory exists and is suitable for venv creation.
+            - Validates the parent environment (if specified) for existence, structure, and Python version compatibility.
+            - Ensures the child environment uses the same Python version as the parent, unless overridden.
+            - Invokes the 'uv venv' command to create the environment.
+            - Verifies successful creation by checking for the activate script.
+            - If a parent is specified, sets up the hierarchy by modifying activation scripts.
+            - Prints informative messages and errors to the user.
+            - Exits with error status on failure.
+        """
+        venv_path = Path(venv_path).resolve()
+
+        # Check if target already exists
+        if venv_path.exists():
+            print(
+                f"Error: Path '{venv_path}' already exists",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+
+        # Validate parent environment if specified
+        if parent_path:
+            parent_path = Path(parent_path).resolve()
+            if not parent_path.exists():
+                parent_path_str = self._get_safe_path_string(
+                    parent_path, for_windows_script=False
+                )
+                print(
+                    f"Error: Parent environment '{parent_path_str}' does not exist.",
+                    file=sys.stderr,
+                )
+                sys.exit(1)
+            if not (parent_path / "pyvenv.cfg").exists():
+                parent_path_str = self._get_safe_path_string(
+                    parent_path, for_windows_script=False
+                )
+                print(
+                    f"Error: '{parent_path_str}' is not a valid virtual environment.",
+                    file=sys.stderr,
+                )
+                sys.exit(1)
+
+            # Check for activation script based on platform
+            activate_script = self._get_activation_script_path(parent_path)
+            if not activate_script.exists():
+                parent_path_str = self._get_safe_path_string(
+                    parent_path, for_windows_script=False
+                )
+                print(
+                    f"Error: Parent environment '{parent_path_str}' is missing activate script.",
+                    file=sys.stderr,
+                )
+                sys.exit(1)
+
+            # Validate Python version compatibility with parent
+            parent_python_version = self._get_python_version(parent_path)
+            if parent_python_version:
+                # Check if specific Python version requested via uv args
+                requested_python_version = None
+                python_specified = False
+                if uv_args:
+                    for i, arg in enumerate(uv_args):
+                        if (arg == "--python" or arg == "-p") and i + 1 < len(uv_args):
+                            python_specified = True
+                            python_arg = uv_args[i + 1]
+                            # Extract version from python executable path or version string
+                            version_match = re.search(r"(\d+\.\d+)", python_arg)
+                            if version_match:
+                                requested_python_version = version_match.group(1)
+                            break
+
+                # If a specific Python version was requested, validate compatibility
+                if (
+                    requested_python_version
+                    and requested_python_version != parent_python_version
+                ):
+                    print(
+                        f"Error: Child environment Python version ({requested_python_version}) "
+                        f"must match parent environment Python version ({parent_python_version}) "
+                        f"for package compatibility.",
+                        file=sys.stderr,
+                    )
+                    sys.exit(1)
+
+                # If no Python version specified, automatically use parent's version
+                if not python_specified:
+                    if uv_args is None:
+                        uv_args = []
+                    uv_args.extend(["--python", parent_python_version])
+                    print(f"Using parent's Python version: {parent_python_version}")
+                elif (
+                    python_specified
+                    and requested_python_version == parent_python_version
+                ):
+                    # User explicitly specified same version as parent - no need to add another --python
+                    print(f"Using parent's Python version: {parent_python_version}")
+
+        # Build uv command
+        cmd = [self.uv_executable, "venv", str(venv_path)]
+        if uv_args:
+            cmd.extend(uv_args)
+
+        venv_path_str = self._get_safe_path_string(venv_path, for_windows_script=False)
+        print(f"Creating virtual environment: {venv_path_str}")
+        if parent_path:
+            parent_path_str = self._get_safe_path_string(
+                parent_path, for_windows_script=False
+            )
+            print(f"Parent environment: {parent_path_str}")
+
+        try:
+            subprocess.run(cmd, check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"Error creating virtual environment: {e}", file=sys.stderr)
+            sys.exit(1)
+
+        # Verify the environment was created successfully
+        activate_script = self._get_activation_script_path(venv_path)
+        if not activate_script.exists():
+            print(
+                "Error: Virtual environment creation failed - missing activate script",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+
+        # If parent is specified, modify activation scripts
+        if parent_path:
+            parent_path_str = self._get_safe_path_string(
+                parent_path, for_windows_script=False
+            )
+            print(f"Setting up hierarchy with parent: {parent_path_str}")
+            try:
+                self._setup_hierarchy(venv_path, parent_path)
+            except Exception as e:
+                print(f"Error setting up hierarchy: {e}", file=sys.stderr)
+                print(
+                    "Virtual environment created but hierarchy setup failed.",
+                    file=sys.stderr,
+                )
+                sys.exit(1)
+
+        venv_path_str = self._get_safe_path_string(venv_path, for_windows_script=False)
+        print(f"[OK] Virtual environment created successfully at: {venv_path_str}")
+        if parent_path:
+            parent_path_str = self._get_safe_path_string(
+                parent_path, for_windows_script=False
+            )
+            print(f"[OK] Hierarchy configured with parent: {parent_path_str}")
+            if self.is_windows:
+                activate_path = Path(venv_path) / "Scripts" / "activate.bat"
+                # For Windows display, use string concatenation to avoid f-string Unicode issues
+                print("  Use: " + str(activate_path))
+            else:
+                venv_path_str = self._get_safe_path_string(
+                    venv_path, for_windows_script=False
+                )
+                print(f"  Use: source {venv_path_str}/bin/activate")
+
+    def _setup_hierarchy(
+        self, venv_path: Union[str, Path], parent_path: Union[str, Path]
+    ) -> None:
+        """Setup hierarchy by modifying _virtualenv.py for automatic parent inheritance
+
+        Args:
+            venv_path (str or Path): Path to the child virtual environment.
+            parent_path (str or Path): Path to the parent virtual environment.
+
+        Behavior:
+            - Writes parent information to pyvenv.cfg
+            - Modifies _virtualenv.py to set up sys.path hierarchy automatically
+            - No activation script modifications needed - inheritance works immediately
+
+        """
+        venv_path = Path(venv_path)
+        parent_path = Path(parent_path)
+        parent_venv_path = str(parent_path.resolve())
+
+        # Write parent information to pyvenv.cfg
+        pyvenv_cfg = venv_path / "pyvenv.cfg"
+        if pyvenv_cfg.exists():
+            with open(pyvenv_cfg, "a") as f:
+                f.write(f"huv_parent = {parent_venv_path}\n")
+
+        # Modify _virtualenv.py to include hierarchy support
+        virtualenv_py_path = self._get_virtualenv_py_path(venv_path)
+        if virtualenv_py_path and virtualenv_py_path.exists():
+            self._modify_virtualenv_py(virtualenv_py_path)
+        else:
+            raise FileNotFoundError(f"Could not find _virtualenv.py in {venv_path}")
+
+    def _get_virtualenv_py_path(self, venv_path: Union[str, Path]) -> Path:
+        """Get the path to _virtualenv.py in the virtual environment."""
+        venv_path = Path(venv_path)
+
+        # Try common locations for _virtualenv.py
+        if self.is_windows:
+            site_packages = venv_path / "Lib" / "site-packages"
+        else:
+            # Find the python version directory
+            lib_dir = venv_path / "lib"
+            if lib_dir.exists():
+                python_dirs = list(lib_dir.glob("python*"))
+                if python_dirs:
+                    site_packages = python_dirs[0] / "site-packages"
+                else:
+                    # Fallback
+                    site_packages = lib_dir / "python3.12" / "site-packages"
+            else:
+                raise FileNotFoundError(f"Could not find lib directory in {venv_path}")
+
+        virtualenv_py = site_packages / "_virtualenv.py"
+        return virtualenv_py
+
+    def _modify_virtualenv_py(self, virtualenv_py_path: Path) -> None:
+        """Modify _virtualenv.py to include hierarchy support."""
+
+        # Read the current content
+        with open(virtualenv_py_path) as f:
+            content = f.read()
+
+        # Check if already modified
+        if "# huv hierarchy support" in content:
+            return  # Already modified
+
+        # Add hierarchy setup code at the end
+        hierarchy_code = '''
+
+# huv hierarchy support - automatically set up parent environment inheritance
+def _setup_huv_hierarchy():
+    """Set up hierarchical virtual environment support by modifying sys.path."""
+    import os
+    import sys
+    import glob
+    from pathlib import Path
+
+    # Read pyvenv.cfg to find parent environment
+    venv_root = Path(sys.prefix)
+    pyvenv_cfg = venv_root / "pyvenv.cfg"
+
+    if not pyvenv_cfg.exists():
+        return
+
+    parent_path = None
+    with open(pyvenv_cfg, 'r') as f:
+        for line in f:
+            if line.startswith("huv_parent = "):
+                parent_path = line.split("= ", 1)[1].strip()
+                break
+
+    if not parent_path or not os.path.exists(parent_path):
+        return
+
+    # Find parent site-packages directories
+    parent_site_packages = []
+    if os.name == 'nt':  # Windows
+        parent_site_dir = os.path.join(parent_path, "Lib", "site-packages")
+        if os.path.exists(parent_site_dir):
+            parent_site_packages.append(parent_site_dir)
+    else:  # Unix-like
+        parent_lib_pattern = os.path.join(parent_path, "lib", "python*", "site-packages")
+        parent_site_packages.extend(glob.glob(parent_lib_pattern))
+
+    if not parent_site_packages:
+        return
+
+    # Find current venv site-packages in sys.path
+    current_venv_paths = []
+    for path in sys.path:
+        if sys.prefix in path and "site-packages" in path:
+            current_venv_paths.append(path)
+
+    # Insert parent site-packages after current venv paths
+    # This ensures child packages take precedence over parent packages
+    for parent_site in parent_site_packages:
+        if parent_site not in sys.path:
+            if current_venv_paths:
+                # Insert after the last current venv site-packages
+                insert_idx = sys.path.index(current_venv_paths[-1]) + 1
+                sys.path.insert(insert_idx, parent_site)
+            else:
+                # No current venv paths found, append
+                sys.path.append(parent_site)
+
+    # Add parent bin directory to PATH so child can use parent's executables
+    if os.name == 'nt':  # Windows
+        parent_bin_dir = os.path.join(parent_path, "Scripts")
+    else:  # Unix-like
+        parent_bin_dir = os.path.join(parent_path, "bin")
+
+    if os.path.exists(parent_bin_dir):
+        current_path = os.environ.get('PATH', '')
+        if parent_bin_dir not in current_path:
+            # Add parent bin directory to PATH after current venv bin
+            path_parts = current_path.split(os.pathsep)
+            # Find current venv bin directory in PATH
+            current_venv_bin = None
+            if os.name == 'nt':
+                current_venv_bin = os.path.join(sys.prefix, "Scripts")
+            else:
+                current_venv_bin = os.path.join(sys.prefix, "bin")
+ 
+            if current_venv_bin in path_parts:
+                # Insert parent bin after current venv bin
+                insert_idx = path_parts.index(current_venv_bin) + 1
+                path_parts.insert(insert_idx, parent_bin_dir)
+            else:
+                # Prepend parent bin to ensure it's found
+                path_parts.insert(0, parent_bin_dir)
+ 
+            os.environ['PATH'] = os.pathsep.join(path_parts)
+
+# Set up hierarchy automatically when _virtualenv.py is imported
+try:
+    _setup_huv_hierarchy()
+except Exception:
+    # Silently ignore errors to avoid breaking virtual environment startup
+    pass
+'''
+
+        # Append the hierarchy code
+        modified_content = content + hierarchy_code
+
+        # Write back the modified content
+        with open(virtualenv_py_path, "w") as f:
+            f.write(modified_content)
+
+    def _get_current_venv(self) -> Path | None:
+        """
+        Get the path of the currently active virtual environment.
+
+        Returns:
+            Path|None: Path to current virtual environment or None if not in one
+        """
+        venv_path = os.environ.get("VIRTUAL_ENV")
+        if venv_path:
+            return Path(venv_path)
+        return None
+
+    def _find_parent_venv(self, venv_path: Path | None) -> Path | None:
+        """
+        Find the parent virtual environment for a given virtual environment.
+
+        This method looks for the huv_parent configuration in pyvenv.cfg
+        to determine if the environment has a hierarchical parent.
+
+        Args:
+            venv_path (Path|None): Path to the virtual environment to check
+
+        Returns:
+            Path|None: Path to parent environment or None if no parent exists
+        """
+        if not venv_path:
+            return None
+
+        pyvenv_cfg = venv_path / "pyvenv.cfg"
+        if not pyvenv_cfg.exists():
+            return None
+
+        try:
+            with open(pyvenv_cfg) as f:
+                content = f.read()
+                # Look for the huv_parent line
+                match = re.search(r"huv_parent\s*=\s*(.+)", content)
+                if match:
+                    parent_path = match.group(1).strip()
+                    if parent_path and Path(parent_path).exists():
+                        return Path(parent_path)
+        except Exception:
+            pass
+        return None
+
+    def _get_installed_packages(self, venv_path: Path | None) -> Dict[str, str]:
+        """
+        Get a dictionary of installed packages in a virtual environment.
+
+        Args:
+            venv_path (Path): Path to the virtual environment
+
+        Returns:
+            dict: Mapping of package names to versions, e.g., {"numpy": "1.24.0"}
+        """
+        if not venv_path or not venv_path.exists():
+            return {}
+
+        python_exe = self._get_python_executable_path(venv_path)
+        if not python_exe.exists():
+            return {}
+
+        # Try uv pip first, then fall back to regular pip
+        for pip_cmd in [
+            [self.uv_executable, "pip", "list", "--format=json"],
+            [str(python_exe), "-m", "pip", "list", "--format=json"],
+        ]:
+            try:
+                # Set VIRTUAL_ENV for uv pip to work correctly
+                env = os.environ.copy()
+                env["VIRTUAL_ENV"] = str(venv_path)
+
+                result = subprocess.run(
+                    pip_cmd, capture_output=True, text=True, check=True, env=env
+                )
+
+                packages = {}
+                for pkg in json.loads(result.stdout):
+                    packages[pkg["name"].lower()] = pkg["version"]
+                return packages
+            except Exception:
+                continue
+
+        return {}
+
+    def _get_parent_packages(self, venv_path: Path | None) -> Dict[str, str]:
+        """Get all packages available from parent environments"""
+        all_packages = {}
+        current = venv_path
+
+        while current:
+            parent = self._find_parent_venv(current)
+            if not parent:
+                break
+
+            parent_packages = self._get_installed_packages(parent)
+            # Add packages that aren't already in our collection (child takes precedence)
+            for pkg_name, version in parent_packages.items():
+                if pkg_name not in all_packages:
+                    all_packages[pkg_name] = version
+
+            current = parent
+
+        return all_packages
+
+    def _get_dependency_tree(
+        self, packages: List[str], pip_args: List[str] | None = None
+    ) -> Dict[str, str]:
+        """Get the full dependency tree for packages using dry-run"""
+        cmd = [self.uv_executable, "pip", "install", "--dry-run"] + packages
+        if pip_args:
+            cmd.extend(pip_args)
+
+        try:
+            # Temporarily remove PYTHONPATH to get accurate dependency analysis
+            # This prevents uv from seeing parent packages as "already installed"
+            env = os.environ.copy()
+            env.pop("PYTHONPATH", None)
+
+            result = subprocess.run(
+                cmd, capture_output=True, text=True, check=True, env=env
+            )
+
+            # Parse the dry-run output to extract package names and versions
+            dependencies = {}
+
+            # uv output format: "Would install X packages" followed by " + package==version" lines
+            lines = result.stdout.split("\n") + result.stderr.split("\n")
+
+            for line in lines:
+                line = line.strip()
+                # Look for lines like " + package==version"
+                if line.startswith("+") and "==" in line:
+                    pkg_info = line[1:].strip()  # Remove "+"
+                    if "==" in pkg_info:
+                        pkg_name, version = pkg_info.split("==", 1)
+                        dependencies[pkg_name.lower()] = version
+
+            return dependencies
+        except subprocess.CalledProcessError:
+            # If dry-run fails, fall back to the original approach
+            return {}
+
+    def _parse_version_constraint(self, pkg_spec: str) -> tuple[str, str]:
+        """Parse package specification to extract name and version constraint"""
+        # Handle specifications like "numpy>=1.0", "requests==2.0", etc.
+        match = re.match(r"^([a-zA-Z0-9_.-]+)(.*)$", pkg_spec.strip())
+        if match:
+            pkg_name = match.group(1)
+            constraint = match.group(2) if match.group(2) else ""
+            return pkg_name.lower(), constraint
+        return pkg_spec.lower(), ""
+
+    def _build_install_flags(self, parsed_args: argparse.Namespace) -> List[str]:
+        """Build install flags from parsed arguments"""
+        flags = []
+
+        # Constraints
+        if getattr(parsed_args, "constraints", None):
+            for constraint_file in parsed_args.constraints:
+                flags.extend(["-c", constraint_file])
+
+        # Editable installs (handled separately in package list)
+        if getattr(parsed_args, "editables", None):
+            for editable in parsed_args.editables:
+                flags.extend(["-e", editable])
+
+        # Extras
+        if getattr(parsed_args, "extras", None):
+            for extra in parsed_args.extras:
+                flags.extend(["--extra", extra])
+
+        if getattr(parsed_args, "all_extras", False):
+            flags.append("--all-extras")
+
+        # Upgrade options
+        if getattr(parsed_args, "upgrade", False):
+            flags.append("-U")
+
+        if getattr(parsed_args, "upgrade_packages", None):
+            for pkg in parsed_args.upgrade_packages:
+                flags.extend(["-P", pkg])
+
+        # Index options
+        if getattr(parsed_args, "index_url", None):
+            flags.extend(["-i", parsed_args.index_url])
+
+        if getattr(parsed_args, "extra_index_urls", None):
+            for url in parsed_args.extra_index_urls:
+                flags.extend(["--extra-index-url", url])
+
+        if getattr(parsed_args, "find_links", None):
+            for link in parsed_args.find_links:
+                flags.extend(["-f", link])
+
+        if getattr(parsed_args, "no_index", False):
+            flags.append("--no-index")
+
+        # Installation options
+        if getattr(parsed_args, "user", False):
+            flags.append("--user")
+
+        if getattr(parsed_args, "target", None):
+            flags.extend(["--target", parsed_args.target])
+
+        if getattr(parsed_args, "prefix", None):
+            flags.extend(["--prefix", parsed_args.prefix])
+
+        # Build options
+        if getattr(parsed_args, "no_deps", False):
+            flags.append("--no-deps")
+
+        if getattr(parsed_args, "no_build", False):
+            flags.append("--no-build")
+
+        if getattr(parsed_args, "no_binary", None):
+            for pkg in parsed_args.no_binary:
+                flags.extend(["--no-binary", pkg])
+
+        if getattr(parsed_args, "only_binary", None):
+            for pkg in parsed_args.only_binary:
+                flags.extend(["--only-binary", pkg])
+
+        # Other options
+        if getattr(parsed_args, "force_reinstall", False):
+            flags.append("--reinstall")
+
+        if getattr(parsed_args, "require_hashes", False):
+            flags.append("--require-hashes")
+
+        return flags
+
+    def _is_version_compatible(self, available_version: str, constraint: str) -> bool:
+        """Check if available version satisfies the constraint"""
+        if not constraint:
+            return True
+
+        # Simple version comparison - for a full solution, we'd use packaging.specifiers
+        # This handles the most common cases
+        if constraint.startswith(">="):
+            required = constraint[2:].strip()
+            return available_version >= required
+        elif constraint.startswith("=="):
+            required = constraint[2:].strip()
+            return available_version == required
+        elif constraint.startswith(">"):
+            required = constraint[1:].strip()
+            return available_version > required
+        elif constraint.startswith("<="):
+            required = constraint[2:].strip()
+            return available_version <= required
+        elif constraint.startswith("<"):
+            required = constraint[1:].strip()
+            return available_version < required
+
+        # Default to compatible for complex constraints
+        return True
+
+    def pip_install(
+        self,
+        packages: List[str],
+        pip_args: List[str] | None = None,
+        parsed_args: argparse.Namespace | None = None,
+    ) -> None:
+        """
+        Install packages with hierarchical dependency checking.
+
+        This method analyzes package dependencies and only installs packages
+        that are not already available from parent environments, significantly
+        reducing disk usage and installation time.
+
+        Args:
+            packages (list): List of package specifications to install
+            pip_args (list, optional): Additional pip arguments (deprecated)
+            parsed_args (Namespace, optional): Parsed command line arguments
+
+        Raises:
+            SystemExit: If no virtual environment is active or installation fails
+        """
+        if not self.current_venv:
+            print(
+                "Error: No active virtual environment. Please activate one first.",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+
+        # Extract parsed arguments and build comprehensive package list
+        all_packages = list(packages) if packages else []
+        requirements_files = []
+        editables = []
+        install_flags = []
+
+        if parsed_args:
+            # Handle requirements files
+            if getattr(parsed_args, "requirements", None):
+                requirements_files = parsed_args.requirements
+
+            # Handle editable installs
+            if getattr(parsed_args, "editables", None):
+                editables = parsed_args.editables
+
+            # Build install flags from parsed arguments
+            install_flags = self._build_install_flags(parsed_args)
+        else:
+            # Fallback for old-style calls (backwards compatibility)
+            # For now, we'll handle requirements_files parameter as before
+            if hasattr(parsed_args, "__iter__") and not isinstance(parsed_args, str):
+                # If parsed_args is actually requirements_files list (old signature)
+                requirements_files = parsed_args or []
+
+        # Process requirements files
+        if requirements_files:
+            for req_file in requirements_files:
+                try:
+                    with open(req_file) as f:
+                        for line in f:
+                            line = line.strip()
+                            # Skip empty lines and comments
+                            if line and not line.startswith("#"):
+                                all_packages.append(line)
+                except FileNotFoundError:
+                    print(
+                        f"Error: Requirements file '{req_file}' not found.",
+                        file=sys.stderr,
+                    )
+                    sys.exit(1)
+                except Exception as e:
+                    print(
+                        f"Error reading requirements file '{req_file}': {e}",
+                        file=sys.stderr,
+                    )
+                    sys.exit(1)
+
+        # Add editable packages
+        if editables:
+            all_packages.extend(editables)
+
+        if not all_packages:
+            print("Error: No packages specified for installation.", file=sys.stderr)
+            sys.exit(1)
+
+        # Use all_packages instead of packages for the rest of the method
+        packages = all_packages
+
+        # Get packages available from parents
+        parent_packages = self._get_parent_packages(self.current_venv)
+
+        print("🔍 Analyzing dependencies...")
+
+        # Get full dependency tree using dry-run
+        # Build dry-run command with appropriate flags
+        dry_run_args = []
+        if install_flags:
+            # Filter out flags that might interfere with dry-run analysis
+            safe_flags = []
+            skip_next = False
+            for i, flag in enumerate(install_flags):
+                if skip_next:
+                    skip_next = False
+                    continue
+
+                # Skip flags that don't work well with dry-run dependency analysis
+                if flag in ["--user", "--target", "--prefix", "--reinstall"]:
+                    continue
+                if flag in [
+                    "-c",
+                    "--constraints",
+                    "-f",
+                    "--find-links",
+                    "-i",
+                    "--index-url",
+                    "--extra-index-url",
+                ]:
+                    safe_flags.append(flag)
+                    # These flags take arguments, so skip the next item too
+                    if i + 1 < len(install_flags):
+                        safe_flags.append(install_flags[i + 1])
+                        skip_next = True
+                elif flag in ["--no-index", "--all-extras", "-U", "--upgrade"]:
+                    safe_flags.append(flag)
+                elif flag.startswith("--extra"):
+                    safe_flags.append(flag)
+                    if not flag.startswith("--extra=") and i + 1 < len(install_flags):
+                        safe_flags.append(install_flags[i + 1])
+                        skip_next = True
+            dry_run_args = safe_flags
+
+        dependency_tree = self._get_dependency_tree(packages, dry_run_args)
+
+        if dependency_tree:
+            print(
+                f"📋 Found {len(dependency_tree)} total packages (including dependencies)"
+            )
+
+            # Check each package in the dependency tree
+            packages_to_install = []
+            skipped_packages = []
+            version_conflicts = []
+
+            # First, handle the explicitly requested packages
+            explicit_packages = set()
+            for pkg_spec in packages:
+                pkg_name, constraint = self._parse_version_constraint(pkg_spec)
+                explicit_packages.add(pkg_name)
+
+                if pkg_name in parent_packages:
+                    available_version = parent_packages[pkg_name]
+                    if self._is_version_compatible(available_version, constraint):
+                        print(
+                            f"📦 Skipping '{pkg_name}' (v{available_version} from parent satisfies {constraint or 'any version'})"
+                        )
+                        skipped_packages.append(pkg_name)
+                    else:
+                        print(
+                            f"[WARNING] Parent has '{pkg_name}' v{available_version}, but need {constraint}"
+                        )
+                        packages_to_install.append(pkg_spec)
+                        version_conflicts.append(
+                            f"{pkg_name}: parent v{available_version} vs required {constraint}"
+                        )
+                else:
+                    packages_to_install.append(pkg_spec)
+
+            # Then handle dependencies
+            for dep_name in dependency_tree:
+                if dep_name in explicit_packages:
+                    continue  # Already handled above
+
+                if dep_name in parent_packages:
+                    parent_version = parent_packages[dep_name]
+                    print(
+                        f"📦 Dependency '{dep_name}' (v{parent_version} available from parent)"
+                    )
+                    skipped_packages.append(dep_name)
+                else:
+                    # Add dependency to install list - we'll use --no-deps later
+                    packages_to_install.append(dep_name)
+
+            if version_conflicts:
+                print("\n[WARNING] Version conflicts detected:")
+                for conflict in version_conflicts:
+                    print(f"   {conflict}")
+                print(
+                    "   Child environment will override parent versions for these packages."
+                )
+
+        else:
+            # Fallback to original logic if dry-run fails
+            print(
+                "[WARNING] Could not analyze dependencies, using basic package checking"
+            )
+            packages_to_install = []
+            skipped_packages = []
+
+            for pkg_spec in packages:
+                pkg_name = re.split(r"[<>=!]", pkg_spec)[0].strip().lower()
+
+                if pkg_name in parent_packages:
+                    print(
+                        f"📦 Skipping '{pkg_name}' (v{parent_packages[pkg_name]} available from parent)"
+                    )
+                    skipped_packages.append(pkg_name)
+                else:
+                    packages_to_install.append(pkg_spec)
+
+        if not packages_to_install:
+            print(
+                "✅ All requested packages and dependencies are already available from parent environments."
+            )
+            return
+
+        print(f"\n📥 Installing {len(packages_to_install)} package(s)")
+        if skipped_packages:
+            print(
+                f"⏭️  Skipped {len(skipped_packages)} package(s) available from parent"
+            )
+
+        # Build uv pip install command
+        cmd = [self.uv_executable, "pip", "install"]
+
+        # Add install flags from parsed arguments first
+        if install_flags:
+            cmd.extend(install_flags)
+
+        # Handle dependency conflicts
+        no_deps_from_args = "--no-deps" in install_flags
+        if dependency_tree and skipped_packages and not no_deps_from_args:
+            # If we skipped some dependencies, we need to install without automatic dependency resolution
+            # to avoid conflicts with parent packages
+            cmd.append("--no-deps")
+            print("🔧 Using --no-deps to avoid conflicts with parent environment")
+
+        # Add packages to install
+        cmd.extend(packages_to_install)
+
+        # Add any additional pip args that weren't parsed
+        if pip_args:
+            cmd.extend(pip_args)
+
+        # Run the installation
+        try:
+            subprocess.run(cmd, check=True)
+            print("✅ Installation completed successfully.")
+
+            if dependency_tree and skipped_packages:
+                print("\n📦 Package hierarchy summary:")
+                print(f"   • Installed in child: {len(packages_to_install)} packages")
+                print(f"   • Available from parent: {len(skipped_packages)} packages")
+
+        except subprocess.CalledProcessError as e:
+            print(
+                f"[ERROR] Installation failed with exit code {e.returncode}",
+                file=sys.stderr,
+            )
+            sys.exit(e.returncode)
+
+    def pip_uninstall(
+        self, packages: List[str], pip_args: List[str] | None = None
+    ) -> None:
+        """
+        Uninstall packages from the current environment with hierarchy awareness.
+
+        This method uninstalls packages from the current environment while
+        providing information about which packages remain available from
+        parent environments.
+
+        Args:
+            packages (list): List of package names to uninstall
+            pip_args (list, optional): Additional pip arguments
+
+        Raises:
+            SystemExit: If no virtual environment is active or uninstallation fails
+        """
+        if not self.current_venv:
+            print(
+                "Error: No active virtual environment. Please activate one first.",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+
+        if not packages:
+            print("Error: No packages specified for uninstallation.", file=sys.stderr)
+            sys.exit(1)
+
+        # Get currently installed packages in this environment
+        current_packages = self._get_installed_packages(self.current_venv)
+        parent_packages = self._get_parent_packages(self.current_venv)
+
+        packages_to_remove = []
+        not_found = []
+        parent_available = []
+
+        for pkg_name in packages:
+            pkg_name_lower = pkg_name.lower()
+
+            if pkg_name_lower in current_packages:
+                packages_to_remove.append(pkg_name)
+                if pkg_name_lower in parent_packages:
+                    parent_available.append(
+                        f"{pkg_name} (v{parent_packages[pkg_name_lower]} still available from parent)"
+                    )
+            else:
+                not_found.append(pkg_name)
+
+        if not_found:
+            print(
+                f"[WARNING] Packages not installed in current environment: {', '.join(not_found)}"
+            )
+
+        if not packages_to_remove:
+            print("[ERROR] No packages to uninstall from current environment.")
+            return
+
+        print(
+            f"🗑️  Uninstalling {len(packages_to_remove)} package(s): {', '.join(packages_to_remove)}"
+        )
+        if parent_available:
+            print(
+                "📦 After uninstall, these packages will still be available from parent:"
+            )
+            for pkg in parent_available:
+                print(f"   - {pkg}")
+
+        # Build uv pip uninstall command
+        cmd = [self.uv_executable, "pip", "uninstall"] + packages_to_remove
+        if pip_args:
+            cmd.extend(pip_args)
+
+        # Run the uninstallation
+        try:
+            subprocess.run(cmd, check=True)
+            print("✅ Uninstallation completed successfully.")
+        except subprocess.CalledProcessError as e:
+            print(
+                f"[ERROR] Uninstallation failed with exit code {e.returncode}",
+                file=sys.stderr,
+            )
+            sys.exit(e.returncode)
+
+    def passthrough_command(self, args: List[str]) -> None:
+        """
+        Pass commands directly to uv without modification.
+
+        This method is used for commands that don't require hierarchical
+        processing, such as cache management, tool installs, etc.
+
+        Args:
+            args (list): Command arguments to pass to uv
+
+        Raises:
+            SystemExit: If uv execution fails
+        """
+        cmd = [self.uv_executable] + args
+
+        try:
+            # Use execvp to replace the current process with uv
+            # This ensures that uv gets the exact same environment and signal handling
+            os.execvp(self.uv_executable, cmd)
+        except OSError as e:
+            print(f"[ERROR] Failed to execute uv: {e}", file=sys.stderr)
+            sys.exit(1)
+
+
+def main() -> None:
+    """
+    Main entry point for the huv command-line interface.
+
+    This function handles command-line argument parsing and dispatches
+    to the appropriate HierarchicalUV methods based on the command type.
+
+    Commands handled specially:
+    - venv: Virtual environment creation with optional hierarchy
+    - pip install: Package installation with dependency analysis
+    - pip uninstall: Package removal with hierarchy awareness
+
+    All other commands are passed through directly to uv.
+    """
+    # Show huv help for --help or -h
+    if len(sys.argv) >= 2 and sys.argv[1] in ["--help", "-h"]:
+        print(__doc__.strip())
+        return
+
+    huv = HierarchicalUV()
+
+    # Check if this is a huv-specific command that needs special handling
+    if len(sys.argv) >= 2:
+        if sys.argv[1] == "venv":
+            # Use dynamic argument parser to handle all uv venv options
+            try:
+                parser = DynamicArgumentParser(huv.uv_executable)
+                args = sys.argv[2:]  # Skip 'huv' and 'venv'
+
+                # Handle help requests
+                if "--help" in args or "-h" in args:
+                    help_output = parser._get_uv_help_output()
+                    # Inject our --parent option into the help
+                    help_lines = help_output.split("\n")
+                    for i, line in enumerate(help_lines):
+                        if line.strip().startswith("Options:"):
+                            help_lines.insert(i + 1, "      --parent <PARENT>")
+                            help_lines.insert(
+                                i + 2,
+                                "          Parent virtual environment path for hierarchy",
+                            )
+                            break
+                    print("\n".join(help_lines))
+                    return
+
+                parsed_args = parser.parse_args(args)
+
+                if not parsed_args.path:
+                    print("Error: venv command requires a path argument")
+                    return
+
+                venv_path = parsed_args.path
+                parent = getattr(parsed_args, "parent", None)
+
+                # Collect all uv arguments (both known and unknown) for passthrough
+                remaining_uv_args = []
+
+                # Add known arguments (excluding huv-specific ones)
+                for attr_name in vars(parsed_args):
+                    if attr_name in ["path", "parent", "unknown_args"]:
+                        continue
+                    value = getattr(parsed_args, attr_name)
+                    if value is not None and value is not False:
+                        # Convert back to command line format
+                        flag = "--" + attr_name.replace("_", "-")
+                        if value is True:
+                            remaining_uv_args.append(flag)
+                        elif isinstance(value, list):
+                            for item in value:
+                                remaining_uv_args.extend([flag, str(item)])
+                        else:
+                            remaining_uv_args.extend([flag, str(value)])
+
+                # Add unknown arguments
+                if hasattr(parsed_args, "unknown_args"):
+                    remaining_uv_args.extend(parsed_args.unknown_args)
+
+                huv.create_venv(venv_path, parent, remaining_uv_args)
+
+            except Exception as e:
+                print(f"Error parsing arguments: {e}", file=sys.stderr)
+                print("Falling back to direct uv call...")
+                # Fallback: pass all arguments directly to uv
+                remaining_args = sys.argv[2:]  # Skip 'huv' and 'venv'
+                huv.passthrough_command(["venv"] + remaining_args)
+            return
+
+        elif (
+            sys.argv[1] == "pip"
+            and len(sys.argv) >= 3
+            and sys.argv[2] in ["install", "uninstall"]
+        ):
+            # Handle hierarchical pip commands
+            if sys.argv[2] == "install":
+                parser = argparse.ArgumentParser(
+                    description="Install packages with hierarchy awareness"
+                )
+                parser.add_argument("command")  # pip
+                parser.add_argument("subcommand")  # install
+                parser.add_argument("packages", nargs="*", help="Packages to install")
+
+                # Requirements and constraints
+                parser.add_argument(
+                    "-r",
+                    "--requirement",
+                    dest="requirements",
+                    action="append",
+                    help="Requirements files",
+                )
+                parser.add_argument(
+                    "-c",
+                    "--constraints",
+                    dest="constraints",
+                    action="append",
+                    help="Constraint files",
+                )
+
+                # Editable installs
+                parser.add_argument(
+                    "-e",
+                    "--editable",
+                    dest="editables",
+                    action="append",
+                    help="Editable packages",
+                )
+
+                # Extras
+                parser.add_argument(
+                    "--extra",
+                    dest="extras",
+                    action="append",
+                    help="Include optional dependencies",
+                )
+                parser.add_argument(
+                    "--all-extras",
+                    action="store_true",
+                    help="Include all optional dependencies",
+                )
+
+                # Upgrade options
+                parser.add_argument(
+                    "-U",
+                    "--upgrade",
+                    action="store_true",
+                    help="Allow package upgrades",
+                )
+                parser.add_argument(
+                    "-P",
+                    "--upgrade-package",
+                    dest="upgrade_packages",
+                    action="append",
+                    help="Allow upgrades for specific packages",
+                )
+
+                # Index options
+                parser.add_argument(
+                    "-i",
+                    "--index-url",
+                    dest="index_url",
+                    help="Base URL of Python Package Index",
+                )
+                parser.add_argument(
+                    "--extra-index-url",
+                    dest="extra_index_urls",
+                    action="append",
+                    help="Extra URLs of package indexes",
+                )
+                parser.add_argument(
+                    "-f",
+                    "--find-links",
+                    dest="find_links",
+                    action="append",
+                    help="Look for archives at this URL or path",
+                )
+                parser.add_argument(
+                    "--no-index", action="store_true", help="Ignore package index"
+                )
+
+                # Installation options
+                parser.add_argument(
+                    "--user", action="store_true", help="Install to user directory"
+                )
+                parser.add_argument(
+                    "--target",
+                    dest="target",
+                    help="Install packages into specified directory",
+                )
+                parser.add_argument(
+                    "--prefix", dest="prefix", help="Installation prefix"
+                )
+
+                # Build options
+                parser.add_argument(
+                    "--no-deps",
+                    action="store_true",
+                    help="Don't install package dependencies",
+                )
+                parser.add_argument(
+                    "--no-build",
+                    action="store_true",
+                    help="Don't build source distributions",
+                )
+                parser.add_argument(
+                    "--no-binary",
+                    dest="no_binary",
+                    action="append",
+                    help="Don't use pre-built wheels",
+                )
+                parser.add_argument(
+                    "--only-binary",
+                    dest="only_binary",
+                    action="append",
+                    help="Only use pre-built wheels",
+                )
+
+                # Other common options
+                parser.add_argument(
+                    "--force-reinstall",
+                    "--reinstall",
+                    action="store_true",
+                    help="Reinstall all packages",
+                )
+                parser.add_argument(
+                    "--require-hashes",
+                    action="store_true",
+                    help="Require a matching hash for each requirement",
+                )
+
+                args, unknown_args = parser.parse_known_args()
+                huv.pip_install(args.packages, unknown_args, args)
+                return
+
+            elif sys.argv[2] == "uninstall":
+                parser = argparse.ArgumentParser(
+                    description="Uninstall packages with hierarchy awareness"
+                )
+                parser.add_argument("command")  # pip
+                parser.add_argument("subcommand")  # uninstall
+                parser.add_argument("packages", nargs="+", help="Packages to uninstall")
+                args, unknown_args = parser.parse_known_args()
+                huv.pip_uninstall(args.packages, unknown_args)
+                return
+
+    # For all other commands, pass through to uv
+    # Remove the script name and pass everything else
+    if len(sys.argv) > 1:
+        huv.passthrough_command(sys.argv[1:])
+    else:
+        # No arguments - show uv help
+        huv.passthrough_command(["--help"])
+
+
+if __name__ == "__main__":
+    main()
