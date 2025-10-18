@@ -1,0 +1,53 @@
+# Include documentation
+include README.md
+include LICENSE
+include CHANGELOG.md
+include CONTRIBUTING.md
+include PHASE2_README.md
+
+# Include configuration files
+include pyproject.toml
+include setup.py
+
+# Include examples
+recursive-include examples *.py *.yaml *.json *.md
+
+# Include documentation
+recursive-include docs *.md *.rst *.txt
+
+# Include tests
+recursive-include tests *.py *.yaml *.json
+
+# Include source code
+recursive-include src *.py
+
+# Include data files
+recursive-include src/llm_dispatcher *.json *.yaml *.csv
+
+# Exclude unnecessary files
+exclude *.pyc
+exclude *.pyo
+exclude *.pyd
+exclude __pycache__
+exclude .git*
+exclude .DS_Store
+exclude *.egg-info
+exclude .coverage
+exclude .pytest_cache
+exclude .flake8_cache
+exclude .tox
+exclude .venv
+exclude venv
+exclude env
+exclude .env
+exclude *.log
+exclude *.tmp
+exclude *.temp
+
+# Exclude development files
+exclude .pre-commit-config.yaml
+exclude .github/
+exclude .vscode/
+exclude .idea/
+exclude *.iml
+exclude .editorconfig

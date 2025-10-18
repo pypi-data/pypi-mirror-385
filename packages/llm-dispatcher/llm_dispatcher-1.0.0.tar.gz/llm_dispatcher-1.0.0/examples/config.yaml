@@ -1,0 +1,109 @@
+# LLM-Dispatcher Configuration Example
+# This file demonstrates how to configure LLM-Dispatcher with various options
+
+# Provider configurations
+providers:
+  openai:
+    name: "openai"
+    api_key: "${OPENAI_API_KEY}" # Use environment variable
+    enabled: true
+    models:
+      - "gpt-4"
+      - "gpt-4-turbo"
+      - "gpt-3.5-turbo"
+    max_requests_per_minute: 60
+    timeout_seconds: 30
+    retry_attempts: 3
+    retry_delay: 1.0
+
+  anthropic:
+    name: "anthropic"
+    api_key: "${ANTHROPIC_API_KEY}"
+    enabled: true
+    models:
+      - "claude-3-opus"
+      - "claude-3-sonnet"
+      - "claude-3-haiku"
+    max_requests_per_minute: 50
+    timeout_seconds: 30
+    retry_attempts: 3
+    retry_delay: 1.0
+
+  google:
+    name: "google"
+    api_key: "${GOOGLE_API_KEY}"
+    enabled: true
+    models:
+      - "gemini-2.5-pro"
+      - "gemini-2.5-flash"
+      - "gemini-1.5-pro"
+    max_requests_per_minute: 100
+    timeout_seconds: 30
+    retry_attempts: 3
+    retry_delay: 1.0
+
+# Switching rules and optimization
+switching_rules:
+  # Task-specific routing
+  task_routing:
+    text_generation: ["openai", "anthropic", "google"]
+    code_generation: ["anthropic", "openai", "google"]
+    reasoning: ["openai", "anthropic", "google"]
+    math: ["openai", "anthropic", "google"]
+    vision_analysis: ["openai", "anthropic", "google"]
+    audio_transcription: ["openai", "google"]
+    structured_output: ["openai", "anthropic"]
+    function_calling: ["openai", "anthropic"]
+
+  # Optimization strategy
+  optimization_strategy: "balanced" # performance, cost, speed, reliability, balanced
+
+  # Performance thresholds
+  min_performance_score: 0.5
+  max_latency_ms: 5000
+  max_cost_per_request: 0.10
+
+  # Fallback configuration
+  fallback_strategy: "performance_priority" # performance_priority, cost_priority, speed_priority, reliability_priority
+  max_fallback_attempts: 3
+  fallback_enabled: true
+
+  # Caching configuration
+  enable_caching: true
+  cache_ttl_seconds: 3600
+  max_cache_size: 1000
+
+  # Monitoring configuration
+  enable_monitoring: true
+  performance_window_hours: 24
+  alert_thresholds:
+    latency_ms: 5000
+    success_rate: 0.95
+    cost_per_request: 0.10
+
+  # Budget limits
+  daily_budget: 10.0
+  monthly_budget: 300.0
+  budget_alert_threshold: 0.8
+
+# Global settings
+default_provider: "openai"
+default_model: "gpt-4"
+log_level: "INFO"
+log_file: "llm-dispatcher.log"
+
+# Performance settings
+enable_async: true
+max_concurrent_requests: 10
+request_timeout: 30
+
+# Data persistence
+data_dir: "~/.llm-dispatcher"
+enable_persistence: true
+backup_interval_hours: 24
+
+# Advanced settings
+custom_metrics: {}
+experimental_features:
+  auto_scaling: false
+  load_balancing: false
