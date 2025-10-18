@@ -1,0 +1,110 @@
+[project]
+name = "generic-repo"
+version = "2.0.7"
+description = "A powerful, production-ready Python package for DynamoDB operations with repository pattern (sync and async)"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "Subrat", email = "06.subrata@gmail.com" }]
+maintainers = [{ name = "Subrat", email = "06.subrata@gmail.com" }]
+keywords = [
+    "dynamodb",
+    "aws",
+    "repository",
+    "database",
+    "nosql",
+    "boto3",
+    "orm",
+    "data-access",
+    "crud",
+    "batch-operations",
+    "async",
+    "asyncio",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Topic :: Database",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Operating System :: OS Independent",
+    "Typing :: Typed",
+    "Framework :: AsyncIO",
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.1.0",
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "pytest-mock>=3.10.0",
+    "pytest-asyncio>=0.21.0",
+    "mypy>=1.0.0",
+    "bandit>=1.7.0",
+    "types-boto3>=1.0.0",
+    "build>=0.10.0",
+    "twine>=4.0.0",
+]
+test = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "pytest-mock>=3.10.0",
+    "pytest-asyncio>=0.21.0",
+]
+docs = ["sphinx>=5.0.0", "sphinx-rtd-theme>=1.2.0", "myst-parser>=0.18.0"]
+
+[project.urls]
+Homepage = "https://github.com/subratamal/generic-repo"
+Repository = "https://github.com/subratamal/generic-repo.git"
+Documentation = "https://github.com/subratamal/generic-repo/wiki"
+Changelog = "https://github.com/subratamal/generic-repo/blob/main/CHANGELOG.md"
+"Bug Tracker" = "https://github.com/subratamal/generic-repo/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build]
+package-dir = "src"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/generic_repo"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/generic_repo/*.py", "README.md", "LICENSE", "CHANGELOG.md"]
+exclude = ["*egg-info*"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+# Enable linters
+lint.select = ["E", "F", "I", "W"]
+lint.ignore = ["E501"]
+
+# Configure isort rules
+lint.isort.known-first-party = ["src"]
+
+# Configure formatter
+format.quote-style = "single"
+format.indent-style = "space"
+format.line-ending = "auto"
+format.skip-magic-trailing-comma = false
+
+# Exclude directories
+exclude = [
+    ".git",
+    ".venv",
+    "venv",
+    "__pycache__",
+    "build",
+    "dist",
+    "node_modules",
+]
