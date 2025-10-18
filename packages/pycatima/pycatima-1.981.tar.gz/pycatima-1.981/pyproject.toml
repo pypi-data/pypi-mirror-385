@@ -1,0 +1,31 @@
+[build-system]
+requires = [
+    "scikit-build-core[pyproject]>=0.2.0",
+    "pybind11",
+]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "pycatima"
+description = "Python interface to CATIMA library"
+version = "1.981"
+readme = {file = "README.md", content-type = "text/markdown"}
+authors = [
+    {name = "Andrej Prochazka", email = "hrocho@vodacionline.sk"},
+]
+maintainers = [
+    {name = "Angus Hollands", email = "goosey15@gmail.com"},
+]
+requires-python = ">=3.8"
+
+[tool.scikit-build]
+minimum-version = "0.2.1"
+build-dir = "build/{cache_tag}"
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[tool.cibuildwheel]
+test-command = "python {project}/tests/test.py"
+test-extras = ["test"]
+build-verbosity = 1
