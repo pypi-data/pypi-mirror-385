@@ -1,0 +1,51 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "El dispositivo ya est\u00e1 configurado"
+        },
+        "error": {
+            "cannot_connect": "No se pudo conectar",
+            "invalid_auth": "Autenticaci\u00f3n no v\u00e1lida",
+            "timeout_connect": "Tiempo de espera agotado mientras se establec\u00eda la conexi\u00f3n",
+            "unknown": "Error inesperado"
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "api_token": "Token API",
+                    "url": "URL",
+                    "verify_ssl": "Verificar el certificado SSL"
+                },
+                "data_description": {
+                    "api_token": "El token de acceso a la API para autenticarse con Portainer",
+                    "url": "La URL, incluido el puerto, de tu instancia de Portainer",
+                    "verify_ssl": "Si se deben verificar los certificados SSL. Desact\u00edvalo solo si tienes un certificado autofirmado."
+                },
+                "description": "Puedes crear un token de acceso en la IU de Portainer. Ve a **Mi cuenta > Tokens de acceso** y selecciona **A\u00f1adir token de acceso**."
+            }
+        }
+    },
+    "device": {
+        "unknown_container": {
+            "name": "Contenedor desconocido"
+        }
+    },
+    "entity": {
+        "binary_sensor": {
+            "status": {
+                "name": "Estado"
+            }
+        }
+    },
+    "exceptions": {
+        "cannot_connect": {
+            "message": "Se produjo un error al intentar conectarse a la instancia de Portainer: {error}"
+        },
+        "invalid_auth": {
+            "message": "Se produjo un error al intentar autenticarse: {error}"
+        },
+        "timeout_connect": {
+            "message": "Se produjo un tiempo de espera agotado al intentar conectarse a la instancia de Portainer: {error}"
+        }
+    }
+}

@@ -1,0 +1,51 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Ger\u00e4t ist bereits konfiguriert"
+        },
+        "error": {
+            "cannot_connect": "Verbindung fehlgeschlagen",
+            "invalid_auth": "Ung\u00fcltige Authentifizierung",
+            "timeout_connect": "Zeit\u00fcberschreitung beim Verbindungsaufbau",
+            "unknown": "Unerwarteter Fehler"
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "api_token": "API-Token",
+                    "url": "URL",
+                    "verify_ssl": "SSL-Zertifikat \u00fcberpr\u00fcfen"
+                },
+                "data_description": {
+                    "api_token": "Das API-Zugriffstoken zur Authentifizierung bei Portainer",
+                    "url": "Die URL, einschlie\u00dflich des Ports, deiner Portainer-Instanz",
+                    "verify_ssl": "Ob SSL-Zertifikate \u00fcberpr\u00fcft werden sollen. Deaktiviere diese Option nur, wenn du ein selbstsigniertes Zertifikat hast."
+                },
+                "description": "Du kannst ein Zugriffstoken in der Portainer-Benutzeroberfl\u00e4che erstellen. Gehe zu **My account > Access tokens** und w\u00e4hle **Add access token**"
+            }
+        }
+    },
+    "device": {
+        "unknown_container": {
+            "name": "Unbekannter Container"
+        }
+    },
+    "entity": {
+        "binary_sensor": {
+            "status": {
+                "name": "Status"
+            }
+        }
+    },
+    "exceptions": {
+        "cannot_connect": {
+            "message": "Beim Versuch, eine Verbindung zur Portainer-Instanz herzustellen, ist ein Fehler aufgetreten: {error}"
+        },
+        "invalid_auth": {
+            "message": "Beim Versuch der Authentifizierung ist ein Fehler aufgetreten: {error}"
+        },
+        "timeout_connect": {
+            "message": "Beim Versuch, eine Verbindung zur Portainer-Instanz herzustellen, ist eine Zeit\u00fcberschreitung aufgetreten: {error}"
+        }
+    }
+}

@@ -1,0 +1,51 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Seade on juba h\u00e4\u00e4lestatud"
+        },
+        "error": {
+            "cannot_connect": "\u00dchendamine nurjus",
+            "invalid_auth": "Tuvastamine nurjus",
+            "timeout_connect": "\u00dchenduse loomise ajal\u00f5pp",
+            "unknown": "Ootamatu t\u00f5rge"
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "api_token": "API v\u00f5ti",
+                    "url": "URL",
+                    "verify_ssl": "Kontrolli SSL sertifikaati"
+                },
+                "data_description": {
+                    "api_token": "API juurdep\u00e4\u00e4suluba Portaineriga tuvastamiseks",
+                    "url": "Portaineri eksemplari URL koos pordiga",
+                    "verify_ssl": "Kas SSL-sertifikaate kontrollida? Keela ainult siis, kui sul on iseallkirjastatud sertifikaat."
+                },
+                "description": "Juurdep\u00e4\u00e4sut\u00f5endi saad luua Portaineri kasutajaliideses. Mine jaotisse **Minu konto > Juurdep\u00e4\u00e4sut\u00f5endid** ja vali **Lisa juurdep\u00e4\u00e4suluba**"
+            }
+        }
+    },
+    "device": {
+        "unknown_container": {
+            "name": "Tundmatu konteiner"
+        }
+    },
+    "entity": {
+        "binary_sensor": {
+            "status": {
+                "name": "Olek"
+            }
+        }
+    },
+    "exceptions": {
+        "cannot_connect": {
+            "message": "Portaineri eksemplariga \u00fchenduse loomisel ilmnes t\u00f5rge: {error}"
+        },
+        "invalid_auth": {
+            "message": "Autentimisel ilmnes t\u00f5rge: {error}"
+        },
+        "timeout_connect": {
+            "message": "Portaineri eksemplariga \u00fchenduse loomisel ilmnes ajal\u00f5pp: {error}"
+        }
+    }
+}
