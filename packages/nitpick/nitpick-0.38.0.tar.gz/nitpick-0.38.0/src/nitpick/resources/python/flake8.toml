@@ -1,0 +1,28 @@
+[nitpick.meta]
+name = "Flake8"
+url = "https://github.com/PyCQA/flake8"
+
+["setup.cfg".flake8]
+# http://www.pydocstyle.org/en/2.1.1/error_codes.html
+# Ignoring W503: https://github.com/python/black#line-breaks--binary-operators
+# Ignoring "D202 No blank lines allowed after function docstring": black inserts a blank line.
+ignore = "D107,D202,D203,D401,E203,E402,E501,W503"
+max-line-length = 120
+inline-quotes = "double"
+exclude = ".tox,build"
+
+# Nitpick recommends those plugins as part of the style, but doesn't install them automatically as before.
+# This way, the developer has the choice of overriding this style, instead of having lots of plugins installed
+# without being asked.
+[[".pre-commit-config.yaml".repos]]
+repo = "https://github.com/PyCQA/flake8"
+
+[[".pre-commit-config.yaml".repos.hooks]]
+id = "flake8"
+additional_dependencies = ["flake8-blind-except", "flake8-bugbear", "flake8-comprehensions", "flake8-debugger", "flake8-docstrings", "flake8-isort", "flake8-polyfill", "flake8-pytest", "flake8-quotes", "flake8-typing-imports", "yesqa"]
+
+[".codeclimate.yml".plugins.pep8]  # https://docs.codeclimate.com/docs/pep8 PEP8 already being checked by flake8 plugins on pre-commit
+enabled = false
+
+[nitpick.files."setup.cfg"]
+comma_separated_values = ["flake8.ignore", "flake8.exclude"]
