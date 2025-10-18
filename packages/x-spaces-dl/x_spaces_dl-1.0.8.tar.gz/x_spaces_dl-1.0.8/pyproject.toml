@@ -1,0 +1,94 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "x-spaces-dl"
+version = "1.0.8"
+description = "A powerful command-line tool and Python library for downloading Twitter/X Spaces recordings"
+readme = "README.md"
+authors = [
+    {name = "pyvrma", email = "insightfulverma@gmail.com"}
+]
+license = {text = "MIT"}
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Multimedia :: Sound/Audio :: Capture/Recording",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+keywords = ["twitter", "x", "spaces", "download", "audio", "recording", "cli"]
+requires-python = ">=3.10"
+dependencies = [
+    "click>=8.3.0",
+    "mutagen>=1.47.0",
+    "python-dateutil>=2.9.0.post0",
+    "pyyaml>=6.0.3",
+    "requests>=2.32.5",
+    "rich>=14.2.0",
+    "tqdm>=4.67.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black>=25.9.0",
+    "flake8>=7.3.0",
+    "isort>=7.0.0",
+    "mypy>=1.18.2",
+    "pytest>=8.4.2",
+    "pytest-cov>=7.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/w3Abhishek/x-spaces-dl"
+Documentation = "https://github.com/w3Abhishek/x-spaces-dl#readme"
+Repository = "https://github.com/w3Abhishek/x-spaces-dl"
+Issues = "https://github.com/w3Abhishek/x-spaces-dl/issues"
+
+[project.scripts]
+x-spaces-dl = "xspacesdl.cli:main"
+xspacesdl = "xspacesdl.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.black]
+line-length = 100
+target-version = ['py38', 'py39', 'py310', 'py311', 'py312', 'py313']
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v --cov=xspacesdl --cov-report=term-missing"
+
+[dependency-groups]
+dev = [
+    "black>=24.8.0",
+    "flake8>=7.1.2",
+    "isort>=5.13.2",
+    "mypy>=1.14.1",
+    "pytest>=8.3.5",
+    "pytest-cov>=5.0.0",
+]
