@@ -1,0 +1,76 @@
+[project]
+name = "weather-app-feifei"
+version = "1.0.0"
+description = "基于MCP框架的天气查询应用，包含客户端和服务器组件"
+readme = "README.md"
+requires-python = ">=3.13"
+authors = [
+    { name = "Feifei", email = "feifei@example.com" },
+]
+license = { text = "MIT" }
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Atmospheric Science",
+    "Topic :: Internet :: WWW/HTTP :: Indexing/Search",
+]
+keywords = ["weather", "mcp", "api", "client-server", "openweather"]
+dependencies = [
+    "httpx>=0.28.1",  # 异步HTTP客户端
+    "mcp>=1.17.0",    # 微服务通信协议框架
+    "python-dotenv>=1.1.1",  # 环境变量管理
+    "openai>=1.30.0",  # OpenAI API客户端
+]
+
+[project.urls]
+Homepage = "https://github.com/feifei/weather-app"
+Repository = "https://github.com/feifei/weather-app"
+Documentation = "https://github.com/feifei/weather-app/blob/main/README.md"
+Issues = "https://github.com/feifei/weather-app/issues"
+
+[project.scripts]
+weather-server = "weather_app.weather_server:main"
+weather-client = "weather_app.weather_client:main"
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.black]
+line-length = 88
+target-version = ["py313"]
+
+[tool.ruff]
+select = ["E", "F", "W", "I"]
+ignore = ["E501"]
+target-version = "py313"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = ["-v", "--strict-markers"]
+
+[tool.coverage.run]
+source = ["src"]
+branch = true
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]
