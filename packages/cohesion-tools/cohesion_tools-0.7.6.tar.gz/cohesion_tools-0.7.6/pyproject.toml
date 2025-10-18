@@ -1,0 +1,109 @@
+[project]
+name = "cohesion-tools"
+version = "0.7.6"
+description = "A preprocessing and evaluation tools for Japanese cohesion analysis"
+license = "MIT"
+authors = [
+  {name = "Nobuhiro Ueda", email = "ueda-n127@hotmail.co.jp"},
+]
+maintainers = [
+  {name = "Nobuhiro Ueda", email = "ueda-n127@hotmail.co.jp"},
+]
+readme = "README.md"
+keywords = ["NLP", "Japanese"]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: Japanese",
+    "Operating System :: MacOS",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Text Processing",
+    "Topic :: Text Processing :: Linguistic",
+]
+requires-python = ">=3.9"
+dependencies = [
+    "rhoknp>=1.5.1",
+]
+
+[project.optional-dependencies]
+eval = [
+    'pandas>=2.3.0,<2.4.0',
+]
+
+[dependency-groups]
+dev = [
+    'ipython>=8.18.0,<8.19.0; python_version == "3.9"',
+    'ipython>=8.19.0; python_version == "3.10"',
+    'ipython>=9.6.0; python_version >= "3.11"',
+    "ipdb>=0.13.13",
+    "pytest>=8.0.0",
+    "pip>=24.2",
+]
+
+[build-system]
+requires = ["uv_build"]
+build-backend = "uv_build"
+
+[tool.uv]
+package = true
+
+[tool.ruff]
+line-length = 120
+indent-width = 4
+src = ["src"]
+target-version = "py39"  # The minimum Python version to target
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "PLR0912",  # Too many branches
+    "PLR0913",  # Too many arguments in function definition
+    "PLR0915",  # Too many statements
+    "E501",  # Line too long
+    "RUF001",  # String contains ambiguous `ノ` (KATAKANA LETTER NO). Did you mean `/` (SOLIDUS)?
+    "RUF002",  # Docstring contains ambiguous `，` (FULLWIDTH COMMA). Did you mean `,` (COMMA)?
+    "COM812",  # Trailing comma missing
+    "ANN002",  # Missing type annotation for `*args`
+    "ANN003",  # Missing type annotation for `**kwargs`
+    "FA100",  # Missing `from __future__ import annotations`, but uses `...`
+    "S101",  # Use of `assert` detected
+    "G004",  # Logging statement uses f-string
+    "FBT001",  # Boolean-typed positional argument in function definition
+    "FBT002",  # Boolean default positional argument in function definition
+    "EM101",  # Exception must not use a string literal, assign to variable first
+    "EM102",  # Exception must not use an f-string literal, assign to variable first
+    "TRY003",  # Avoid specifying long messages outside the exception class
+    "D",  # pydocstyle
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = [
+    "D104"  # Missing docstring in public package
+]
+"tests/*" = [
+    "D",  # pydocstyle
+    "INP001",  # File `...` is part of an implicit namespace package. Add an `__init__.py`
+]
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.mccabe]
+max-complexity = 20  # default: 10
+
+[tool.mypy]
+python_version = 3.9
