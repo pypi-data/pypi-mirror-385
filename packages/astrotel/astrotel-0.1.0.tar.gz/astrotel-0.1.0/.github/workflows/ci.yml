@@ -1,0 +1,45 @@
+name: 🐍 Python CI/CD
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+      - release/*
+    tags:
+      - "v*" # e.g., v1.0.0
+  pull_request:
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  lint:
+    name: 🧹 Lint
+    uses: ./.github/workflows/_lint.yml
+    with:
+      working-directory: .
+      python-version: "3.12"
+
+  test:
+    name: ✅ Tests
+    uses: ./.github/workflows/_test.yml
+    needs: lint
+    with:
+      working-directory: .
+      python-version: "3.12"
+
+  build:
+    name: 📦 Build
+    uses: ./.github/workflows/_build.yml
+    needs: test
+    with:
+      working-directory: .
+      python-version: "3.12"
+
+  release:
+    # if: github.ref == 'refs/heads/main'
+    name: 🚀 Release
+    uses: ./.github/workflows/_release.yml
+    needs: build
