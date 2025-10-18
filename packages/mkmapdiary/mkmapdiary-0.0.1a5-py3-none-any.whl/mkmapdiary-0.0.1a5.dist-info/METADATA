@@ -1,0 +1,67 @@
+Metadata-Version: 2.4
+Name: mkmapdiary
+Version: 0.0.1a5
+Summary: A travel journal generator
+Project-URL: Documentation, https://bytehexe.github.io/mkmapdiary/
+Project-URL: Issues, https://github.com/bytehexe/mkmapdiary/issues
+Project-URL: Source, https://github.com/bytehexe/mkmapdiary
+Author-email: Janna Hopp <hopp.janna@gmail.com>
+License-Expression: PolyForm-Noncommercial-1.0.0
+License-File: LICENSE.txt
+Classifier: Development Status :: 4 - Beta
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Programming Language :: Python :: Implementation :: PyPy
+Requires-Python: >=3.8
+Requires-Dist: click
+Requires-Dist: doit
+Requires-Dist: gpxpy
+Requires-Dist: hdbscan
+Requires-Dist: identify
+Requires-Dist: imageio
+Requires-Dist: jsonschema
+Requires-Dist: libsass
+Requires-Dist: lxml
+Requires-Dist: mkdocs
+Requires-Dist: mkdocs-glightbox
+Requires-Dist: mkdocs-material
+Requires-Dist: ollama
+Requires-Dist: pillow
+Requires-Dist: pydantic
+Requires-Dist: pydub
+Requires-Dist: pyexiftool
+Requires-Dist: pyyaml
+Requires-Dist: rawpy
+Requires-Dist: requests
+Requires-Dist: tabulate
+Provides-Extra: all
+Requires-Dist: openai-whisper; extra == 'all'
+Provides-Extra: transcription
+Requires-Dist: openai-whisper; extra == 'transcription'
+Description-Content-Type: text/markdown
+
+# mkmapdiary
+
+[![PyPI - Version](https://img.shields.io/pypi/v/mkmapdiary.svg)](https://pypi.org/project/mkmapdiary)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/mkmapdiary.svg)](https://pypi.org/project/mkmapdiary)
+
+-----
+
+A travel journal generator.
+
+## Installation
+
+```console
+pipx install mkmapdiary[all]
+```
+
+## License
+
+`mkmapdiary` is distributed under the terms of the [PolyForm Noncommercial License 1.0.0](https://polyformproject.org/licenses/noncommercial/1.0.0/) license.
+
+> Required Notice: Copyright Janna Hopp (https://github.com/bytehexe)

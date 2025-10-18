@@ -1,0 +1,11 @@
+# {{ home_title }}
+
+## {{ gallery_title }}
+
+<div id="photo_gallery" markdown>
+{%- for item in grid_items -%}
+![](assets/{{ item.name }}){ height="200" width="200" }
+{%- endfor -%}
+</div>
+
+<div class="clear"></div>
