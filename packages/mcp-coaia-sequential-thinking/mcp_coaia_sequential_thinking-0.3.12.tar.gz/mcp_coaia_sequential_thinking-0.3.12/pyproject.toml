@@ -1,0 +1,77 @@
+[project]
+name = "mcp-coaia-sequential-thinking"
+version = "0.3.12"
+description = "CoAiA's Structural Core: Guiding Intelligent Agents with Foundational Creative Thinking"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+keywords = ["mcp", "ai", "coaia", "sequential-thinking","creative-orientation", "structural-thinking", "polycentric-lattice"]
+authors = [
+   { name = "Arben Ademi", email = "arben.ademi@tuta.io" }
+]
+dependencies = [
+   "mcp[cli]>=1.2.0",
+   "rich>=13.7.0",
+   "pyyaml>=6.0",
+   "portalocker",
+   "numpy",
+]
+
+[project.scripts]
+mcp-coaia-sequential-thinking = "mcp_coaia_sequential_thinking.wrapper:main"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=23.0.0",
+    "isort>=5.0.0",
+    "mypy>=1.0.0",
+]
+
+vis = [
+    "matplotlib>=3.5.0",
+    "numpy>=1.20.0",
+]
+
+web = [
+    "fastapi>=0.100.0",
+    "uvicorn>=0.20.0",
+    "pydantic>=2.0.0",
+]
+
+all = [
+    "sequential-thinking[dev,vis,web]",
+]
+
+[project.urls]
+Source = "https://github.com/miadisabelle/mcp-coaia-sequential-thinking"
+
+[tool.hatch.build.targets.wheel]
+packages = ["mcp_coaia_sequential_thinking"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+
+[tool.black]
+line-length = 100
+target-version = ['py310']
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.mypy]
+python_version = "0.3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
