@@ -1,0 +1,11 @@
+[console_scripts]
+sync-pre-commit-uv = sync_pre_commit_lock.uv:sync_pre_commit
+
+[gui_scripts]
+
+[pdm]
+pdm-sync-pre-commit-lock = sync_pre_commit_lock.pdm_plugin:register_pdm_plugin
+
+[poetry.application.plugin]
+poetry-sync-pre-commit-lock = sync_pre_commit_lock.poetry_plugin:SyncPreCommitLockPlugin
+
