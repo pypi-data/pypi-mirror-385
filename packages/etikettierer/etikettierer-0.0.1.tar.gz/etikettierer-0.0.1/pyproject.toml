@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "etikettierer"
+version = "0.0.1"
+description = "Core label and QR generation utilities with built-in printer support."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Enno Henn", email = "henn@ipfdd.de" }]
+requires-python = ">=3.8"
+
+dependencies = [
+    "Pillow>=8.0",
+    "qrcode>=7.3",
+    "zpl",
+    "brother-ql",
+    "pywin32>=305; sys_platform == 'win32'",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"etikettierer" = ["ipf-logo.ico"]
