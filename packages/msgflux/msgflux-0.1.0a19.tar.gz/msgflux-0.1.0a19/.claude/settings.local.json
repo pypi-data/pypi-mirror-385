@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(uv run --all-groups pytest tests/ --tb=no -q)",
+      "Bash(uv run:*)",
+      "Bash(timeout 10 uv run --all-groups pytest:*)",
+      "Bash(timeout 15 uv run --all-groups pytest:*)",
+      "Bash(timeout 20 uv run --all-groups pytest:*)",
+      "WebSearch",
+      "Bash(python3:*)",
+      "Bash(timeout 30 uv run --all-groups pytest:*)",
+      "Bash(find:*)",
+      "Bash(awk:*)",
+      "Bash(for file in src/msgflux/models/providers/*.py)",
+      "Bash(do echo \"=== $file ===\")",
+      "Bash(done)",
+      "Bash(mkdir:*)",
+      "Bash(tree:*)",
+      "Bash(npm install)",
+      "Bash(npm run build)",
+      "Bash(chmod:*)",
+      "Bash(npm install:*)",
+      "Bash(python:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
