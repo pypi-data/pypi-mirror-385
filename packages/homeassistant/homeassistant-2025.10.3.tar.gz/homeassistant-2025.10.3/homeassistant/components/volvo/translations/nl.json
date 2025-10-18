@@ -1,0 +1,252 @@
+{
+    "common": {
+        "pressure": "Druk"
+    },
+    "config": {
+        "abort": {
+            "already_configured": "Account is al geconfigureerd",
+            "already_in_progress": "De configuratie is momenteel al bezig",
+            "authorize_url_timeout": "Time-out bij het genereren van autorisatie-URL.",
+            "missing_configuration": "Integratie niet geconfigureerd. Raadpleeg de documentatie.",
+            "no_url_available": "Geen URL beschikbaar. Voor informatie over deze fout, [raadpleeg de documentatie]({docs_url})",
+            "oauth_error": "Ongeldige tokengegevens ontvangen.",
+            "oauth_failed": "Fout bij het verkrijgen van toegangstoken.",
+            "oauth_timeout": "Time-out bij het verkrijgen OAuth token.",
+            "oauth_unauthorized": "OAuth autorisatiefout tijdens het verkrijgen van een toegangstoken.",
+            "reauth_successful": "Herauthenticatie geslaagd",
+            "reconfigure_successful": "Herconfiguratie was succesvol",
+            "user_rejected_authorize": "Accountkoppeling geweigerd: {error}"
+        },
+        "create_entry": {
+            "default": "Authenticatie geslaagd"
+        },
+        "error": {
+            "no_vehicles": "Geen voertuigen gevonden voor dit account."
+        },
+        "step": {
+            "api_key": {
+                "data": {
+                    "api_key": "API-sleutel"
+                },
+                "data_description": {
+                    "api_key": "Volvo ontwikkelaars API sleutel"
+                }
+            },
+            "pick_implementation": {
+                "title": "Kies een authenticatiemethode"
+            },
+            "reauth_confirm": {
+                "title": "Authenticatie is verlopen voor {name}"
+            }
+        }
+    },
+    "entity": {
+        "binary_sensor": {
+            "brake_fluid_level_warning": {
+                "name": "Remvloeistof"
+            },
+            "brake_light_center_warning": {
+                "name": "Middelste remlicht"
+            },
+            "brake_light_left_warning": {
+                "name": "Linker remlicht"
+            },
+            "brake_light_right_warning": {
+                "name": "Rechter remlicht"
+            },
+            "coolant_level_warning": {
+                "name": "Niveau koelvloeistof"
+            },
+            "daytime_running_light_left_warning": {
+                "name": "Dagrijverlichting links"
+            },
+            "daytime_running_light_right_warning": {
+                "name": "Dagrijverlichting rechts"
+            },
+            "door_front_left": {
+                "name": "Linker voordeur"
+            },
+            "door_front_right": {
+                "name": "Rechter voordeur"
+            },
+            "door_rear_left": {
+                "name": "Linker achterdeur"
+            },
+            "door_rear_right": {
+                "name": "Rechter achterdeur"
+            },
+            "engine_status": {
+                "name": "Status motor"
+            },
+            "fog_light_front_warning": {
+                "name": "Mistlicht voor"
+            },
+            "fog_light_rear_warning": {
+                "name": "Mistlicht achter"
+            },
+            "hazard_lights_warning": {
+                "name": "Alarmlichten"
+            },
+            "high_beam_left_warning": {
+                "name": "Grootlicht links"
+            },
+            "high_beam_right_warning": {
+                "name": "Grootlicht rechts"
+            },
+            "hood": {
+                "name": "Motorkap"
+            },
+            "low_beam_left_warning": {
+                "name": "Dimlicht links"
+            },
+            "low_beam_right_warning": {
+                "name": "Dimlicht rechts"
+            },
+            "oil_level_warning": {
+                "name": "Oliepeil"
+            },
+            "position_light_front_left_warning": {
+                "name": "Positielicht linksvoor"
+            },
+            "position_light_front_right_warning": {
+                "name": "Positielicht rechtsvoor"
+            },
+            "position_light_rear_left_warning": {
+                "name": "Positielicht linksachter"
+            },
+            "position_light_rear_right_warning": {
+                "name": "Positielicht rechtsachter"
+            },
+            "registration_plate_light_warning": {
+                "name": "Kentekenverlichting"
+            },
+            "reverse_lights_warning": {
+                "name": "Achteruitrijlichten"
+            },
+            "side_mark_lights_warning": {
+                "name": "Zijmarkeringslichten"
+            },
+            "sunroof": {
+                "name": "Zonnedak"
+            },
+            "tailgate": {
+                "name": "Achterklep"
+            },
+            "tank_lid": {
+                "name": "Tankdop"
+            },
+            "tire_front_left": {
+                "name": "Linker voorwiel"
+            },
+            "tire_front_right": {
+                "name": "Rechter voorwiel"
+            },
+            "tire_rear_left": {
+                "name": "Linker achterwiel"
+            },
+            "tire_rear_right": {
+                "name": "Rechter achterwiel"
+            },
+            "turn_indication_front_left_warning": {
+                "name": "Richtingaanwijzer linksvoor"
+            },
+            "turn_indication_front_right_warning": {
+                "name": "Richtingaanwijzer rechtsvoor"
+            },
+            "turn_indication_rear_left_warning": {
+                "name": "Richtingaanwijzer linksachter"
+            },
+            "turn_indication_rear_right_warning": {
+                "name": "Richtingaanwijzer rechtsachter"
+            },
+            "washer_fluid_level_warning": {
+                "name": "Ruitensproeiervloeistof"
+            },
+            "window_front_left": {
+                "name": "Raam linksvoor"
+            },
+            "window_front_right": {
+                "name": "Raam rechtsvoor"
+            },
+            "window_rear_left": {
+                "name": "Raam linksachter"
+            },
+            "window_rear_right": {
+                "name": "Raam rechtsachter"
+            }
+        },
+        "sensor": {
+            "battery_capacity": {
+                "name": "Accucapaciteit"
+            },
+            "battery_charge_level": {
+                "name": "Accuniveau"
+            },
+            "charger_connection_status": {
+                "name": "Verbindingsstatus oplader",
+                "state": {
+                    "connected": "Verbonden",
+                    "disconnected": "Verbroken"
+                }
+            },
+            "charging_current_limit": {
+                "name": "Oplaadlimiet"
+            },
+            "charging_power": {
+                "name": "Oplaadvermogen"
+            },
+            "charging_power_status": {
+                "name": "Oplaadstatus",
+                "state": {
+                    "fault": "Fout",
+                    "no_power_available": "Geen stroom",
+                    "power_available_but_not_activated": "Stroom beschikbaar",
+                    "providing_power": "Stroom beschikbaar"
+                }
+            },
+            "charging_status": {
+                "name": "Oplaadstatus",
+                "state": {
+                    "charging": "Opladen",
+                    "discharging": "Ontladen",
+                    "done": "Klaar",
+                    "error": "Fout",
+                    "idle": "Inactief",
+                    "scheduled": "Gepland"
+                }
+            },
+            "charging_type": {
+                "name": "Type oplader",
+                "state": {
+                    "ac": "Wisselspanning",
+                    "dc": "Gelijkspanning",
+                    "none": "Geen"
+                }
+            },
+            "distance_to_empty_battery": {
+                "name": "Afstand tot lege accu"
+            },
+            "distance_to_empty_tank": {
+                "name": "Afstand tot lege tank"
+            },
+            "distance_to_service": {
+                "name": "Afstand tot service"
+            },
+            "estimated_charging_time": {
+                "name": "Verwachtte oplaadtijd"
+            },
+            "odometer": {
+                "name": "Kilometerstand"
+            },
+            "target_battery_charge_level": {
+                "name": "Streefniveau accu"
+            },
+            "trip_meter_automatic": {
+                "name": "Automatische dagteller"
+            },
+            "trip_meter_manual": {
+                "name": "Handmatige dagteller"
+            }
+        }
+    }
+}

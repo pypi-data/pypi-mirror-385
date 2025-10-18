@@ -1,0 +1,51 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Prietaisas jau sukonfig\u016bruotas"
+        },
+        "error": {
+            "cannot_connect": "Nepavyko prisijungti",
+            "invalid_auth": "Neteisingas autentifikavimas",
+            "timeout_connect": "Baig\u0117si ry\u0161io u\u017emezgimo laikas",
+            "unknown": "Netik\u0117ta klaida"
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "api_token": "API prieigos raktas",
+                    "url": "URL",
+                    "verify_ssl": "Patikrinkite SSL sertifikat\u0105"
+                },
+                "data_description": {
+                    "api_token": "API prieigos raktas autentifikavimui naudojant Portainer",
+                    "url": "J\u016bs\u0173 Portainer egzemplioriaus URL, \u012fskaitant prievad\u0105",
+                    "verify_ssl": "Ar tikrinti SSL sertifikatus. I\u0161junkite tik tuo atveju, jei turite savaranki\u0161kai pasira\u0161yt\u0105 sertifikat\u0105."
+                },
+                "description": "Prieigos rakt\u0105 galite sukurti Portainer vartotojo s\u0105sajoje. Eikite \u012f **Mano paskyra > Prieigos raktai** ir pasirinkite **Prid\u0117ti prieigos rakt\u0105**."
+            }
+        }
+    },
+    "device": {
+        "unknown_container": {
+            "name": "Ne\u017einomas konteineris"
+        }
+    },
+    "entity": {
+        "binary_sensor": {
+            "status": {
+                "name": "B\u016bsena"
+            }
+        }
+    },
+    "exceptions": {
+        "cannot_connect": {
+            "message": "Bandant prisijungti prie Portainer egzemplioriaus, \u012fvyko klaida: {error}"
+        },
+        "invalid_auth": {
+            "message": "Bandant autentifikuotis \u012fvyko klaida: {error}"
+        },
+        "timeout_connect": {
+            "message": "Bandant prisijungti prie Portainer egzemplioriaus, baig\u0117si skirtasis laikas: {error}"
+        }
+    }
+}
