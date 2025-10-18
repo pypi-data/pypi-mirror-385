@@ -1,0 +1,211 @@
+{
+    "ProblemType": "Structural_Mechanics",
+    "AnalysisType": "DynamicsAnalysis",
+    "Dynamic_Analysis_Description": {
+        "Num_Modes": 1,
+        "Num_increments": 800,
+        "DeltaT": 0.1,
+        "Damping_ratio": 0.0
+    },
+    "Mesh": {
+        "ElemType": "FRAME02",
+        "Nodes": [
+            {
+                "x": 0.0,
+                "y": 0.0
+            },
+            {
+                "x": 0.1,
+                "y": 0.0
+            },
+            {
+                "x": 0.2,
+                "y": 0.0
+            },
+            {
+                "x": 0.3,
+                "y": 0.0
+            },
+            {
+                "x": 0.4,
+                "y": 0.0
+            },
+            {
+                "x": 0.5,
+                "y": 0.0
+            },
+            {
+                "x": 0.6,
+                "y": 0.0
+            },
+            {
+                "x": 0.7,
+                "y": 0.0
+            },
+            {
+                "x": 0.8,
+                "y": 0.0
+            },
+            {
+                "x": 0.85,
+                "y": 0.0
+            },
+            {
+                "x": 0.9,
+                "y": 0.0
+            },
+            {
+                "x": 0.95,
+                "y": 0.0
+            },
+            {
+                "x": 1.0,
+                "y": 0.0
+            }
+        ],
+        "Elements": [
+            {
+                "Connectivities": [
+                    1,
+                    2
+                ],
+                "MaterialId": 1
+            },
+            {
+                "Connectivities": [
+                    2,
+                    3
+                ],
+                "MaterialId": 1
+            },
+            {
+                "Connectivities": [
+                    3,
+                    4
+                ],
+                "MaterialId": 1
+            },
+            {
+                "Connectivities": [
+                    4,
+                    5
+                ],
+                "MaterialId": 1
+            },
+            {
+                "Connectivities": [
+                    5,
+                    6
+                ],
+                "MaterialId": 1
+            },
+            {
+                "Connectivities": [
+                    6,
+                    7
+                ],
+                "MaterialId": 1
+            },
+            {
+                "Connectivities": [
+                    7,
+                    8
+                ],
+                "MaterialId": 1
+            },
+            {
+                "Connectivities": [
+                    8,
+                    9
+                ],
+                "MaterialId": 1
+            },
+            {
+                "Connectivities": [
+                    9,
+                    10
+                ],
+                "MaterialId": 1
+            },
+            {
+                "Connectivities": [
+                    10,
+                    11
+                ],
+                "MaterialId": 1
+            },
+            {
+                "Connectivities": [
+                    11,
+                    12
+                ],
+                "MaterialId": 1
+            },
+            {
+                "Connectivities": [
+                    12,
+                    13
+                ],
+                "MaterialId": 1
+            }
+        ]
+    },
+    "Materials": [
+        {
+            "Young": 70e9,
+            "Density": 2500,
+            "Width": 0.04,
+            "Height": 0.004
+        }
+    ],
+    "Constraints": [
+        {
+            "Node": 1,
+            "Activation": [1, 1, 1],
+            "Values": [0.0, 0.0, 0.0]
+        },
+        {
+            "Node": 2,
+            "Activation": [1, 1, 1],
+            "Values": [0.0, 0.0, 0.0]
+        }
+    ],
+    "Masses": {
+        "Line_Mass": [
+            {
+                "Node_ini": 10,
+                "Node_end": 11,
+                "Mass_per_Length": 1.3
+            },
+            {
+                "Node_ini": 11,
+                "Node_end": 12,
+                "Mass_per_Length": 1.3
+            },
+            {
+                "Node_ini": 12,
+                "Node_end": 13,
+                "Mass_per_Length": 1.3
+            }
+        ]
+    },
+    "Dynamics_Loads": {
+        "Harmonic_Point_Loads": [
+            {
+                "Node": 13,
+                "Amplitudes": [ 0.0, 1000.0, 0.0],
+                "Load_Frequency(Hz)": 0.159
+            }
+        ]
+    },
+    "Postprocess": {
+        "Show_vibration_modes": true,
+        "Deformed_scale": 1.2,
+        "Show_dynamics_evolution": [
+            {
+                "Node": 13,
+                "Result": "Disp_y"
+            }
+        ]
+    }
+}
