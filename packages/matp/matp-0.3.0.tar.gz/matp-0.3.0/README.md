@@ -1,0 +1,152 @@
+# Matryoshka Protocol (MATP)
+
+**Invisible secure messaging with perfect steganography**
+
+## Features
+
+- **Perfect Invisibility**: Messages indistinguishable from normal web traffic (ε → 0)
+- **Production Crypto**: AES-256-GCM + X25519 + Double Ratchet
+- **Fast Ghost Mode**: 0.01ms overhead for invisibility
+- **Dead Drop Protocol**: No direct communication required
+- **Service Diversity**: Mimics GitHub, Stripe, AWS APIs
+- **Group Messaging**: Fractal Group Ratchet with O(1) encryption
+- **Invisible Groups**: Group messages hidden in normal traffic
+
+## Installation
+
+```bash
+pip install matp
+```
+
+## Quick Start
+
+### Basic 1-to-1 Messaging
+
+```python
+from matp import MatryoshkaProtocol
+
+# Initialize
+alice = MatryoshkaProtocol()
+bob = MatryoshkaProtocol()
+
+# Key exchange (X25519)
+alice_priv, alice_pub = MatryoshkaProtocol.generate_keypair()
+bob_priv, bob_pub = MatryoshkaProtocol.generate_keypair()
+
+shared_secret = MatryoshkaProtocol.derive_shared_secret(alice_priv, bob_pub)
+alice_session = MatryoshkaProtocol(key=shared_secret)
+bob_session = MatryoshkaProtocol(key=shared_secret)
+
+# Send invisible message
+msg = alice_session.send_message("Secret meeting at midnight")
+# Looks like: {"status": "success", "data": {...}}
+
+# Receive
+plaintext = bob_session.receive_message(msg)
+```
+
+### Ghost Mode (Perfect Invisibility)
+
+```python
+from matp import GhostMode
+
+key = b"shared_secret_key_32_bytes_long!"
+alice = GhostMode(key=key)
+bob = GhostMode(key=key)
+
+# Send hidden in GitHub API response
+cover = alice.send_invisible("Secret data", service="github")
+# Returns: {"id": 123456, "login": "user", "bio": "<encrypted>", ...}
+
+# Receive
+message = bob.receive_invisible(cover)
+```
+
+### Fast Ghost Mode (Speed + Invisibility)
+
+```python
+from matp import FastGhostMode
+
+key = b"benchmark_key_32_bytes_padding!!"
+alice = FastGhostMode(key=key)
+bob = FastGhostMode(key=key)
+
+# 0.01ms latency, perfect invisibility
+cover = alice.send("Fast secret message")
+message = bob.receive(cover)
+```
+
+### Dead Drop Protocol
+
+```python
+from matp import DeadDropProtocol
+
+key = b"dead_drop_key_32_bytes_padding!!"
+dead_drop = DeadDropProtocol(key=key)
+
+# Alice drops message (no direct connection to Bob)
+location = dead_drop.drop_message("secret_spot_42", "The eagle has landed")
+
+# Bob picks up later
+message = dead_drop.pickup_message(location)
+```
+
+### Group Messaging
+
+```python
+from matp import MatryoshkaGroupManager
+
+# Create users
+alice = MatryoshkaGroupManager("alice")
+bob = MatryoshkaGroupManager("bob")
+
+# Alice creates group
+group = alice.create_group("team", "Secret Team")
+
+# Bob joins
+invite = group.export_invite()
+bob.join_group(invite)
+
+# Alice sends invisible group message
+msg = alice.send_to_group("team", "Meeting at 3pm!")
+# Returns: {"status": "success", "data": {...}}  # Looks like normal API
+
+# Bob receives
+received = bob.receive_group_message(msg)
+print(received['message'])  # "Meeting at 3pm!"
+```
+
+## Security Properties
+
+- **Encryption**: AES-256-GCM (authenticated encryption)
+- **Key Exchange**: X25519 (elliptic curve Diffie-Hellman)
+- **Forward Secrecy**: Double ratchet protocol
+- **Steganographic Security**: ε < 0.001 (indistinguishable from real traffic)
+- **Plausible Deniability**: Messages look like normal API calls
+
+## Performance
+
+| Mode | Latency | Throughput | Invisibility |
+|------|---------|------------|--------------|
+| Standard | ~2ms | 500 msg/s | ε < 0.01 |
+| Fast Ghost | ~0.01ms | 160K msg/s | ε < 0.001 |
+
+## Use Cases
+
+- Secure messaging in restrictive environments
+- Covert communication channels
+- Privacy-preserving protocols
+- Research in steganography
+
+## License
+
+Apache 2.0
+
+## Author
+
+Sangeet Sharma
+
+## Links
+
+- [GitHub](https://github.com/sangeet01/matp)
+- [Documentation](https://github.com/sangeet01/matp/tree/main/docs)
