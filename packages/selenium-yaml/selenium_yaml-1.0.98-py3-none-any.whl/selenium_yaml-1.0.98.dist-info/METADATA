@@ -1,0 +1,55 @@
+Metadata-Version: 2.4
+Name: selenium-yaml
+Version: 1.0.98
+Summary: Selenium bots using YAML
+Home-page: https://github.com/wigeria/selenium-yaml-core
+Author: Abhishek Verma
+Author-email: wigeriaaeriag@gmail.com
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Software Development :: Testing
+Classifier: Topic :: Software Development :: Libraries :: Application Frameworks
+Classifier: Development Status :: 3 - Alpha
+Classifier: Natural Language :: English
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: selenium==4.27.1
+Requires-Dist: Jinja2==2.11.3
+Requires-Dist: loguru
+Requires-Dist: PyYAML==6.0
+Requires-Dist: requests
+Requires-Dist: markupsafe==2.0.1
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: license-file
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+# selenium-yaml-core
+Selenium bots using YAML
+
+## Documentation
+
+For in-depth documentation, head over to our [GH-Pages site](https://wigeria.github.io/selenium-yaml-core/).
+
+## Installation
+
+```
+pip install selenium-yaml
+```
+
+## Running the CLI
+
+The CLI can be run directly by using:
+
+```run_sally.py --yaml-file=path/to/bot/yaml```
+
+<sub><sup>Use the `--help` argument for details on the CLI!</sup></sub>
