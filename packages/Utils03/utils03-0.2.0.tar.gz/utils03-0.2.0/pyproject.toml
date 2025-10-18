@@ -1,0 +1,16 @@
+[project]
+name = "Utils03"
+version = "0.2.0"
+description = "An library that contains a lot of utilities"
+authors = [{ name="Reyzer", email="reyzervt@gmail.com" }]
+readme = "README.md"
+license = { text = "MIT" }
+dependencies = ["requests"]
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["Utils03*"]
