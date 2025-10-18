@@ -1,0 +1,12 @@
+#include "{{ header }}"
+
+{% for propName, propParams in enum.properties.items() %}
+{{ propParams.type }} _{{ propName }}{{ enum.name }}[] = {
+	{%- for entryName, entryProps in enum.entries.items() %}
+	{{ renderEntryValue(
+		entryName,
+		entryProps.get(propName, propParams.default)
+	) }},
+	{%- endfor %}
+};
+{% endfor %}
