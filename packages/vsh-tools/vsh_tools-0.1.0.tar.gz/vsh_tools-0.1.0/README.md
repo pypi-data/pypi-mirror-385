@@ -1,0 +1,55 @@
+# Vector Spherical Harmonics (VSH) analysis toolkit
+
+---
+
+A modern Python package for vector spherical harmonics (VSH) analysis — primarily for astrometric and celestial reference frame studies (e.g., Gaia, VLBI).
+
+Reference:
+    [Mignard & Klioner (2012), A&A 547, A59](https://ui.adsabs.harvard.edu/link_gateway/2012A&A...547A..59M)
+    doi:10.1051/0004-6361/201219927
+
+
+## Package structure
+
+```
+vsh_tools/
+ ├── basis.py           # scalar & vector spherical harmonic bases
+ ├── bootstrap.py       # bootstrap confidence estimation
+ ├── diagnostics.py     # goodness-of-fit, residual diagnostics
+ ├── fit.py             # LSQ fitting interface (vsh_fit)
+ ├── glide.py           # glide decomposition, GA-related utilities
+ ├── legacy.py          # consolidated older workflow
+ ├── linalg.py          # linear algebra helpers
+ ├── metrics.py         # stats & chi² computations
+ ├── outliers.py        # outlier clipping
+ ├── power.py           # power spectrum and significance
+ ├── rgq.py             # rotation–glide–quadrupole functions
+ ├── scalar_basis.py    # scalar spherical harmonics
+ ├── significance.py    # significance of harmonics
+ ├── stats.py           # statistical utilities
+ └── transforms.py      # conversions between parameter representations
+
+```
+
+## Quick test
+
+```
+import numpy as np
+from vsh_tools.fit import vsh_fit
+from vsh_tools.rgq import vsh_func
+
+# true params: (g1,g2,g3,r1,r2,r3)
+p_true = np.array([30, 24, 12, 20, 30, 15])
+ra  = np.deg2rad(np.linspace(0, 360, 1000))
+dec = np.deg2rad(np.linspace(-90, 90, 1000))
+
+dra, ddec = vsh_func(ra, dec, p_true, l_max=1)
+dra_err = ddec_err = np.ones_like(dra)
+
+out = vsh_fit(dra, ddec, dra_err, ddec_err, np.rad2deg(ra), np.rad2deg(dec),
+              l_max=1, pos_in_rad=False, fit_type="full")
+print(out["pmt"])  # estimated coefficients
+```
+
+
+For any questions and comments, please contact me at [niu.liu@foxmail.com](niu.liu@foxmail.com).
