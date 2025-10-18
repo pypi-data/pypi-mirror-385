@@ -1,0 +1,155 @@
+Metadata-Version: 2.4
+Name: format-json
+Version: 0.1.1
+Summary: A CLI and pre-commit hook for formatting JSON with configurable trailing newline handling.
+Project-URL: Homepage, https://github.com/jsh9/format-json
+Project-URL: Repository, https://github.com/jsh9/format-json
+Project-URL: Issues, https://github.com/jsh9/format-json/issues
+Author: format-json maintainers
+License: MIT License
+        
+        Copyright (c) 2025 jsh9
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+        ----
+        
+        The majority of this project's data files and code files are copied/adopted
+        from https://github.com/pre-commit/pre-commit-hooks. Below is the original
+        license of pre-commit-hooks.
+        
+        ----
+        
+        Copyright (c) 2014 pre-commit dev team: Anthony Sottile, Ken Struys
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in
+        all copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+        THE SOFTWARE.
+License-File: LICENSE
+Keywords: cli,formatter,json,pre-commit
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Software Development :: Build Tools
+Classifier: Topic :: Utilities
+Requires-Python: >=3.10
+Provides-Extra: dev
+Requires-Dist: flake8-broken-line; extra == 'dev'
+Requires-Dist: flake8-clean-block; extra == 'dev'
+Requires-Dist: flake8-picky-parentheses; extra == 'dev'
+Requires-Dist: muff; extra == 'dev'
+Requires-Dist: mypy; extra == 'dev'
+Requires-Dist: pre-commit; extra == 'dev'
+Requires-Dist: pytest; extra == 'dev'
+Description-Content-Type: text/markdown
+
+# format-json
+
+`format-json` is a JSON formatter that ships both a standalone CLI and a
+pre-commit hook. It is adapted from the
+[`pretty-format-json`](https://github.com/pre-commit/pre-commit-hooks)
+pre-commit hook, with only one difference, as seen below.
+
+**Table of Contents:**
+
+<!--TOC-->
+
+- [1. How does `format-json` differs from `pretty-format-json`?](#1-how-does-format-json-differs-from-pretty-format-json)
+- [2. Why a separate project from `pretty-format-json`?](#2-why-a-separate-project-from-pretty-format-json)
+- [3. Usage](#3-usage)
+  - [3.1. As a command-line tool](#31-as-a-command-line-tool)
+  - [3.2. As a pre-commit hook](#32-as-a-pre-commit-hook)
+- [4. Instructions for Maintainers](#4-instructions-for-maintainers)
+
+<!--TOC-->
+
+## 1. How does `format-json` differs from `pretty-format-json`?
+
+| Feature                            | format-json | pretty-format-json |
+| ---------------------------------- | ----------- | ------------------ |
+| Config option for trailing newline | ✅          | ❌                 |
+
+## 2. Why a separate project from `pretty-format-json`?
+
+There are oftentimes practical reasons for JSON files to **not** have a
+trailing newline.
+
+But the maintainers of `pretty-format-json`
+[hard-coded a newline](https://github.com/pre-commit/pre-commit-hooks/blob/3fed74c572621f74eaffba6603801d153ffe5ce0/pre_commit_hooks/pretty_format_json.py#L30)
+at the end of the formatted JSON, and they
+[chose not to offer a configuration option for this](https://github.com/pre-commit/pre-commit-hooks/issues/1203).
+
+## 3. Usage
+
+### 3.1. As a command-line tool
+
+First, install it:
+
+```bash
+pip install format-json
+```
+
+Then, in the terminal, you can do something like:
+
+```bash
+format-json --autofix --no-eof-newline path/to/file.json
+```
+
+All command-line options from `pretty-format-json` are preserved, with the new
+`--no-eof-newline` flag layered on top.
+
+### 3.2. As a pre-commit hook
+
+Add the hook to your `.pre-commit-config.yaml`:
+
+```yaml
+- repo: https://github.com/jsh9/format-json
+  rev: <LATEST_VERSION>
+  hooks:
+    - id: format-json
+      args: [--autofix, --no-eof-newline]
+```
+
+(You can choose your own args.)
+
+## 4. Instructions for Maintainers
+
+- Run `pip install -e .` to install this project in the "editable" mode.
+- Run `pip install -r requirements.dev` to install developer dependencies.
+- Run `pytest` to execute the automated tests replicated from the upstream
+  project.
+- Use `tox` to exercise the full test matrix, linting, and formatting targets.
