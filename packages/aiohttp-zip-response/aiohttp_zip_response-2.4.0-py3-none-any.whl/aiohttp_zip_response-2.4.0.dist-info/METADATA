@@ -1,0 +1,79 @@
+Metadata-Version: 2.4
+Name: aiohttp-zip-response
+Version: 2.4.0
+Summary: A AIOHTTP response class streaming a directory as ZIP archive
+Project-URL: homepage, https://github.com/DoctorJohn/aiohttp-zip-response
+Project-URL: repository, https://github.com/DoctorJohn/aiohttp-zip-response
+Project-URL: documentation, https://github.com/DoctorJohn/aiohttp-zip-response
+Author-email: Jonathan Ehwald <github@ehwald.info>
+License: MIT
+License-File: LICENSE
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Web Environment
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Classifier: Topic :: Internet :: WWW/HTTP
+Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: <4.0,>=3.9
+Requires-Dist: aiohttp<4.0,>=3.9.5
+Requires-Dist: stream-zip<0.1.0,>=0.0.83
+Description-Content-Type: text/markdown
+
+# AIOHTTP ZIP Response
+
+[![Versions][versions-image]][versions-url]
+[![PyPI][pypi-image]][pypi-url]
+[![Codecov][codecov-image]][codecov-url]
+[![License][license-image]][license-url]
+
+[versions-image]: https://img.shields.io/pypi/pyversions/aiohttp-zip-response
+[versions-url]: https://github.com/DoctorJohn/aiohttp-zip-response/blob/main/pyproject.toml
+[pypi-image]: https://img.shields.io/pypi/v/aiohttp-zip-response
+[pypi-url]: https://pypi.org/project/aiohttp-zip-response/
+[codecov-image]: https://codecov.io/gh/DoctorJohn/aiohttp-zip-response/branch/main/graph/badge.svg
+[codecov-url]: https://codecov.io/gh/DoctorJohn/aiohttp-zip-response
+[license-image]: https://img.shields.io/pypi/l/aiohttp-zip-response
+[license-url]: https://github.com/DoctorJohn/aiohttp-zip-response/blob/main/LICENSE
+
+A AIOHTTP response class streaming the contents of a directory as a ZIP archive.
+Thanks to [stream-zip](https://github.com/uktrade/stream-zip/), this works **without storing the entire ZIP in memory or disk**.
+
+Generally, this package is meant to complement the existing `aiohttp.web.FileResponse` class which can be used to stream the contents of a single file.
+
+## Installation
+
+```bash
+pip install aiohttp-zip-response
+```
+
+## Usage
+
+```python
+from aiohttp import web
+from aiohttp_zip_response import ZipResponse
+
+
+async def handle_zip(request):
+    return ZipResponse('path/to/directory')
+
+
+app = web.Application()
+app.router.add_get('/zip', handle_zip)
+web.run_app(app)
+```
+
+## Caveats
+
+- The `Content-Length` header is not set because the size of the ZIP archive is not known in advance. This means clients such as browsers cannot display a download progress bar.
+- This package currently doesn't support streaming of symbolic links to directories.
