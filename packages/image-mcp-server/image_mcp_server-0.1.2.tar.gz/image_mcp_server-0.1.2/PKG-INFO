@@ -1,0 +1,79 @@
+Metadata-Version: 2.4
+Name: image-mcp-server
+Version: 0.1.2
+Summary: MCP server for image understanding using Alibaba Cloud's Qwen3-VL-Plus model
+Project-URL: Homepage, https://github.com/your-repo/image-mcp-server
+Project-URL: Repository, https://github.com/your-repo/image-mcp-server
+Project-URL: Documentation, https://github.com/your-repo/image-mcp-server/docs
+Project-URL: Bug Tracker, https://github.com/your-repo/image-mcp-server/issues
+Author-email: Image MCP Server Contributors <maintainers@example.com>
+Maintainer-email: Image MCP Server Contributors <maintainers@example.com>
+License: MIT
+License-File: LICENSE
+Keywords: ai,alibaba-cloud,analysis,dashscope,image,mcp,qwen,vl
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Multimedia :: Graphics
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.12
+Requires-Dist: fastmcp>=2.12.5
+Requires-Dist: httpx[socks]>=0.28.1
+Requires-Dist: openai>=2.5.0
+Requires-Dist: pillow>=12.0.0
+Requires-Dist: pydantic>=2.12.3
+Requires-Dist: python-dotenv>=1.1.1
+Requires-Dist: tenacity>=9.1.2
+Requires-Dist: typer>=0.19.2
+Description-Content-Type: text/markdown
+
+# Image MCP Server
+
+A Model Context Protocol (MCP) server for image understanding using Alibaba Cloud's Qwen3-VL-Plus model.
+
+## Quick Start
+
+### Installation
+
+```bash
+uvx image-mcp-server
+```
+
+### Configuration
+
+Set your DashScope API key:
+
+```bash
+export IMAGE_MCP_DASHSCOPE_API_KEY="your-api-key-here"
+```
+
+### Usage
+
+The server provides an `analyze_image` tool that can analyze images from URLs or base64 data.
+
+## Development
+
+```bash
+# Install in development mode
+uv pip install -e .
+
+# Run tests
+pytest
+
+# Lint code
+ruff check .
+
+# Format code
+black .
+isort .
+```
+
+## License
+
+MIT
