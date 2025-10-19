@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wxautold"
+version = "3.9.11.17.5"
+authors = [
+  { name="wxautold", email="wxautold@qq.com" }, 
+]
+description = "A wxauto package" 
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows"
+]
+dependencies = [
+    "comtypes",
+    "pywin32",
+"pyperclip",
+"Pillow",
+"psutil",
+"typing-extensions"
+]
+[tool.setuptools]
+license-files = ["LICENSE"]
