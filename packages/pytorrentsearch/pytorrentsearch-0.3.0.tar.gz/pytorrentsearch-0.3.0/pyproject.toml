@@ -1,0 +1,68 @@
+[project]
+name = "pytorrentsearch"
+dynamic = ["version"]
+description = "No distraction way to find torrents"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = []
+
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/lucasew/pytorrentsearch"
+Repository = "https://github.com/lucasew/pytorrentsearch"
+
+[project.scripts]
+pytorrentsearch = "pytorrentsearch.cli:main"
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "coverage",
+    "mypy",
+]
+
+[build-system]
+build-backend = "hatchling.build"
+requires = ["hatchling"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["pytorrentsearch"]
+
+[tool.hatch.version]
+path = "pytorrentsearch/VERSION"
+pattern = "^(?P<version>[^$]*)"
+
+[tool.ruff]
+line-length = 79
+target-version = "py39"
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "UP", # pyupgrade
+]
+ignore = [
+    "E203", # whitespace before ':'
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.mypy]
+ignore_missing_imports = true
+strict_optional = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --cov=pytorrentsearch --cov-report=xml --cov-report=html"
+
+[tool.coverage.run]
+source = ["pytorrentsearch"]
+omit = ["tests/*"]
