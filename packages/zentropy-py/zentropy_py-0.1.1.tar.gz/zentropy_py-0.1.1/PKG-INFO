@@ -1,0 +1,40 @@
+Metadata-Version: 2.4
+Name: zentropy-py
+Version: 0.1.1
+Summary: A simple client for Zentropy server
+Project-URL: Homepage, https://github.com/mailmug/zentropy-py
+Project-URL: Documentation, https://github.com/mailmug/zentropy-py#readme
+Project-URL: Repository, https://github.com/mailmug/zentropy-py
+Project-URL: Issues, https://github.com/mailmug/zentropy-py/issues
+Author-email: MailMug <info@mailmug.net>
+License: MIT
+Keywords: client,redis,tcp,zentropy,zig
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.8
+Provides-Extra: dev
+Requires-Dist: black>=23.0.0; extra == 'dev'
+Requires-Dist: build>=0.10.0; extra == 'dev'
+Requires-Dist: flake8>=6.0.0; extra == 'dev'
+Requires-Dist: isort>=5.12.0; extra == 'dev'
+Requires-Dist: mypy>=1.0.0; extra == 'dev'
+Requires-Dist: pytest-cov>=4.0.0; extra == 'dev'
+Requires-Dist: pytest-mock>=3.10.0; extra == 'dev'
+Requires-Dist: pytest>=7.0.0; extra == 'dev'
+Requires-Dist: twine>=4.0.0; extra == 'dev'
+Description-Content-Type: text/markdown
+
+# Zentropy Client
+
+Python client for the Zentropy key-value server.
+
+## Example
+
+```python
+from zentropy import Client
+
+z = Client(host='127.0.0.1', port=6383, password='')
+z.set('foo', 'bar')
+print(z.get('foo'))
+z.close()
