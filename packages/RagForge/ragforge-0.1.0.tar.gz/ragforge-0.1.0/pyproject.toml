@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=65.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "RagForge"
+version = "0.1.0"
+description = "A modular Retrieval-Augmented Generation (RAG) library integrating Vertex AI, OpenAI, and ChromaDB."
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+    { name = "Kusal Bandara", email = "gpbandarakusal@gmail.com" }
+]
+license = "MIT"
+license-files = ["LICENSE.md"]
+urls = { "Homepage" = "https://github.com/Pula99/ragify" }
+
+dependencies = [
+    "chromadb==0.6.0",
+    "google-cloud-aiplatform==1.120.0",
+    "langchain-google-vertexai==3.0.0",
+    "openai==2.5.0",
+    "protobuf==6.33.0",
+    "pytest==8.4.2",
+    "python-dotenv==1.1.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "isort",
+    "flake8",
+    "mypy"
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["ragify*"]
