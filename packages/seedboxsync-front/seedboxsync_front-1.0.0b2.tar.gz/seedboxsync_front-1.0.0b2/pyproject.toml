@@ -1,0 +1,85 @@
+[project]
+name = "seedboxsync-front"
+description = "The frontend for SeedboxSync."
+dynamic = ["version"]
+authors = [
+  { name = "Guillaume Kulakowski", email = "guillaume@kulakowski.fr" }
+]
+keywords = [
+  "seedbox",
+  "nas",
+  "sync",
+  "sftp",
+]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: System Administrators",
+  "Topic :: Internet",
+  "Programming Language :: Python :: 3",
+  "Environment :: Web Environment",
+]
+readme = "README.md"
+license-files = ["LICENSE"]
+license = "GPL-3.0-only"
+requires-python = ">=3.10"
+dependencies = [
+  "flask",
+  "Flask-Caching",
+  "Flask-Babel",
+  "flask-restx",
+  "pyyaml",
+  "peewee",
+  "seedboxsync>=3.3.0",
+]
+
+[project.urls]
+Home = "https://llaumgui.github.io/seedboxsync/"
+Documentation = "https://llaumgui.github.io/seedboxsync/"
+Source = "https://github.com/llaumgui/seedboxsync-front"
+
+[project.optional-dependencies]
+dev = [
+  "flake8",
+  "pytest",
+  "pytest-cov",
+  "coverage",
+  "flit",
+  "mypy",
+  "types-PyYAML",
+]
+
+[project.scripts]
+seedboxsync-front = "seedboxsync_front.app:app"
+
+[build-system]
+requires = ["flit_core<4"]
+build-backend = "flit_core.buildapi"
+
+[tool.flit.sdist]
+include = [
+  "seedboxsync_front/static/dist/**",
+]
+exclude = [
+  ".github/**",
+  "docker/**",
+  "screenshots/**",
+  ".dockerignore",
+  ".editorconfig",
+  ".flake8",
+  ".gitignore",
+  ".hadolint.yaml",
+  ".markdownlint.yaml",
+  "Dockerfile",
+  "Makefile",
+  "package.json",
+  "package-lock.json",
+  "sonar-project.properties",
+  "vite.config.js",
+]
+
+[tool.mypy]
+files = ["seedboxsync_front"]
+ignore_missing_imports = true
+strict = true
+show_error_codes = true
+pretty = true
