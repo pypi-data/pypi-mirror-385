@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "deeprehab-visualize"
+version = "0.1.0"
+description = "Visualization functions for DeepRehab pose data and analysis results"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "DeepRehab Team"}
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Healthcare Industry",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Image Processing",
+    "Topic :: Software Development :: Libraries :: Python Modules"
+]
+dependencies = [
+    "opencv-python>=4.5.0",
+    "numpy>=1.20.0",
+    "svgwrite>=1.4.0"
+]
+requires-python = ">=3.8"
+
+[project.urls]
+Homepage = "https://github.com/wenjiangbaobeiovo2005/Deeprehab-packge"
+Repository = "https://github.com/wenjiangbaobeiovo2005/Deeprehab-packge"
+Documentation = "https://github.com/wenjiangbaobeiovo2005/Deeprehab-packge#readme"
+"Bug Tracker" = "https://github.com/wenjiangbaobeiovo2005/Deeprehab-packge/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"*" = ["*.md"]
