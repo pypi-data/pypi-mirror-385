@@ -1,0 +1,74 @@
+Metadata-Version: 2.4
+Name: allscrape
+Version: 0.1.4
+Summary: Easy web scraping with built-in Cloudflare bypass
+Author: AllScrape Contributors & YiğitDEV
+Author-email: AllScrape Contributors <info@yigitdev.net>
+License: GPLv3
+Keywords: web-scraping,cloudflare-bypass,scraper,html-parser,web-scraper
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Classifier: Operating System :: OS Independent
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Internet :: WWW/HTTP
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: httpx>=0.24.0
+Requires-Dist: beautifulsoup4>=4.11.0
+Requires-Dist: lxml>=4.9.0
+Requires-Dist: trafilatura>=1.6.0
+Requires-Dist: cloudscraper>=1.2.71
+Requires-Dist: curl-cffi>=0.5.0
+Requires-Dist: playwright>=1.40.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.20.0; extra == "dev"
+Requires-Dist: black>=23.0; extra == "dev"
+Requires-Dist: flake8>=6.0; extra == "dev"
+Requires-Dist: mypy>=1.0; extra == "dev"
+Dynamic: author
+Dynamic: license-file
+Dynamic: requires-python
+
+# AllScrape
+
+[![License: GPLv3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.html)
+[![Python 3.8+](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/downloads/)
+
+AllScrape, Cloudflare ve diğer anti-bot korumaları otomatik olarak aşan Python web kaynağı kazıma kütüphanesidir.
+
+## Özellikler
+
+- 🚀 **Kolay Kullanım**: Sadece bir satır kodla web sayfası kazıyın
+- 🛡️ **Cloudflare Bypass**: Otomatik fallback mekanizmaları ile Cloudflare korumasını aşın
+- 📝 **Çoklu Format**: Text, Markdown, HTML formatlarında içerik çıkarın
+- 🤖 **LLM Optimized**: AI modellerine hazır içerik formatı
+- ⚡ **Async Support**: Async/await ile performanslı kazıma
+- 🔍 **Web Search**: DuckDuckGo ile web arama ve sonuçları kazıma
+
+## Kurulum
+
+```bash
+pip install allscrape
+```
+
+## Hızlı Başlangıç
+
+```python
+import allscrape
+
+result = allscrape.scrape("https://example.com")
+print(result["content"]["text"])
+print(result["metadata"]["title"])
+```
+
+## Lisans
+
+GPLv3 - Bkz. [LICENSE](LICENSE) dosyası
