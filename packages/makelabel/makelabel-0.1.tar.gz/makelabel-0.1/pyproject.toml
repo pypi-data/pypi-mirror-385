@@ -1,0 +1,30 @@
+[build-system]
+requires = ["flit_core >=3.11,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "makelabel"
+authors = [{name = "Julien Palard", email = "julien@palard.fr"}]
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+dynamic = ["version", "description"]
+dependencies = [
+    "pillow"
+]
+[project.scripts]
+makelabel = "makelabel:main"
+
+[project.urls]
+Home = "https://git.afpy.org/mdk/makelabel"
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "isort",
+]
+
+[tool.isort]
+profile = "black"
+
+[tool.black]
