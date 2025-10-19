@@ -1,0 +1,119 @@
+[project]
+name = "yuio"
+authors = [{name = "Tamika Nomara", email = "taminomara@gmail.com"}]
+description = "Lite and user-friendly CLI library"
+dynamic = ["version"]
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: User Interfaces",
+    "Topic :: System :: Logging",
+    "Intended Audience :: Developers",
+    "Environment :: Console",
+    "Typing :: Typed",
+]
+dependencies = ["typing-extensions>=4.13,<5"]
+
+[dependency-groups]
+dev = [
+    "pytest-cov==7.0.0",
+    {include-group = "test"},
+    {include-group = "lint"},
+    {include-group = "doc"},
+]
+test = [
+    "tox==4.30.3",
+    "pyright==1.1.406",
+    "pytest==8.4.2",
+    "sybil==9.2.0",
+    "PyYaml==6.0.3",
+    "toml==0.10.2",
+    "jsonschema==4.25.1",
+]
+doc = [
+    "sybil==9.2.0",
+    "furo==2025.9.25",
+    "sphinx_design==0.6.1",
+    "sphinx-vhs==1.2.0",
+]
+lint = [
+    "tox==4.30.3",
+    "black==25.1.0",
+    "isort==6.0.1",
+    "pre-commit==4.3.0",
+]
+
+[project.urls]
+Documentation = "https://yuio.readthedocs.io/"
+Issues = "https://github.com/taminomara/yuio/issues"
+Source = "https://github.com/taminomara/yuio/"
+Changelog = "https://github.com/taminomara/yuio/blob/main/CHANGELOG.md"
+
+[build-system]
+requires = ["setuptools>=45", "setuptools_scm[toml]>=6.2", "wheel>=0.40"]
+
+[tool.setuptools_scm]
+write_to = "yuio/_version.py"
+
+[tool.tox]
+requires = ["tox>=4"]
+env_list = ["3.14", "3.13", "3.12", "3.11", "3.10", "type", "lint"]
+
+[tool.tox.env_run_base]
+description = "Run tests under {base_python}"
+dependency_groups = ["test"]
+commands = [["pytest", "--color=yes"]]
+
+[tool.tox.env.type]
+description = "Run type check"
+dependency_groups = ["test"]
+commands = [["pyright"]]
+
+[tool.tox.env.lint]
+description = "Run pre-commit hooks"
+skip_install = true
+dependency_groups = ["lint"]
+commands = [["pre-commit", "run", "--all", "--color=always"]]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = ["--strict-markers", "-p no:doctest"]
+testpaths = ["examples", "test", "yuio", "docs"]
+
+[tool.pyright]
+include = ["yuio", "examples"]
+exclude = ["**/__pycache__", "yuio/_version.py", "yuio/_sphinx.py"]
+typeCheckingMode = "strict"
+pythonVersion = "3.10"
+pythonPlatform = "All"
+
+reportMissingParameterType = "none"
+reportUnknownParameterType = "none"
+reportUnknownVariableType = "none"
+reportUnknownMemberType = "none"
+reportUnknownArgumentType = "none"
+reportUnknownLambdaType = "none"
+reportUnnecessaryIsInstance = "none"
+reportUnnecessaryTypeIgnoreComment = "warning"
+reportPrivateUsage = "none"
+reportUnusedFunction = "none"
+reportConstantRedefinition = "none"
+reportRedeclaration = "none"
+deprecateTypingAliases = true
+
+[tool.black]
+force-exclude = '^(/docs/source/by_example/code/.*|/yuio/_version.py)'
+
+[tool.isort]
+profile = "black"
+extend_skip_glob = ["docs/source/by_example/code/*"]
+skip_gitignore = true
