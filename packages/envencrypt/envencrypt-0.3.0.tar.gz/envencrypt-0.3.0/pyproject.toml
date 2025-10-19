@@ -1,0 +1,53 @@
+[project]
+name = "envencrypt"
+version = "0.3.0"
+description = "Windows DPAPI-based encryption/decryption library for .env files"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "GPL-3.0-or-later"
+license-files = ["LICENSE*"]
+authors = [
+    { name = "Dyve ltd", email = "dev@dyve.ch" },
+    { name = "Igor Petrovic", email = "758832+igorovic@users.noreply.github.com" },
+]
+keywords = [".env", "encryption", "decryption", "dpapi"]
+classifiers = [
+    "Intended Audience :: Developers",
+    #"Operating System :: OS Independent",
+    "Operating System :: Microsoft :: Windows :: Windows 10",
+    "Operating System :: Microsoft :: Windows :: Windows 11",
+    "Programming Language :: Python :: 3",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Software Development :: Libraries",
+]
+dependencies = ["dotenv>=0.9.9", "pywin32>=311"]
+
+[build-system]
+requires = ["uv_build>=0.9.3,<0.10.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.14.0",
+]
+[tool.pyright]
+typeCheckingMode = "strict"
+
+[project.urls]
+Homepage = "https://github.com/Dyve-dev/py-envencrypt"
+Repository = "https://github.com/Dyve-dev/py-envencrypt"
+
+[tool.uv]
+cache-dir = "../../.uv_cache"
+
+[[tool.uv.index]]
+name = "testpypi"
+url = "https://test.pypi.org/envencrypt/"
+publish-url = "https://test.pypi.org/legacy/"
+explicit = true
+
+[[tool.uv.index]]
+name = "pypi"
+url = "https://pypi.org/envencrypt/"
+publish-url = "https://upload.pypi.org/legacy/"
+explicit = true
