@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lyric-lang"
+version = "0.0.1"
+description = "Lyric programming language — coming soon from MiraNova Studios"
+authors = [
+  { name = "MiraNova Studios", email = "aeonath4@gmail.com" }
+]
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.8"
+keywords = ["language", "lyric", "compiler", "ai", "miranova"]
+classifiers = [
+  "Development Status :: 1 - Planning",
+  "Programming Language :: Python :: 3",
+  "Intended Audience :: Developers",
+  "Topic :: Software Development :: Compilers",
+  "License :: OSI Approved :: MIT License",
+]
+
+[project.urls]
+Homepage = "http://miranova.studio/lyric.html"
+Repository = "https://github.com/Aeonath4/lyric"
+
+[project.scripts]
+lyric = "lyric:main"
+
