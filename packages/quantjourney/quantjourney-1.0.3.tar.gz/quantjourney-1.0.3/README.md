@@ -1,0 +1,37 @@
+# QuantJourney Python SDK
+
+High-quality, lightweight client for the QuantJourney API.
+
+- Package: `quantjourney`
+- Import: `quantjourney.sdk`
+
+## Features
+- Simple, requests-based HTTP client with automatic JSON handling
+- Auth helpers for `/auth/login` and `/auth/refresh`
+- Lazy connector endpoints (e.g., `qj.eod.get_historical_prices`)
+- Domain proxy for `/d/<domain>.<method>` calls
+- Config via environment (QJ_API, QJ_TENANT_ID, etc.)
+
+## Install
+- PyPI: `pip install quantjourney`
+- From GitHub: `pip install "git+https://github.com/QuantJourneyOrg/_repo_quantjourney_sdk.git#subdirectory=sdk"`
+
+## Quick Start
+```python
+from quantjourney.sdk import QuantJourney
+
+qj = QuantJourney(api_url="http://localhost:8001", tenant_id="jakub")
+# or: qj = QuantJourney.from_env()
+
+# Login to obtain tokens
+qj.auth.login(tenant_id="jakub", user_id="alice", password="secret")
+
+# Use connectors
+prices = qj.eod.get_historical_prices(symbols=["AAPL"], start_date="2025-01-01", end_date="2025-02-01", frequency="1d", exchanges=["US"])  # dict
+print(len(prices.get("data", [])))
+```
+
+See USAGE.md for more examples.
+ 
+## License
+Proprietary. All rights reserved.
