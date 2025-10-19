@@ -1,0 +1,253 @@
+{% extends "base.html" %}
+
+{% block title %}Validazione Rapporti Stratigrafici - {{ site_name }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>
+            <i class="fas fa-check-circle"></i> Validazione Rapporti Stratigrafici - {{ site_name }}
+        </h2>
+        <div>
+            <a href="{{ url_for('harris_matrix', site_name=site_name) }}" class="btn btn-success">
+                <i class="fas fa-project-diagram"></i> Harris Matrix
+            </a>
+            <a href="{{ url_for('sites_list') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Indietro
+            </a>
+        </div>
+    </div>
+
+    <!-- Validation Summary -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="display-6">{{ stats.total_us }}</h5>
+                    <p class="text-muted mb-0">Unità Stratigrafiche</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="display-6">{{ stats.total_relationships }}</h5>
+                    <p class="text-muted mb-0">Relazioni Totali</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card {% if stats.total_errors == 0 %}bg-success{% else %}bg-danger{% endif %} text-white">
+                <div class="card-body text-center">
+                    <h5 class="display-6">{{ stats.total_errors }}</h5>
+                    <p class="mb-0">Paradossi/Errori</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card {% if stats.is_valid %}bg-success{% else %}bg-warning{% endif %} text-white">
+                <div class="card-body text-center">
+                    <h5 class="display-6">
+                        {% if stats.is_valid %}
+                            <i class="fas fa-check-circle"></i>
+                        {% else %}
+                            <i class="fas fa-exclamation-triangle"></i>
+                        {% endif %}
+                    </h5>
+                    <p class="mb-0">
+                        {% if stats.is_valid %}
+                            Valido
+                        {% else %}
+                            Richiede Correzione
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overall Status -->
+    {% if stats.is_valid %}
+    <div class="alert alert-success">
+        <h4><i class="fas fa-check-circle"></i> Validazione Superata!</h4>
+        <p class="mb-0">Tutti i rapporti stratigrafici sono corretti. Nessun paradosso o ciclo rilevato.</p>
+    </div>
+    {% else %}
+    <div class="alert alert-warning">
+        <h4><i class="fas fa-exclamation-triangle"></i> Attenzione: Problemi Rilevati</h4>
+        <p class="mb-0">Sono stati rilevati problemi nei rapporti stratigrafici. Consultare i dettagli sotto.</p>
+    </div>
+    {% endif %}
+
+    <!-- Paradoxes/Errors -->
+    {% if errors %}
+    <div class="card mb-4 border-danger">
+        <div class="card-header bg-danger text-white">
+            <h5 class="mb-0">
+                <i class="fas fa-exclamation-circle"></i> Paradossi e Errori ({{ errors|length }})
+            </h5>
+        </div>
+        <div class="card-body">
+            <p class="text-muted">
+                I seguenti errori logici sono stati rilevati nei rapporti stratigrafici:
+            </p>
+            <ul class="list-group">
+                {% for error in errors %}
+                <li class="list-group-item list-group-item-danger">
+                    <i class="fas fa-times-circle"></i> {{ error }}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Cycles -->
+    {% if cycles %}
+    <div class="card mb-4 border-warning">
+        <div class="card-header bg-warning">
+            <h5 class="mb-0">
+                <i class="fas fa-sync-alt"></i> Cicli Stratigrafici ({{ cycles|length }})
+            </h5>
+        </div>
+        <div class="card-body">
+            <p class="text-muted">
+                I seguenti cicli sono stati rilevati nella sequenza stratigrafica:
+            </p>
+            <ul class="list-group">
+                {% for cycle in cycles %}
+                <li class="list-group-item list-group-item-warning">
+                    <i class="fas fa-sync-alt"></i>
+                    <strong>Ciclo:</strong> US {{ cycle|join(' → US ') }} → (ritorna all'inizio)
+                </li>
+                {% endfor %}
+            </ul>
+            <div class="alert alert-info mt-3">
+                <i class="fas fa-info-circle"></i>
+                <strong>Nota:</strong> I cicli indicano rapporti stratigrafici contraddittori che creano sequenze impossibili.
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Missing Reciprocals -->
+    {% if missing_reciprocals %}
+    <div class="card mb-4 border-info">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0">
+                <i class="fas fa-exchange-alt"></i> Rapporti Reciproci Mancanti ({{ missing_reciprocals|length }})
+            </h5>
+        </div>
+        <div class="card-body">
+            <p class="text-muted">
+                I seguenti rapporti mancano del rapporto reciproco corretto:
+            </p>
+            <div class="table-responsive">
+                <table class="table table-sm table-hover">
+                    <thead>
+                        <tr>
+                            <th>Da US</th>
+                            <th>A US</th>
+                            <th>Rapporto Esistente</th>
+                            <th>Reciproco Mancante</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for missing in missing_reciprocals %}
+                        <tr>
+                            <td><strong>US {{ missing.from_us }}</strong></td>
+                            <td><strong>US {{ missing.to_us }}</strong></td>
+                            <td><span class="badge bg-primary">{{ missing.relationship }}</span></td>
+                            <td><span class="badge bg-warning">{{ missing.expected_reciprocal }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Auto-Fix Button -->
+            <div class="mt-3">
+                <form method="POST" action="{{ url_for('fix_stratigraphic', site_name=site_name) }}" class="d-inline">
+                    <input type="hidden" name="fix_type" value="reciprocals">
+                    <button type="submit" class="btn btn-success" onclick="return confirm('Applicare automaticamente i rapporti reciproci mancanti?');">
+                        <i class="fas fa-magic"></i> Applica Auto-Fix Rapporti Reciproci
+                    </button>
+                </form>
+                <small class="text-muted d-block mt-2">
+                    <i class="fas fa-info-circle"></i>
+                    Questa operazione aggiungerà automaticamente i rapporti reciproci mancanti alle US interessate.
+                </small>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- No Issues -->
+    {% if not errors and not cycles and not missing_reciprocals %}
+    <div class="card border-success">
+        <div class="card-body text-center py-5">
+            <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+            <h3 class="mt-3">Tutto OK!</h3>
+            <p class="text-muted">
+                Non sono stati rilevati paradossi, cicli o rapporti reciproci mancanti.
+            </p>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Help Section -->
+    <div class="card mt-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="fas fa-question-circle"></i> Guida alla Validazione</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <h6><i class="fas fa-exclamation-circle text-danger"></i> Paradossi</h6>
+                    <p class="small">
+                        Relazioni logicamente impossibili tra due US (es. US A copre B e B copre A).
+                        Questi errori devono essere corretti manualmente.
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <h6><i class="fas fa-sync-alt text-warning"></i> Cicli</h6>
+                    <p class="small">
+                        Sequenze stratigrafiche che ritornano su se stesse (es. A sopra B, B sopra C, C sopra A).
+                        Indicano errori nella registrazione dei rapporti.
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <h6><i class="fas fa-exchange-alt text-info"></i> Reciproci Mancanti</h6>
+                    <p class="small">
+                        Rapporti stratigrafici che mancano della relazione inversa corretta.
+                        Possono essere corretti automaticamente con l'auto-fix.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="card mt-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="fas fa-tools"></i> Azioni</h5>
+        </div>
+        <div class="card-body">
+            <div class="btn-group">
+                <a href="{{ url_for('validate_stratigraphic', site_name=site_name) }}" class="btn btn-primary">
+                    <i class="fas fa-sync"></i> Riesegui Validazione
+                </a>
+                <a href="{{ url_for('harris_matrix', site_name=site_name) }}" class="btn btn-success">
+                    <i class="fas fa-chart-bar"></i> Visualizza Harris Matrix
+                </a>
+                <a href="{{ url_for('harris_matrix_graphviz', site_name=site_name, grouping='period_area') }}" class="btn btn-success">
+                    <i class="fas fa-project-diagram"></i> Harris Matrix Graphviz
+                </a>
+                <a href="{{ url_for('us_list') }}?sito={{ site_name }}" class="btn btn-info">
+                    <i class="fas fa-list"></i> Lista US del Sito
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

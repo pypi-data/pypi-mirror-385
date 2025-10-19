@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}PyArchInit-Mini{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        .navbar-brand {
+            font-weight: bold;
+            color: #2E86AB !important;
+        }
+        .card-header {
+            background-color: #E8F4FD;
+            border-bottom: 2px solid #2E86AB;
+        }
+        .btn-primary {
+            background-color: #2E86AB;
+            border-color: #2E86AB;
+        }
+        .btn-primary:hover {
+            background-color: #1A5A7A;
+            border-color: #1A5A7A;
+        }
+        .table-header {
+            background-color: #E8F4FD;
+        }
+        .sidebar {
+            background-color: #f8f9fa;
+            min-height: calc(100vh - 56px);
+        }
+        .main-content {
+            padding: 20px;
+        }
+        .stats-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .stats-card .card-body {
+            text-align: center;
+        }
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+    </style>
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <i class="fas fa-monument"></i> PyArchInit-Mini
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="sitesDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-map-marked-alt"></i> Siti
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ url_for('sites_list') }}">Elenco Siti</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('create_site') }}">Nuovo Sito</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="usDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-layer-group"></i> US
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ url_for('us_list') }}">Elenco US</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('create_us') }}">Nuova US</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="inventarioDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-archive"></i> Inventario
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ url_for('inventario_list') }}">Elenco Reperti</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('create_inventario') }}">Nuovo Reperto</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('upload_media') }}">
+                            <i class="fas fa-images"></i> Media
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('sites_list') }}">
+                            <i class="fas fa-project-diagram"></i> Harris Matrix
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('export_page') }}">
+                            <i class="bi bi-file-earmark-spreadsheet"></i> Export/Import
+                        </a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('admin_database') }}">
+                            <i class="fas fa-database"></i> Database
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/docs" target="_blank">
+                            <i class="fas fa-book"></i> API Docs
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-2 d-none d-md-block sidebar">
+                <div class="position-sticky pt-3">
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>Navigazione</span>
+                    </h6>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('index') }}">
+                                <i class="fas fa-home"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('sites_list') }}">
+                                <i class="fas fa-map-marked-alt"></i> Siti Archeologici
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('us_list') }}">
+                                <i class="fas fa-layer-group"></i> Unità Stratigrafiche
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('inventario_list') }}">
+                                <i class="fas fa-archive"></i> Inventario Materiali
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>Strumenti</span>
+                    </h6>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('upload_media') }}">
+                                <i class="fas fa-upload"></i> Carica Media
+                            </a>
+                        </li>
+                    </ul>
+
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>Amministrazione</span>
+                    </h6>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('admin_database') }}">
+                                <i class="fas fa-database"></i> Gestione Database
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Page Content -->
+            <main class="col-md-10 ms-sm-auto px-md-4 main-content">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ 'danger' if category == 'error' else 'success' if category == 'success' else 'info' }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

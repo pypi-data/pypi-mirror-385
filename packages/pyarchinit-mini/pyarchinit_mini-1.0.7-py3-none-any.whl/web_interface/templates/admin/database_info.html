@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block title %}Informazioni Database{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fas fa-info-circle"></i> Informazioni Database</h2>
+        <a href="{{ url_for('admin_database') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Indietro
+        </a>
+    </div>
+
+    <!-- Database Connection Info -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-database"></i> Informazioni Connessione</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h6><strong>URL Connessione:</strong></h6>
+                            <pre class="bg-light p-3 rounded">{{ current_url }}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Tables Statistics -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-table"></i> Tabelle Principali</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th><i class="fas fa-table"></i> Tabella</th>
+                                    <th><i class="fas fa-hashtag"></i> Numero Record</th>
+                                    <th><i class="fas fa-info-circle"></i> Descrizione</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>site_table</code></td>
+                                    <td><strong>{{ table_counts.get('site_table', 0) }}</strong></td>
+                                    <td>Siti archeologici</td>
+                                </tr>
+                                <tr>
+                                    <td><code>us_table</code></td>
+                                    <td><strong>{{ table_counts.get('us_table', 0) }}</strong></td>
+                                    <td>Unità stratigrafiche</td>
+                                </tr>
+                                <tr>
+                                    <td><code>inventario_materiali_table</code></td>
+                                    <td><strong>{{ table_counts.get('inventario_materiali_table', 0) }}</strong></td>
+                                    <td>Inventario materiali</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- All Tables List -->
+    {% if tables %}
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-list"></i> Tutte le Tabelle ({{ tables|length }})</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {% for table in tables %}
+                        <div class="col-md-4 mb-2">
+                            <div class="card bg-light">
+                                <div class="card-body py-2">
+                                    <i class="fas fa-table text-muted"></i>
+                                    <code class="ms-2">{{ table }}</code>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Database Health Check -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card border-success">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-check-circle"></i> Stato Database</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <i class="fas fa-check-circle text-success fa-3x mb-2"></i>
+                            <h6>Connessione Attiva</h6>
+                            <p class="text-muted small">Database raggiungibile e operativo</p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            {% if tables|length > 0 %}
+                            <i class="fas fa-check-circle text-success fa-3x mb-2"></i>
+                            <h6>Struttura Valida</h6>
+                            <p class="text-muted small">{{ tables|length }} tabelle trovate</p>
+                            {% else %}
+                            <i class="fas fa-exclamation-triangle text-warning fa-3x mb-2"></i>
+                            <h6>Nessuna Tabella</h6>
+                            <p class="text-muted small">Database vuoto o incompatibile</p>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-4 text-center">
+                            {% set total_records = table_counts.get('site_table', 0) + table_counts.get('us_table', 0) + table_counts.get('inventario_materiali_table', 0) %}
+                            {% if total_records > 0 %}
+                            <i class="fas fa-check-circle text-success fa-3x mb-2"></i>
+                            <h6>Dati Presenti</h6>
+                            <p class="text-muted small">{{ total_records }} record totali</p>
+                            {% else %}
+                            <i class="fas fa-info-circle text-info fa-3x mb-2"></i>
+                            <h6>Database Vuoto</h6>
+                            <p class="text-muted small">Nessun dato presente</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0"><i class="fas fa-tools"></i> Azioni</h5>
+                </div>
+                <div class="card-body">
+                    <div class="btn-group" role="group">
+                        <a href="{{ url_for('admin_database') }}" class="btn btn-primary">
+                            <i class="fas fa-database"></i> Gestione Database
+                        </a>
+                        <a href="{{ url_for('sites_list') }}" class="btn btn-success">
+                            <i class="fas fa-map-marked-alt"></i> Visualizza Siti
+                        </a>
+                        <a href="{{ url_for('us_list') }}" class="btn btn-info">
+                            <i class="fas fa-layer-group"></i> Visualizza US
+                        </a>
+                        <a href="{{ url_for('inventario_list') }}" class="btn btn-warning">
+                            <i class="fas fa-box-open"></i> Visualizza Inventario
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
