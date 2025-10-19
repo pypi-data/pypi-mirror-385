@@ -1,0 +1,28 @@
+name: Upload Python Package
+
+on:
+  workflow_run:
+    workflows: ["Unit tests"]
+    branches: [master]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.9'
+    - name: Build and upload package
+      run: |
+        python -m pip install --upgrade twine build
+        python -m build --sdist --wheel
+        python -m twine upload dist/*
+        make git-tag
+      env:
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
