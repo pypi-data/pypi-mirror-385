@@ -1,0 +1,126 @@
+[betty.command]
+clear-caches = betty.console.command.commands.clear_caches:ClearCaches.plugin
+config = betty.console.command.commands.config:Config.plugin
+demo = betty.console.command.commands.demo:Demo.plugin
+docs = betty.console.command.commands.docs:Docs.plugin
+extension-new-translation = betty.console.command.commands.extension_new_translation:ExtensionNewTranslation.plugin
+extension-update-translations = betty.console.command.commands.extension_update_translations:ExtensionUpdateTranslations.plugin
+generate = betty.console.command.commands.generate:Generate.plugin
+new = betty.console.command.commands.new:New.plugin
+new-translation = betty.console.command.commands.new_translation:NewTranslation.plugin
+serve = betty.console.command.commands.serve:Serve.plugin
+update-translations = betty.console.command.commands.update_translations:UpdateTranslations.plugin
+
+[betty.copyright_notice]
+project-author = betty.copyright_notice.copyright_notices:ProjectAuthor.plugin
+public-domain = betty.copyright_notice.copyright_notices:PublicDomain.plugin
+streetmix = betty.project.extension.demo.copyright_notice:Streetmix.plugin
+wikipedia-contributors = betty.wiki.copyright_notice:WikipediaContributors.plugin
+
+[betty.dev.command]
+dev-update-translations = betty.console.command.commands.dev_update_translations:DevUpdateTranslations.plugin
+
+[betty.entity_type]
+citation = betty.ancestry.citation:Citation.plugin
+enclosure = betty.ancestry.enclosure:Enclosure.plugin
+event = betty.ancestry.event:Event.plugin
+file = betty.ancestry.file:File.plugin
+note = betty.ancestry.note:Note.plugin
+person = betty.ancestry.person:Person.plugin
+person-name = betty.ancestry.person_name:PersonName.plugin
+place = betty.ancestry.place:Place.plugin
+presence = betty.ancestry.presence:Presence.plugin
+source = betty.ancestry.source:Source.plugin
+
+[betty.event_type]
+adoption = betty.ancestry.event_type.event_types:Adoption.plugin
+baptism = betty.ancestry.event_type.event_types:Baptism.plugin
+bar-mitzvah = betty.ancestry.event_type.event_types:BarMitzvah.plugin
+bat-mitzvah = betty.ancestry.event_type.event_types:BatMitzvah.plugin
+birth = betty.ancestry.event_type.event_types:Birth.plugin
+burial = betty.ancestry.event_type.event_types:Burial.plugin
+conference = betty.ancestry.event_type.event_types:Conference.plugin
+confirmation = betty.ancestry.event_type.event_types:Confirmation.plugin
+correspondence = betty.ancestry.event_type.event_types:Correspondence.plugin
+cremation = betty.ancestry.event_type.event_types:Cremation.plugin
+death = betty.ancestry.event_type.event_types:Death.plugin
+divorce = betty.ancestry.event_type.event_types:Divorce.plugin
+divorce-announcement = betty.ancestry.event_type.event_types:DivorceAnnouncement.plugin
+emigration = betty.ancestry.event_type.event_types:Emigration.plugin
+engagement = betty.ancestry.event_type.event_types:Engagement.plugin
+funeral = betty.ancestry.event_type.event_types:Funeral.plugin
+immigration = betty.ancestry.event_type.event_types:Immigration.plugin
+marriage = betty.ancestry.event_type.event_types:Marriage.plugin
+marriage-announcement = betty.ancestry.event_type.event_types:MarriageAnnouncement.plugin
+missing = betty.ancestry.event_type.event_types:Missing.plugin
+occupation = betty.ancestry.event_type.event_types:Occupation.plugin
+residence = betty.ancestry.event_type.event_types:Residence.plugin
+retirement = betty.ancestry.event_type.event_types:Retirement.plugin
+unknown = betty.ancestry.event_type.event_types:Unknown.plugin
+will = betty.ancestry.event_type.event_types:Will.plugin
+
+[betty.extension]
+demo = betty.project.extension.demo:Demo.plugin
+deriver = betty.project.extension.deriver:Deriver.plugin
+gramps = betty.project.extension.gramps:Gramps.plugin
+http-api-doc = betty.project.extension.http_api_doc:HttpApiDoc.plugin
+maps = betty.project.extension.maps:Maps.plugin
+privatizer = betty.project.extension.privatizer:Privatizer.plugin
+raspberry-mint = betty.project.extension.raspberry_mint:RaspberryMint.plugin
+trees = betty.project.extension.trees:Trees.plugin
+webpack = betty.project.extension.webpack:Webpack.plugin
+wiki = betty.project.extension.wiki:Wiki.plugin
+
+[betty.gender]
+female = betty.ancestry.gender.genders:Female.plugin
+male = betty.ancestry.gender.genders:Male.plugin
+non-binary = betty.ancestry.gender.genders:NonBinary.plugin
+unknown = betty.ancestry.gender.genders:Unknown.plugin
+
+[betty.http_rate_limit]
+wikipedia-action-api = betty.http_client.rate_limits:WikipediaActionApi.plugin
+wikipedia-rest-api = betty.http_client.rate_limits:WikipediaRestApi.plugin
+
+[betty.license]
+all-rights-reserved = betty.license.licenses:AllRightsReserved.plugin
+public-domain = betty.license.licenses:PublicDomain.plugin
+
+[betty.place_type]
+borough = betty.ancestry.place_type.place_types:Borough.plugin
+building = betty.ancestry.place_type.place_types:Building.plugin
+city = betty.ancestry.place_type.place_types:City.plugin
+country = betty.ancestry.place_type.place_types:Country.plugin
+county = betty.ancestry.place_type.place_types:County.plugin
+department = betty.ancestry.place_type.place_types:Department.plugin
+district = betty.ancestry.place_type.place_types:District.plugin
+farm = betty.ancestry.place_type.place_types:Farm.plugin
+hamlet = betty.ancestry.place_type.place_types:Hamlet.plugin
+locality = betty.ancestry.place_type.place_types:Locality.plugin
+municipality = betty.ancestry.place_type.place_types:Municipality.plugin
+neighborhood = betty.ancestry.place_type.place_types:Neighborhood.plugin
+number = betty.ancestry.place_type.place_types:Number.plugin
+parish = betty.ancestry.place_type.place_types:Parish.plugin
+province = betty.ancestry.place_type.place_types:Province.plugin
+region = betty.ancestry.place_type.place_types:Region.plugin
+state = betty.ancestry.place_type.place_types:State.plugin
+street = betty.ancestry.place_type.place_types:Street.plugin
+town = betty.ancestry.place_type.place_types:Town.plugin
+unknown = betty.ancestry.place_type.place_types:Unknown.plugin
+village = betty.ancestry.place_type.place_types:Village.plugin
+
+[betty.presence_role]
+attendee = betty.ancestry.presence_role.presence_roles:Attendee.plugin
+beneficiary = betty.ancestry.presence_role.presence_roles:Beneficiary.plugin
+celebrant = betty.ancestry.presence_role.presence_roles:Celebrant.plugin
+informant = betty.ancestry.presence_role.presence_roles:Informant.plugin
+organizer = betty.ancestry.presence_role.presence_roles:Organizer.plugin
+speaker = betty.ancestry.presence_role.presence_roles:Speaker.plugin
+subject = betty.ancestry.presence_role.presence_roles:Subject.plugin
+unknown = betty.ancestry.presence_role.presence_roles:Unknown.plugin
+witness = betty.ancestry.presence_role.presence_roles:Witness.plugin
+
+[betty.renderer]
+jinja2 = betty.jinja2:Jinja2Renderer.plugin
+
+[console_scripts]
+betty = betty.console:main_standalone
