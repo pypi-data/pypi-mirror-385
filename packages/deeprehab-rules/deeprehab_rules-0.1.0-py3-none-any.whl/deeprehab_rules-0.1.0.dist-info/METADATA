@@ -1,0 +1,61 @@
+Metadata-Version: 2.4
+Name: deeprehab-rules
+Version: 0.1.0
+Summary: Rehabilitation movement scoring rules for DeepRehab
+Author: DeepRehab Team
+License: MIT
+Project-URL: Homepage, https://github.com/wenjiangbaobeiovo2005/Deeprehab-packge
+Project-URL: Repository, https://github.com/wenjiangbaobeiovo2005/Deeprehab-packge
+Project-URL: Documentation, https://github.com/wenjiangbaobeiovo2005/Deeprehab-packge#readme
+Project-URL: Bug Tracker, https://github.com/wenjiangbaobeiovo2005/Deeprehab-packge/issues
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Healthcare Industry
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Classifier: Topic :: Scientific/Engineering :: Image Processing
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: numpy>=1.20.0
+
+# DeepRehab Rules
+
+DeepRehab Rules is a Python package that provides a rules engine for validating rehabilitation exercises based on pose estimation data. It works in conjunction with [deeprehab-pose](../deeprehab-pose) and [deeprehab-angles](../deeprehab-angles) to provide a complete rehabilitation analysis solution.
+
+## Features
+
+- Exercise form validation
+- Rule-based feedback system
+- Configurable rules engine
+- Integration with pose estimation data
+- Extensible design
+
+## Installation
+
+```bash
+pip install deeprehab-rules
+```
+
+## Usage
+
+```python
+from deeprehab_rules import DeepRehabRules
+
+# Initialize the rules engine
+rules_engine = DeepRehabRules()
+
+# Validate exercise form
+result = rules_engine.validate_form(landmarks, "knee_extension")
+print(result)
+```
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
