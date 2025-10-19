@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "linkminer"
+version = "1.0.0"
+description = "A CLI tool to recursively download specific file types from websites (e.g., pdf, txt."
+authors = [
+    { name = "Skye", email = "swskye17@gmail.com" }
+]
+readme = "README.md"
+requires-python = ">=3.7"
+# license = { text = "GPL-3.0-or-later" }
+license = { file = "LICENSE" }
+keywords = ["crawler", "downloader", "web", "search engine", "automation"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Environment :: Console",
+    "Topic :: Utilities",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent"
+]
+
+[project.scripts]
+linkminer = "linkminer.cli:main"
