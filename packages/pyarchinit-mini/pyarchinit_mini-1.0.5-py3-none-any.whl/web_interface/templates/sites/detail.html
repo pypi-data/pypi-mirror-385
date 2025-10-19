@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}{{ site.get('sito', 'Sito') }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>{{ site.get('sito', 'Sito') }}</h2>
+        <div>
+            <a href="{{ url_for('export_site_pdf', site_id=site.get('id_sito')) }}" class="btn btn-secondary">Esporta PDF</a>
+            <a href="{{ url_for('sites_list') }}" class="btn btn-outline-secondary">Indietro</a>
+        </div>
+    </div>
+
+    <!-- Site Details -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5>Dettagli Sito</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Nazione:</strong> {{ site.get('nazione') or '-' }}</p>
+                    <p><strong>Regione:</strong> {{ site.get('regione') or '-' }}</p>
+                    <p><strong>Provincia:</strong> {{ site.get('provincia') or '-' }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Comune:</strong> {{ site.get('comune') or '-' }}</p>
+                    <p><strong>Definizione:</strong> {{ site.get('definizione_sito') or '-' }}</p>
+                </div>
+            </div>
+            {% if site.get('descrizione') %}
+            <div class="mt-3">
+                <p><strong>Descrizione:</strong></p>
+                <p>{{ site.get('descrizione') }}</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- US List -->
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5>Unità Stratigrafiche ({{ us_list|length }})</h5>
+            <a href="{{ url_for('create_us') }}?sito={{ site.get('sito') }}" class="btn btn-sm btn-primary">Nuova US</a>
+        </div>
+        <div class="card-body">
+            {% if us_list %}
+            <div class="table-responsive">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>US</th>
+                            <th>Area</th>
+                            <th>Descrizione</th>
+                            <th>Anno Scavo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for us in us_list[:10] %}
+                        <tr>
+                            <td><strong>{{ us.get('us') }}</strong></td>
+                            <td>{{ us.get('area') or '-' }}</td>
+                            <td>{{ us.get('d_stratigrafica') or '-' }}</td>
+                            <td>{{ us.get('anno_scavo') or '-' }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% if us_list|length > 10 %}
+                <p class="text-muted">Mostrando 10 di {{ us_list|length }} US. <a href="{{ url_for('us_list') }}?sito={{ site.get('sito') }}">Vedi tutte</a></p>
+                {% endif %}
+            </div>
+            {% else %}
+            <p class="text-muted">Nessuna unità stratigrafica registrata.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Inventory List -->
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5>Inventario Materiali ({{ inventory_list|length }})</h5>
+            <a href="{{ url_for('create_inventario') }}?sito={{ site.get('sito') }}" class="btn btn-sm btn-primary">Nuovo Reperto</a>
+        </div>
+        <div class="card-body">
+            {% if inventory_list %}
+            <div class="table-responsive">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>N. Inv.</th>
+                            <th>Tipo</th>
+                            <th>Definizione</th>
+                            <th>US</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in inventory_list[:10] %}
+                        <tr>
+                            <td><strong>{{ item.get('numero_inventario') }}</strong></td>
+                            <td>{{ item.get('tipo_reperto') or '-' }}</td>
+                            <td>{{ item.get('definizione') or '-' }}</td>
+                            <td>{{ item.get('us') or '-' }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% if inventory_list|length > 10 %}
+                <p class="text-muted">Mostrando 10 di {{ inventory_list|length }} reperti. <a href="{{ url_for('inventario_list') }}?sito={{ site.get('sito') }}">Vedi tutti</a></p>
+                {% endif %}
+            </div>
+            {% else %}
+            <p class="text-muted">Nessun reperto registrato.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Harris Matrix Link -->
+    <div class="card">
+        <div class="card-body text-center">
+            <a href="{{ url_for('harris_matrix', site_name=site.get('sito')) }}" class="btn btn-lg btn-success">
+                Visualizza Matrice di Harris
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
