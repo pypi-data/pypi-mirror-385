@@ -1,0 +1,195 @@
+Metadata-Version: 2.4
+Name: pylogsentinel
+Version: 0.3.0
+Summary: Lightweight cron-friendly log monitoring utility with regex rules and per-rule shell actions
+Author-email: Jan Tuomi <jan@jantuomi.fi>
+License-Expression: MIT
+Project-URL: Homepage, https://github.com/jantuomi/pylogsentinel
+Project-URL: Repository, https://github.com/jantuomi/pylogsentinel.git
+Project-URL: Issues, https://github.com/jantuomi/pylogsentinel/issues
+Keywords: log,monitoring,regex,cron,alerting,sentinel
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Dynamic: license-file
+
+# pylogsentinel
+
+A lightweight, zero-dependency (standard library only) log monitoring sentinel intended
+to be invoked periodically (e.g. once per minute via `cron`). It incrementally scans
+configured log files for user-defined regular expression rules and triggers shell
+actions with rich contextual environment variables.
+
+`pylogsentinel` is intentionally simple: no daemons, no background threads, no
+long-running processes. Each run processes just the _new_ bytes appended since the
+previous run (tracked per-file, per-inode) and then exits.
+
+## Key Features
+
+- INI-style configuration (`pylogsentinel.conf`).
+- Multiple named log sets (e.g. [logs.default], [logs.errors]) with per-set discovery via static paths or shell command
+- Per-rule regular expressions with optional flags (`/pattern/i` style).
+- Per-rule or actions executed as shell commands with rich contextual environment variables.
+- Reliable state tracking via inode-based files (`<inode>` in `state_dir`).
+- Safe handling of truncation & rotation (offset reset if file shrinks).
+- Strict lock file (`LOCK`) prevents concurrent overlapping runs.
+- Skip-actions mode (`--skip-actions`) processes new data but skips executing actions (use on the first run to avoid firing on historical log lines).
+- Human-friendly size option for `max_block_size` (e.g. `512K`, `10M`).
+- Automatic configuration file discovery when -c/--config is not supplied.
+- Directory path monitoring uses the system 'file' command; only paths whose description contains 'text' are monitored (explicit file paths are always processed).
+- Python 3.9+ (only standard library imports).
+
+## Installation
+
+```sh
+pip install pylogsentinel
+```
+
+## Quick Start
+
+1. Write a configuration in a standard location:
+   ```
+   touch /etc/pylogsentinel.conf
+   chmod 600 /etc/pylogsentinel.conf
+   ```
+2. Edit paths, rules, and actions to your needs.
+3. First build state without executing actions (initial run with --skip-actions):
+
+   ```
+   python -m pylogsentinel -c /etc/pylogsentinel.conf --skip-actions
+   ```
+
+   If you omit the `-c` option (or the specified file does not exist), pylogsentinel will look for a configuration file in this order:
+   - `~/.pylogsentinel.conf`
+   - `~/.config/pylogsentinel.conf`
+   - `/etc/pylogsentinel.conf`
+   - `/usr/local/etc/pylogsentinel.conf`.
+
+4. Add a cron entry (run every minute):
+
+   ```
+   * * * * * /usr/bin/env python3 -m pylogsentinel -c /etc/pylogsentinel.conf
+   ```
+
+## Configuration File Reference
+
+The configuration is an INI-style file. An example:
+
+```
+[system]
+state_dir = /var/run/pylogsentinel
+max_block_size = 10M
+
+[logs.default]
+paths = /var/log /custom/app/logs/app.log
+
+[logs.other]
+cmd = find /var/log -type f -name '*.log'
+
+[action.default]
+cmd = echo -e "Matched $RULE_ID in $FILE at line $LINE, context:\n\n$CONTEXT" | mail -s "Sentinel alert" root
+
+[action.another]
+cmd = echo "Another action"
+
+[rule.error]
+description = Error-like conditions
+pattern = /(error|fatal|exception|kill|crash)/i
+action = another
+logs = default other
+```
+
+### `[system]` Section
+
+| Option           | Required | Description                                                                                             | Default |
+| ---------------- | -------- | ------------------------------------------------------------------------------------------------------- | ------- |
+| `state_dir`      | Yes      | Directory storing lock + per-inode state files. Must be writable. (Defined under `[system]`.)           | (none)  |
+| `max_block_size` | No       | Maximum newly appended bytes to read per file per run. Supports suffixes `K`, `M`, `G` (in `[system]`). | `10M`   |
+
+### Log Sets (`[logs.<id>]`)
+
+Define one or more log sets; each `[logs.<id>]` specifies exactly one of `paths` or `cmd`. The default set must be named `[logs.default]`. A bare `[logs]` section is not allowed.
+
+- `paths`: Space-separated file and/or directory paths. Directories are traversed recursively; only files whose `file -b` output contains 'text' are monitored. Explicit file paths are always processed.
+- `cmd`: Shell command producing one path per line on stdout.
+
+Rules may reference multiple log sets using a whitespace-separated `logs` field.
+
+### `[rule.<rule_id>]` Sections
+
+| Field         | Required | Description                                                                                                |
+| ------------- | -------- | ---------------------------------------------------------------------------------------------------------- |
+| `pattern`     | Yes      | Regular expression in `/pattern/flags` form. Supported flag: `i` (IGNORECASE).                             |
+| `description` | No       | Human-readable description for environment variable `RULE_DESCRIPTION`.                                    |
+| `action`      | No       | Action id to invoke; defaults to `default` if omitted.                                                     |
+| `logs`        | No       | Whitespace-separated list of log set ids (e.g. `default errors access`). Defaults to `default` if omitted. |
+
+At least one rule is required.
+
+#### Pattern Forms Examples
+
+| Pattern                 | Meaning                                             |
+| ----------------------- | --------------------------------------------------- |
+| `/error/i`              | Case-insensitive match of "error"                   |
+| `/^panic:.+/`           | Match lines starting with "panic:" (case-sensitive) |
+| `/^panic:.+/i`          | Same, case-insensitive                              |
+| `/\b(?:CRIT\|FATAL)\b/` | Word boundary critical terms                        |
+
+If you supply an invalid regex or an unsupported flag, startup will fail with a configuration error.
+
+### `[action.<action_id>]` Sections
+
+Each action defines a shell `cmd` executed when a matching rule triggers. The special action id `default` **must** exist; it is used as a fallback when a rule references it explicitly or omits `action`.
+
+Environment variables available to the command:
+
+| Variable           | Description                                                            |
+| ------------------ | ---------------------------------------------------------------------- |
+| `RULE_ID`          | The rule identifier (e.g. `error`).                                    |
+| `RULE_PATTERN`     | The normalized pattern string (e.g. `/error/i`).                       |
+| `RULE_DESCRIPTION` | Description text or placeholder string if not provided.                |
+| `FILE`             | Absolute path of the log file where the match occurred.                |
+| `LINE`             | 1-based absolute line number within the file at time of scan.          |
+| `CONTEXT`          | Concatenated lines around the match (default radius 2 before & after). |
+
+Your `cmd` can reference these with typical shell expansion, for example:
+
+```
+[action.notify]
+cmd = printf "%s\n%s\n" "$RULE_DESCRIPTION" "$CONTEXT" | mail -s "Alert $RULE_ID: $FILE:$LINE" ops@example.com
+```
+
+## State Tracking
+
+For each processed file:
+
+1. The file's inode (`st_ino`) is determined.
+2. A state file named `<inode>` inside `state_dir` stores:
+   ```
+   <byte_offset> <line_number>
+   ```
+3. On the next run only new bytes (up to `max_block_size`) beyond `<byte_offset>` are read.
+4. If the file shrinks (truncation), the stored offset is treated as invalid and scanning restarts from the beginning with line numbers reset.
+
+This scheme tolerates typical log rotation patterns.
+
+## Lock File
+
+A lock file named `LOCK` in `state_dir` prevents overlapping runs. If it exists the process exits immediately. Remove a stale lock only after verifying no instance is active.
+
+## Dry Run
+
+`--skip-actions` processes new data but does not run the actions (recommended for the very first run to prevent alert storms from historical data).
+
+## Exit Codes
+
+| Code | Meaning              |
+| ---- | -------------------- |
+| 0    | Success              |
+| 2    | Configuration error  |
+| 130  | Interrupted (Ctrl+C) |
+| 1    | Other runtime error  |
+
+## License
+
+MIT License (see LICENSE).
