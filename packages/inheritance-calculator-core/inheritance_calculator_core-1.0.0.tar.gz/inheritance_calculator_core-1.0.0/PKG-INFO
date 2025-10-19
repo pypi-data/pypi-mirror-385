@@ -1,0 +1,100 @@
+Metadata-Version: 2.4
+Name: inheritance-calculator-core
+Version: 1.0.0
+Summary: 日本の民法に基づく相続計算のコアライブラリ
+Author-email: Kawahara <your.email@example.com>
+License: MIT
+License-File: LICENSE
+Keywords: calculator,core,inheritance,japan,law,neo4j
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Legal Industry
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Office/Business
+Classifier: Topic :: Software Development :: Libraries
+Requires-Python: >=3.12
+Requires-Dist: neo4j~=6.0.2
+Requires-Dist: pydantic-settings~=2.11.0
+Requires-Dist: pydantic[email]~=2.11.9
+Requires-Dist: python-dotenv~=1.1.1
+Provides-Extra: agents
+Requires-Dist: agnos~=1.0.2; extra == 'agents'
+Requires-Dist: ollama~=0.6.0; extra == 'agents'
+Provides-Extra: dev
+Requires-Dist: black>=24.0.0; extra == 'dev'
+Requires-Dist: mypy~=1.8.0; extra == 'dev'
+Requires-Dist: pytest-cov~=4.0.0; extra == 'dev'
+Requires-Dist: pytest~=8.0.0; extra == 'dev'
+Requires-Dist: ruff~=0.1.0; extra == 'dev'
+Description-Content-Type: text/markdown
+
+# Inheritance Calculator Core
+
+日本の民法に基づく相続計算のコアライブラリ
+
+## 概要
+
+`inheritance-calculator-core`は、日本の民法に基づいた相続人の資格確定と相続割合の計算を行うPythonライブラリです。
+
+このライブラリは以下のパッケージで使用されています：
+- **inheritance-calculator-cli**: CLIアプリケーション
+- **inheritance-calculator-web**: Webアプリケーション（開発予定）
+
+## 特徴
+
+- ✅ **相続人資格の判定**: 配偶者、子、直系尊属、兄弟姉妹の相続権を民法に基づいて判定
+- ✅ **相続割合の計算**: 法定相続分を自動計算
+- ✅ **代襲相続の処理**: 子の代襲相続（制限なし）、兄弟姉妹の代襲相続（1代限り）
+- ✅ **特殊ケースの対応**: 相続放棄、相続欠格、相続廃除、再転相続
+- ✅ **Neo4jデータベース統合**: グラフデータベースによる相続関係の永続化
+- ✅ **AI対話インターフェース**: Ollama経由での自然言語対話（オプション）
+
+## インストール
+
+```bash
+pip install inheritance-calculator-core
+```
+
+## 使い方
+
+### 基本的な使用例
+
+```python
+from datetime import date
+from inheritance_calculator_core.models.person import Person
+from inheritance_calculator_core.services.inheritance_calculator import InheritanceCalculator
+
+# 被相続人と相続人候補の作成
+decedent = Person(
+    name="山田太郎",
+    is_decedent=True,
+    is_alive=False,
+    death_date=date(2025, 6, 15)
+)
+
+spouse = Person(name="山田花子", is_alive=True)
+child1 = Person(name="山田一郎", is_alive=True)
+
+# 相続計算
+calculator = InheritanceCalculator()
+result = calculator.calculate(
+    decedent=decedent,
+    spouses=[spouse],
+    children=[child1],
+    parents=[],
+    siblings=[]
+)
+
+# 結果の表示
+for heir in result.heirs:
+    print(f"{heir.person.name}: {heir.share} ({heir.share_percentage}%)")
+```
+
+## ライセンス
+
+MIT License
+
+---
+
+**バージョン**: 1.0.0
