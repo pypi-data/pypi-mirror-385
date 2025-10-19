@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "interfaced"
+version = "0.1.0"
+description = "Python interface system"
+authors = ["anybody"]
+readme = "README.md"
+packages = [{include = "interfaced"}]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
