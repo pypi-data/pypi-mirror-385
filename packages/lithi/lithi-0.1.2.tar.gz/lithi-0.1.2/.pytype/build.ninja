@@ -1,0 +1,66 @@
+rule infer
+  command = /drone/src/.venv/bin/python -m pytype.main --imports_info $imports --module-name $module --platform linux -V 3.10 -o $out --no-report-errors --nofail --quick $in
+  description = infer $module
+rule check
+  command = /drone/src/.venv/bin/python -m pytype.main --imports_info $imports --module-name $module --platform linux -V 3.10 -o $out --analyze-annotated --nofail --quick $in
+  description = check $module
+build /drone/src/.pytype/pyi/lithi/core/core.pyi: check /drone/src/src/lithi/core/core.py
+  imports = /drone/src/.pytype/imports/lithi.core.core.imports
+  module = lithi.core.core
+build /drone/src/.pytype/pyi/lithi/logger.pyi: check /drone/src/src/lithi/logger.py | /drone/src/.pytype/pyi/lithi/core/core.pyi
+  imports = /drone/src/.pytype/imports/lithi.logger.imports
+  module = lithi.logger
+build /drone/src/.pytype/pyi/lithi/core/args.pyi: check /drone/src/src/lithi/core/args.py
+  imports = /drone/src/.pytype/imports/lithi.core.args.imports
+  module = lithi.core.args
+build /drone/src/.pytype/pyi/lithi/config.pyi: check /drone/src/src/lithi/config.py | /drone/src/.pytype/pyi/lithi/logger.pyi
+  imports = /drone/src/.pytype/imports/lithi.config.imports
+  module = lithi.config
+build /drone/src/.pytype/pyi/lithi/interface/target.pyi: check /drone/src/src/lithi/interface/target.py
+  imports = /drone/src/.pytype/imports/lithi.interface.target.imports
+  module = lithi.interface.target
+build /drone/src/.pytype/pyi/lithi/core/cli.pyi: check /drone/src/src/lithi/core/cli.py | /drone/src/.pytype/pyi/lithi/logger.pyi /drone/src/.pytype/pyi/lithi/core/args.pyi
+  imports = /drone/src/.pytype/imports/lithi.core.cli.imports
+  module = lithi.core.cli
+build /drone/src/.pytype/pyi/lithi/bizlog/settings.pyi: check /drone/src/src/lithi/bizlog/settings.py | /drone/src/.pytype/pyi/lithi/config.pyi
+  imports = /drone/src/.pytype/imports/lithi.bizlog.settings.imports
+  module = lithi.bizlog.settings
+build /drone/src/.pytype/pyi/lithi/commands/__init__.pyi: check /drone/src/src/lithi/commands/__init__.py
+  imports = /drone/src/.pytype/imports/lithi.commands.__init__.imports
+  module = lithi.commands.__init__
+build /drone/src/.pytype/pyi/lithi/__init__.pyi: check /drone/src/src/lithi/__init__.py
+  imports = /drone/src/.pytype/imports/lithi.__init__.imports
+  module = lithi.__init__
+build /drone/src/.pytype/pyi/lithi/implementation/__init__.pyi: check /drone/src/src/lithi/implementation/__init__.py
+  imports = /drone/src/.pytype/imports/lithi.implementation.__init__.imports
+  module = lithi.implementation.__init__
+build /drone/src/.pytype/pyi/lithi/bizlog/brand.pyi: check /drone/src/src/lithi/bizlog/brand.py
+  imports = /drone/src/.pytype/imports/lithi.bizlog.brand.imports
+  module = lithi.bizlog.brand
+build /drone/src/.pytype/pyi/lithi/bizlog/__init__.pyi: check /drone/src/src/lithi/bizlog/__init__.py
+  imports = /drone/src/.pytype/imports/lithi.bizlog.__init__.imports
+  module = lithi.bizlog.__init__
+build /drone/src/.pytype/pyi/lithi/interface/__init__.pyi: check /drone/src/src/lithi/interface/__init__.py
+  imports = /drone/src/.pytype/imports/lithi.interface.__init__.imports
+  module = lithi.interface.__init__
+build /drone/src/.pytype/pyi/lithi/commands/memory.pyi: check /drone/src/src/lithi/commands/memory.py | /drone/src/.pytype/pyi/lithi/bizlog/settings.pyi /drone/src/.pytype/pyi/lithi/config.pyi /drone/src/.pytype/pyi/lithi/core/args.pyi /drone/src/.pytype/pyi/lithi/core/cli.pyi /drone/src/.pytype/pyi/lithi/interface/target.pyi
+  imports = /drone/src/.pytype/imports/lithi.commands.memory.imports
+  module = lithi.commands.memory
+build /drone/src/.pytype/pyi/lithi/implementation/sim.pyi: check /drone/src/src/lithi/implementation/sim.py | /drone/src/.pytype/pyi/lithi/interface/target.pyi /drone/src/.pytype/pyi/lithi/logger.pyi
+  imports = /drone/src/.pytype/imports/lithi.implementation.sim.imports
+  module = lithi.implementation.sim
+build /drone/src/.pytype/pyi/lithi/app.pyi: check /drone/src/src/lithi/app.py | /drone/src/.pytype/pyi/lithi/implementation/__init__.pyi /drone/src/.pytype/pyi/lithi/bizlog/settings.pyi /drone/src/.pytype/pyi/lithi/config.pyi /drone/src/.pytype/pyi/lithi/interface/target.pyi /drone/src/.pytype/pyi/lithi/__init__.pyi /drone/src/.pytype/pyi/lithi/commands/__init__.pyi /drone/src/.pytype/pyi/lithi/core/cli.pyi /drone/src/.pytype/pyi/lithi/logger.pyi
+  imports = /drone/src/.pytype/imports/lithi.app.imports
+  module = lithi.app
+build /drone/src/.pytype/pyi/lithi/implementation/jlink.pyi: check /drone/src/src/lithi/implementation/jlink.py | /drone/src/.pytype/pyi/lithi/interface/target.pyi /drone/src/.pytype/pyi/lithi/logger.pyi
+  imports = /drone/src/.pytype/imports/lithi.implementation.jlink.imports
+  module = lithi.implementation.jlink
+build /drone/src/.pytype/pyi/lithi/core/__init__.pyi: check /drone/src/src/lithi/core/__init__.py
+  imports = /drone/src/.pytype/imports/lithi.core.__init__.imports
+  module = lithi.core.__init__
+build /drone/src/.pytype/pyi/lithi/commands/config.pyi: check /drone/src/src/lithi/commands/config.py | /drone/src/.pytype/pyi/lithi/bizlog/brand.pyi /drone/src/.pytype/pyi/lithi/bizlog/settings.pyi /drone/src/.pytype/pyi/lithi/config.pyi /drone/src/.pytype/pyi/lithi/core/args.pyi /drone/src/.pytype/pyi/lithi/core/cli.pyi /drone/src/.pytype/pyi/lithi/interface/target.pyi /drone/src/.pytype/pyi/lithi/logger.pyi
+  imports = /drone/src/.pytype/imports/lithi.commands.config.imports
+  module = lithi.commands.config
+build /drone/src/.pytype/pyi/lithi/commands/development.pyi: check /drone/src/src/lithi/commands/development.py | /drone/src/.pytype/pyi/lithi/core/args.pyi /drone/src/.pytype/pyi/lithi/core/cli.pyi /drone/src/.pytype/pyi/lithi/logger.pyi
+  imports = /drone/src/.pytype/imports/lithi.commands.development.imports
+  module = lithi.commands.development

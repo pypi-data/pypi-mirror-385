@@ -1,0 +1,54 @@
+Metadata-Version: 2.4
+Name: lithi
+Version: 0.1.2
+Summary: ELF parser and memory live inspector
+Project-URL: Homepage, https://pypi.org/project/lithi/
+Author-email: Kanelis Elias <e.kanelis@voidbuffer.com>
+Maintainer-email: Kanelis Elias <e.kanelis@voidbuffer.com>
+Keywords: elf,inspect,jlink,mcu,memory
+Classifier: Development Status :: 3 - Alpha
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Requires-Python: >=3.10
+Requires-Dist: colorama>=0.4.6
+Requires-Dist: pydantic-settings>=2.11.0
+Requires-Dist: pydantic>=2.12.3
+Requires-Dist: pylink-square>=2.0.0
+Requires-Dist: xdg-base-dirs>=6.0.2
+Description-Content-Type: text/markdown
+
+# lithi
+
+> Keeps every byte in sight — uncovers the memory of your MCU.
+
+**lithi** is a Python tool that parses ELF files and connects to your
+embedded target (e.g. via J-Link). It lets you spy on functions,
+global variables, and memory — directly from the command line.
+
+## Features
+
+Currently under development
+
+- [ ] Parse ELF symbols (functions, global variables, addresses, sizes).
+- [x] Connect to STM32/embedded targets using J-Link.
+- [ ] Read variables directly from the running device.
+- [ ] TUI/CLI interface for inspecting memory maps.
+- [ ] Export symbol/function metadata.
+- [ ] Fuzzy search
+- [ ] Support multiple providers (OpenOCD, gdb/ptrace, jlink, stlink, etc)
+
+## Getting Started
+
+To get a local copy up and running follow these simple steps.
+
+### Installation
+
+Run the following command:
+
+```sh
+pip install lithi
+```
+
+## Contact
+
+Kanelis Elias - [@email](mailto:e.kanelis@voidbuffer.com)
