@@ -1,0 +1,583 @@
+Metadata-Version: 2.3
+Name: audiobook-reader
+Version: 0.1.7
+Summary: AI-powered audiobook generator with GPU/NPU acceleration (up to 8x faster than real-time). Built-in Kokoro-82M TTS with character-aware voices and emotion analysis. Supports EPUB, PDF, TXT, MD, RST (use convertext for DOCX/MOBI/HTML).
+License: MIT
+Keywords: audiobook,text-to-speech,tts,kokoro,neural-engine,apple-silicon,m1,m2,m3,m4,epub,pdf,cli,audio,conversion,character-voices,emotion-analysis
+Author: danielcorsano
+Author-email: danielcorsano@users.noreply.github.com
+Requires-Python: >=3.10,<3.14
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Console
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Multimedia :: Sound/Audio :: Conversion
+Classifier: Topic :: Multimedia :: Sound/Audio :: Speech
+Classifier: Topic :: Text Processing
+Provides-Extra: all
+Provides-Extra: monitoring
+Provides-Extra: progress-full
+Provides-Extra: progress-rich
+Provides-Extra: progress-timeseries
+Provides-Extra: progress-tqdm
+Requires-Dist: PyPDF2 (>=3.0.1,<4.0.0)
+Requires-Dist: beautifulsoup4 (>=4.12.2,<5.0.0)
+Requires-Dist: click (>=8.1.7,<9.0.0)
+Requires-Dist: ebooklib (>=0.18,<0.19)
+Requires-Dist: ffmpeg-python (>=0.2.0,<0.3.0)
+Requires-Dist: kokoro-onnx (>=0.4.9,<0.5.0)
+Requires-Dist: mutagen (>=1.47.0,<2.0.0)
+Requires-Dist: onnxruntime (>=1.20.0,<2.0.0)
+Requires-Dist: plotext (>=5.3.2,<6.0.0) ; extra == "progress-full" or extra == "progress-timeseries" or extra == "all"
+Requires-Dist: psutil (>=7.1.0,<8.0.0) ; extra == "monitoring" or extra == "all"
+Requires-Dist: pyyaml (>=6.0.1,<7.0.0)
+Requires-Dist: regex (>=2023.12.25,<2024.0.0)
+Requires-Dist: rich (>=14.0.0,<15.0.0) ; extra == "progress-full" or extra == "progress-rich" or extra == "all"
+Requires-Dist: tqdm (>=4.67.0,<5.0.0) ; extra == "progress-full" or extra == "progress-tqdm" or extra == "all"
+Requires-Dist: vaderSentiment (>=3.3.2,<4.0.0)
+Project-URL: Documentation, https://github.com/danielcorsano/reader/tree/main/docs
+Project-URL: Homepage, https://github.com/danielcorsano/reader
+Project-URL: Repository, https://github.com/danielcorsano/reader
+Description-Content-Type: text/markdown
+
+# AI Audiobook Generator: CLI Tool with GPU & NPU Acceleration
+
+[![PyPI](https://img.shields.io/pypi/v/audiobook-reader)](https://pypi.org/project/audiobook-reader/)
+[![Python](https://img.shields.io/pypi/pyversions/audiobook-reader)](https://pypi.org/project/audiobook-reader/)
+[![License](https://img.shields.io/pypi/l/audiobook-reader)](https://github.com/danielcorsano/reader/blob/main/LICENSE)
+[![Downloads](https://img.shields.io/pypi/dm/audiobook-reader)](https://pypi.org/project/audiobook-reader/)
+
+**Transform long-form text into professional audiobooks with character-aware voices, emotion analysis, and intelligent processing.**
+
+Perfect for novels, articles, textbooks, research papers, and other long-form content that you want to be able to listen to on your own time or offline. Built with Kokoro-82M TTS for production-quality narration. Works on all platforms with optimizations for Apple Silicon (M1/M2/M3/M4 Neural Engine), NVIDIA GPUs, and AMD/Intel GPUs.
+
+## ✨ Core Features
+
+### ⚡ **High-Performance Conversion**
+- **Up to 8x faster than real-time** on Apple Silicon (M1/M2/M3/M4) with Neural Engine
+- **GPU acceleration** for NVIDIA (CUDA), AMD/Intel (DirectML on Windows)
+- **Efficient CPU processing** on all platforms
+- Kokoro-82M engine optimized for speed + quality balance
+
+### 🎭 **Character-Aware Narration**
+- **Automatic character detection** in dialogue
+- **Auto-assign different voices** with automatic gender detection where possible
+- Assigns gender-appropriate voices (e.g., Alice gets `af_sarah`, Bob gets `am_adam`)
+- Perfect for fiction, interviews, dialogues, and multi-speaker content
+
+### 😊 **Emotion Analysis**
+- **VADER sentiment analysis** adjusts prosody in real-time
+- Excitement, sadness, tension automatically reflected in voice tone
+- Natural emotional narration without manual SSML tagging
+
+### 💾 **Checkpoint Resumption**
+- **Resume interrupted conversions** from where you left off
+- Essential for extra-long texts (500+ page books, textbooks, research papers)
+- Reliable production workflow for lengthy content
+
+### 📚 **Chapter Management**
+- **Automatic chapter detection** from EPUB TOC, PDF structure, or text patterns
+- **M4B audiobook format** with chapter metadata
+- Chapter timestamps and navigation
+
+### 📊 **Professional Production Tools**
+- **4 progress visualization styles**: simple, tqdm, rich, timeseries
+- **Real-time metrics**: processing speed, ETA, completion percentage
+- **Batch processing** with queue management
+- **Multiple output formats**: MP3 (48kHz mono optimized by default), WAV, M4A, M4B
+
+### 🎙️ **Production-Quality TTS**
+- **Kokoro-82M**: 48 high-quality neural voices across 8 languages
+- **Near-human quality** narration
+- **Consistent voice** throughout long documents
+- No voice cloning overhead
+
+---
+
+## ⚖️ Copyright Notice
+
+**IMPORTANT**: This software is a tool for converting text to audio. Users are solely responsible for:
+
+- Ensuring they have the legal right to convert any text to audio
+- Obtaining necessary permissions for copyrighted materials
+- Complying with all applicable copyright laws and licensing terms
+- Understanding that creating audiobooks from copyrighted text without authorization may constitute copyright infringement
+
+**Recommended Use Cases:**
+- ✅ Your own original content
+- ✅ Public domain works
+- ✅ Content you have explicit permission to convert
+- ✅ Educational materials you legally own
+- ✅ Open-source or Creative Commons licensed texts (per their terms)
+
+The developers of audiobook-reader do not condone or support copyright infringement. By using this software, you agree to use it only for content you have the legal right to convert.
+
+---
+
+## 📚 Supported Input Formats
+
+EPUB, PDF, TXT, Markdown, ReStructuredText
+
+**Need to convert other formats first?** Use [convertext](https://pypi.org/project/convertext/) to convert DOCX, ODT, MOBI, HTML, and other document formats to supported formats like EPUB or TXT.
+
+## 📦 Installation
+
+### Using pip (recommended for users)
+```bash
+# Default installation (Kokoro TTS + core features)
+pip install audiobook-reader
+
+# With all progress visualizations (tqdm, rich, plotext)
+pip install audiobook-reader[progress-full]
+
+# With system monitoring
+pip install audiobook-reader[monitoring]
+
+# With everything
+pip install audiobook-reader[all]
+```
+
+### Hardware Acceleration Options
+
+audiobook-reader works great on **all platforms**. For maximum performance, enable hardware acceleration:
+
+#### ✅ Apple Silicon (M1/M2/M3/M4)
+**Neural Engine (CoreML) works automatically** - no additional setup needed!
+
+```bash
+pip install audiobook-reader
+# That's it! CoreML acceleration is built-in
+```
+
+#### ✅ NVIDIA GPU (Windows/Linux)
+Get **CUDA acceleration** with a simple package swap:
+
+```bash
+pip install audiobook-reader
+pip uninstall onnxruntime
+pip install onnxruntime-gpu
+```
+
+#### ✅ AMD/Intel GPU (Windows)
+Get **DirectML acceleration**:
+
+```bash
+pip install audiobook-reader
+pip uninstall onnxruntime
+pip install onnxruntime-directml
+```
+
+#### ✅ CPU Only (All Platforms)
+**No GPU? No problem!** The default installation works efficiently on any CPU:
+
+```bash
+pip install audiobook-reader
+# Works great on Intel, AMD, ARM processors
+```
+
+## 🚀 Quick Start
+
+```bash
+# 1. Install
+pip install audiobook-reader
+
+# 2. Models auto-download on first use (~310MB to ~/.cache/)
+#    Or manually: reader download models
+
+# 3. Convert any text file directly
+reader convert --file mybook.epub
+
+# 4. Find your audiobook in ~/Downloads/mybook_kokoro_am_michael.mp3
+
+# Choose output location:
+reader convert --file mybook.epub --output-dir downloads  # ~/Downloads/ (default)
+reader convert --file mybook.epub --output-dir same       # Next to source
+reader convert --file mybook.epub --output-dir /custom    # Custom path
+```
+
+### 🎭 Character Voices (Optional)
+
+For books with dialogue, assign different voices to each character:
+
+```bash
+# Auto-detect characters and generate config
+reader characters detect text/mybook.txt --auto-assign
+
+# OR manually create mybook.characters.yaml:
+# characters:
+#   - name: Alice
+#     voice: af_sarah
+#     gender: female
+#   - name: Bob
+#     voice: am_michael
+#     gender: male
+
+# Convert with character voices
+reader convert --characters --file text/mybook.txt
+```
+
+### 🐍 Python API (Jupyter Notebooks & Scripts)
+
+For programmatic access in Python scripts or Jupyter notebooks:
+
+```python
+import reader
+
+# Simple conversion
+output = reader.convert("mybook.epub")
+print(f"Audiobook created: {output}")
+
+# Advanced usage
+from reader import Reader
+r = Reader()
+output = r.convert(
+    "mybook.epub",
+    voice="af_sarah",
+    speed=1.2,
+    character_voices=True,
+    progress_style="tqdm"
+)
+```
+
+See **[Programmatic API](https://github.com/danielcorsano/reader/blob/main/docs/API.md)** for full documentation.
+
+## 📖 Documentation
+
+- **[Usage Guide](https://github.com/danielcorsano/reader/blob/main/docs/USAGE.md)** - Complete command reference and workflows
+- **[Programmatic API](https://github.com/danielcorsano/reader/blob/main/docs/API.md)** - Python API for Jupyter notebooks and scripts
+- **[Examples](https://github.com/danielcorsano/reader/blob/main/docs/EXAMPLES.md)** - Real-world examples and use cases
+- **[Advanced Features](https://github.com/danielcorsano/reader/blob/main/docs/ADVANCED_FEATURES.md)** - Professional audiobook production features
+- **[Kokoro Setup](https://github.com/danielcorsano/reader/blob/main/docs/KOKORO_SETUP.md)** - Neural TTS model setup guide
+
+## 🎙️ Command Reference
+
+### Basic Conversion
+```bash
+# Convert single file with Neural Engine acceleration
+reader convert --file text/book.epub
+
+# Convert with specific voice
+reader convert --file text/book.epub --voice am_michael
+
+# Kokoro is the TTS engine
+
+# Enable debug mode to see Neural Engine status
+reader convert --file text/book.epub --debug
+```
+
+### 📊 Progress Visualization Options
+
+```bash
+# Simple text progress (default)
+reader convert --progress-style simple --file "book.epub"
+
+# Professional progress bars with speed metrics
+reader convert --progress-style tqdm --file "book.epub"
+
+# Beautiful Rich formatted displays with colors
+reader convert --progress-style rich --file "book.epub"
+
+# Real-time ASCII charts showing processing speed
+reader convert --progress-style timeseries --file "book.epub"
+```
+
+### Configuration Management
+```bash
+# Save permanent settings to config file
+reader config --voice am_michael --format mp3 --output-dir downloads
+
+# Set custom default output directory
+reader config --output-dir /audiobooks
+reader config --output-dir same  # Save next to source files
+
+# List available Kokoro voices
+reader voices
+
+# View current configuration
+reader config
+
+# View application info and features
+reader info
+```
+
+### **Parameter Hierarchy (How Settings Work)**
+1. **CLI parameters** (highest priority) - temporary overrides, never saved
+2. **Config file** (middle priority) - your saved preferences  
+3. **Code defaults** (lowest priority) - sensible fallbacks
+
+Example:
+```bash
+# Save your preferred settings
+reader config --engine kokoro --voice am_michael --format mp3
+
+# Use temporary override (doesn't change your saved config)
+reader convert --voice af_sarah
+
+# Your config file still has kokoro/am_michael/mp3 saved
+```
+
+## 📁 File Support
+
+### Input Formats
+| Format | Extension | Chapter Detection |
+|--------|-----------|------------------|
+| EPUB | `.epub` | ✅ Automatic from TOC |
+| PDF | `.pdf` | ✅ Page-based |
+| Text | `.txt` | ✅ Simple patterns |
+| Markdown | `.md` | ✅ Header-based |
+| ReStructuredText | `.rst` | ✅ Header-based |
+
+**Need other formats?** Use [convertext](https://pypi.org/project/convertext/) to convert DOCX, ODT, MOBI, HTML, and more to supported formats.
+
+### Output Formats
+- **MP3** (default) - 48kHz mono, configurable bitrate (32k-64k, default 48k)
+- **WAV** - Uncompressed, high quality
+- **M4A** - Apple-friendly format
+- **M4B** - Audiobook format with chapter support
+
+## 🏗️ File Locations
+
+Reader uses system-standard directories for clean organization:
+
+**Working Files (Temporary):**
+- **Temp workspace**: `/tmp/audiobook-reader-{session}/` (auto-cleaned on exit)
+- Session-specific, isolated from your files
+- Automatically removed when conversion completes
+
+**Persistent Data:**
+- **Models**: `~/.cache/audiobook-reader/models/` (~310MB, shared across all conversions)
+- **Config**: `~/.config/audiobook-reader/` (settings and character mappings)
+
+**Output Files (Your Audiobooks):**
+- **Default**: `~/Downloads/` (configurable)
+- **Options**:
+  - `--output-dir downloads` → `~/Downloads/`
+  - `--output-dir same` → Next to source file
+  - `--output-dir /custom/path` → Custom location
+
+**No directory pollution** - only your final audiobooks appear in the output location!
+
+## 🎨 Example Workflows
+
+### Simple Book Conversion
+```bash
+# Convert any book directly
+reader convert --file "My Novel.epub"
+
+# Result: ~/Downloads/My Novel_kokoro_am_michael.mp3
+
+# Or output next to source file
+reader convert --file "My Novel.epub" --output-dir same
+
+# Result: My Novel_kokoro_am_michael.mp3 (in same directory as source)
+```
+
+### Voice Comparison
+```bash
+# Test different Kokoro voices on same content
+reader convert --voice af_sarah --file text/sample.txt
+reader convert --voice am_adam --file text/sample.txt
+reader convert --voice bf_emma --file text/sample.txt
+
+# Compare finished/sample_*.mp3 outputs
+```
+
+### Batch Processing
+```bash
+# Convert multiple files with custom output location
+reader convert --file book1.epub --output-dir /audiobooks
+reader convert --file book2.pdf --output-dir /audiobooks
+reader convert --file story.txt --output-dir /audiobooks
+
+# Results: /audiobooks/book1_*.mp3, /audiobooks/book2_*.mp3, /audiobooks/story_*.mp3
+
+# Or set default output directory in config
+reader config --output-dir /audiobooks
+reader convert --file book1.epub  # → /audiobooks/
+```
+
+## ⚙️ Configuration
+
+Settings are saved to `~/.config/audiobook-reader/settings.yaml`:
+
+```yaml
+tts:
+  engine: kokoro           # TTS engine (Kokoro)
+  voice: am_michael        # Default voice
+  speed: 1.0               # Speech rate multiplier
+  volume: 1.0              # Volume level
+audio:
+  format: mp3              # Output format (mp3, wav, m4a, m4b)
+  bitrate: 48k             # MP3 bitrate (32k-64k typical for audiobooks)
+  add_metadata: true       # Metadata support
+processing:
+  chunk_size: 400          # Text chunk size for processing (Kokoro optimal)
+  auto_detect_chapters: true  # Chapter detection
+output_dir: downloads      # Output location: "downloads", "same", or path
+```
+
+## 🎯 Quick Examples
+
+See **[docs/EXAMPLES.md](https://github.com/danielcorsano/reader/blob/main/docs/EXAMPLES.md)** for detailed examples including:
+- Voice testing and selection
+- PDF processing workflows  
+- Markdown chapter handling
+- Batch processing scripts
+- Configuration optimization
+
+## 📊 Technical Specs
+
+- **TTS Engine**: Kokoro-82M (82M parameters, Apache 2.0 license)
+- **Model Size**: ~310MB ONNX models (auto-downloaded on first use to cache)
+- **Model Cache**: Follows XDG standard (`~/.cache/audiobook-reader/models/`)
+- **Python**: 3.10-3.13 compatibility
+- **Platforms**: macOS, Linux, Windows (all fully supported)
+- **Audio Quality**: 48kHz mono MP3, configurable bitrate (32k-64k, default 48k)
+- **Hardware Acceleration**:
+  - ✅ Apple Silicon (M1/M2/M3/M4): CoreML (Neural Engine) - automatic
+  - ✅ NVIDIA GPUs: CUDA via onnxruntime-gpu
+  - ✅ AMD/Intel GPUs: DirectML on Windows
+  - ✅ CPU: Works efficiently on all processors
+- **Performance**: Hardware-accelerated on all major platforms
+- **Memory**: Efficient streaming processing for large books
+
+## 🎵 Audio Quality
+
+**Kokoro TTS** (primary engine):
+- ✅ Near-human quality neural voices
+- ✅ 48 voices across 8 languages
+- ✅ Apple Neural Engine acceleration
+- ✅ Professional audiobook production
+- ✅ Consistent narration (no hallucinations)
+
+---
+
+## 🔧 Troubleshooting
+
+### FFmpeg Not Found
+**Error**: `FFmpeg not found` or `Command 'ffmpeg' not found`
+
+**Solution**:
+```bash
+# macOS
+brew install ffmpeg
+
+# Ubuntu/Debian
+sudo apt-get install ffmpeg
+
+# Windows
+# Download from https://ffmpeg.org/download.html
+# Or use: choco install ffmpeg
+```
+
+### Models Not Downloading
+**Error**: `Failed to download Kokoro models`
+
+**Solution**:
+Models auto-download on first use (~310MB). If automatic download fails:
+```bash
+# Download to system cache (default)
+reader download models
+
+# Download to local models/ folder (permanent storage)
+reader download models --local
+
+# Force re-download
+reader download models --force
+```
+
+**Model & File Locations:**
+- **Models**: `~/.cache/audiobook-reader/models/` (all platforms, ~310MB)
+- **Config**: `~/.config/audiobook-reader/` (settings and character mappings)
+- **Temp Files**: `/tmp/audiobook-reader-{session}/` (auto-cleaned on exit)
+- **Output**: `~/Downloads/` by default (configurable with `--output-dir`)
+
+### Neural Engine Not Detected (Apple Silicon)
+**Error**: `Neural Engine not available, using CPU`
+
+**Solution**:
+- Ensure you're on Apple Silicon (M1/M2/M3/M4 Mac)
+- Update macOS to latest version
+- Reinstall onnxruntime: `pip uninstall onnxruntime && pip install onnxruntime`
+- CPU processing works fine but is slower than GPU/NPU
+
+### Permission Errors
+**Error**: `Permission denied` when creating directories
+
+**Solution**:
+```bash
+# Ensure write permissions in project directory
+chmod -R u+w /path/to/reader
+
+# Or run from a directory you own
+cd ~/Documents
+git clone https://github.com/danielcorsano/reader.git
+cd reader
+```
+
+### Import Errors
+**Error**: `ModuleNotFoundError: No module named 'kokoro_onnx'`
+
+**Solution**:
+```bash
+# Reinstall package
+pip install --force-reinstall audiobook-reader
+```
+
+### Invalid Input Format
+**Error**: `Unsupported file format`
+
+**Supported formats**: `.epub`, `.pdf`, `.txt`, `.md`, `.rst`
+
+**Solution**:
+```bash
+# Use convertext to convert other formats first
+pip install convertext
+convertext document.docx --format epub  # DOCX to EPUB
+convertext book.mobi --format epub      # MOBI to EPUB
+convertext file.html --format txt       # HTML to TXT
+
+# Then convert to audiobook
+reader convert --file document.epub
+```
+
+### GPU Acceleration Issues
+**NVIDIA GPU**: Requires `onnxruntime-gpu` instead of `onnxruntime`
+```bash
+pip uninstall onnxruntime
+pip install onnxruntime-gpu
+```
+
+**AMD/Intel GPU (Windows)**: Requires `onnxruntime-directml`
+```bash
+pip uninstall onnxruntime
+pip install onnxruntime-directml
+```
+
+### Still Having Issues?
+- Check the [GitHub Issues](https://github.com/danielcorsano/reader/issues)
+- Run with debug mode: `reader convert --debug --file yourfile.txt`
+- Verify Python version: `python --version` (requires 3.10-3.13)
+
+## 📜 Credits & Licensing
+
+### Kokoro TTS Model
+This project uses the [Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M) text-to-speech model by [hexgrad](https://github.com/hexgrad/kokoro), licensed under Apache 2.0.
+
+**Model Credits:**
+- Original Model: [hexgrad/Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M) (Apache 2.0)
+- ONNX Wrapper: [kokoro-onnx](https://github.com/thewh1teagle/kokoro-onnx) by thewh1teagle (MIT)
+- Training datasets: Koniwa (CC BY 3.0), SIWIS (CC BY 4.0)
+
+### Reader Package
+This audiobook CLI tool is licensed under the MIT License. See `LICENSE` file for details.
+
+---
+
+**Ready to create your first audiobook?** Check out the **[Usage Guide](https://github.com/danielcorsano/reader/blob/main/docs/USAGE.md)** for step-by-step instructions!
