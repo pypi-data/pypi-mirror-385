@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/tamle/Projects/vntickers/**)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nAdd initial project structure with README and documentation\n\n- Add CLAUDE.md with project architecture and commands\n- Add README.md with installation and usage examples\n- Add pyproject.toml with dependencies (vnstock, vnquant)\n- Add VNStockData loader class with two data fetching methods\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git commit -m \"$(cat <<''EOF''\nUpdate repository URL in README\n\n- Change placeholder username to gahoccode in clone URL\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "WebFetch(domain:github.com)",
+      "Bash(gh repo create:*)",
+      "Bash(git push:*)",
+      "Bash(uv build:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

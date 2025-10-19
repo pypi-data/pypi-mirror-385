@@ -1,0 +1,40 @@
+[project]
+name = "vntickers"
+version = "0.2.0"
+description = "A Python package for fetching Vietnamese stock market data from multiple sources"
+readme = "README.md"
+authors = [
+    { name = "gahoccode", email = "dautuchungkhoan1200@gmail.com" }
+]
+requires-python = ">=3.10"
+dependencies = [
+    "vnstock>=3.2.6",
+    "vnquant",
+    "vietfin",
+    "pandas",
+    "pydantic>=2.0.0",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Financial and Insurance Industry",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Office/Business :: Financial :: Investment",
+]
+
+[project.urls]
+Homepage = "https://github.com/gahoccode/vntickers"
+Repository = "https://github.com/gahoccode/vntickers"
+Issues = "https://github.com/gahoccode/vntickers/issues"
+
+[project.scripts]
+vntickers = "vntickers:main"
+
+[build-system]
+requires = ["uv_build>=0.8.22,<0.9.0"]
+build-backend = "uv_build"
+
