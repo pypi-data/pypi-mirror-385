@@ -1,0 +1,41 @@
+[tool.poetry]
+name = "quantjourney"
+version = "0.9.0"
+description = "QuantJourney - SDK client for QuantJourney"
+authors = ["QuantJourney <support@quantjourney.pro>"]
+license = "Proprietary"
+readme = "README.md"
+homepage = "https://quantjourney.cloud"
+repository = "https://github.com/QuantJourneyOrg/_repo_quantjourney_sdk"
+keywords = ["finance", "trading", "data", "sdk", "fastapi"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Financial and Insurance Industry",
+  "License :: Other/Proprietary License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Office/Business :: Financial :: Investment",
+]
+packages = [
+  { include = "quantjourney" }
+]
+# Ensure non-Python assets are packaged (YAML config and license)
+include = [
+  "quantjourney/sdk/routers.yaml",
+  "LICENSE"
+]
+
+[tool.poetry.dependencies]
+python = ">=3.10"
+requests = ">=2.31.0"
+pandas = ">=2.1.0"
+PyYAML = ">=6.0.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = ">=8.0.0"
+
+[build-system]
+requires = ["poetry-core>=1.9.0"]
+build-backend = "poetry.core.masonry.api"
