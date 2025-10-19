@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "clusternet"
+version = "0.9.3"
+authors = [
+  {name="Esaú Mascarenhas"},
+]
+description = "Distributed Software Defined Network Emulation"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "Flask",
+    "Flask-Cors",
+    "httpx",
+    "pyyaml"
+]
+keywords = ["networking", "emulator", "containernet", "mininet", "OpenFlow", "SDN", "fog"]
+license = {text = "MIT License"}
+classifiers = [
+    "Programming Language :: Python :: 3.8",
+    "Intended Audience :: Developers",
+    "Topic :: System :: Distributed Computing",
+    "Topic :: System :: Emulators"
+]
+
+[project.scripts]
+RunWorker = "clusternet.server.worker_app:main"
+
+[project.urls]
+Homepage = "https://github.com/larsid/clusternet"
