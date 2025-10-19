@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Base Shapes &mdash; документация Frame Stamp </title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=372fde1a"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/translations.js?v=9bfe3ffa"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" />
+    <link rel="next" title="Rect" href="rect.html" />
+    <link rel="prev" title="Фигуры" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Frame Stamp
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../make_template.html">Создание шаблонов</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../viewer.html">Template Viewer</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Фигуры</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#id2">Параметры</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#id3">Поля</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#id4">Список доступных фигур</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Base Shapes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#abstractshape">AbstractShape</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#baseshape">BaseShape</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#emptyshape">EmptyShape</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rootparent">RootParent</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">Глобальный контекст</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="rect.html">Rect</a></li>
+<li class="toctree-l3"><a class="reference internal" href="label.html">Label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="image.html">Image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="line.html">line</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tile.html">Tile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="grid.html">Grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="row.html">Row</a></li>
+<li class="toctree-l3"><a class="reference internal" href="column.html">Column</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../expressions.html">Expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../environment_variables.html">Переменные окружения</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Создание новых фигур</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../debug.html">Debug Mode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../debug.html#timeline">TimeLine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tricks.html">Советы и подсказки</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Frame Stamp</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Фигуры</a></li>
+      <li class="breadcrumb-item active">Base Shapes</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="base-shapes">
+<h1>Base Shapes<a class="headerlink" href="#base-shapes" title="Ссылка на этот заголовок"></a></h1>
+<p>Базовые и вспомогательные фигуры.</p>
+<section id="abstractshape">
+<h2>AbstractShape<a class="headerlink" href="#abstractshape" title="Ссылка на этот заголовок"></a></h2>
+<p>Базовый абстрактный класс для фигуры. Содержит общие для всех данные.</p>
+<section id="id1">
+<h3>Параметры<a class="headerlink" href="#id1" title="Ссылка на этот заголовок"></a></h3>
+<dl class="simple">
+<dt>id</dt><dd><p>Уникальное имя фигуры. Нельзя в одном шаблоне создавать две фигуры с одинаковым именем.
+Это имя используется для ссылки на конкретную фигуру и её параметры.</p>
+</dd>
+<dt>parent</dt><dd><p>Ссылка на родительский объект. Если <cite>parent</cite> не указан то им является исходная картинка.
+При парентинге начало координат объекта находятся в верхнем левом углу парента, поэтому объект изменит своё расположение
+и будет следовать за родительским объектом.</p>
+</dd>
+</dl>
+<p>Нет парентинга</p>
+<img alt="No Parenting" src="../_images/parenting-no.gif" />
+<p>Есть парентинг</p>
+<img alt="With Parenting" src="../_images/parenting-yes.gif" />
+<dl class="simple">
+<dt>z_index</dt><dd><p>Параметр отвечает за порядок отрисовки элементов. Например, родительский объект должен быть создан в шаблоне
+ДО указания его в качестве родителя. В таком случае все дочерние объекты будут отрисованы поверх родительского.
+Изменение индекса позволит управлять этой очерёдностью.</p>
+</dd>
+</dl>
+<img alt="With Parenting" src="../_images/z-index.gif" />
+<dl class="simple">
+<dt>enabled</dt><dd><p>Параметр, определяющий рендерится ли фигура. Если <cite>enabled=false</cite> то элемент будет отсутствовать, но при этом ячейка
+сетки всё равно будет занята и эта фигура может быть парентом для других фигур.</p>
+</dd>
+<dt>skip</dt><dd><p>Пропуск элемента в сетке. В отличие от <cite>enabled</cite> ячейка сетки не будет занята, произойдет его полное
+удаление со смещением следующего элемента.
+Лучше всего подходит для вариативных элементов. То есть в двух соседних элементах в параметр <cite>skip</cite> можно записать
+противоположные условия и будет виден либо один либо другой.</p>
+</dd>
+</dl>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="nt">&quot;variables&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;show_alt&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="p">},</span>
+<span class="nt">&quot;shapes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;label&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Main Text&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;skip&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;$show_alt&quot;</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;label&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Alt Text&quot;</span><span class="p">,</span><span class="w">  </span><span class="nt">&quot;skip&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;=not $show_alt&quot;</span><span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="baseshape">
+<h2>BaseShape<a class="headerlink" href="#baseshape" title="Ссылка на этот заголовок"></a></h2>
+<blockquote>
+<div><p><cite>inherited (AbstractShape)</cite></p>
+</div></blockquote>
+<p>Базовая фигура представляет объект, участвующий в рендере. Он либо видим на рендере, либо используется как
+невидимый родительский объект.</p>
+<dl class="simple">
+<dt>local_resource_paths</dt><dd><p>Пути для поиска файлов ресурсов.</p>
+</dd>
+<dt>get_resource_func</dt><dd><p>Функция для поиска файла ресурса.</p>
+</dd>
+</dl>
+<section id="id2">
+<h3>Параметры<a class="headerlink" href="#id2" title="Ссылка на этот заголовок"></a></h3>
+<dl class="simple">
+<dt>x</dt><dd><p>Координата X относительно родительского объекта</p>
+</dd>
+<dt>y</dt><dd><p>Координата Y относительно родительского объекта</p>
+</dd>
+<dt>width</dt><dd><p>Ширина фигуры</p>
+</dd>
+<dt>height</dt><dd><p>Высота фигуры</p>
+</dd>
+<dt>align_v</dt><dd><p>Выравнивание по вертикали относительно родителя</p>
+</dd>
+<dt>align_h</dt><dd><p>Выравнивание по горизонтали относительно родителя</p>
+</dd>
+<dt>color</dt><dd><p>Основной цвет. Можно указать в следующих форматах:</p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p><strong>RGB (0-255):</strong> <code class="docutils literal notranslate"><span class="pre">[100,</span> <span class="pre">100,</span> <span class="pre">0]</span></code></p></li>
+<li><p><strong>RGBA (0-255):</strong> <code class="docutils literal notranslate"><span class="pre">[255,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">100]</span></code></p></li>
+<li><p><strong>HEX:</strong> <code class="docutils literal notranslate"><span class="pre">#fff444</span></code></p></li>
+<li><p><strong>COLOR NAME:</strong> <code class="docutils literal notranslate"><span class="pre">&quot;red&quot;</span></code></p></li>
+</ul>
+<p>Список имён цветов можно посмотреть в исходниках Pillow, например <a class="reference external" href="https://github.com/python-pillow/Pillow/blob/master/src/PIL/ImageColor.py#L148">здесь</a></p>
+<dl class="simple">
+<dt>rotate</dt><dd><p>Угол поворота в градусах</p>
+</dd>
+<dt>rotation_pivot</dt><dd><p>Центр поворота. <strong>Этот параметр всегда должен быть списком из двух элементов</strong>.
+Если не указать центр поворота то по умолчанию центром будет являться геометрический центр объекта.</p>
+</dd>
+<dt>rotation_offset</dt><dd><p>Смещение фигуры относительно края парента при включенном выравнивании по горизонтали или вертикали.</p>
+</dd>
+<dt>gradient (EXPERIMENTAL)</dt><dd><p>Заливка градиентом. Поддерживается линейный и радиальный градиенты</p>
+</dd>
+<dt>debug</dt><dd><p>Отображение рамок объектов. Должен быть словарём.</p>
+</dd>
+</dl>
+<p>Доступные параметры для <code class="docutils literal notranslate"><span class="pre">debug</span></code></p>
+<dl class="simple">
+<dt>debug.enabled</dt><dd><p>Включить или выключить обводку</p>
+</dd>
+<dt>debug.color</dt><dd><p>Цвет обводки</p>
+</dd>
+<dt>debug.width</dt><dd><p>Толщина обводки</p>
+</dd>
+<dt>debug.offset</dt><dd><p>Смещение обводки от основной фигуры</p>
+</dd>
+<dt>debug.rotation_pivot</dt><dd><p>Отобразить пивот вращения</p>
+</dd>
+<dt>debug.rotation_pivot_color</dt><dd><p>Цвет пивота вращения</p>
+</dd>
+<dt>debug.rotation_pivot_size</dt><dd><p>Размер пивота вращения</p>
+</dd>
+<dt>debug.parent</dt><dd><p>Отобразить обводку родительского объекта</p>
+</dd>
+<dt>debug.parent_color</dt><dd><p>Цвет обводки родительского объекта</p>
+</dd>
+<dt>debug.parent_width</dt><dd><p>Толщина обводки родительского объекта</p>
+</dd>
+<dt>debug.parent_offset</dt><dd><p>Смещение обводки от основной фигуры для родительского объекта</p>
+</dd>
+<dt>debug.canvas</dt><dd><p>Отобразить границы исходного канваса текущего объекта</p>
+</dd>
+<dt>debug.canvas_color</dt><dd><p>Цвет обводки границ канваса</p>
+</dd>
+<dt>debug.canvas_width</dt><dd><p>Толщина обводки границ канваса</p>
+</dd>
+</dl>
+<p>Пример:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;label&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;example&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;parent&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;rect1&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;align_h&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;center&quot;</span><span class="p">,</span><span class="w">  </span><span class="nt">&quot;align_v&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;debug&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;enabled&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;red&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;width&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;parent_width&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;parent_color&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;orange&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;parent_offset&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;parent&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;canvas&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;canvas_color&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;yellow&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;canvas_width&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;rotation_pivot&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;rotation_pivot_size&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;5p&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;rotation_pivot_color&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;blue&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<img alt="With Parenting" src="../_images/debug.png" />
+</section>
+<section id="id4">
+<h3>Поля<a class="headerlink" href="#id4" title="Ссылка на этот заголовок"></a></h3>
+<dl class="simple">
+<dt>top</dt><dd><p>Верхняя граница в глобальных координатах</p>
+</dd>
+<dt>bottom</dt><dd><p>Нижняя граница в глобальных координатах</p>
+</dd>
+<dt>left</dt><dd><p>Левая граница в глобальных координатах</p>
+</dd>
+<dt>right</dt><dd><p>Правая граница в глобальных координатах</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="emptyshape">
+<h2>EmptyShape<a class="headerlink" href="#emptyshape" title="Ссылка на этот заголовок"></a></h2>
+<blockquote>
+<div><p><cite>inherited (BaseShape)</cite></p>
+</div></blockquote>
+<p>Пустая фигура, используется как заглушка для пустого места или как невидимый парент.</p>
+</section>
+<section id="rootparent">
+<h2>RootParent<a class="headerlink" href="#rootparent" title="Ссылка на этот заголовок"></a></h2>
+<blockquote>
+<div><p><cite>inherited (BaseShape)</cite></p>
+</div></blockquote>
+<p>Обёртка для исходной картинки, чтобы она работала как родительский объект.</p>
+</section>
+<section id="id5">
+<h2>Глобальный контекст<a class="headerlink" href="#id5" title="Ссылка на этот заголовок"></a></h2>
+<p>В процессе ресолва экспрешенов доступны все built-in функции python, а также несколько объектов импортированных из библиотек.</p>
+<dl class="simple">
+<dt>random</dt><dd><p>Функция <cite>random.random</cite></p>
+</dd>
+<dt>uniform</dt><dd><p>Функция <cite>random.uniform</cite></p>
+</dd>
+<dt>randint</dt><dd><p>Функция <cite>random.randint</cite></p>
+</dd>
+<dt>random_seed</dt><dd><p>Функция <cite>random.seed</cite></p>
+</dd>
+<dt>math</dt><dd><p>Модуль <cite>math</cite></p>
+</dd>
+</dl>
+<p>Пример</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;label&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;`=math.sin($frame)`&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="index.html" class="btn btn-neutral float-left" title="Фигуры" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="rect.html" class="btn btn-neutral float-right" title="Rect" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Авторские права 2024. </p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

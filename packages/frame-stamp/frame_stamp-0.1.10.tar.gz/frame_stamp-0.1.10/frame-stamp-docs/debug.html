@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Debug Mode &mdash; документация Frame Stamp </title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=372fde1a"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/translations.js?v=9bfe3ffa"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="Советы и подсказки" href="tricks.html" />
+    <link rel="prev" title="Создание новых фигур" href="development.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Frame Stamp
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="make_template.html">Создание шаблонов</a></li>
+<li class="toctree-l1"><a class="reference internal" href="viewer.html">Template Viewer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shapes/index.html">Фигуры</a></li>
+<li class="toctree-l1"><a class="reference internal" href="expressions.html">Expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="environment_variables.html">Переменные окружения</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Создание новых фигур</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Debug Mode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#timeline">TimeLine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tricks.html">Советы и подсказки</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Frame Stamp</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Debug Mode</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="debug-mode">
+<h1>Debug Mode<a class="headerlink" href="#debug-mode" title="Ссылка на этот заголовок"></a></h1>
+<p>Во время разработки шаблона удобно видеть контуры фигур. Особенно актуально для невидимых фигур, таких как <code class="docutils literal notranslate"><span class="pre">Grid</span></code>, <code class="docutils literal notranslate"><span class="pre">Row</span></code> и <code class="docutils literal notranslate"><span class="pre">Column</span></code>.
+Для включения этого режима есть два способа.</p>
+<ol class="arabic simple">
+<li><p>В шаблоне в разделе <code class="docutils literal notranslate"><span class="pre">variables</span></code> добавьте поле <code class="docutils literal notranslate"><span class="pre">&quot;debug&quot;:</span> <span class="pre">{&quot;enabled&quot;:</span> <span class="pre">true}</span></code>.</p></li>
+<li><p>В меню <cite>View/Debug Shapes</cite>.</p></li>
+</ol>
+<p>В этом режиме каждая фигура будет отрисовывать свой <cite>bounding box</cite> цветной рамкой.</p>
+<img alt="debugmode" src="_images/dialog2.png" />
+<div class="admonition note">
+<p class="admonition-title">Примечание</p>
+<p><cite>Bounding Box</cite> фигуры <code class="docutils literal notranslate"><span class="pre">label</span></code> может быть весьма странной. Это связанно с особенностью рендера текста. Не волнуйтесь, с ней всё ОК.</p>
+</div>
+<p>В параметрах поля <code class="docutils literal notranslate"><span class="pre">debug</span></code>  доступны следующие опции:</p>
+<dl class="simple">
+<dt>enabled</dt><dd><p>Разрешает или запрещает <code class="docutils literal notranslate"><span class="pre">debug</span> <span class="pre">mode</span></code></p>
+</dd>
+<dt>color</dt><dd><p>Цвет рамки</p>
+</dd>
+<dt>width</dt><dd><p>Толщина рамки</p>
+</dd>
+<dt>offset</dt><dd><p>Смещение рамки вовнутрь фигуры</p>
+</dd>
+<dt>parent_border_color</dt><dd><p>Цвет рамки родительского объекта</p>
+</dd>
+<dt>parent_border_width</dt><dd><p>Толщина рамки родительского объекта. Толщина 0 просто её отключает.</p>
+</dd>
+<dt>parent_offset</dt><dd><p>Смещение рамки родительского объекта.</p>
+</dd>
+<dt>rotation_pivot</dt><dd><p>Отображение центра поворота.</p>
+</dd>
+<dt>rotation_pivot_color</dt><dd><p>Цвет центра поворота</p>
+</dd>
+<dt>rotation_pivot_size</dt><dd><p>Размер центра поворота</p>
+</dd>
+<dt>canvas_bound</dt><dd><p>Отображение рамки исходного канваса текущей фигуры</p>
+</dd>
+<dt>canvas_bound_color</dt><dd><p>Цвет канваса текущей фигуры</p>
+</dd>
+<dt>canvas_bound_width</dt><dd><p>Тощина рамки канваса текущей фигуры</p>
+</dd>
+</dl>
+</section>
+<section id="timeline">
+<h1>TimeLine<a class="headerlink" href="#timeline" title="Ссылка на этот заголовок"></a></h1>
+<p>Для дебага изменяемых значений в шаблоне или настройки анимации ожно использовать простой встроенный таймлайн.
+Для отображения таймлайна во вьювере укажите перменных указать поле <code class="docutils literal notranslate"><span class="pre">_timeline</span></code> с настройками таймлайна.
+В шаблоне его значение будет доступно через переменную <code class="docutils literal notranslate"><span class="pre">$timeline_value</span></code>.</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;templates&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;timeline_example&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;defaults&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">&quot;variables&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;_timeline&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;start&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;end&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">}</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">&quot;shapes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;label&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Timeline Value: $timeline_value&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;font_size&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;6u&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;align_h&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;center&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;y&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;20u&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;backdrop&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;black&quot;</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Значение <code class="docutils literal notranslate"><span class="pre">$timeline_value</span></code> можно использовать в экспрешенах фигур, переменных и в дефолтных переменных.</p>
+<div class="admonition note">
+<p class="admonition-title">Примечание</p>
+<p>Пример смотрите в шаблоне <code class="docutils literal notranslate"><span class="pre">examples/timeline.json</span></code></p>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="development.html" class="btn btn-neutral float-left" title="Создание новых фигур" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="tricks.html" class="btn btn-neutral float-right" title="Советы и подсказки" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Авторские права 2024. </p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

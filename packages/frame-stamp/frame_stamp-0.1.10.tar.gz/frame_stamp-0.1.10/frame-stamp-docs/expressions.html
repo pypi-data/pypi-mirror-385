@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expressions &mdash; документация Frame Stamp </title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=372fde1a"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/translations.js?v=9bfe3ffa"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="Переменные окружения" href="environment_variables.html" />
+    <link rel="prev" title="Column" href="shapes/column.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Frame Stamp
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="make_template.html">Создание шаблонов</a></li>
+<li class="toctree-l1"><a class="reference internal" href="viewer.html">Template Viewer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shapes/index.html">Фигуры</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Expressions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">Ссылка на другой элемент шаблона</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">Ссылка на переменные</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">Ссылка на родительский объект</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">Сложные выражения</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">Специальные переменные</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#unit-point">Unit и Point</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="environment_variables.html">Переменные окружения</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Создание новых фигур</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debug.html">Debug Mode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debug.html#timeline">TimeLine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tricks.html">Советы и подсказки</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Frame Stamp</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Expressions</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="expressions">
+<span id="id1"></span><h1>Expressions<a class="headerlink" href="#expressions" title="Ссылка на этот заголовок"></a></h1>
+<p>Шаблонизатор поддерживает выражения, с помощью которых можно создавать сложные связи между фигурами или изменять значения
+переменных «на лету», передавая их в параметр фигуры.</p>
+<section id="id2">
+<h2>Ссылка на другой элемент шаблона<a class="headerlink" href="#id2" title="Ссылка на этот заголовок"></a></h2>
+<p>Если у фигуры указать параметр <code class="docutils literal notranslate"><span class="pre">id</span></code> то можно будет ссылаться на его параметры из других фигур.</p>
+<div class="admonition note">
+<p class="admonition-title">Примечание</p>
+<p>Фигура должна быть определена до обращения к ней</p>
+</div>
+<p>Следующий пример показывает как создать простую зависимость второго прямоугольника от размера и положения первого:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;shapes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;определяем первый прямоугольник&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;rect&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;x&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;y&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;width&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;height&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;rect_1&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;определяем второй прямоугольник&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;rect&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;параметр Х ссылается на такой же параметр другой фигуры.&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;x&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;rect_1.x&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;параметр Y ссылается на параметр высоты другой фигуры&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;y&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;rect_1.height&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Для того чтобы ссылаться на свои параметры используйте специальное слово <code class="docutils literal notranslate"><span class="pre">self</span></code>. Например <code class="docutils literal notranslate"><span class="pre">&quot;x&quot;:</span> <span class="pre">&quot;self.y&quot;</span></code>.</p>
+</section>
+<section id="id3">
+<h2>Ссылка на переменные<a class="headerlink" href="#id3" title="Ссылка на этот заголовок"></a></h2>
+<p>С помощью символа <code class="docutils literal notranslate"><span class="pre">$</span></code> можно ссылаться на значения из контекста или специальные значения, которые генерируются шаблонизатором.</p>
+<p>В этом примере мы ссылаемся на цвет из переменных контекста.</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;variables&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;backdrop_color&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">]</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;shapes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;rect&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;x&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;y&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;width&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;height&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;$backdrop_color&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h2>Ссылка на родительский объект<a class="headerlink" href="#id4" title="Ссылка на этот заголовок"></a></h2>
+<p>Любая фигура имеет родительский объект. Если он не задан явно, то родительским объектом будет исходный кадр.
+Координаты рассчитываются относительно родительского объекта.</p>
+<div class="admonition note">
+<p class="admonition-title">Примечание</p>
+<p>Такие поля как <code class="docutils literal notranslate"><span class="pre">left</span></code>, <code class="docutils literal notranslate"><span class="pre">right</span></code>, <code class="docutils literal notranslate"><span class="pre">top</span></code> и <code class="docutils literal notranslate"><span class="pre">bottom</span></code> возвращают глобальные координаты вне зависимости от родительского объекта.</p>
+</div>
+<p>Для ссылки на параметры родительского объекта используйте имя <code class="docutils literal notranslate"><span class="pre">parent</span></code></p>
+<div class="admonition note">
+<p class="admonition-title">Примечание</p>
+<p>Нельзя создать фигуру указав ей параметр <code class="docutils literal notranslate"><span class="pre">id</span></code> равный <code class="docutils literal notranslate"><span class="pre">&quot;parent&quot;</span></code> или <code class="docutils literal notranslate"><span class="pre">&quot;self&quot;</span></code>. Это зарезервированы слова.</p>
+</div>
+<p>В следующем примере для второй фигуры указан родительский объект. Параметр <code class="docutils literal notranslate"><span class="pre">&quot;width&quot;</span></code> ссылается на ширину родительского объекта.
+Значение будет автоматически измениться если изменить родительский объект.</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;shapes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;rect&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;x&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;y&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;width&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;height&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;rec1&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;rect&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;parent&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;rec1&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;x&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;y&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+
+<span class="w">      </span><span class="nt">&quot;&quot;</span><span class="p">:</span><span class="s2">&quot;указываем ширину равную ширине родительского объекта&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;width&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;parent.width&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;height&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h2>Сложные выражения<a class="headerlink" href="#id5" title="Ссылка на этот заголовок"></a></h2>
+<p>Шаблонизатор поддерживает сложные выражения, которые транслируются в Python через <code class="docutils literal notranslate"><span class="pre">eval</span></code>, подставляя значения переменных.
+Если в выражении есть какие-либо операции, а не только ссылка на другой параметр, то его следует начинать со знака <code class="docutils literal notranslate"><span class="pre">=</span></code>.</p>
+<p>В следующем шаблоне второй прямоугольник всегда в 2 раза меньше родителя и вписан в его центр.</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;shapes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;rect&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;x&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;y&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;width&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;height&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;rec1&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;rect&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;parent&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;rec1&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;x&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;y&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;align_h&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;center&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;align_v&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;width&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;=parent.width/2&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;height&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;=parent.height/2&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;red&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>В сложных выражениях можно точно так же использовать переменные.</p>
+<p><strong>Внимание!</strong> При распаковке переменных в место имени переменной подставляется её значение. Если вы пишете экспрешен со
+строкой то нужно добавлять кавычки.</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="nt">&quot;variables&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;some_name&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="nt">&quot;shapes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;label&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;hello&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;enabled&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;=&#39;$name&#39;==&#39;name1&#39;&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>В этом примере переменная <code class="docutils literal notranslate"><span class="pre">$name</span></code> дополнительно берётся в кавычки, чтобы она определилась как строка.</p>
+<p>Второй способ создавать выражения - писать однострочный код на Python. Для этого выражение нужно обернуть в бектики « ` »
+и также начинать выражение с символа <code class="docutils literal notranslate"><span class="pre">=</span></code>.</p>
+<p>Формат такой: <code class="docutils literal notranslate"><span class="pre">`=expression`</span></code></p>
+<div class="admonition note">
+<p class="admonition-title">Примечание</p>
+<p>В одной строке может быть несколько выражений.</p>
+</div>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w"> </span><span class="nt">&quot;variables&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">     </span><span class="nt">&quot;entity_path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;assets/characters/char1&quot;</span>
+<span class="w">     </span><span class="p">},</span>
+<span class="w"> </span><span class="nt">&quot;shapes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">     </span><span class="p">{</span>
+<span class="w">         </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;label&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;`=&#39;$entity_path&#39;.split(&#39;/&#39;)[-2]` / `=&#39;$entity_path&#39;.split(&#39;/&#39;)[-1]`&quot;</span>
+<span class="w">     </span><span class="p">}</span>
+<span class="w">     </span><span class="p">]</span>
+<span class="w"> </span><span class="p">}</span>
+</pre></div>
+</div>
+<p>В значении параметра <code class="docutils literal notranslate"><span class="pre">text</span></code> есть два выражения. В результате мы получим такой текст: <code class="docutils literal notranslate"><span class="pre">characters</span> <span class="pre">/</span> <span class="pre">char1</span></code>.</p>
+<p>Аналогичный результат можно получить таким выражением:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;label&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;`=&#39; / &#39;.join(&#39;$entity_path&#39;.split(&#39;/&#39;)[-2:])`&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Переменные в <code class="docutils literal notranslate"><span class="pre">variables</span></code> могут ссылаться на переменные из <code class="docutils literal notranslate"><span class="pre">defaults</span></code> и наоборот</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w"> </span><span class="nt">&quot;defaults&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span>
+<span class="w"> </span><span class="p">},</span>
+<span class="w"> </span><span class="nt">&quot;variables&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="nt">&quot;value2&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;=$value * 2&quot;</span>
+<span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h2>Специальные переменные<a class="headerlink" href="#id6" title="Ссылка на этот заголовок"></a></h2>
+<p>Шаблонизатор автоматически добавляет в контекст несколько переменных</p>
+<dl class="simple">
+<dt>source</dt><dd><p>Ссылка на исходное изображение, поверх которого производится рендер шаблона. С помощью этой переменной можно ссылаться
+на исходную картинку в фигуре <code class="docutils literal notranslate"><span class="pre">image</span></code> в параметре <code class="docutils literal notranslate"><span class="pre">source</span></code>.</p>
+</dd>
+</dl>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;image&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;$source&quot;</span><span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>source_width</dt><dd><p>Ширина исходной картинки</p>
+</dd>
+<dt>source_height</dt><dd><p>Высота иходной картинки</p>
+</dd>
+<dt>source_aspect</dt><dd><p>Отношение высоты исходной картинки к её ширине <cite>(height/width)</cite></p>
+</dd>
+<dt>unit</dt><dd><p>Одна сотая от высоты картинки. Может использоваться как множитель к числам.</p>
+</dd>
+<dt>point</dt><dd><p>Автоматически рассчитываемое значение которое для любого размера исходного кадра будет иметь примерно одинаковую относительную величину.</p>
+</dd>
+</dl>
+</section>
+<section id="unit-point">
+<h2>Unit и Point<a class="headerlink" href="#unit-point" title="Ссылка на этот заголовок"></a></h2>
+<p>В выражениях есть возможность записывать числа с помощью относительных величин от размера картинки.
+В переменных эти значения доступны в под именами <code class="docutils literal notranslate"><span class="pre">&quot;$unt&quot;</span></code> и <code class="docutils literal notranslate"><span class="pre">&quot;$pnt&quot;</span></code>.</p>
+<p>Значение <code class="docutils literal notranslate"><span class="pre">unit</span></code> является короткой записью выражения <code class="docutils literal notranslate"><span class="pre">source_height</span> <span class="pre">/</span> <span class="pre">100</span></code>, то есть одна сотая часть от высоты
+исходного изображения, или 1%.</p>
+<p>Этот параметр можно использовать в записи чисел в виде суффикса «u» для чисел. Например: <code class="docutils literal notranslate"><span class="pre">10u</span></code>, <code class="docutils literal notranslate"><span class="pre">2.5u</span></code>, <code class="docutils literal notranslate"><span class="pre">50u</span></code>.</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;label&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;$unt&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;font_size&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;10u&quot;</span><span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>Данный код создаст текст в котором будет записан размер одного «юнита» в пикселях.
+Высота этого текста всегда будет 10% от высоты картинки.</p>
+<p>Значение <code class="docutils literal notranslate"><span class="pre">point</span></code> рассчитывается учитывая и высоту и ширину. В итоге получаем примерно одинаковый относительный
+размер для любого изображения и не экстремального соотношения сторон.</p>
+<p>Формула расчёта: <code class="docutils literal notranslate"><span class="pre">round(0.01*sqrt(width*height),</span> <span class="pre">3)</span></code>.</p>
+<p>Этот параметр используется в виде суффикса «p». Например: <code class="docutils literal notranslate"><span class="pre">10p</span></code>, <code class="docutils literal notranslate"><span class="pre">2.5p</span></code>, <code class="docutils literal notranslate"><span class="pre">50p</span></code>.</p>
+<p>Эти переменные полезно использовать для адаптивных шаблонов, которые могут рендериться на картинках разного размера.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="shapes/column.html" class="btn btn-neutral float-left" title="Column" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="environment_variables.html" class="btn btn-neutral float-right" title="Переменные окружения" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Авторские права 2024. </p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

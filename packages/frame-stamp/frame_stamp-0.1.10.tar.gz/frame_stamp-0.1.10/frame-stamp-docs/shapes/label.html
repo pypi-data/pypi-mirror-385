@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Label &mdash; документация Frame Stamp </title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=372fde1a"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/translations.js?v=9bfe3ffa"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" />
+    <link rel="next" title="Image" href="image.html" />
+    <link rel="prev" title="Rect" href="rect.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Frame Stamp
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../make_template.html">Создание шаблонов</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../viewer.html">Template Viewer</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Фигуры</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#id2">Параметры</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#id3">Поля</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#id4">Список доступных фигур</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="base_shapes.html">Base Shapes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="base_shapes.html#id5">Глобальный контекст</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rect.html">Rect</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Label</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Параметры</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">Специальные символы</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="image.html">Image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="line.html">line</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tile.html">Tile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="grid.html">Grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="row.html">Row</a></li>
+<li class="toctree-l3"><a class="reference internal" href="column.html">Column</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../expressions.html">Expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../environment_variables.html">Переменные окружения</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Создание новых фигур</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../debug.html">Debug Mode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../debug.html#timeline">TimeLine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tricks.html">Советы и подсказки</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Frame Stamp</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Фигуры</a></li>
+      <li class="breadcrumb-item active">Label</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="label">
+<h1>Label<a class="headerlink" href="#label" title="Ссылка на этот заголовок"></a></h1>
+<blockquote>
+<div><p><cite>inherited (BaseShape)</cite></p>
+</div></blockquote>
+<p>Текст</p>
+<section id="id1">
+<h2>Параметры<a class="headerlink" href="#id1" title="Ссылка на этот заголовок"></a></h2>
+<dl>
+<dt>text</dt><dd><p>Обязательный параметр, указывающий что именно будет написано</p>
+</dd>
+<dt>font_name</dt><dd><p>Название шрифта, заменяет шрифт по умолчанию.</p>
+<p>Этот параметр поддерживает встроенные шрифты (Tools/File to BASE64).</p>
+</dd>
+<dt>font_size</dt><dd><p>Размер шрифта</p>
+</dd>
+<dt>text_color</dt><dd><p>Цвет текста. Не тоже самое что параметр <code class="docutils literal notranslate"><span class="pre">color</span></code>!</p>
+</dd>
+<dt>text_spacing</dt><dd><p>Расстояние между строками для многострочного текста</p>
+</dd>
+<dt>zfill</dt><dd><p>Аналог функции строки <cite>zfill()</cite></p>
+</dd>
+<dt>lower</dt><dd><p>Аналог функции строки <cite>lower()</cite></p>
+</dd>
+<dt>upper</dt><dd><p>Аналог функции строки <cite>upper()</cite></p>
+</dd>
+<dt>title</dt><dd><p>Аналог функции строки <cite>title()</cite></p>
+</dd>
+<dt>truncate</dt><dd><p>Обрезка строки на длину, не более указанной.</p>
+</dd>
+<dt>ltruncate</dt><dd><p>Обрезка, аналогичная параметру <cite>truncate</cite>, только от начала строки.</p>
+</dd>
+<dt>truncate_path</dt><dd><p>Обрезка пути. Путь разделяется по знаку слэша и остаётся только указанное количество элементов.</p>
+</dd>
+<dt>ltruncate_path</dt><dd><p>Обрезка пути слева. Остаётся указанное количество последних элементов.</p>
+</dd>
+<dt>truncate_to_parent</dt><dd><p>Обрезка строки чтобы она вписалась в ширину парента.</p>
+</dd>
+<dt>ltruncate_to_parent</dt><dd><p>Обрезка по ширине парента с удалением текста слева.</p>
+</dd>
+<dt>fit_to_parent</dt><dd><p>Вписать текст в ширину парента с переносом на новую строку.</p>
+</dd>
+<dt>line_splitter</dt><dd><p>Символ для разбиение текста при переносе на новую строку. Работает только вместе с <code class="docutils literal notranslate"><span class="pre">fit_to_parent</span></code>.</p>
+</dd>
+<dt>move_splitter_to_next_line</dt><dd><p>Если <code class="docutils literal notranslate"><span class="pre">True</span></code> то символ разбиения переносится на новую строку, если <code class="docutils literal notranslate"><span class="pre">False</span></code> то остаётся на предыдущей.
+Работает только с <code class="docutils literal notranslate"><span class="pre">fit_to_parent</span></code>.</p>
+</dd>
+<dt>max_lines_count</dt><dd><p>Ограничение по количеству переносов при включенном <code class="docutils literal notranslate"><span class="pre">fit_to_parent</span></code>. Лишние строки удаляются</p>
+</dd>
+<dt>lmax_lines_count</dt><dd><p>То же что и <cite>max_lines_count</cite> но удалятся строки в начале текста. Работает только вместе с <code class="docutils literal notranslate"><span class="pre">fit_to_parent</span></code>.</p>
+</dd>
+<dt>outline</dt><dd><p>Обводка текста. Данный параметр можно указывать в двух вариантах</p>
+</dd>
+</dl>
+<ul>
+<li><p>number</p>
+<blockquote>
+<div><p>Указывая просто число (int или float) вы указываете толщину черного контура. Параметр называется <code class="docutils literal notranslate"><span class="pre">width</span></code>.</p>
+</div></blockquote>
+</li>
+</ul>
+<dl class="simple">
+<dt>padding</dt><dd><p>Отступы от доступного для рендера пространства. Пишется в виде списка из 4х элементов.
+Каждый элемент обозначает свою сторону начиная с <code class="docutils literal notranslate"><span class="pre">top</span></code> и далее по часовой стрелке.
+То есть параметр <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">2,</span> <span class="pre">3,</span> <span class="pre">4]</span></code> равен <code class="docutils literal notranslate"><span class="pre">top=1,</span> <span class="pre">right=2,</span> <span class="pre">bottom=3,</span> <span class="pre">left=4</span></code></p>
+</dd>
+<dt>padding_top</dt><dd><p>Указывает отступ только сверху. Имеет бОльший приоритет чем параметр <code class="docutils literal notranslate"><span class="pre">padding</span></code></p>
+</dd>
+<dt>padding_right</dt><dd><p>Указывает отступ только справа. Имеет бОльший приоритет чем параметр <code class="docutils literal notranslate"><span class="pre">padding</span></code></p>
+</dd>
+<dt>padding_bottom</dt><dd><p>Указывает отступ только снизу. Имеет бОльший приоритет чем параметр <code class="docutils literal notranslate"><span class="pre">padding</span></code></p>
+</dd>
+<dt>padding_left</dt><dd><p>Указывает отступ только слева. Имеет бОльший приоритет чем параметр <code class="docutils literal notranslate"><span class="pre">padding</span></code></p>
+</dd>
+</dl>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;outline&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">}</span>
+</pre></div>
+</div>
+<ul>
+<li><p>dict</p>
+<blockquote>
+<div><p>С помощью словаря можно указать еще два параметра, это цвет и жесткость.</p>
+</div></blockquote>
+</li>
+</ul>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;outline&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;width&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;red&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;hardness&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">}}</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>backdrop</dt><dd><p>Подложка для текста. Доступно два способа определения</p>
+</dd>
+</dl>
+<ul>
+<li><p>str/list</p>
+<blockquote>
+<div><p>В качестве одиночного параметра может выступать цвет в виде строки или списка из 3 или 4 чисел.</p>
+</div></blockquote>
+</li>
+</ul>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;backdrop&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">]}</span>
+</pre></div>
+</div>
+<ul>
+<li><p>dict</p>
+<blockquote>
+<div><p>С помощью словаря можно указать дополнительный параметр смещения координат бекдропа.</p>
+</div></blockquote>
+</li>
+</ul>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;backdrop&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;offset&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;red&quot;</span><span class="p">}}</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>format_date</dt><dd><p>Форматирование даты. Позволяет вставить дату любого формата в тексте.
+Про форматирование даты можно почитать <a class="reference external" href="https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes">в документации</a>.
+Дата берётся из контекста, параметр <cite>timestamp</cite> или текущая дата.</p>
+</dd>
+</dl>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;label&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Date: {:%Y/%m/%d}&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;format_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">    </span><span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h2>Специальные символы<a class="headerlink" href="#id3" title="Ссылка на этот заголовок"></a></h2>
+<dl>
+<dt>&amp;;</dt><dd><p>Пустой символ. Полезно для разделения имени переменной от другого текста если между ними не нужен пробел.
+Например такая запись: <code class="docutils literal notranslate"><span class="pre">$widthx$height</span></code> вызовет ошибку, так как парсер будет искать переменную <code class="docutils literal notranslate"><span class="pre">$widthx</span></code>.
+В таком случае писать нужно так: <code class="docutils literal notranslate"><span class="pre">$width&amp;;x&amp;;$height</span></code>. Эта запись будет распечатана как <code class="docutils literal notranslate"><span class="pre">800x600</span></code></p>
+</dd>
+<dt>HTML</dt><dd><p>Поддерживаются любые HTML-спец символы в формате <code class="docutils literal notranslate"><span class="pre">&amp;[name];</span></code>.</p>
+<p>Пример списка символов: <a class="reference external" href="https://www.whatsmyip.org/html-characters/">https://www.whatsmyip.org/html-characters/</a></p>
+</dd>
+<dt>(`)</dt><dd><p>Текст в фигуре label по умолчанию не воспринимается как выражение. Если вы напишете такое выражение:</p>
+<p><code class="docutils literal notranslate"><span class="pre">&quot;text&quot;:</span> <span class="pre">&quot;=int($frame/$total_frames*100)&quot;</span></code></p>
+<p>То получите в результате такой текст:</p>
+<p><code class="docutils literal notranslate"><span class="pre">int(32/200*100)</span></code></p>
+<p>По умолчанию в тексте распаковываются только переменные, начинающиеся на символ <strong>$</strong>.
+Чтобы добавить в текст лейбла выражение его необходимо обозначить апострофом (<strong>`</strong>) с двух сторон.
+При этом вне этой зоны можно писать любой другой текст:</p>
+<p><code class="docutils literal notranslate"><span class="pre">&quot;text&quot;:</span> <span class="pre">&quot;Progress:</span> <span class="pre">`=int($frame/$total_frames*100)`%&quot;</span></code></p>
+<p>Тогда получите такой результат:</p>
+<p><code class="docutils literal notranslate"><span class="pre">Progress:</span> <span class="pre">16%</span></code></p>
+<p>Один лейбл может содержать несколько отдельных экспрешенов.</p>
+</dd>
+</dl>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="rect.html" class="btn btn-neutral float-left" title="Rect" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="image.html" class="btn btn-neutral float-right" title="Image" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Авторские права 2024. </p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

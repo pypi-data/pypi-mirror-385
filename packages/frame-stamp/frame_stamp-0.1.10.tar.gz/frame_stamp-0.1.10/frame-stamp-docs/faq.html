@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQ &mdash; документация Frame Stamp </title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=372fde1a"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/translations.js?v=9bfe3ffa"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="prev" title="Советы и подсказки" href="tricks.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Frame Stamp
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="make_template.html">Создание шаблонов</a></li>
+<li class="toctree-l1"><a class="reference internal" href="viewer.html">Template Viewer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shapes/index.html">Фигуры</a></li>
+<li class="toctree-l1"><a class="reference internal" href="expressions.html">Expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="environment_variables.html">Переменные окружения</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Создание новых фигур</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debug.html">Debug Mode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debug.html#timeline">TimeLine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tricks.html">Советы и подсказки</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">FAQ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Почему градиент такой медленный</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">Есть ли фигуры или параметры заметно замедляющие рендер?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">Есть ли возможность рисовать залитый многоугольник произвольной фигуры?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">Как сделать треугольник?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">Какой глубины может быть парентинг?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">Можно в тексте лейбла записать несколько выражений сразу?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">Чем отличаются поля и параметры?</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Frame Stamp</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">FAQ</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="faq">
+<h1>FAQ<a class="headerlink" href="#faq" title="Ссылка на этот заголовок"></a></h1>
+<section id="id1">
+<h2>Почему градиент такой медленный<a class="headerlink" href="#id1" title="Ссылка на этот заголовок"></a></h2>
+<p>Он реализован на стандартных функция Python чтобы не добавлять в зависимости <code class="docutils literal notranslate"><span class="pre">numpy</span></code> или <code class="docutils literal notranslate"><span class="pre">cv2</span></code>.
+В некоторых случаях лишние зависимости могут сломать всё, поэтому пока будет только так.</p>
+</section>
+<section id="id2">
+<h2>Есть ли фигуры или параметры заметно замедляющие рендер?<a class="headerlink" href="#id2" title="Ссылка на этот заголовок"></a></h2>
+<p>Да, это <strong>outline</strong> для текста. Считается относительно долго. Старайтесь его избегать на больших текстах.
+Градиент тоже далеко не оптимален.</p>
+</section>
+<section id="id3">
+<h2>Есть ли возможность рисовать залитый многоугольник произвольной фигуры?<a class="headerlink" href="#id3" title="Ссылка на этот заголовок"></a></h2>
+<p>Да, это фигура <code class="docutils literal notranslate"><span class="pre">polygon</span></code>.</p>
+</section>
+<section id="id4">
+<h2>Как сделать треугольник?<a class="headerlink" href="#id4" title="Ссылка на этот заголовок"></a></h2>
+<p>Использовать фигуру <code class="docutils literal notranslate"><span class="pre">polygon</span></code>.</p>
+</section>
+<section id="id5">
+<h2>Какой глубины может быть парентинг?<a class="headerlink" href="#id5" title="Ссылка на этот заголовок"></a></h2>
+<p>Любой.</p>
+</section>
+<section id="id6">
+<h2>Можно в тексте лейбла записать несколько выражений сразу?<a class="headerlink" href="#id6" title="Ссылка на этот заголовок"></a></h2>
+<p>Можно, каждое надо взять в бэктики. Например:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Value1 = `=expr1`, Value2 = `=expr2`&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="id7">
+<h2>Чем отличаются поля и параметры?<a class="headerlink" href="#id7" title="Ссылка на этот заголовок"></a></h2>
+<dl class="simple">
+<dt>Поля</dt><dd><p>Значения, которые можно указывать в шаблоне в <code class="docutils literal notranslate"><span class="pre">variables</span></code>.</p>
+</dd>
+<dt>Параметры</dt><dd><p>автоматически рассчитываемые значения фигуры, значения которых мы определяем в шаблоне. В том числе с помощью полей.</p>
+</dd>
+</dl>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="tricks.html" class="btn btn-neutral float-left" title="Советы и подсказки" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Авторские права 2024. </p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

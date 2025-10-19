@@ -1,0 +1,107 @@
+{
+  "templates": [
+    {
+      "name": "new",
+      "defaults": {
+        "font_size": 30,
+        "text_color": "lightgray",
+        "color": [0, 0, 0, 150],
+        "text_spacing": 10
+      },
+      "variables": {
+        "panels_height": 50,
+        "project_name": "Project Name",
+        "shot_name": "SCN001",
+        "task_id": 10232,
+        "debug_shapes": 0,
+        "panel_height": "=$source_width*0.04",
+        "user": "username",
+        "frame_num": 123,
+        "pipeline_step": "compos",
+        "total_length": 300,
+        "resolution": [1920, 1080],
+        "is_demo": 1
+        },
+      "shapes": [
+          {
+            "type": "rect", "id": "panel_top",
+            "height": "$panel_height", "width": "=parent.width*0.8",
+            "align_h": "center"
+          },
+          {
+            "type": "rect", "id": "panel_bottom",
+            "height": "$panel_height", "width": "=parent.width*0.8",
+            "align_h": "center", "align_v": "bottom"
+          },
+          {
+            "type": "row", "parent": "panel_top",
+            "width": "parent.width","height": "parent.height",
+            "padding_left": 20, "padding_right": 20,
+
+            "shapes":[
+              {
+                "type": "label", "text": "PRJ: $project_name",
+                "align_v": "center", "font_size": "=$panel_height*0.6"
+              },
+              {
+                "type": "label", "text": "TSK: $task_id",
+                "align_v": "center", "align_h": "center",
+                "font_size": "=$panel_height*0.6"
+              },
+              {
+                "type": "label", "text": "SHT: $shot_name",
+                "align_v": "center", "align_h": "right",
+                "font_size": "=$panel_height*0.6"
+              }
+            ]
+          },
+          {
+            "type": "row", "parent": "panel_bottom",
+            "width": "parent.width","height": "parent.height",
+            "padding_left": 20, "padding_right": 20,
+
+            "shapes":[
+              {
+                "type": "label", "text": "STP: $pipeline_step",
+                "align_v": "center", "font_size": "=$panel_height*0.6"
+              },
+              {
+                "type": "label", "text": "USR: $user",
+                "align_v": "center", "align_h": "center",
+                "font_size": "=$panel_height*0.4", "text_color": "yellow",
+                "upper": true
+              },
+              {
+                "type": "label", "text": "FRM: $frame_num/$total_length",
+                "align_v": "center", "align_h": "right",
+                "font_size": "=$panel_height*0.6"
+              }
+
+            ]
+          },
+          {
+            "type": "label",
+            "text": "DEMO CONTENT", "upper": true, "text_color": [255, 255, 0, 80],
+            "font_size": 100, "align_h": "center", "align_v": "center",
+            "enabled": "$is_demo"
+          },
+          {
+            "type": "line", "points": [
+                [0, 0], ["$source_width", "$source_height"]
+              ], "thickness": 30, "color": [255, 0, 0, 30], "enabled": "$is_demo"
+          },
+          {
+            "type": "line", "points": [
+                ["$source_width", 0], [0, "$source_height"]
+              ], "thickness": 30, "color": [255, 0, 0, 50], "enabled": "$is_demo"
+          },
+          {
+            "type": "label", "text": "Wrong Size", "outline": {"width": 2, "hardness": 20},
+            "align_h": "center", "y": "=parent.height/6",
+            "font_size": 40, "text_color": "red",
+            "enabled": "=$source_width!=$resolution[0]"
+          }
+      ]
+    }
+  ]
+}

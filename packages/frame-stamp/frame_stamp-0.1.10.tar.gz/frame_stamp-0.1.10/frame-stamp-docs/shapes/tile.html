@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tile &mdash; документация Frame Stamp </title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=372fde1a"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/translations.js?v=9bfe3ffa"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" />
+    <link rel="next" title="Grid" href="grid.html" />
+    <link rel="prev" title="line" href="line.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Frame Stamp
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../make_template.html">Создание шаблонов</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../viewer.html">Template Viewer</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Фигуры</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#id2">Параметры</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#id3">Поля</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#id4">Список доступных фигур</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="base_shapes.html">Base Shapes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="base_shapes.html#id5">Глобальный контекст</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rect.html">Rect</a></li>
+<li class="toctree-l3"><a class="reference internal" href="label.html">Label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="image.html">Image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="line.html">line</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Tile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="grid.html">Grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="row.html">Row</a></li>
+<li class="toctree-l3"><a class="reference internal" href="column.html">Column</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../expressions.html">Expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../environment_variables.html">Переменные окружения</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Создание новых фигур</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../debug.html">Debug Mode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../debug.html#timeline">TimeLine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tricks.html">Советы и подсказки</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Frame Stamp</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Фигуры</a></li>
+      <li class="breadcrumb-item active">Tile</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="tile">
+<h1>Tile<a class="headerlink" href="#tile" title="Ссылка на этот заголовок"></a></h1>
+<blockquote>
+<div><p><cite>inherited (BaseShape)</cite></p>
+</div></blockquote>
+<p>Паттерн из других фигур.</p>
+<dl class="simple">
+<dt>tile_width</dt><dd><p>Ширина плитки</p>
+</dd>
+<dt>tile_height</dt><dd><p>Высота плитки</p>
+</dd>
+<dt>rotate</dt><dd><p>Не используется. Можно повернуть направление сетки с помощью <cite>grid_rotate</cite></p>
+</dd>
+<dt>grid_rotate</dt><dd><p>Наклон сетки плиток в градусах</p>
+</dd>
+<dt>spacing</dt><dd><p>Горизонтальное и вертикальное расстояние между плитками в виде списка</p>
+</dd>
+<dt>vertical_spacing</dt><dd><p>Вертикалльное расстояние между плитками. Оверрайдит <cite>spacing[0]</cite></p>
+</dd>
+<dt>horizontal_spacing:</dt><dd><p>Горизонтальное расстояние между плитками. Оверайдит <cite>spacing[1]</cite></p>
+</dd>
+<dt>row_offset</dt><dd><p>Смещение строк через одну</p>
+</dd>
+<dt>column_offset</dt><dd><p>Смещение столбцов через один</p>
+</dd>
+<dt>random_order</dt><dd><p>Случайный порядок вложенных фигур</p>
+</dd>
+<dt>random_seed</dt><dd><p>Сид для рандома</p>
+</dd>
+<dt>tile_index</dt><dd><p>Значение доступно как локальная переменная. Содержит индекс текущей плитки.</p>
+</dd>
+</dl>
+<p>Фигура <cite>Tile</cite> может иметь параметр <cite>shapes</cite> с вложенными фигурами.
+Вложенные фигуры используются для замощения всего изображения.
+Если вложенных фигур несколько то они циклично чередуются по порядку.</p>
+<p>Каждая фигура имеет своего парента в виде основной зоны плитки и может быть трансформирована относительно него</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;templates&quot;</span><span class="p">:[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;defaults&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;font_size&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;4p&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;text1_color&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">],</span>
+<span class="w">        </span><span class="nt">&quot;text2_color&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">]</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">&quot;variables&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;studio_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;MyStudio&quot;</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">&quot;shapes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tile&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;grid_rotate&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">-45</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;tile_width&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">250</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;tile_height&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">150</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;row_offset&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">250</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;shapes&quot;</span><span class="p">:[</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;label&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;$studio_name&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;text_color&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;$text1_color&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;align_h&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;center&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;align_v&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;center&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;font_size&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;$font_size&quot;</span>
+<span class="w">                </span><span class="p">},{</span>
+<span class="w">                    </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;label&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;DEMO&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;text_color&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;$text2_color&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;align_h&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;center&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;align_v&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;center&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;font_size&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;$font_size&quot;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="line.html" class="btn btn-neutral float-left" title="line" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="grid.html" class="btn btn-neutral float-right" title="Grid" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Авторские права 2024. </p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

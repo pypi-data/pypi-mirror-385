@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Создание шаблонов &mdash; документация Frame Stamp </title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=372fde1a"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/translations.js?v=9bfe3ffa"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="Template Viewer" href="viewer.html" />
+    <link rel="prev" title="Frame Stamp" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Frame Stamp
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Создание шаблонов</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">Контекст</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">Фигуры</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">Выражения</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#viewer">Viewer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">Как создать шаблон</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="viewer.html">Template Viewer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shapes/index.html">Фигуры</a></li>
+<li class="toctree-l1"><a class="reference internal" href="expressions.html">Expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="environment_variables.html">Переменные окружения</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Создание новых фигур</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debug.html">Debug Mode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debug.html#timeline">TimeLine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tricks.html">Советы и подсказки</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Frame Stamp</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Создание шаблонов</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1>Создание шаблонов<a class="headerlink" href="#id1" title="Ссылка на этот заголовок"></a></h1>
+<p>Шаблон это JSON, YAML или PY файл, в котором указан набор фигур и параметры из рендеринга.</p>
+<blockquote>
+<div><p>В PY файле необходимо создать функцию <cite>get_template(**kwargs)</cite> которая вернёт шаблоны</p>
+</div></blockquote>
+<p>Этот файл имеет строгую структуру, поэтому требует правильного составления.</p>
+<p>Шаблон это словарь, в котором должно быть 4 основных поля:</p>
+<dl class="simple">
+<dt>name</dt><dd><p>Имя шаблона (обязательное поле)</p>
+</dd>
+<dt>defaults</dt><dd><p>Значения по умолчанию, используемые в фигурах. Предполагается что эти данные сохраняются внутри шаблона.</p>
+</dd>
+<dt>variables</dt><dd><p>Различные переменные контекста, которые вы передаёте в рендер. Они используются в переменных фигур.</p>
+</dd>
+<dt>shapes</dt><dd><p>Список фигур в шаблоне</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Примечание</p>
+<p>Поле <code class="docutils literal notranslate"><span class="pre">variables</span></code> имеет бОльший приоритет чем <code class="docutils literal notranslate"><span class="pre">defaults</span></code>. Если имя параметра не найдено в поле <code class="docutils literal notranslate"><span class="pre">variables</span></code>
+то будет поиск в параметрах <code class="docutils literal notranslate"><span class="pre">defaults</span></code>.</p>
+</div>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;defaults&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;font_size&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;variables&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;user&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;User Name&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;shapes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;shapename&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;x&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;y&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;parm&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;val&quot;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Примечание</p>
+<p>Шаблоны поддерживают комментарии с помощью двойного слеша <code class="docutils literal notranslate"><span class="pre">//</span></code> или хеша <code class="docutils literal notranslate"><span class="pre">#</span></code></p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Примечание</p>
+<p>Фигуры рендерятся в порядке их указания в шаблоне. Чем позже указана фигура, тем позже она будет
+отрендерена и будет находиться поверх предыдущих.</p>
+</div>
+<section id="id2">
+<h2>Контекст<a class="headerlink" href="#id2" title="Ссылка на этот заголовок"></a></h2>
+<p>Что такое контекст? Это словарь, в котором указаны различные данные для рендера.
+Чаще всего это данные, которые следует отобразить в шаблоне. Но так же могут быть другие данные.</p>
+<ul class="simple">
+<li><p>путь к картинке логотипа для рендера на шаблоне</p></li>
+<li><p>переменные для вычисления различных условий рендера</p></li>
+<li><p>оверрайды для любых дефолтных значений</p></li>
+</ul>
+<p>И другие значения</p>
+<p>Чем отличается поля <code class="docutils literal notranslate"><span class="pre">variables</span></code> и <code class="docutils literal notranslate"><span class="pre">defaults</span></code>? Поле <code class="docutils literal notranslate"><span class="pre">variables</span></code> заполняется вне шаблона и приходит в виде словаря
+как аргумент процесса рендера. Поле <code class="docutils literal notranslate"><span class="pre">defaults</span></code> сохраняется непосредственно в шаблоне.
+Запрашиваемое значение всегда сначала ищется в <code class="docutils literal notranslate"><span class="pre">variables</span></code>, и если не находится то берется из <code class="docutils literal notranslate"><span class="pre">defaults</span></code>.
+То есть <code class="docutils literal notranslate"><span class="pre">variables</span></code> имеет бОльший приоритет поиска.</p>
+</section>
+<section id="id3">
+<h2>Фигуры<a class="headerlink" href="#id3" title="Ссылка на этот заголовок"></a></h2>
+<p>Шаблонизатор поддерживает определённый набор фигур. Полный список смотрите в разделе <a class="reference internal" href="shapes/index.html#shapes"><span class="std std-ref">Фигуры</span></a></p>
+</section>
+<section id="id4">
+<h2>Выражения<a class="headerlink" href="#id4" title="Ссылка на этот заголовок"></a></h2>
+<p>Шаблонизатор поддерживает выражения в параметрах. Подробней в разделе <a class="reference internal" href="expressions.html#expressions"><span class="std std-ref">Expressions</span></a></p>
+</section>
+<section id="viewer">
+<h2>Viewer<a class="headerlink" href="#viewer" title="Ссылка на этот заголовок"></a></h2>
+<p>У шаблонизатора нет никакого GUI в котором можно легко расставить фигуры по картинке. Но есть удобный виджет
+интерактивного предпросмотра шаблона. Подробней в разделе <a class="reference internal" href="viewer.html#viewer"><span class="std std-ref">Template Viewer</span></a></p>
+</section>
+<section id="id5">
+<h2>Как создать шаблон<a class="headerlink" href="#id5" title="Ссылка на этот заголовок"></a></h2>
+<p>Для начала создайте пустой JSON-файл с любым именем. Начальные данные могут быть такими:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;templates&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;new&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;defaults&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;font_size&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;4u&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;text_spacing&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">&quot;variables&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span>
+<span class="w">      </span><span class="nt">&quot;shapes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Теперь можно заполнять фигурами список <code class="docutils literal notranslate"><span class="pre">shapes</span></code> и смотреть как изменяется шаблон с помощью вьювера.</p>
+<p>В словарь <code class="docutils literal notranslate"><span class="pre">variables</span></code> удобно добавлять любе значения для теста. В реальном использовании этот словарь
+передаётся из аргументов рендера. Не забудьте очистить его после финализации шаблона.</p>
+<p>В словарь <code class="docutils literal notranslate"><span class="pre">defaults</span></code> записывайте значения, которые должны оставаться в шаблоне. Например пути к используемым файлам
+или повторяющиеся значения.</p>
+<div class="admonition note">
+<p class="admonition-title">Примечание</p>
+<p>Когда утвердите шаблон, не забудьте очистить словарь <code class="docutils literal notranslate"><span class="pre">variables</span></code> и указать правильное имя шаблона в поле <code class="docutils literal notranslate"><span class="pre">name</span></code>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Примечание</p>
+<p>В одном файле может быть несколько шаблонов, которые могут друг друга наследовать.</p>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="index.html" class="btn btn-neutral float-left" title="Frame Stamp" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="viewer.html" class="btn btn-neutral float-right" title="Template Viewer" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Авторские права 2024. </p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

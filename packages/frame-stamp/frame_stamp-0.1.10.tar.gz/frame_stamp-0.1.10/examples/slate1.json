@@ -1,0 +1,271 @@
+{"templates":[
+{
+  "name": "default_slate",
+  "variables": {
+    "backdrop_color": [40, 40, 40, 255],
+    "plate_padding": 10,
+    "grid_padding": [5, 5, 5, 5],
+    "logo_img": "${PWD}/examples/images/dummy.png",
+    "title_text_color": "gray",
+    "sg_project_name": "Project Name",
+    "sg_fps": 25,
+    "date": "2020-03-01",
+    "source_scene": "scene_name.mb",
+    "sg_entity_name": "asset_name",
+    "sg_task": "task_name",
+    "sg_version": "001",
+    "sg_sequence": "/mnt/projects/myprj/dev/textures/base/publish/001/filename.exr",
+    "source_length": 100,
+    "source_camera": "cam1",
+    "user": "UserName",
+    "client":"Client Name",
+    "dcc_name": "maya",
+    "dcc_version": "2020"
+  },
+  "defaults": {
+    "font_size": "3.5u",
+    "text_color": "lightgray",
+    "color": [0, 0, 0, 150],
+//    "font_name": "FreeSansBold.ttf",
+    "text_spacing": 10
+  },
+  "shapes": [
+    // frame preview
+    {
+      "type": "image",
+      "source": "$source",
+      "x": "=parent.width/5"
+    },
+    // top bar
+    {
+      "type": "rect", "id": "top_line",
+      "color": "$backdrop_color",
+      "width": "parent.width", "height": "10u",
+      "x": 0, "y": 0
+    },
+    // side bar
+    {
+      "type": "rect", "id": "sidebar",
+      "color": "$backdrop_color",
+      "width": "=parent.width/2", "height": "=parent.height-top_line.height-bottom_line.height",
+      "y": "top_line.bottom", "x": 0
+    },
+    // bottom line
+    {
+      "type": "rect", "id": "bottom_line",
+      "color": "$backdrop_color",
+      "width": "parent.width", "height": "=parent.height*0.1",
+      "align_v": "bottom", "x": 0, "y": 0
+    },
+    // logo
+    {
+      "type": "image", "id": "logo",
+      "source": "$logo_img",
+      "width": "top_line.h", "height": "top_line.h",
+      "parent": "top_line",
+      "x": "4u", "y": "2u"
+    },
+    // table data
+    {
+      "type": "grid", "id": "top_title",
+      "rows": "auto", "columns": 2,
+      "width": "sidebar.width", "height": "sidebar.height",
+      "x": 0, "y": "=sidebar.top",
+//      "max_row_height": "5u",
+//      "padding_top": "4u", "padding_bottom": "4u",
+      "padding": ["4u", 10, "4u", "2u"],
+      "max_column_width": "=sidebar.width/3",
+      "horizontal_spacing": 20,
+      "shapes": [
+        {
+          "type": "label", "id": "t1",
+          "text": "PROJECT:",
+          "align_h": "right", "text_color": "$title_text_color"
+        },
+        {
+          "type": "label", "id": "t2",
+          "text": "$sg_project_name"
+        },
+        {
+          "type": "label", "id": "t3",
+          "text": "FPS:",
+          "align_h": "right", "text_color": "$title_text_color"
+        },
+        {
+          "type": "label",
+          "text": "$sg_fps"
+        },
+        {
+          "type": "label", "id": "t5",
+          "text": "DATE:",
+          "align_h": "right", "text_color": "$title_text_color"
+        },
+        {
+          "type": "label",
+          "text": "$date"
+        },
+        {
+          "type": "label",
+          "text": "CLIENT:",
+          "align_h": "right", "text_color": "$title_text_color"
+        },
+        {
+          "type": "label",
+          "text": "$client"
+        },
+        {
+          "type": "label", "id": "t6",
+          "text": "SCENE FILE:",
+          "align_h": "right", "text_color": "$title_text_color"
+        },
+        {
+          "type": "label",
+          "text": "$source_scene"
+        },
+        {
+          "type": "label", "id": "t7",
+          "text": "SEQUENCE:",
+          "align_h": "right", "text_color": "$title_text_color"
+        },
+        {
+          "type": "label",
+          "text": "$sg_sequence", "ltruncate_path": 2
+        },
+
+        // empty line
+        null,
+        null,
+        {
+          "type": "label", "id": "t9",
+          "text": "SHOT:",
+          "align_h": "right", "text_color": "$title_text_color"
+        },
+        {
+          "type": "label",
+          "text": "$sg_entity_name"
+        },
+        {
+          "type": "label", "id": "t10",
+          "text": "TASK:",
+          "align_h": "right", "text_color": "$title_text_color"
+        },
+        {
+          "type": "label",
+          "text": "$sg_task"
+        },
+        {
+          "type": "label", "id": "t11",
+          "text": "VERSION:",
+          "align_h": "right", "text_color": "$title_text_color"
+        },
+        {
+          "type": "label",
+          "text": "$sg_version",
+          "zfill": 4
+        },
+        {
+          "type": "label", "id": "t12",
+          "text": "LENGTH:",
+          "align_h": "right", "text_color": "$title_text_color"
+        },
+        {
+          "type": "label",
+          "text": "$source_length",
+          "zfill": 4
+        },
+        {
+          "type": "label", "id": "t13",
+          "text": "CAMERA:",
+          "align_h": "right", "text_color": "$title_text_color"
+        },
+        {
+          "type": "label",
+          "text": "$source_camera"
+        },
+        // empty line
+        null,
+        null
+      ,{
+          "type": "label", "id": "t14",
+          "text": "ARTIST:",
+          "align_h": "right", "text_color": "$title_text_color"
+        },
+        {
+          "type": "label",
+          "text": "$user", "text_color": "yellow"
+        }
+      ]
+    },
+    // dcc info
+    {
+      "type": "label", "text": "$dcc_name $dcc_version", "align_v": "bottom", "title": true,
+      "y": -10, "x": 10, "font_size": "1.5p",  "text_color": [255,255,255,100]
+    },
+    // color grid
+    {
+      "type": "grid", "id": "colors",
+      "rows": 2, "columns": 7,
+      "x": "sidebar.right", "y": "bottom_line.top",
+      "width": "=parent.width-sidebar.w", "height": "bottom_line.height",
+      "shapes": [
+        {
+          "type": "rect", "color": "black",
+          "width": "parent.width","height": "parent.height"
+        },
+        {
+          "type": "rect", "color": [128, 128, 128],
+          "width": "parent.width", "height": "parent.height"
+        },
+        {
+          "type": "rect", "color": [255, 0, 0],
+          "width": "parent.width", "height": "parent.height"
+        },
+        {
+          "type": "rect", "color": [0, 255, 0],
+          "width": "parent.width", "height": "parent.height"
+        },
+        {
+          "type": "rect", "color": [0, 0, 255],
+          "width": "parent.width", "height": "parent.height"
+        },
+        {
+          "type": "rect", "color": [255, 255, 0],
+          "width": "parent.width", "height": "parent.height"
+        },
+        {
+          "type": "rect", "color": [0, 255, 255],
+          "width": "parent.width", "height": "parent.height"
+        },
+        {
+          "type": "rect", "color": "white",
+          "width": "parent.width", "height": "parent.height"
+        },
+        {
+          "type": "rect", "color": [255, 0, 255],
+          "width": "parent.width", "height": "parent.height"
+        },
+        {
+          "type": "rect", "color": "purple",
+          "width": "parent.width", "height": "parent.height"
+        },
+        {
+          "type": "rect", "color": "indigo",
+          "width": "parent.width", "height": "parent.height"
+        },
+        {
+          "type": "rect", "color": "bisque",
+          "width": "parent.width", "height": "parent.height"
+        },
+        {
+          "type": "rect", "color": "orange",
+          "width": "parent.width", "height": "parent.height"
+        },
+        {
+          "type": "rect", "color": "yellowgreen",
+          "width": "parent.width", "height": "parent.height"
+        }
+      ]
+    }
+  ]
+}
+]}
