@@ -1,0 +1,26 @@
+name: install_package
+description: Set up Python + uv and install project deps
+inputs:
+  python_version:
+    description: "Python version to install"
+    default: "3.12"
+
+runs:
+  using: "composite"
+
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      id: setup_python
+      with:
+        python-version: ${{ inputs.python_version }}
+        allow-prereleases: true
+
+    - name: Set up uv
+      uses: astral-sh/setup-uv@v4
+
+    - name: Sync dependencies (create .venv)
+      shell: bash
+      run: |
+        uv sync --dev
+        echo "python-version=${{ steps.setup_python.outputs.python-version }}" >> "$GITHUB_OUTPUT"
