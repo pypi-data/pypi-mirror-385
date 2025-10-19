@@ -1,0 +1,371 @@
+TermiGPT v2.0.0 🛡️
+AI-Powered Security Research Terminal Assistant
+Professional tool for cybersecurity researchers, penetration testers, and security students. Combines AI intelligence with security automation for reconnaissance, exploitation, and reporting.
+
+🎯 Features
+🔍 Security Research Capabilities
+
+Reconnaissance - Automated subdomain enumeration, port scanning, service detection
+Payload Generation - Create exploit code, reverse shells, custom scripts
+Vulnerability Scanning - Automated vulnerability assessment with AI analysis
+VAPT Reporting - Generate professional penetration testing reports with CVEs
+OSINT Integration - Threat intelligence correlation and IP reputation checks
+Tool Management - Install and configure security tools (nmap, subfinder, nuclei, etc.)
+
+🤖 AI-Powered Assistance
+
+5 AI Models - GPT-4o, GPT-4o Mini, GPT-4 Turbo, Perplexity, Mistral
+Production Code - Generate complete, working security tools and scripts
+Learning Mode - Explains commands, CVEs, and security concepts
+Real-time Guidance - Command syntax help, tool flag explanations
+Adaptive Intelligence - Supports beginners to advanced users
+
+🛠️ Advanced Features
+
+Session Management - Command history, resume sessions
+Piped Input - cat file.txt | termi -p "analyze"
+Multi-format Output - Reports in text, JSON, HTML, PDF
+Auto-Install - Automatically installs missing dependencies
+Ethical Safeguards - Built-in ethical use reminders
+Cross-Platform - Works on Linux, macOS, Windows, Termux
+
+🚀 Installation
+bashpip install termingpt
+Post-Install
+After installation, you'll see a welcome banner with all commands and examples.
+📋 Quick Start
+Interactive Mode (Recommended)
+bashtermi
+Direct Commands
+bash# Reconnaissance
+termi recon example.com
+termi enum subdomains of target.com
+
+# Payload Generation
+termi create a Python port scanner with threading
+termi code a PowerShell reverse shell for 192.168.1.10:4444
+
+# Security Scanning
+termi scan target.com
+termi vuln-scan https://example.com
+
+# Tool Management
+termi list-tools
+termi install-tool recon
+
+# Reporting
+termi report generate from last scan
+
+# AI Chat
+termi ask "explain CVE-2024-1234"
+termi ask "what is MITRE ATT&CK"
+📚 Complete Command Reference
+Core Commands
+CommandDescriptionExampletermiInteractive modetermitermi helpShow help menutermi helptermi --continueResume last sessiontermi --continue
+Reconnaissance
+CommandDescriptionExamplerecon <target>Full reconnaissance workflowtermi recon example.comenum <target>Subdomain enumerationtermi enum target.comportscan <target>Port scanningtermi portscan 192.168.1.1
+Code Generation
+CommandDescriptionExamplecreate <desc>Generate security tooltermi create a SQL injection scannercode <desc>Generate scripttermi code a Python keyloggerwrite <desc>Generate codetermi write a web fuzzer
+Security Scanning
+CommandDescriptionExamplescan <target>Security assessmenttermi scan example.comvuln-scan <target>Vulnerability scantermi vuln-scan https://target.com
+Tool Management
+CommandDescriptionExamplelist-toolsShow available toolstermi list-toolsinstall-tool <cat>Install security toolstermi install-tool reconcheck-toolsVerify installationstermi check-tools
+Reporting
+CommandDescriptionExamplereportGenerate VAPT reporttermi reportexport <format>Export findingstermi export pdf
+AI & Models
+CommandDescriptionExampleask <question>Ask AI anythingtermi ask "explain nmap -sV"modelsList AI modelstermi modelsselectChange modeltermi select
+Session Management
+CommandDescriptionExamplehistoryShow command historytermi historyclearClear sessiontermi clear
+🔧 Available Security Tools
+Reconnaissance
+
+subfinder - Fast subdomain discovery
+amass - In-depth DNS enumeration
+httpx - Fast HTTP probe
+nuclei - Fast vulnerability scanner
+
+Scanning
+
+nmap - Network exploration and security scanner
+masscan - Fast TCP port scanner
+rustscan - Modern fast port scanner
+
+Exploitation
+
+metasploit - Penetration testing framework
+sqlmap - Automatic SQL injection tool
+
+Wireless
+
+aircrack-ng - WiFi security auditing tools
+
+Web
+
+gobuster - Directory/file & DNS busting
+ffuf - Fast web fuzzer
+wpscan - WordPress security scanner
+
+💡 Usage Examples
+Example 1: Reconnaissance Workflow
+bash$ termi recon example.com
+
+🔍 RECONNAISSANCE: example.com
+
+AI Reconnaissance Plan:
+
+1. Subdomain Enumeration
+   Tools: subfinder, amass
+   Expected: 10-50 subdomains
+
+2. Port Scanning
+   Tools: nmap, rustscan
+   Ports: 1-1000 common ports
+
+3. Service Detection
+   Command: nmap -sV -sC target
+   Look for: Version info, vulnerabilities
+
+4. DNS Analysis
+   Records: A, AAAA, MX, TXT, NS
+   Tools: dig, nslookup
+
+5. OSINT Gathering
+   Sources: WHOIS, certificate transparency
+   Look for: Email addresses, infrastructure
+Example 2: Generate Exploit Code
+bash$ termi create a Python reverse shell for 192.168.1.10:4444
+
+🔧 Generating Security Tool
+
+⚠️  Reminder: For authorized security testing only
+
+📁 Project: python-reverse-shell
+
+✅ reverse_shell.py
+✅ requirements.txt
+✅ README.md
+✅ .gitignore
+
+✅ SUCCESS! 4 files created
+📁 Location: ./python-reverse-shell
+💡 Next: cd python-reverse-shell && cat README.md
+Example 3: Security Scan with AI Analysis
+bash$ termi scan target.com
+
+🔒 SECURITY SCAN: target.com
+
+🎯 Scan Types:
+  1. Quick Scan (Top ports)
+  2. Full Scan (1-1000)
+  3. Comprehensive (1-65535)
+  4. DNS Analysis
+  5. Service Detection
+
+Select (1-5): 1
+
+🔍 Scanning 15 ports...
+  ✓ Found: 22/SSH
+  ✓ Found: 80/HTTP
+  ✓ Found: 443/HTTPS
+
+Found 3 open ports
+
+🤖 Generating AI security assessment...
+
+🛡️  AI SECURITY ASSESSMENT
+
+Executive Summary:
+Target shows standard web services with SSH management access.
+Overall security posture: MEDIUM risk.
+
+Key Findings:
+- Port 22 (SSH) exposed - potential RISK
+- Standard web ports (80, 443) functional
+- HTTPS enabled - SECURE
+
+Risk Assessment:
+1. SSH Exposure - MEDIUM
+   Recommendations: Implement fail2ban, use key authentication
+
+2. HTTP to HTTPS redirect - Check required
+   Recommendations: Ensure proper redirect configuration
+
+Vulnerabilities:
+- Potential brute force on SSH (Port 22)
+- Check for outdated SSL/TLS versions
+
+Recommendations:
+1. Implement SSH key authentication
+2. Configure fail2ban for brute force protection
+3. Verify HTTPS configuration and certificates
+4. Regular security updates
+Example 4: Tool Installation
+bash$ termi install-tool recon
+
+📦 Available Tool Categories:
+
+Recon:
+  ❌ subfinder: Fast subdomain discovery tool
+  ❌ amass: In-depth DNS enumeration
+  ✅ httpx: Fast HTTP probe utility
+  ❌ nuclei: Fast vulnerability scanner
+
+Select category (or 'cancel'): recon
+
+Tools to install:
+  1. subfinder: Fast subdomain discovery tool ❌ Not installed
+  2. amass: In-depth DNS enumeration ❌ Not installed
+  3. httpx: Fast HTTP probe utility ✅ Already installed
+  4. nuclei: Fast vulnerability scanner ❌ Not installed
+
+Select tool number (or 'all'): 1
+
+Installing subfinder...
+✅ subfinder installed successfully
+Example 5: Generate VAPT Report
+bash$ termi report
+
+📊 GENERATING VAPT REPORT
+
+Enter scan findings or path to scan file: ./scan_results.txt
+
+🤖 AI analyzing ✅
+
+PROFESSIONAL PENETRATION TEST REPORT
+
+Executive Summary:
+Assessment performed on target.com revealed 3 findings of varying severity...
+
+Methodology:
+- Port scanning using Nmap 7.94
+- Service enumeration with version detection
+- Manual vulnerability verification
+
+Findings:
+
+1. [CRITICAL] SQL Injection - /admin/login.php
+   CVE: N/A (Application-specific)
+   Description: SQL injection vulnerability in login form
+   Impact: Full database compromise possible
+   Remediation: Implement parameterized queries
+
+2. [HIGH] Outdated Apache Version
+   CVE: CVE-2024-1234
+   Description: Apache 2.4.41 running with known vulnerabilities
+   Impact: Remote code execution possible
+   Remediation: Update to Apache 2.4.58+
+
+3. [MEDIUM] Directory Listing Enabled
+   CVE: N/A (Configuration issue)
+   Description: /backup/ directory listing exposed
+   Impact: Information disclosure
+   Remediation: Disable directory listing in Apache config
+
+Risk Ratings:
+- CRITICAL: 1 finding
+- HIGH: 1 finding
+- MEDIUM: 1 finding
+- LOW: 0 findings
+
+Recommendations:
+1. Immediate patching of critical SQL injection
+2. Update Apache to latest stable version
+3. Review and harden web server configuration
+4. Implement Web Application Firewall (WAF)
+5. Regular security assessments
+
+Conclusion:
+Target requires immediate attention for critical findings...
+
+✅ Report saved to: vapt_report_20251018_152900.txt
+Example 6: Piped Input Analysis
+bash$ cat nmap_scan.xml | termi -p "analyze for vulnerabilities"
+
+🤖 AI analyzing
+
+NMAP SCAN ANALYSIS
+
+Detected Services:
+1. SSH (Port 22) - OpenSSH 7.6p1
+   Status: Outdated version
+   Risk: MEDIUM
+   CVE: CVE-2018-15473 (User enumeration)
+
+2. HTTP (Port 80) - Apache 2.4.41
+   Status: Vulnerable
+   Risk: HIGH
+   CVE: CVE-2024-1234 (RCE possible)
+
+3. MySQL (Port 3306) - MySQL 5.7.30
+   Status: Externally accessible
+   Risk: CRITICAL
+   Issue: Database should not be internet-facing
+
+Recommendations:
+1. Update all services to latest versions
+2. Restrict MySQL access to localhost only
+3. Implement fail2ban for SSH
+4. Configure WAF for web services
+🎓 Learning Examples
+Explain Security Concepts
+bash$ termi ask "explain what is CVE-2024-1234"
+$ termi ask "what is MITRE ATT&CK framework"
+$ termi ask "explain nmap flags: -sV -A -T4"
+$ termi ask "difference between white box and black box testing"
+Tool-Specific Help
+bash$ termi ask "how to use Metasploit for Windows exploitation"
+$ termi ask "best practices for using sqlmap"
+$ termi ask "aircrack-ng commands for WPA2 cracking"
+⚠️ Ethical Use Disclaimer
+TermiGPT is designed for authorized security testing only.
+
+Always obtain written permission before testing any system
+Unauthorized access to computer systems is illegal
+Use this tool responsibly and ethically
+The authors are not responsible for misuse
+
+🔐 Security & Privacy
+
+No data is stored on external servers
+All API communication is encrypted
+Session data stored locally only
+No telemetry or tracking
+
+🤝 Contributing
+Contributions are welcome! Please feel free to submit a Pull Request.
+📄 License
+MIT License - see LICENSE file for details
+👨‍💻 Author
+TheNooB
+
+GitHub: https://github.com/thenoob4
+GitHub: https://github.com/codelabwithosman
+
+🆘 Support
+
+Issues: https://github.com/thenoob4/termingpt/issues
+Documentation: https://github.com/thenoob4/termingpt#readme
+
+🎯 Requirements
+
+Python 3.7+
+Internet connection
+(Optional) Security tools for advanced features
+
+🔄 Version History
+v2.0.0 (Current)
+
+Professional security research focus
+Enhanced reconnaissance capabilities
+AI-powered vulnerability assessment
+VAPT report generation
+Tool management system
+Session persistence
+Improved error handling
+Piped input support
+
+v1.0.0
+
+Initial release
+Basic code generation
+Simple security scanning
