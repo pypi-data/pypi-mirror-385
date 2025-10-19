@@ -1,0 +1,23 @@
+[project]
+name = "tdp-TauCeti"
+version = "5.1.1"
+description = "Presetmanagement and parameer manipulation in TouchDesigner."
+readme = "README.md"
+license-files = ["LICENSE"]
+requires-python = ">=3.11"
+authors = [
+    {name = "Wieland Hilker", email = "wieland@plusplus.one"},
+]
+keywords = ["TouchDesigner", "Parameter", "Tweener", "2023.12000"]
+dependencies = []
+
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"*" = ["*.tox"]
