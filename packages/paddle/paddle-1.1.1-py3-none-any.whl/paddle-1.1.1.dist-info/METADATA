@@ -1,0 +1,38 @@
+Metadata-Version: 2.4
+Name: paddle
+Version: 1.1.1
+Summary: Canoe's utility subroutines
+Project-URL: Homepage, https://github.com/chengcli/paddle
+Project-URL: Repository, https://github.com/chengcli/paddle
+Project-URL: Issues, https://github.com/chengcli/paddle/issues
+Author-email: Cheng Li <chengcli@umich.edu>
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Scientific/Engineering :: Astronomy
+Classifier: Topic :: Scientific/Engineering :: Atmospheric Science
+Classifier: Topic :: Scientific/Engineering :: Physics
+Requires-Python: >=3.9
+Requires-Dist: kintera>=1.0.1
+Requires-Dist: snapy>=0.7.0
+Requires-Dist: torch<=2.7.1,>=2.7.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7; extra == 'dev'
+Description-Content-Type: text/markdown
+
+# paddle
+
+A minimal, utility subroutines for canoe
+
+## Install
+
+```bash
+pip install paddle
