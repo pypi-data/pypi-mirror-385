@@ -1,0 +1,202 @@
+<!--suppress HtmlDeprecatedAttribute-->
+<div align="center">
+   <h1>🎲 libprng</h1>
+
+[![Build Status](https://github.com/Jayson-Fong/libprng/actions/workflows/python-package.yml/badge.svg?branch=main)](https://github.com/Jayson-Fong/libprng/actions/workflows/python-package.yml)
+[![Coverage](https://img.shields.io/badge/coverage-0%25-red)](https://github.com/Jayson-Fong/libprng/actions/workflows/python-package.yml)
+[![Latest Version](https://img.shields.io/pypi/v/libprng.svg)](https://pypi.org/project/libprng/)
+[![Python Versions](https://img.shields.io/pypi/pyversions/libprng.svg)](https://pypi.org/project/libprng/)
+[![Format](https://img.shields.io/pypi/format/libprng.svg)](https://pypi.org/project/libprng/)
+[![License](https://img.shields.io/pypi/l/libprng)](https://github.com/Jayson-Fong/tabularize/blob/main/README.md)
+[![Status](https://img.shields.io/pypi/status/libprng)](https://pypi.org/project/libprng/)
+[![Types](https://img.shields.io/pypi/types/libprng)](https://pypi.org/project/libprng/)
+
+
+</div>
+
+<hr />
+
+<div align="center">
+
+[💼 Purpose](#purpose) | [🛠️️ Installation](#installation) | [⚙️ Usage](#usage) | [🛡️ Security](#security) | 
+[📋 Backlog](#backlog) | [⚖️ License](#license)
+
+</div>
+
+<hr />
+
+# Purpose
+
+This package provides a set of pseudo-random number generators (PRNGs). These are not meant to be cryptologically secure, 
+but rather enable the reproduction of "random" number sequences regardless of the platform that they are being generated 
+on.
+
+Creation of this package was inspired by capture-the-flag competitions where random number generation using glibc's
+`rand` function on a typical Windows or Linux target would not match those generated on a macOS device (macOS generally 
+uses Clang rather than glibc). This package exists to fill that gap and enable reproduction regardless of platform.
+
+# Installation
+
+This package is available on [PyPI](https://pypi.org/project/libprng/) and can be installed using `pip`:
+
+```shell
+python3 -m pip install libprng
+```
+
+> [!NOTE]  
+> Your Python command may differ depending on how it was installed on your system. Some installations omit the version 
+> (`python`) while others are minor-version specific (ex. `python3.9`).
+
+You may also install the latest development releases from GitHub:
+
+```shell
+python3 -m pip install git+https://github.com/Jayson-Fong/libprng
+```
+
+<details style="border: 1px solid; border-radius: 8px; padding: 8px; margin-top: 4px;">
+<summary>📦 Installing Using a Virtual Environment</summary>
+
+In most cases, you should install this package within a Python virtual environment. This enables you to leverage
+multiple versions of this package across various projects on your system.
+
+To create a virtual environment:
+
+```shell
+python3 -m venv .venv
+```
+
+You will then need to activate your virtual environment. On Linux or macOS:
+
+```shell
+source .venv/bin/activate
+```
+
+On Windows, the activation command depends on what interpreter you are using. For command prompt:
+
+```shell
+.\.venv\Scripts\activate.bat
+```
+
+For PowerShell:
+
+```ps1
+.\.venv\Scripts\Activate.ps1
+```
+
+Or when using GitBash:
+
+```shell
+source .venv/Scripts/activate
+```
+
+You may then install using `pip` normally:
+
+```shell
+python3 -m pip install libprng
+```
+
+</details>
+
+# Usage
+
+> [!IMPORTANT]  
+> This package is under active development, and the API may change at any time. If using this package in your project, 
+> consider pinning it to a specific version.
+
+<details style="border: 1px solid; border-radius: 8px; padding: 8px; margin-top: 4px;">
+<summary>🐂 GNU C Library (glibc): Traditional Usage</summary>
+
+Initialize the global PRNG random data instance with a seed and generate a single random 31-bit integer:
+
+```python
+from libprng.glibc import srand, rand
+
+
+srand(1234)
+print(rand())
+```
+
+Create a PRNG object that is unaffected by other `rand()` calls:
+
+```python
+from libprng.glibc import GlibcRandom
+
+
+random_generator: GlibcRandom = GlibcRandom(1234)
+
+# Request a single random integers
+print(random_generator.generate())
+
+# Loop through random numbers until one is even:
+for random_int in random_generator:
+    print(random_int)
+    if random_int % 2 == 0:
+        break
+```
+
+</details>
+
+<details style="border: 1px solid; border-radius: 8px; padding: 8px; margin-top: 4px;">
+<summary>🐂 GNU C Library (glibc): Reentrant</summary>
+
+Generate a random integer with a seed of `1234`:
+
+```python
+from libprng.glibc import rand_r
+
+
+result, _next_seed = rand_r(1234)
+print(result)
+```
+
+Generate a random integer with a seed of `1234` without having to update the seed yourself:
+
+```python
+from libprng.glibc import rand_r, Seed
+
+
+seed: Seed = Seed(1234)
+print(rand_r(seed))
+print(rand_r(seed))
+```
+
+Leverage `rand_r` as a generator:
+
+```python
+from libprng.glibc import GlibcReentrantRandom
+
+
+random_generator: GlibcReentrantRandom = GlibcReentrantRandom(1234)
+
+# Request a single random integers
+print(random_generator.generate())
+
+# Loop through random numbers until one is even:
+for random_int in random_generator:
+    print(random_int)
+    if random_int % 2 == 0:
+        break
+```
+
+</details>
+
+# Security
+
+Pseudo-random number generators are generally insufficient for cryptographic or security-sensitive use cases. Likewise,
+this package was designed for reproducibility—not security or cryptography. You should **not** use this package for 
+security-sensitive use cases, such as password generation, encryption, or key derivation.
+
+# Backlog
+
+This package is still under active development. The following features are anticipated:
+
+- Clang PRNG implementation
+- Command-line PRNG utility
+
+# License
+
+While this package's author seeks to provide this software openly and under the MIT License, it contains derivative 
+works from open-source projects such as the GNU C Library. As a result, the overall distribution is licensed under the 
+GNU Lesser General Public License version 2.1 or later (at your choosing). Files that are not licensed under the MIT
+License contain a banner explicitly noting so alongside notes on which sections are licensed under the MIT License, if 
+applicable.
