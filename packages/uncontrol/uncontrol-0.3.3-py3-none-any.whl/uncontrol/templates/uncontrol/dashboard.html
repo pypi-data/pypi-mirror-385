@@ -1,0 +1,117 @@
+{% extends request.htmx|yesno:'htmx_components/base.html,htmx_components/standalone.html' %}
+
+
+{% block content %}
+<div id="uncontrol-dashboard"
+     class="container"
+     hx-headers='{"x-csrftoken": "{{ csrf_token }}"}'
+     hx-boost="true"
+     hx-swap="none"
+     hx-push-url="false">
+    <div class="row">
+        <div class="col-12">
+            <h2>Public Keys:</h2>
+        </div>
+    </div>
+    <div class="row">
+        {% for group in encryption_groups %}
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    {{ group }}
+                    <a href="{% url 'update-encryption-group' pk=group.pk %}" class="btn btn-sm btn-link">
+                        <i class="bi bi-pencil-square"></i>
+                    </a>
+                    <a href="{% url 'delete-encryption-group' pk=group.pk %}" class="btn btn-sm btn-link">
+                        <i class="bi bi-dash-square"></i>
+                    </a>
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-link" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapse-group-{{ group.pk }}" aria-expanded="false"
+                            aria-controls="collapse-group-{{ group.pk }}">
+                        {{ group.public_keys.count }} Public Keys
+                    </button>
+                    <div class="collapse" id="collapse-group-{{ group.pk }}">
+                        <ul class="list-group list-group-flush">
+                            {% for public_key in group.public_keys.all %}
+                            <li class="list-group-item">
+                                {{ public_key }}
+                                <a href="{% url 'group-remove-public-key' group_id=group.pk pk=public_key.pk %}"
+                                   class="btn btn-sm btn-link text-danger">
+                                    <i class="bi bi-dash-square"></i>
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'encryption-group-encrypt' pk=group.pk %}"
+                       class="btn btn-primary{% if not group.public_keys.exists %} disabled{% endif %}"
+                       {% if not group.public_keys.exists %} aria-disabled="true" {% endif %}>
+                        <i class="bi bi-lock"></i> Encrypt for Group
+                    </a>
+                    <a href="{% url 'create-public-key' group_id=group.id %}" class="btn btn-secondary">
+                        <i class="bi bi-plus-square"></i> Add Public Key
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <a href="{% url 'create-encryption-group' %}" class="btn btn-secondary">
+                <i class="bi bi-plus-square"></i> Add Group
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <hr>
+        </div>
+    </div>
+    {% if private_keys.exists %}
+    <div class="row">
+        <div class="col-12">
+            <h2>Private Keys:</h2>
+        </div>
+    </div>
+
+    {% endif %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    {{ request.user }}
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        {% for private_key in private_keys %}
+                        <li class="list-group-item">
+                            {{ private_key }}
+                            <a href="{% url 'delete-private-key' pk=private_key.pk %}"
+                               class="btn btn-sm btn-link text-danger">
+                                <i class="bi bi-dash-square"></i>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'decrypt-message' %}"
+                       class="btn btn-primary{% if not private_keys.exists %} disabled{% endif %}"
+                       {% if not private_keys.exists %} aria-disabled="true" {% endif %}>
+                        <i class="bi bi-unlock"></i> Decrypt
+                    </a>
+                    <a href="{% url 'create-private-key' %}" class="btn btn-secondary">
+                        <i class="bi bi-key"></i> Add Private Key
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
