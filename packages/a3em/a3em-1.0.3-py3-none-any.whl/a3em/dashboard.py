@@ -1,0 +1,861 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+# PYTHON INCLUSIONS ---------------------------------------------------------------------------------------------------
+
+try: from .read_config import read_config
+except: from read_config import read_config
+try: from .write_config import write_config
+except: from write_config import write_config
+try: from .tkcal import DateEntry
+except: from tkcal import DateEntry
+try: from .relabel_logs import relabel_audio_files
+except: from relabel_logs import relabel_audio_files
+from tkinter import ttk, filedialog
+from datetime import datetime
+from functools import partial
+from pathlib import Path
+import glob, os, psutil, re, sys, threading
+import pytz, tzlocal
+import tkinter as tk
+import asyncio
+
+
+# CONSTANTS AND DEFINITIONS -------------------------------------------------------------------------------------------
+
+CONFIG_FILE_NAME = '_a3em.cfg'
+MAX_DEVICE_LABEL_LEN = 15
+MAX_AUDIO_TRIGGER_TIMES = 12
+
+DEFAULT_MAGNETIC_FIELD_VALIDATION_LENGTH_MS = 5000
+DEFAULT_MIN_FREQUENCY_OF_INTEREST = 250
+DEFAULT_AUDIO_SAMPLE_RATE_HZ = 16000
+DEFAULT_AUDIO_CLIP_LENGTH_S = 10
+DEFAULT_IMU_SAMPLE_RATE_HZ = 25
+
+VALID_AUDIO_MODES = {'Threshold-Based': 'AMPLITUDE',
+                     'Schedule-Based': 'SCHEDULED',
+                     'Interval-Based': 'INTERVAL',
+                     'Continuous': 'CONTINUOUS'}
+VALID_IMU_MODES = {'Motion-Based': 'ACTIVITY', 'Audio-Synced': 'AUDIO', 'None': 'NONE'}
+VALID_TIME_SCALES = {'Second': 'SECONDS', 'Minute': 'MINUTES', 'Hour': 'HOURS', 'Day': 'DAYS'}
+VALID_VHF_MODES = {'Never': 'NEVER', 'End of Deployment': 'END', 'Scheduled': 'SCHEDULED'}
+VALID_IMU_SAMPLE_RATES = ['3', '6', '12', '25', '50', '100', '200', '400', '800']
+VALID_AUDIO_SAMPLE_RATES = ['8000', '16000', '24000', '32000', '48000']
+VALID_MIC_TYPES = {'Analog': 'ANALOG', 'Digital': 'DIGITAL'}
+VALID_DOFS = ['3']
+
+
+# HELPER FUNCTIONS ----------------------------------------------------------------------------------------------------
+
+def get_download_directory():
+   if os.name == 'nt':
+      import winreg
+      sub_key = 'SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders'
+      downloads_guid = '{374DE290-123F-4565-9164-39C4925E467B}'
+      with winreg.OpenKey(winreg.HKEY_CURRENT_USER, sub_key) as key:
+         location = winreg.QueryValueEx(key, downloads_guid)[0]
+      return location
+   else:
+      return os.path.join(os.path.expanduser('~'), 'Downloads')
+
+format_complete = False
+def format_callback(command, modifier, arg):
+   global format_complete
+   format_complete = command == 11
+   return 1
+
+def sd_card_check_formatting(device, passwd):
+   if os.name == 'nt':
+      from ctypes import windll, pointer, c_ulonglong, c_wchar_p
+      sectorsPerCluster, bytesPerSector = c_ulonglong(0), c_ulonglong(0)
+      windll.kernel32.GetDiskFreeSpaceW(c_wchar_p(device), pointer(sectorsPerCluster), pointer(bytesPerSector), None, None)
+      return bytesPerSector.value * sectorsPerCluster.value == 4096
+   elif sys.platform == 'darwin':
+      device = re.match(r'.*disk[0-9]+', device)[0]
+      os.system(f'diskutil unmountDisk force {device}')
+      valid = os.system(f'/bin/sh -c "[ $(echo {passwd} | sudo -S newfs_exfat -N {device} | grep cluster | cut -f 2 -d :) -eq 4096 ]"') == 0
+      os.system(f'diskutil mountDisk {device}')
+      return valid
+   else:
+      os.system(f'/bin/sh -c "if ! dpkg -s exfatprogs >/dev/null 2>&1 && ! echo {passwd} | sudo -S apt -y install exfatprogs >/dev/null 2>&1; then if ! dpkg -s exfat-fuse >/dev/null 2>&1 || ! dpkg -s exfat-utils >/dev/null 2>&1; then echo {passwd} | sudo -S apt -y install exfat-fuse exfat-utils >/dev/null 2>&1; fi; fi"')
+      return os.system(f'/bin/sh -c "[ $(echo {passwd} | sudo -S fsck.exfat -n -v {device} | grep cluster | cut -f 2 -d \":\" | cut -f 2 -d \" \") = \"4.00\" ]"') == 0
+
+def format_sd_card_as_exfat(mountpoint, device, passwd):
+   if os.name == 'nt':
+      from ctypes import windll, WINFUNCTYPE, pointer, c_int, c_ulonglong, c_void_p, c_wchar_p
+      global format_complete
+      format_complete = False
+      fm = windll.LoadLibrary('fmifs.dll')
+      FMT_CB_FUNC = WINFUNCTYPE(c_int, c_int, c_int, c_void_p)
+      while not format_complete:
+         fm.FormatEx(c_wchar_p(device), 0, c_wchar_p('EXFAT'), c_wchar_p('A3EM'), True, c_int(4096), FMT_CB_FUNC(format_callback))
+         while not format_complete:
+            sleep(0.1)
+         format_complete = sd_card_check_formatting(device, passwd)
+   elif sys.platform == 'darwin':
+      device = re.match(r'.*disk[0-9]+', device)[0]
+      os.system(f'diskutil unmountDisk force {device}')
+      os.system(f'echo {passwd} | sudo -S newfs_exfat -b 4096 -v A3EM {device}')
+      os.system(f'diskutil mountDisk {device}')
+   else:
+      os.system(f'/bin/sh -c "if ! dpkg -s exfatprogs >/dev/null 2>&1 && ! echo {passwd} | sudo -S apt -y install exfatprogs >/dev/null 2>&1; then if ! dpkg -s exfat-fuse >/dev/null 2>&1 || ! dpkg -s exfat-utils >/dev/null 2>&1; then echo {passwd} | sudo -S apt -y install exfat-fuse exfat-utils >/dev/null 2>&1; fi; fi"')
+      os.system(f'echo {passwd} | sudo -S umount {device}')
+      os.system(f'echo {passwd} | sudo -S mkfs -t exfat -c 4096 -L A3EM {device}')
+      os.system(f'echo {passwd} | sudo -S fsck.exfat {device}')
+
+def relabel_thread(self, audio_dir, original_datetime, offset_in_seconds):
+      relabel_audio_files(audio_dir, offset_in_seconds, original_timestamp=original_datetime)
+      self._clear_canvas()
+      tk.Label(self.canvas, text='Operation complete!').pack(fill=tk.BOTH, expand=True)
+
+def relabel_log_files(self, original_date, original_time, target_date, target_time):
+   try:
+      self._clear_canvas()
+      tk.Label(self.canvas, text='Relabeling audio files, please wait...').pack(fill=tk.BOTH, expand=True)
+      original_datetime = datetime.strptime(original_date.get() + ' ' + original_time.get(), '%Y-%m-%d %H:%M:%S').timestamp()
+      target_datetime = datetime.strptime(target_date.get() + ' ' + target_time.get(), '%Y-%m-%d %H:%M:%S').timestamp()
+      relabeling_thread = threading.Thread(target=relabel_thread, args=(self, self.target_selection.get(), int(original_datetime), int(target_datetime - original_datetime)))
+      relabeling_thread.start()
+   except ValueError:
+      tk.messagebox.showerror('A3EM Formatting Error', 'Invalid datetime format\n\nEnsure that the date is formatted as YYYY-MM-DD and the time as HH:MM:SS')
+
+def validate_time(var, why, new_val):
+   good = (len(new_val) == 0) or \
+          (len(new_val) == 1 and new_val.isnumeric()) or \
+          (len(new_val) == 2 and (new_val[-1] == ':' or (new_val[-1].isnumeric() and int(new_val) < 24))) or \
+          (len(new_val) == 3 and ((new_val[-2] != ':' and new_val[-1] == ':') or (new_val[-2] == ':' and new_val[-1].isnumeric() and int(new_val[-1]) <= 5))) or \
+          (len(new_val) == 4 and new_val[-1].isnumeric() and (new_val[-2] != ':' or int(new_val[-1]) <= 5)) or \
+          (len(new_val) == 5 and new_val[-1].isnumeric() and new_val[-3] == ':')
+   if int(why) == -1 and (not good or len(new_val) != 5):
+      var.set('00:00')
+      return True
+   return good
+
+def validate_number(var, min_val, max_val, why, new_val):
+   if int(why) == 0:
+      return True
+   elif int(why) == -1 and (not new_val.isdigit() or int(new_val) < min_val):
+      var.set(min_val)
+      return True
+   return new_val.isdigit() and int(new_val) <= max_val
+
+def validate_float(var, min_val, max_val, why, new_val):
+   if int(why) == 0:
+      return True
+   else:
+      return new_val.replace('.', '').isdigit() and new_val.count('.') <= 1 and float(new_val) >= min_val and float(new_val) <= max_val
+
+def validate_details(self):
+   write_order = [0]
+   last_phase_end = None
+   time_zone = self.device_timezone.get()
+   utc_offset = int(datetime.now(pytz.timezone(time_zone)).utcoffset().total_seconds())
+   start_datetime = pytz.timezone(time_zone).localize(datetime.strptime(self.deployment_start_date.get() + ' ' + self.deployment_start_time.get(), '%Y-%m-%d %H:%M')).astimezone(pytz.utc)
+   end_datetime = pytz.timezone(time_zone).localize(datetime.strptime(self.deployment_end_date.get() + ' ' + self.deployment_end_time.get(), '%Y-%m-%d %H:%M')).astimezone(pytz.utc)
+   vhf_datetime = pytz.timezone(time_zone).localize(datetime.strptime(self.vhf_start_date.get() + ' ' + self.vhf_start_time.get(), '%Y-%m-%d %H:%M')).astimezone(pytz.utc)
+   if start_datetime >= end_datetime:
+      return 'Deployment start datetime must be before deployment end datetime'
+   if self.vhf_mode.get() != 'Never' and vhf_datetime < start_datetime:
+      return 'VHF start datetime must be after deployment start datetime'
+   if self.deployment_is_split.get():
+      start_times = []
+      if len(self.deployment_phases) == 0:
+         return 'At least one deployment phase must be defined'
+      for idx, phase in enumerate(self.deployment_phases):
+         _, date_start, date_end, time_start, time_end = self.deployment_phase_times[idx]
+         start_times.append((int(datetime.strptime(date_start.get() + ' ' + time_start.get(), '%Y-%m-%d %H:%M').timestamp()), idx))
+      write_order = [item[1] for item in sorted(start_times, key=lambda x: x[0])]
+   for idx in write_order:
+      phase = self.deployment_phases[idx]
+      if self.deployment_is_split.get():
+         _, date_start, date_end, time_start, time_end = self.deployment_phase_times[idx]
+         phase_start_datetime = pytz.timezone(time_zone).localize(datetime.strptime(date_start.get() + ' ' + time_start.get(), '%Y-%m-%d %H:%M')).astimezone(pytz.utc)
+         phase_end_datetime = pytz.timezone(time_zone).localize(datetime.strptime(date_end.get() + ' ' + time_end.get(), '%Y-%m-%d %H:%M')).astimezone(pytz.utc)
+         if phase_start_datetime < start_datetime or phase_end_datetime > end_datetime:
+            return 'Deployment phases must be within deployment start/end times'
+         if last_phase_end and phase_start_datetime < last_phase_end:
+            return 'Deployment phases cannot overlap'
+         last_phase_end = phase_end_datetime
+      if self.microphone_type.get() == 'Digital' and phase.audio_recording_mode.get() == 'Threshold-Based':
+         return 'Threshold-based audio recording is impossible with a digital microphone'
+      if phase.audio_recording_mode.get() == 'Interval-Based':
+         interval_seconds = 0
+         if phase.audio_trigger_interval_time_scale.get() == 'Second':
+            interval_seconds = int(phase.audio_trigger_interval.get())
+         elif phase.audio_trigger_interval_time_scale.get() == 'Minute':
+            interval_seconds = int(phase.audio_trigger_interval.get()) * 60
+         elif phase.audio_trigger_interval_time_scale.get() == 'Hour':
+            interval_seconds = int(phase.audio_trigger_interval.get()) * 3600
+         elif phase.audio_trigger_interval_time_scale.get() == 'Day':
+            interval_seconds = int(phase.audio_trigger_interval.get()) * 86400
+         if int(phase.audio_clip_length.get()) > interval_seconds:
+            return 'Audio-reading interval must be greater than or equal to the audio clip length'
+      if phase.audio_recording_mode.get() == 'Schedule-Based':
+         last_end_time = 0
+         if len(phase.audio_trigger_times) == 0:
+            return 'Schedule-based audio recording must have at least one start/end time pair'
+         for trigger_time in phase.audio_trigger_times:
+            hours, minutes = trigger_time[0].get().split(':')
+            start_time = (int(hours) * 3600) + (int(minutes) * 60)
+            hours, minutes = trigger_time[1].get().split(':')
+            end_time = (int(hours) * 3600) + (int(minutes) * 60)
+            if start_time >= end_time:
+               return 'Schedule-based audio start times must be before their corresponding end times'
+            if start_time < last_end_time:
+               return 'Schedule-based audio start/end times cannot overlap'
+            last_end_time = end_time
+   return None
+
+
+# INTERMEDIATE STORAGE CLASSES ----------------------------------------------------------------------------------------
+
+class SchedulePhase:
+   
+   def __init__(self, master, name):
+      self.name = name
+      self.extend_clip_if_continuous_audio = tk.BooleanVar(master, False)
+      self.imu_recording_mode = tk.StringVar(master, 'Audio-Synced')
+      self.audio_recording_mode = tk.StringVar(master, 'Threshold-Based')
+      self.max_clips_time_scale = tk.StringVar(master, 'Hour')
+      self.audio_trigger_interval_time_scale = tk.StringVar(master, 'Minute')
+      self.max_audio_clips = tk.IntVar(master, 0)
+      self.audio_trigger_interval = tk.IntVar(master, 10)
+      self.audio_clip_length = tk.IntVar(master, DEFAULT_AUDIO_CLIP_LENGTH_S)
+      self.audio_sampling_rate = tk.IntVar(master, DEFAULT_AUDIO_SAMPLE_RATE_HZ)
+      self.imu_sampling_rate = tk.IntVar(master, DEFAULT_IMU_SAMPLE_RATE_HZ)
+      self.imu_degrees_of_freedom = tk.IntVar(master, 3)
+      self.audio_trigger_threshold = tk.DoubleVar(master, 0.25)
+      self.imu_trigger_threshold = tk.DoubleVar(master, 0.25)
+      self.silence_threshold = tk.IntVar(master, 0)
+      self.min_frequency = tk.IntVar(master, DEFAULT_MIN_FREQUENCY_OF_INTEREST)
+      self.max_frequency = tk.IntVar(master, DEFAULT_AUDIO_SAMPLE_RATE_HZ // 2)
+      self.audio_trigger_times = []
+
+
+# GUI DESIGN ----------------------------------------------------------------------------------------------------------
+
+class A3EMGui(ttk.Frame):
+
+   def __init__(self):
+
+      # Set up the root application window
+      super().__init__(None)
+      self.master.title('A3EM Dashboard')
+      try:
+         self.master.iconphoto(True, tk.PhotoImage(file='dashboard/a3em_icon.png'))
+      except Exception:
+         self.master.iconphoto(True, tk.PhotoImage(file=os.path.dirname(os.path.realpath(__file__)) + '/a3em_icon.png'))
+      self.master.protocol('WM_DELETE_WINDOW', self._exit)
+      self.master.geometry('900x720+' + str((self.winfo_screenwidth()-900)//2) + '+' + str((self.winfo_screenheight()-720)//2))
+      self.pack(fill=tk.BOTH, expand=True)
+
+      # Create an asynchronous event loop
+      self.event_loop = asyncio.new_event_loop()
+      asyncio.set_event_loop(self.event_loop)
+
+      # Create all necessary shared variables
+      self.deployment_is_split = tk.BooleanVar(self.master, False)
+      self.set_rtc_at_magnet_detect = tk.BooleanVar(self.master, True)
+      self.gps_available = tk.BooleanVar(self.master, False)
+      self.awake_on_magnet = tk.BooleanVar(self.master, True)
+      self.leds_enabled = tk.BooleanVar(self.master, True)
+      self.leds_active_seconds = tk.IntVar(self.master, 3600)
+      self.mic_amplification_level_db = tk.DoubleVar(self.master, 35.0)
+      self.battery_low_mv = tk.IntVar(self.master, 0)  # TODO: Set this to something reasonable
+      self.magnetic_field_validation_length_ms = tk.IntVar(self.master, DEFAULT_MAGNETIC_FIELD_VALIDATION_LENGTH_MS)
+      self.forbid_deactivation_seconds = tk.IntVar(self.master, 0)
+      self.target_selection = tk.StringVar(self.master, 'Select a target device...')
+      self.device_timezone = tk.StringVar(self.master, tzlocal.get_localzone())
+      self.save_directory = tk.StringVar(self.master, get_download_directory())
+      self.device_label = tk.StringVar(self.master)
+      self.microphone_type = tk.StringVar(self.master, 'Analog')
+      self.deployment_start_date = tk.StringVar(self.master, datetime.today().strftime('%Y-%m-%d'))
+      self.deployment_start_time = tk.StringVar(self.master, '00:00')
+      self.deployment_end_date = tk.StringVar(self.master, datetime.today().strftime('%Y-%m-%d'))
+      self.deployment_end_time = tk.StringVar(self.master, '00:00')
+      self.vhf_start_date = tk.StringVar(self.master, datetime.today().strftime('%Y-%m-%d'))
+      self.vhf_start_time = tk.StringVar(self.master, '00:00')
+      self.vhf_mode = tk.StringVar(self.master, 'End of Deployment')
+      self.deployment_phase_default = [SchedulePhase(self.master, tk.StringVar(self.master, 'Default'))]
+      self.deployment_phases_custom = []
+      self.deployment_phases = self.deployment_phase_default
+      self.selected_phase = tk.StringVar(self.master, 'Default')
+      self.deployment_phase_times = []
+      self.audio_detail_fields = []
+      self.active_data_entry = None
+
+      # Create the control bar
+      control_bar = ttk.Frame(self)
+      control_bar.pack(side=tk.TOP, fill=tk.X, padx=5, pady=5, expand=False)
+      control_bar.columnconfigure(1, weight=1)
+      self.scan_button = ttk.Button(control_bar, text='Scan for Devices', command=self._scan_for_devices, width=20)
+      self.scan_button.grid(column=0, row=0, padx=(10,0))
+      self.target_selector = ttk.Combobox(control_bar, textvariable=self.target_selection, state=['readonly'])
+      self.target_selector.bind('<<ComboboxSelected>>', self._target_selection_changed)
+      self.target_selector.grid(column=1, row=0, padx=10, pady=(3,0), sticky=tk.W+tk.E)
+      self.target_selector['values'] = ['Local Directory']
+      self.configure_button = ttk.Button(control_bar, text='Configure', command=self._configure, state=['disabled'])
+      self.configure_button.grid(column=2, row=0)
+      ttk.Button(control_bar, text='Quit', command=self._exit).grid(column=3, row=0)
+
+      # Create the operations bar
+      self.operations_bar = ttk.Frame(self)
+      self.operations_bar.pack(side=tk.LEFT, fill=tk.Y, padx=5, expand=False)
+      ttk.Label(self.operations_bar, text='A3EM Actions', padding=6).grid(row=0)
+      ttk.Button(self.operations_bar, text='Get Current Configuration', command=self._get_configuration).grid(row=1, sticky=tk.W+tk.E)
+      ttk.Button(self.operations_bar, text='Update Deployment Details', command=self._update_deployment_details).grid(row=2, sticky=tk.W+tk.E)
+      self.phases_button = ttk.Button(self.operations_bar, text='Update Deployment Phases', command=self._update_deployment_phases)
+      self.update_audio_button = ttk.Button(self.operations_bar, text='Update Audio Recording Details', command=self._update_audio_details)
+      self.update_audio_button.grid(row=4, sticky=tk.W+tk.E)
+      self.update_imu_button = ttk.Button(self.operations_bar, text='Update IMU Recording Details', command=self._update_imu_details)
+      self.update_imu_button.grid(row=5, sticky=tk.W+tk.E)
+      ttk.Button(self.operations_bar, text='Post-Deployment Tools', command=self._post_deployment_tools_start).grid(row=6, sticky=tk.W+tk.E)
+
+      # Scan for SD Card devices
+      self._scan_for_devices()
+
+      # Create the workspace canvas
+      self.canvas = ttk.Frame(self)
+      self.canvas.pack(fill=tk.BOTH, padx=(0, 5), pady=(0, 5), expand=True)
+      tk.Label(self.canvas, text='Select a target device to continue...').pack(fill=tk.BOTH, expand=True)
+
+   def _exit(self):
+      self._clear_canvas()
+      tk.Label(self.canvas, text='Shutting down...').pack(fill=tk.BOTH, expand=True)
+      self.master.destroy()
+
+   def _clear_canvas(self):
+      for item in self.canvas.winfo_children():
+         item.destroy()
+
+   def _change_button_states(self, enable):
+      self.configure_button.configure(state=['enabled' if enable else 'disabled'])
+      for item in self.operations_bar.winfo_children():
+         if isinstance(item, ttk.Button):
+            item.configure(state=['enabled' if enable else 'disabled'])
+
+   def _target_selection_changed(self, event):
+      if self.target_selection.get() == 'Local Directory':
+         new_directory = filedialog.askdirectory(parent=self, title='Choose A3EM Storage Directory', initialdir=self.save_directory.get())
+         if new_directory:
+            self.save_directory.set(new_directory)
+            self.target_selection.set(new_directory)
+            self._change_button_states(True)
+         else:
+            self.target_selection.set('Select a target device...')
+            self._change_button_states(False)
+         self.target_selector.selection_clear()
+      else:
+         self.save_directory.set(self.target_selection.get())
+         self._change_button_states(True)
+
+   def _deployment_end_changed(self, var, why, new_val):
+      good_val = validate_time(var, why, new_val) if not isinstance(new_val, tk.Event) else True
+      if good_val and self.vhf_mode.get() == 'End of Deployment':
+         self.vhf_start_date.set(self.deployment_end_date.get())
+         self.vhf_start_time.set(self.deployment_end_time.get())
+      self._date_entry_changed(None)
+      return good_val
+
+   def _scan_for_devices(self):
+      self._change_button_states(False)
+      self.target_device_mapping = { 'Local Directory': (None, None) }
+      if sys.platform == 'darwin':
+         self.target_device_mapping.update({ partition.mountpoint: (re.match(r'.*disk[0-9]+', partition.device)[0], partition.fstype.lower())
+                                             for partition in psutil.disk_partitions()
+                                             if partition.fstype.lower() in ['fat', 'msdos', 'exfat'] })
+      else:
+         self.target_device_mapping.update({ partition.mountpoint: (partition.device, partition.fstype.lower())
+                                             for partition in psutil.disk_partitions()
+                                             if partition.fstype.lower() in ['fat', 'msdos', 'exfat'] })
+      self.target_selection.set('Select a target device...')
+      self.target_selector['values'] = list(self.target_device_mapping.keys())
+
+   def _prompt_for_password(self):
+      self.passwd = 'None'
+      if os.name == 'nt' or os.geteuid() == 0:
+         return True
+      else:
+         password = tk.StringVar()
+         prompt = tk.Toplevel()
+         prompt.geometry('400x150+' + str((self.winfo_screenwidth()-400)//2) + '+' + str((self.winfo_screenheight()-150)//2))
+         prompt.title('Sudo Password Request')
+         ttk.Label(prompt, text='SD card formatting requires administrative privileges.').pack(padx=(20, 20), pady=(10, 0), expand=True)
+         ttk.Label(prompt, text='Please enter your sudo password:').pack(pady=(0, 0), expand=True)
+         entry = ttk.Entry(prompt, show='*', textvariable=password)
+         entry.bind('<Return>', lambda event: prompt.destroy())
+         entry.pack(pady=(5, 5), expand=True)
+         ttk.Button(prompt, text='OK', command=prompt.destroy).pack(pady=(0, 10), expand=True)
+         entry.focus_force()
+         self.wait_window(prompt)
+         self.passwd = password.get()
+         return True
+
+   def _get_configuration(self):
+      self._clear_canvas()
+      try:
+         read_config(self, CONFIG_FILE_NAME, SchedulePhase)
+         tk.Label(self.canvas, text='Successfully loaded configuration from the device!').pack(fill=tk.BOTH, expand=True)
+      except:
+         tk.Label(self.canvas, text='Unable to load the configuration file').pack(fill=tk.BOTH, expand=True)
+         tk.messagebox.showerror('A3EM Error', 'ERROR\n\nUnable to parse configuration file at {}/{}'.format(self.save_directory.get(), CONFIG_FILE_NAME))
+
+   def _change_leds_enabled(self):
+      for field in self.led_fields:
+         field.configure(state=['' if self.leds_enabled.get() else 'disabled'])
+
+   def _change_magnet_enabled(self):
+      for field in self.magnet_fields:
+         field.configure(state=['' if self.awake_on_magnet.get() else 'disabled'])
+
+   def _imu_mode_changed(self, phase, event=None):
+      for field in self.imu_motion_fields:
+         field.configure(state=['' if phase.imu_recording_mode.get() == 'Motion-Based' else 'disabled'])
+
+   def _change_vhf_enabled(self, event=None):
+      for field in self.vhf_fields:
+         field.configure(state=['' if self.vhf_mode.get() == 'Scheduled' else 'disabled'])
+      if self.vhf_mode.get() == 'End of Deployment':
+         self.vhf_start_date.set(self.deployment_end_date.get())
+         self.vhf_start_time.set(self.deployment_end_time.get())
+      elif self.vhf_mode.get() == 'Never':
+         self.vhf_start_date.set('2000-01-01')
+         self.vhf_start_time.set('00:00')
+
+   def _change_deployment_split(self):
+      if self.deployment_is_split.get():
+         self.phases_button.grid(row=3, sticky=tk.W+tk.E)
+         self.deployment_phases = self.deployment_phases_custom
+         if len(self.deployment_phases) > 0:
+            self.selected_phase.set(self.deployment_phases[0].name.get())
+         self.update_audio_button.configure(state=['enabled' if self.deployment_phase_times else 'disabled'])
+         self.update_imu_button.configure(state=['enabled' if self.deployment_phase_times else 'disabled'])
+      else:
+         self.phases_button.grid_forget()
+         self.deployment_phases = self.deployment_phase_default
+         self.selected_phase.set('Default')
+         self.update_audio_button.configure(state=['enabled'])
+         self.update_imu_button.configure(state=['enabled'])
+
+   def _deployment_phase_changed(self, from_tab, event=None):
+      if from_tab == 'audio':
+         self._update_audio_details()
+      elif from_tab == 'imu':
+         self._update_imu_details()
+
+   def _focus_in(self, event):
+      if self.active_data_entry is not None:
+         self.active_data_entry.drop_down()
+
+   def _date_entry_clicked(self, event):
+      self.focus_set()
+      self.active_data_entry = event.widget
+
+   def _date_entry_changed(self, event):
+      self.active_data_entry = None
+
+   def _update_deployment_details(self):
+      self._clear_canvas()
+      prompt_area = ttk.Frame(self.canvas)
+      prompt_area.place(relx=0.5, anchor=tk.N)
+      ttk.Label(prompt_area, text='Deployment Details', font=('Helvetica', '14', 'bold')).grid(column=0, row=0, columnspan=5, pady=(20,20), sticky=tk.N+tk.S)
+      ttk.Label(prompt_area, text='Device Details', font=('Helvetica', '14', 'bold')).grid(column=0, row=1, columnspan=5, pady=(0,10), sticky=tk.W+tk.N+tk.S)
+      row = ttk.Frame(prompt_area)
+      row.grid(row=2, column=0, columnspan=5, pady=(0,10), sticky=tk.W+tk.E)
+      ttk.Label(row, text='Device Label:  ').pack(side=tk.LEFT, expand=False)
+      ttk.Entry(row, textvariable=self.device_label, validate='all', validatecommand=(row.register(lambda new_val: len(new_val) <= MAX_DEVICE_LABEL_LEN), '%P')).pack(side=tk.RIGHT, fill=tk.X, expand=True)
+      ttk.Checkbutton(prompt_area, text='GPS Available on Device', variable=self.gps_available).grid(column=0, row=3, columnspan=5, pady=(0,5), sticky=tk.W)
+      ttk.Checkbutton(prompt_area, text='Device LEDs Enabled', variable=self.leds_enabled, command=self._change_leds_enabled).grid(column=0, row=4, columnspan=5, sticky=tk.W)
+      field1 = ttk.Label(prompt_area, text='     LEDs Active after Activation for:')
+      field1.grid(column=0, row=5, columnspan=3, sticky=tk.W+tk.E+tk.N+tk.S)
+      field2 = ttk.Entry(prompt_area, textvariable=self.leds_active_seconds, width=7, validate='all', validatecommand=(prompt_area.register(partial(validate_number, self.leds_active_seconds, 0, 604800)), '%d', '%P'))
+      field2.grid(column=3, row=5, columnspan=1, sticky=tk.W+tk.E+tk.N+tk.S)
+      field3 = ttk.Label(prompt_area, text=' seconds')
+      field3.grid(column=4, row=5, columnspan=1, sticky=tk.W+tk.E+tk.N+tk.S)
+      self.led_fields = [field1, field2, field3]
+      self._change_leds_enabled()
+      ttk.Label(prompt_area, text='Microphone Type: ').grid(column=0, row=6, columnspan=3, sticky=tk.W+tk.E+tk.N+tk.S)
+      ttk.Combobox(prompt_area, textvariable=self.microphone_type, values=list(VALID_MIC_TYPES.keys()), state=['readonly']).grid(column=3, row=6, columnspan=1, sticky=tk.W+tk.E+tk.N+tk.S)
+      ttk.Label(prompt_area, text='Microphone Amplification Level: ').grid(column=0, row=7, columnspan=3, sticky=tk.W+tk.E+tk.N+tk.S)
+      ttk.Spinbox(prompt_area, textvariable=self.mic_amplification_level_db, width=10, from_=0.0, to=35.0, increment=0.5, validate='all', validatecommand=(prompt_area.register(partial(validate_float, self.mic_amplification_level_db, 0.0, 35.0)), '%d', '%P')).grid(column=3, row=7, columnspan=1, sticky=tk.W+tk.E+tk.N+tk.S)
+      ttk.Label(prompt_area, text=' dB').grid(column=4, row=7, columnspan=1, sticky=tk.W+tk.E+tk.N+tk.S)
+      ttk.Checkbutton(prompt_area, text='Magnetic Activation Enabled', variable=self.awake_on_magnet, command=self._change_magnet_enabled).grid(column=0, row=8, columnspan=5, sticky=tk.W)
+      field1 = ttk.Label(prompt_area, text='     Magnetic Duration for Activation: ')
+      field1.grid(column=0, row=9, columnspan=3, sticky=tk.W+tk.E+tk.N+tk.S)
+      field2 = ttk.Entry(prompt_area, textvariable=self.magnetic_field_validation_length_ms, width=7, validate='all', validatecommand=(prompt_area.register(partial(validate_number, self.magnetic_field_validation_length_ms, 1000, 30000)), '%d', '%P'))
+      field2.grid(column=3, row=9, columnspan=1, sticky=tk.W+tk.E+tk.N+tk.S)
+      field3 = ttk.Label(prompt_area, text=' ms')
+      field3.grid(column=4, row=9, columnspan=1, sticky=tk.W+tk.E+tk.N+tk.S)
+      field4 = ttk.Label(prompt_area, text='     Magnetic Deactivation Allowed After: ')
+      field4.grid(column=0, row=10, columnspan=3, sticky=tk.W+tk.E+tk.N+tk.S)
+      field5 = ttk.Entry(prompt_area, textvariable=self.forbid_deactivation_seconds, width=7, validate='all', validatecommand=(prompt_area.register(partial(validate_number, self.forbid_deactivation_seconds, 0, 86400)), '%d', '%P'))
+      field5.grid(column=3, row=10, columnspan=1, sticky=tk.W+tk.E+tk.N+tk.S)
+      field6 = ttk.Label(prompt_area, text=' seconds')
+      field6.grid(column=4, row=10, columnspan=1, sticky=tk.W+tk.E+tk.N+tk.S)
+      self.magnet_fields = [field1, field2, field3, field4, field5, field6]
+      self._change_magnet_enabled()
+      ttk.Separator(prompt_area, orient='horizontal').grid(column=0, row=11, pady=20, columnspan=5, sticky=tk.W+tk.E+tk.N+tk.S)
+      ttk.Label(prompt_area, text='Scheduling Details', font=('Helvetica', '14', 'bold')).grid(column=0, row=12, columnspan=5, pady=(0,10), sticky=tk.W+tk.N+tk.S)
+      ttk.Label(prompt_area, text='Deployment Timezone:').grid(column=0, row=13, columnspan=2, pady=(0,8), sticky=tk.W+tk.N+tk.S)
+      ttk.Combobox(prompt_area, textvariable=self.device_timezone, values=pytz.all_timezones, state=['readonly']).grid(column=2, row=13, columnspan=3, pady=(0,8), sticky=tk.W+tk.E+tk.N+tk.S)
+      ttk.Label(prompt_area, text='Start Date').grid(column=0, row=14, sticky=tk.W)
+      ttk.Label(prompt_area, text='Start Time').grid(column=1, row=14, sticky=tk.W)
+      ttk.Label(prompt_area, text='End Date').grid(column=3, row=14, sticky=tk.W)
+      ttk.Label(prompt_area, text='End Time').grid(column=4, row=14, sticky=tk.W)
+      start_date = DateEntry(prompt_area, textvariable=self.deployment_start_date, selectmode='day', firstweekday='sunday', showweeknumbers=False, date_pattern='yyyy-mm-dd')
+      start_date.grid(column=0, row=15, sticky=tk.W)
+      start_date.bind('<FocusIn>', self._focus_in)
+      start_date.bind('<Button-1>', self._date_entry_clicked)
+      start_date.bind('<<DateEntrySelected>>', self._date_entry_changed)
+      ttk.Entry(prompt_area, textvariable=self.deployment_start_time, width=7, validate='all', validatecommand=(prompt_area.register(partial(validate_time, self.deployment_start_time)), '%d', '%P')).grid(column=1, row=15, sticky=tk.W)
+      end_date = DateEntry(prompt_area, textvariable=self.deployment_end_date, selectmode='day', firstweekday='sunday', showweeknumbers=False, date_pattern='yyyy-mm-dd')
+      end_date.grid(column=3, row=15, sticky=tk.W)
+      end_date.bind('<FocusIn>', self._focus_in)
+      end_date.bind('<Button-1>', self._date_entry_clicked)
+      end_date.bind('<<DateEntrySelected>>', partial(self._deployment_end_changed, None, 0)) 
+      ttk.Entry(prompt_area, textvariable=self.deployment_end_time, width=7, validate='all', validatecommand=(prompt_area.register(partial(self._deployment_end_changed, self.deployment_end_time)), '%d', '%P')).grid(column=4, row=15, sticky=tk.W)
+      ttk.Checkbutton(prompt_area, text='Set RTC to Start Date/Time upon Magnetic Activation', variable=self.set_rtc_at_magnet_detect).grid(column=0, row=16, columnspan=5, pady=(10,0), sticky=tk.W+tk.N+tk.S)
+      ttk.Checkbutton(prompt_area, text='Split Deployment into Phases', variable=self.deployment_is_split, command=self._change_deployment_split).grid(column=0, row=17, columnspan=5, pady=(5,10), sticky=tk.W+tk.N+tk.S)
+      ttk.Label(prompt_area, text='VHF Beacon Activation Mode: ').grid(column=0, row=18, columnspan=2, pady=(0,7), sticky=tk.W+tk.E+tk.N+tk.S)
+      vhf_selector = ttk.Combobox(prompt_area, textvariable=self.vhf_mode, width=10, values=list(VALID_VHF_MODES.keys()), state=['readonly'])
+      vhf_selector.grid(column=2, row=18, columnspan=3, pady=(0,7), sticky=tk.W+tk.E+tk.N+tk.S)
+      vhf_selector.bind('<<ComboboxSelected>>', self._change_vhf_enabled)
+      field1 = ttk.Label(prompt_area, text='VHF Date')
+      field1.grid(column=3, row=19, columnspan=1, sticky=tk.W)
+      field2 = ttk.Label(prompt_area, text='VHF Time')
+      field2.grid(column=4, row=19, columnspan=1, sticky=tk.W)
+      field3 = ttk.Label(prompt_area, text='Enable: ')
+      field3.grid(column=2, row=20, columnspan=1, sticky=tk.W)
+      field4 = DateEntry(prompt_area, textvariable=self.vhf_start_date, selectmode='day', firstweekday='sunday', showweeknumbers=False, date_pattern='yyyy-mm-dd')
+      field4.grid(column=3, row=20, columnspan=1, sticky=tk.W)
+      field4.bind('<FocusIn>', self._focus_in)
+      field4.bind('<Button-1>', self._date_entry_clicked)
+      field4.bind('<<DateEntrySelected>>', self._date_entry_changed)
+      field5 = ttk.Entry(prompt_area, textvariable=self.vhf_start_time, width=7, validate='all', validatecommand=(prompt_area.register(partial(validate_time, self.vhf_start_time)), '%d', '%P'))
+      field5.grid(column=4, row=20, columnspan=1, sticky=tk.W)
+      self.vhf_fields = [field1, field2, field3, field4, field5]
+      self._change_vhf_enabled()
+
+   def _update_deployment_phases(self):
+      self.phases = []
+      self._clear_canvas()
+      prompt_area = ttk.Frame(self.canvas)
+      prompt_area.place(relx=0.5, anchor=tk.N)
+      ttk.Label(prompt_area, text='Deployment Phase Scheduling', font=('Helvetica', '14', 'bold')).grid(column=0, row=0, columnspan=5, pady=(20,10), sticky=tk.N+tk.S)
+      def remove_phase(self, phase):
+         phase.destroy()
+         del self.deployment_phases[self.phases.index(phase)]
+         del self.deployment_phase_times[self.phases.index(phase)]
+         self.phases.remove(phase)
+         for idx in range(len(self.phases)):
+            self.phases[idx].grid(row=5+idx, column=0, columnspan=5, sticky=tk.W+tk.E)
+         if len(self.phases) == 0:
+            self.update_audio_button.configure(state=['disabled'])
+            self.update_imu_button.configure(state=['disabled'])
+         else:
+            self.selected_phase.set(self.deployment_phases[0].name.get())
+      def add_phase(self, phase_times=None):
+         phase = ttk.Frame(prompt_area)
+         phase.grid(row=5+len(self.phases), column=0, columnspan=5, sticky=tk.W+tk.E)
+         if phase_times is not None:
+            period_name, period_date_start, period_date_end, period_time_start, period_time_end = phase_times
+         else:
+            period_name = tk.StringVar(self.master, 'Phase {}'.format(len(self.phases)+1))
+            period_date_start = tk.StringVar(self.master, datetime.today().strftime('%Y-%m-%d'))
+            period_date_end = tk.StringVar(self.master, datetime.today().strftime('%Y-%m-%d'))
+            period_time_start = tk.StringVar(self.master, '00:00')
+            period_time_end = tk.StringVar(self.master, '00:00')
+            self.deployment_phase_times.append((period_name, period_date_start, period_date_end, period_time_start, period_time_end))
+            self.deployment_phases.append(SchedulePhase(self.master, period_name))
+            self.selected_phase.set(self.deployment_phases[0].name.get())
+         period_name.trace_add('write', lambda _name, _idx, _mode: self.selected_phase.set(self.deployment_phases[0].name.get()))
+         row = ttk.Frame(phase)
+         row.grid(row=0, column=0, pady=10, columnspan=5, sticky=tk.W+tk.E+tk.N+tk.S)
+         ttk.Separator(row, orient='horizontal').pack(fill=tk.X, expand=True)
+         row = ttk.Frame(phase)
+         row.grid(row=1, column=0, columnspan=5, sticky=tk.W+tk.E+tk.N+tk.S)
+         ttk.Label(row, text='Phase Name: ').pack(side=tk.LEFT, expand=False)
+         ttk.Button(row, text='Remove', command=partial(remove_phase, self, phase)).pack(side=tk.RIGHT, expand=False)
+         ttk.Label(row, text='  ').pack(side=tk.RIGHT, expand=False)
+         ttk.Entry(row, textvariable=period_name).pack(side=tk.LEFT, expand=True)
+         row = ttk.Frame(phase)
+         row.grid(row=2, column=0, columnspan=5, sticky=tk.W+tk.E)
+         ttk.Label(row, text='Start Date:').pack(side=tk.LEFT, expand=False)
+         start_date = DateEntry(row, textvariable=period_date_start, selectmode='day', firstweekday='sunday', showweeknumbers=False, date_pattern='yyyy-mm-dd', mindate=datetime.strptime(self.deployment_start_date.get(), '%Y-%m-%d'), maxdate=datetime.strptime(self.deployment_end_date.get(), '%Y-%m-%d'))
+         start_date.pack(side=tk.LEFT, fill=tk.X, expand=True)
+         start_date.bind('<FocusIn>', self._focus_in)
+         start_date.bind('<Button-1>', self._date_entry_clicked)
+         start_date.bind('<<DateEntrySelected>>', self._date_entry_changed)
+         ttk.Label(row, text=' End Date:').pack(side=tk.LEFT, expand=False)
+         end_date = DateEntry(row, textvariable=period_date_end, selectmode='day', firstweekday='sunday', showweeknumbers=False, date_pattern='yyyy-mm-dd', mindate=datetime.strptime(self.deployment_start_date.get(), '%Y-%m-%d'), maxdate=datetime.strptime(self.deployment_end_date.get(), '%Y-%m-%d'))
+         end_date.pack(side=tk.LEFT, fill=tk.X, expand=True)
+         end_date.bind('<FocusIn>', self._focus_in)
+         end_date.bind('<Button-1>', self._date_entry_clicked)
+         end_date.bind('<<DateEntrySelected>>', self._date_entry_changed)
+         row = ttk.Frame(phase)
+         row.grid(row=3, column=0, columnspan=5, sticky=tk.W+tk.E)
+         ttk.Label(row, text='Start Time:').pack(side=tk.LEFT, expand=False)
+         ttk.Entry(row, textvariable=period_time_start, width=5, validate='all', validatecommand=(row.register(partial(validate_time, period_time_start)), '%d', '%P')).pack(side=tk.LEFT, fill=tk.X, expand=True)
+         ttk.Label(row, text=' End Time:').pack(side=tk.LEFT, expand=False)
+         ttk.Entry(row, textvariable=period_time_end, width=5, validate='all', validatecommand=(row.register(partial(validate_time, period_time_end)), '%d', '%P')).pack(side=tk.LEFT, fill=tk.X, expand=True)
+         self.phases.append(phase)
+         self.update_audio_button.configure(state=['enabled'])
+         self.update_imu_button.configure(state=['enabled'])
+      field1 = ttk.Label(prompt_area, text='Phase Schedule:')
+      field1.grid(column=0, row=1, columnspan=4, sticky=tk.W+tk.E+tk.N+tk.S)
+      field2 = ttk.Button(prompt_area, text='Add', command=partial(add_phase, self))
+      field2.grid(column=4, row=1, sticky=tk.E)
+      for phase_times in self.deployment_phase_times:
+         add_phase(self, phase_times)
+
+   def _update_audio_details(self):
+      self._clear_canvas()
+      prompt_area = ttk.Frame(self.canvas)
+      prompt_area.place(relx=0.5, anchor=tk.N)
+      phase = [phase for phase in self.deployment_phases if self.selected_phase.get() == phase.name.get()][0]
+      ttk.Label(prompt_area, text='Audio Recording Details', font=('Helvetica', '14', 'bold')).grid(column=0, row=0, columnspan=5, pady=(20,20), sticky=tk.N+tk.S)
+      if self.deployment_is_split.get():
+         ttk.Label(prompt_area, text='For Deployment Phase:  ').grid(column=0, row=1, columnspan=2, sticky=tk.W+tk.E+tk.N+tk.S)
+         phase_selector = ttk.Combobox(prompt_area, textvariable=self.selected_phase, width=10, values=[phase.name.get() for phase in self.deployment_phases], state=['readonly'])
+         phase_selector.grid(column=2, row=1, columnspan=3, sticky=tk.W+tk.E+tk.N+tk.S)
+         phase_selector.bind('<<ComboboxSelected>>', partial(self._deployment_phase_changed, 'audio'))
+         ttk.Separator(prompt_area, orient='horizontal').grid(column=0, row=2, pady=20, columnspan=5, sticky=tk.W+tk.E+tk.N+tk.S)
+      ttk.Label(prompt_area, text='Sampling Rate (Hz):   ').grid(column=0, row=3, columnspan=2, sticky=tk.W+tk.E+tk.N+tk.S)
+      def sample_rate_changed(self, event):
+         phase.max_frequency.set(int(phase.audio_sampling_rate.get()) // 2)
+      sampling_rate = ttk.Combobox(prompt_area, textvariable=phase.audio_sampling_rate, values=VALID_AUDIO_SAMPLE_RATES, state=['readonly'])
+      sampling_rate.grid(column=2, row=3, columnspan=3, sticky=tk.W+tk.E+tk.N+tk.S)
+      sampling_rate.bind('<<ComboboxSelected>>', partial(sample_rate_changed, self))
+      ttk.Label(prompt_area, text='Audio Clip Length (s):   ').grid(column=0, row=4, columnspan=2, sticky=tk.W+tk.E+tk.N+tk.S)
+      ttk.Entry(prompt_area, textvariable=phase.audio_clip_length, validate='all', validatecommand=(prompt_area.register(partial(validate_number, phase.audio_clip_length, 1, 3600)), '%d', '%P')).grid(column=2, row=4, columnspan=3, sticky=tk.W+tk.E+tk.N+tk.S)
+      ttk.Label(prompt_area, text='Silence Threshold (% of max):   ').grid(column=0, row=5, columnspan=2, sticky=tk.W+tk.E+tk.N+tk.S)
+      ttk.Entry(prompt_area, textvariable=phase.silence_threshold, validate='all', validatecommand=(prompt_area.register(partial(validate_number, phase.silence_threshold, 0, 100)), '%d', '%P')).grid(column=2, row=5, columnspan=3, sticky=tk.W+tk.E+tk.N+tk.S)
+      ttk.Label(prompt_area, text='Frequencies of Interest (Hz):   ').grid(column=0, row=6, columnspan=2, sticky=tk.W+tk.E+tk.N+tk.S)
+      ttk.Entry(prompt_area, textvariable=phase.min_frequency, width=8, validate='all', validatecommand=(prompt_area.register(partial(validate_number, phase.min_frequency, 0, int(phase.audio_sampling_rate.get()) // 4)), '%d', '%P')).grid(column=2, row=6, columnspan=1, sticky=tk.W+tk.E+tk.N+tk.S)
+      ttk.Label(prompt_area, text=' - ').grid(column=3, row=6, columnspan=1, sticky=tk.W+tk.E+tk.N+tk.S)
+      ttk.Entry(prompt_area, textvariable=phase.max_frequency, width=8, validate='all', validatecommand=(prompt_area.register(partial(validate_number, phase.max_frequency, int(phase.audio_sampling_rate.get()) // 4, int(phase.audio_sampling_rate.get()) // 2)), '%d', '%P')).grid(column=4, row=6, columnspan=1, sticky=tk.W+tk.E+tk.N+tk.S)
+      ttk.Checkbutton(prompt_area, text='Extend Clip if Continuous Audio Detected', variable=phase.extend_clip_if_continuous_audio).grid(column=0, row=7, columnspan=5, pady=(10,0), sticky=tk.W+tk.N+tk.S)
+      ttk.Separator(prompt_area, orient='horizontal').grid(column=0, row=8, pady=20, columnspan=5, sticky=tk.W+tk.E+tk.N+tk.S)
+      def show_threshold_options(self):
+         for field in self.audio_detail_fields:
+            field.destroy()
+         field1 = ttk.Label(prompt_area, text='Threshold Trigger Level (dB):   ')
+         field1.grid(column=0, row=11, columnspan=2, sticky=tk.W+tk.E+tk.N+tk.S)
+         field2 = ttk.Entry(prompt_area, textvariable=phase.audio_trigger_threshold)
+         field2.grid(column=2, row=11, columnspan=3, sticky=tk.W+tk.E+tk.N+tk.S)
+         field3 = ttk.Label(prompt_area, text='Max Number of Audio Clips:   ')
+         field3.grid(column=0, row=12, columnspan=2, sticky=tk.W+tk.E+tk.N+tk.S)
+         field4 = ttk.Entry(prompt_area, textvariable=phase.max_audio_clips, width=5, validate='all', validatecommand=(prompt_area.register(partial(validate_number, phase.max_audio_clips, 0, 100000)), '%d', '%P'))
+         field4.grid(column=2, row=12, columnspan=1, sticky=tk.W+tk.E+tk.N+tk.S)
+         field5 = ttk.Label(prompt_area, text=' per ')
+         field5.grid(column=3, row=12, columnspan=1, sticky=tk.W+tk.E+tk.N+tk.S)
+         field6 = ttk.Combobox(prompt_area, textvariable=phase.max_clips_time_scale, width=7, values=list(VALID_TIME_SCALES.keys()), state=['readonly'])
+         field6.grid(column=4, row=12, columnspan=1, sticky=tk.W+tk.E+tk.N+tk.S)
+         self.audio_detail_fields = [field1, field2, field3, field4, field5, field6]
+      def show_interval_options(self):
+         for field in self.audio_detail_fields:
+            field.destroy()
+         field1 = ttk.Label(prompt_area, text='Record New Clip Every:   ')
+         field1.grid(column=0, row=13, columnspan=3, sticky=tk.W+tk.E+tk.N+tk.S)
+         field2 = ttk.Entry(prompt_area, textvariable=phase.audio_trigger_interval, width=5, validate='all', validatecommand=(prompt_area.register(partial(validate_number, phase.audio_trigger_interval, 1, 60)), '%d', '%P'))
+         field2.grid(column=2, row=13, columnspan=3, sticky=tk.W+tk.N+tk.S)
+         field3 = ttk.Combobox(prompt_area, textvariable=phase.audio_trigger_interval_time_scale, width=7, values=list(VALID_TIME_SCALES.keys()), state=['readonly'])
+         field3.grid(column=3, row=13, columnspan=3, sticky=tk.W+tk.E+tk.N+tk.S)
+         self.audio_detail_fields = [field1, field2, field3]
+      def show_schedule_options(self):
+         for field in self.audio_detail_fields:
+            field.destroy()
+         self.periods = []
+         def remove_period(self, row):
+            row.destroy()
+            del phase.audio_trigger_times[self.periods.index(row)]
+            self.periods.remove(row)
+            for idx in range(len(self.periods)):
+               self.periods[idx].grid(row=15+idx, column=0, columnspan=5, sticky=tk.W+tk.E)
+         def add_period(self, trigger_times=None):
+            if len(self.periods) < MAX_AUDIO_TRIGGER_TIMES:
+               row = ttk.Frame(prompt_area)
+               if trigger_times is not None:
+                  period_start, period_end = trigger_times
+               else:
+                  period_start, period_end = tk.StringVar(self.master, '00:00'), tk.StringVar(self.master, '00:00')
+                  phase.audio_trigger_times.append((period_start, period_end))
+               row.grid(row=15+len(self.periods), column=0, columnspan=5, sticky=tk.W+tk.E)
+               ttk.Label(row, text='Start Time:').pack(side=tk.LEFT, expand=False)
+               ttk.Entry(row, textvariable=period_start, width=5, validate='all', validatecommand=(row.register(partial(validate_time, period_start)), '%d', '%P')).pack(side=tk.LEFT, fill=tk.X, expand=True)
+               ttk.Label(row, text=' End Time:').pack(side=tk.LEFT, expand=False)
+               ttk.Entry(row, textvariable=period_end, width=5, validate='all', validatecommand=(row.register(partial(validate_time, period_end)), '%d', '%P')).pack(side=tk.LEFT, fill=tk.X, expand=True)
+               ttk.Label(row, text='  ').pack(side=tk.LEFT, expand=False)
+               ttk.Button(row, text='Remove', command=partial(remove_period, self, row)).pack(side=tk.LEFT, expand=False)
+               self.audio_detail_fields.append(row)
+               self.periods.append(row)
+         field1 = ttk.Label(prompt_area, text='Active Listening Periods:')
+         field1.grid(column=0, row=14, columnspan=4, sticky=tk.W+tk.E+tk.N+tk.S)
+         field2 = ttk.Button(prompt_area, text='Add', command=partial(add_period, self))
+         field2.grid(column=4, row=14, sticky=tk.E)
+         self.audio_detail_fields = [field1, field2]
+         for trigger_times in phase.audio_trigger_times:
+            add_period(self, trigger_times)
+      def audio_mode_changed(self, event):
+         if phase.audio_recording_mode.get() == 'Threshold-Based':
+            show_threshold_options(self)
+         elif phase.audio_recording_mode.get() == 'Schedule-Based':
+            show_schedule_options(self)
+         elif phase.audio_recording_mode.get() == 'Interval-Based':
+            show_interval_options(self)
+         else:
+            for field in self.audio_detail_fields:
+               field.destroy()
+      ttk.Label(prompt_area, text='Audio Recording Mode:   ').grid(column=0, row=9, columnspan=2, pady=(0,10), sticky=tk.W+tk.E+tk.N+tk.S)
+      mode_selector = ttk.Combobox(prompt_area, textvariable=phase.audio_recording_mode, width=18, values=list(VALID_AUDIO_MODES.keys()), state=['readonly'])
+      mode_selector.grid(column=2, row=9, columnspan=3, pady=(0,10), sticky=tk.W+tk.E+tk.N+tk.S)
+      mode_selector.bind('<<ComboboxSelected>>', partial(audio_mode_changed, self))
+      audio_mode_changed(self, None)
+
+   def _update_imu_details(self):
+      self._clear_canvas()
+      prompt_area = ttk.Frame(self.canvas)
+      prompt_area.place(relx=0.5, anchor=tk.N)
+      phase = [phase for phase in self.deployment_phases if self.selected_phase.get() == phase.name.get()][0]
+      ttk.Label(prompt_area, text='IMU Recording Details', font=('Helvetica', '14', 'bold')).grid(column=0, row=0, columnspan=6, pady=(20,20), sticky=tk.N+tk.S)
+      if self.deployment_is_split.get():
+         ttk.Label(prompt_area, text='For Deployment Phase:  ').grid(column=0, row=1, columnspan=3, sticky=tk.E+tk.N+tk.S)
+         phase_selector = ttk.Combobox(prompt_area, textvariable=self.selected_phase, width=10, values=[phase.name.get() for phase in self.deployment_phases], state=['readonly'])
+         phase_selector.grid(column=3, row=1, columnspan=3, sticky=tk.W+tk.E+tk.N+tk.S)
+         phase_selector.bind('<<ComboboxSelected>>', partial(self._deployment_phase_changed, 'imu'))
+         ttk.Separator(prompt_area, orient='horizontal').grid(column=0, row=2, pady=20, columnspan=6, sticky=tk.W+tk.E+tk.N+tk.S)
+      ttk.Label(prompt_area, text='Degrees of Freedom:   ').grid(column=0, row=3, columnspan=3, sticky=tk.E+tk.N+tk.S)
+      ttk.Combobox(prompt_area, textvariable=phase.imu_degrees_of_freedom, width=10, values=VALID_DOFS, state=['readonly']).grid(column=3, row=3, columnspan=2, sticky=tk.W+tk.E+tk.N+tk.S)
+      ttk.Label(prompt_area, text='Sampling Rate (Hz):   ').grid(column=0, row=4, columnspan=3, sticky=tk.E+tk.N+tk.S)
+      ttk.Combobox(prompt_area, textvariable=phase.imu_sampling_rate, width=10, values=VALID_IMU_SAMPLE_RATES, state=['readonly']).grid(column=3, row=4, columnspan=2, sticky=tk.W+tk.E+tk.N+tk.S)
+      ttk.Label(prompt_area, text='Recording Mode:   ').grid(column=0, row=5, columnspan=3, sticky=tk.E+tk.N+tk.S)
+      mode_selector = ttk.Combobox(prompt_area, textvariable=phase.imu_recording_mode, width=10, values=list(VALID_IMU_MODES.keys()), state=['readonly'])
+      mode_selector.grid(column=3, row=5, columnspan=2, sticky=tk.W+tk.E+tk.N+tk.S)
+      mode_selector.bind('<<ComboboxSelected>>', partial(self._imu_mode_changed, phase))
+      field1 = ttk.Label(prompt_area, text='Motion Trigger Threshold (mg):   ')
+      field1.grid(column=0, row=6, columnspan=3, sticky=tk.E+tk.N+tk.S)
+      field2 = ttk.Entry(prompt_area, textvariable=phase.imu_trigger_threshold)
+      field2.grid(column=3, row=6, columnspan=2, sticky=tk.W+tk.E+tk.N+tk.S)
+      self.imu_motion_fields = [field1, field2]
+      self._imu_mode_changed(phase)
+
+   def _post_deployment_tools(self):
+      files_list = sorted(glob.glob(os.path.join(self.target_selection.get(), '**', '*.wav'), recursive=True))
+      first_datetime, last_datetime = None, None
+      while not first_datetime:
+         for file in files_list:
+            try: first_datetime = datetime.strptime(Path(file).stem, '%Y-%m-%d %H-%M-%S'); break
+            except ValueError: continue
+      while not last_datetime:
+         for file in reversed(files_list):
+            try: last_datetime = datetime.strptime(Path(file).stem, '%Y-%m-%d %H-%M-%S'); break
+            except ValueError: continue
+      if first_datetime and last_datetime:
+         duration = last_datetime - first_datetime
+         duration = str(duration.days) + ' days, ' + str(duration.seconds // 3600) + ' hours, ' + str((duration.seconds // 60) % 60) + ' minutes, ' + str(duration.seconds % 60) + ' seconds'
+      else:
+         duration = 'Unknown'
+      num_files = len(files_list)
+      data_size = sum([os.path.getsize(file) for file in files_list]) / 1024 / 1024 / 1024
+      self._clear_canvas()
+      prompt_area = ttk.Frame(self.canvas)
+      prompt_area.place(relx=0.5, anchor=tk.N)
+      ttk.Label(prompt_area, text='Post-Deployment Tools', font=('Helvetica', '14', 'bold')).grid(column=0, row=0, columnspan=5, pady=(20,20), sticky=tk.N+tk.S)
+      ttk.Label(prompt_area, text='Deployment Statistics', font=('Helvetica', '12', 'bold')).grid(column=0, row=1, columnspan=5, pady=(0,10), sticky=tk.W+tk.N+tk.S)
+      ttk.Label(prompt_area, text=f'      Deployment Duration:  {duration}').grid(column=0, row=2, sticky=tk.W+tk.N+tk.S)
+      ttk.Label(prompt_area, text=f'      Number of Audio Clips:  {num_files:,}').grid(column=0, row=3, sticky=tk.W+tk.N+tk.S)
+      ttk.Label(prompt_area, text=f'      Audio Data Total Size:  {data_size:.5} GB').grid(column=0, row=4, sticky=tk.W+tk.N+tk.S)
+      ttk.Separator(prompt_area, orient='horizontal').grid(column=0, row=9, pady=20, columnspan=5, sticky=tk.W+tk.E+tk.N+tk.S)
+      tool_label = ttk.Label(prompt_area, text='Select Tool', font=('Helvetica', '12', 'bold'))
+      tool_label.grid(column=0, row=10, columnspan=5, pady=(0,10), sticky=tk.W+tk.E+tk.N+tk.S)
+      def relabel_logs(self, tool_area):
+         ttk.Label(tool_area, text=' ', width=2).grid(column=2, row=12, sticky=tk.W+tk.E)
+         ttk.Label(tool_area, text='Original Date and Time').grid(column=0, row=12, columnspan=2, sticky=tk.W)
+         ttk.Label(tool_area, text='Target Date and Time').grid(column=3, row=12, columnspan=2, sticky=tk.W)
+         orig_date_var = tk.StringVar(tool_area, str(first_datetime).split(' ')[0] if first_datetime else datetime.today().strftime('%Y-%m-%d'))
+         orig_time_var = tk.StringVar(tool_area, str(first_datetime).split(' ')[1] if first_datetime else '00:00:00')
+         target_date_var = tk.StringVar(tool_area, str(first_datetime).split(' ')[0] if first_datetime else datetime.today().strftime('%Y-%m-%d'))
+         target_time_var = tk.StringVar(tool_area, str(first_datetime).split(' ')[1] if first_datetime else '00:00:00')
+         orig_date = DateEntry(tool_area, textvariable=orig_date_var, selectmode='day', firstweekday='sunday', showweeknumbers=False, date_pattern='yyyy-mm-dd')
+         orig_date.grid(column=0, row=13, sticky=tk.W)
+         orig_date.bind('<FocusIn>', self._focus_in)
+         orig_date.bind('<Button-1>', self._date_entry_clicked)
+         orig_date.bind('<<DateEntrySelected>>', self._date_entry_changed)
+         ttk.Entry(tool_area, textvariable=orig_time_var, width=7).grid(column=1, row=13, sticky=tk.W)
+         target_date = DateEntry(tool_area, textvariable=target_date_var, selectmode='day', firstweekday='sunday', showweeknumbers=False, date_pattern='yyyy-mm-dd')
+         target_date.grid(column=3, row=13, sticky=tk.W)
+         target_date.bind('<FocusIn>', self._focus_in)
+         target_date.bind('<Button-1>', self._date_entry_clicked)
+         target_date.bind('<<DateEntrySelected>>', partial(self._deployment_end_changed, None, 0)) 
+         ttk.Entry(tool_area, textvariable=target_time_var, width=7).grid(column=4, row=13, sticky=tk.W)
+         button = ttk.Button(tool_area, text='Relabel', command=partial(relabel_log_files, self, orig_date_var, orig_time_var, target_date_var, target_time_var))
+         button.grid(column=3, row=14, columnspan=2, pady=5, sticky=tk.W+tk.E+tk.N+tk.S)
+      def tool_click(self, tool_area, tool_name):
+         tool_area.destroy()
+         tool_area = ttk.Frame(prompt_area)
+         tool_area.grid(row=11, column=0, columnspan=4, sticky=tk.W+tk.E+tk.N)
+         tool_label.configure(text=tool_name)
+         if tool_name == 'Relabel Log Files':
+            relabel_logs(self, tool_area)
+         else:
+            tk.messagebox.showinfo('A3EM Info', 'This tool is not yet implemented')
+      rows = []
+      tool_area = ttk.Frame(prompt_area)
+      tool_area.grid(row=11, column=0, columnspan=4, sticky=tk.W+tk.E+tk.N)
+      for i in range(2):
+         rows.append(ttk.Frame(tool_area))
+         rows[i].grid(column=0, row=i, columnspan=4, sticky=tk.W+tk.E+tk.N+tk.S)
+      button1 = ttk.Button(rows[0], text='Relabel Log Files', width=20, command=partial(tool_click, self, tool_area, 'Relabel Log Files'))
+      button1.pack(side=tk.LEFT, padx=(20,5), fill=tk.X, expand=True)
+      button2 = ttk.Button(rows[0], text='Todo', width=20, command=partial(tool_click, self, tool_area, 'Todo'), state=['disabled'])
+      button2.pack(side=tk.RIGHT, padx=(5,20), fill=tk.X, expand=True)
+      button3 = ttk.Button(rows[1], text='Todo', width=20, command=partial(tool_click, self, tool_area, 'Todo'), state=['disabled'])
+      button3.pack(side=tk.LEFT, padx=(20,5), fill=tk.X, expand=True)
+      button4 = ttk.Button(rows[1], text='Todo', width=20, command=partial(tool_click, self, tool_area, 'Todo'), state=['disabled'])
+      button4.pack(side=tk.RIGHT, padx=(5,20), fill=tk.X, expand=True)
+
+   def _post_deployment_tools_start(self):
+      self._clear_canvas()
+      tk.Label(self.canvas, text='Loading deployment details, please wait...').pack(fill=tk.BOTH, expand=True)
+      deployment_parsing_thread = threading.Thread(target=self._post_deployment_tools)
+      deployment_parsing_thread.start()
+
+   def _configure(self):
+      self._clear_canvas()
+      try:
+         error = validate_details(self)
+         if not error and self.save_directory.get() in self.target_device_mapping:
+            device_info = self.target_device_mapping[self.save_directory.get()]
+            if device_info[1] != 'exfat':
+               error = 'SD Card is not in the correct exFAT format!'
+#            if device_info[1] != 'exfat' or (not os.path.exists(os.path.join(self.save_directory.get(), CONFIG_FILE_NAME)) and self._prompt_for_password() and not sd_card_check_formatting(device_info[0], self.passwd)):
+#               if not hasattr(self, 'passwd'):
+#                  self._prompt_for_password()
+#                  error = format_sd_card_as_exfat(self.save_directory.get(), device_info[0], self.passwd)
+#               if not error:
+#                  for partition in psutil.disk_partitions():
+#                     if partition.device == device_info[0]:
+#                        self.target_selection.set(partition.mountpoint)
+#                        self.save_directory.set(partition.mountpoint)
+#            if hasattr(self, 'passwd'):
+#               del self.passwd
+         if error:
+            tk.Label(self.canvas, text='Fix configuration errors and try again').pack(fill=tk.BOTH, expand=True)
+            tk.messagebox.showerror('A3EM Error', error)
+         else:
+            write_config(self, CONFIG_FILE_NAME)
+            tk.Label(self.canvas, text='Successfully stored configuration to device!').pack(fill=tk.BOTH, expand=True)
+      except:
+         tk.Label(self.canvas, text='Unable to store the configuration file').pack(fill=tk.BOTH, expand=True)
+         tk.messagebox.showerror('A3EM Error', 'ERROR\n\nUnable to write configuration file to {}'.format(self.save_directory.get()))
+
+
+# TOP-LEVEL FUNCTIONALITY ---------------------------------------------------------------------------------------------
+
+def main():
+   gui = A3EMGui()
+   gui.mainloop()
+
+if __name__ == '__main__':
+   main()
