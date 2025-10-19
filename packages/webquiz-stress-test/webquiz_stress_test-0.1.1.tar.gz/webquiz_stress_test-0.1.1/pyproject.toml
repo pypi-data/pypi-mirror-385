@@ -1,0 +1,65 @@
+[tool.poetry]
+name = "webquiz-stress-test"
+version = "0.1.1"
+description = "Performance testing tool for WebQuiz servers - simulate concurrent users taking quizzes"
+authors = ["Oleksandr Liabakh <oduvan@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/oduvan/webquiz-stress-test"
+repository = "https://github.com/oduvan/webquiz-stress-test"
+documentation = "https://github.com/oduvan/webquiz-stress-test"
+keywords = ["webquiz", "stress-test", "load-test", "performance", "testing", "benchmark"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Testing",
+    "Topic :: Software Development :: Testing :: Traffic Generation",
+]
+packages = [{include = "webquiz_stress_test"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+aiohttp = "^3.12.13"
+
+[tool.poetry.group.dev.dependencies]
+pyinstaller = {version = "^6.15", python = ">=3.9,<3.15"}
+black = "^24.0.0"
+
+[tool.poetry.scripts]
+webquiz-stress-test = "webquiz_stress_test.cli:main"
+build_binary = "webquiz_stress_test.build:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/oduvan/webquiz-stress-test/issues"
+
+[tool.black]
+line-length = 120
+target-version = ['py39', 'py310', 'py311', 'py312']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | venv
+  | build
+  | dist
+)/
+'''
