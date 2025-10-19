@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=65.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "python-nhi"
+description = "A function to check strings against the New Zealand Ministry of Health NHI Validation Routine"
+license = "Apache-2.0"
+readme = "README.md"
+requires-python = ">=3.9"
+dynamic = ["version"]
+
+[tool.setuptools.dynamic]
+version = { attr = "nhi.__version__" }
+
+[project.urls]
+repository = "https://codeberg.org/jamesansley/nhi"
+
