@@ -1,0 +1,127 @@
+Metadata-Version: 2.4
+Name: langgraph-s3-checkpointer
+Version: 0.1.0
+Summary: Langgraph S3 Checkpoint Persistant Memory
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: aiobotocore>=2.25.0
+Requires-Dist: boto3>=1.40.49
+Requires-Dist: langgraph>=0.6.10
+Provides-Extra: examples
+Requires-Dist: dotenv>=0.9.9; extra == "examples"
+Requires-Dist: ipykernel>=7.0.1; extra == "examples"
+Dynamic: license-file
+
+# LangGraph S3 Checkpoint
+
+A Python package that provides S3 storage capabilities for LangGraph checkpoints. This package implements the `BaseCheckpointSaver` interface from LangGraph to allow storing and retrieving checkpoints from Amazon S3.
+
+## Installation
+
+You can install the package directly from PyPI:
+
+```bash
+pip install langgraph-s3-checkpointer
+```
+
+Or using uv:
+
+```bash
+uv pip install langgraph-s3-checkpointer
+```
+
+## Requirements
+
+- Python 3.8+
+- boto3
+- langgraph
+
+## Usage
+
+### Basic Usage
+
+```python
+from s3checkpointer.s3saver import S3CheckpointSaver
+from langgraph.graph import StateGraph
+
+# Initialize the S3 checkpoint saver
+s3_saver = S3CheckpointSaver(
+    bucket_name="my-langgraph-checkpoints",
+    prefix="my-app",  # Optional prefix for S3 keys
+    # AWS credentials (optional if using environment variables or IAM roles)
+    aws_access_key_id="YOUR_ACCESS_KEY",  
+    aws_secret_access_key="YOUR_SECRET_KEY",
+    region_name="us-east-1"
+)
+
+# Create a LangGraph with the S3 checkpoint saver
+builder = StateGraph(checkpointer=s3_saver)
+
+# ... define your graph nodes and edges ...
+
+# Build the graph
+graph = builder.compile()
+
+# The graph will now use S3 for checkpoint storage
+```
+
+### Using with Environment Variables
+
+You can also configure AWS credentials using environment variables:
+
+```python
+import os
+from s3checkpointer.s3saver import S3CheckpointSaver
+
+# Set AWS credentials in environment variables
+os.environ["AWS_ACCESS_KEY_ID"] = "YOUR_ACCESS_KEY"
+os.environ["AWS_SECRET_ACCESS_KEY"] = "YOUR_SECRET_KEY"
+os.environ["AWS_REGION"] = "us-east-1"
+
+# Initialize without explicit credentials
+s3_saver = S3CheckpointSaver(
+    bucket_name="my-langgraph-checkpoints",
+    prefix="my-app"
+)
+```
+
+## Configuration Options
+
+The `S3CheckpointSaver` class accepts the following parameters:
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `bucket_name` | str | Yes | The name of the S3 bucket to store checkpoints |
+| `prefix` | str | No | A prefix to use for all keys in the bucket (default: "") |
+| `aws_access_key_id` | str | No | AWS access key ID (default: None, read from environment) |
+| `aws_secret_access_key` | str | No | AWS secret access key (default: None, read from environment) |
+| `region_name` | str | No | AWS region name (default: None, read from environment) |
+
+## Features
+
+- Store and retrieve LangGraph checkpoints in Amazon S3
+- Automatic bucket creation if it doesn't exist
+- Efficient batch deletion of checkpoints
+- Support for checkpoint metadata
+- Thread-based organization of checkpoints
+
+## Testing
+
+To run the tests:
+
+```bash
+# Install test dependencies
+pip install pytest moto
+
+# Run tests
+pytest tests/
+```
+
+## License
+
+[MIT License](LICENSE)
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.

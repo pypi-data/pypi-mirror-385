@@ -1,0 +1,58 @@
+[project]
+name = "langgraph-s3-checkpointer"
+version = "0.1.0"
+description = "Langgraph S3 Checkpoint Persistant Memory"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "aiobotocore>=2.25.0",
+    "boto3>=1.40.49",
+    "langgraph>=0.6.10",
+]
+
+[project.optional-dependencies]
+examples = [
+    "dotenv>=0.9.9",
+    "ipykernel>=7.0.1",
+]
+
+[tool.ruff]
+lint.select = [
+    "E",    # pycodestyle
+    "F",    # pyflakes
+    "I",    # isort
+    "D",    # pydocstyle
+    "D401", # First line should be in imperative mood
+    "T201",
+    "UP",
+]
+lint.ignore = [
+    "UP006",
+    "UP007",
+    # We actually do want to import from typing_extensions
+    "UP035",
+    # Relax the convention by _not_ requiring documentation for every function parameter.
+    "D417",
+    "E501",
+]
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["D", "UP"]
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.interrogate]
+ignore-init-module = true
+ignore-init-method = false
+ignore-module = false
+ignore-nested-functions = false
+
+
+
+[tool.uv]
+dev-dependencies = [
+    "interrogate>=1.7.0",
+    "moto[all]>=5.1.15",
+    "mypy>=1.18.2",
+    "pytest>=8.4.2",
+    "ruff>=0.14.1",
+]
