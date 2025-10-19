@@ -1,0 +1,167 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "xtdamo"
+version = "0.1.0"
+description = "基于大漠插件的Python自动化封装库"
+readme = "README.md"
+requires-python = ">=3.8"
+# 注意：大漠插件仅支持32位Python环境
+license = {text = "MIT"}
+authors = [
+    {name = "sandorn", email = "sandorn@live.cn"}
+]
+keywords = ["automation", "dm-plugin", "mouse", "keyboard", "image-recognition"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: Microsoft :: Windows",
+    "Environment :: Win32 (MS Windows)",
+]
+dependencies = [
+    "pywin32>=306",
+    "typing-extensions>=4.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=22.0.0",
+    "flake8>=5.0.0",
+    "mypy>=1.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/sandorn/xtdamo"
+Repository = "https://github.com/sandorn/xtdamo"
+Issues = "https://github.com/sandorn/xtdamo/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["xtdamo*"]
+
+#=======================================================
+[tool.ruff]
+target-version = "py313"
+cache-dir = "D:/TMP/ruff_cache"
+preview = true
+line-length = 200
+
+# 排除配置
+exclude = [
+    ".venv", "__pycache__", "build", "dist",
+    "migrations", "node_modules", "tests/fixtures",
+    "**/generated/*.py", "*.pyc", "*.pyo", "*.pyd",
+    "*.so", "*.dll", "*.dylib", "*.egg-info", "*.egg",
+    "*.log", "*.tmp", "*.bak", "old_code/**"
+]
+
+[tool.ruff.lint]
+select = [
+    "B",    # bugbear
+    "SIM",  # simplify
+    "RUF",  # ruff
+    "UP",   # pyupgrade
+    "I",    # isort
+    "C90",  # mccabe
+    "N",    # pep8-naming
+    "S",    # bandit
+    "T",    # flake8-print
+    "F",    # pyflakes
+    "E",    # pycodestyle
+    "RET",  # flake8-return
+    "PT",   # flake8-pytest-style
+]
+
+ignore = [
+    "A",    # 完全禁用 flake8-annotations
+    "ANN",  # 完全禁用 flake8-annotations 扩展
+    "E501", # 行超长 (由 line-length 控制)
+    "B006", # 可变默认值
+    "RUF002", # 字符串中全角标点
+    "RUF003", # 字符串中全角标点
+    "Q000", # 与格式化器冲突的引号规则
+    "Q003", # 与格式化器冲突的引号规则
+    # "RUF022",  # __all__ 排序
+    "D203", "D212",  # 文档字符串格式
+    "S101",  # 测试文件中允许断言
+    "T201",  # 测试文件中允许 print
+    "N802", "N803", "N806",  # 中文函数名和参数名
+    "RUF001",  # 全角标点符号
+    "S311",  # 随机数生成器安全警告
+    "RUF012",  # 可变类属性
+    "RET505",  # 不必要的else
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]  # 未使用的导入在 __init__ 中可接受
+"examples/**" = ["F401"]  # 示例代码中允许未使用的导入
+
+[tool.ruff.lint.isort]
+known-first-party = []
+known-third-party = []
+required-imports = ["from __future__ import annotations"]
+combine-as-imports = true
+force-single-line = false
+order-by-type = true
+force-sort-within-sections = false
+split-on-trailing-comma = false  # 添加这一行
+
+[tool.ruff.format]
+indent-style = "space"
+quote-style = "single"
+docstring-code-format = true
+line-ending = "auto"
+skip-magic-trailing-comma = false  # 改为 true 避免与长行冲突
+
+#=======================================================
+
+# 类型检查器: basedpyright
+
+[tool.pyright]
+pythonVersion = "3.13"
+typeCheckingMode = "basic"
+reportMissingImports = "error"
+reportUnusedImport = "none"
+reportUnusedVariable = "warning"
+reportExplicitAny = "none"
+reportAny = "none"
+reportUnannotatedClassAttribute = "none"
+exclude = [
+    "**/tests/**",
+    "**/test_*", 
+    "**/__pycache__/**",
+    "**/.git/**",
+    "**/migrations/**",
+    "**/node_modules/**",
+    "**/old_code/**"
+]
+
+#=======================================================
+
+# 可选类型检查器：mypy 
+[tool.mypy]
+python_version = "3.13"
+cache_dir = "D:/TMP/mypy_cache/"
+show_error_codes = true
+check_untyped_defs = true
+disallow_incomplete_defs = false
+disallow_untyped_defs = false
+disallow_untyped_decorators = false
+implicit_optional = false
+strict_equality = false
+strict_optional = true
+
+[[tool.mypy.overrides]]
+module = "tkinter.*"
+ignore_errors = true
