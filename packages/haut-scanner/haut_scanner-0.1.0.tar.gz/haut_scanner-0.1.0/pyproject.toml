@@ -1,0 +1,32 @@
+[build-system]
+requires = ["hatchling>=1.27.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "haut_scanner"
+version = "0.1.0"
+description = "Asynchronous scanning utilities for discovering HAUT services, starting with the JWGLXT portal."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "aiohttp>=3.12.13",
+    "beautifulsoup4>=4.13.0",
+    "hatch>=1.15.1",
+]
+keywords = ["jwglxt", "haut", "scanner", "asyncio", "network"]
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Internet",
+    "Topic :: System :: Networking",
+]
+
+[project.scripts]
+haut_scan = "haut_scanner.jwglxt:run"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/haut_scanner"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "README.md", "pyproject.toml"]
