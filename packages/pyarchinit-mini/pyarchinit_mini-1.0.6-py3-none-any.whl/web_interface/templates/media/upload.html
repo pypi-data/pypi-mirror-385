@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Carica Media{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Carica File Media</h2>
+
+    <form method="POST" enctype="multipart/form-data" class="mt-4">
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+            <label class="form-label">Tipo Entità *</label>
+            {{ form.entity_type(class="form-select", required=True) }}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">ID Entità *</label>
+            {{ form.entity_id(class="form-control", required=True) }}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">File *</label>
+            {{ form.file(class="form-control", required=True) }}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Descrizione</label>
+            {{ form.description(class="form-control", rows=3) }}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Autore/Fotografo</label>
+            {{ form.author(class="form-control") }}
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">Carica</button>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">Annulla</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
