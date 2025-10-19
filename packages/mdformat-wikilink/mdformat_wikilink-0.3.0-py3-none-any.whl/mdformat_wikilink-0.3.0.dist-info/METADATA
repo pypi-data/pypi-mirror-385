@@ -1,0 +1,55 @@
+Metadata-Version: 2.1
+Name: mdformat_wikilink
+Version: 0.3.0
+Summary: 
+Home-page: https://github.com/tmr232/mdformat-wikilink
+License: MIT
+Author: Tamir Bahar
+Requires-Python: >=3.10
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Dist: markdown-it-py (>=2.2.0)
+Requires-Dist: mdformat (>=0.7.16)
+Project-URL: Repository, https://github.com/tmr232/mdformat-wikilink
+Description-Content-Type: text/markdown
+
+# mdformat-wikilink
+
+An [mdformat] plugin for ensuring that wiki-style links (`[[Target|Alias]]`)
+are preserved during formatting.
+
+Source:
+
+```markdown
+This is a [[link]].
+```
+
+With the plugin:
+
+```markdown
+This is a [[link]].
+```
+
+Without the plugin:
+
+```markdown
+This is a \[\[link\]\].
+```
+
+## Installation
+
+After installing mdformat,
+
+```bash
+# With pip
+pip install mdformat-wikilink
+
+# With pipx
+pipx inject mdformat mdformat-wikilink
+```
+
+[mdformat]: https://github.com/executablebooks/mdformat
+
