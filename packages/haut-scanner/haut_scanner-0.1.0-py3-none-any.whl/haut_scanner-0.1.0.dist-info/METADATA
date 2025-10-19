@@ -1,0 +1,58 @@
+Metadata-Version: 2.4
+Name: haut_scanner
+Version: 0.1.0
+Summary: Asynchronous scanning utilities for discovering HAUT services, starting with the JWGLXT portal.
+License-File: LICENSE
+Keywords: asyncio,haut,jwglxt,network,scanner
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Internet
+Classifier: Topic :: System :: Networking
+Requires-Python: >=3.11
+Requires-Dist: aiohttp>=3.12.13
+Requires-Dist: beautifulsoup4>=4.13.0
+Requires-Dist: hatch>=1.15.1
+Description-Content-Type: text/markdown
+
+# haut_scanner
+
+An asynchronous toolkit for discovering HAUT services. The initial module targets HAUT JWGLXT portals and records reachable instances for later analysis.
+
+## Installation
+
+```bash
+pip install haut_scanner
+```
+
+## Usage
+
+Run the bundled command-line interface:
+
+```bash
+haut_scan
+```
+
+Or integrate the scanner into your own script:
+
+```python
+from haut_scanner import JwglxtScanner
+import asyncio
+
+async def main():
+    scanner = JwglxtScanner()
+    await scanner.scan()
+    scanner.save_results("jwglxt_urls.json")
+
+asyncio.run(main())
+```
+
+The scan writes any discovered portals to `jwglxt_urls.json` by default.
+
+## Development
+
+This project uses Hatch for builds. To produce a wheel and source distribution:
+
+```bash
+hatch build
+```
