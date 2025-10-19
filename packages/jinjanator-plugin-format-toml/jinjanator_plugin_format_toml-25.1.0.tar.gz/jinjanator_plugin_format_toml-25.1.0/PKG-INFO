@@ -1,0 +1,90 @@
+Metadata-Version: 2.4
+Name: jinjanator-plugin-format-toml
+Version: 25.1.0
+Summary: Plugin which provides TOML format (data input) support for jinjanator
+Project-URL: Bug Tracker, https://github.com/kpfleming/jinjanator-plugin-format-toml/issues
+Project-URL: Homepage, https://github.com/kpfleming/jinjanator-plugin-format-toml
+Author-email: "Kevin P. Fleming" <jinjanator@kevin.km6g.us>
+License: Apache-2.0
+License-File: LICENSE
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: System Administrators
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Classifier: Typing :: Typed
+Requires-Python: >=3.10
+Requires-Dist: jinjanator-plugins==25.1.*
+Requires-Dist: tomli>=1.1; python_version < '3.11'
+Description-Content-Type: text/markdown
+
+# *jinjanator-plugin-format-toml*: Provides TOML format (data input) support for jinjanator
+
+
+
+This plugin allows jinjanator to parse TOML data for processing in
+templates. The format can be selected using `--format toml` or
+autoselected by using a data file with a name ending with `.toml`.
+
+## Installation
+
+```
+pip install jinjanator-plugin-format-toml
+```
+
+## Usage
+
+Suppose you have an NGINX configuration file template, `nginx.j2`:
+
+```jinja2
+server {
+  listen 80;
+  server_name {{ nginx.hostname }};
+
+  root {{ nginx.webroot }};
+  index index.htm;
+}
+```
+
+And you have a TOML file with the data, `nginx.toml`:
+
+```toml
+[nginx]
+hostname="localhost"
+webroot="/var/www/project"
+```
+
+This is how you render it into a working configuration file:
+
+```bash
+$ jinjanate nginx.j2 nginx.toml > nginx.conf
+```
+
+## Options
+
+This format does not support any options.
+## Release Information
+### Backwards-incompatible Changes
+
+- Support for Python 3.9 has been removed, and support for Python 3.14
+  has been added. Since the minimum supported version is now 3.10, the
+  code has been updated to use features introduced in that version.
+  
+- Upgraded to version 25.1.0 of jinjanator-plugins.
+  
+
+
+### Additions
+
+- Added testing against Python 3.13 (again).
+  
+
+---
+[→ Full Changelog](https://github.com/kpfleming/jinjanator-plugin-format-toml/blob/main/CHANGELOG.md)
