@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "blendercolors"             
+version = "0.1.0"
+description = "The simplest module for coloring terminal output via ansi codes. Originally from blender 3d source code."
+readme = "README.md"
+license = {text = "GPL-3.0-or-later"}
+authors = [
+    {name = "TDH", email = "tdhster@gmail.com"},
+]
+classifiers = [
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+requires-python = ">=3.7"
+keywords = ["ansi", "terminal", "colors", "easy", "gpl", "class"]
+
+[project.urls]
+Homepage = "https://github.com/tdhster/blendercolors"
+
+[tool.setuptools.packages.find]
+where = ["src"]
