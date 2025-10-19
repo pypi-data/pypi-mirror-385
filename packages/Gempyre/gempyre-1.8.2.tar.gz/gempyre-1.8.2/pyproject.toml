@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=42", "wheel", "scikit-build", "cmake>=3.18", "ninja; platform_system!='Windows'"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "Gempyre"
+version = "1.8.2"
+description = "Gempyre is a framework for quick and simple UI development"
+readme = "README.md"
+authors = [
+    { name="Markus Mertama", email="author99@example.com"}
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Topic :: Software Development :: User Interfaces",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows"
+]
+requires-python = ">=3.8"
+dependencies = [
+  "websockets"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/mmertama"
+
+[tool.scikit-build]
+cmake.minimum-version = "3.18"
+cmake.args = []
+cmake.build-type = "Release"
+cmake.targets = []
+wheel.py-api = "cp310"
+wheel.license-files = ["LICEN[CS]E*", "COPYING*", "NOTICE*", "AUTHORS*"]
+install.components = []
+

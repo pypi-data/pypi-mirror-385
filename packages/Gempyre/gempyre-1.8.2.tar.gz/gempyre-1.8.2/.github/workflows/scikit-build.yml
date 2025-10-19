@@ -1,0 +1,172 @@
+name: CMake Build Matrix
+
+on: [push]
+
+jobs:
+  build:
+    name: ${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+        - {
+            name: "MSVC",
+            artifact: "Windows.tar.gz",
+            os: windows-latest,
+            build_type: "Release",
+          }
+        - {
+            name: "Ubuntu",
+            artifact: "Linux.tar.gz",
+            os: ubuntu-latest,
+            build_type: "Release"
+          }
+        - {
+            name: "MacOS",
+            artifact: "macOS.tar.gz",
+            os: macos-latest,
+            build_type: "Release"
+          }
+
+    steps:
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      id: cp38
+      with:
+        python-version: "3.8"
+  
+    - uses: actions/checkout@v2  
+    - name: Install scikit-build
+      run: |
+        pip install scikit-build --user
+        pip install build --user
+
+    #- name: Setup Chrome
+    #  uses: browser-actions/setup-chrome@v1  
+
+    #- name: Setup DISPLAY
+    #  if: startsWith(matrix.config.os, 'linux')
+    #  run: |
+    #    export DISPLAY=:99
+    #    sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &       
+    
+
+    #- name: Build using CIBuildWheel
+    #  if: startsWith(matrix.config.name, 'Ubuntu')
+    #  uses: pypa/cibuildwheel@v2.15.0
+    #  env:
+    #    CIBW_BUILD: cp38-manylinux_x86_64
+  
+    - name: Build for Windows
+      if: startsWith(matrix.config.name, 'MSVC')
+      shell: pwsh
+      run: |
+        mkdir C:\foo
+        $env:TMPDIR = "C:\foo"
+        $env:TEMP = "C:\foo"
+        python -m build .
+    
+    - name: Install dependencies on ubuntu
+      if: startsWith(matrix.config.name, 'ubuntu')
+      run: |
+        sudo apt-get update
+        sudo apt-get install ninja-build cmake
+        ninja --version
+        make --version
+        gcc --version
+        # not valid in 24 Ubuntu sudo apt-get install libegl1-mesa
+        sudo apt-get install doxygen
+        sudo apt-get install graphviz
+        sudo apt-get install aspell     
+
+    - name: Build 
+      if: "!startsWith(matrix.config.name, 'MSVC')"
+      run: |
+        python -m build .
+
+    #- name: Run tests
+    #  shell: cmake -P {0}
+    #  run: |
+    #    include(ProcessorCount)
+    #    ProcessorCount(N)
+    #
+    #    execute_process(
+    #      COMMAND ctest -j ${N}
+    #      WORKING_DIRECTORY ${{ matrix.config.build_dir }}
+    #      RESULT_VARIABLE result
+    #    )
+    #    if (NOT result EQUAL 0)
+    #      message(FATAL_ERROR "Running tests failed!")
+    #    endif()
+
+    - name: Set env
+      shell: bash
+      run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV  
+    
+    - name: Pack
+      shell: bash
+      run: |
+        cmake -E tar cvzf gempyre-py-${{ env.RELEASE_VERSION }}-${{ matrix.config.artifact }} dist/
+
+    - name: Upload
+      uses: actions/upload-artifact@v4
+      with:
+        overwrite: true
+        path: ./gempyre-py-${{ env.RELEASE_VERSION }}-${{ matrix.config.artifact }}
+        name: gempyre-py-${{ env.RELEASE_VERSION }}-${{ matrix.config.artifact }}
+
+        
+  publish:
+    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {
+              name: "MSVC",
+              artifact: "Windows.tar.gz",
+              os: windows-latest,
+              build_type: "Release",
+            }
+          - {
+              name: "Ubuntu",
+              artifact: "Linux.tar.gz",
+              os: ubuntu-latest,
+              build_type: "Release"
+            }
+          - {
+              name: "MacOS",
+              artifact: "macOS.tar.gz",
+              os: macos-latest,
+              build_type: "Release"
+            }
+    needs: build
+
+    steps:
+      - name: Set env
+        shell: bash
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV  
+
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name:  gempyre-py-${{ env.RELEASE_VERSION }}-${{ matrix.config.artifact }}
+
+      - name: Verify version
+        shell: bash
+        run: |
+          REL=$(echo ${{ env.RELEASE_VERSION }} | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+')
+          VER=$(tar -tf gempyre-py-${{ env.RELEASE_VERSION }}-${{ matrix.config.artifact }} | grep 'dist/gempyre-.*-' | cut -d '-' -f 2)
+          if [[ "$REL" != "$VER" ]]; then
+            tar -tf gempyre-py-${{ env.RELEASE_VERSION }}-${{ matrix.config.artifact }} 
+            echo "Invalid version in pyproject.toml $VER, when $REL was expected"
+            exit 1
+          fi      
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: gempyre-py-${{ env.RELEASE_VERSION }}-${{ matrix.config.artifact }}

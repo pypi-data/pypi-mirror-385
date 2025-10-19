@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>Balls</title>
+</head>
+<style>
+body {
+  background-color:darkgrey;
+}
+canvas {
+  background-color:grey;
+  width: 700px;
+}
+#left {
+  width: 800px;
+  float:left;
+  position:relative;
+}
+
+#instructions {
+  position: absolute;
+  left: 200px;
+  top: 100px;
+  width: 300px;
+}
+
+.ontop {
+  position: absolute;
+  left: 200px;
+  top: 100px;
+  width: 300px;
+}
+
+</style>
+<body>
+  <script src="/gempyre.js"></script>
+  <h1>Space Balls Invaders</h1>
+  <h5 id="hit_header">Hits: <div span id="hits"></div> Wave:<div span id="waves"></div> Invaders:<div span id="monsters"></div></h5>
+  <div id="left">
+    <canvas id="canvas" width=700 height=700>
+    </canvas>
+      <div  id="instructions" class="ontop">
+        <h2 id="game_over">Game over!</h2>
+      <ul>
+          <li>&larr; Turret left </li>
+          <li>&rarr; Turret right </li>
+          <li>Z pipe left </li>
+          <li>X pipe right </li>
+          <li>C shoot </li>
+          <li> Shoot until they vanish, or hit the ground. Your turret can bounce the ammo back.</li>
+      </ul>
+        <h3>A or Click to go!</h3>
+    </div>
+      <div  id="wave_end" class="ontop">
+        <h2>Wave Completed!</h2>
+        <h3>A or Click to go!</h3>
+    </div>
+  </div>
+</body>
+</html>
+
