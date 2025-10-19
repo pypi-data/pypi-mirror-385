@@ -1,0 +1,111 @@
+/*
+ * Default Ingot Theme
+ * A clean, modern, and dark theme to get you started.
+ *
+ * Enhanced with styles for MenuBar, Menus, and Side Panels.
+ */
+
+@import "_colors";
+
+/* Main Window */
+QMainWindow {
+  background-color: $background;
+  color: $foreground;
+}
+
+/* Menu Bar & Menus */
+QMenuBar {
+  background-color: $background;
+  color: $foreground;
+  border-bottom: 1px solid $border;
+  /* Adds a subtle separator line */
+}
+
+QMenuBar::item {
+  background-color: transparent;
+  padding: 5px 10px;
+}
+
+QMenuBar::item:selected {
+  /* When hovering over the menu title (e.g., "File") */
+  background-color: $background-light;
+  color: $foreground-light;
+}
+
+QMenu {
+  background-color: $background-light;
+  color: $foreground;
+  border: 1px solid $border;
+}
+
+QMenu::item {
+  padding: 5px 25px;
+  /* More padding for readability */
+}
+
+QMenu::item:selected {
+  /* When hovering over a menu action (e.g., "Exit") */
+  background-color: $primary;
+  color: $foreground-light;
+}
+
+QMenu::separator {
+  height: 1px;
+  background-color: $border;
+  margin: 5px 0;
+}
+
+/* Side Panel */
+/* This style now targets any QWidget with the specific object name */
+QWidget#ingotSidePanel_left {
+  background-color: $background-light;
+  border-right: 1px solid $border;
+}
+
+QWidget#ingotSidePanel_right {
+  background-color: $background-light;
+  border-left: 1px solid $border;
+}
+
+/* Tab Workspace */
+/* Change generic QTabWidget to a specific ID for precision */
+QTabWidget#ingotWorkspace::pane {
+  border-top: 2px solid $primary;
+  border-left: none; /* Remove default border to avoid double lines with the side panel */
+}
+
+/* Target the specific tab bar */
+QTabBar#ingotWorkspaceTabBar::tab {
+  background: $background-light;
+  color: $foreground-dark;
+  padding: 8px 12px;
+  border: 1px solid $border;
+  border-bottom: none;
+}
+
+QTabBar#ingotWorkspaceTabBar::tab:selected {
+  background: $primary;
+  color: $foreground-light;
+}
+
+QTabBar#ingotWorkspaceTabBar::tab:not(:selected):hover {
+  background: $primary-light;
+  color: $foreground;
+}
+
+/* Buttons */
+QPushButton {
+  background-color: $primary;
+  color: $foreground-light;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+}
+
+QPushButton:hover {
+  background-color: $primary-light;
+}
+
+QPushButton:pressed {
+  background-color: $primary-dark;
+}
