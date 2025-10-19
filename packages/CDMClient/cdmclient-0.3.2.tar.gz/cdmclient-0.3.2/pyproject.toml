@@ -1,0 +1,32 @@
+[project]
+name = "CDMClient"
+version = "0.3.2"
+description = "CDMClient"
+authors = [{name = "Aron Radics", email = "radics.aron.jozsef@gmail.com"}]
+requires-python = ">=3.9"
+readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+  "requests",
+  "transmission_rpc",
+  "cryptography",
+]
+
+[project.urls]
+Homepage = "https://github.com/radaron/CDMClient"
+Repository = "https://github.com/radaron/CDMClient"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.14.1",
+    "ty>=0.0.1a23",
+]
+
+[tool.uv]
+package = true
+
+[project.scripts]
+cdm-client = "cdm_client.cdm_client:main"
