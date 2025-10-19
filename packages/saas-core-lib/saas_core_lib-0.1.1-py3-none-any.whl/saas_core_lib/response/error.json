@@ -1,0 +1,169 @@
+{
+    "AUTH": {
+      "AUTH_INVALID_CREDENTIALS": {
+        "status": 401,
+        "message": "Geçersiz kullanıcı adı veya şifre"
+      },
+      "AUTH_TOKEN_MISSING": {
+        "status": 401,
+        "message": "JWT token gönderilmedi"
+      },
+      "AUTH_TOKEN_INVALID": {
+        "status": 401,
+        "message": "Geçersiz veya bozulan JWT token"
+      },
+      "AUTH_TOKEN_EXPIRED": {
+        "status": 401,
+        "message": "JWT token süresi dolmuş"
+      },
+      "AUTH_UNAUTHORIZED": {
+        "status": 403,
+        "message": "Bu işlem için yetkiniz yok"
+      },
+      "AUTH_PROVIDER_ERROR": {
+        "status": 502,
+        "message": "Harici kimlik sağlayıcısında hata"
+      },
+      "AUTH_RECAPTCHA_FAILED": {
+        "status": 400,
+        "message": "reCAPTCHA doğrulaması başarısız"
+      }
+    },
+    "API_KEY": {
+      "API_KEY_MISSING": {
+        "status": 401,
+        "message": "API key gönderilmedi"
+      },
+      "API_KEY_INVALID": {
+        "status": 401,
+        "message": "Geçersiz API key"
+      },
+      "API_KEY_REVOKED": {
+        "status": 403,
+        "message": "API key iptal edilmiş"
+      },
+      "API_KEY_EXPIRED": {
+        "status": 401,
+        "message": "API key süresi dolmuş"
+      },
+      "API_KEY_SCOPE_DENIED": {
+        "status": 403,
+        "message": "Bu işlem için gerekli scope’a sahip değilsiniz"
+      },
+      "API_KEY_TENANT_MISMATCH": {
+        "status": 403,
+        "message": "API key farklı tenant’a ait"
+      }
+    },
+    "TENANT": {
+      "TENANT_NOT_FOUND": {
+        "status": 404,
+        "message": "Tenant bulunamadı"
+      },
+      "TENANT_DISABLED": {
+        "status": 403,
+        "message": "Tenant devre dışı bırakılmış"
+      },
+      "USER_NOT_FOUND": {
+        "status": 404,
+        "message": "Kullanıcı bulunamadı"
+      },
+      "USER_ALREADY_EXISTS": {
+        "status": 409,
+        "message": "Bu kullanıcı zaten kayıtlı"
+      },
+      "USER_NOT_ACTIVE": {
+        "status": 403,
+        "message": "Kullanıcı aktif değil"
+      },
+      "USER_PERMISSION_DENIED": {
+        "status": 403,
+        "message": "Kullanıcı bu işlem için gerekli izne sahip değil"
+      }
+    },
+    "SECURITY": {
+      "SECURITY_RATE_LIMIT": {
+        "status": 429,
+        "message": "Çok fazla istek gönderdiniz, lütfen bekleyin"
+      },
+      "SECURITY_IP_BLOCKED": {
+        "status": 403,
+        "message": "IP adresiniz engellendi"
+      },
+      "SECURITY_SUSPICIOUS_ACTIVITY": {
+        "status": 403,
+        "message": "Şüpheli aktivite tespit edildi"
+      },
+      "SECURITY_FORBIDDEN": {
+        "status": 403,
+        "message": "Güvenlik politikası nedeniyle erişim engellendi"
+      }
+    },
+    "RESOURCE": {
+      "RESOURCE_NOT_FOUND": {
+        "status": 404,
+        "message": "İstenen kaynak bulunamadı"
+      },
+      "RESOURCE_ALREADY_EXISTS": {
+        "status": 409,
+        "message": "Kaynak zaten mevcut"
+      },
+      "RESOURCE_LOCKED": {
+        "status": 423,
+        "message": "Kaynak kilitlenmiş"
+      },
+      "RESOURCE_VALIDATION_ERROR": {
+        "status": 422,
+        "message": "Geçersiz veri girişi"
+      },
+      "RESOURCE_QUOTA_EXCEEDED": {
+        "status": 403,
+        "message": "Kaynak kotası aşıldı"
+      }
+    },
+    "BILLING": {
+      "BILLING_PAYMENT_FAILED": {
+        "status": 402,
+        "message": "Ödeme başarısız oldu"
+      },
+      "BILLING_CARD_EXPIRED": {
+        "status": 402,
+        "message": "Kartın süresi dolmuş"
+      },
+      "BILLING_SUBSCRIPTION_NOT_FOUND": {
+        "status": 404,
+        "message": "Abonelik bulunamadı"
+      },
+      "BILLING_SUBSCRIPTION_INACTIVE": {
+        "status": 403,
+        "message": "Abonelik aktif değil"
+      },
+      "BILLING_PLAN_UPGRADE_REQUIRED": {
+        "status": 403,
+        "message": "Bu özellik için plan yükseltmeniz gerekli"
+      }
+    },
+    "SYSTEM": {
+      "SYSTEM_MAINTENANCE": {
+        "status": 503,
+        "message": "Sistem bakımda"
+      },
+      "SYSTEM_ERROR": {
+        "status": 500,
+        "message": "Beklenmedik sistem hatası"
+      },
+      "SYSTEM_DEPENDENCY_ERROR": {
+        "status": 502,
+        "message": "Harici servis hatası"
+      },
+      "SYSTEM_TIMEOUT": {
+        "status": 504,
+        "message": "İstek zaman aşımına uğradı"
+      },
+      "SYSTEM_NOT_IMPLEMENTED": {
+        "status": 501,
+        "message": "Bu özellik henüz uygulanmadı"
+      }
+    }
+  }
+  
