@@ -1,0 +1,157 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "abstractvoice"
+version = "0.2.0"
+description = "A modular Python library for voice interactions with AI systems"
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [
+    {name = "Laurent-Philippe Albou", email = "contact@abstractcore.ai"}
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "numpy>=1.24.0",
+    "requests>=2.31.0",
+]
+
+[project.optional-dependencies]
+# Core voice functionality - install this for basic TTS/STT features
+voice = [
+    "sounddevice>=0.4.6",
+    "webrtcvad>=2.0.10",
+    "PyAudio>=0.2.13",
+    "soundfile>=0.12.1",
+]
+
+# Text-to-Speech functionality
+tts = [
+    "coqui-tts>=0.27.0",
+    "torch>=2.0.0",
+    "torchaudio>=2.0.0",
+    "librosa>=0.10.0",
+]
+
+# Speech-to-Text functionality
+stt = [
+    "openai-whisper>=20230314",
+    "tiktoken>=0.6.0",
+]
+
+# Web API functionality
+web = [
+    "flask>=2.0.0",
+]
+
+# All features combined
+all = [
+    "sounddevice>=0.4.6",
+    "webrtcvad>=2.0.10",
+    "PyAudio>=0.2.13",
+    "openai-whisper>=20230314",
+    "coqui-tts>=0.27.0",
+    "torch>=2.0.0",
+    "torchaudio>=2.0.0",
+    "librosa>=0.10.0",
+    "soundfile>=0.12.1",
+    "flask>=2.0.0",
+    "tiktoken>=0.6.0",
+]
+
+# Development dependencies
+dev = [
+    "pytest>=7.0.0",
+    "black>=22.0.0",
+    "flake8>=5.0.0",
+]
+
+# Simplified language support - all languages require the same dependencies
+# Since TTS models are language-specific but dependencies are the same
+languages = [
+    "sounddevice>=0.4.6",
+    "webrtcvad>=2.0.10",
+    "PyAudio>=0.2.13",
+    "openai-whisper>=20230314",
+    "coqui-tts>=0.27.0",
+    "torch>=2.0.0",
+    "torchaudio>=2.0.0",
+    "librosa>=0.10.0",
+    "soundfile>=0.12.1",
+    "flask>=2.0.0",
+    "tiktoken>=0.6.0",
+]
+
+# Individual language extras (all identical)
+fr = [
+    "sounddevice>=0.4.6",
+    "webrtcvad>=2.0.10",
+    "PyAudio>=0.2.13",
+    "openai-whisper>=20230314",
+    "coqui-tts>=0.27.0",
+    "torch>=2.0.0",
+    "torchaudio>=2.0.0",
+    "librosa>=0.10.0",
+    "soundfile>=0.12.1",
+    "flask>=2.0.0",
+    "tiktoken>=0.6.0",
+]
+es = [
+    "sounddevice>=0.4.6",
+    "webrtcvad>=2.0.10",
+    "PyAudio>=0.2.13",
+    "openai-whisper>=20230314",
+    "coqui-tts>=0.27.0",
+    "torch>=2.0.0",
+    "torchaudio>=2.0.0",
+    "librosa>=0.10.0",
+    "soundfile>=0.12.1",
+    "flask>=2.0.0",
+    "tiktoken>=0.6.0",
+]
+de = [
+    "sounddevice>=0.4.6",
+    "webrtcvad>=2.0.10",
+    "PyAudio>=0.2.13",
+    "openai-whisper>=20230314",
+    "coqui-tts>=0.27.0",
+    "torch>=2.0.0",
+    "torchaudio>=2.0.0",
+    "librosa>=0.10.0",
+    "soundfile>=0.12.1",
+    "flask>=2.0.0",
+    "tiktoken>=0.6.0",
+]
+it = [
+    "sounddevice>=0.4.6",
+    "webrtcvad>=2.0.10",
+    "PyAudio>=0.2.13",
+    "openai-whisper>=20230314",
+    "coqui-tts>=0.27.0",
+    "torch>=2.0.0",
+    "torchaudio>=2.0.0",
+    "librosa>=0.10.0",
+    "soundfile>=0.12.1",
+    "flask>=2.0.0",
+    "tiktoken>=0.6.0",
+]
+
+[project.urls]
+Repository = "https://github.com/lpalbou/abstractvoice"
+Documentation = "https://github.com/lpalbou/abstractvoice#readme"
+
+[project.scripts]
+abstractvoice = "abstractvoice.examples.voice_cli:main"
+abstractvoice-cli = "abstractvoice.__main__:main" 
