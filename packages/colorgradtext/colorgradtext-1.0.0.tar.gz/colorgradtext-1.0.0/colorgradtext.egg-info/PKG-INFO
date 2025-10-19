@@ -1,0 +1,57 @@
+Metadata-Version: 2.4
+Name: colorgradtext
+Version: 1.0.0
+Summary: Apply amazing horizontal and vertical color gradients to text and ASCII art in the terminal.
+Author: Og_Ten
+License: MIT
+Project-URL: Homepage, https://github.com/yourusername/colorgradtext
+Project-URL: Issues, https://github.com/yourusername/colorgradtext/issues
+Keywords: text,gradient,ansi,colors,terminal
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Dynamic: license-file
+
+# ColorGradText
+
+**ColorGradText** is a Python module that allows you to apply amazing color gradients to text and ASCII art in your terminal.  
+It supports **horizontal and vertical gradients**, works with multi-line text, and comes with **10 creative gradient presets**.
+
+![](https://github.com/OgTen/GradientText/blob/main/images/aqua_wave.png)
+![](https://github.com/OgTen/GradientText/blob/main/images/rose_blush.png)
+![](https://github.com/OgTen/GradientText/blob/main/images/violet_dream.png)
+![](https://github.com/OgTen/GradientText/blob/main/images/sunflare.png)
+![](https://github.com/OgTen/GradientText/blob/main/images/frostbite.png)
+![](https://github.com/OgTen/GradientText/blob/main/images/ember_glow.png)
+![](https://github.com/OgTen/GradientText/blob/main/images/tidepool.png)
+![](https://github.com/OgTen/GradientText/blob/main/images/evenfall.png)
+![](https://github.com/OgTen/GradientText/blob/main/images/lime_light.png)
+![](https://github.com/OgTen/GradientText/blob/main/images/dreamcloud.png)
+![](https://github.com/OgTen/GradientText/blob/main/images/gradtexts.png)
+
+```
+from colorgradtext import aqua_wave
+
+text = "Og_Ten"
+print(aqua_wave(text))
+```
+```
+from colorgradtext import lime_light
+
+ascii = r"""
+   ____   _____            _______ ______ _   _ 
+  / __ \ / ____|          |__   __|  ____| \ | |
+ | |  | | |  __              | |  | |__  |  \| |
+ | |  | | | |_ |             | |  |  __| | . ` |
+ | |__| | |__| |             | |  | |____| |\  |
+  \____/ \_____|   _______   |_|  |______|_| \_|                        
+                  |_______|   
+"""
+
+print(lime_light(ascii, direction="vertical"))
+```
+
+**Download: ``pip install colorgradtext``**
