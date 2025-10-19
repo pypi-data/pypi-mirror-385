@@ -1,0 +1,46 @@
+Metadata-Version: 2.3
+Name: deqr
+Version: 0.2.4
+Summary: qr code decoding library
+License: LGPL-2.1-or-later
+Keywords: qr,qr code,decoder
+Author: torque
+Author-email: torque@users.noreply.github.com
+Requires-Python: >=3.10,<4.0
+Classifier: License :: OSI Approved
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Provides-Extra: dev
+Provides-Extra: documentation
+Requires-Dist: Pillow (>=8.0.0) ; extra == "dev"
+Requires-Dist: cython (==3.1.2) ; extra == "dev"
+Requires-Dist: furo (==2024.4.27) ; extra == "documentation"
+Requires-Dist: numpy (>=1.20.0) ; extra == "dev"
+Requires-Dist: pytest (>=7.0.0) ; extra == "dev"
+Requires-Dist: sphinx (==7.4.7) ; extra == "documentation"
+Requires-Dist: sphinx-copybutton (==0.5.2) ; extra == "documentation"
+Requires-Dist: sphinx-inline-tabs (==2023.4.21) ; extra == "documentation"
+Project-URL: Changelog, https://github.com/torque/deqr/blob/master/CHANGELOG.md
+Project-URL: Documentation, https://torque.github.io/deqr-docs/
+Project-URL: Issues, https://github.com/torque/deqr/issues
+Project-URL: Repository, https://github.com/torque/deqr
+Description-Content-Type: text/markdown
+
+## deqr
+
+A python library for decoding QR codes. Implemented as a cython wrapper around
+two different QR code decoding backends (quirc and qrdec).
+
+### Install
+
+```
+pip install deqr
+```
+
+### [Documentation][documentation]
+
+[documentation]: https://torque.github.io/deqr-docs/latest-dev/
+
