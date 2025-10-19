@@ -1,0 +1,80 @@
+Metadata-Version: 2.1
+Name: kivy_garden.ebs.camera
+Version: 1.1.0
+Summary: Camera Preview Widgets for Kivy
+Home-page: https://github.com/ebs-universe/kivy_garden.ebs.camera
+Author: Chintalagiri Shashank
+Author-email: shashank.chintalagiri@gmail.com
+Project-URL: Bug Reports, https://github.com/ebs-universe/kivy_garden.ebs.camera/issues
+Project-URL: Source, https://github.com/ebs-universe/kivy_garden.ebs.camera
+Keywords: Kivy kivy-garden
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Libraries
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE.txt
+License-File: AUTHORS.txt
+Requires-Dist: kivy>=1.11.1
+Requires-Dist: kivy_garden.ebs.core
+Provides-Extra: dev
+Requires-Dist: pytest>=3.6; extra == "dev"
+Requires-Dist: pytest-cov; extra == "dev"
+Requires-Dist: pytest-asyncio; extra == "dev"
+Requires-Dist: sphinx_rtd_theme; extra == "dev"
+Provides-Extra: ci
+Requires-Dist: coveralls; extra == "ci"
+Requires-Dist: pycodestyle; extra == "ci"
+Requires-Dist: pydocstyle; extra == "ci"
+
+Camera Widgets for Kivy
+=======================
+
+[![Github Build Status](https://github.com/ebs-universe/kivy_garden.ebs.clocks/workflows/Garden%20flower/badge.svg)](https://github.com/ebs-universe/kivy_garden.ebs.clocks/actions)
+
+This package provides relatively simple Camera widgets for Kivy. 
+
+This package is part of the EBS widget collection for Kivy. It is written in 
+mostly Python and depends on the EBS core widgets and widget infrastructure package. 
+For more information, see [kivy_garden.ebs.core](https://github.com/ebs-universe/kivy_garden.ebs.core)
+
+See https://kivy-garden.github.io/ebs.flower/ for the rendered flower docs.
+
+Please see the garden [instructions](https://kivy-garden.github.io) for 
+how to use kivy garden flowers.
+
+
+CI
+--
+
+Every push or pull request run the [GitHub Action](https://github.com/kivy-garden/flower/actions) CI.
+It tests the code on various OS and also generates wheels that can be released on PyPI upon a
+tag. Docs are also generated and uploaded to the repo as well as artifacts of the CI.
+
+
+TODO
+-------
+
+* add your code
+
+Contributing
+--------------
+
+Check out our [contribution guide](CONTRIBUTING.md) and feel free to improve the flower.
+
+License
+---------
+
+This software is released under the terms of the MIT License.
+Please see the [LICENSE.txt](LICENSE.txt) file.
+
+How to release
+===============
+
+See the garden [instructions](https://kivy-garden.github.io/#makingareleaseforyourflower) for how to make a new release.
