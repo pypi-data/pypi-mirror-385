@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ugit - Modern Git Repository Viewer</title>
+    <meta name="description" content="Beautiful, fast Git repository browser" />
+    
+    <link href="/static/css/style.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  </head>
+  <body>
+    <div id="notification" class="notification" style="display: none;"></div>
+    <div class="container">
+        <!-- Repository Interface Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="repo-title">
+                    <i class="fa-solid fa-code-branch"></i>
+                    <span id="repo-name">{{ repo_name }}</span>
+                </h1>
+                <div class="repo-path">
+                    <i class="fa-solid fa-folder-tree"></i>
+                    {{ repo_path }}
+                </div>
+            </div>
+            <nav class="nav-tabs">
+                <button class="nav-tab active" data-tab="files">
+                    <i class="fa-solid fa-code"></i>
+                    <span>Code</span>
+                </button>
+                <button class="nav-tab" data-tab="commits">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <span>Commits</span>
+                </button>
+            </nav>
+        </header>
+
+        <!-- Keyboard Shortcuts Overlay -->
+        <div id="shortcuts-overlay" class="shortcuts-overlay">
+            <div class="shortcuts-panel">
+                <div class="shortcuts-header">
+                    <h2>Keyboard Shortcuts</h2>
+                    <button class="close-shortcuts" onclick="toggleShortcuts()">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="shortcuts-list">
+                    <div class="shortcut-item">
+                        <kbd>/</kbd>
+                        <span>Focus search</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <kbd>ESC</kbd>
+                        <span>Go back / Clear search</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <kbd>?</kbd>
+                        <span>Show shortcuts</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <kbd>r</kbd>
+                        <span>Refresh current view</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <kbd>h</kbd>
+                        <span>Go to home</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Files Tab -->
+            <div id="files-tab" class="tab-content active">
+                <!-- Breadcrumb Navigation with Back Button -->
+                <div class="navigation-bar">
+                    <button id="back-button" class="back-button" style="display: none;">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Back</span>
+                    </button>
+                    <div class="breadcrumb" id="breadcrumb">
+                        <span class="breadcrumb-item root">
+                            <i class="fa-solid fa-house"></i>
+                            <span class="breadcrumb-text">Repository</span>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Repository File Browser -->
+                <div class="file-browser">
+                    <!-- Latest Commit Bar -->
+                    <div class="latest-commit-bar">
+                        <div class="commit-info-left">
+                            <i class="fa-solid fa-code-commit"></i>
+                            <span id="latest-commit-message">Loading commit...</span>
+                        </div>
+                        <div class="commit-info-right">
+                            <span id="latest-commit-hash" class="commit-hash">Loading...</span>
+                            <span id="latest-commit-date">Loading...</span>
+                        </div>
+                    </div>
+                    
+                    <div class="file-browser-header">
+                        <div class="file-browser-title">
+                            <i class="fa-solid fa-folder"></i>
+                            <span id="file-count">Loading files...</span>
+                        </div>
+                        <div class="toolbar-actions">
+                            <div class="search-container">
+                                <i class="fa-solid fa-search search-icon"></i>
+                                <input type="text" id="file-search" class="file-search" placeholder="Search files... (press /)">
+                                <button id="clear-search" class="clear-search" style="display: none;">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                            </div>
+                            <!-- <div class="filter-buttons">
+                                <button class="filter-btn active" data-filter="all" title="All files">
+                                    <i class="fa-solid fa-list"></i>
+                                </button>
+                                <button class="filter-btn" data-filter="code" title="Code files">
+                                    <i class="fa-solid fa-code"></i>
+                                </button>
+                                <button class="filter-btn" data-filter="docs" title="Documentation">
+                                    <i class="fa-solid fa-file-lines"></i>
+                                </button>
+                                <button class="filter-btn" data-filter="media" title="Media files">
+                                    <i class="fa-solid fa-image"></i>
+                                </button>
+                            </div> -->
+                            <button class="shortcuts-btn" onclick="toggleShortcuts()" title="Keyboard shortcuts (?)">
+                                <i class="fa-solid fa-keyboard"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- File List Table -->
+                    <div class="file-table-container" id="file-table-container">
+                        <table class="file-table">
+                            <tbody id="file-table-body" class="file-table-body">
+                                <!-- File rows will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Repository File Viewer (Full Width) -->
+                <div id="file-viewer" class="file-viewer" style="display: none;">
+                    <div class="file-viewer-header">
+                        <div class="file-header-left">
+                            <button id="back-to-files" class="back-to-files-btn">
+                                <i class="fa-solid fa-arrow-left"></i>
+                                <span>Back to files</span>
+                            </button>
+                            <div class="file-path-info">
+                                <i class="fa-solid fa-file-code"></i>
+                                <span id="file-path">filename.ext</span>
+                            </div>
+                        </div>
+                        <div class="file-actions">
+                            <div class="file-stats" id="file-stats"></div>
+                        </div>
+                    </div>
+                    <div id="file-content" class="file-content"></div>
+                </div>
+            </div>
+
+            <!-- Commits Tab -->
+            <div id="commits-tab" class="tab-content">
+                <div class="commits-container">
+                    <div class="commits-header">
+                        <h2>
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                            <span>Commit History</span>
+                        </h2>
+                        <button id="refresh-commits" class="refresh-btn">
+                            <i class="fa-solid fa-arrows-rotate"></i>
+                            <span>Refresh</span>
+                        </button>
+                    </div>
+                    <div id="commits-list" class="commits-list">
+                        <!-- Commits will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading" class="loading-overlay" style="display: none;">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Loading...</div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="/static/js/app.js"></script>
+  </body>
+</html>
