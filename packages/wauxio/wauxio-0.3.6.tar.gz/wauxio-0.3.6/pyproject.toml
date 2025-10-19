@@ -1,0 +1,24 @@
+[project]
+name = "wauxio"
+version = "0.3.6"
+description = "Audio framework"
+readme = "README.md"
+license = "MIT"
+authors = [{ name = "wumtdev" }]
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=2.3.2",
+    "wsignals>=0.2.2",
+]
+
+[project.optional-dependencies]
+miniaudio = ["miniaudio>=1.61"]
+soundfile = ["soundfile>=0.13.1"]
+all = [
+    "miniaudio>=1.61",
+    "soundfile>=0.13.1",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

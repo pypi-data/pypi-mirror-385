@@ -1,0 +1,64 @@
+Metadata-Version: 2.4
+Name: wauxio
+Version: 0.3.6
+Summary: Audio framework
+Author: wumtdev
+License-Expression: MIT
+License-File: LICENSE
+Requires-Python: >=3.12
+Requires-Dist: numpy>=2.3.2
+Requires-Dist: wsignals>=0.2.2
+Provides-Extra: all
+Requires-Dist: miniaudio>=1.61; extra == 'all'
+Requires-Dist: soundfile>=0.13.1; extra == 'all'
+Provides-Extra: miniaudio
+Requires-Dist: miniaudio>=1.61; extra == 'miniaudio'
+Provides-Extra: soundfile
+Requires-Dist: soundfile>=0.13.1; extra == 'soundfile'
+Description-Content-Type: text/markdown
+
+
+# wauxio
+v0.3.6
+
+This library is for in-Python audio translation and proccessing.
+
+
+## Installation
+
+### PyPI
+```sh
+pip install wauxio
+```
+
+### GitHub
+```sh
+pip install git+https://github.com/wumtdev/wauxio.git
+```
+
+### Manual
+Clone from github
+```sh
+# using https
+git clone https://github.com/wumtdev/wauxio.git
+# using ssh
+git clone git@github.com:wumtdev/wauxio.git
+```
+
+In the environment where you need to install wauxio, install library as a local package. Specify path to cloned repository.
+```sh
+pip install /path/to/cloned_repo
+```
+
+
+## Usage
+TODO: There will be guides for library usage :(
+
+You can check examples to use and test library
+
+
+## Dependencies
+- `numpy` for multidimensional numeric arrays
+- `wsignals` for emitting and handling events
+- `miniaudio` for mp3 codec
+- `soundfile` for general codec(wav, ogg, etc...)
