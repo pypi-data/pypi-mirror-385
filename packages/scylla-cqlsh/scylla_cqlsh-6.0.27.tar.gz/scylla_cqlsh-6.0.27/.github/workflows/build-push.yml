@@ -1,0 +1,212 @@
+name: Build/Test and Upload to PyPi
+
+on:
+  pull_request:
+    branches:
+     - master
+  push:
+    tags:
+      - '*'
+    branches:
+      - master
+
+env:
+  CIBW_SKIP: cp36* cp37* cp38* pp*
+
+jobs:
+  build_wheels:
+    name: Build wheels (${{ matrix.os }})
+    if: contains(github.event.pull_request.labels.*.name, 'test-build') || github.event_name == 'push' && endsWith(github.event.ref, 'scylla')
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-24.04, ubuntu-24.04-arm, windows-latest, macos-13, macos-14]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v3.1.3
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: artifacts-wheels-${{ matrix.os }}
+          path: ./wheelhouse/*.whl
+
+  build_sdist:
+    name: Build source distribution
+    if: contains(github.event.pull_request.labels.*.name, 'test-build') || github.event_name == 'push' && endsWith(github.event.ref, 'scylla')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build sdist
+        run: |
+          pipx run build --sdist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: artifacts-source-dist
+          path: dist/*.tar.gz
+
+  integration_test_scylla:
+    name: Integration Tests (Scylla)
+    if: "!contains(github.event.pull_request.labels.*.name, 'disable-integration-test')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Start Scylla
+        run: |
+          export DOCKER_ID=$(docker run -d scylladb/scylla:latest --cluster-name test )
+          export CQL_TEST_HOST=$(docker inspect --format='{{ .NetworkSettings.IPAddress }}' ${DOCKER_ID})
+          while ! nc -z ${CQL_TEST_HOST} 9042; do   
+            sleep 0.1 # wait for 1/10 of the second before check again
+          done
+
+          echo "CQL_TEST_HOST=${CQL_TEST_HOST}" >> $GITHUB_ENV
+
+      - name: pytest
+        run: |
+          pip install -r ./pylib/requirements.txt
+           ./reloc/build_reloc.sh
+          pytest ./cqlshlib/test
+
+  integration_test_scylla_enterprise:
+    name: Integration Tests (Scylla Enterprise)
+    if: "!contains(github.event.pull_request.labels.*.name, 'disable-integration-test')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Start Scylla
+        run: |
+          export DOCKER_ID=$(docker run -d scylladb/scylla-enterprise:latest --cluster-name test )
+          export CQL_TEST_HOST=$(docker inspect --format='{{ .NetworkSettings.IPAddress }}' ${DOCKER_ID})
+          while ! nc -z ${CQL_TEST_HOST} 9042; do   
+            sleep 0.1 # wait for 1/10 of the second before check again
+          done
+
+          echo "CQL_TEST_HOST=${CQL_TEST_HOST}" >> $GITHUB_ENV
+
+      - name: pytest
+        run: |
+          pip install -r ./pylib/requirements.txt
+           ./reloc/build_reloc.sh
+          pytest ./cqlshlib/test
+
+  integration_test_scylla_cloud_bundle:
+    name: Integration Tests (Scylla Cloud Bundle)
+    if: "!contains(github.event.pull_request.labels.*.name, 'disable-integration-test')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Start Scylla cloud bundle setup with CCM
+        run: |
+          python3 -m pip install https://github.com/scylladb/scylla-ccm/archive/master.zip
+          
+          ccm create test_sni -i 127.0.1. -n 1 --scylla --version release:6.2
+          ccm start --sni-proxy --sni-port=8443
+
+          export CQL_TEST_BUNDLE_PATH=$(realpath ~/.ccm/test_sni/config_data.yaml)
+          
+          echo "CQL_TEST_BUNDLE_PATH=${CQL_TEST_BUNDLE_PATH}" >> $GITHUB_ENV
+
+      - name: pytest
+        run: |
+          pip install -r ./pylib/requirements.txt
+           ./reloc/build_reloc.sh
+          pytest ./cqlshlib/test
+
+  integration_test_cassandra:
+    name: Integration Tests (Cassandra)
+    if: "!contains(github.event.pull_request.labels.*.name, 'disable-integration-test')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Start Scylla
+        run: |
+          export DOCKER_ID=$(docker run -d -e CASSANDRA_CLUSTER_NAME=test cassandra:4.1 )
+          export CQL_TEST_HOST=$(docker inspect --format='{{ .NetworkSettings.IPAddress }}' ${DOCKER_ID})
+          while ! nc -z ${CQL_TEST_HOST} 9042; do
+                  sleep 0.1 # wait for 1/10 of the second before check again
+          done
+
+          echo "CQL_TEST_HOST=${CQL_TEST_HOST}" >> $GITHUB_ENV
+
+      - name: pytest
+        run: |
+          pip install -r ./pylib/requirements.txt
+           ./reloc/build_reloc.sh
+          pytest ./cqlshlib/test
+
+  docker:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: determine docker tag base on tag
+        if: endsWith(github.event.ref, '-scylla')
+        shell: bash
+        run: |
+          split=(${GITHUB_REF_NAME//-/ })
+          DOCKER_TAG=${split[0]}
+          echo DOCKER_TAG=$DOCKER_TAG >> $GITHUB_ENV
+
+      - name: Build and push release
+        if: endsWith(github.event.ref, '-scylla')
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            scylladb/scylla-cqlsh:${{ env.DOCKER_TAG }}
+            scylladb/scylla-cqlsh:latest
+
+      - name: Build and push master
+        uses: docker/build-push-action@v6
+        if: endsWith(github.event.ref, 'master')
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          file: ./Dockerfile
+          push: true
+          tags: |
+            scylladb/scylla-cqlsh:master
+
+  upload_pypi:
+    needs: [build_wheels, build_sdist, integration_test_scylla, integration_test_cassandra]
+    runs-on: ubuntu-latest
+    # upload to PyPI on every tag starting with 'v'
+    if: github.event_name == 'push' && endsWith(github.event.ref, 'scylla')
+    # alternatively, to publish when a GitHub Release is created, use the following rule:
+    # if: github.event_name == 'release' && github.event.action == 'published'
+    steps:
+      - uses: actions/download-artifact@v4.1.9
+        with:
+          path: dist
+          pattern: artifacts-*
+          merge-multiple: true
+
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
