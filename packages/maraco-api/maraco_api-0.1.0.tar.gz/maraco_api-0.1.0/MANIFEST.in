@@ -1,0 +1,12 @@
+include README.md
+include requirements.txt
+include LICENSE
+recursive-include maraco *.py
+recursive-include examples *.py
+recursive-include tests *.py
+recursive-include maraco/models *.pkl *.joblib *.json
+recursive-include maraco/config *.json
+global-exclude *.pyc
+global-exclude __pycache__
+global-exclude *.so
+global-exclude .DS_Store
