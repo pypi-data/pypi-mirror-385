@@ -1,0 +1,978 @@
+CHANGES
+=======
+
+0.8.3
+-----
+
+* Add support for Python 3.14 (#797)
+* Bump rich from 14.1.0 to 14.2.0 (#796)
+* Bump tomli from 2.2.1 to 2.3.0 (#795)
+* Bump pyyaml from 6.0.2 to 6.0.3 (#794)
+* Bump tree-sitter from 0.25.1 to 0.25.2 (#793)
+
+0.8.2
+-----
+
+* Bump tree-sitter-python from 0.23.6 to 0.25.0 (#792)
+* Bump actions/setup-python from 5 to 6 (#791)
+* Bump tree-sitter-go from 0.23.4 to 0.25.0 (#790)
+* Bump actions/attest-build-provenance from 2.4.0 to 3.0.0 (#789)
+* Bump typing-extensions from 4.14.1 to 4.15.0 (#788)
+* Bump requests from 2.32.4 to 2.32.5 (#787)
+* Bump actions/checkout from 4 to 5 (#786)
+* Add custom rule for the swift language (#785)
+* Bump tree-sitter from 0.25.0 to 0.25.1 (#784)
+* Bump rich from 14.0.0 to 14.1.0 (#783)
+* Bump tree-sitter from 0.24.0 to 0.25.0 (#782)
+* Bump typing-extensions from 4.14.0 to 4.14.1 (#781)
+
+0.8.1
+-----
+
+* Bump typing-extensions from 4.13.2 to 4.14.0 (#780)
+* Bump actions/attest-build-provenance from 2.3.0 to 2.4.0 (#779)
+* Bump requests from 2.32.3 to 2.32.4 (#778)
+* Add more custom rules (#776)
+* Custom rule example with Ruby language (#775)
+* Verify the language field given in the custom rule (#774)
+* Ability to define custom rules via a YAML file (#772)
+* Make hash names configurable (#771)
+* Fix net http (#768)
+* Go rule to check function that do not permit a timeout (#767)
+* Update doc index with latest 2 rules (#762)
+* New GO rule using net Listen as unrestricted address (#761)
+* New rule for Go unrestricted bind (#760)
+* Use unset timeout to test global timeout set (#757)
+* Bump actions/attest-build-provenance from 2.2.3 to 2.3.0 (#755)
+* Bump tree-sitter from 0.23.2 to 0.24.0 (#719)
+* Drop Python 3.9 support (#754)
+* Use Python 3.13 as defauto verion for testing (#752)
+* Start unit testing with pre-release Python 3.14 (#751)
+* Bump typing-extensions from 4.13.1 to 4.13.2 (#749)
+* Update man page copyright year to 2025 (#748)
+* Run unit tests on push and PR (#747)
+* Bump typing-extensions from 4.12.2 to 4.13.1 (#746)
+* Bump rich from 13.9.4 to 14.0.0 (#745)
+* Bump tomli from 1.1.0 to 2.2.1 (#744)
+* Redo translated strings (#739)
+* Update copyright year in docs (#738)
+* Bump actions/attest-build-provenance from 2.2.2 to 2.2.3 (#737)
+
+0.8.0
+-----
+
+* Ensure msgfmt is installed for publish (#736)
+* Publish translation binary files with release (#735)
+* Add msgfmt step to unit-test build (#734)
+* Add setupttools classifiers for translated languages (#733)
+* Update the pre-commit config versions (#732)
+* Add msgfmt step to tox (#731)
+* Translate message files and enable correct lookup (#730)
+* Add translation message files (#729)
+* Start layout of internationalization of strings (#728)
+* Bump actions/attest-build-provenance from 2.2.1 to 2.2.2 (#727)
+* Bump actions/attest-build-provenance from 2.2.0 to 2.2.1 (#726)
+* Metadata rename classifier to classifiers (#725)
+* Remove cwe2 from dependency review (#724)
+* Bump actions/attest-build-provenance from 2.1.0 to 2.2.0 (#721)
+* More modern, inclusive terminology (#720)
+* Bump tomli-w from 1.1.0 to 1.2.0 (#718)
+* Remove extra text ended up in doc for rule (#716)
+* Bump tree-sitter-python from 0.23.4 to 0.23.6 (#713)
+* Bump tree-sitter-java from 0.23.4 to 0.23.5 (#715)
+* Bump tree-sitter-go from 0.23.3 to 0.23.4 (#714)
+
+0.7.10
+------
+
+* Lower tree-sitter language libraries to work with PyOdide. (#712)
+* Bump tree-sitter-python from 0.23.5 to 0.23.6 (#710)
+* Bump tree-sitter-java from 0.23.4 to 0.23.5 (#711)
+* get\_file\_encoding inconsistent parameters (#709)
+
+0.7.9
+-----
+
+* Do not try to fetch last modified date if remote file (#707)
+* Bump actions/attest-build-provenance from 2.0.1 to 2.1.0 (#706)
+* Bump actions/attest-build-provenance from 2.0.0 to 2.0.1 (#705)
+* Bump tree-sitter-python from 0.23.4 to 0.23.5 (#704)
+* Bump actions/attest-build-provenance from 1.4.4 to 2.0.0 (#703)
+* Bump tree-sitter-go from 0.23.3 to 0.23.4 (#701)
+* Only append config to pyproject.toml (#700)
+* Prevent precli-init overwriting configuration settings (#699)
+* Fix traceback when not passing file to -o option (#698)
+* Bump tree-sitter-python from 0.23.3 to 0.23.4 (#696)
+* Bump tree-sitter-go from 0.23.2 to 0.23.3 (#695)
+* Bump tree-sitter-java from 0.23.3 to 0.23.4 (#694)
+* Use mkdocs plugin to put last update time on pages (#693)
+* Bump tree-sitter-go from 0.23.1 to 0.23.2 (#690)
+* Bump tree-sitter-java from 0.23.2 to 0.23.3 (#691)
+* Bump tree-sitter-python from 0.23.2 to 0.23.3 (#692)
+* Improve the look of the man page (#689)
+* Add config files to the CLI reference page (#688)
+* Bump actions/attest-build-provenance from 1.4.3 to 1.4.4 (#687)
+* Bump rich from 13.9.3 to 13.9.4 (#686)
+
+0.7.8
+-----
+
+* Add PyPI example to Getting Started documentation (#685)
+* Add ability to specify a PyPI url as a target (#684)
+* Set exit code to 0 or 1 based on results (#683)
+* Clean up and refactor CLI unit tests (#682)
+* Nit: minor change of name of unit test function (#681)
+* Fix up the CLI main unit tests (#680)
+* Use response.ok instead of specific code (#679)
+* Small refactor in the loading of targets extension (#678)
+* Fix --gist argument failure (#677)
+
+0.7.7
+-----
+
+* Fix the output option (#676)
+* Move the github target logic into an extension (#675)
+* Add unit test of mutually exclusive enable and disable (#673)
+* Add unit test for invalid multiple renderers given (#674)
+* Add checking for files given that don't exist (#672)
+* Add unit test for precli-init command (#671)
+* Add unit test of the version argument to the CLI (#670)
+* Properly handle quiet mode (#669)
+* Add validation on the specified output file (#668)
+* Refactor the CLI checking of config arguments (#667)
+* Add some testing of CLI loading of config (#666)
+* Fix outdated man page (#665)
+
+0.7.6
+-----
+
+* Small change to parameters of load\_config (#664)
+* Honor all configuration passed via toml files (#663)
+* New CLI argument to accept a custom configuration file (#662)
+* Fix CLI fails when running on the tests (#661)
+* Support writing to pyproject.toml (#660)
+* Rename of the key size config variables (#659)
+* Command line to create a .precli.toml default config file (#658)
+* Bump tree-sitter from 0.23.1 to 0.23.2 (#657)
+* Slight naming change to the weak key rules config (#656)
+
+0.7.5
+-----
+
+* Move some configuration into the docs themselves (#655)
+* Change the pattern to match for testing code (#654)
+* Bump rich from 13.9.2 to 13.9.3 (#653)
+* Add last modified time to the file artifacts (#652)
+* Add SPDX license identifier to each file (#651)
+* importlib metadata distributions not available in Py3.9 (#650)
+* Try again to get PyPI to render all the project URLs (#648)
+* Add trailing slash to project\_url links (#647)
+* Add slack link to PyPI (#646)
+* Fix the no\_color command line argument (#645)
+* Nit change to install part of README (#644)
+
+0.7.4
+-----
+
+* Update classifier to specify Python 3 only (#643)
+* Add more project urls (#642)
+* Default the assert rule to be disabled (#641)
+* Ignore test code in analysis (#640)
+* Direct assert rule to ignore asserts in test functions (#639)
+* Always use latest python version (#637)
+* Fix typo in the nntplib no timeout docstring (#636)
+* Remove minimum python version text (#635)
+
+0.7.3
+-----
+
+* Add Python 3.9 testing to build (#634)
+* Add support for Python 3.9 (#633)
+
+0.7.2
+-----
+
+* Replace open source with source available (#632)
+* Fix some bugs using Python 3.10 (#631)
+* Update README requests Python 3.10+ (#629)
+
+0.7.1
+-----
+
+* Support Python 3.10 (#628)
+* Add support for Python 3.11 (#627)
+* Add some more badges to the README (#626)
+
+0.7.0
+-----
+
+* Show support of Python 3.13 (#625)
+* Add Python 3.13 to unit test matrix (#624)
+* Bump rich from 13.9.1 to 13.9.2 (#623)
+* Honor umask in calculating effective mode (#622)
+* Fix up not\_in\_nav errors from mkdocs (#621)
+* Remove inconsistent divider in argparse rule (#620)
+* Update pre-commit hooks to latest versions (#619)
+* Add last updated date on doc pages (#618)
+* Add support of mkdocs macros (#617)
+* Add some logging of the start and end of the run (#616)
+
+0.6.7
+-----
+
+* Fix broken handling of file via stdin (#615)
+* Some nit fixing up of the man page (#614)
+* Automatically update the copyright year (#613)
+* Bump rich from 13.8.1 to 13.9.1 (#612)
+* Enhance timeout rules ot honor the global timeout (#610)
+* New Python rule checks for ssl use with no timeout (#609)
+* New Python rule checks ftplib use without a timeout (#608)
+* New Python rule checks use of Telnet with no timeout (#607)
+* New Python rule to check poplib use without timeout (#606)
+* New rule to check nntplib for use without a timeout (#605)
+* New Python rule to check for imaplib use without a timeout (#604)
+* The smtplib starttls context arg is always a kwarg (#603)
+* Add doc for new smtplib no timeout rule (#602)
+* SocketNoTimeout doesn't need to check for 0 or negative values (#601)
+* New rule to check for no timeout use in smtplib (#600)
+* SocketNoTimeout needs to check for 0 and negative timeouts (#599)
+* New rule to check socket.create\_connection with no timeout (#598)
+* Fix typo in the example output (#595)
+
+0.6.6
+-----
+
+* Wrong line number in syscall.Setuid rule example (#594)
+* Fix invalid links in docs (#593)
+* Cleanup copy-and-paste typos in syscall.Setuid rule (#592)
+* Remove unnecessary init of wildcards (#591)
+* New Golang rule to check for Setuid to root user (#590)
+* New python rule to check for setuid(0) (#589)
+* Bump rich from 13.8.0 to 13.8.1 (#588)
+* Bump actions/attest-build-provenance from 1.4.2 to 1.4.3 (#586)
+* Fix augmented assignment (#585)
+* Support augmented assignments and parenthesized expressions (#584)
+* Bump tree-sitter-python from 0.23.0 to 0.23.2 (#582)
+* Bump tree-sitter-go from 0.23.0 to 0.23.1 (#581)
+* Bump tree-sitter-java from 0.21.0 to 0.23.2 (#580)
+
+0.6.5
+-----
+
+* Update to the latest tree-sitter (#579)
+
+0.6.4
+-----
+
+* Get file encoding using artifact contents (#577)
+
+0.6.3
+-----
+
+* Only load file if artifact content is none (#576)
+* Remove the unnecessary console object on Run (#574)
+* Bump rich from 13.7.1 to 13.8.0 (#572)
+
+0.6.2
+-----
+
+* Fix for typo in pathlib rule example output (#570)
+* New rule for pathlib.Path usage with loose permissions (#569)
+* Fix raised exceptions in edge cases of incorrect permissions (#568)
+* Add new rule around loose permission in os module (#556)
+* Refactor Cwe class to be more pythonic (#567)
+* Rename tokens to node types (#566)
+* Second pass at refactoring wildcard logic (#565)
+* Refactor how wildcard imports are processed (#564)
+* Bump actions/attest-build-provenance from 1.4.1 to 1.4.2 (#563)
+* Add CWE for permissions and token for binary op (#562)
+* Add links to App and Action (#561)
+* Move README build badge above divider (#560)
+* Remove repo activity in README (#559)
+* Add example code to Readme for clear example (#558)
+* Bump tree-sitter-go from 0.21.0 to 0.21.2 (#557)
+* Disable animated example gif to loop (#555)
+* Add example of running command as animated gif (#554)
+* Bump actions/attest-build-provenance from 1.4.0 to 1.4.1 (#553)
+* Add repo activity to README (#552)
+* More type fixes (#550)
+* Set types on args of setters (#549)
+* Use ubuntu latest for readthedocs build (#548)
+* More typing error fixes (#547)
+
+0.6.1
+-----
+
+* Add Windows support and unit testing (#546)
+* Bump actions/attest-build-provenance from 1.3.3 to 1.4.0 (#544)
+
+0.6.0
+-----
+
+* tree-sitter-python requires manual install on arm macOS (#545)
+
+0.5.13
+------
+
+* Bump to latest version of tree-sitter (#543)
+* Use extension loader to load renderers (#542)
+* Resolve hex, ord, and binary forms of an integer (#538)
+* Some cosmetic changes to docs (#537)
+
+0.5.12
+------
+
+* Allow rule ranges on command line (#535)
+* Make doc tables sortable (#534)
+* Remove parent Rules in doc index (#533)
+* Add example output to each rule (#532)
+* Use GitHub icon for docs link (#530)
+* Pretty up the home index for the docs (#528)
+* Use tabbed code blocks when there are multiple examples (#527)
+* Add highlighted lines to example code blocks (#526)
+* Use mkdocs-material for docs (#525)
+* Add email and license classifier (#523)
+* More typing fixes for rules (#522)
+* More type fixes (#521)
+* Fix up some of the typing errors (#520)
+* Bump actions/attest-build-provenance from 1.3.2 to 1.3.3 (#518)
+
+0.5.11
+------
+
+* Store resolve dict values and store dicts in symtab (#517)
+
+0.5.10
+------
+
+* Don't do a resolve on the left hand side of an assignment (#516)
+* Add 347 to CWE class (#515)
+
+0.5.9
+-----
+
+* Add CWE 306 to cwe mapping class (#514)
+
+0.5.8
+-----
+
+* Add CWE ID of 79 with description (#513)
+
+0.5.7
+-----
+
+* Add CWE 215 as possible code (#512)
+* Suggest using localhost address as fix (#511)
+* Bump actions/attest-build-provenance from 1.3.1 to 1.3.2 (#509)
+* Fix up warnings from pylint and flake8 (#508)
+* Remove the newer version check (#507)
+* Bump actions/attest-build-provenance from 1.2.0 to 1.3.1 (#506)
+* Add --token to argparse rule (#505)
+* Remove unnecessary sphinx config in tox.ini (#504)
+* Bump actions/attest-build-provenance from 1.1.2 to 1.2.0 (#502)
+* Show download progress in file size (#501)
+* Add number of complete count to progress (#500)
+
+0.5.6
+-----
+
+* Removal of the Cwe2 dependency (#499)
+* Bump requests from 2.32.2 to 2.32.3 (#498)
+* Return a rule ID for syntax and other errors (#496)
+* Small refactor on where Tool is initialized (#495)
+
+0.5.5
+-----
+
+* Fix for traceback in plain renderer (#494)
+* Filter the list of artifacts during discovery (#491)
+* Nit: Rearrange args to partial (#490)
+* Delay reading of file contents until parser decided (#489)
+* Redo handling of keyboard interrupts (#488)
+* Suppress FutureWarnings from tree-sitter and re modules (#487)
+* Avoid init of parsers twice (#486)
+* Support multiprocessing of file parsing (#485)
+* Bump requests from 2.32.1 to 2.32.2 (#484)
+* Refactor the invoke function in the run class (#483)
+* Nicer output using rich.console (#482)
+* Handle invalid coding for a Python file (#481)
+* Correctly handle a non unicode file without pep3120 (#479)
+* Fix unknown value for nbytes (#478)
+* Handle non-UTF-8 encoding files (#477)
+* Remove some docstring comments on return and params (#476)
+* Use f-string instead of string substitution (#475)
+* Fix typo in copyright (#469)
+* Bump requests from 2.31.0 to 2.32.1 (#467)
+* Delete .stestr.conf (#465)
+* Migrate from stestr to pytests (#464)
+* Bump actions/attest-build-provenance from 1.1.1 to 1.1.2 (#462)
+* Bump actions/attest-build-provenance from 1.1.0 to 1.1.1 (#460)
+* Add defaultConfiguration in SARIF output (#459)
+* Load metadata for any extension entry points (#458)
+* Remove the unnecessary scripts directory and contents (#457)
+* Bump actions/attest-build-provenance from 1.0.0 to 1.1.0 (#456)
+* Bump pygments from 2.17.2 to 2.18.0 (#454)
+
+0.5.4
+-----
+
+* Fix action failure to release binary (#453)
+
+0.5.3
+-----
+
+* Add attestation to build artifacts (#452)
+* Update some tests so they are runnable (#451)
+* Fix how scoped variables accessed in symbol table (#450)
+* Use child\_by\_type for all parsers (#449)
+* Add Node convenient function utf8\_text (#448)
+* Enhance the Node class with convenient functions (#447)
+* Recenter the text and logo in the banner image (#441)
+
+0.5.2
+-----
+
+* Add start\_time to SARIF output (#440)
+
+0.5.1
+-----
+
+* Fix traceback raised on an expression list assignment (#439)
+* Correct the paths given in getting start examples (#438)
+* Trim trailing space in README (#437)
+* README example with wrong path (#436)
+* Simplify the README content (#435)
+* Create a nicer looking banner logo (#434)
+* Increase size of banner logo (#433)
+* Add Java rule for insecure java.net.HttpCookie (#432)
+* Fix broken link in rules table (#431)
+* Add rule to use of Cookie with secure flag false (#430)
+* Add Python requirement to install quick start (#428)
+
+0.5.0
+-----
+
+* Handle method calls with field access (#427)
+* Weak hash and weak random Java rules need to guard from none (#426)
+* Don't break codee with suggested fix (#425)
+* Add rule for detection of weak random algorithm in SecureRandom (#424)
+* Go and Java docs should have similar headers as Python (#423)
+* Add more symbol tables for other declarations (#422)
+* Create sub-symbol tables on class and method declaration (#421)
+* Fix collison in rule wildcards (#420)
+* Add new Java rule to check for a weak key (#419)
+* Make Call class more generic for all supported languages (#418)
+* Small refactor to parsers (#417)
+* Add rule for weak hashes in java.security (#416)
+* Add more tests for java weak cipher rule (#415)
+* Create java parser and example rule with test (#414)
+
+0.4.6
+-----
+
+* Resolve a call argument that is a call to its identifier (#412)
+
+0.4.5
+-----
+
+* Add extensions to the version output (#411)
+* Add more detail to the --version output (#410)
+
+0.4.4
+-----
+
+* Fix for IndexError in an expression list assignment (#408)
+* Fix traceback from usage of importlib.import\_module (#406)
+* Add suggested fixes for weak hashes in hmac function (#404)
+* Add suggested fixes for the hashlib weak hash rule (#403)
+* Add dependabot checks for PyPI packages (#402)
+* Do update check only if git target or gist output (#401)
+
+0.4.3
+-----
+
+* Check for no action passed in argparse rule (#396)
+* Bump tree-sitter to version 0.21.3 (#395)
+* Add rule to check for improper random generator usage (#394)
+* Correct invalid examples for hmac timing attack (#393)
+* Fix for cases of a reassignment of a variable (#392)
+* Small edit to hmac weak key doc (#391)
+* Rule to check for insufficient key size to HMAC (#390)
+
+0.4.2
+-----
+
+* importlib.import\_module also needs to handle string types (#389)
+
+0.4.1
+-----
+
+* Distinguish betwen strings and attributes (#388)
+* More progress indicators (#387)
+* Put tokens into a separate module (#386)
+* Ensure the tests import hashlib (#385)
+* Add md5-sha1 to list of hashlib algorithms (#383)
+* Add ability to process a byte string value (#380)
+* IgnoreFilterManager always requires relative path (#379)
+* Fix so preignore properly ignores tests (#378)
+* Pin the dependencies in requirements.txt (#377)
+* Check for api-key not api\_key (#376)
+* Add --api\_key checked in the CLI args (#375)
+* Embed the copyright as part of the package (#374)
+
+0.4.0
+-----
+
+* Refactor how rules are called to analyze (#373)
+
+0.3.14
+------
+
+* Add new rule to detect regex denial-of-service patterns (#372)
+* Fix wrong examples in docstring of xmlrpc (#369)
+* Add rule for xmlrpc.server unrestricted bind (#368)
+* Nit: rename file for consistency (#367)
+* Add new rule for http.server unrestricted bind (#366)
+* SocketServer doc needs example and refs for socketserver (#365)
+* Add rule for socketserver unrestricted bind (#364)
+* New rule for socket based unrestricted bind (#362)
+* Drop support of Windows (#363)
+* Add logo to README (#361)
+* More consistent naming of docs (#360)
+* Refactor the docs (#359)
+* Change category name to insufficient\_token\_length (#358)
+* Add secrets\_weak\_token to rules table (#357)
+* Add new rule for secrets insufficient token length (#356)
+* Rename function to be more clear (#355)
+* Add rule on argparse to check for an argument of password (#353)
+* Add new rule to check for context=None in smtp.starttls or SMTP\_SSL (#352)
+* Add new rule to check for context=None in stls or POP3\_SSL (#351)
+* Add new rule to check for context=None in nntp.starttls or NNTP\_SSL (#350)
+* Reorganize the paths of the testcases and examples (#349)
+* Add new rule to check for no context being passed to IMAP4\_SSL (#348)
+* Use guards instead of nested if conditionals (#347)
+* Add new rule to check for no context being passed to FTP\_TLS (#346)
+* Skip build for changes to README (#338)
+* Add more details to README (#337)
+* Bump softprops/action-gh-release from 1 to 2 (#336)
+* Create a security policy (#335)
+* Create a code of conduct (#334)
+* Keep SARIF output as minimal as possible (#333)
+
+0.3.13
+------
+
+* Clean up the description text for rules (#332)
+* Add help text and markdown for rule (#331)
+* Better short and long rule descriptions (#330)
+* Add rule descriptions to SARIF output (#329)
+* Nit: use single ticks not double (#328)
+* Switch docs to use mkdocs (#327)
+* security severity should be str not float (#326)
+* Fix the schema version to not be the uri (#325)
+* Rename tool name to Precaution (#324)
+* Add security-severity property to sarif rules (#323)
+
+0.3.12
+------
+
+* Add CWE info in the SARIF output (#322)
+* Add security tag to sarif output (#321)
+
+0.3.11
+------
+
+* Remove the rule's full description from SARIF (#320)
+* Delete results.sarif
+
+0.3.10
+------
+
+* More SARIF cleanup (#319)
+
+0.3.9
+-----
+
+* Use text attribute for ArtifactContent (#318)
+* inserted\_content does does conform to SARIF schema (#317)
+
+0.3.8
+-----
+
+* Fix up the output to adhere to SARIF schema (#316)
+* Add assert rule to doc table (#314)
+* Add assert rule to docs (#313)
+* Finish up the assert rule (#312)
+* Rework how a typed parameter is handled (#311)
+* Slight refactoring of symtab and base parser (#309)
+
+0.3.7
+-----
+
+* Add varibles of function parameters to symtab (#308)
+* Add license and indices links to main index doc (#307)
+* Inform user if an update is available (#306)
+* Rework of the documentation (#305)
+
+0.3.6
+-----
+
+* Change json\_load rule to be default of disabled (#304)
+* Nit change to gist conditional (#303)
+
+0.3.5
+-----
+
+* Fix traceback when parsing with without as (#302)
+* Add more details to getting started in README (#300)
+* Fix traceback on unsupported files (#299)
+* Add option to output the results to Gist (#297)
+* Fix up the renderer outputs (#295)
+* Add an output to a file CLI argument (#294)
+* Use rich console capture of printed text (#292)
+* New renderer to output in markdown format (#291)
+
+0.3.4
+-----
+
+* Use SARIF schema for JSON output (#287)
+* Add further tests for rule http\_url\_secret (#286)
+* Add sphinx automodule for http\_url\_secret (#285)
+* Add more testing of HttpUrlSecret rule (#284)
+* Fix missing syntax highlighting on code snippets (#283)
+* New rule for secrets in HTTP URL parameters (#282)
+* Add environment variables section to man page (#281)
+* Better languages detection (#280)
+* Fix for bad artifact URI (#279)
+* Set logging level on urllib (#276)
+* Trigger publish to PyPI on release published (#274)
+* Fix traceback on syntax errors (#273)
+
+0.3.3
+-----
+
+* Make the artifact argument of a Result to be lazy set (#271)
+
+0.3.2
+-----
+
+* Trigger publish to Test PyPI on release publish (#270)
+* Trigger wheel upload on release publish (#269)
+* Use the correct package name for repos (#268)
+
+0.3.0
+-----
+
+* Rename publish environments (#267)
+* Use RST instead of markdown for README (#266)
+* Add GitHub environments for packages (#265)
+* Add line numbers in the URI (#264)
+* Refactor arguments to renderers (#263)
+* Use artifact in context (#262)
+* Refactor into run, tool, artifacts (#261)
+* Support passing a file via standard input (#260)
+* Allow using GitHub URLs as targets (#259)
+* Only use relative paths with function is\_ignored() (#258)
+* Add accurate version added values in docstring (#257)
+* Remove references to securesauce.dev docs (#256)
+* Add windows testing and claim support (#255)
+* Add support and testing of macOS (#254)
+* Add more detail to the README (#253)
+
+0.2.4
+-----
+
+* Remove reference to direct dependencies (#252)
+* Install setuptools as part of publish (#251)
+* Add trusted publishing to PyPI (#250)
+* Add publishing to PyPI and Test PyPI (#249)
+* Allow install of thirdparty rules via an extra (#248)
+* Fix nit error in doc (#247)
+* Add a Reporting Bugs section (#246)
+* Prohibit GPL based licenses being introduced (#245)
+* Only trigger unit tests on pull requests (#244)
+* Bump versions of actions used (#243)
+* Add a dependency review workflow action (#242)
+* Represent env var DEBUG if set (#241)
+* Update man page to reflect current function (#240)
+* Fix links and titles to docs (#239)
+* Fix reference to doc to docs for RTD (#238)
+* Fix requirements reference in readthedocs.yaml (#237)
+* Add Read The Docs config file (#236)
+* Add license on use (#235)
+* Update year and remove spdx (#234)
+* Remove the unused examples (#233)
+
+0.2.3
+-----
+
+* Move 3rd party rules to separate repo (#232)
+* Flatten the directory structure of the rule unit tests (#231)
+* Flatten the directory structure of rules (#230)
+* Nit fix of docstring in Level enum (#211)
+* Use the org level .github for issue templates (#209)
+* Add rule for weak diffie-hellman keys in SSLContext (#208)
+* Add rule for usage of Flask.run with debug true (#207)
+
+0.2.2
+-----
+
+* Update upload-asset.yml (#206)
+
+0.2.1
+-----
+
+* Refactor building of ignore manager (#205)
+* Add support to ignore files via .preignore (#204)
+* Fix a couple errors found scanning thousands of files (#203)
+* Handle SyntaxWarnings appearing in output (#202)
+* Better handling of SyntaxErrors (#201)
+* Automatically ignore files matching .gitignore patterns (#200)
+* Move visit\_comment into base class (#199)
+* Implement suppression in Go parser (#198)
+* Bump Python version to 3.12 (#181)
+* Fix parsing of int values (#197)
+* Properly check key size or bits type as int (#196)
+* Some doc nits (#195)
+* Add golang\_org\_x\_weak\_cipher and testing (#194)
+* More refactoring of tests (#193)
+* Refactor the tests and test\_case.py (#192)
+* Add tests for Go rules (#191)
+* Add Go rule for weak rsa and dsa key sizes (#190)
+* Add Go rule for md4 and ripemd160 weak hashes (#189)
+* Add weak hash Go rule (#188)
+* Add weakhash Go rule for md5 and sha1 (#187)
+* golang\_org\_x\_crypto\_ssh to golang\_org\_x\_crypto (#186)
+* Reorganize test for one Go rule (#185)
+* Remap the rule IDs (#184)
+* Remove third\_party directory and flatten rules (#183)
+* Implement Go parser and one example rule (#182)
+* Bump actions/setup-python from 4 to 5 (#180)
+
+0.2.0
+-----
+
+* Aiohttp tests (#179)
+* Add rule for aiohttp no ssl verify (#178)
+* Add further tests of cryptography (#177)
+* Add tests for pycryptodomex (#176)
+* Add pycrypto tests (#175)
+* Add tests for pandas (#174)
+* Add all tests for jsonpickle (#173)
+* Add tests for M2Crypto (#172)
+* Add dill\_load tests (#171)
+* Add tests for pyopenssl weak keys (#170)
+* Create pyghmi tests (#169)
+* Auto generate yaml tests (#168)
+* Auto generate httpx tests (#167)
+* Auto generate jsonpickle tests (#166)
+* Auto generate hmac tests (#165)
+* Auto generate tests for hashlib (#164)
+* Auto generate ssl tests (#163)
+* Auto generate logging tests (#162)
+* More auto-generated tests (#161)
+* Auto generate shelve tests (#160)
+* Auto generate poplib tests (#159)
+* Auto generate pickle tests (#158)
+* Auto generate nntplib tests (#157)
+* Auto generate marshal tests (#156)
+* Auto generate json tests (#155)
+* Auto generate imaplib tests (#154)
+* Auto generate ftplib tests (#153)
+* Auto generate crypt tests (#152)
+* Auto generate tests for requests (#151)
+* Use better test generation for cryptography (#150)
+* Dynamically generated unit tests based on files (#149)
+* Add rule for m2crypto weak keys (#148)
+* Add rule for PyOpenSSL RSA and DSA key generation (#147)
+* Use RULE\_ID constant (#146)
+* Add pycrypto and dome cipher and key rules (#145)
+* Fix doc nits (#144)
+* Add weak cipher, cipher mode rules (#143)
+* Add tests for EC keys (#142)
+* Add tests for RSA generate\_private\_key (#141)
+* Add tests for DSA generate\_private\_key and generate\_parameters (#140)
+* Add rule for cryptography weak keys (#139)
+
+0.1.9
+-----
+
+* Update docstrings (#138)
+* Bump actions/checkout from 3 to 4 (#136)
+* Bump actions/setup-python from 3 to 4 (#137)
+* Create dependabot.yml (#135)
+* Add checks for hashlib.pbkdf2\_hmac (#134)
+* Handle syntax errors in code (#133)
+* New rule on tempfile.mktemp (#132)
+* Add thousands separator to metrics (#131)
+* Fix IndexError in \_get\_var\_node (#130)
+* Add testing for imaplib, poplib, nntplib, and smtplib (#129)
+* Add ability to analyze call history (#128)
+* Start using pre-commit (#127)
+
+0.1.8
+-----
+
+* No need to check for suppressions (#126)
+* Do not return fixes for a suppressed result (#125)
+
+0.1.7
+-----
+
+* Add tests for suppression code (#124)
+* Fix typo in suppression message (#123)
+* Add support of suppressions (#122)
+
+0.1.6
+-----
+
+* Implement the short description property (#121)
+* Minor cleanup fix (#120)
+
+0.1.5
+-----
+
+* Small fix in detailed renderer (#119)
+* Move plugin loading to loader (#118)
+* Move some base classes into \_\_init\_\_ (#117)
+
+0.1.4
+-----
+
+* Add metrics summary to the output (#116)
+* SSHClient can be imported from paramiko (#115)
+* Some comparison code cleanup (#114)
+* Highlight the operator instead of digest (#113)
+* Add rule for HMAC timing attack (#112)
+* Avoid double visit in edge case (#111)
+* Add support of assignments via walrus operator (#110)
+* Add testing for rule pickle (#109)
+* Add shelve rule testing (#108)
+* Add testing of marshal.load rule (#107)
+* Add json.load testing (#106)
+* Hmac allows hashlib hashes as digest (#105)
+* Add testing for hmac rule (#104)
+* Add testing for hashlib rule (#103)
+* Add testing for crypt rule (#102)
+* Some nit change (#101)
+* Fixes for new Call class (#100)
+* Creation of Call and Argument classes (#99)
+* Add framework for Suppressions (#98)
+* Nit: make location optional in result (#97)
+* Add kind property to result (#96)
+* Add ability to enable or disable rules (#95)
+* Add a docs Github action workflow (#94)
+* Add sphinx docs for stdlib rules (#93)
+* Remap the rule ID numbers (#92)
+
+0.1.3
+-----
+
+* Update upload-asset.yml (#91)
+
+0.1.2
+-----
+
+* Update upload-asset.yml (#90)
+
+0.1.1
+-----
+
+* Create upload-asset.yml (#89)
+* Add names to each symbol table (#88)
+
+0.1.0
+-----
+
+* Cleanup various rules (#87)
+* Fix some of the todos in ftp and tls rules (#86)
+* Remove unused args argument in analyze (#85)
+* Add fixes for httpx (#84)
+* Fix the suggested fix output (#83)
+* More extensive refactoring (#82)
+* Better handling of context, nodes and such (#81)
+* More detailed ftp rule and tests (#80)
+* Add fixes and tests for ftplib (#79)
+* More suggested fixes for rules (#78)
+* Use symbol class instead of tuple (#77)
+* New version of suggested fixes (#76)
+* Show better context of offending code (#75)
+* Add logger init code (#74)
+* Add no-color option to CLI args (#73)
+* Add some initial output renderers (#72)
+* Fix no\_host\_key and other nits (#71)
+* Prototype parse and unparse imports (#70)
+* Initial drop implementing suggested fixes (#69)
+* Nit: remove setting None in call context (#68)
+* Add test to requests rule verify-as-var (#67)
+* Handle variable arguments with value None (#66)
+* Fix some nits related to logging rule (#65)
+* Add rule for logging.config.listen (#64)
+* Fix for traceback on with statement (#63)
+* Add support for context managers (#62)
+* Add rule for httpx no cert verify (#61)
+* Add rule for requests no cert verify (#60)
+* Add wildcard imports to pyopenssl (#59)
+* Add rule for pyopenssl insecure methods (#58)
+* More TLS version testing (#57)
+* Add ssl insecure version rule (#56)
+* Add rule for \_create\_unverified\_context (#55)
+* Different levels of severity depending on policy (#54)
+* Add more docstrings (#53)
+* Slight refactor (#52)
+* Fix errors when running against a lot of code (#51)
+* Adds a recursive option to CLI (#50)
+* Handle multiple files for directories (#49)
+* More various clean up (#48)
+* Some more small refactoring (#47)
+* Refactor the python parser (#46)
+* Drop with modified tests (#45)
+* Rename lang to stdlib (#44)
+* Upper case the rule IDs (#43)
+* Redo symbol table to more polished solution (#42)
+* Early implementation of symbol table (#41)
+* Test and fix for wildcard imports (#40)
+* Add some more example tests (#39)
+* Remove official macOS support for now (#38)
+* Rename rule variable cwe to cwe\_id (#37)
+* Create examples in test directory (#36)
+* Some more refactoring for simplicity (#35)
+* Some minor cleanup fixes (#34)
+* Resolving qualified names is now scope aware (#33)
+* Add testcase of an import within a function (#32)
+* Fix up the match call functions (#31)
+* Set the rule ID in the setup.cfg (#30)
+* Add check for hmac weak hashes (#29)
+* Add cryptography weak hashes check (#28)
+* Add more weak hash checks (#27)
+* Remove redundant pip installs (#26)
+* A fix for numerous things (#25)
+* Convert node bytes to str (#24)
+* Fix resolving fully qualified attributes (#23)
+* Render the result to the command line (#22)
+* Simplify rule impl with less code (#21)
+* Use the function call qualified name in message (#20)
+* More rules around deserialize (#19)
+* Update unit-test.yml
+* Update tox.ini
+* Support tox4 (#18)
+* Handle more types of nodes and kwargs (#17)
+* Update unit-test.yml
+* Update README.md
+* Update README.md (#16)
+* Delete dependency-review.yml (#15)
+* Fix pep8 errors (#13)
+* Update unit-test.yml (#14)
+* Add template and workflows to the repository (#12)
+* First working complete Rule (#11)
+* Drop of working code for rules to match calls (#10)
+* Rename of the rule and parser base classes (#9)
+* Big drop including mechanics of rules (#8)
+* Early drop of handling call nodes (#7)
+* Parser handling of import and import from statements (#6)
+* Use abstract base class for parsers (#5)
+* Make use of importlib instead of pbr (#4)
+* Clean up based on pylint and format checking (#3)
+* Second drop demonstrating parser and rule loading (#2)
+* Initial drop of minimal working CLI (#1)
+* Initial commit

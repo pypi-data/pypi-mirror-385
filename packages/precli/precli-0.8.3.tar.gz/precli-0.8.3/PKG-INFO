@@ -1,0 +1,138 @@
+Metadata-Version: 2.4
+Name: precli
+Version: 0.8.3
+Summary: Precaution security static analysis command line
+Home-page: https://github.com/securesauce/precli
+Download-URL: https://pypi.org/project/precli/#files
+Author: Secure Sauce
+Author-email: info@securesauce.dev
+License: Other/Proprietary License
+Project-URL: Homepage, https://github.com/securesauce/precli
+Project-URL: Documentation, https://precli.readthedocs.io
+Project-URL: Source, https://github.com/securesauce/precli
+Project-URL: Issues, https://github.com/securesauce/precli/issues
+Project-URL: Changelog, https://github.com/securesauce/precli/releases
+Project-URL: Slack, https://secure-sauce.slack.com
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Information Technology
+Classifier: Intended Audience :: System Administrators
+Classifier: Intended Audience :: Developers
+Classifier: Natural Language :: Chinese (Simplified)
+Classifier: Natural Language :: Chinese (Traditional)
+Classifier: Natural Language :: English
+Classifier: Natural Language :: French
+Classifier: Natural Language :: German
+Classifier: Natural Language :: Italian
+Classifier: Natural Language :: Japanese
+Classifier: Natural Language :: Korean
+Classifier: Natural Language :: Portuguese (Brazilian)
+Classifier: Natural Language :: Russian
+Classifier: Natural Language :: Spanish
+Classifier: Operating System :: MacOS
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Classifier: Topic :: Security
+Requires-Python: >=3.10
+License-File: LICENSE
+Requires-Dist: tomli_w==1.2.0
+Requires-Dist: rich==14.2.0
+Requires-Dist: tree-sitter==0.25.2
+Requires-Dist: ignorelib==0.3.0
+Requires-Dist: requests==2.32.5
+Requires-Dist: sarif-om==1.0.4
+Requires-Dist: jschema-to-python==1.2.3
+Requires-Dist: tree-sitter-go==0.25.0
+Requires-Dist: tree-sitter-java==0.23.5
+Requires-Dist: tree-sitter-python==0.25.0
+Requires-Dist: pyyaml==6.0.3
+Requires-Dist: typing-extensions==4.15.0; python_version < "3.11"
+Requires-Dist: tomli==2.3.0; python_version < "3.11"
+Dynamic: author
+Dynamic: author-email
+Dynamic: description
+Dynamic: download-url
+Dynamic: license
+Dynamic: license-file
+Dynamic: project-url
+Dynamic: provides-extra
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+.. image:: https://raw.githubusercontent.com/securesauce/precli/main/images/logo.png
+    :alt: Precaution CLI
+
+.. image:: https://github.com/securesauce/precli/actions/workflows/unit-test.yml/badge.svg?branch=main
+    :target: https://github.com/securesauce/precli/actions/workflows/unit-test.yml
+    :alt: Build and Test
+
+.. image:: https://img.shields.io/pypi/v/precli.svg
+    :target: https://pypi.org/project/precli/
+    :alt: Latest Version
+
+.. image:: https://img.shields.io/pypi/pyversions/precli.svg
+    :target: https://pypi.org/project/precli/
+    :alt: Python Versions
+
+.. image:: https://img.shields.io/pypi/dm/precli
+    :target: https://pypistats.org/packages/precli
+    :alt: PyPI - Downloads
+
+======
+
+Precli is the core of the `Precaution App <https://github.com/marketplace/precaution>`_ and `Precaution Action <https://github.com/marketplace/actions/precaution-action>`_. It also serves as a command line interface to demonstate its functionality. It is designed to do static code analysis of source code with a number of rules covering the standard library for the corresponding programming language.
+
+If your needs go beyond the analysis of just the standard library, consider upgrading to Precaution Professional to get access to finding and fixing security vulnerabilities in third-party libraries. See https://www.securesauce.dev/ for more details.
+
+Quick Start
+-----------
+
+To install:
+
+.. code-block:: console
+
+    pip install precli
+
+Run precli on a single test example:
+
+.. code-block:: console
+
+    precli tests/unit/rules/python/stdlib/hmac/examples/hmac_timing_attack.py
+
+Example code:
+
+.. code-block:: python
+
+    # level: ERROR
+    # start_line: 18
+    # end_line: 18
+    # start_column: 13
+    # end_column: 15
+    import hmac
+
+
+    received_digest = (
+        b"\xe2\x93\x08\x19T8\xdc\x80\xef\x87\x90m\x1f\x9d\xf7\xf2"
+        b"\xf5\x10>\xdbf\xa2\xaf\xf7x\xcdX\xdf"
+    )
+
+    key = b"my-super-duper-secret-key-string"
+    password = b"pass"
+    digest = hmac.digest(key, password, digest="sha224")
+
+    print(digest == received_digest)
+
+Example result:
+
+.. image:: https://raw.githubusercontent.com/securesauce/precli/main/images/example.gif
+    :alt: Example output
+
