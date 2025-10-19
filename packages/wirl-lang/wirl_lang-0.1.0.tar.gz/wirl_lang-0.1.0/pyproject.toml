@@ -1,0 +1,40 @@
+[project]
+name = "wirl-lang"
+version = "0.1.0"
+description = "WIRL workflow DSL grammar and parser"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+  { name = "Artem Goncharov" }
+]
+license = { text = "MIT" }
+dependencies = [
+  "lark>=1.1.9",
+]
+
+[project.urls]
+Repository = "https://github.com/wirl/packages/wirl-lang"
+
+[project.optional-dependencies]
+dev = [
+  "ruff>=0.5.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["wirl_lang"]
+include = ["wirl_lang/wirl.bnf"]
+
+[tool.ruff]
+line-length = 200
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
