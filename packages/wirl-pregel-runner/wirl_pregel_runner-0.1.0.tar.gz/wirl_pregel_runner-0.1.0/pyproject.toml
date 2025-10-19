@@ -1,0 +1,48 @@
+[project]
+name = "wirl-pregel-runner"
+version = "0.1.0"
+description = "Pregel-based runner for WIRL workflows"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+  { name = "Artem Goncharov" }
+]
+license = { text = "MIT" }
+dependencies = [
+  "wirl-lang>=0.1.0",
+  "langgraph==0.6.7",
+]
+
+[project.urls]
+Repository = "https://github.com/wirl/packages/wirl-pregel-runner"
+
+[dependency-groups]
+dev = [
+  "ruff>=0.5.0",
+  "pytest>=7",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["wirl_pregel_runner"]
+
+[tool.ruff]
+line-length = 200
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.uv.sources]
+# Configure local editable source for neighbor package during development
+wirl-lang = { path = "../wirl-lang", editable = true }
+
+[tool.uv]
+default-groups = ['dev']
