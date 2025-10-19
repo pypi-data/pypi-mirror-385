@@ -1,0 +1,374 @@
+# aitoolkit_esp32
+
+**Arduino 风格的 ESP32 控制库** - 通过串口控制 ESP32，提供完整的 Arduino API
+
+[![Python Version](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
+## 特性
+
+- ✅ **完整的 Arduino 风格 API** - pinMode, digitalWrite, analogRead 等熟悉的函数
+- ✅ **简单易用** - 3 行代码即可开始
+- ✅ **自动设备检测** - 自动查找并连接 ESP32
+- ✅ **FastAPI 集成** - 提供 REST API 和 WebSocket 支持
+- ✅ **Jupyter 友好** - 专为交互式编程设计
+- ✅ **固件烧录工具** - 一键烧录 ESP32 固件
+- ✅ **教学友好** - 与 Arduino 编程无缝衔接
+
+## 安装
+
+```bash
+pip install aitoolkit-esp32
+```
+
+或者从源码安装：
+
+```bash
+cd aitoolkit_esp32
+pip install -e .
+```
+
+## 快速开始
+
+### 1. 基本使用 - LED 闪烁
+
+```python
+from aitoolkit_esp32 import Arduino
+
+# 连接 ESP32
+board = Arduino(port="/dev/ttyUSB0", baudrate=115200)
+
+# Arduino 风格的 API
+board.pinMode(13, board.OUTPUT)
+
+while True:
+    board.digitalWrite(13, board.HIGH)
+    board.delay(1000)
+    board.digitalWrite(13, board.LOW)
+    board.delay(1000)
+```
+
+### 2. 自动检测设备
+
+```python
+from aitoolkit_esp32 import Arduino
+
+# 自动查找 ESP32 设备
+board = Arduino.auto()
+
+board.pinMode(2, board.OUTPUT)
+board.digitalWrite(2, board.HIGH)
+```
+
+### 3. 使用上下文管理器
+
+```python
+from aitoolkit_esp32 import Arduino
+
+with Arduino(port="/dev/ttyUSB0") as board:
+    board.pinMode(13, board.OUTPUT)
+    board.digitalWrite(13, board.HIGH)
+    board.delay(1000)
+    board.digitalWrite(13, board.LOW)
+```
+
+### 4. 读取按钮和传感器
+
+```python
+from aitoolkit_esp32 import Arduino
+
+board = Arduino.auto()
+
+# 读取数字输入
+board.pinMode(12, board.INPUT_PULLUP)
+button_state = board.digitalRead(12)
+print(f"Button: {button_state}")
+
+# 读取模拟输入
+board.pinMode(34, board.INPUT)
+sensor_value = board.analogRead(34)  # 0-4095
+print(f"Sensor: {sensor_value}")
+```
+
+### 5. PWM 控制（LED 调光）
+
+```python
+from aitoolkit_esp32 import Arduino
+
+board = Arduino.auto()
+
+board.pinMode(25, board.OUTPUT)
+
+# 逐渐变亮
+for brightness in range(0, 256):
+    board.analogWrite(25, brightness)
+    board.delay(10)
+
+# 逐渐变暗
+for brightness in range(255, -1, -1):
+    board.analogWrite(25, brightness)
+    board.delay(10)
+```
+
+## 完整 API 参考
+
+### Digital I/O
+
+```python
+# 设置引脚模式
+board.pinMode(pin, mode)  # mode: OUTPUT, INPUT, INPUT_PULLUP, INPUT_PULLDOWN
+
+# 数字写入
+board.digitalWrite(pin, value)  # value: HIGH (1) or LOW (0)
+
+# 数字读取
+value = board.digitalRead(pin)  # 返回 0 或 1
+```
+
+### Analog I/O
+
+```python
+# 模拟读取 (ADC)
+value = board.analogRead(pin)  # 返回 0-4095
+
+# 模拟写入 (PWM)
+board.analogWrite(pin, value)  # value: 0-255
+```
+
+### 高级功能
+
+```python
+# 生成方波
+board.tone(pin, frequency)  # 在引脚上生成指定频率的方波
+board.noTone(pin)          # 停止方波
+
+# 脉冲测量
+duration = board.pulseIn(pin, value)  # 测量脉冲宽度（微秒）
+
+# 中断（回调在 Python 端执行）
+def callback():
+    print("Interrupt triggered!")
+
+board.attachInterrupt(pin, callback, mode)  # mode: RISING, FALLING, CHANGE
+board.detachInterrupt(pin)
+```
+
+### 时间函数
+
+```python
+# 延时
+board.delay(ms)              # 毫秒延时
+board.delayMicroseconds(us)  # 微秒延时
+
+# 获取运行时间
+ms = board.millis()          # 返回启动后的毫秒数
+```
+
+### 串口通信
+
+```python
+# 配置 ESP32 的硬件串口
+board.Serial.begin(baudrate)
+
+# 发送数据
+board.Serial.write(data)
+board.Serial.println(text)
+
+# 读取数据
+data = board.Serial.read()
+line = board.Serial.readLine()
+```
+
+## 固件烧录
+
+### 自动烧录固件
+
+```python
+from aitoolkit_esp32 import flash_firmware
+
+# 烧录标准固件
+flash_firmware(port="/dev/ttyUSB0")
+```
+
+### 命令行烧录
+
+```bash
+python -m aitoolkit_esp32.firmware_flasher --port /dev/ttyUSB0
+```
+
+## FastAPI 集成
+
+```python
+from fastapi import FastAPI
+from aitoolkit_esp32 import add_esp32_routes
+
+app = FastAPI()
+
+# 添加 ESP32 控制路由
+add_esp32_routes(app, port="/dev/ttyUSB0", prefix="/esp32")
+
+# 启动服务器
+# uvicorn main:app --host 0.0.0.0 --port 8000
+```
+
+**可用的 API 端点：**
+
+- `GET /esp32/status` - 获取设备状态
+- `POST /esp32/digital/write` - 数字写入
+- `GET /esp32/digital/read/{pin}` - 数字读取
+- `GET /esp32/analog/read/{pin}` - 模拟读取
+- `POST /esp32/pwm/write` - PWM 输出
+- `WS /esp32/stream` - WebSocket 实时数据流
+
+## 设备检测
+
+```python
+from aitoolkit_esp32 import list_esp32_devices, find_esp32_device
+
+# 列出所有串口设备
+devices = list_esp32_devices()
+for device in devices:
+    print(f"{device['port']}: {device['description']}")
+
+# 自动查找 ESP32 设备
+port = find_esp32_device()
+print(f"Found ESP32 at: {port}")
+```
+
+## 配置管理
+
+```python
+from aitoolkit_esp32 import get_config, set_config, save_config
+
+# 获取配置
+baudrate = get_config("serial.baudrate")
+
+# 设置配置
+set_config("serial.baudrate", 115200)
+set_config("protocol.response_timeout", 2.0)
+
+# 保存配置到文件
+save_config()  # 保存到 ~/.aitoolkit_esp32/config.json
+```
+
+## 示例项目
+
+查看 `examples/` 目录获取更多示例：
+
+- `blink.py` - LED 闪烁
+- `button.py` - 按钮读取
+- `pwm_led.py` - PWM 调光
+- `sensor_reading.py` - 传感器读取
+- `interrupt_demo.py` - 中断使用
+- `web_control.py` - Web 控制界面
+
+## 支持的 ESP32 开发板
+
+- ESP32 DevKit
+- ESP32-WROOM-32
+- ESP32-WROVER
+- ESP32-S2
+- ESP32-S3
+- ESP32-C3
+
+## 常见问题
+
+### 如何找到串口号？
+
+**Linux/Mac:**
+```bash
+ls /dev/tty* | grep -i usb
+# 通常是 /dev/ttyUSB0 或 /dev/ttyACM0
+```
+
+**Windows:**
+- 打开设备管理器
+- 查看"端口(COM和LPT)"
+- 找到 "USB Serial Port (COMx)"
+
+### 权限问题（Linux）
+
+```bash
+# 将用户添加到 dialout 组
+sudo usermod -a -G dialout $USER
+
+# 重新登录后生效
+```
+
+### 连接失败
+
+1. 检查 USB 线是否支持数据传输（不是只充电线）
+2. 确认驱动已安装（CP2102/CH340）
+3. 检查端口号是否正确
+4. 确认固件已烧录
+
+## 通信协议
+
+ESP32 固件使用简单的文本协议通过串口通信：
+
+```
+命令格式: <CMD><PIN><VALUE>\n
+响应格式: <STATUS><DATA>\n
+
+示例:
+Python -> ESP32: "M13O\n"   (pinMode 13, OUTPUT)
+ESP32 -> Python: "OK\n"
+
+Python -> ESP32: "W13H\n"   (digitalWrite 13, HIGH)
+ESP32 -> Python: "OK\n"
+
+Python -> ESP32: "R12\n"    (digitalRead 12)
+ESP32 -> Python: "OK1\n"    (返回值: 1)
+```
+
+详细协议文档见 [PROTOCOL.md](PROTOCOL.md)
+
+## 开发
+
+### 克隆仓库
+
+```bash
+git clone https://github.com/yourusername/aitoolkit-esp32.git
+cd aitoolkit-esp32
+```
+
+### 安装开发依赖
+
+```bash
+pip install -e ".[dev,web,jupyter]"
+```
+
+### 运行测试
+
+```bash
+pytest tests/
+```
+
+### 构建固件
+
+```bash
+cd firmware/esp32_arduino
+# 使用 Arduino IDE 或 PlatformIO 编译
+```
+
+## 贡献
+
+欢迎提交 Issue 和 Pull Request！
+
+## 许可证
+
+MIT License - 详见 [LICENSE](LICENSE) 文件
+
+## 致谢
+
+- 灵感来源于 [pyfirmata](https://github.com/tino/pyFirmata) 和 [Arduino](https://www.arduino.cc/)
+- 感谢所有贡献者
+
+## 相关项目
+
+- [aitoolkit_cam](https://github.com/dianx12/aitoolkit-cam) - 摄像头工具包
+- [aitoolkit_base](https://github.com/dianx12/aitoolkit-base) - 基础工具包
+
+---
+
+**Made with ❤️ for makers, educators, and developers**
