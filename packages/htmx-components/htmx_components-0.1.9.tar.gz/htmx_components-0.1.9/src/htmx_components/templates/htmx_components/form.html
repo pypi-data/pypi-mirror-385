@@ -1,0 +1,37 @@
+{% extends request.htmx|yesno:'htmx_components/modal.html,htmx_components/standalone.html' %}
+{% load i18n django_bootstrap5 %}
+
+{% block modal_body %}
+<form
+        id="modal-form"
+        action="{% if form.action %}{{ form.action }}{% else %}{{ request.path }}{% endif %}"
+        method="{% if form.method %}{{ form.method }}{% else %}post{% endif %}"
+        hx-encoding="multipart/form-data">
+    {% csrf_token %}
+    <div class="row">
+        {% if form.description %}
+        <div class="col-12">
+            {{ form.description|safe }}
+        </div>
+        <div class="col-12">
+            <hr>
+        </div>
+        {% endif %}
+    </div>
+    {% if form.errors %}
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-warning" role="alert">
+                {{ form.errors }}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% bootstrap_form form %}
+</form>
+{% endblock modal_body %}
+
+{% block modal_footer %}
+<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans 'Cancel' %}</button>
+<button type="submit" class="btn btn-primary" form="modal-form">Absenden</button>
+{% endblock modal_footer %}
