@@ -1,0 +1,37 @@
+name: Publish to PyPI
+
+permissions:
+    contents: read
+
+on:
+  release:
+    types: [published]  # Trigger only when a GitHub release is published.
+
+jobs:
+  publish:
+    name: Build and Publish to PyPI
+    if: github.repository == 'deepsaia/tinydsl'
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install build tools
+        run: |
+          pip install --upgrade pip
+          pip install build
+
+      - name: Build wheel and sdist
+        run: python -m build
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
