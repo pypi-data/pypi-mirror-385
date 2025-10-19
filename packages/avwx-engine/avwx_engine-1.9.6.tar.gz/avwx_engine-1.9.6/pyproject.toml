@@ -1,0 +1,158 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "avwx-engine"
+dynamic = ["version"]
+description = "Aviation weather report parsing library"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+keywords = ["aviation", "weather", "metar"]
+authors = [
+    { name = "Michael duPont", email = "michael@dupont.dev" },
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+dependencies = [
+    "geopy>=2.4",
+    "httpx>=0.28",
+    "python-dateutil>=2.9",
+    "typing-extensions~=4.12; python_version < '3.11'",
+    "xmltodict>=0.13",
+]
+
+[project.urls]
+Documentation = "https://engine.avwx.rest"
+Homepage = "https://engine.avwx.rest"
+Issues = "https://github.com/avwx-rest/avwx-engine/issues"
+Source = "https://github.com/avwx-rest/avwx-engine"
+
+[tool.hatch.version]
+path = "avwx/__about__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["avwx"]
+[tool.hatch.build.targets.sdist]
+include = [
+    "avwx/data/files/*.json",
+]
+
+[project.optional-dependencies]
+fuzz = [
+    "rapidfuzz>=3.6",
+]
+scipy = [
+    "numpy>=1.26",
+    "scipy>=1.10",
+]
+shape = [
+    "shapely>=2.0",
+]
+all = [
+    "avwx-engine[fuzz,scipy,shape]",
+]
+
+[tool.hatch.envs.types]
+extra-dependencies = [
+    "avwx-engine[all]",
+    "mypy>=1.0.0",
+    "pytest-asyncio>=0.23.7",
+    "time-machine",
+]
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:avwx tests}"
+
+[tool.hatch.envs.hatch-test]
+extra-dependencies = [
+    "avwx-engine[all]",
+    "pytest-asyncio>=0.23.7",
+    "pytest-cov",
+    "pytest-github-actions-annotate-failures",
+    "time-machine",
+]
+
+[tool.hatch.envs.docs]
+extra-dependencies = [
+    "avwx-engine[shape]",
+    "pdoc",
+]
+
+[tool.hatch.envs.docs.scripts]
+serve = """\
+    python -m pdoc ./avwx \
+    !avwx.flight_path !avwx.current.airep \
+    --favicon https://raw.githubusercontent.com/avwx-rest/avwx-engine/main/docs/assets/images/favicon.ico \
+    --logo https://raw.githubusercontent.com/avwx-rest/avwx-engine/main/docs/assets/images/avwx-logo-color-200.png \
+    --logo-link https://info.avwx.rest \
+"""
+build = """\
+    OUT_DIR={args:docs_build}
+    python -m pdoc ./avwx \
+    !avwx.flight_path !avwx.current.airep \
+    --output-directory $OUT_DIR \
+    --favicon https://raw.githubusercontent.com/avwx-rest/avwx-engine/main/docs/assets/images/favicon.ico \
+    --logo https://raw.githubusercontent.com/avwx-rest/avwx-engine/main/docs/assets/images/avwx-logo-color-200.png \
+    --logo-link https://info.avwx.rest
+    echo "engine.avwx.rest" > $OUT_DIR/CNAME
+"""
+
+[tool.pytest.ini_options]
+addopts = """\
+    --cov avwx \
+    --cov tests \
+    --cov-report term-missing \
+    --no-cov-on-fail \
+"""
+
+[tool.coverage.run]
+source_pkgs = ["avwx", "tests"]
+branch = true
+parallel = true
+omit = [
+    "*airep.py",
+    "*glossary.py",
+    "avwx/data/*",
+]
+
+[tool.coverage.report]
+fail_under = 89  # increase over time
+exclude_lines = [
+    "no cov",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]
+
+[tool.mypy]
+disallow_any_unimported = false
+disallow_untyped_defs = true
+no_implicit_optional = true
+strict_equality = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_return_any = true
+check_untyped_defs = true
+show_error_codes = true
+
+[tool.ruff]
+lint.ignore = [
+    "D105",
+    "D203",
+    "D213",
+    "PLR2004", # Magic variable. Consider slowly re-enabling
+    "N818",
+]
