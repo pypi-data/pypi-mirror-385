@@ -1,0 +1,107 @@
+[build-system]
+requires = ["hatchling>=1.18.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "asantiya"
+version = "0.1.5"
+description = "Docker deployment CLI tool for local and remote environments"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Shahid Khan", email = "shahiddev91@gmail.com"},
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Build Tools",
+    "Topic :: System :: Systems Administration",
+    "Topic :: Utilities",
+]
+keywords = ["docker", "deployment", "cli", "devops"]
+dependencies = [
+    "docker>=7.1.0",
+    "python-dotenv>=1.1.0",
+    "PyYAML>=6.0.2",
+    "typer>=0.16.0",
+    "paramiko>=3.5.1",
+    "tabulate>=0.9.0",
+    "pydantic>=2.11.7",
+    "python-dateutil>=2.9.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "black>=23.0",
+    "mypy>=1.0",
+    "flake8>=6.0",
+    "isort>=5.12",
+    "ipython>=8.0",
+    "twine>=4.0",
+    "types-PyYAML>=6.0",
+    "types-paramiko>=3.0",
+    "types-tabulate>=0.9",
+    "types-python-dateutil>=2.8",
+]
+
+
+[project.urls]
+Homepage = "https://github.com/shahid-0/asantiya"
+Documentation = "https://github.com/shahid-0/asantiya#readme"
+Issues = "https://github.com/shahid-0/asantiya/issues"
+
+[project.scripts]
+asantiya = "asantiya.__main__:main"
+
+# [project.entry-points."asantiya.commands"]
+# down = "asantiya.accessories.down:cli"
+# logs = "asantiya.accessories.logs:cli"
+# ls = "asantiya.accessories.ls:cli"
+# reboot = "asantiya.accessories.reboot:cli"
+# restart = "asantiya.accessories.restart:cli"
+# up = "asantiya.accessories.up:cli"
+
+[tool.hatch.build.targets.wheel]
+packages = ["asantiya"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/asantiya",
+    "/tests",
+    "/README.md",
+    "/LICENSE",
+    "/pyproject.toml",
+]
+
+[tool.black]
+line-length = 88
+target-version = ['py39']
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[dependency-groups]
+dev = [
+    "black>=25.9.0",
+    "flake8>=7.3.0",
+    "isort>=6.1.0",
+    "mypy>=1.18.2",
+    "pytest>=8.4.2",
+    "pytest-cov>=7.0.0",
+    "twine>=6.2.0",
+    "types-paramiko>=4.0.0.20250822",
+    "types-python-dateutil>=2.9.0.20251008",
+    "types-pyyaml>=6.0.12.20250915",
+    "types-tabulate>=0.9.0.20241207",
+]
