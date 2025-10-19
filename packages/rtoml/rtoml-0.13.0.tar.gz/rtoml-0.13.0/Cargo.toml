@@ -1,0 +1,21 @@
+[package]
+name = "rtoml"
+version = "0.13.0"
+authors = ["Samuel Colvin <s@muelcolvin.com>"]
+edition = "2021"
+license = "MIT"
+readme = "README.md"
+
+[dependencies]
+toml = {version = "0.5.11", features = ["preserve_order"]}
+serde = "1.0.228"
+pyo3 = "0.26.0"
+ahash = "0.8.12"
+
+[lib]
+name = "_rtoml"
+crate-type = ["cdylib", "rlib"]
+
+[profile.release]
+lto = "fat"
+codegen-units = 1
