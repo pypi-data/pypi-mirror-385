@@ -1,0 +1,91 @@
+Metadata-Version: 2.1
+Name: upcat
+Version: 0.1.0
+Summary: 图片文件夹可视化工具
+Home-page: https://github.com/upcat-project/upcat
+Author: upcat Authors
+Author-email: upcat@example.com
+License: MIT
+Description: # upcat - 图片文件夹可视化工具
+        
+        一个简单易用的图片文件夹可视化工具，可以快速生成HTML预览网页并启动本地服务器。
+        
+        ## 功能特性
+        
+        - 自动扫描指定文件夹中的所有图片文件
+        - 生成美观的响应式HTML预览页面
+        - 提供图片缩略图网格视图和点击放大预览功能
+        - 自动启动本地Web服务器并打开浏览器
+        - 支持多种图片格式：JPG、PNG、GIF、WebP、BMP、TIFF、SVG等
+        
+        ## 安装
+        
+        使用pip安装：
+        
+        ```bash
+        pip install upcat
+        ```
+        
+        ## 使用方法
+        
+        ### 基本使用
+        
+        ```bash
+        upcat -d /path/to/image/folder
+        ```
+        
+        这将扫描指定文件夹中的所有图片，生成HTML预览文件，并在默认端口(8000)启动Web服务器。
+        
+        ### 指定端口
+        
+        ```bash
+        upcat -d /path/to/image/folder -p 8080
+        ```
+        
+        这将在端口8080上启动Web服务器。
+        
+        ### 外网访问
+        
+        服务器默认支持外网访问，启动后会显示本地访问地址和外网访问地址。在同一局域网内的其他设备可以通过外网访问地址查看图片。
+        
+        **注意：** 要实现真正的互联网访问，需要确保您的电脑有公网IP或已配置端口映射。
+        
+        ### 命令行参数
+        
+        - `-d`, `--directory`: 要可视化的图片文件夹路径（必需）
+        - `-p`, `--port`: 服务器端口（可选，默认8000）
+        
+        ## 预览效果
+        
+        - 响应式网格布局，适配不同屏幕大小
+        - 图片卡片支持悬停效果和点击放大
+        - 模态框预览大图，支持ESC键关闭
+        - 显示文件夹信息、图片数量和生成时间
+        
+        ## 系统要求
+        
+        - Python 3.6 或更高版本
+        - 无需其他第三方依赖
+        
+        ## 示例
+        
+        ```bash
+        # 查看当前目录下的图片
+        upcat -d .
+        
+        # 查看指定文件夹的图片，使用端口9000
+        upcat -d /Users/username/Pictures -p 9000
+        ```
+        
+        ## 许可证
+        
+        MIT License
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: Topic :: Multimedia :: Graphics
+Classifier: Topic :: Utilities
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
