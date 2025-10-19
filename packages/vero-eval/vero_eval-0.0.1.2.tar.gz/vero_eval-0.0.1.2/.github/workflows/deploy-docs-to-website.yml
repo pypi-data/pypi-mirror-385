@@ -1,0 +1,73 @@
+name: Deploy Docs to Website Repo
+
+on:
+  push:
+    branches:
+      - docs
+  workflow_dispatch:
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout docs repo
+        uses: actions/checkout@v3
+        with:
+          # get the commit history so push works
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        # run: npm ci
+        # If your Docusaurus is in a subfolder, e.g. `my-website`,
+        # then use:
+        run: |
+          cd docs
+          npm ci
+
+      - name: Build Docusaurus
+#        run: npm run build
+        # Or if in subfolder:
+        run: |
+         cd docs
+         npm run build
+
+      - name: Clone website repo
+        env:
+          WEBSITE_REPO: Dark8203/vero-website
+        run: |
+          git clone https://x-access-token:${{ secrets.WEBSITE_REPO_TOKEN }}@github.com/${WEBSITE_REPO}.git website
+          cd website
+          # Optionally switch to branch if your gh-pages site is on a separate branch:
+          git checkout main
+
+      - name: Copy built docs
+        run: |
+          SOURCE="docs/build"
+          rm -rf website/public/docs
+          mkdir -p website/public/docs
+          #cp -R docs/build/* website/docs/
+          rsync -a --delete "${SOURCE}/" website/public/docs/
+
+      - name: Commit, Sync & Push docs
+        working-directory: website
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Make sure we have the remote updates
+          git fetch origin main
+          
+          # Merge remote changes (if any)
+          git merge origin/main --allow-unrelated-histories || echo "Nothing to merge"
+          
+          git add -A public/docs
+          git commit -m "Update docs from vero-eval (docs repo)" || echo "No changes to commit"
+          git push origin HEAD:main
+          
+
