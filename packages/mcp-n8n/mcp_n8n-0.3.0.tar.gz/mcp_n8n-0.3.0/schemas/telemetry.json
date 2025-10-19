@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Media Processor Telemetry",
+  "type": "object",
+  "properties": {
+    "event_type": {
+      "type": "string",
+      "enum": ["media_recorded", "segment_created"]
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "bundle_id": {
+      "type": ["string", "null"],
+      "description": "Identifier linking related telemetry; may be absent for media_recorded until generated."
+    },
+    "scenario_id": {
+      "type": "string",
+      "enum": ["VS-MP-001"],
+      "description": "Scenario responsible for emitting the event."
+    },
+    "payload": {
+      "type": "object",
+      "oneOf": [
+        {
+          "required": ["file_path", "duration_seconds"],
+          "properties": {
+            "file_path": {
+              "type": "string",
+              "description": "Absolute path or URI to the recorded media or segment."
+            },
+            "duration_seconds": {
+              "type": "number",
+              "minimum": 0
+            },
+            "file_size_mb": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          "description": "Payload for media_recorded."
+        },
+        {
+          "required": [
+            "bundle_id",
+            "file_path",
+            "duration_seconds",
+            "segment_start_dttm_utc",
+            "segment_end_dttm_utc"
+          ],
+          "properties": {
+            "bundle_id": {
+              "type": "string"
+            },
+            "file_path": {
+              "type": "string"
+            },
+            "duration_seconds": {
+              "type": "number",
+              "minimum": 0
+            },
+            "segment_start_dttm_utc": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "segment_end_dttm_utc": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "description": "Payload for segment_created."
+        }
+      ]
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["info", "warning", "error"],
+      "default": "info"
+    },
+    "source": {
+      "type": "string",
+      "description": "Component emitting the event (e.g., watcher, segmentation-workflow)."
+    },
+    "correlation_id": {
+      "type": ["string", "null"],
+      "description": "Optional ID for MCP/tool correlation; to be refined during design."
+    }
+  },
+  "required": ["event_type", "timestamp", "scenario_id", "payload"],
+  "additionalProperties": false
+}

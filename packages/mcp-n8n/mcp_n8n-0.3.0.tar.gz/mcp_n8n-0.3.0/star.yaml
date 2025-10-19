@@ -1,0 +1,69 @@
+capability:
+  id: media-processor
+  name: Media Processor Capability
+  version: 0.1.0
+  owner: local-dev
+intent:
+  id: DRSO-PROCESS-PRODUCT
+  title: DRSO as Process-as-Product
+  summary: >
+    Treat development, release, security, and operations as a reusable
+    capability so audio ingestion workflows are predictable, auditable,
+    and consumable by humans and MCP agents.
+  narrative: docs/overview.md
+process:
+  wip_dashboard: docs/process/E2E_REORGANIZATION_PROGRESS.md
+scenarios:
+  - id: VS-MP-001
+    title: Segment & Archive Recording
+    status: planned
+    docs:
+      narrative: docs/mcp/E2E_TIER1_CORE.md
+      bdd: tests/test_tools_read.py
+      tutorial: docs/tutorials/getting-started.md
+    telemetry_events:
+      - media_recorded
+      - segment_created
+  - id: VS-MP-002
+    title: Generate STT-Friendly Audio
+    status: planned
+    docs:
+      narrative: docs/mcp/E2E_TIER2_ADVANCED.md
+      bdd: tests/test_no_secret_leak.py
+      tutorial: docs/tutorials/custom-tools.md
+    telemetry_events:
+      - stt_prepared
+      - bundle_archived
+  - id: VS-MP-003
+    title: Transcribe & Persist
+    status: planned
+    docs:
+      narrative: docs/mcp/E2E_TIER3_PRODUCTION.md
+      bdd: tests/test_prompts_exposed.py
+      tutorial: docs/reference/api/tools/documents.md
+    telemetry_events:
+      - transcription_saved
+  - id: VS-MP-004
+    title: Notify & Orchestrate
+    status: planned
+    docs:
+      narrative: docs/process/IMPLEMENTATION-SUMMARY.md
+      bdd: tests/test_handlers_with_fake_client.py
+      tutorial: docs/reference/api/tools/rows.md
+    telemetry_events:
+      - change_signal_updated
+      - notification_published
+drso:
+  # cli_path removed - chora-platform submodule no longer used
+  gates:
+    - status
+    - coverage
+    - release
+    - ack
+  evidence:
+    coverage_matrix: coverage/matrix.json
+    telemetry_bundle: telemetry/export.json
+    release_manifest: releases/manifest.yaml
+telemetry:
+  schema: schemas/telemetry.json
+  context_bus_endpoint: http://localhost:9000/context-bus (placeholder)
