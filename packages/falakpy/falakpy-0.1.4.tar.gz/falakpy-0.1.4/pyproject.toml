@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "falakpy"
+version = "0.1.4"
+description = "A Python toolkit for Islamic Astronomy (Ilm al-Falak): Qibla, Prayer Times, and Lunar Observation."
+readme = { file = "readme.md", content-type = "text/markdown", charset = "utf-8" }
+requires-python = ">=3.9"
+license = { file = "LICENSE" }
+authors = [
+  { name = "Dr. Muhamad Syazwan Faid", email = "syazwaned90@gmail.com" }
+]
+keywords = [
+  "Islamic Astronomy",
+  "Falak",
+  "Qibla",
+  "Prayer Times",
+  "Lunar Observation",
+  "Hilal",
+  "Hijri Calendar"
+]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Science/Research",
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Topic :: Scientific/Engineering :: Astronomy",
+  "Topic :: Religion",
+  "Typing :: Typed"
+]
+
+dependencies = [
+  "numpy",
+  "skyfield",
+  "scipy",
+  "matplotlib",
+  "tabulate"
+]
+
+[project.urls]
+Homepage = "https://github.com/syazwanfaid/falakpy"
+Documentation = "https://pypi.org/project/falakpy"
+Issues = "https://github.com/syazwanfaid/falakpy/issues"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
