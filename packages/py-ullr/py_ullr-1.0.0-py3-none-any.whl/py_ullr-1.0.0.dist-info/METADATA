@@ -1,0 +1,92 @@
+Metadata-Version: 2.4
+Name: py-ullr
+Version: 1.0.0
+Summary: A comprehensive Python library for Archer IRM API integration
+Home-page: 
+Author: Takeshi Cho
+Author-email: chotakeshi.richard@gmail.com
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: requests>=2.28.0
+Requires-Dist: requests-toolbelt>=0.10.0
+Requires-Dist: python-dateutil>=2.8.0
+Requires-Dist: pydantic>=2.0.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.0.0; extra == "dev"
+Requires-Dist: black>=23.0.0; extra == "dev"
+Requires-Dist: flake8>=6.0.0; extra == "dev"
+Requires-Dist: mypy>=1.0.0; extra == "dev"
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: license-file
+Dynamic: provides-extra
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+# Archer API Client Library
+
+A comprehensive Python library for seamless integration with Archer IRM APIs.
+
+## Features
+
+- 🔐 **Secure Authentication**: Built-in session management and token handling
+- 🎯 **OOP Architecture**: Clean, intuitive class-based design
+- 📦 **Multiple API Support**: RESTful, Web Services, and Content APIs
+- 🔄 **Automatic Retries**: Configurable retry logic for failed requests
+- 📝 **Type Hints**: Full type annotation support
+- 📚 **Extensive Documentation**: Detailed guides and examples
+
+## Installation
+
+```bash
+pip install -e .
+```
+
+## Quick Start
+
+```python
+from archer_api import ArcherClient
+
+# Initialize the client
+client = ArcherClient(
+    base_url="https://your-archer-instance.com",
+    instance_name="YourInstance",
+    username="your_username",
+    password="your_password"
+)
+
+# Get applications
+applications = client.rest.applications.get_all()
+
+# Create a record
+new_record = client.rest.records.create(
+    application_id=123,
+    field_values={
+        "Field Name": "Field Value",
+        "Another Field": "Another Value"
+    }
+)
+```
+
+## Documentation
+
+See the `docs/` directory for detailed documentation.
+
+## License
+
+MIT License
