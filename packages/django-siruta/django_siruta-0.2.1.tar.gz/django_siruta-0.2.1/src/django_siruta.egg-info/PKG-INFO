@@ -1,0 +1,137 @@
+Metadata-Version: 2.4
+Name: django-siruta
+Version: 0.2.1
+Summary: A bunch of form fields and utilities for Romanian counties and localities using SIRUTA codes.
+Author-email: Ionel Cristian Mărieș <contact@ionelmc.ro>
+License-Expression: BSD-2-Clause
+Project-URL: Sources, https://github.com/ionelmc/django-siruta
+Project-URL: Documentation, https://django-siruta.readthedocs.io/
+Project-URL: Changelog, https://django-siruta.readthedocs.io/en/latest/changelog.html
+Project-URL: Issue Tracker, https://github.com/ionelmc/django-siruta/issues
+Keywords: siruta,romania,romanian,counties,county
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Operating System :: Unix
+Classifier: Operating System :: POSIX
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Programming Language :: Python :: Implementation :: PyPy
+Classifier: Topic :: Utilities
+Requires-Python: >=3.9
+Description-Content-Type: text/x-rst
+License-File: LICENSE
+Requires-Dist: unidecode
+Requires-Dist: django
+Provides-Extra: msgspec
+Requires-Dist: msgspec; extra == "msgspec"
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: license-file
+
+========
+Overview
+========
+
+
+
+A bunch of form fields and utilities for Romanian counties and localities using SIRUTA codes.
+
+* Free software: BSD 2-Clause License
+
+Data:
+    Localities: https://data.gov.ro/dataset/activity/siruta-2024
+
+    Counties: https://data.gov.ro/dataset/activity/siruta
+
+Form fields are designed to pass around integers (assuming you will have the most compact storage).
+
+Form widgets use `selectize <https://selectize.dev/>`_.
+JS/CSS not bundled or included in media - you are free to load those however you like.
+
+
+Installation
+============
+
+::
+
+    pip install django-siruta
+
+You can also install the in-development version with::
+
+    pip install https://github.com/ionelmc/django-siruta/archive/main.zip
+
+
+Documentation
+=============
+
+Add ``siruta`` to your INSTALLED_APPS and use something like this:
+
+.. code-block:: python
+
+    class DemoForm(forms.Form):
+        county = CountyField(label="Delivery county")
+        locality = LocalityField(label="Delivery locality")
+
+        billing_county = CountyField()
+        billing_locality = LocalityField(county_field="billing_county")
+
+With bootstrap5 would look like this:
+
+.. image::  https://github.com/ionelmc/django-siruta/blob/main/docs/example.png?raw=true
+
+Complete code: https://github.com/ionelmc/django-siruta/blob/main/tests/testproject/views.py
+
+Sphinx docs: https://django-siruta.readthedocs.io/
+
+
+Development
+===========
+
+To run all the tests run::
+
+    tox
+
+Note, to combine the coverage data from all the tox environments run:
+
+.. list-table::
+    :widths: 10 90
+    :stub-columns: 1
+
+    - - Windows
+      - ::
+
+            set PYTEST_ADDOPTS=--cov-append
+            tox
+
+    - - Other
+      - ::
+
+            PYTEST_ADDOPTS=--cov-append tox
+
+
+Changelog
+=========
+
+0.2.1 (2025-10-19)
+------------------
+
+* Move ``msgspec`` to optional dependencies (it has some big issues on 3.14). It's not really optional but perhaps a fork may work better on 3.14.
+
+0.2.0 (2025-10-13)
+------------------
+
+* Replace ``siruta.extras.LOCALITIES_BY_NAME`` with ``siruta.extras.LOCALITIES_BY_COUNTY_ID_BY_NAME`` (to avoid name collisions).
+
+0.1.1 (2025-10-10)
+------------------
+
+* First release on PyPI.
