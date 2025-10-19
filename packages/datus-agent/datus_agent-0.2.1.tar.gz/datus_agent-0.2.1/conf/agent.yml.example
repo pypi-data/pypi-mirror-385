@@ -1,0 +1,287 @@
+agent:
+  target: anthropic
+  models:
+    openai:
+      type: openai
+      vendor: openai
+      base_url: https://api.openai.com/v1
+      api_key: ${OPENAI_API_KEY}
+      model: gpt-4-turbo
+
+    google:
+      type: gemini
+      vendor: google
+      base_url: https://generativelanguage.googleapis.com/v1beta
+      api_key: ${GEMINI_API_KEY}
+      model: gemini-2.0-flash-exp
+
+    anthropic:
+      type: claude
+      vendor: anthropic
+      base_url: https://api.anthropic.com
+      api_key: ${ANTHROPIC_API_KEY}
+      model: claude-haiku-4-5
+
+    deepseek_v3:
+      type: deepseek
+      vendor: deepseek
+      base_url: https://api.deepseek.com
+      api_key: ${DEEPSEEK_API_KEY}
+      model: deepseek-chat
+
+  nodes:
+    schema_linking:
+      model: openai
+      matching_rate: fast
+      prompt_version: "1.0"
+    generate_sql:
+      model: deepseek_v3
+      prompt_version: "1.0"
+      max_table_schemas_length: 4000
+      max_data_details_length: 2000
+      max_context_length: 8000
+      max_value_length: 500
+    reasoning:
+      model: anthropic
+      prompt_version: "1.0"
+      max_table_schemas_length: 4000
+      max_data_details_length: 2000
+      max_context_length: 8000
+      max_value_length: 500
+    reflect:
+      prompt_version: "1.0"
+    output:
+      prompt_version: "1.0"
+      check_result: true # Whether to check the results of the previous step, the default value is false
+    chat:
+      workspace_root: sql2
+      model: anthropic
+      max_turns: 25
+
+  # benchmark configuration
+  benchmark:
+    bird_dev: # this is namespace of benchmark
+      benchmark_path: benchmark/bird/dev_20240627
+    spider2:
+      benchmark_path: benchmark/spider2/spider2-snow
+    semantic_layer:
+      benchmark_path: benchmark/semantic_layer
+
+  # local databases configuration
+  namespace:
+    snowflake:
+      type: snowflake
+      account: ${SNOWFLAKE_ACCOUNT}  # Use environment variables or real values
+      username: ${SNWOFLAKE_USER}
+      password: ${SNOWFLAKE_PASSWORD}
+      # database: BBC
+      # schema: BBC_NEWS
+    # bird_sqlite: # This section is configured for the bird-dev benchmarking, you should download the database file and unzip it before you can continue
+    #   type: sqlite
+    #   # just support glob pattern. Ensure that the corresponding database files exist in the configuration directory.
+    #   path_pattern: benchmark/bird/dev_20240627/dev_databases/**/*.sqlite # https://bird-bench.oss-cn-beijing.aliyuncs.com/dev.zip
+    local_sqlite:
+      type: sqlite
+      # Only sqlite and duckdb support multiple data source configuration
+      dbs:
+        - name: ssb # sqlite and duckdb must have a name
+          uri: sqlite:////Users/xxx/benchmark/SSB.db
+    local_sqlite2:
+      type: sqlite
+      # Only sqlite and duckdb support multiple data source configuration
+      name: ssb # sqlite and duckdb must have a name
+      uri: sqlite:////Users/xxx/benchmark/SSB.db
+    local_duckdb:
+      type: duckdb
+      dbs:
+        - name: ssb
+          uri: duckdb:////absolute/path/to/db.db # absolute path
+        - name: abc
+          uri: duckdb:///relative/path/to/abc.duckdb # relative path
+    starrocks:
+      type: starrocks
+      host: ${STARROCKS_HOST}
+      port: ${STARROCKS_PORT}
+      username: ${STARROCKS_USER}
+      password: ${STARROCKS_PASSWORD}
+      database: ${STARROCKS_DATABASE}
+
+  metrics:
+    duckdb:
+      domain: sale
+      layer1: layer1
+      layer2: layer2
+      ext_knowledge: ""
+
+  storage:
+    base_path: data # rag storage base path,final data path is 'data/datus_db_spider2',  'data/datus_db_bird_dev', 'data/datus_db_local1' ...
+    embedding_device_type: cpu # If set to cpu, it will be specified as cpu, otherwise, it will be automatically selected based on the current machine
+    # Local model suggestions:
+    # 1. if you want extreme performance, choose the small multilingual model with 384 dimensions: all-MiniLM-L6-v2 (~100M) or intfloat/multilingual-e5-small (~460M).
+    # 2. if you want performance and retrieval quality, choose the 1024-dimension multilingual model: intfloat/multilingual-e5-large-instruct (~1.2G)
+    # 3. if you pay more attention to retrieval quality, you can choose 1024-dimension model according to language (English/Chinese): BAAI/bge-large-en-v1.5 or BAAI/bge-large-zh-v1.5 (~1.2G)
+    # Of course, you can also choose your own model according to your business.
+    # If you don't configure the following models, all-MiniLM-L6-v2 will be selected by default.
+    # Cloud model suggestions: Now we just support openai.
+    database:
+      registry_name: openai # default is sentence-transformers
+      model_name: text-embedding-v3-small
+      dim_size: 1024
+      batch_size: 10 # Aliyun only supports no more than 10
+      target_model: openai # target model in agent.models, if not set, the agent's target configuration will be used
+    document:
+      model_name: all-MiniLM-L6-v2 #～100MB The lightest model
+      dim_size: 384
+    metric:
+      model_name: all-MiniLM-L6-v2 #～100MB The lightest model
+      dim_size: 384
+
+  workflow:
+    plan: planA
+
+    planA:
+      - schema_linking
+      - generate_sql
+      - output
+
+    planB:
+      - schema_linking
+      - generate_sql
+      - execute_sql
+      - reflect
+      - output
+
+  reflection_nodes:
+    schema_linking:
+      - schema_linking
+      - generate_sql
+      - execute_sql
+      - reflect
+    doc_search:
+      - doc_search
+      - generate_sql
+      - execute_sql
+      - reflect
+    simple_regenerate:
+      - execute_sql
+      - reflect
+    reasoning:
+      - reasoning
+      - execute_sql
+      - reflect
+
+  # Workflow configuration with parallel execution and selection
+  workflow:
+    plan: bird_para
+
+    bird_para:
+      - schema_linking
+      - parallel:
+        - generate_sql
+        - reasoning
+      - selection
+      - execute_sql
+      - output
+
+  # Sub-workflow example
+  workflow:
+    plan: bird_para
+
+    bird_para:
+      - schema_linking
+      - parallel:
+        - subworkflow1
+        - subworkflow2
+        - subworkflow3
+      - selection
+      - execute_sql
+      - output
+
+    subworkflow1:
+      - search_metrics
+      - generate_sql
+
+    subworkflow2:
+      - search_metrics
+      - reasoning
+
+    subworkflow3:
+      - reasoning
+      - reflect
+
+  # Sub-workflow with config example
+   workflow:
+    plan: bird_para
+
+    bird_para:
+      - schema_linking
+      - parallel:
+        - subworkflow1
+        - subworkflow2
+        - subworkflow3
+      - selection
+      - execute_sql
+      - output
+
+    subworkflow1:
+      steps:
+      - search_metrics
+      - generate_sql
+      config: multi/agent1.yaml
+
+    subworkflow2:
+      steps:
+      - search_metrics
+      - reasoning
+      config: multi/agent2.yaml
+
+    subworkflow3:
+      steps:
+      - reasoning
+      - reflect
+      config: multi/agent3.yaml
+
+  agentic_nodes:
+    gen_semantic_model:
+      model: anthropic
+      system_prompt: gen_semantic_model
+      prompt_version: "1.0"
+      tools: db_tools.*, generation_tools.*, filesystem_tools.*
+      hooks: generation_hooks
+      mcp: metricflow_mcp
+      workspace_root: ~/.datus/data/semantic_models
+      agent_description: "Semantic model generation assistant"
+      rules:
+        - Use get_table_ddl tool to get complete table DDL with constraints
+        - Generate comprehensive semantic models with dimensions, measures, and identifiers
+        - Use write_file tool to save YAML files
+        - Use metricflow_mcp `mf validate-configs` tool to validate configurations
+        - Focus on one table per semantic model
+
+    gen_metrics:
+      model: anthropic
+      system_prompt: gen_metrics
+      prompt_version: "1.0"
+      tools: generation_tools.*, filesystem_tools.*
+      hooks: generation_hooks
+      mcp: metricflow_mcp
+      max_turns: 40
+      workspace_root: ~/.datus/data/semantic_models
+      agent_description: "Metric definition generation assistant"
+      rules:
+        - Analyze user-provided SQL queries to generate MetricFlow metrics
+        - Use list_allowed_directories to find existing semantic model files
+        - Use read_file to read semantic model and understand measures
+        - Use check_metric_exists tool to avoid duplicate generation
+        - Use edit_file to append metrics to existing semantic model (DO NOT use write_file)
+        - Use metricflow_mcp `mf validate-configs` tool to validate configurations
+        - After validation, call end_generation tool to trigger sync confirmation
+
+    gen_sql_summary:
+      model: deepseek_v3
+      system_prompt: gen_sql_summary
+      prompt_version: "1.0"
+      tools: generation_tools.prepare_sql_summary_context, generation_tools.generate_sql_summary_id, filesystem_tools.write_file
+      hooks: generation_hooks
+      workspace_root: ~/.datus/data/sql_history
+      agent_description: "SQL history analysis assistant"
