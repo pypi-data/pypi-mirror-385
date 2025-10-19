@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+include-package-data = false
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["complexplorer", "complexplorer.*"]
+exclude = ["examples*", "tests*", "docs*", "build*", "*.egg-info"]
+
+[project]
+name = "complexplorer"
+version = "2.0.0"
+authors = [
+  { name="Igor Kuvychko", email="igor.kuvychko@gmail.com" },
+]
+description = "Complex function visualizations inspired by Elias Wegert's 'Visual Complex Functions - An Introduction with Phase Portraits'"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=1.26.0",
+    "matplotlib>=3.8.0",
+    "scipy>=1.11.0",
+]
+classifiers = [
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "License :: OSI Approved :: BSD License",
+    "Topic :: Scientific/Engineering :: Visualization",
+    "Topic :: Multimedia :: Graphics",
+    "Operating System :: OS Independent",
+    "Framework :: Matplotlib",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=3.0.0",
+    "pytest-timeout>=2.1.0",
+]
+pyvista = [
+    "pyvista>=0.45.0",
+]
+qt = [
+    "PyQt6>=6.5.0",
+]
+all = [
+    "complexplorer[dev,pyvista,qt]",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/kuvychko/complexplorer"
+"Bug Tracker" = "https://github.com/kuvychko/complexplorer/issues"
