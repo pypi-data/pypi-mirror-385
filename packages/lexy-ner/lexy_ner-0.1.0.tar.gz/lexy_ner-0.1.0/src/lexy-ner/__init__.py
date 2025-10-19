@@ -1,0 +1,1 @@
+from .pipeline import load_legal_nlp as load

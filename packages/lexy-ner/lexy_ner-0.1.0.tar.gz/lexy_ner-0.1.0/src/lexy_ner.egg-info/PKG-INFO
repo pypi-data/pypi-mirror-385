@@ -1,0 +1,73 @@
+Metadata-Version: 2.4
+Name: lexy-ner
+Version: 0.1.0
+Summary: A spaCy-based Named Entity Recognition (NER) pipeline optimized for legal documents.
+Author-email: Tvisha Majithia <tvishamajithia13@gmail.com>
+License: MIT License
+        
+        Copyright (c) 2024 Tvisha Majithia
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Legal Industry
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Classifier: Topic :: Text Processing :: Linguistic
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: spacy>=3.0.0
+Requires-Dist: en_core_web_sm; python_version < "3.11"
+Dynamic: license-file
+
+# lexy-ner
+
+[![PyPI version](https://img.shields.io/pypi/v/lexy-ner?color=blue)](https://pypi.org/project/lexy-ner/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+## ⚖️ A Specialised NER Pipeline for Legal Texts
+
+Lexy-ner is a **spaCy-based Named Entity Recognition (NER)** pipeline designed specifically to extract and classify structured information from complex legal documents. While general NLP tools (like standard spaCy models) excel at common entities (Person, Org, Date), they often fail on domain-specific identifiers.
+
+This package solves that problem by implementing a sophisticated, rule-based matching engine that recognises entities critical to legal research, compliance, and litigation analysis across multiple domains.
+
+### Why Lexy-ner?
+
+* Deep Legal Taxonomy: Extracts over 12 specialised entity types, including Case IDs, Court Names, Insolvency Terms, Contract Types, and specific Statute References.
+* Ease of Use: Integrates seamlessly into any existing spaCy workflow. Install and run with two simple lines of code.
+* Open-Source & Extensible: Built on the robust spaCy framework, allowing for easy expansion with custom rules or fine-tuning with deep learning models.
+
+---
+
+## 🚀 Installation
+
+Ensure you are using Python 3.8 or higher.
+
+```bash
+# 1. Install the package
+pip install lexy-ner
+
+# 2. Install the default language model (required by lexy-ner's pipeline)
+python -m spacy download en_core_web_sm

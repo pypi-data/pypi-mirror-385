@@ -1,0 +1,44 @@
+[build-system]
+# Tells the frontend (pip, build) to use setuptools as the backend to build the package.
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+# The name users will type: pip install lexy-ner
+name = "lexy-ner" 
+version = "0.1.0"
+authors = [
+  # IMPORTANT: Update this with your actual information
+  { name="Tvisha Majithia", email="tvishamajithia13@gmail.com" },
+]
+description = "A spaCy-based Named Entity Recognition (NER) pipeline optimized for legal documents."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { file="LICENSE" }
+
+# List of dependencies users must have installed for your package to run.
+dependencies = [
+    # Core dependency
+    "spacy>=3.0.0",
+    # We include a default, lightweight spaCy model
+    "en_core_web_sm; python_version < '3.11'", 
+]
+
+# Standard classifiers help users find your package on PyPI.
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Legal Industry",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Text Processing :: Linguistic",
+]
+
+# This section tells setuptools where to find your Python package source code.
+[tool.setuptools.packages.find]
+where = ["src"]
