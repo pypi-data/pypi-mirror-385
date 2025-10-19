@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}Carica Database SQLite{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fas fa-upload"></i> Carica Database SQLite</h2>
+        <a href="{{ url_for('admin_database') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Indietro
+        </a>
+    </div>
+
+    <!-- Info Card -->
+    <div class="alert alert-info mb-4">
+        <h5><i class="fas fa-info-circle"></i> Informazioni</h5>
+        <p class="mb-0">
+            Carica un file database SQLite (.db) esistente dal desktop PyArchInit o da altre fonti.
+            Il file verrà validato e salvato nella cartella databases/ del server.
+        </p>
+    </div>
+
+    <!-- Upload Form -->
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Carica File Database</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+
+                        <!-- Database Name -->
+                        <div class="mb-3">
+                            {{ form.database_name.label(class="form-label") }}
+                            <span class="text-danger">*</span>
+                            {{ form.database_name(class="form-control", placeholder="Es: PyArchInit Desktop Export") }}
+                            {% if form.database_name.description %}
+                            <small class="form-text text-muted">
+                                <i class="fas fa-question-circle"></i> {{ form.database_name.description }}
+                            </small>
+                            {% endif %}
+                            {% if form.database_name.errors %}
+                                {% for error in form.database_name.errors %}
+                                    <div class="text-danger small">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        <!-- Database File -->
+                        <div class="mb-3">
+                            {{ form.database_file.label(class="form-label") }}
+                            <span class="text-danger">*</span>
+                            {{ form.database_file(class="form-control", accept=".db,.sqlite,.sqlite3") }}
+                            <small class="form-text text-muted">
+                                <i class="fas fa-file-alt"></i> Seleziona un file .db, .sqlite o .sqlite3
+                            </small>
+                            {% if form.database_file.errors %}
+                                {% for error in form.database_file.errors %}
+                                    <div class="text-danger small">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-3">
+                            {{ form.description.label(class="form-label") }}
+                            {{ form.description(class="form-control", rows=3, placeholder="Es: Database scavo Pompei 2024") }}
+                            {% if form.description.description %}
+                            <small class="form-text text-muted">
+                                <i class="fas fa-question-circle"></i> {{ form.description.description }}
+                            </small>
+                            {% endif %}
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-upload"></i> Carica Database
+                            </button>
+                            <a href="{{ url_for('admin_database') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times"></i> Annulla
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Section -->
+    <div class="row mt-4">
+        <div class="col-md-8 offset-md-2">
+            <div class="card border-info">
+                <div class="card-header bg-info text-white">
+                    <h6 class="mb-0"><i class="fas fa-lightbulb"></i> Suggerimenti</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="mb-0 small">
+                        <li>Il database viene validato prima del caricamento</li>
+                        <li>Assicurati che il file sia un database SQLite valido</li>
+                        <li>Il database deve contenere le tabelle PyArchInit (site_table, us_table, etc.)</li>
+                        <li>Dopo il caricamento, il database sarà disponibile nella lista connessioni</li>
+                        <li>Il file originale non viene modificato, viene creata una copia</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
