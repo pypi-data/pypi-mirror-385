@@ -1,0 +1,68 @@
+[project]
+name = "inheritance-calculator-core"
+version = "0.9.0"
+description = "日本の民法に基づく相続計算のコアライブラリ"
+authors = [
+    { name = "Kawahara", email = "your.email@example.com" }
+]
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+keywords = ["inheritance", "law", "japan", "neo4j", "calculator", "core"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Legal Industry",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Office/Business",
+    "Topic :: Software Development :: Libraries",
+]
+
+dependencies = [
+    "neo4j~=6.0.2",
+    "pydantic[email]~=2.11.9",
+    "pydantic-settings~=2.11.0",
+    "python-dotenv~=1.1.1",
+]
+
+[project.optional-dependencies]
+agents = [
+    "agnos~=1.0.2",
+    "ollama~=0.6.0",
+]
+dev = [
+    "pytest~=8.0.0",
+    "pytest-cov~=4.0.0",
+    "mypy~=1.8.0",
+    "ruff~=0.1.0",
+    "black>=24.0.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/inheritance_calculator_core"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+ignore = []
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short --cov=src/inheritance_calculator_core --cov-report=html --cov-report=term-missing"

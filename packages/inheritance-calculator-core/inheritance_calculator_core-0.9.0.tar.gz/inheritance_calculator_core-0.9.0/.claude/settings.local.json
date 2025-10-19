@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(openspec list:*)",
+      "mcp__sequential-thinking__sequentialthinking",
+      "Bash(tree:*)",
+      "Bash(openspec init:*)",
+      "Bash(mkdir:*)",
+      "Bash(openspec validate:*)",
+      "Bash(openspec show:*)",
+      "Bash(openspec update:*)",
+      "Bash(find:*)",
+      "Bash(python3:*)",
+      "Bash(python -m pytest tests/test_models/test_value_objects.py -v)",
+      "Bash(source:*)",
+      "Bash(pytest:*)",
+      "Bash(python:*)",
+      "Bash(mypy:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfeat: Phase 1 refactoring - type safety and architecture improvements\n\nMajor refactoring to introduce PersonID value objects and improve type safety across the codebase.\n\nAdded:\n- PersonID value object for type-safe ID management\n- ServiceFactory for centralized service instance management\n- BaseRepository abstract class for CRUD operations\n- Comprehensive documentation in docs/base_repository_usage.md\n- CHANGELOG.md for version history\n\nChanged:\n- Migrated from string-based IDs to PersonID throughout\n- ShareCalculator now returns Dict[PersonID, Fraction]\n- InheritanceCalculator supports dependency injection\n- Neo4jService uses PersonID for sibling blood types\n- Updated all tests to use PersonID\n\nFixed:\n- All mypy --strict type checking errors resolved\n- Test import paths corrected\n- Type safety improved across 206/216 passing tests\n\nVersion: 0.9.0 (Beta)\nCoverage: 59%\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git tag:*)",
+      "Bash(git push:*)",
+      "Bash(gh release create:*)",
+      "Bash(gh run list:*)",
+      "Bash(git log:*)",
+      "Bash(git config:*)",
+      "Bash(git commit:*)",
+      "Bash(gh release delete:*)",
+      "Bash(uv build:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
