@@ -1,0 +1,72 @@
+Metadata-Version: 2.4
+Name: aiocfd1
+Version: 1.0.0
+Summary: An asyncio wrapper for Cloudflare D1 REST API.
+Author-email: Swee <meow@swee.codes>
+License: BSD-3-Clause
+Project-URL: Homepage, https://swee.codes/apps/aiod1
+Project-URL: Repository, https://git.swee.codes/swee/aiod1
+Project-URL: Issues, https://git.swee.codes/swee/aiod1/issues
+Project-URL: Changelog, https://git.swee.codes/swee/aiod1/releases
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Classifier: Framework :: AsyncIO
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Natural Language :: English
+Classifier: Topic :: Database :: Front-Ends
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: aiohttp>=3
+Dynamic: license-file
+
+# AIO CF D1
+
+A simple asyncio wrapper for Cloudflare D1's REST API. It does nothing but query SQL.
+
+# Install
+
+```
+pip install aiocfd1
+```
+
+# Usage
+
+```python
+from aiocfd1 import D1
+import asyncio
+# Get these credentials from cloudflare dashboard!
+db = D1("account id", "token", "database id")
+async def test():
+    result = await db.execute("SELECT * FROM table; SELECT * FROM table WHERE something = 'test';")
+    print(result)
+
+asyncio.run(test())
+```
+
+## Output
+
+```python
+[
+    [
+        {
+            "something": "lorem",
+            "foo": "bar"
+        },
+        {
+            "something": "test",
+            "foo": "baz"
+        },
+        {
+            "something": "abc",
+            "foo": "qux"
+        }
+    ],
+    [
+        {
+            "something": "test",
+            "foo": "baz"
+        }
+    ]
+]
+```
