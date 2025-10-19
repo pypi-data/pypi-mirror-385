@@ -1,0 +1,50 @@
+# Cybercafe Python Library
+
+[![PyPI version](https://img.shields.io/pypi/v/cybercafe.svg)](https://pypi.org/project/cybercafe/)
+
+
+## Generate an API Key
+[Sign up at Cybercafe](https://cybercafe.space/register) and generate an API key from the dashboard.
+
+
+## Install the SDK
+Install the SDK using pip:
+
+```bash
+pip install cybercafe
+```
+
+
+## Configure the Client
+Import and configure the Cybercafe client with your API key:
+
+```python
+from cybercafe import Cybercafe
+
+client = Cybercafe("YOUR_API_KEY")
+```
+
+
+## Connect to a Space
+Connect to a running Space using its `SPACE_ID`:
+
+```python
+space = client.space("SPACE_ID")
+```
+
+
+## Interact with the Space
+Use controllers to interact with the Space. For example, take a screenshot:
+
+```python
+import base64
+import asyncio
+
+async def main():
+    image_base64 = await space.Screen.screenshot()
+    image_bytes = base64.b64decode(image_base64)
+    with open("screenshot.png", "wb") as f:
+        f.write(image_bytes)
+
+asyncio.run(main())
+```
