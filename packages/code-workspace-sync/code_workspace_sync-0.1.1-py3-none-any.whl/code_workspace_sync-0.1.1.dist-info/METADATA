@@ -1,0 +1,58 @@
+Metadata-Version: 2.3
+Name: code-workspace-sync
+Version: 0.1.1
+Summary: synchronize a VS Code workspace with directories in a source repositories folder
+Author: W. J. Meijer
+Author-email: W. J. Meijer <houterm@gmail.com>
+Requires-Python: >=3.12
+Description-Content-Type: text/markdown
+
+# VS Code Workspace Synchronizer
+
+A script to synchronize a VS Code workspace with directories in a source repositories folder.
+It can add new directories and optionally remove directories that no longer exist.
+
+```bash
+uv tool install code-workspace-sync
+```
+
+For help and available commands, run: `code-workspace-sync --help`:
+
+```text
+usage: code-workspace-sync [-h] [--src-repos SRC_REPOS]
+                           [--workspace WORKSPACE] [--remove-missing]
+                           [--dry-run] [--verbose]
+
+Synchronize VS Code workspace with src_repos directories
+
+options:
+  -h, --help            show this help message and exit
+  --src-repos SRC_REPOS
+                        Path to the source repositories directory (default:
+                        src_repos)
+  --workspace WORKSPACE
+                        Path to the VS Code workspace file (default: auto-
+                        detect in current directory)
+  --remove-missing      Remove directories from workspace that no longer exist
+                        in src_repos
+  --dry-run             Show what would be changed without making any
+                        modifications
+  --verbose, -v         Enable verbose output
+
+Examples:
+  # Basic sync (add missing directories)
+  python sync_workspace.py
+
+  # Sync with custom paths
+  python sync_workspace.py --src-repos ./repositories --workspace my-workspace.code-workspace
+
+  # Sync and remove missing directories
+  python sync_workspace.py --remove-missing
+
+  # Dry run to see what would change
+  python sync_workspace.py --dry-run --verbose
+
+  # Full sync with verbose output
+  python sync_workspace.py --remove-missing --verbose
+
+```
