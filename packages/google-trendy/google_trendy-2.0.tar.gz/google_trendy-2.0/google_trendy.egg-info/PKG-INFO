@@ -1,0 +1,53 @@
+Metadata-Version: 2.4
+Name: google_trendy
+Version: 2.0
+Summary: Package for getting and analyzing tending Google searches
+Home-page: https://github.com/michaelMondoro/google_trendy
+Author: Michael Mondoro
+Author-email: michaelmondoro@gmail.com
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: bs4
+Requires-Dist: requests
+Requires-Dist: lxml
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: license-file
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+[![Generic badge](https://img.shields.io/badge/Licence-MIT-blue.svg)](https://shields.io/)
+[![Generic badge](https://img.shields.io/badge/Maintained-yes-green.svg)](https://shields.io/)
+[![Generic badge](https://img.shields.io/badge/Python-3.10-yellow.svg)](https://shields.io/)
+[![Generic badge](https://img.shields.io/badge/google_trendy-2.0-red.svg)](https://pypi.org/project/google-trendy/)
+[![Build](https://github.com/michaelMondoro/google_trendy/actions/workflows/publish_pypi.yml/badge.svg)](https://github.com/michaelMondoro/google_trendy/actions/workflows/publish_pypi.yml)
+
+## Package
+Package for getting and analyzing tending Google searches
+
+## Usage
+```python
+from google_trendy import *
+
+tracker = GoogleTrends()
+tracker.get_trends()
+for trend in tracker.trends:
+    print(trend)
+
+
+# Example Output
+GTrend(title='ole miss vs georgia', volume=500000, start=2025-10-18 07:00)
+GTrend(title='no kings', volume=500000, start=2025-10-18 10:00)
+GTrend(title='lsu vs vanderbilt', volume=500000, start=2025-10-18 03:50)
+GTrend(title='tornado watch', volume=500000, start=2025-10-18 18:20)
+GTrend(title='tennessee vs alabama', volume=200000, start=2025-10-18 07:30)
+```
