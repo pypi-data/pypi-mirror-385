@@ -1,0 +1,81 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "saas-core-lib"
+version = "0.1.1"
+authors = [
+  { name="Hasan Bahadır", email="hasan@hashub.dev" },
+]
+description = "Common core library for all microservices"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Framework :: FastAPI",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "fastapi>=0.104.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    "sqlalchemy>=2.0.0",
+    "alembic>=1.12.0",
+    "asyncpg>=0.28.0",
+    "psycopg2-binary>=2.9.0",
+    "elasticsearch>=8.0.0",
+    "redis>=4.5.0",
+    "passlib>=1.7.0",
+    "bcrypt>=4.0.0",
+    "python-jose>=3.3.0",
+    "cryptography>=41.0.0",
+    "structlog>=23.0.0",
+    "httpx>=0.25.0",
+    "python-multipart>=0.0.6",
+    "email-validator>=2.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.1.0",
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "flake8>=6.0.0",
+    "mypy>=1.5.0",
+    "pre-commit>=3.4.0",
+]
+unix = [
+    "uvloop>=0.17.0",  # Unix systems only
+]
+
+[project.urls]
+Homepage = "https://github.com/hasanbahadir/saas-core-lib"
+"Bug Reports" = "https://github.com/hasanbahadir/saas-core-lib/issues"
+"Source" = "https://github.com/hasanbahadir/saas-core-lib"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.black]
+line-length = 88
+target-version = ['py310']
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
