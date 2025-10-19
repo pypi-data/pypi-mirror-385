@@ -1,0 +1,86 @@
+[build-system]
+build-backend = "poetry.core.masonry.api"
+
+requires = [ "poetry-core" ]
+
+[tool.poetry]
+name = "pathlibutil"
+version = "v0.3.6"
+description = "inherits from pathlib.Path with methods for hashing, copying, deleting and more"
+authors = [ "Christoph Dörrer <d-chris@web.de>" ]
+readme = "README.md"
+license = "MIT"
+classifiers = [
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+]
+keywords = [ "pathlib", "hashlib", "shutil", "urllib.parse", "json", "urlpath" ]
+
+[tool.poetry.urls]
+repository = "https://github.com/d-chris/pathlibutil"
+documentation = "https://d-chris.github.io/pathlibutil"
+
+[tool.poetry.dependencies]
+python = "^3.8.1"
+py7zr = { version = ">=0.20.2", optional = true }
+
+[tool.poetry.extras]
+7z = [ "py7zr" ]
+
+[tool.poetry.group.dev.dependencies]
+tox = ">=4.11.4"
+pyinstaller = { version = ">=6.10.0", python = "<3.15" }
+
+[tool.poetry.group.test.dependencies]
+pytest = ">=8.3.3"
+pytest-random-order = ">=1.1.0"
+pytest-cov = ">=4.1.0"
+pytest-mock = ">=3.12.0"
+exrex = ">=0.12.0"
+
+[tool.poetry.group.docs.dependencies]
+jinja2-pdoc = ">=1.1.0"
+pyperclip = ">=1.9.0"
+
+[[tool.poetry.source]]
+name = "PyPI"
+priority = "primary"
+
+[[tool.poetry.source]]
+name = "testpypi"
+url = "https://test.pypi.org/legacy/"
+priority = "explicit"
+
+[tool.isort]
+profile = "black"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = "tests"
+addopts = [
+  "--random-order",
+  "--color=yes",
+  "-s",
+  "--cov=pathlibutil",
+  "--cov-report=term-missing:skip-covered",
+  "--cov-report=xml",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+  "^def normalize_url",
+]
+
+[tool.coverage.run]
+omit = [
+  "*/tests/*",
+  "*/docs/*",
+  "*/examples/*",
+]
