@@ -1,0 +1,34 @@
+Metadata-Version: 2.4
+Name: SnakeScan
+Version: 1.4.6
+Summary: Module SnakeScan using to scan port or ports in you device or other devices
+Author: Den*Ram
+Description-Content-Type: text/markdown
+License-Expression: MIT
+License-File: LICENSE
+Requires-Dist: art
+Requires-Dist: tqdm
+Requires-Dist: termcolor
+Project-URL: Homepage, https://github.com/Den-Ram/SnakeScan
+Project-URL: Repository, https://github.com/Den-Ram/SnakeScan
+
+#SnakeScan
+    ![PyPI version](https://badge.fury.io/py/your_package_name.svg)
+        ![License](https://img.shields.io/badge/License-MIT-blue.svg)
+ Scanner to scan devices or watch if you server down or up in time work
+ ```
+import SnakeScan
+SnakeScan.run()
+```
+##Attrinutes
+- --l  need internet to view public ip you device
+- --t threading port search
+- --d dos
+- --s single port search
+- --i information about host
+- --h in host /--h port in host
+##Added class Watcher:
+     ```
+     for SnakeScan import Watcher
+     Watcher(host:str,port:int)
+     ``` 
