@@ -1,0 +1,138 @@
+Metadata-Version: 2.4
+Name: Coreform_Cubit_Mesh_Export
+Version: 1.4
+Summary: Cubit mesh export to various formats including Gmsh, Nastran, and VTK
+Author-email: Kengo Sugahara <ksugahar@gmail.com>
+Maintainer-email: Kengo Sugahara <ksugahar@gmail.com>
+License: BSD-3-Clause
+Project-URL: Homepage, https://github.com/ksugahar/Coreform_Cubit_Mesh_Export
+Project-URL: Repository, https://github.com/ksugahar/Coreform_Cubit_Mesh_Export
+Project-URL: Bug Tracker, https://github.com/ksugahar/Coreform_Cubit_Mesh_Export/issues
+Keywords: cubit,mesh,gmsh,nastran,vtk,export,coreform
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Scientific/Engineering :: Physics
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+Requires-Dist: numpy>=1.20.3
+Requires-Dist: scipy>=1.6.3
+
+# Coreform Cubit Mesh Export
+
+Coreform Cubitから様々な形式のメッシュファイルをエクスポートするPythonライブラリ
+
+## インストール方法
+
+### PyPIから直接インストール（推奨）
+```bash
+pip install --upgrade coreform-cubit-mesh-export
+```
+
+### Cubit内蔵Pythonの場合
+```bash
+cd "C:\Program Files\Coreform Cubit 2025.3\bin\python3\"
+python.exe -m pip install --upgrade coreform-cubit-mesh-export
+```
+
+### 開発版をGitHubからインストール
+```bash
+pip install git+https://github.com/ksugahar/Coreform_Cubit_Mesh_Export.git
+```
+
+### ローカルインストール（開発用）
+```bash
+git clone https://github.com/ksugahar/Coreform_Cubit_Mesh_Export.git
+cd Coreform_Cubit_Mesh_Export
+pip install -e .
+```
+
+## サポートしているファイル形式
+
+- **Gmsh形式**
+  - バージョン2.2（完全サポート）
+- **Nastran形式**
+  - 2Dメッシュ
+  - 3Dメッシュ
+- **MEG形式**（ELF用）
+  - 2Dメッシュ
+  - 3Dメッシュ
+- **VTK形式**
+  - メッシュのみ（Legacy VTK形式）
+
+## 使い方
+
+### Cubit内での使用例
+
+Cubitでメッシュ生成後、以下のようにPythonスクリプトを実行します：
+
+```python
+# Cubitコマンドライン
+play "export_mesh.py"
+```
+
+`export_mesh.py`の内容例：
+
+```python
+import cubit_mesh_export
+
+# Nastran形式でエクスポート
+FileName = 'output/model.nas'
+cubit_mesh_export.export_3D_Nastran(cubit, FileName)
+
+# Gmsh形式でエクスポート
+FileName = 'output/model.msh'
+cubit_mesh_export.export_3D_gmsh_ver2(cubit, FileName)
+
+# VTK形式でエクスポート
+FileName = 'output/model.vtk'
+cubit_mesh_export.export_3D_vtk(cubit, FileName)
+```
+
+## 関数一覧
+
+### Gmsh形式
+- `export_gmsh_ver2(cubit, filename)` - Gmsh v2.2形式で3Dメッシュをエクスポート 2次要素に対応
+
+### Nastran形式
+- `export_Nastran(cubit, filename, DIM="2D|3D", PYRAM=True|False)` - 2D/3DメッシュをNastran形式でエクスポート、PyramidをHexに変換、1次要素のみサポート
+
+### MEG形式（ELF用）
+- `export_meg(cubit, filename, DIM="T|R|K", MGR2)` - T:3次元、R:軸対称、K:2次元、MGR2で空間節点を指定
+
+### VTK形式
+- `export_3D_vtk(cubit, filename, ORDER="2nd")` - Legacy VTK形式でエクスポート、2ndで2次要素に対応
+
+## 要件
+
+- Python 3.7以上
+- NumPy >= 1.20.3
+- SciPy >= 1.6.3
+- Coreform Cubit（メッシュ生成用）
+
+## ライセンス
+
+BSD 3-Clause License
+
+## 作者
+
+Kengo Sugahara (ksugahar@gmail.com)
+
+## リポジトリ
+
+- GitHub: [https://github.com/ksugahar/Coreform_Cubit_Mesh_Export](https://github.com/ksugahar/Coreform_Cubit_Mesh_Export)
+- PyPI: [https://pypi.org/project/coreform-cubit-mesh-export/](https://pypi.org/project/coreform-cubit-mesh-export/)
+
+## バグ報告・機能要望
+
+[GitHub Issues](https://github.com/ksugahar/Coreform_Cubit_Mesh_Export/issues)にてお願いします。
+
