@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "relatipy"
+version = "0.1.0"
+description = "Numeric and symbolic tools for Kerr black hole geometry"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "lldddv2"}]
+
+dependencies = [
+    "sympy",
+    "numpy",
+    "scipy",
+    "plotly",
+    "einsteinpy",
+]
+
+[project.optional-dependencies]
+dev = ["black", "flake8", "isort"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
