@@ -1,0 +1,15 @@
+[package]
+name = "python-gamedig"
+version = "0.8.0"
+edition = "2021"
+readme = "README.md"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+name = "gamedig"
+crate-type = ["cdylib"]
+
+[dependencies]
+gamedig = { version = "0.8.0", features = ["serde", "tls"] }
+pyo3 = "0.26.0"
+serde-pyobject = "0.7.0"
