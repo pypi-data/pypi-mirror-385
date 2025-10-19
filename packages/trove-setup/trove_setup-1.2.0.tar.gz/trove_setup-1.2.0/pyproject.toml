@@ -1,0 +1,104 @@
+[project]
+name = "trove-setup"
+description = "Simple TUI for setting up trove classifiers"
+authors = [
+    { name = "Jan Vollmer", email = "jan@vllmr.dev" },
+]
+dependencies = [
+    "textual>=6.3.0",
+    "trove-classifiers>=2025.9.11.17",
+    "typer>=0.19.2",
+    "tomlkit>=0.13.3",
+    "jmespath>=1.0.1",
+    "rich>=14.2.0",
+    "packaging>=25.0",
+]
+requires-python = ">=3.10"
+readme = "README.md"
+classifiers = [
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Typing :: Typed",
+]
+keywords = [
+    "trove",
+    "classifier",
+    "pypi",
+    "package",
+]
+dynamic = []
+version = "1.2.0"
+
+[project.license]
+text = "MIT"
+
+[project.urls]
+Repository = "https://github.com/jvllmr/trove-setup"
+
+[project.scripts]
+trove_setup = "trove_setup.cli:run_typer"
+trove-setup = "trove_setup.cli:run_typer"
+
+[build-system]
+requires = [
+    "pdm-backend",
+]
+build-backend = "pdm.backend"
+
+[tool.pycln]
+all = true
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+files = [
+    "src/trove_setup",
+]
+exclude = [
+    "tests",
+]
+
+[tool.pdm]
+plugins = [
+    "sync-pre-commit-lock",
+]
+
+[tool.pdm.version]
+source = "scm"
+
+[tool.pdm.scripts]
+dev = "textual run trove_setup.app:TroveSetupApp --dev"
+console = "textual console"
+test = "pytest -x -n auto"
+update-snapshots = "pytest -x -n auto --snapshot-update"
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "mypy>=1.18.2",
+    "ruff>=0.14.0",
+    "pytest>=8.4.2",
+    "isort>=7.0.0",
+    "pycln>=2.5.0",
+    "pyaphid>=0.3.1",
+    "pre-commit>=4.3.0",
+    "nox>=2025.5.1",
+    "textual-dev>=1.8.0",
+    "pytest-textual-snapshot>=1.1.0",
+    "types-jmespath>=1.0.2.20250809",
+    "tomli>=2.3.0",
+    "pytest-xdist>=3.8.0",
+    "pytest-asyncio>=1.2.0",
+]
+
+[tool.isort]
+profile = "black"
+
+[tool.pytest.ini_options]
+asyncio_default_fixture_loop_scope = "function"

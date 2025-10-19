@@ -1,0 +1,60 @@
+Metadata-Version: 2.1
+Name: trove-setup
+Version: 1.2.0
+Summary: Simple TUI for setting up trove classifiers
+Keywords: trove,classifier,pypi,package
+Author-Email: Jan Vollmer <jan@vllmr.dev>
+License: MIT
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Classifier: Typing :: Typed
+Project-URL: Repository, https://github.com/jvllmr/trove-setup
+Requires-Python: >=3.10
+Requires-Dist: textual>=6.3.0
+Requires-Dist: trove-classifiers>=2025.9.11.17
+Requires-Dist: typer>=0.19.2
+Requires-Dist: tomlkit>=0.13.3
+Requires-Dist: jmespath>=1.0.1
+Requires-Dist: rich>=14.2.0
+Requires-Dist: packaging>=25.0
+Description-Content-Type: text/markdown
+
+[![PyPI - Downloads](https://img.shields.io/pypi/dd/trove-setup)](https://pypi.org/p/trove-setup)
+[![GitHub license](https://img.shields.io/github/license/jvllmr/trove-setup)](https://github.com/jvllmr/trove-setup/blob/dev/LICENSE)
+[![Routine Checks](https://github.com/jvllmr/trove-setup/actions/workflows/test.yaml/badge.svg)](https://github.com/jvllmr/trove-setup/actions/workflows/test.yaml)
+
+# trove-setup
+
+A simple TUI for adding trove classifiers to your project.
+Supports `pep621`, `poetry` and `flit` pyproject.toml files.
+
+![trove-setup demo](demo/demo.gif)
+
+## Installation and usage
+
+Optimal installation with `pipx`:
+
+```shell
+pipx install trove-setup
+```
+
+Run in your project via
+
+```shell
+trove-setup
+```
+
+## CLI Params
+
+```
+trove-setup
+    --pyproject-path: Path to pyproject.toml file. Can be directory or file.
+    --type: Type of project. Can be one of pep621, poetry, flit, auto.
+```
