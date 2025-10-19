@@ -1,0 +1,113 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fullmetalalchemy"
+version = "2.2.2"
+description = "Easy-to-use helpers for SQL table changes with SQLAlchemy."
+readme = "README.md"
+authors = [
+    { name = "Odos Matthews" }
+]
+license = { file = "LICENSE" }
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Database",
+]
+dependencies = [
+    "SQLAlchemy>=1.4,<3",
+    "tinytim>=0.1.2",
+    "frozendict>=2.4",
+]
+
+[project.optional-dependencies]
+testing = [
+    "pytest>=8",
+    "pytest-cov>=4",
+    "pytest-asyncio>=0.23",
+    "greenlet>=3.0",
+    "aiosqlite>=0.19",
+]
+async = [
+    "greenlet>=3.0",
+    "aiosqlite>=0.19",
+    "asyncpg>=0.29",
+    "aiomysql>=0.2",
+]
+dev = [
+    "pytest>=8",
+    "pytest-cov>=4",
+    "pytest-asyncio>=0.23",
+    "greenlet>=3.0",
+    "aiosqlite>=0.19",
+    "mypy>=1.10",
+    "ruff>=0.6",
+    "tox>=4",
+]
+
+[project.urls]
+Homepage = "https://github.com/eddiethedean/fullmetalalchemy"
+Repository = "https://github.com/eddiethedean/fullmetalalchemy"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+fullmetalalchemy = ["py.typed"]
+
+[tool.pytest.ini_options]
+addopts = "--cov=fullmetalalchemy"
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+
+[tool.coverage.run]
+branch = true
+source = ["fullmetalalchemy"]
+
+[tool.mypy]
+mypy_path = "src"
+strict = true
+warn_unused_configs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+implicit_reexport = false
+ignore_missing_imports = false
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+target-version = "py38"
+exclude = ["docs/"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "C4", "RUF"]
+exclude = ["build", "dist"]
+# Ignore Python 3.10+ modernizations to maintain Python 3.8 compatibility
+ignore = ["UP006", "UP007", "UP035", "UP045"]
+
+[tool.ruff.lint.per-file-ignores]
+# Allow longer lines in select.py docstrings (complex SQL examples)
+"src/fullmetalalchemy/select.py" = ["E501"]
+"tests/test_select.py" = ["E501"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
