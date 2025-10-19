@@ -1,0 +1,88 @@
+Metadata-Version: 2.4
+Name: artmeta
+Version: 0.2.0
+Summary: Gestionnaire de métadonnées pour articles académiques - génération LaTeX et exports HAL/ArXiv
+Author-email: Nicolas Klutchnikoff <nicolas.klutchnikoff@univ-rennes2.fr>
+License-Expression: MIT
+Project-URL: Homepage, https://plmlab.math.cnrs.fr/nicolas.klutchnikoff/artmeta
+Project-URL: Documentation, https://plmlab.math.cnrs.fr/nicolas.klutchnikoff/artmeta/-/tree/main/docs
+Project-URL: Repository, https://plmlab.math.cnrs.fr/nicolas.klutchnikoff/artmeta
+Project-URL: Issues, https://plmlab.math.cnrs.fr/nicolas.klutchnikoff/artmeta/-/issues
+Keywords: latex,academic,metadata,hal,arxiv,publishing
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Science/Research
+Classifier: Topic :: Text Processing :: Markup :: LaTeX
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pyyaml>=6.0
+Requires-Dist: jinja2>=3.1
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.0; extra == "dev"
+Requires-Dist: black>=23.0; extra == "dev"
+Requires-Dist: ruff>=0.1.0; extra == "dev"
+Provides-Extra: docs
+Requires-Dist: mkdocs>=1.5.0; extra == "docs"
+Requires-Dist: mkdocs-material>=9.0.0; extra == "docs"
+Dynamic: license-file
+
+# artmeta
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![pipeline status](https://plmlab.math.cnrs.fr/nicolas.klutchnikoff/artmeta/badges/main/pipeline.svg)](https://plmlab.math.cnrs.fr/nicolas.klutchnikoff/artmeta/-/pipelines)
+[![coverage report](https://plmlab.math.cnrs.fr/nicolas.klutchnikoff/artmeta/badges/main/coverage.svg)](https://plmlab.math.cnrs.fr/nicolas.klutchnikoff/artmeta/-/pipelines)
+[![PyPI version](https://badge.fury.io/py/artmeta.svg)](https://badge.fury.io/py/artmeta) <!-- Placeholder : à activer lors de la publication sur PyPI -->
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
+**Gérez les métadonnées de vos articles scientifiques sans effort.**
+
+`artmeta` est un outil en ligne de commande qui vous libère de la gestion fastidieuse des métadonnées d'articles. Définissez auteurs, affiliations et résumé une seule fois dans un fichier YAML, et laissez `artmeta` générer le code LaTeX pour n'importe quelle revue.
+
+### Concept
+
+```
+[ art.yml ] ----( artmeta )----> [ Code LaTeX / HAL XML ]
+```
+
+---
+
+### Installation
+
+```bash
+pip install artmeta
+```
+
+### Exemple d'Utilisation
+
+```bash
+# 1. Initialisez votre fichier de métadonnées
+artmeta init
+
+# 2. Générez et insérez le code pour une revue (ex: AMS)
+artmeta generate amsart --insert main.tex
+
+# 3. Rejeté ? Changez de revue en une seule commande
+artmeta switch elsarticle main.tex
+```
+
+---
+
+### 📖 Documentation
+
+Pour un guide complet, des exemples et des tutoriels, **[consultez la documentation](./docs/index.md)**.
+
+### 🤝 Contribuer
+
+Les contributions sont les bienvenues ! Voir le **[guide de contribution](./docs/contributing.md)**.
+
+### 📄 Licence
+
+Ce projet est sous licence [MIT](LICENSE).

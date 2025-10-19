@@ -1,0 +1,38 @@
+{# Template Jinja2 pour la classe svjour3 (Springer) #}
+\title{{ '{' }}{{ meta.title }}{{ '}' }}
+
+{# Auteurs #}
+{% for author in meta.authors %}
+{% if loop.first %}
+\author{{ '{' }}{{ author.firstname }} {{ author.lastname }}{% if author.affiliations %}{% for affil_id in author.affiliations %} \inst{{ '{' }}{{ affil_id }}{{ '}' }}{% endfor %}{% endif %}
+{% else %}
+ \and {{ author.firstname }} {{ author.lastname }}{% if author.affiliations %}{% for affil_id in author.affiliations %} \inst{{ '{' }}{{ affil_id }}{{ '}' }}{% endfor %}{% endif %}
+{% endif %}
+{% if loop.last %}{{ '}' }}{% endif %}
+{% endfor %}
+
+{# Institutes (affiliations) #}
+{% if meta.affiliations %}
+{% for affil in meta.affiliations %}
+{% if loop.first %}\institute{{ '{' }}{% endif %}
+{% if not loop.first %} \and {% endif %}
+\inst{{ '{' }}{{ affil.id }}{{ '}' }} {{ affil.institution }}{% if affil.city %}, {{ affil.city }}{% endif %}{% if affil.country %}, {{ affil.country }}{% endif %}
+{% if loop.last %}{{ '}' }}{% endif %}
+{% endfor %}
+{% endif %}
+
+{# Abstract #}
+{% if meta.abstract %}
+
+\begin{abstract}
+{{ meta.abstract }}
+\end{abstract}
+{% endif %}
+
+{# Keywords #}
+{% if meta.keywords %}
+
+\keywords{{ '{' }}{{ meta.keywords|join(' \\and ') }}{{ '}' }}
+{% endif %}
+
+\maketitle
