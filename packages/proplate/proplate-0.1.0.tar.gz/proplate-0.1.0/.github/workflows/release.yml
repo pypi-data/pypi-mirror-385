@@ -1,0 +1,71 @@
+# Release workflow: Build and publish Python package to PyPI
+# Triggers on GitHub Release publication
+# Uses trusted publishing (OIDC) for secure PyPI authentication
+
+name: Release to PyPI
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  release-build:
+    name: Build distributions
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+
+      - name: Build distributions
+        run: uv build
+
+      - name: Upload distributions
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-dists
+          path: dist/
+          if-no-files-found: error
+
+  pypi-publish:
+    name: Publish to PyPI
+    runs-on: ubuntu-latest
+    needs:
+      - release-build
+
+    permissions:
+      # REQUIRED: OIDC token for trusted publishing
+      id-token: write
+      # REQUIRED: attestations feature needs to write to attestations
+      attestations: write
+      # REQUIRED: attestations feature needs to read repository contents
+      contents: read
+
+    # Use dedicated environment with deployment protections
+    environment:
+      name: pypi
+      url: https://pypi.org/project/proplate/${{ github.event.release.tag_name }}
+
+    steps:
+      - name: Download distributions
+        uses: actions/download-artifact@v4
+        with:
+          name: release-dists
+          path: dist/
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+

@@ -1,0 +1,304 @@
+# Proplate
+
+A CLI tool for managing and using prompt templates with placeholder injection. Perfect for storing reusable prompt templates and quickly filling them with context-specific information.
+
+## Features
+
+- 🎯 **Interactive template selection** with fuzzy search
+- ⚡ **Direct template access** with tab autocomplete
+- 📋 **Auto-copy to clipboard** for seamless pasting
+- 🔧 **Placeholder support** with single-line and multi-line input
+- 📝 **YAML frontmatter** for template metadata
+- 🎨 **Rich CLI output** with beautiful formatting
+
+## Installation
+
+```bash
+pip install proplate
+```
+
+## Quick Start
+
+### 1. Create a template
+
+**Easy way:**
+```bash
+proplate new code-review
+```
+
+This opens your editor with starter content:
+```markdown
+---
+title: Code Review
+description: Add a description here
+---
+
+# {{placeholder}}
+
+Your template content goes here.
+Use {{placeholder}} syntax for variables.
+```
+
+**Or manually** create `~/.proplate/templates/code-review.md`:
+
+```markdown
+---
+title: Code Review Guide
+description: Template for thorough code reviews
+---
+
+# Code Review: {{file_path}}
+
+## Context
+{{context}}
+
+## Review Areas
+{{focus_areas}}
+
+## Security Considerations
+{{security_notes}}
+```
+
+**Pro tip:** Make placeholders self-documenting!
+```markdown
+{{Your feature request here. Be specific about WHAT and WHY.}}
+```
+
+This way, the placeholder itself tells users what to enter.
+
+### 2. Use your template
+
+**Interactive mode** (with fuzzy search):
+```bash
+proplate
+```
+
+**Direct selection** (with tab autocomplete):
+```bash
+proplate code-review
+```
+
+The tool will:
+1. Prompt you for each `{{placeholder}}`
+2. Support multi-line input when needed
+3. **Automatically copy the filled template to your clipboard**
+4. You can then paste directly into Cursor, ChatGPT, or any other tool
+
+## Usage
+
+### Main Commands
+
+```bash
+# Interactive template selector
+proplate
+
+# Use a specific template (supports tab completion)
+proplate <template-name>
+
+# Create a new template (opens in $EDITOR with starter content)
+proplate new <template-name>
+
+# List all available templates
+proplate list
+
+# Edit an existing template in $EDITOR
+proplate edit <template-name>
+
+# Delete a template (with confirmation)
+proplate delete <template-name>
+
+# Delete a template without confirmation
+proplate delete <template-name> --force
+
+# Show templates directory path
+proplate path
+
+# Initialize templates directory (optional - auto-created on first use)
+proplate init
+```
+
+### Managing Templates
+
+**Create a new template:**
+```bash
+proplate new my-template
+```
+Creates a template with starter content and opens it in your `$EDITOR`.
+
+**Edit existing template:**
+```bash
+proplate edit my-template
+```
+
+**Delete a template:**
+```bash
+proplate delete my-template        # With confirmation prompt
+proplate delete my-template --force # Skip confirmation
+```
+
+**Manual way:**
+Create/edit `.md` files directly in `~/.proplate/templates/` (auto-created on first use)
+
+### Shell Autocomplete
+
+Enable tab completion for template names:
+
+```bash
+# For bash
+proplate --install-completion bash
+
+# For zsh
+proplate --install-completion zsh
+
+# For fish
+proplate --install-completion fish
+```
+
+Then restart your shell or source your config file.
+
+## Template Format
+
+Templates are Markdown files with optional YAML frontmatter and `{{placeholder}}` syntax.
+
+### Basic Template
+
+```markdown
+# Hello {{name}}!
+
+This is a simple template.
+```
+
+### Template with Frontmatter
+
+```markdown
+---
+title: Bug Analysis
+description: Structured template for bug investigation
+---
+
+# Bug Report: {{bug_id}}
+
+## Description
+{{description}}
+
+## Steps to Reproduce
+{{steps}}
+
+## Expected vs Actual
+**Expected:** {{expected}}
+**Actual:** {{actual}}
+```
+
+### Placeholder Guidelines
+
+- Use `{{placeholder}}` syntax
+- **Placeholders can be descriptive instructions** (e.g., `{{Your request here. Be specific!}}`)
+- Support spaces, punctuation, and special characters
+- Duplicate placeholders are prompted once and replaced everywhere
+- Whitespace variations (`{{name}}`, `{{ name }}`) are normalized
+- Leave input empty to open multi-line editor (`$EDITOR`)
+
+## Examples
+
+### Example 1: Code Review Template
+
+`~/.proplate/templates/code-review.md`:
+```markdown
+---
+title: Code Review
+description: Comprehensive code review template
+---
+
+# Code Review: {{file_path}}
+
+## Context
+{{context}}
+
+## Changes Summary
+{{changes}}
+
+## Review Checklist
+- [ ] Code quality and readability
+- [ ] Error handling
+- [ ] Security considerations
+- [ ] Performance implications
+- [ ] Test coverage
+
+## Specific Feedback
+{{feedback}}
+```
+
+### Example 2: Refactoring Plan
+
+`~/.proplate/templates/refactor.md`:
+```markdown
+---
+title: Refactoring Plan
+description: Template for planning refactoring work
+---
+
+# Refactoring: {{component_name}}
+
+## Current State
+{{current_state}}
+
+## Problems
+{{problems}}
+
+## Proposed Solution
+{{solution}}
+
+## Migration Strategy
+{{migration}}
+
+## Risks
+{{risks}}
+```
+
+## Tips
+
+1. **Multi-line Input**: Press Enter on an empty prompt to open your `$EDITOR` for multi-line content
+2. **Template Organization**: Use descriptive filenames (they become the template name)
+3. **Metadata**: Add `title` and `description` in frontmatter for better organization
+4. **Separators**: Use `---` freely in your template body (only the first block is frontmatter)
+
+## Development
+
+```bash
+# Clone repository
+git clone <repo-url>
+cd proplate
+
+# Install with uv
+uv sync
+
+# Run locally
+uv run proplate
+
+# Run tests
+uv run pytest
+
+# Run specific test
+uv run pytest tests/test_template.py -v
+```
+
+## Requirements
+
+- Python >= 3.12
+- Dependencies:
+  - `typer[all]` - CLI framework
+  - `questionary` - Interactive prompts
+  - `pyperclip` - Clipboard operations
+  - `pyyaml` - YAML parsing
+  - `rich` - Terminal formatting
+
+## License
+
+MIT
+
+## Contributing
+
+Contributions welcome! Please ensure:
+1. Tests pass: `pytest`
+2. Code follows project style (modern Python 3.12+ syntax)
+3. Add tests for new features

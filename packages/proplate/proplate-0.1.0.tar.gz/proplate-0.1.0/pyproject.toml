@@ -1,0 +1,28 @@
+[project]
+name = "proplate"
+version = "0.1.0"
+description = "A CLI tool for managing and using prompt templates with placeholder injection."
+readme = "README.md"
+authors = [
+    { name = "Elior Cohen", email = "elior.cohen.p@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "pyperclip>=1.11.0",
+    "pyyaml>=6.0.3",
+    "questionary>=2.1.1",
+    "rich>=14.1.0",
+    "typer[all]>=0.19.2",
+]
+
+[project.scripts]
+proplate = "proplate.cli:cli_wrapper"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
+]
