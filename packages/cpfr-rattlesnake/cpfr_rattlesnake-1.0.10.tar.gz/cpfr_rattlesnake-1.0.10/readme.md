@@ -1,0 +1,56 @@
+# Rattlesnake Static Site Generator
+Rattlesnake is a static website generator.
+It is written in the Python programming language and utilizes the Jinja templating engine, pySCSS for SCSS support, as well as the pyYaml library for parsing config files.
+
+See <a href="https://pac4.gitlab.io/rattlesnake/">https://pac4.gitlab.io/rattlesnake/</a> for more information.
+
+## Usage
+
+Rattlesnake needs the following things:
+
+- A `config.yml` file that contains configuration properties and variables for the site rendering
+- A `src` folder that contains the source files for the website.
+- It generates a `build` directory that will contain the ready-to-deploy website after running the build script.
+
+The build follows the convention that files starting with an underscore (e.g. `_header.html`) are not built as pages, but used as template files via *Jinja*. All HTML files not starting with an underscore will be converted into pages. Files with the name `index.html` will keep their relative path. However, all other HTML files will be moved into a directory with the same name as the original file (without extension) and stored as an `index.html` inside that folder. This means that a file `./src/about.html` will be processed into a file `./build/about/index.html`. This is due to the way the browser and the web server handle paths. This creates nicer looking URLs (`https://youwebsite.org/about` instead of `https://youwebsite.org/about.html`). 
+
+## Command-Line Interface
+```
+usage: rattlesnake [-h] [-w] [-o OUTPUT_DIR] [-p PORT] [-c CONFIG_FILE] [-a ADDITIONAL_CONFIG] [source_dir]
+
+This tool converts your markdown text and HTML into a static website.
+
+positional arguments:
+  source_dir
+
+options:
+  -h, --help            show this help message and exit
+  -w, --watch
+  -o OUTPUT_DIR, --output-dir OUTPUT_DIR
+  -p PORT, --port PORT
+  -c CONFIG_FILE, --config-file CONFIG_FILE
+  -a ADDITIONAL_CONFIG, --additional-config ADDITIONAL_CONFIG
+```
+
+- By default, `./src` is used as the input directory. This can be changed by specifying a different path as the first argument.
+- By default, `./build` is used as the output directory. This can be changed by specifying a different path using the `--output-dir` option.
+- By default, `./config.yml` is used as the config file for parameters and template variables. This can be changed by specifying a different file path using the `--config-file` option.
+- The `--watch` option keeps the script running after the build process and watches the source directory for file changes. Further, it starts an HTTP server that serves the built website.
+- The `--port` option allows the user to specify a port if the --watch flag is given. If no custom port is provided, port `8000` is used.
+- The `--additional-config` option can be used in order to load an additional config yaml file that supplement or overrides the default values. This can be useful for different deployment targets.
+
+# Version History
+
+- 1.0.10: fixing non-working port parameter and allowing for other types than HTML, XML and Markdown to be processed by Jinja 
+- 1.0.8: Monkey-Patching the bug in pyscss
+- 1.0.7: referencing fork of PyScss
+- 1.0.6: referencing PyScss also in toml file from git
+- 1.0.5: using PyScss from git-repo source (since the official pip release does not work with Python > 3.10)
+- 1.0.4: adding fenced code blocks to markdown parsing
+- 1.0.3: introducing meta-variables for page paths
+  - `_target_path` points to the path of the page relative to the website's base url
+  - `_source_path` points to the path of the source file relative to the input directory
+- 1.0.2: Bugfixes
+  - directories starting with an underscore are also skipped (not just files)
+  - adding date formatting filter to Jinja parser (`{{ some_date | format_date("%d.%m.%Y") }}`)
+- 1.0.0: Initial Implementation

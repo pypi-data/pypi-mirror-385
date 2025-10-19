@@ -1,0 +1,32 @@
+# pyproject.toml
+
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cpfr-rattlesnake"
+authors = [
+    { name = "Carsten Pfeffer", email = "pfeffer.carsten@gmail.com" }
+]
+description = "A simple static-site generator for Python3, using markdown and the Jinja2 templating engine"
+version = "1.0.10"
+readme = "readme.md"
+requires-python = ">= 3.7"
+keywords = ["static site generator", "website", "gitlab pages", "jinja"]
+dependencies = [
+    "watchdog",
+    "jinja2",
+    "pyyaml",
+    "pyScss",
+    "termcolor",
+    "python-frontmatter",
+    "markdown",
+    "python-dateutil"
+]
+
+[tool.setuptools]
+packages = ["rattlesnake"]
+
+[project.scripts]
+rattlesnake = "rattlesnake:run"
