@@ -1,0 +1,11 @@
+prefix="/private/var/folders/q0/wmf37v850txck86cpnvwm_zw0000gn/T/build-via-sdist-ohddvg2u/gempyre-1.8.2/_skbuild/macosx-15.0-arm64-3.8/cmake-install/src/Gempyre"
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: libwebsockets
+Description: Websockets server and client library
+Version: 4.3.3-v4.3.3
+
+Libs: -L${libdir} -lwebsockets
+Cflags: -I${includedir}
