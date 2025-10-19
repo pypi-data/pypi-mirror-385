@@ -1,0 +1,50 @@
+[project]
+name = "testprofiler"
+version = "1.0.1"
+description = "Lightweight testing utility for Python functions with profiling and logging."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+
+authors = [
+  { name = "Sam Lewis", email = "samlewis1999.sl@gmail.com" }
+]
+
+dependencies = [
+  "pandas>=1.5.0",
+  "numpy>=1.22.0",
+  "polars>=0.16.0"
+]
+
+
+[project.optional-dependencies]
+dev = [
+  "black",
+  "mypy",
+  "ruff"
+]
+
+[project.urls]
+Homepage = "https://github.com/VarSamLewis/unittestplus"
+Repository = "https://github.com/VarSamLewis/unittestplus"
+
+[build-system]
+requires = ["setuptools >= 77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["testprofiler"]
+package-dir = {"" = "src"}
+
+[tool.black]
+line-length = 88
+target-version = ['py310']
+
+[tool.mypy]
+python_version = "3.10"
+ignore_missing_imports = true
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+lint.select = ["E", "F", "I"]
