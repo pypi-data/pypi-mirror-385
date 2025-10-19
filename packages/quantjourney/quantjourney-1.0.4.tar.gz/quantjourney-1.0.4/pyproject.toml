@@ -1,0 +1,22 @@
+[tool.poetry]
+packages = [ { include = "quantjourney", from = "sdk" } ]
+classifiers = ["Development Status :: 4 - Beta", "Intended Audience :: Developers", "License :: Other/Proprietary License", "Programming Language :: Python :: 3", "Programming Language :: Python :: 3.12", "Topic :: Office/Business :: Financial :: Investment"]
+keywords = ["quant", "finance", "data", "sdk", "api"]
+repository = "https://github.com/QuantJourneyOrg/_repo_quantjourney_sdk"
+homepage = "https://github.com/QuantJourneyOrg/_repo_quantjourney_sdk"
+license = "Proprietary"
+name = "quantjourney"
+version = "1.0.4"
+description = "QuantJourney SDK"
+authors = ["QuantJourney <support@quantjourney.pro>"]
+readme = "README.md"
+[tool.poetry.dependencies]
+python = ">=3.12,<3.15"
+
+requests = ">=2.31,<3"
+PyYAML = ">=6,<7"
+[build-system]
+requires = ["poetry-core>=1.9.0"]
+build-backend = "poetry.core.masonry.api"
+
+
