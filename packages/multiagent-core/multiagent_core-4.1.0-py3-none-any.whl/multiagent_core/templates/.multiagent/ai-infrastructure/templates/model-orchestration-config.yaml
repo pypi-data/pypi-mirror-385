@@ -1,0 +1,138 @@
+# AI Model Orchestration Configuration
+# Purpose: Define model fallback chains, cost limits, and routing rules
+
+models:
+  # Primary Models
+  primary:
+    - name: gpt-4-turbo
+      provider: openai
+      max_tokens: 128000
+      cost_per_1k_tokens:
+        input: 0.01
+        output: 0.03
+      timeout_ms: 30000
+      rate_limit_rpm: 500
+
+    - name: claude-3-opus
+      provider: anthropic
+      max_tokens: 200000
+      cost_per_1k_tokens:
+        input: 0.015
+        output: 0.075
+      timeout_ms: 30000
+      rate_limit_rpm: 300
+
+    - name: gemini-pro
+      provider: google
+      max_tokens: 32000
+      cost_per_1k_tokens:
+        input: 0.0005
+        output: 0.0015
+      timeout_ms: 20000
+      rate_limit_rpm: 1000
+
+  # Fallback Models (cheaper/faster alternatives)
+  fallback:
+    - name: gpt-3.5-turbo
+      provider: openai
+      max_tokens: 16385
+      cost_per_1k_tokens:
+        input: 0.0005
+        output: 0.0015
+      timeout_ms: 10000
+      rate_limit_rpm: 3500
+
+    - name: claude-3-haiku
+      provider: anthropic
+      max_tokens: 200000
+      cost_per_1k_tokens:
+        input: 0.00025
+        output: 0.00125
+      timeout_ms: 10000
+      rate_limit_rpm: 1000
+
+# Routing Rules
+routing:
+  # Route by use case
+  use_cases:
+    simple_completion:
+      model: gpt-3.5-turbo
+      fallback: claude-3-haiku
+
+    code_generation:
+      model: claude-3-opus
+      fallback: gpt-4-turbo
+
+    long_context:
+      model: claude-3-opus
+      fallback: gemini-pro
+
+    cost_sensitive:
+      model: gemini-pro
+      fallback: gpt-3.5-turbo
+
+  # Route by token count
+  token_routing:
+    - threshold: 100000
+      model: claude-3-opus
+    - threshold: 30000
+      model: gpt-4-turbo
+    - threshold: 10000
+      model: gpt-3.5-turbo
+    - threshold: 0
+      model: gemini-pro
+
+# Cost Controls
+cost_controls:
+  daily_budget_usd: 100.00
+  alert_threshold_percent: 80
+  hard_limit_threshold_percent: 95
+
+  # Per-user limits
+  per_user:
+    daily_budget_usd: 5.00
+    rate_limit_requests_per_hour: 100
+
+  # Per-endpoint limits
+  per_endpoint:
+    "/api/chat": 1000
+    "/api/summarize": 500
+    "/api/generate": 200
+
+# Fallback Chain Configuration
+fallback_chain:
+  enabled: true
+  max_retries: 3
+  retry_delay_ms: 1000
+
+  # When to trigger fallback
+  triggers:
+    - status_code: 429  # Rate limit
+    - status_code: 503  # Service unavailable
+    - status_code: 500  # Internal error
+    - timeout: true
+    - cost_limit_reached: true
+
+# Circuit Breaker
+circuit_breaker:
+  failure_threshold: 5
+  timeout_ms: 30000
+  reset_timeout_ms: 60000
+
+# Monitoring
+monitoring:
+  log_all_requests: true
+  track_token_usage: true
+  track_latency: true
+  track_costs: true
+
+  # Export metrics to Prometheus
+  prometheus:
+    enabled: true
+    port: 9090
+    metrics:
+      - ai_requests_total
+      - ai_tokens_total
+      - ai_cost_usd_total
+      - ai_latency_seconds
+      - ai_errors_total

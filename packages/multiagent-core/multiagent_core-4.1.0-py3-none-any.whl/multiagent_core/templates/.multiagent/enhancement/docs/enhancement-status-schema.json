@@ -1,0 +1,318 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Enhancement Status Schema",
+  "description": "Machine-readable status tracking for enhancements",
+  "type": "object",
+  "required": ["id", "title", "status", "priority", "created", "updated"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[0-9]{3}$",
+      "description": "Enhancement ID (e.g., '001', '042')",
+      "examples": ["001", "042"]
+    },
+    "title": {
+      "type": "string",
+      "description": "Short title of the enhancement",
+      "maxLength": 100,
+      "examples": ["Add Redis Caching Layer", "Implement Circuit Breaker Pattern"]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "not-started",
+        "analyzed",
+        "ready",
+        "in-progress",
+        "blocked",
+        "completed",
+        "rejected",
+        "deferred"
+      ],
+      "description": "Current status of the enhancement"
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["critical", "high", "medium", "low"],
+      "description": "Priority level"
+    },
+    "source": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["pr-review", "manual", "issue", "customer-request"],
+          "description": "Where this enhancement originated"
+        },
+        "reference": {
+          "type": "string",
+          "description": "Reference to source (PR number, issue number, etc.)",
+          "examples": ["PR #123", "Issue #45", "Customer feedback"]
+        }
+      }
+    },
+    "created": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when enhancement was created"
+    },
+    "updated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of last status change"
+    },
+    "analyzed": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "When analysis was completed (null if not analyzed yet)"
+    },
+    "started": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "When implementation started (null if not started yet)"
+    },
+    "completed": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "When implementation completed (null if not completed yet)"
+    },
+    "analysis": {
+      "type": "object",
+      "description": "Analysis results from enhancement-analyzer agent",
+      "properties": {
+        "confidence": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Confidence score for the analysis (0.0-1.0)"
+        },
+        "complexity": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "Overall complexity score (1=trivial, 5=extreme)"
+        },
+        "effort_hours": {
+          "type": "object",
+          "properties": {
+            "min": {"type": "number", "minimum": 0},
+            "max": {"type": "number", "minimum": 0},
+            "estimate": {"type": "number", "minimum": 0}
+          },
+          "description": "Effort estimate in hours"
+        },
+        "estimated_loc": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Estimated lines of code to add/modify"
+        },
+        "affected_subsystems": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "List of subsystems this enhancement would affect",
+          "examples": [["backend", "deployment", "testing"]]
+        },
+        "business_value": {
+          "type": "string",
+          "enum": ["low", "medium", "high", "critical"],
+          "description": "Assessed business value impact"
+        },
+        "technical_risk": {
+          "type": "string",
+          "enum": ["low", "medium", "high", "critical"],
+          "description": "Technical risk level"
+        },
+        "recommendation": {
+          "type": "string",
+          "enum": ["implement", "defer", "reject"],
+          "description": "Agent's recommendation"
+        },
+        "priority_score": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 10.0,
+          "description": "Calculated priority score (higher = more important)"
+        }
+      }
+    },
+    "implementation": {
+      "type": "object",
+      "description": "Implementation tracking data",
+      "properties": {
+        "branch": {
+          "type": ["string", "null"],
+          "description": "Git branch name (e.g., 'enhancement/001-redis-caching')"
+        },
+        "safety_tag": {
+          "type": ["string", "null"],
+          "description": "Git tag for rollback point (e.g., 'pre-enhancement/001-20251013-143022')"
+        },
+        "assignee": {
+          "type": ["string", "null"],
+          "description": "Agent or developer assigned",
+          "examples": ["@claude", "@qwen", "developer-name"]
+        },
+        "spec_promoted": {
+          "type": ["boolean", "null"],
+          "description": "Whether this was promoted to a full spec"
+        },
+        "spec_directory": {
+          "type": ["string", "null"],
+          "description": "If promoted, the spec directory path",
+          "examples": ["specs/010-redis-caching"]
+        }
+      }
+    },
+    "blocking": {
+      "type": "object",
+      "description": "Blocking information if status is 'blocked'",
+      "properties": {
+        "reason": {
+          "type": "string",
+          "description": "Why this is blocked"
+        },
+        "blocked_by": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "What is blocking this (enhancement IDs, issues, etc.)",
+          "examples": [["enhancement-002", "issue-#45"]]
+        },
+        "since": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When this became blocked"
+        }
+      }
+    },
+    "deferred": {
+      "type": "object",
+      "description": "Deferral information if status is 'deferred'",
+      "properties": {
+        "reason": {
+          "type": "string",
+          "description": "Why this was deferred"
+        },
+        "deferred_until": {
+          "type": ["string", "null"],
+          "description": "When to revisit (ISO date or description)",
+          "examples": ["2025-Q2", "When customer demand increases", "2025-06-01"]
+        },
+        "revisit_criteria": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Conditions that would trigger reconsideration",
+          "examples": [["3+ customer requests", "Performance degrades below SLA"]]
+        }
+      }
+    },
+    "rejected": {
+      "type": "object",
+      "description": "Rejection information if status is 'rejected'",
+      "properties": {
+        "reason": {
+          "type": "string",
+          "description": "Why this was rejected"
+        },
+        "alternative": {
+          "type": ["string", "null"],
+          "description": "Recommended alternative approach"
+        }
+      }
+    },
+    "related": {
+      "type": "object",
+      "description": "Related items",
+      "properties": {
+        "enhancements": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Related enhancement IDs",
+          "examples": [["002", "003"]]
+        },
+        "specs": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Related spec directories",
+          "examples": [["specs/005-api-optimization"]]
+        },
+        "issues": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Related GitHub issue numbers",
+          "examples": [["#45", "#67"]]
+        },
+        "prs": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Related PR numbers",
+          "examples": [["#123", "#125"]]
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Additional metadata",
+      "properties": {
+        "tags": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Freeform tags for categorization",
+          "examples": [["performance", "caching", "redis"]]
+        },
+        "notes": {
+          "type": "string",
+          "description": "Brief notes or comments"
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "id": "001",
+      "title": "Add Redis Caching Layer",
+      "status": "ready",
+      "priority": "high",
+      "source": {
+        "type": "pr-review",
+        "reference": "PR #123"
+      },
+      "created": "2025-10-13T10:30:00Z",
+      "updated": "2025-10-13T15:45:00Z",
+      "analyzed": "2025-10-13T14:20:00Z",
+      "started": null,
+      "completed": null,
+      "analysis": {
+        "confidence": 0.85,
+        "complexity": 3,
+        "effort_hours": {
+          "min": 4,
+          "max": 6,
+          "estimate": 5
+        },
+        "estimated_loc": 300,
+        "affected_subsystems": ["backend", "deployment", "performance", "testing"],
+        "business_value": "high",
+        "technical_risk": "low",
+        "recommendation": "implement",
+        "priority_score": 8.5
+      },
+      "implementation": {
+        "branch": null,
+        "safety_tag": null,
+        "assignee": null,
+        "spec_promoted": false,
+        "spec_directory": null
+      },
+      "related": {
+        "enhancements": ["002"],
+        "specs": ["specs/005-api-optimization"],
+        "issues": [],
+        "prs": ["#123"]
+      },
+      "metadata": {
+        "tags": ["performance", "caching", "redis", "backend"],
+        "notes": "Addresses performance bottleneck identified in PR review"
+      }
+    }
+  ]
+}

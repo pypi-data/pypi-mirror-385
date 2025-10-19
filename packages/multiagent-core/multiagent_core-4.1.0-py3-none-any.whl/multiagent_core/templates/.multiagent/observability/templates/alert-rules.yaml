@@ -1,0 +1,183 @@
+# Prometheus Alert Rules
+# Purpose: Define alerting rules for AI/SaaS applications
+
+groups:
+  # AI Service Alerts
+  - name: ai_services
+    interval: 30s
+    rules:
+      - alert: HighAICosts
+        expr: rate(ai_cost_usd_total[1h]) * 24 > 100
+        for: 5m
+        labels:
+          severity: warning
+          category: cost
+        annotations:
+          summary: "AI costs exceeding daily budget"
+          description: "Projected daily AI costs: ${{ $value | humanize }}. Budget: $100."
+
+      - alert: AIProviderDown
+        expr: up{job="ai-services"} == 0
+        for: 2m
+        labels:
+          severity: critical
+          category: availability
+        annotations:
+          summary: "AI provider unavailable"
+          description: "AI service {{ $labels.instance }} has been down for more than 2 minutes."
+
+      - alert: HighAILatency
+        expr: histogram_quantile(0.95, rate(ai_latency_seconds_bucket[5m])) > 5
+        for: 5m
+        labels:
+          severity: warning
+          category: performance
+        annotations:
+          summary: "High AI request latency"
+          description: "95th percentile AI latency is {{ $value }}s (threshold: 5s)."
+
+      - alert: AIRateLimitReached
+        expr: rate(ai_errors_total{error="rate_limit"}[5m]) > 0
+        for: 2m
+        labels:
+          severity: warning
+          category: quota
+        annotations:
+          summary: "AI rate limit reached"
+          description: "Provider {{ $labels.provider }} rate limit hit."
+
+  # Application Alerts
+  - name: application
+    interval: 30s
+    rules:
+      - alert: HighErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: critical
+          category: reliability
+        annotations:
+          summary: "High error rate detected"
+          description: "Error rate is {{ $value | humanizePercentage }} (threshold: 5%)."
+
+      - alert: HighResponseTime
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 1
+        for: 5m
+        labels:
+          severity: warning
+          category: performance
+        annotations:
+          summary: "High response time"
+          description: "95th percentile response time: {{ $value }}s (threshold: 1s)."
+
+      - alert: ServiceDown
+        expr: up{job="application"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          category: availability
+        annotations:
+          summary: "Service is down"
+          description: "Service {{ $labels.instance }} has been down for more than 1 minute."
+
+  # Database Alerts
+  - name: database
+    interval: 30s
+    rules:
+      - alert: HighDatabaseConnections
+        expr: pg_stat_database_numbackends / pg_settings_max_connections > 0.8
+        for: 5m
+        labels:
+          severity: warning
+          category: capacity
+        annotations:
+          summary: "High database connection usage"
+          description: "Database connection pool at {{ $value | humanizePercentage }} capacity."
+
+      - alert: SlowQueries
+        expr: rate(pg_stat_statements_mean_time_seconds[5m]) > 1
+        for: 5m
+        labels:
+          severity: warning
+          category: performance
+        annotations:
+          summary: "Slow database queries detected"
+          description: "Average query time: {{ $value }}s (threshold: 1s)."
+
+      - alert: DatabaseDown
+        expr: up{job="postgres"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          category: availability
+        annotations:
+          summary: "Database is down"
+          description: "Database {{ $labels.instance }} is unreachable."
+
+  # Cache Alerts
+  - name: cache
+    interval: 30s
+    rules:
+      - alert: LowCacheHitRate
+        expr: rate(redis_keyspace_hits_total[5m]) / (rate(redis_keyspace_hits_total[5m]) + rate(redis_keyspace_misses_total[5m])) < 0.8
+        for: 10m
+        labels:
+          severity: warning
+          category: performance
+        annotations:
+          summary: "Low cache hit rate"
+          description: "Cache hit rate: {{ $value | humanizePercentage }} (threshold: 80%)."
+
+      - alert: RedisDown
+        expr: up{job="redis"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          category: availability
+        annotations:
+          summary: "Redis is down"
+          description: "Redis instance {{ $labels.instance }} is unreachable."
+
+      - alert: HighMemoryUsage
+        expr: redis_memory_used_bytes / redis_memory_max_bytes > 0.9
+        for: 5m
+        labels:
+          severity: warning
+          category: capacity
+        annotations:
+          summary: "Redis memory usage high"
+          description: "Redis memory usage: {{ $value | humanizePercentage }} (threshold: 90%)."
+
+  # System Resource Alerts
+  - name: system
+    interval: 30s
+    rules:
+      - alert: HighCPUUsage
+        expr: 100 - (avg by (instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+        for: 5m
+        labels:
+          severity: warning
+          category: capacity
+        annotations:
+          summary: "High CPU usage"
+          description: "CPU usage: {{ $value }}% (threshold: 80%)."
+
+      - alert: HighMemoryUsage
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+          category: capacity
+        annotations:
+          summary: "High memory usage"
+          description: "Memory usage: {{ $value }}% (threshold: 85%)."
+
+      - alert: DiskSpaceLow
+        expr: (node_filesystem_avail_bytes / node_filesystem_size_bytes) * 100 < 10
+        for: 5m
+        labels:
+          severity: warning
+          category: capacity
+        annotations:
+          summary: "Low disk space"
+          description: "Disk space available: {{ $value }}% (threshold: 10%)."
