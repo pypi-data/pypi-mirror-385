@@ -1,0 +1,82 @@
+[tool.poetry]
+name = "tabwrap"
+version = "1.1.0"
+description = "Wrap LaTeX table fragments into complete documents for research workflows"
+authors = ["Jan Fasnacht <jan.fasnacht@gmail.com>"]
+readme = "README.md"
+homepage = "https://github.com/janfasnacht/tabwrap"
+repository = "https://github.com/janfasnacht/tabwrap"
+documentation = "https://github.com/janfasnacht/tabwrap#readme"
+keywords = ["latex", "tables", "research", "academic", "statistics"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Text Processing :: Markup :: LaTeX",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Environment :: Console",
+]
+packages = [
+    { include = "tabwrap" }
+]
+
+[tool.poetry.scripts]
+tabwrap = "tabwrap.cli:main"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+click = "^8.1.7"
+pymupdf = "^1.24.11"
+numpy = "^2.1.2"
+pillow = "^10.4.0"
+# Optional API dependencies
+fastapi = {version = "^0.115.0", optional = true}
+uvicorn = {version = "^0.32.0", optional = true}
+python-multipart = {version = "^0.0.12", optional = true}
+
+[tool.poetry.extras]
+api = ["fastapi", "uvicorn", "python-multipart"]
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.4"
+fastapi = "^0.115.0"
+uvicorn = "^0.32.0"
+python-multipart = "^0.0.12"
+httpx = "^0.27.2"
+ruff = "^0.13.2"
+pre-commit = "^4.3.0"
+
+
+[tool.ruff]
+line-length = 127
+target-version = "py310"
+
+[tool.ruff.lint]
+# Equivalent to flake8's E9,F63,F7,F82 plus some modern Python best practices
+select = [
+    "E9",   # syntax errors
+    "F63",  # invalid escape sequence  
+    "F7",   # syntax error in forward annotation
+    "F82",  # undefined name in __all__
+    "F",    # Pyflakes errors
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "I",    # isort
+    "UP",   # pyupgrade
+]
+ignore = []
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
