@@ -1,0 +1,97 @@
+[build-system]
+requires = ["poetry-core>=2.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[project]
+name = "uncertainAPI"
+version = "0.1.1-dev"
+description = "A Python package for uncertainAPI"
+authors = [
+    {name = "Iyanuoluwa Adebayo", email = "adebayo@uncertainapi.com"}
+]
+license = "MIT"
+readme = "README.md"
+requires-python = ">= 3.8"
+keywords = ["uncertainAPI", "API", "Python", "AI", "Python Framework"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities"
+]
+
+[project.urls]
+Homepage = "https://uncertainapi.com/"
+Repository = "https://github.com/Lux-speed-labs/uncertainAPI"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "black>=23.0",
+    "ruff>=0.1.0",
+    "mypy>=1.0",
+]
+
+[tool.poetry]
+packages = [{include = "uncertainAPI", from = "."}]
+include = [
+    { path = "uncertainAPI/py.typed", format = ["sdist", "wheel"] },
+    { path = "LICENSE", format = ["sdist", "wheel"] },
+    { path = "README.md", format = ["sdist", "wheel"] },
+]
+exclude = [
+    "**/.DS_Store",
+    "**/__pycache__",
+    "**/*.pyc",
+    "**/tests",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["uncertainAPI/tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --cov=uncertainAPI --cov-report=term-missing"
+
+[tool.black]
+line-length = 100
+target-version = ["py38", "py39", "py310", "py311"]
+include = '\.pyi?$'
+
+[tool.ruff]
+line-length = 100
+target-version = "py38"
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "N",   # pep8-naming
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "SIM", # flake8-simplify
+]
+ignore = ["N999"]  # Ignore invalid module name for package name
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+strict_equality = true

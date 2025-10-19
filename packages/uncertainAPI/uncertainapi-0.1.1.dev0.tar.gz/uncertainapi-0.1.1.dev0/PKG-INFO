@@ -1,0 +1,149 @@
+Metadata-Version: 2.4
+Name: uncertainAPI
+Version: 0.1.1.dev0
+Summary: A Python package for uncertainAPI
+License-Expression: MIT
+License-File: LICENSE
+Keywords: uncertainAPI,API,Python,AI,Python Framework
+Author: Iyanuoluwa Adebayo
+Author-email: adebayo@uncertainapi.com
+Requires-Python: >= 3.8
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Software Development :: Libraries :: Application Frameworks
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Utilities
+Provides-Extra: dev
+Requires-Dist: black (>=23.0) ; extra == "dev"
+Requires-Dist: mypy (>=1.0) ; extra == "dev"
+Requires-Dist: pytest (>=7.0) ; extra == "dev"
+Requires-Dist: pytest-cov (>=4.0) ; extra == "dev"
+Requires-Dist: ruff (>=0.1.0) ; extra == "dev"
+Project-URL: Homepage, https://uncertainapi.com/
+Project-URL: Repository, https://github.com/Lux-speed-labs/uncertainAPI
+Description-Content-Type: text/markdown
+
+# uncertainAPI
+
+A Python package for uncertainAPI.
+
+## Installation
+
+### From PyPI
+
+```bash
+pip install uncertainAPI
+```
+
+### From source
+
+```bash
+git clone https://github.com/Lux-speed-labs/uncertainAPI.git
+cd uncertainAPI
+make install-dev
+```
+
+## Development Setup
+
+This project uses [Poetry](https://python-poetry.org/) for dependency management and Make for task automation.
+
+### Prerequisites
+
+```bash
+# Install Poetry (if not already installed)
+curl -sSL https://install.python-poetry.org | python3 -
+```
+
+### Quick Start
+
+```bash
+# Install dependencies and create virtual environment
+make install-dev
+
+# Run tests
+make test
+
+# Format code
+make format
+
+# Run linter
+make lint
+
+# Type check
+make type-check
+
+# See all available commands
+make help
+```
+
+## Available Make Commands
+
+### Setup
+- `make install` - Install package and create virtual environment
+- `make install-dev` - Install with development dependencies
+
+### Development
+- `make shell` - Activate virtual environment shell
+- `make run` - Run the main application
+- `make test` - Run tests
+- `make test-cov` - Run tests with coverage report
+- `make lint` - Run linter (ruff)
+- `make format` - Format code with black
+- `make type-check` - Run type checker (mypy)
+
+### Build & Publish
+- `make build` - Build distribution packages
+- `make publish` - Publish to PyPI
+
+### Cleanup
+- `make clean` - Remove build artifacts and cache files
+
+## Usage
+
+```python
+import uncertainAPI
+
+# Your code here
+```
+
+## Adding Dependencies
+
+```bash
+# Add a runtime dependency
+poetry add package-name
+
+# Add a development dependency
+poetry add --group dev package-name
+```
+
+## Manual Poetry Commands
+
+If you prefer to use Poetry directly:
+
+```bash
+# Install dependencies
+poetry install
+
+# Activate virtual environment
+poetry shell
+
+# Run command in virtual environment
+poetry run python script.py
+```
+
+## License
+
+MIT License - see LICENSE file for details.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
