@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!-- The COPYRIGHT file at the top level of this repository contains the full
+copyright notices and license terms. -->
+<data>
+    <xpath expr="/form/notebook" position="inside">
+        <page id="webdav" string="WebDAV Settings">
+            <label name="webdav_url"/>
+            <field name="webdav_url" colspan="3"/>
+            <label name="webdav_username"/>
+            <field name="webdav_username"/>
+            <label name="webdav_password"/>
+            <field name="webdav_password" widget="password"/>
+            <button name="test_webdav_connection" colspan="2" string="Test connection"/>
+            <button name="update_dav_collections" colspan="2" string="Update DAV collections"/>
+            <field name="carddav_collections" colspan="4"/>
+            <field name="caldav_collections" colspan="4"/>
+        </page>
+    </xpath>
+</data>
