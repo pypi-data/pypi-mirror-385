@@ -1,0 +1,68 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "django-startsubapp"
+version = "1.0.0"
+description = "A Django management command to create apps in a subdirectory (e.g., apps/) for better project organization"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "Saman Naruee", email = "samannaruee@gmail.com"}
+]
+keywords = ["django", "management-command", "app-structure", "django-apps"]
+classifiers = [
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "Framework :: Django :: 3.2",
+    "Framework :: Django :: 4.0",
+    "Framework :: Django :: 4.1",
+    "Framework :: Django :: 4.2",
+    "Framework :: Django :: 5.0",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+]
+dependencies = [
+    "Django>=3.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-django>=4.5",
+    "black>=22.0",
+    "isort>=5.0",
+    "flake8>=4.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/Saman-naruee/django-startsubapp"
+Documentation = "https://github.com/Saman-naruee/django-startsubapp#readme"
+Repository = "https://github.com/Saman-naruee/django-startsubapp.git"
+Issues = "https://github.com/Saman-naruee/django-startsubapp/issues"
+
+[tool.setuptools]
+packages = ["startsubapp", "startsubapp.management", "startsubapp.management.commands"]
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.black]
+line-length = 100
+target-version = ["py38"]
+
+[tool.isort]
+profile = "black"
+line_length = 100
