@@ -1,0 +1,29 @@
+datasets:
+- neurodata_type_def: HedTags
+  neurodata_type_inc: VectorData
+  dtype: text
+  doc: An extension of VectorData for Hierarchical Event Descriptor (HED) tags. 
+    Always has the name HED
+- neurodata_type_def: HedValueVector
+  neurodata_type_inc: VectorData
+  doc: An extension of VectorData for Hierarchical Event Descriptor (HED) tags. 
+    Always has the name HED
+  attributes:
+  - name: hed
+    dtype: text
+    doc: 'The HED annotation applicable to the column (expects #).'
+groups:
+- neurodata_type_def: HedLabMetaData
+  neurodata_type_inc: LabMetaData
+  doc: Extension type for storing a HED (Hierarchical Event Descriptor) schema 
+    in lab metadata
+  quantity: '?'
+  attributes:
+  - name: hed_schema_version
+    dtype: text
+    doc: The HED schema version(s) used in this NWB file, e.g., '8.4.0' or 
+      '["score_2.1.0","lang_1.1.0"]'.
+  - name: definitions
+    dtype: text
+    doc: A string containing one or more HED definitions.
+    required: false
