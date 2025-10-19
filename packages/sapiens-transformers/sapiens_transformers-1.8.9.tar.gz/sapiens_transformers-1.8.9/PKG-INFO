@@ -1,0 +1,58 @@
+Metadata-Version: 2.2
+Name: sapiens_transformers
+Version: 1.8.9
+Home-page: https://github.com/sapiens-technology/sapiens_transformers
+Author: SAPIENS TECHNOLOGY
+License: Proprietary Software
+License-File: LICENSE.txt
+Requires-Dist: transformers==4.45.2
+Requires-Dist: huggingface-hub
+Requires-Dist: requests
+Requires-Dist: certifi
+Requires-Dist: tqdm
+Requires-Dist: numpy
+Requires-Dist: torch==2.4.1
+Requires-Dist: torchvision==0.19.1
+Requires-Dist: torchaudio==2.4.1
+Requires-Dist: accelerate
+Requires-Dist: sapiens-machine
+Requires-Dist: sapiens-accelerator
+Requires-Dist: sapiens-generalization
+Requires-Dist: tokenizers
+Requires-Dist: regex
+Requires-Dist: datasets
+Requires-Dist: sentencepiece
+Requires-Dist: protobuf
+Requires-Dist: optimum
+Requires-Dist: einops
+Requires-Dist: nemo-toolkit
+Requires-Dist: hydra-core
+Requires-Dist: lightning
+Requires-Dist: braceexpand
+Requires-Dist: webdataset
+Requires-Dist: h5py
+Requires-Dist: ijson
+Requires-Dist: matplotlib
+Requires-Dist: diffusers==0.32.2
+Requires-Dist: moviepy
+Requires-Dist: llama-cpp-python==0.3.6
+Requires-Dist: llamacpp==0.1.14
+Requires-Dist: beautifulsoup4
+Requires-Dist: av
+Requires-Dist: ftfy
+Requires-Dist: tiktoken
+Requires-Dist: opencv-python
+Requires-Dist: scipy
+Requires-Dist: TTS
+Requires-Dist: pydub
+Requires-Dist: megatron-core
+Provides-Extra: toolkit
+Requires-Dist: nemo-toolkit[all]; extra == "toolkit"
+Provides-Extra: multimedia
+Requires-Dist: av; python_version >= "3.12" and extra == "multimedia"
+Requires-Dist: TTS; python_version < "3.12" and extra == "multimedia"
+Dynamic: author
+Dynamic: home-page
+Dynamic: license
+Dynamic: provides-extra
+Dynamic: requires-dist
