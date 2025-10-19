@@ -1,0 +1,21 @@
+# -------------------------------
+# MANIFEST.in — OPM packaging rules
+# -------------------------------
+
+# Include essential project metadata
+include README.md
+include LICENSE*
+include pyproject.toml
+include opm.example.yaml
+
+# Exclude local/dev artifacts
+exclude setup.sh
+exclude opm.yaml
+prune .opm
+
+# Exclude Odoo addons (not part of CLI)
+exclude addons
+prune addons
+
+exclude .env
+exclude .env.*
