@@ -1,0 +1,114 @@
+root:
+             creates   file:./
+             creates   file:plan.py
+             creates   step:runpy ./plan.py
+
+file:./
+               state = STATIC
+          created by   root:
+            supplies   file:generated.tex
+            supplies   file:paper-inventory.txt
+            supplies   file:paper.aux
+            supplies   file:paper.fls
+            supplies   file:paper.log
+            supplies   file:paper.pdf
+            supplies   file:paper.tex
+            supplies   file:plan.py
+            supplies   file:smile.pdf
+            supplies   step:compile-latex paper.tex --run-bibtex --inventory=paper-inventory.txt
+            supplies   step:runpy ./plan.py
+            supplies   step:runsh echo 'Hi there!' > generated.tex
+
+file:plan.py
+               state = STATIC
+          created by   root:
+            consumes   file:./
+            supplies   step:runpy ./plan.py
+
+step:runpy ./plan.py
+               state = SUCCEEDED
+             env_var = REPREP_LATEX_INVENTORY [amended]
+                     = STEPUP_PATH_FILTER [amended]
+          created by   root:
+            consumes   file:./
+            consumes   file:plan.py
+             creates   file:paper.tex
+             creates   file:smile.pdf
+             creates   step:compile-latex paper.tex --run-bibtex --inventory=paper-inventory.txt
+             creates   step:runsh echo 'Hi there!' > generated.tex
+
+file:paper.tex
+               state = STATIC
+          created by   step:runpy ./plan.py
+            consumes   file:./
+            supplies   step:compile-latex paper.tex --run-bibtex --inventory=paper-inventory.txt
+
+file:smile.pdf
+               state = STATIC
+          created by   step:runpy ./plan.py
+            consumes   file:./
+            supplies   step:compile-latex paper.tex --run-bibtex --inventory=paper-inventory.txt
+
+step:compile-latex paper.tex --run-bibtex --inventory=paper-inventory.txt
+               state = SUCCEEDED
+             env_var = REPREP_LATEX [amended]
+                     = STEPUP_PATH_FILTER [amended]
+          created by   step:runpy ./plan.py
+            consumes   file:./
+            consumes   file:generated.tex [amended]
+            consumes   file:paper.tex
+            consumes   file:smile.pdf [amended]
+             creates   file:paper-inventory.txt
+             creates   file:paper.aux
+             creates   file:paper.fls
+             creates   file:paper.log
+             creates   file:paper.pdf
+            supplies   file:paper-inventory.txt
+            supplies   file:paper.aux
+            supplies   file:paper.fls
+            supplies   file:paper.log [amended]
+            supplies   file:paper.pdf
+
+file:paper-inventory.txt
+               state = BUILT
+          created by   step:compile-latex paper.tex --run-bibtex --inventory=paper-inventory.txt
+            consumes   file:./
+            consumes   step:compile-latex paper.tex --run-bibtex --inventory=paper-inventory.txt
+
+file:paper.aux
+               state = BUILT
+          created by   step:compile-latex paper.tex --run-bibtex --inventory=paper-inventory.txt
+            consumes   file:./
+            consumes   step:compile-latex paper.tex --run-bibtex --inventory=paper-inventory.txt
+
+file:paper.fls
+               state = BUILT
+          created by   step:compile-latex paper.tex --run-bibtex --inventory=paper-inventory.txt
+            consumes   file:./
+            consumes   step:compile-latex paper.tex --run-bibtex --inventory=paper-inventory.txt
+
+file:paper.pdf
+               state = BUILT
+          created by   step:compile-latex paper.tex --run-bibtex --inventory=paper-inventory.txt
+            consumes   file:./
+            consumes   step:compile-latex paper.tex --run-bibtex --inventory=paper-inventory.txt
+
+step:runsh echo 'Hi there!' > generated.tex
+               state = SUCCEEDED
+          created by   step:runpy ./plan.py
+            consumes   file:./
+             creates   file:generated.tex
+            supplies   file:generated.tex
+
+file:generated.tex
+               state = BUILT
+          created by   step:runsh echo 'Hi there!' > generated.tex
+            consumes   file:./
+            consumes   step:runsh echo 'Hi there!' > generated.tex
+            supplies   step:compile-latex paper.tex --run-bibtex --inventory=paper-inventory.txt
+
+file:paper.log
+               state = VOLATILE
+          created by   step:compile-latex paper.tex --run-bibtex --inventory=paper-inventory.txt
+            consumes   file:./
+            consumes   step:compile-latex paper.tex --run-bibtex --inventory=paper-inventory.txt
