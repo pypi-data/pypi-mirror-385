@@ -1,0 +1,69 @@
+[tool.poetry]
+name = "coldstore"
+version = "1.0.0"
+description = "Project archival with structured metadata (Git state, environment, notes) and multi-level integrity verification"
+authors = ["Jan Fasnacht <jan.fasnacht@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/janfasnacht/coldstore"
+repository = "https://github.com/janfasnacht/coldstore"
+documentation = "https://github.com/janfasnacht/coldstore#readme"
+keywords = [
+    "archival",
+    "metadata",
+    "research",
+    "academic",
+    "snapshot",
+    "verification",
+    "git",
+    "compliance",
+    "audit"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "Topic :: System :: Archiving",
+    "Topic :: System :: Archiving :: Backup",
+    "Topic :: Software Development :: Version Control :: Git",
+    "Topic :: Scientific/Engineering",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Environment :: Console",
+    "Typing :: Typed"
+]
+packages = [{include = "coldstore"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+click = ">=8.0,<8.2"
+typer = "^0.12.0"
+pyyaml = "^6.0"
+pydantic = "^2.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+pytest-cov = "^4.0.0"
+ruff = "^0.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+coldstore = "coldstore.cli.app:app"
+
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+select = ["E", "F", "I", "N", "W", "UP", "B", "C90", "RUF"]
+ignore = ["UP007"]  # Allow Optional[X] instead of X | Y (style preference)
+
+[tool.ruff.per-file-ignores]
+"tests/*" = ["N802", "N803"]  # Allow non-lowercase function names in tests
