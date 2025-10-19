@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add README.md)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nFix pymed-paperscraper repository URL in README\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git push origin main)",
+      "Bash(git tag -a v0.1.2 -m \"Release v0.1.2: Comprehensive XML extraction improvements\")",
+      "Bash(git push origin v0.1.2)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
