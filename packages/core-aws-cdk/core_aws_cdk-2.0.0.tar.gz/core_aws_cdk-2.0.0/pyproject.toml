@@ -1,0 +1,94 @@
+# Other project metadata fields as specified in:
+# https://packaging.python.org/en/latest/specifications/declaring-project-metadata/
+# https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
+
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "core-aws-cdk"
+description = "This project contains the commons elements to create infrastructure in AWS using AWS CDK..."
+version = "2.0.0"
+
+authors = [
+    {name = "Alejandro Cora González", email = "alek.cora.glez@gmail.com"}
+]
+
+maintainers = [
+    {name = "Alejandro Cora González"}
+]
+
+requires-python = ">=3.9"
+license = "MIT"
+readme = "README.rst"
+
+classifiers = [
+    # Classifiers -> https://pypi.org/classifiers/
+    "Intended Audience :: Developers",
+    "Development Status :: 5 - Production/Stable",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+
+dependencies = [
+    "aws-cdk-lib>=2.195.0",
+    "core-mixins>=2.1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "core-dev-tools>=1.0.1",
+    "core-tests>=2.0.3",
+    "pytest-xdist>=3.5.0",
+]
+
+[project.urls]
+Homepage = "https://gitlab.com/bytecode-solutions/infrastructure/core-aws-cdk"
+Repository = "https://gitlab.com/bytecode-solutions/core/core-aws-cdk"
+Documentation = "https://core-aws-cdk.readthedocs.io/en/latest/"
+Issues = "https://gitlab.com/bytecode-solutions/core/core-aws-cdk/-/issues"
+Changelog = "https://gitlab.com/bytecode-solutions/core/core-aws-cdk/-/blob/master/CHANGELOG.md"
+
+[tool.setuptools.package-data]
+"core_aws_cdk" = ["py.typed"]
+
+[tool.pytest.ini_options]
+# Pytest configuration for parallel test execution
+minversion = "7.0"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+# Parallel execution options
+# Use -n auto to automatically detect number of CPUs
+# Or specify a number: -n 4 for 4 parallel workers
+addopts = [
+    "-v",                   # Verbose output
+    "--tb=short",           # Shorter traceback format
+    "--strict-markers",     # Ensure all markers are defined
+    "-ra",                  # Show summary of all test results
+    "--color=yes",          # Colored output
+]
+
+# Markers for test categorization
+markers = [
+    "unit: Unit tests (fast, no external dependencies)",
+    "functional: Functional tests (deploy to AWS, slower)",
+    "integration: Integration tests (multiple services)",
+    "slow: Slow running tests",
+]
+
+# Logging configuration
+log_cli = true
+log_cli_level = "INFO"
+log_cli_format = "[%(levelname)s] %(message)s"
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
