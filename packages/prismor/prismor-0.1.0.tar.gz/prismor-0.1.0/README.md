@@ -1,0 +1,329 @@
+# Prismor CLI
+
+A powerful command-line tool for scanning GitHub repositories for security vulnerabilities, secrets, and generating Software Bill of Materials (SBOM).
+
+**Get started at [https://prismor.dev](https://prismor.dev)** - Sign up for free to get your API key and access full dashboarding and analysis features!
+
+## Features
+
+- 🔍 **Vulnerability Scanning (VEX)** - Detect security vulnerabilities in your codebase
+- 🔐 **Secret Detection** - Find exposed secrets, API keys, and credentials
+- 📦 **SBOM Generation** - Generate comprehensive Software Bill of Materials
+- ⚡ **Full Scan** - Run all security checks in one command
+- 🎨 **Beautiful CLI Output** - Colorful, easy-to-read results
+- 🔗 **Flexible Repository Input** - Support for `username/repo` or full GitHub URLs
+
+## Quick Start
+
+1. **Sign up** at [https://prismor.dev](https://prismor.dev)
+2. **Generate your API Key** from the dashboard
+3. **Install** the CLI: `pip install prismor`
+4. **Set your API key**: `export PRISMOR_API_KEY=your_api_key`
+5. **Run your first scan**: `prismor --scan username/repo --fullscan`
+
+For the complete analysis with dashboards and reports, visit [Prismor.dev](https://prismor.dev) after running scans!
+
+## Installation
+
+Install Prismor CLI via pip:
+
+```bash
+pip install prismor
+```
+
+## Prerequisites
+
+### Getting Your API Key
+
+Before using Prismor CLI, you need to get your API key from [Prismor.dev](https://prismor.dev):
+
+1. Visit [https://prismor.dev](https://prismor.dev)
+2. **Sign up** for a free account
+3. Navigate to your dashboard
+4. **Generate an API Key**
+5. Copy your API key
+
+### Setting Up Your API Key
+
+Once you have your API key, set it as an environment variable:
+
+```bash
+export PRISMOR_API_KEY=your_api_key_here
+```
+
+To make this permanent, add it to your shell configuration file (`~/.bashrc`, `~/.zshrc`, etc.):
+
+```bash
+echo 'export PRISMOR_API_KEY=your_api_key_here' >> ~/.zshrc
+source ~/.zshrc
+```
+
+### Private Repositories
+
+To scan **private repositories**, you need to integrate your GitHub account:
+
+1. Go to [Prismor.dev](https://prismor.dev)
+2. Navigate to **Settings** or **Integrations**
+3. **Connect your GitHub account**
+4. Authorize Prismor to access your private repositories
+
+This allows Prismor to securely access and scan your private repositories.
+
+## Usage
+
+### Basic Syntax
+
+```bash
+prismor --scan <repository> [scan-type]
+```
+
+### Repository Format
+
+You can specify repositories in two ways:
+
+1. **Username/Repository format:**
+   ```bash
+   prismor --scan Ar9av/trychai-web-revamped --fullscan
+   ```
+
+2. **Full GitHub URL:**
+   ```bash
+   prismor --scan https://github.com/Ar9av/trychai-web-revamped --fullscan
+   ```
+
+### Scan Types
+
+#### 1. Vulnerability Scanning (VEX)
+
+Scan for security vulnerabilities in your dependencies and code:
+
+```bash
+prismor --scan myrepository --vex
+```
+
+#### 2. Secret Detection
+
+Detect exposed secrets, API keys, passwords, and other sensitive information:
+
+```bash
+prismor --scan myrepository --detect-secret
+```
+
+#### 3. SBOM Generation
+
+Generate a Software Bill of Materials for your repository:
+
+```bash
+prismor --scan myrepository --sbom
+```
+
+#### 4. Full Scan
+
+Run all security checks (VEX + Secret Detection + SBOM):
+
+```bash
+prismor --scan myrepository --fullscan
+```
+
+### Multiple Scan Types
+
+You can combine multiple scan types:
+
+```bash
+prismor --scan myrepository --vex --detect-secret
+```
+
+### JSON Output
+
+Get results in JSON format for automation and integration:
+
+```bash
+prismor --scan myrepository --fullscan --json
+```
+
+## Examples
+
+### Example 1: Quick Vulnerability Scan
+
+```bash
+prismor --scan facebook/react --vex
+```
+
+### Example 2: Comprehensive Security Audit
+
+```bash
+prismor --scan https://github.com/microsoft/vscode --fullscan
+```
+
+### Example 3: Secret Detection Only
+
+```bash
+prismor --scan openai/gpt-3 --detect-secret
+```
+
+### Example 4: SBOM Generation with JSON Output
+
+```bash
+prismor --scan kubernetes/kubernetes --sbom --json > sbom-results.json
+```
+
+## Additional Commands
+
+### Check Configuration
+
+View your current Prismor CLI configuration:
+
+```bash
+prismor config
+```
+
+### Version Information
+
+Display the version of Prismor CLI:
+
+```bash
+prismor version
+```
+
+Or:
+
+```bash
+prismor --version
+```
+
+### Help
+
+Get help and see all available options:
+
+```bash
+prismor --help
+```
+
+## Output
+
+Prismor CLI provides clear, colorful output with:
+
+- ✓ Success indicators
+- ✗ Error messages
+- ℹ Information updates
+- ⚠ Warnings
+- Detailed scan results including:
+  - Repository information
+  - Vulnerability counts
+  - Secret detection findings
+  - SBOM artifact counts
+  - Download links for detailed reports
+
+## Full Analysis & Dashboarding
+
+For comprehensive analysis and visualization of your scan results, visit the **[Prismor Dashboard](https://prismor.dev)**:
+
+### Features Available on Prismor.dev:
+- 📊 **Interactive Dashboards** - Visualize security trends and metrics
+- 📈 **Historical Analysis** - Track vulnerabilities over time
+- 🎯 **Detailed Reports** - In-depth analysis of all findings
+- 🔔 **Alerts & Notifications** - Get notified of critical issues
+- 👥 **Team Collaboration** - Share reports with your team
+- 🔄 **CI/CD Integration** - Automate scans in your pipeline
+- 📁 **Repository Management** - Manage multiple repositories in one place
+
+### Accessing Full Reports:
+
+After running a scan with the CLI, you can:
+
+1. Visit [https://prismor.dev](https://prismor.dev)
+2. Log into your dashboard
+3. View all your scan results with rich visualizations
+4. Export reports in various formats
+5. Set up automated scanning schedules
+
+The CLI provides quick results in your terminal, while the web dashboard offers comprehensive analysis and long-term security monitoring.
+
+## API Information
+
+Prismor CLI communicates with the Prismor API at `https://api.prismor.dev`. The CLI handles:
+
+- Authentication via API key
+- Request formatting
+- Error handling
+- Response parsing
+- Result presentation
+
+## Troubleshooting
+
+### API Key Not Set
+
+If you see an error about `PRISMOR_API_KEY` not being set:
+
+```bash
+export PRISMOR_API_KEY=your_api_key_here
+```
+
+### Invalid Repository Format
+
+Ensure your repository is in one of these formats:
+- `username/repository`
+- `https://github.com/username/repository`
+
+### Connection Issues
+
+If you experience connection issues:
+1. Check your internet connection
+2. Verify the API endpoint is accessible
+3. Ensure your API key is valid
+
+## Development
+
+### Local Installation
+
+For development, clone the repository and install in editable mode:
+
+```bash
+git clone https://github.com/PrismorSec/prismor-cli.git
+cd prismor-cli
+pip install -e .
+```
+
+### Project Structure
+
+```
+prismor-cli/
+├── prismor/
+│   ├── __init__.py      # Package initialization
+│   ├── cli.py           # CLI interface and commands
+│   └── api.py           # API client and communication
+├── setup.py             # Package configuration
+├── requirements.txt     # Dependencies
+└── README.md            # Documentation
+```
+
+## Requirements
+
+- Python 3.7 or higher
+- `click` >= 8.0.0
+- `requests` >= 2.25.0
+
+## License
+
+MIT License - See LICENSE file for details
+
+## Support
+
+- **Website**: [https://prismor.dev](https://prismor.dev)
+- **Dashboard**: [https://prismor.dev](https://prismor.dev) (Sign up for full features)
+- **Documentation**: [https://docs.prismor.dev](https://docs.prismor.dev)
+- **Issues**: [https://github.com/PrismorSec/prismor-cli/issues](https://github.com/prismor/prismor-cli/issues)
+
+### Need Help?
+
+1. Visit [Prismor.dev](https://prismor.dev) for full documentation and support
+2. Check the dashboard for detailed scan results and analysis
+3. Join our community for questions and discussions
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+---
+
+Made with ❤️ by Prismor
