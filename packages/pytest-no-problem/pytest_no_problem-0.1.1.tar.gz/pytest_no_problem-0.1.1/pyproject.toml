@@ -1,0 +1,56 @@
+[project]
+name = "pytest-no-problem"
+version = "0.1.1"
+description = "Pytest plugin to tell you when there's no problem"
+readme = "README.md"
+authors = [
+    { name = "Ben Berry-Allwood", email = "b.berry-allwood@protonmail.com" }
+]
+classifiers = [
+    "Framework :: Pytest",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Testing",
+]
+
+requires-python = ">=3.9"
+dependencies = [
+    "pytest>=7.0",
+]
+
+[project.entry-points.pytest11]
+pytest_no_problem = "pytest_no_problem"
+
+[project.urls]
+Repository = "https://codeberg.org/benba/pytest-no-problem"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.11.4",
+]
+
+[tool.pytest.ini_options]
+addopts = [
+  "--import-mode=importlib",
+]
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = ["D100", "D104"]
+
+[tool.ruff.lint.per-file-ignores]
+"src/pytest_no_problem/**.py" = ["PT013"]
+"tests/**.py" = ["S101", "ANN201", "D10", "INP001"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

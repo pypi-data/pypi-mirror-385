@@ -1,0 +1,57 @@
+min_version = "2025.10.11"
+
+[tools]
+uv = "0.9.3"
+
+[tasks.lint]
+description = "Lint code"
+run = "uv run ruff check"
+
+[tasks."lint:fix"]
+description = "Fix any fixable linting errors"
+run = "uv run ruff check --fix"
+
+[tasks.format]
+description = "Format code"
+run = "uv run ruff format"
+
+[tasks."format:check"]
+description = "Check code is formatted"
+run = "uv run ruff format --check"
+
+[tasks.build]
+description = "Build package"
+run = "uv build"
+
+[tasks.test]
+description = "Run tests"
+run = """
+if [ '{{option(name='python')}}' != '' ]; then
+  uv run --python {{option(name='python')}} --isolated pytest
+else
+  uv run pytest
+fi
+"""
+quiet = true
+
+[tasks.test-all]
+description = "Run tests for all supported Python versions"
+depends = [
+  "test --python 3.9",
+  "test --python 3.10",
+  "test --python 3.11",
+  "test --python 3.12",
+  "test --python 3.13",
+]
+
+[tasks.ci]
+description = "Perform all steps for CI"
+depends = ["lint", "format:check", "test-all"]
+
+[tasks.publish]
+confirm = "This will publish to PyPI - are you sure?"
+description = "Publish to PyPI"
+run = "uv publish"
+
+[env]
+UV_PUBLISH_TOKEN = { age = "YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBZMUhUenRYTWM3cmFwN3ZxT25wZzRRdDRZNEVLZlVwNCtITXFDT2d3Z3dBCjNLWEZJaUhrU1VDcDVOVmtLeUw4VG5mMWsrVzVTTUJOQXVLc1FNZDVoSTQKLT4gJFZ3Yi1ncmVhc2UgUCBBVwpsMXFiWUs4QklyTG1iU1Y5NlNUeWYwT1ZFWTVIN3NHWUN5Wm9TeG5BMUFERDZCRUF0NFpaSU5tNlc2TFZvWUMzCkFjRlFpRmsrWDZqYUI4SC9uTE4waWw1MzdOY1kzcnF3ZytTbklEczVCNyt1RnVvWDN5VnA1MnJBSklRCi0tLSBkdVJXR1gvK24xR2UyVUdsRDFUWDQ4ajBvaUowYTE1M3N5ZExselF6bW5VCpfMi8iBGIQn2iqzAza7GEzyY81iu3qDAUHWYMCt+iwWRXaAsuoLggt6kP9WwqmQQ9vlk3y1K+l/HzpY8TGYjW5GCsnvMMqE6KWG4lnIKs2cAYLk0xjd/3hAwLQVSguXEJxWCmn2rlaAt+CvT8CODNN34hffL0lHdo+8sXS/0vs5hEkKXUyvRz2TwWIzCXvV8ziCn/WvPZ/YEdRereOg7TsXqVmUM9QzoX1gkesHvNZS103mlCjxUy90lh/RGN82uKQ22qP8NJqV6RW9o/ey0RfPs8BHmPmwW+Iya2EV76VAcZ8p6TY8hiLkXKMyKAhu5Y9p9pyne68+rB9U" }
