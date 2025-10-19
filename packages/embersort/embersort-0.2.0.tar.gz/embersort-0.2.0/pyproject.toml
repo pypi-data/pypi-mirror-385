@@ -1,0 +1,14 @@
+[project]
+name = "embersort"
+version = "0.2.0"
+description="A simple yet powerful Python module to automatically organize files into categorized folders."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = []
+
+[project.scripts]
+embersort = "embersort:main"
+
+[build-system]
+requires = ["uv_build>=0.9.4,<0.10.0"]
+build-backend = "uv_build"
