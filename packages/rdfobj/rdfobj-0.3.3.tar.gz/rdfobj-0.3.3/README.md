@@ -1,0 +1,44 @@
+# RDFObject (RDFObj)
+
+**A Python library for Object-Oriented RDF data manipulation**
+
+---
+
+## Key Features
+
+RDFObject provides a seamless bridge between Python objects and RDF data, offering:
+
+- **OWL to Python code generation**: Automatically generate Python classes from OWL ontologies.
+- **Object-Triple Store mapping**: Map Python objects directly to RDF triples.
+- **CRUD operations**: Create, Read, Update, and Delete RDF data with ease.
+- **Browsing API**: Explore RDF datasets using both object models and SPARQL queries.
+
+---
+
+## Purpose
+
+This library simplifies the exploration and manipulation of large-scale RDF datasets. It functions as an ORM-like library, mapping Python objects to RDF using auto-generated SPARQL queries. The Python class model is dynamically extracted from the OWL specification, ensuring consistency and reducing manual effort.
+
+---
+## Presentations
+
+- **English**:[Concept and Usage  + RDF Query API Generation](https://forge.inrae.fr/pegase/wspilot/-/raw/master/hackathon/rdfobj/doc/rdfobj_custom_ontology_tutorial-en.pdf)
+
+- **French**:[Concept and Usage  + RDF Query API Generation](https://forge.inrae.fr/pegase/wspilot/-/raw/master/hackathon/rdfobj/doc/rdfobj_custom_ontology_tutorial-fr.pdf)
+
+## Tutorial
+
+For a hands-on guide, see:
+
+
+
+[Custom Ontology Creation and RDF Query API Generation](https://forge.inrae.fr/pegase/wspilot/-/raw/master/hackathon/rdfobj/doc/custom_onto_with_biopax.pdf)
+
+---
+
+## Installation
+
+Install the library via pip:
+
+```bash
+pip install rdfobj
