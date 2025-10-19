@@ -1,0 +1,38 @@
+[package]
+name = "rustsat-pyapi"
+version.workspace = true
+edition.workspace = true
+authors = ["Christoph Jabs <christoph.jabs@helsinki.fi>"]
+license.workspace = true
+description = "This library aims to provide implementations of elements commonly used in the development on software in the area of satisfiability solving. The focus of the library is to provide as much ease of use without giving up on performance."
+keywords = ["sat", "satisfiability", "encodings"]
+repository = "https://github.com/chrjabs/rustsat"
+readme = "README.md"
+rust-version.workspace = true
+
+# The PyAPI is published on PyPI rather than crates.io
+publish = false
+
+build = "build.rs"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+# keep-sorted start block=yes
+pyo3 = { version = "0.26.0", features = [
+  "extension-module",
+  "abi3",
+  "abi3-py37",
+  "multiple-pymethods",
+] }
+rustsat = { workspace = true, features = ["fxhash"] }
+# keep-sorted end
+
+[build-dependencies]
+pyo3-build-config = { version = "0.26.0" }
+
+[features]
+_test = []
+
+[lib]
+crate-type = ["cdylib"]
