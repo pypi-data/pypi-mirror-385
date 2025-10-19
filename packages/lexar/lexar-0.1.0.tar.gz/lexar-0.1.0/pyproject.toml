@@ -1,0 +1,46 @@
+[build-system]
+# This section tells tools like pip and build which backend to use.
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+# NEW NAME: The name users will type: pip install lexar
+name = "lexar" 
+version = "0.1.0" 
+authors = [
+  # IMPORTANT: Update this with your actual information
+  { name="Tvisha Majithia", email="tvishamajithia13@gmail.com" },
+]
+description = "A spaCy-based Named Entity Recognition (NER) pipeline optimized for legal documents."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { file="LICENSE" }
+
+# List of dependencies users must have installed for your package to run.
+dependencies = [
+    # Core dependency
+    "spacy>=3.0.0",
+    "en_core_web_sm; python_version < '3.11'", 
+]
+
+# Standard classifiers help users find your package on PyPI.
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Legal Industry",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Text Processing :: Linguistic",
+]
+
+# --- THE CRITICAL FIX FOR IMPORT ERRORS ---
+[tool.setuptools.packages.find]
+# 1. Look for source code inside the 'src' directory
+where = ["src"] 
+# 2. Explicitly include the package named 'lexar' for reliable packaging
+include = ["lexar"]
