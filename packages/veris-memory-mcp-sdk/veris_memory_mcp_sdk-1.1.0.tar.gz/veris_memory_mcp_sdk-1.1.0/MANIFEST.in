@@ -1,0 +1,23 @@
+# Include documentation and configuration files
+include README.md
+include LICENSE
+include CHANGELOG.md
+include requirements.txt
+include pyproject.toml
+
+# Include examples
+recursive-include examples *.py
+
+# Include type stubs if any
+recursive-include veris_memory_sdk *.pyi
+
+# Exclude development and testing files
+exclude .gitignore
+exclude .pre-commit-config.yaml
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
+recursive-exclude * *.pyo
+recursive-exclude * .pytest_cache
+recursive-exclude * .mypy_cache
+recursive-exclude tests *
+recursive-exclude .github *
