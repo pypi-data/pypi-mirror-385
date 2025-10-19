@@ -1,0 +1,55 @@
+Metadata-Version: 2.4
+Name: univocalx-dj
+Version: 2.0.2a6
+Summary: Data and dataset management CLI/desktop tool for S3 and SQL backends
+License-File: LICENSE
+Author: Elad Jerbi
+Author-email: eladxjerbi@gmail.com
+Requires-Python: >=3.12,<3.15
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Requires-Dist: boto3 (>=1.39.16,<2.0.0)
+Requires-Dist: psycopg2-binary (>=2.9.10,<3.0.0)
+Requires-Dist: pydantic (>=2.11.7,<2.12.0)
+Requires-Dist: pydantic-settings (>=2.10.1,<2.11.0)
+Requires-Dist: python-magic (>=0.4.27,<0.5.0) ; sys_platform != "win32"
+Requires-Dist: python-magic-bin (>=0.4.14,<0.5.0) ; sys_platform == "win32"
+Requires-Dist: pyyaml (>=6.0.2,<7.0.0)
+Requires-Dist: rich (>=14.2.0,<15.0.0)
+Requires-Dist: sqlalchemy (>=2.0.42,<2.1.0)
+Requires-Dist: tqdm (>=4.67.1,<5.0.0)
+Description-Content-Type: text/markdown
+
+# Data Journalist
+
+a cli/sdk cli tool for managing datasets.
+
+## Build Desktop
+### Windows
+```
+poetry run pyinstaller --clean --noconfirm desktop.spec
+```
+
+### Linux
+```
+sudo apt install python3.12-tk tk-dev
+sudo apt-get update
+sudo apt-get install -y \
+    libxcb-xinerama0 \
+    libxcb-cursor0 \
+    libxkbcommon-x11-0 \
+    libxcb-render-util0 \
+    libxcb-icccm4 \
+    libxcb-image0 \
+    libxcb-keysyms1 \
+    libxcb-randr0 \
+    libxcb-shape0 \
+    libxcb-sync1 \
+    libxcb-xfixes0 \
+    libxcb-xkb1 \
+    libx11-xcb1
+
+poetry run pyinstaller --clean --noconfirm desktop.spec
+```
