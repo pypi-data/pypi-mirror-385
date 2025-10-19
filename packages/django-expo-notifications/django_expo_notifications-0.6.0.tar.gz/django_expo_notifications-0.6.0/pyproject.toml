@@ -1,0 +1,70 @@
+[project]
+name = "django-expo-notifications"
+version = "0.6.0"
+description = "Send and keep track of Expo push notifications with Django and Celery"
+authors = [{ name = "Jonathan Ehwald", email = "github@ehwald.info" }]
+license = { text = "MIT" }
+readme = "README.md"
+requires-python = ">=3.10,<4.0"
+dependencies = [
+    "django (>=4.2)",
+    "celery (>=5.4)",
+    "django-admin-anchors (>=4.2.0,<5.0.0)",
+    "exponent-server-sdk (>=2.1.0,<3.0.0)",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "Framework :: Django :: 4.2",
+    "Framework :: Django :: 5.1",
+    "Framework :: Django :: 5.2",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+[project.urls]
+homepage = "https://github.com/DoctorJohn/django-expo-notifications"
+repository = "https://github.com/DoctorJohn/django-expo-notifications"
+documentation = "https://github.com/DoctorJohn/django-expo-notifications"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "beautifulsoup4>=4.13.4",
+    "factory-boy>=3.3.3",
+    "pre-commit>=4.2.0",
+    "pytest>=8.3.5",
+    "pytest-cov>=6.1.1",
+    "pytest-django>=4.11.1",
+    "pytest-mock>=3.14.0",
+    "pytest-randomly>=3.16.0",
+    "redis>=5.2.1",
+    "ruff>=0.11.5",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["expo_notifications"]
+
+[tool.ruff.lint]
+extend-select = ["I"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "tests.project.project.settings"
+addopts = "--cov=expo_notifications --cov-report term-missing --cov-report html"
