@@ -1,0 +1,18 @@
+platform: odoo
+
+runtime:
+  odoo_url: "http://localhost:10017"
+  db: "main"
+  user: "<user>"
+  pass: "<password>"
+  container: ""
+  db_host: "<db>"
+  db_port: 5432
+  db_user: "<user>"
+  db_password: "<password>"
+  addons:
+    - "<addons_path>"
+  vite_proxy: "http://localhost:5173"
+  ws_host: "127.0.0.1"
+  ws_port: 8765
+
