@@ -1,0 +1,95 @@
+Metadata-Version: 2.4
+Name: lift_timeseries_cleaner
+Version: 0.1.1
+Summary: A small library to preprocess diary/transaction data for time series models.
+Project-URL: Homepage, https://example.com/timeseries-cleaner
+Author-email: John Kamau <kkamaujohn@gmail.com>
+License-Expression: MIT
+License-File: LICENSE
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.7
+Requires-Dist: pandas>=1.0.0
+Description-Content-Type: text/markdown
+
+# Time Series Cleaning Package
+
+This repository contains a small Python package, `timeseries_cleaner`,
+designed to simplify the transformation of diary or transactional data
+into a format suitable for time–series forecasting models. The goal of
+the package is to encapsulate the repetitive data munging steps so you
+can focus on building and evaluating your models.
+
+## Features
+
+* **Flexible column mapping** – Configure which columns in your raw
+  DataFrame represent dates, values and identifiers using a
+  `PreprocessConfig`. This means you can reuse the same functions
+  across different datasets without editing any code.
+* **Automatic weekly aggregation** – Raw events are aggregated by
+  week, missing weeks are filled with zeros and the resulting timeline
+  is aligned across entities.
+* **Sliding window generation** – Fixed length sequences of past
+  observations (lags) are extracted along with the next value as the
+  target. Windows containing all zeros or missing targets are
+  automatically discarded.
+* **Demographic merging** – Seamlessly join static attributes (e.g.
+  gender, age) to the generated sequences via a single helper.
+* **Train/test splitting** – Hold out the most recent weeks for
+  evaluation, ensuring that each test window has sufficient history
+  behind it.
+
+## Basic Usage
+
+```python
+import pandas as pd
+from timeseries_cleaner import load_data, preprocess_data, merge_demographics, train_test_split, PreprocessConfig
+
+# Load your data (CSV or Excel). Column names will be normalised to lower
+df = load_data("Income Report - Mon Apr 3 2023.xlsx", sheet_name="Income Reports")
+
+# Select and rename the relevant columns from the full report
+dt = df[[
+    "respondent id", "gender", "age", "number of children",
+    "marital status", "country of residence", "income report amount",
+    "income report date created"
+]].rename(columns={
+    "respondent id": "id",
+    "gender": "gender",
+    "age": "age",
+    "number of children": "children",
+    "marital status": "marital",
+    "country of residence": "country",
+    "income report amount": "amount",
+    "income report date created": "date"
+})
+
+demographic_cols = ["id", "gender", "age", "children", "marital", "country"]
+demographics = dt[demographic_cols].drop_duplicates("id")
+
+config = PreprocessConfig(
+    date_col="date",
+    value_col="amount",
+    id_col="id",
+    window=6,
+)
+
+# Split into training and testing sets and process each
+train, test, full = train_test_split(dt, config=config, weeks_back=3, demographics=demographics)
+
+print(train.head())
+```
+
+## Updating the Package
+
+The package is intentionally small and easy to extend. You can add
+additional helper functions or modify existing ones simply by editing
+the modules inside `timeseries_cleaner/`. No special tooling is
+required: the package does not depend on any external libraries beyond
+Pandas, which is installed by default in most data science
+environments.
+
+If you wish to distribute or install this package into your own
+projects, consider adding a minimal `setup.py` or `pyproject.toml`.
+For the purposes of this exercise the files have been arranged so that
+you can import directly from the local directory without installation.
