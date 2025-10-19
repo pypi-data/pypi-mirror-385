@@ -1,0 +1,184 @@
+# IncariCLI
+
+A simple and elegant task manager for your command line. Track your tasks with style using rich formatting and an intuitive interface.
+
+## Features
+
+- ✨ Beautiful terminal UI with color-coded task statuses
+- 📝 Create, update, and delete tasks
+- 🏷️ Task status management (todo, in-progress, done)
+- 📊 List and filter tasks by status
+- 💾 JSON-based storage for easy portability
+- 🚀 Fast and lightweight
+
+## Installation
+
+### From PyPI
+
+```bash
+pip install incaricli
+```
+
+### From Source
+
+```bash
+git clone https://github.com/paolobtl/incaricli.git
+cd incaricli
+pip install -e .
+```
+
+### For Development
+
+```bash
+git clone https://github.com/paolobtl/incaricli.git
+cd incaricli
+pip install -e ".[dev]"
+```
+
+## Usage
+
+### Add a Task
+
+```bash
+incaricli add "Complete the project documentation"
+```
+
+### List All Tasks
+
+```bash
+incaricli list
+```
+
+### List Tasks by Status
+
+```bash
+# List only todo tasks
+incaricli list todo
+
+# List only in-progress tasks
+incaricli list in-progress
+
+# List only completed tasks
+incaricli list done
+```
+
+### Update a Task
+
+```bash
+incaricli update 1 "Updated task description"
+```
+
+### Change Task Status
+
+```bash
+# Mark task as in-progress
+incaricli status 1 in-progress
+
+# Mark task as done
+incaricli status 1 done
+```
+
+### Delete a Task
+
+```bash
+incaricli delete 1
+```
+
+### Get Help
+
+```bash
+incaricli --help
+incaricli add --help
+```
+
+## Task Statuses
+
+- **todo** (yellow) - Task is pending
+- **in-progress** (blue) - Task is currently being worked on
+- **done** (green) - Task is completed
+
+## Data Storage
+
+Tasks are stored in a `tasks_db.json` file in your current working directory. This makes it easy to:
+- Back up your tasks
+- Share task lists with teammates
+- Version control your tasks
+- Move tasks between machines
+
+## Requirements
+
+- Python 3.10 or higher
+- rich >= 13.0.0
+
+## Development
+
+### Setting Up Development Environment
+
+```bash
+# Clone the repository
+git clone https://github.com/paolobtl/incaricli.git
+cd incaricli
+
+# Create a virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install in development mode with dev dependencies
+pip install -e ".[dev]"
+```
+
+### Running Tests
+
+```bash
+pytest
+```
+
+### Code Formatting
+
+```bash
+# Format code with black
+black incaricli
+
+# Lint with ruff
+ruff check incaricli
+
+# Type check with mypy
+mypy incaricli
+```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Author
+
+**Paolo Bertellotti**
+- GitHub: [@paolobtl](https://github.com/paolobtl)
+
+## Acknowledgments
+
+- Built with [Rich](https://github.com/Textualize/rich) for beautiful terminal formatting
+- Inspired by various task management tools
+
+## Roadmap
+
+- [ ] Add task priorities
+- [ ] Add task due dates
+- [ ] Add task categories/tags
+- [ ] Export tasks to different formats (CSV, Markdown)
+- [ ] Add task search functionality
+- [ ] Add task completion statistics
+
+## Support
+
+If you encounter any issues or have questions, please [open an issue](https://github.com/paolobtl/incaricli/issues) on GitHub.
