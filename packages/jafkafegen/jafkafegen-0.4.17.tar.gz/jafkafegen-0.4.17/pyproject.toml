@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jafkafegen"
+version = "0.4.17"
+authors = [{ name = "Jens Köster", email = "pypi@jensbox.se" }]
+dependencies = ["numpy", "Faker", "typer"]
+description = "A fork of the dbtlabs Jaffle Shop generator, for baking realtime jaffles on kafka."
+readme = "README.md"
+license = { file = "LICENSE" }
+[tool.setuptools.packages.find]
+exclude = ["*.tests", "*.tests.*", "tests.*", "tests"]
+
+[project.scripts]
+jafkafegen = "jafgen.cli:app"
+
+[project.optional-dependencies]
+dev = ["ruff", "pytest"]
+
+[tool.ruff.lint]
+select = [
+  "E",   # Pycodestyle
+  "F",   # Pyflakes
+  "W",   # Whitespace
+  "D",   # Pydocs
+  "T20", # Print statements
+  "I",   # isort
+]
+# Allow autofix for all enabled rules (when `--fix`) is provided.
+fixable = [
+    "A", "B", "C", "D", "E", "F", "G", "I", "N", "Q", "S", "T", "W", "ANN", "ARG", "BLE", "COM", "DJ", "DTZ", "EM",
+    "ERA", "EXE", "FBT", "ICN", "INP", "ISC", "NPY", "PD", "PGH", "PIE", "PL", "PT", "PTH", "PYI", "RET", "RSE", "RUF",
+    "SIM", "SLF", "TCH", "TID", "TRY", "UP", "YTT"
+]
+
+[tool.pydocstyle]
+convention = "google"
