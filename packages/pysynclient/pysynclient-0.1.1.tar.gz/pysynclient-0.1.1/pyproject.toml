@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "pysynclient"
+version = "0.1.1"
+description = "Automatically detects the location of the synology drive client folders and returns its parent location."
+authors = ["Dominik Braun <dome.braun@fau.de>"]
+license = "GPL-3.0 license"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.10"
+pywin32 = "^308"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
