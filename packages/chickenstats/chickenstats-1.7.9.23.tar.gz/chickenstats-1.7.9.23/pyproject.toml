@@ -1,0 +1,179 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "chickenstats"
+version = "1.7.9.23"
+description = "A Python package for scraping & analyzing sports statistics"
+authors = [{name = "chickenandstats", email = "chicken@chickenandstats.com"}]
+maintainers = [{name = "chickenandstats", email = "chicken@chickenandstats.com"}]
+readme = "README.md"
+repository = "https://github.com/chickenandstats/chickenstats"
+documentation = "https://www.chickenstats.com"
+license = "GPL-3.0-only"
+requires-python = ">=3.10"
+packages = [{include = "src/chickenstats"},
+            {include = "src/chickenstats/chicken_nhl"},
+            {include = "src/chickenstats/evolving_hockey"},]
+include = ["src/chickenstats/chicken_nhl/xg_models/*.json",
+            "src/chickenstats/chicken_nhl/score_adjustments/*.pkl",
+            "src/chickenstats/chicken_nhl/utilities/styles/*.mplstyle",
+]
+dependencies = [
+    "beautifulsoup4>=4.12.3",
+    "geopandas>=1.0.1",
+    "llvmlite>=0.44.0",
+    "lxml>=5.3.0",
+    "matplotlib>=3.9.2",
+    "numba>=0.61.0",
+    "numpy>=2.1",
+    "pandas>=2.2.2",
+    "pandera>=0.20.4",
+    "polars>=1.22.0",
+    "pydantic>=2.9.0",
+    "python-dotenv>=1.0.1",
+    "requests>=2.32.3",
+    "rich>=13.8.0",
+    "scikit-learn>=1.6.0",
+    "shapely>=2.0.6",
+    "unidecode>=1.3.8",
+    "xgboost>=2.1.4",
+]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+  "Intended Audience :: Developers",
+  "Topic :: Software Development :: Libraries",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+]
+
+[project.optional-dependencies]
+plotting = [
+  "bokeh>=3.6.3",
+  "hockey-rink>=1.0.3",
+  "networkx>=3.4.2",
+  "plotly>=6.0.0",
+  "seaborn>=0.13.2",
+]
+mlflow = [
+    "mlflow>=2.16.0",
+    "optuna>=4.0.0",
+    "shap>=0.46.0",
+    "yellowbrick>=1.5",
+]
+
+
+[dependency-groups]
+dev = [
+    { "include-group" = "docs"},
+    { "include-group" = "tests"},
+    { "include-group" = "api"},
+    { "include-group" = "mlflow"},
+    { "include-group" = "plotting"},
+    "jupyter>=1.1.1",
+    "ruff>=0.6.4",
+    "pre-commit>=4.0.1",
+    "clean-dotenv>=0.0.7",
+    "openpyxl>=3.1.5",
+]
+docs = [
+    "black>=24.8.0",
+    "mike>=2.1.3",
+    "mkdocs-exclude>=1.0.2",
+    "mkdocs-glightbox>=0.4.0",
+    "mkdocs-macros-plugin>=1.2.0",
+    "mkdocs-material[imaging]>=9.5.34",
+    "mkdocs-table-reader-plugin>=3.1.0",
+    "mkdocs>=1.6.1",
+    "mkdocstrings-python>=1.11.1",
+    "mdformat-ruff>=0.1.3",
+    "nb-clean>=4.0.1",
+    "nbconvert>=7.16.4",
+]
+tests = [
+    "pytest-cov>=5.0.0",
+    "pytest>=8.3.2",
+    "tox-gh>=1.3.3",
+    "tox>=4.18.1",
+    "coverage>=7.6.9",
+]
+api = [
+    "boto3>=1.35.14",
+    "caddy>=1.3.2",
+    "cronitor>=4.7.1",
+    "fastapi>=0.114.0",
+    "psycopg2-binary>=2.9.9",
+    "python-dotenv>=1.0.1",
+    "sqlmodel>=0.0.22",
+]
+mlflow = [
+    "mlflow>=2.16.0",
+    "optuna>=4.0.0",
+    "shap>=0.46.0",
+    "yellowbrick>=1.5",
+]
+plotting = [
+    "bokeh>=3.6.3",
+    "hockey-rink>=1.0.3",
+    "networkx>=3.4.2",
+    "plotly>=6.0.0",
+    "seaborn>=0.13.2",
+]
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+    "docs/",
+    "examples/",
+    "assets/",
+    "logos/",
+]
+
+[tool.ruff]
+include = [
+    "pyproject.toml",
+    "src/chickenstats/**/*.py",
+    "examples/**/*.py",
+    "tests/**/*.py"
+    ]
+extend-include = ["*.ipynb"]
+exclude = [
+    "*__init__.py",
+    ]
+target-version = "py312"
+fix = true
+unsafe-fixes = true
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "D", "UP", "B"]
+fixable = ["ALL"]
+ignore = ["F401", "D100", "B017", "B007", "E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["D"]
+"examples/blog/monte_carlo/monte_carlo.py" = ["B023"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.format]
+docstring-code-format = true
+skip-magic-trailing-comma = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests",]
+minversion = 7.0
+
+[tool.coverage.run]
+relative_files = true
+
+[tool.coverage.report]
+exclude_also = [
+    # Comments to turn coverage on and off:
+    "no cover: start(?s:.)*?no cover: stop",
+    ]
