@@ -1,0 +1,36 @@
+SHELL= /bin/bash
+PYTHON ?= python
+
+inplace:
+	$(PYTHON) setup.py build_ext --inplace --cython
+
+test: inplace
+	pytest -s --doctest-modules cytoolz/
+	echo 'cimport cytoolz ; from cytoolz.functoolz cimport memoize' > try_cimport_cytoolz.pyx
+	echo 'import setuptools, Cython.Build ; setuptools.setup(ext_modules=Cython.Build.cythonize("try_cimport_cytoolz.pyx"))' > try_cimport_cytoolz_setup.py
+	python try_cimport_cytoolz_setup.py build_ext --inplace
+	python -c 'import try_cimport_cytoolz'
+	rm try_cimport_cytoolz*
+	python -c 'import cytoolz ; print(f"{cytoolz.__version__=}")'
+
+clean:
+	rm -f cytoolz/*.c cytoolz/*.so cytoolz/*/*.c cytoolz/*/*.so
+	rm -rf build/ __pycache__/ cytoolz/__pycache__/ cytoolz/*/__pycache__/
+
+curried:
+	sed -e 's/toolz/cytoolz/g' -e 's/itercytoolz/itertoolz/' \
+		-e 's/dictcytoolz/dicttoolz/g' -e 's/funccytoolz/functoolz/g' \
+		../toolz/toolz/curried/__init__.py > cytoolz/curried/__init__.py
+
+copytests:
+	for f in ../toolz/toolz/tests/test*py; \
+	do \
+		if [[ $$f == *test_utils* ]]; then continue ; fi;  \
+		if [[ $$f == *test_curried_doctests* ]]; then continue ; fi;  \
+		if [[ $$f == *test_tlz* ]]; then continue ; fi;  \
+		newf=`echo $$f | sed 's/...toolz.toolz/cytoolz/g'`; \
+		sed -e 's/toolz/cytoolz/g' -e 's/itercytoolz/itertoolz/' \
+			-e 's/dictcytoolz/dicttoolz/g' -e 's/funccytoolz/functoolz/g' \
+			$$f > $$newf; \
+		echo $$f $$newf; \
+	done
