@@ -1,0 +1,9 @@
+include MANIFEST.in
+include LICENSE
+include README.md
+include requirements.txt
+graft django_fullname_localization
+exclude django_fullname_localization_demo
+exclude django_fullname_localization_example
+global-exclude __pycache__
+global-exclude *.py[co]
