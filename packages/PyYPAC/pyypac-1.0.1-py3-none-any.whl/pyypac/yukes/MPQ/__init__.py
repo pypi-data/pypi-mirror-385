@@ -1,0 +1,1 @@
+from .MPQ import MPQ
