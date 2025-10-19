@@ -1,0 +1,58 @@
+[project]
+name = "sys-mcp"
+version = "0.2.2"
+description = "A lightweight MCP server exposing basic system commands for UNIX-like environments."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "httpx>=0.28.1",
+    "mcp[cli]>=1.18.0",
+    "pyyaml>=6.0.3",
+]
+authors = [
+    { name = "Antriksh Misri", email = "antrikshmisri@gmail.com" }
+]
+maintainers = [
+    { name = "Antriksh Misri", email = "antrikshmisri@gmail.com" }
+]
+keywords = [
+    "mcp",
+    "system",
+    "unix",
+    "cli",
+    "automation",
+    "claude",
+    "server"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: System :: Monitoring",
+    "Topic :: Utilities"
+]
+
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project.scripts]
+sys-mcp = "sys_mcp.__main__:main"
+
+[dependency-groups]
+dev = [
+    "commitizen>=4.9.1",
+    "mcp-cli>=0.8.4",
+]
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+tag_format = "$version"
+version_scheme = "semver"
+version_provider = "uv"
+update_changelog_on_bump = true
