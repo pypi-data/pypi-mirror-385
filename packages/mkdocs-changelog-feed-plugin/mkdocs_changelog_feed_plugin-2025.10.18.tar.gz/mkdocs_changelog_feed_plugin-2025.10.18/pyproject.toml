@@ -1,0 +1,72 @@
+[project]
+name = "mkdocs-changelog-feed-plugin"
+version = "2025.10.18"
+description = "MkDocs plugin that adds RSS and Atom feeds for a changelog in the Keep a Changelog format."
+authors = [
+    {name = "Tobias Bölz",email = "tobias@boelz.eu"}
+]
+license = "AGPL-3.0-or-later"
+readme = "README.md"
+requires-python = ">=3.10,<4.0"
+dependencies = [
+    "feedgenerator (>=2.2.1,<3.0.0)",
+    "beautifulsoup4 (>=4.14.2,<5.0.0)",
+    "mkdocs (>=1.6)"
+]
+classifiers = [
+    "Environment :: Console",
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Documentation",
+    "Topic :: Text Processing",
+    "Framework :: MkDocs"
+]
+
+[project.entry-points."mkdocs.plugins"]
+"changelog_feed" = "mkdocs_changelog_feed_plugin.changelog_feed:ChangelogFeedPlugin"
+
+[project.urls]
+Homepage = "https://tmb.codeberg.page/mkdocs-changelog-feed-plugin/"
+Repository = "https://git.boelz.eu/tmb/mkdocs-changelog-feed-plugin"
+Changelog = "https://tmb.codeberg.page/mkdocs-changelog-feed-plugin/changelog/"
+Issues = "https://git.boelz.eu/tmb/mkdocs-changelog-feed-plugin/issues"
+
+[tool.poetry]
+
+[tool.poetry.group.dev.dependencies]
+black = "^25.9.0"
+flake8 = "^7.3.0"
+flake8-quotes = "^3.4.0"
+flake8-bugbear = "^24.12.12"
+flake8-print = "^5.0.0"
+flake8-pep3101 = "^2.1.0"
+flake8-builtins = "^3.0.0"
+isort = "^7.0.0"
+pytest = "^8.4.2"
+coverage = "^7.11.0"
+nox = "^2025.10.16"
+
+[tool.poetry.group.docs.dependencies]
+mkdocstrings = {extras = ["python"], version = "^0.30.1"}
+mdx-forge-links = "^0.5"
+mkdocs-material = "^9.6.22"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+target-version = ["py310"]
+skip-string-normalization = true
+
+[tool.isort]
+profile = "black"
