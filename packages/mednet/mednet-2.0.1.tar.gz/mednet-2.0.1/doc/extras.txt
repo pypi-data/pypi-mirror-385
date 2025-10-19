@@ -1,0 +1,34 @@
+# Sphinx inventory version 2
+# Project: extras
+# Version: stable
+# The remainder of this file is compressed using zlib.
+
+# this one does not exist on the pytorch documentation
+# sphobjinv convert plain -u https://pytorch.org/docs/stable/ - | grep LRSched
+torch.optim.lr_scheduler.LRScheduler py:class 1 https://pytorch.org/docs/stable/_modules/torch/optim/lr_scheduler.html -
+
+# does not exist on torchvision documentation
+# sphobjinv convert plain -u https://pytorch.org/vision/stable/ - | grep -e ^torchvision.transforms
+torchvision.transforms py:module 1 https://pytorch.org/vision/stable/transforms.html -
+
+# does not exist on torchvision documentation
+# sphobjinv convert plain -u https://pytorch.org/vision/stable/ - | grep MobileNetV2
+torchvision.models.mobilenetv2.MobileNetV2 py:class 1 https://pytorch.org/vision/stable/_modules/torchvision/models/mobilenetv2.html -
+torchvision.models.vgg.VGG py:class 1 https://pytorch.org/vision/stable/_modules/torchvision/models/vgg.html -
+
+# object is declared in the wrong submodule at python stdlib
+# sphobjinv convert plain -u https://docs.python.org/3/ - | grep JSONEncoder
+json.encoder.JSONEncoder py:class 1 https://docs.python.org/3/library/json.html#json.JSONEncoder -
+
+# required until https://github.com/sphinx-doc/sphinx/issues/10974 is closed
+# sphobjinv convert plain -u https://numpy.org/doc/stable/ - | grep float64
+numpy.bool_ py:class 1 https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.bool -
+numpy.float32 py:class 1 https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float32 -
+numpy.float64 py:class 1 https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64 -
+numpy.uint64 py:class 1 https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint64 -
+
+# object is declared in the wrong submodule in peft
+# sphobjinv convert plain -u https://huggingface.co/docs/peft/main/en/ - | grep LoraConfig
+# sphobjinv convert plain -u https://huggingface.co/docs/peft/main/en/ - | grep PeftConfig
+peft.tuners.lora.config.LoraConfig py:class 1 https://huggingface.co/docs/peft/package_reference/lora#LoraConfig -
+peft.config.PeftConfig py:class 1 https://huggingface.co/docs/peft/package_reference/config#peft.PeftConfig -

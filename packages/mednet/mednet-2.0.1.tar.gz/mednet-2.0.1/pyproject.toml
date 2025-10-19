@@ -1,0 +1,640 @@
+# SPDX-FileCopyrightText: Copyright © 2023 Idiap Research Institute <contact@idiap.ch>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+[build-system]
+requires = ["hatchling", "versioningit"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mednet"
+dynamic = ["version"]
+requires-python = ">=3.11"
+description = "Multi-task Library to Develop Computer-Aided Tools for Medical Data Analysis"
+readme = "README.md"
+license = "GPL-3.0-or-later"
+authors = [{ name = "Daniel Carron", email = "daniel.carron@idiap.ch" }]
+maintainers = [{ name = "Andre Anjos", email = "andre.anjos@idiap.ch" }]
+
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+  "Natural Language :: English",
+  "Programming Language :: Python :: 3",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+dependencies = [
+  "clapper>=1.3.1",
+  "click",
+  "colorlog",
+  "compact-json",
+  "credible>=1.0.2",
+  "grad-cam>=1.5.0",
+  "h5py",
+  "lightning>=2.2.0",
+  "loky",
+  "matplotlib",
+  "mlflow-skinny",
+  "numpy",
+  "peft",
+  "pillow",
+  "psutil",
+  "python-gitlab",
+  "scikit-image",
+  "scikit-learn",
+  "scipy",
+  "tabulate",
+  "tensorboard",
+  "timm",
+  "torchvision>=0.18.0",
+  "torch",
+  "torchio",
+  "torchmetrics",
+  "tqdm",
+  "versioningit",
+]
+
+[project.urls]
+documentation = "https://mednet.readthedocs.io/en/v2.0.1/"
+homepage = "https://pypi.org/project/mednet"
+repository = "https://gitlab.idiap.ch/medai/software/mednet"
+changelog = "https://gitlab.idiap.ch/medai/software/mednet/-/releases"
+
+[project.optional-dependencies]
+qa = ["pre-commit"]
+doc = [
+  "auto-intersphinx",
+  "furo>=2024.05.06",
+  "sphinx",
+  "sphinx-autodoc-typehints",
+  "sphinx-click",
+  "sphinx-copybutton",
+  "sphinx-inline-tabs",
+  "sphinxcontrib-bibtex",
+  "sphobjinv",
+]
+test = ["pytest", "pytest-cov"]
+
+[project.scripts]
+mednet = "mednet.scripts.cli:cli"
+
+[tool.pixi.project]
+channels = ["conda-forge"]
+platforms = ["linux-64", "osx-arm64"]
+conda-pypi-map = { "https://conda.anaconda.org/conda-forge" = ".pixi-pytorch-mapping.json" }
+
+[tool.pixi.dependencies]
+clapper = ">=1.3.1"
+click = "*"
+colorlog = "*"
+compact-json = "*"
+credible = ">=1.0.2"
+grad-cam = ">=1.5.0"
+lightning = ">=2.2.0"
+loky = "*"
+h5py = "*"
+matplotlib-base = "*"
+mlflow-skinny = "*"
+numpy = "*"
+peft = "*"
+pillow = "*"
+psutil = "*"
+python-gitlab = "*"
+scikit-image = "*"
+scikit-learn = "*"
+scipy = "*"
+tabulate = "*"
+tensorboard = "*"
+timm = "*"
+torchvision = ">=0.18.0"
+tqdm = "*"
+versioningit = "*"
+torchio = "*"
+torchmetrics = "*"
+
+[tool.pixi.tasks]
+compile = "python -m compileall .pixi/envs/$PIXI_ENVIRONMENT_NAME -q"
+
+[tool.pixi.feature.self.pypi-dependencies]
+mednet = { path = ".", editable = true }
+
+[tool.pixi.feature.self.tasks]
+info = "mednet info"
+
+[tool.pixi.feature.py312.dependencies]
+python = "~=3.12.0"
+
+[tool.pixi.feature.py313.dependencies]
+python = "~=3.13.0"
+
+[tool.pixi.feature.qa.dependencies]
+pre-commit = "*"
+ruff = "*"
+reuse = "*"
+
+[tool.pixi.feature.qa.tasks]
+qa-install = "pre-commit install"
+qa = "pre-commit run --all-files"
+qa-ci = "pre-commit run --all-files --show-diff-on-failure --verbose"
+
+[tool.pixi.feature.doc.dependencies]
+auto-intersphinx = "*"
+furo = ">=2024.05.06"
+sphinx = "*"
+sphinx-autodoc-typehints = "*"
+sphinx-click = "*"
+sphinx-copybutton = "*"
+sphinx-inline-tabs = "*"
+sphinxcontrib-bibtex = "*"
+graphviz = "*"
+sphobjinv = "*"
+
+[tool.pixi.feature.doc.tasks]
+doc-clean = "rm -rf doc/api && rm -rf html"
+doc-ci = "dot -c && sphobjinv convert -o zlib doc/extras.txt doc/extras.inv && sphinx-build -aEW doc html"
+doc = "dot -c && sphobjinv convert -o zlib doc/extras.txt doc/extras.inv && sphinx-build -aE doc html"
+doctest = "sphinx-build -aEb doctest doc html/doctest"
+
+[tool.pixi.feature.test.dependencies]
+pytest = "*"
+pytest-cov = "*"
+
+[tool.pixi.feature.test.tasks]
+test = "pytest -sv --no-cov"
+test-slow = "pytest -sv --no-cov -m slow"
+test-fast = "pytest -sv --no-cov -m '(not slow)'"
+test-cov = "pytest -sv --cov-report 'html:html/coverage'"
+
+# Implements testing on the CI, so we can separate testing if need-be
+copy-config = { cmd = "cp {{ filename }} $XDG_CONFIG_HOME", args = [
+  "filename",
+], inputs = [
+  "{{ filename }}",
+] }
+coverage-erase = "coverage erase"
+test-ci-target = { cmd = """pytest -sv \
+--cov-report 'html:html/coverage' \
+--cov-report 'xml:coverage.xml' \
+--junitxml 'junit-coverage.xml' \
+--ignore '.profile' \
+--cov-append \
+{{ target }}""", args = ["target"] }
+
+test-ci = { depends-on = [
+  { task = "copy-config", args = [ "tests/data/mednet.toml" ] },
+  { task = "coverage-erase" },
+  { task = "test-ci-target", args = [ "tests/" ] },
+] }
+
+[tool.pixi.feature.build.dependencies]
+hatch = "*"
+versioningit = "*"
+twine = "*"
+
+[tool.pixi.feature.build.tasks]
+build = "hatch build"
+check = "twine check dist/*"
+upload = "twine upload dist/*"
+
+[tool.pixi.feature.dev.dependencies]
+pdbpp = "*"
+uv = "*"
+
+[tool.pixi.feature.dev.tasks]
+uv-update-lock = "uv pip compile -q pyproject.toml --python-platform=linux -o uv.lock"
+self-update = "uv pip install --editable . --no-deps --no-build-isolation"
+
+[tool.pixi.feature.cuda]
+platforms = ["linux-64"]
+
+[tool.pixi.feature.cuda.system-requirements]
+# minimum version of CUDA on the target environment
+cuda = "12"
+
+[tool.pixi.feature.cuda.dependencies]
+pytorch-gpu = "*"
+
+[tool.pixi.feature.cuda.target.linux-64.dependencies]
+pip = "*" # required for docker image building
+
+[tool.pixi.feature.cpu.dependencies]
+pytorch-cpu = "*"
+
+[tool.pixi.environments]
+default = { features = [
+  "qa",
+  "build",
+  "doc",
+  "test",
+  "dev",
+  "py313",
+  "cpu",
+  "self",
+] }
+qa-ci = { features = ["qa", "py313"], no-default-feature = true }
+build-ci = { features = ["build", "py313"], no-default-feature = true }
+test-ci-alternative = { features = ["test", "py312", "cpu", "self"] }
+cuda-base = { features = ["py313", "cuda"], solve-group = "cuda" }
+cuda-prod = { features = ["py313", "cuda", "self"], solve-group = "cuda" }
+cuda = { features = [
+  "qa",
+  "build",
+  "doc",
+  "test",
+  "dev",
+  "py313",
+  "cuda",
+  "self",
+], solve-group = "cuda" }
+
+[tool.hatch.version]
+source = "versioningit"
+
+[tool.versioningit.vcs]
+default-tag = "0.0.0"
+
+[tool.versioningit.next-version]
+method = "smallest"
+
+[tool.versioningit.format]
+# Example formatted version: 1.2.4.dev42+ge174a1f
+distance = "{next_version}.dev{distance}+{vcs}{rev}"
+# Example formatted version: 1.2.4.dev42+ge174a1f.d20230922
+distance-dirty = "{next_version}.dev{distance}+{vcs}{rev}.d{build_date:%Y%m%d}"
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "src/**/*.py",
+  "src/**/*.json",
+  "src/**/*.json.bz2",
+  "tests/**/*.py",
+  "tests/**/*.png",
+  "tests/**/*.json",
+  "doc/**/*.rst",
+  "doc/**/*.png",
+  "doc/**/*.jpg",
+  "doc/**/*.dot",
+  "doc/*.txt",
+  "doc/*.inv",
+  "doc/conf.py",
+  "doc/_static/*.css",
+  "doc/_templates/*.html",
+  "LICENSES/*.txt",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/mednet"]
+
+[project.entry-points."mednet.config"]
+
+# models
+alexnet = "mednet.config.classify.models.alexnet"
+alexnet-pretrained = "mednet.config.classify.models.alexnet_pretrained"
+cnn3d = "mednet.config.classify.models.cnn3d"
+densenet = "mednet.config.classify.models.densenet"
+densenet-pretrained = "mednet.config.classify.models.densenet_pretrained"
+logistic-regression = "mednet.config.classify.models.logistic_regression"
+mlp = "mednet.config.classify.models.mlp"
+pasa = "mednet.config.classify.models.pasa"
+
+vit-large = "mednet.config.classify.models.vit_large"
+vit-large-lora = "mednet.config.classify.models.vit_large_lora"
+vit-small = "mednet.config.classify.models.vit_small"
+vit-small-lora = "mednet.config.classify.models.vit_small_lora"
+
+driu = "mednet.config.segment.models.driu"
+driu-bn = "mednet.config.segment.models.driu_bn"
+driu-od = "mednet.config.segment.models.driu_od"
+driu-pix = "mednet.config.segment.models.driu_pix"
+hed = "mednet.config.segment.models.hed"
+lwnet = "mednet.config.segment.models.lwnet"
+m2unet = "mednet.config.segment.models.m2unet"
+unet = "mednet.config.segment.models.unet"
+
+faster-rcnn = "mednet.config.detect.models.faster_rcnn"
+
+# lists of data augmentations (applicable to any pipeline)
+affine = "mednet.config.augmentations.affine"
+elastic = "mednet.config.augmentations.elastic"
+hflip = "mednet.config.augmentations.hflip"
+jitter = "mednet.config.augmentations.jitter"
+hflip-affine = "mednet.config.augmentations.hflip_affine"
+hflip-jitter-affine = "mednet.config.augmentations.hflip_jitter_affine"
+
+# montgomery dataset (and cross-validation folds)
+montgomery = "mednet.config.classify.data.montgomery.default"
+montgomery-multiclass = "mednet.config.classify.data.montgomery.multiclass"
+montgomery-f0 = "mednet.config.classify.data.montgomery.fold_0"
+montgomery-f1 = "mednet.config.classify.data.montgomery.fold_1"
+montgomery-f2 = "mednet.config.classify.data.montgomery.fold_2"
+montgomery-f3 = "mednet.config.classify.data.montgomery.fold_3"
+montgomery-f4 = "mednet.config.classify.data.montgomery.fold_4"
+montgomery-f5 = "mednet.config.classify.data.montgomery.fold_5"
+montgomery-f6 = "mednet.config.classify.data.montgomery.fold_6"
+montgomery-f7 = "mednet.config.classify.data.montgomery.fold_7"
+montgomery-f8 = "mednet.config.classify.data.montgomery.fold_8"
+montgomery-f9 = "mednet.config.classify.data.montgomery.fold_9"
+
+# shenzhen dataset (and cross-validation folds)
+shenzhen = "mednet.config.classify.data.shenzhen.default"
+shenzhen-alltest = "mednet.config.classify.data.shenzhen.alltest"
+shenzhen-f0 = "mednet.config.classify.data.shenzhen.fold_0"
+shenzhen-f1 = "mednet.config.classify.data.shenzhen.fold_1"
+shenzhen-f2 = "mednet.config.classify.data.shenzhen.fold_2"
+shenzhen-f3 = "mednet.config.classify.data.shenzhen.fold_3"
+shenzhen-f4 = "mednet.config.classify.data.shenzhen.fold_4"
+shenzhen-f5 = "mednet.config.classify.data.shenzhen.fold_5"
+shenzhen-f6 = "mednet.config.classify.data.shenzhen.fold_6"
+shenzhen-f7 = "mednet.config.classify.data.shenzhen.fold_7"
+shenzhen-f8 = "mednet.config.classify.data.shenzhen.fold_8"
+shenzhen-f9 = "mednet.config.classify.data.shenzhen.fold_9"
+
+# indian dataset (and cross-validation folds)
+indian = "mednet.config.classify.data.indian.default"
+indian-f0 = "mednet.config.classify.data.indian.fold_0"
+indian-f1 = "mednet.config.classify.data.indian.fold_1"
+indian-f2 = "mednet.config.classify.data.indian.fold_2"
+indian-f3 = "mednet.config.classify.data.indian.fold_3"
+indian-f4 = "mednet.config.classify.data.indian.fold_4"
+indian-f5 = "mednet.config.classify.data.indian.fold_5"
+indian-f6 = "mednet.config.classify.data.indian.fold_6"
+indian-f7 = "mednet.config.classify.data.indian.fold_7"
+indian-f8 = "mednet.config.classify.data.indian.fold_8"
+indian-f9 = "mednet.config.classify.data.indian.fold_9"
+
+# TBX11K dataset split 1: healthy vs active tb, and cross-validation folds
+tbx11k-v1-healthy-vs-atb = "mednet.config.classify.data.tbx11k.v1_healthy_vs_atb"
+tbx11k-v1-f0 = "mednet.config.classify.data.tbx11k.v1_fold_0"
+tbx11k-v1-f1 = "mednet.config.classify.data.tbx11k.v1_fold_1"
+tbx11k-v1-f2 = "mednet.config.classify.data.tbx11k.v1_fold_2"
+tbx11k-v1-f3 = "mednet.config.classify.data.tbx11k.v1_fold_3"
+tbx11k-v1-f4 = "mednet.config.classify.data.tbx11k.v1_fold_4"
+tbx11k-v1-f5 = "mednet.config.classify.data.tbx11k.v1_fold_5"
+tbx11k-v1-f6 = "mednet.config.classify.data.tbx11k.v1_fold_6"
+tbx11k-v1-f7 = "mednet.config.classify.data.tbx11k.v1_fold_7"
+tbx11k-v1-f8 = "mednet.config.classify.data.tbx11k.v1_fold_8"
+tbx11k-v1-f9 = "mednet.config.classify.data.tbx11k.v1_fold_9"
+
+# TBX11K dataset split 2: others vs active tb, and cross-validation folds
+tbx11k-v2-others-vs-atb = "mednet.config.classify.data.tbx11k.v2_others_vs_atb"
+tbx11k-v2-f0 = "mednet.config.classify.data.tbx11k.v2_fold_0"
+tbx11k-v2-f1 = "mednet.config.classify.data.tbx11k.v2_fold_1"
+tbx11k-v2-f2 = "mednet.config.classify.data.tbx11k.v2_fold_2"
+tbx11k-v2-f3 = "mednet.config.classify.data.tbx11k.v2_fold_3"
+tbx11k-v2-f4 = "mednet.config.classify.data.tbx11k.v2_fold_4"
+tbx11k-v2-f5 = "mednet.config.classify.data.tbx11k.v2_fold_5"
+tbx11k-v2-f6 = "mednet.config.classify.data.tbx11k.v2_fold_6"
+tbx11k-v2-f7 = "mednet.config.classify.data.tbx11k.v2_fold_7"
+tbx11k-v2-f8 = "mednet.config.classify.data.tbx11k.v2_fold_8"
+tbx11k-v2-f9 = "mednet.config.classify.data.tbx11k.v2_fold_9"
+
+# montgomery-shenzhen aggregated dataset
+montgomery-shenzhen = "mednet.config.classify.data.montgomery_shenzhen.default"
+montgomery-shenzhen-f0 = "mednet.config.classify.data.montgomery_shenzhen.fold_0"
+montgomery-shenzhen-f1 = "mednet.config.classify.data.montgomery_shenzhen.fold_1"
+montgomery-shenzhen-f2 = "mednet.config.classify.data.montgomery_shenzhen.fold_2"
+montgomery-shenzhen-f3 = "mednet.config.classify.data.montgomery_shenzhen.fold_3"
+montgomery-shenzhen-f4 = "mednet.config.classify.data.montgomery_shenzhen.fold_4"
+montgomery-shenzhen-f5 = "mednet.config.classify.data.montgomery_shenzhen.fold_5"
+montgomery-shenzhen-f6 = "mednet.config.classify.data.montgomery_shenzhen.fold_6"
+montgomery-shenzhen-f7 = "mednet.config.classify.data.montgomery_shenzhen.fold_7"
+montgomery-shenzhen-f8 = "mednet.config.classify.data.montgomery_shenzhen.fold_8"
+montgomery-shenzhen-f9 = "mednet.config.classify.data.montgomery_shenzhen.fold_9"
+
+# montgomery-shenzhen-indian aggregated dataset
+montgomery-shenzhen-indian = "mednet.config.classify.data.montgomery_shenzhen_indian.default"
+montgomery-shenzhen-indian-f0 = "mednet.config.classify.data.montgomery_shenzhen_indian.fold_0"
+montgomery-shenzhen-indian-f1 = "mednet.config.classify.data.montgomery_shenzhen_indian.fold_1"
+montgomery-shenzhen-indian-f2 = "mednet.config.classify.data.montgomery_shenzhen_indian.fold_2"
+montgomery-shenzhen-indian-f3 = "mednet.config.classify.data.montgomery_shenzhen_indian.fold_3"
+montgomery-shenzhen-indian-f4 = "mednet.config.classify.data.montgomery_shenzhen_indian.fold_4"
+montgomery-shenzhen-indian-f5 = "mednet.config.classify.data.montgomery_shenzhen_indian.fold_5"
+montgomery-shenzhen-indian-f6 = "mednet.config.classify.data.montgomery_shenzhen_indian.fold_6"
+montgomery-shenzhen-indian-f7 = "mednet.config.classify.data.montgomery_shenzhen_indian.fold_7"
+montgomery-shenzhen-indian-f8 = "mednet.config.classify.data.montgomery_shenzhen_indian.fold_8"
+montgomery-shenzhen-indian-f9 = "mednet.config.classify.data.montgomery_shenzhen_indian.fold_9"
+
+# montgomery-shenzhen-indian-tbx11k aggregated dataset
+montgomery-shenzhen-indian-tbx11k-v1 = "mednet.config.classify.data.montgomery_shenzhen_indian_tbx11k.v1_healthy_vs_atb"
+montgomery-shenzhen-indian-tbx11k-v1-f0 = "mednet.config.classify.data.montgomery_shenzhen_indian_tbx11k.v1_fold_0"
+montgomery-shenzhen-indian-tbx11k-v1-f1 = "mednet.config.classify.data.montgomery_shenzhen_indian_tbx11k.v1_fold_1"
+montgomery-shenzhen-indian-tbx11k-v1-f2 = "mednet.config.classify.data.montgomery_shenzhen_indian_tbx11k.v1_fold_2"
+montgomery-shenzhen-indian-tbx11k-v1-f3 = "mednet.config.classify.data.montgomery_shenzhen_indian_tbx11k.v1_fold_3"
+montgomery-shenzhen-indian-tbx11k-v1-f4 = "mednet.config.classify.data.montgomery_shenzhen_indian_tbx11k.v1_fold_4"
+montgomery-shenzhen-indian-tbx11k-v1-f5 = "mednet.config.classify.data.montgomery_shenzhen_indian_tbx11k.v1_fold_5"
+montgomery-shenzhen-indian-tbx11k-v1-f6 = "mednet.config.classify.data.montgomery_shenzhen_indian_tbx11k.v1_fold_6"
+montgomery-shenzhen-indian-tbx11k-v1-f7 = "mednet.config.classify.data.montgomery_shenzhen_indian_tbx11k.v1_fold_7"
+montgomery-shenzhen-indian-tbx11k-v1-f8 = "mednet.config.classify.data.montgomery_shenzhen_indian_tbx11k.v1_fold_8"
+montgomery-shenzhen-indian-tbx11k-v1-f9 = "mednet.config.classify.data.montgomery_shenzhen_indian_tbx11k.v1_fold_9"
+montgomery-shenzhen-indian-tbx11k-v2 = "mednet.config.classify.data.montgomery_shenzhen_indian_tbx11k.v2_others_vs_atb"
+montgomery-shenzhen-indian-tbx11k-v2-f0 = "mednet.config.classify.data.montgomery_shenzhen_indian_tbx11k.v2_fold_0"
+montgomery-shenzhen-indian-tbx11k-v2-f1 = "mednet.config.classify.data.montgomery_shenzhen_indian_tbx11k.v2_fold_1"
+montgomery-shenzhen-indian-tbx11k-v2-f2 = "mednet.config.classify.data.montgomery_shenzhen_indian_tbx11k.v2_fold_2"
+montgomery-shenzhen-indian-tbx11k-v2-f3 = "mednet.config.classify.data.montgomery_shenzhen_indian_tbx11k.v2_fold_3"
+montgomery-shenzhen-indian-tbx11k-v2-f4 = "mednet.config.classify.data.montgomery_shenzhen_indian_tbx11k.v2_fold_4"
+montgomery-shenzhen-indian-tbx11k-v2-f5 = "mednet.config.classify.data.montgomery_shenzhen_indian_tbx11k.v2_fold_5"
+montgomery-shenzhen-indian-tbx11k-v2-f6 = "mednet.config.classify.data.montgomery_shenzhen_indian_tbx11k.v2_fold_6"
+montgomery-shenzhen-indian-tbx11k-v2-f7 = "mednet.config.classify.data.montgomery_shenzhen_indian_tbx11k.v2_fold_7"
+montgomery-shenzhen-indian-tbx11k-v2-f8 = "mednet.config.classify.data.montgomery_shenzhen_indian_tbx11k.v2_fold_8"
+montgomery-shenzhen-indian-tbx11k-v2-f9 = "mednet.config.classify.data.montgomery_shenzhen_indian_tbx11k.v2_fold_9"
+
+# tbpoc dataset (only cross-validation folds)
+tbpoc-f0 = "mednet.config.classify.data.tbpoc.fold_0"
+tbpoc-f1 = "mednet.config.classify.data.tbpoc.fold_1"
+tbpoc-f2 = "mednet.config.classify.data.tbpoc.fold_2"
+tbpoc-f3 = "mednet.config.classify.data.tbpoc.fold_3"
+tbpoc-f4 = "mednet.config.classify.data.tbpoc.fold_4"
+tbpoc-f5 = "mednet.config.classify.data.tbpoc.fold_5"
+tbpoc-f6 = "mednet.config.classify.data.tbpoc.fold_6"
+tbpoc-f7 = "mednet.config.classify.data.tbpoc.fold_7"
+tbpoc-f8 = "mednet.config.classify.data.tbpoc.fold_8"
+tbpoc-f9 = "mednet.config.classify.data.tbpoc.fold_9"
+
+# hivtb dataset (only cross-validation folds)
+hivtb-f0 = "mednet.config.classify.data.hivtb.fold_0"
+hivtb-f1 = "mednet.config.classify.data.hivtb.fold_1"
+hivtb-f2 = "mednet.config.classify.data.hivtb.fold_2"
+hivtb-f3 = "mednet.config.classify.data.hivtb.fold_3"
+hivtb-f4 = "mednet.config.classify.data.hivtb.fold_4"
+hivtb-f5 = "mednet.config.classify.data.hivtb.fold_5"
+hivtb-f6 = "mednet.config.classify.data.hivtb.fold_6"
+hivtb-f7 = "mednet.config.classify.data.hivtb.fold_7"
+hivtb-f8 = "mednet.config.classify.data.hivtb.fold_8"
+hivtb-f9 = "mednet.config.classify.data.hivtb.fold_9"
+
+# AngioReport dataset (various tasks)
+angioreport-hyperftype = "mednet.config.classify.data.angioreport.hyperftype"
+angioreport-cnv = "mednet.config.classify.data.angioreport.cnv"
+angioreport-cnv-icga = "mednet.config.classify.data.angioreport.cnv_icga"
+angioreport-impression = "mednet.config.classify.data.angioreport.impression"
+
+# NIH CXR14 (relabeled), multi-class (14 labels)
+nih-cxr14 = "mednet.config.classify.data.nih_cxr14.default"
+nih-cxr14-100 = "mednet.config.classify.data.nih_cxr14.first_100"
+
+# PadChest, multi-class (varied number of labels)
+padchest-idiap = "mednet.config.classify.data.padchest.idiap"
+padchest-tb-idiap = "mednet.config.classify.data.padchest.tb_idiap"
+padchest-no-tb-idiap = "mednet.config.classify.data.padchest.no_tb_idiap"
+padchest-cardiomegaly-idiap = "mednet.config.classify.data.padchest.cardiomegaly_idiap"
+
+# VISCERAL dataset
+visceral = "mednet.config.classify.data.visceral.default"
+
+# chase-db1 - retinography
+chasedb1 = "mednet.config.segment.data.chasedb1.first_annotator"
+chasedb1-2nd = "mednet.config.segment.data.chasedb1.second_annotator"
+
+# cxr8 - cxr
+cxr8 = "mednet.config.segment.data.cxr8.default"
+
+# drhagis dataset - retinography
+drhagis = "mednet.config.segment.data.drhagis.default"
+
+# drionsdb - retinography
+drionsdb = "mednet.config.segment.data.drionsdb.expert1"
+drionsdb-2nd = "mednet.config.segment.data.drionsdb.expert2"
+
+# drive dataset - retinography
+drive = "mednet.config.segment.data.drive.default"
+drive-2nd = "mednet.config.segment.data.drive.drive_2nd"
+
+# drishti-gs1 - retinography
+drishtigs1-disc-all = "mednet.config.segment.data.drishtigs1.optic_disc_all"
+drishtigs1-disc-any = "mednet.config.segment.data.drishtigs1.optic_disc_any"
+drishtigs1-cup-all = "mednet.config.segment.data.drishtigs1.optic_cup_all"
+drishtigs1-cup-any = "mednet.config.segment.data.drishtigs1.optic_cup_any"
+
+# hrf database splits - retinography
+hrf = "mednet.config.segment.data.hrf.default"
+
+# iostar database splits - retinography
+iostar-vessel = "mednet.config.segment.data.iostar.vessel"
+iostar-disc = "mednet.config.segment.data.iostar.optic_disc"
+
+# jsrt database splits - cxr
+jsrt = "mednet.config.segment.data.jsrt.default"
+
+# montgomery county database splits - cxr
+montgomery-segment = "mednet.config.segment.data.montgomery.default"
+
+# refuge - retinography
+refuge-cup = "mednet.config.segment.data.refuge.cup"
+refuge-disc = "mednet.config.segment.data.refuge.disc"
+
+# rim one r3 database splits - retinography
+rimoner3-cup = "mednet.config.segment.data.rimoner3.cup_exp1"
+rimoner3-disc = "mednet.config.segment.data.rimoner3.disc_exp1"
+rimoner3-cup-2nd = "mednet.config.segment.data.rimoner3.cup_exp2"
+rimoner3-disc-2nd = "mednet.config.segment.data.rimoner3.disc_exp2"
+
+# shenzhen database splits - cxr
+shenzhen-segment = "mednet.config.segment.data.shenzhen.default"
+
+# stare database splits - retinography
+stare = "mednet.config.segment.data.stare.ah"
+stare-2nd = "mednet.config.segment.data.stare.vk"
+
+# lung (object) detection database splits
+cxr8-detect = "mednet.config.detect.data.cxr8.default"
+jsrt-detect = "mednet.config.detect.data.jsrt.default"
+montgomery-detect = "mednet.config.detect.data.montgomery.default"
+shenzhen-detect = "mednet.config.detect.data.shenzhen.default"
+
+[tool.ruff]
+target-version = "py311"
+src = ["src"]
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.ruff.lint]
+select = [
+  "A",   # https://docs.astral.sh/ruff/rules/#flake8-builtins-a
+  "COM", # https://docs.astral.sh/ruff/rules/#flake8-commas-com
+  "D",   # https://docs.astral.sh/ruff/rules/#pydocstyle-d
+  "E",   # https://docs.astral.sh/ruff/rules/#error-e
+  "F",   # https://docs.astral.sh/ruff/rules/#pyflakes-f
+  "I",   # https://docs.astral.sh/ruff/rules/#isort-i
+  "ISC", # https://docs.astral.sh/ruff/rules/#flake8-implicit-str-concat-isc
+  "LOG", # https://docs.astral.sh/ruff/rules/#flake8-logging-log
+  "N",   # https://docs.astral.sh/ruff/rules/#pep8-naming-n
+  "NPY", # https://docs.astral.sh/ruff/rules/#numpy-specific-rules-npy
+  "PTH", # https://docs.astral.sh/ruff/rules/#flake8-use-pathlib-pth
+  "Q",   # https://docs.astral.sh/ruff/rules/#flake8-quotes-q
+  "RET", # https://docs.astral.sh/ruff/rules/#flake8-return-ret
+  "SLF", # https://docs.astral.sh/ruff/rules/#flake8-self-slf
+  "T10", # https://docs.astral.sh/ruff/rules/#flake8-debugger-t10
+  "T20", # https://docs.astral.sh/ruff/rules/#flake8-print-t20
+  "UP",  # https://docs.astral.sh/ruff/rules/#pyupgrade-up
+  "W",   # https://docs.astral.sh/ruff/rules/#warning-w
+  #"G",   # https://docs.astral.sh/ruff/rules/#flake8-logging-format-g
+  #"ICN", # https://docs.astral.sh/ruff/rules/#flake8-import-conventions-icn
+]
+ignore = [
+  "COM812", # https://docs.astral.sh/ruff/rules/missing-trailing-comma/
+  "D100",   # https://docs.astral.sh/ruff/rules/undocumented-public-module/
+  "D102",   # https://docs.astral.sh/ruff/rules/undocumented-public-method/
+  "D104",   # https://docs.astral.sh/ruff/rules/undocumented-public-package/
+  "D105",   # https://docs.astral.sh/ruff/rules/undocumented-magic-method/
+  "D107",   # https://docs.astral.sh/ruff/rules/undocumented-public-init/
+  "D202",   # https://docs.astral.sh/ruff/rules/no-blank-line-after-function/
+  "D205",   # https://docs.astral.sh/ruff/rules/blank-line-after-summary/
+  "D212",   # https://docs.astral.sh/ruff/rules/multi-line-summary-first-line/
+  "D213",   # https://docs.astral.sh/ruff/rules/multi-line-summary-second-line/
+  "E302",   # https://docs.astral.sh/ruff/rules/blank-lines-top-level/
+  "E402",   # https://docs.astral.sh/ruff/rules/module-import-not-at-top-of-file/
+  "E501",   # https://docs.astral.sh/ruff/rules/line-too-long/
+  "ISC001", # https://docs.astral.sh/ruff/rules/single-line-implicit-string-concatenation/
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.ruff.lint.per-file-ignores]
+"helpers/*.py" = ["T201", "D103"]
+"**/tests/*.py" = ["D", "E501"]
+"doc/conf.py" = ["D"]
+"**/scripts/*.py" = ["E501"]
+
+[tool.numpydoc_validation]
+checks = [
+  "all",  # report on all checks, except the ones below
+  "ES01", # Not all functions require extended summaries
+  "EX01", # Not all functions require examples
+  "GL01", # Expects text to be on the line after the opening quotes but that is in direct opposition of the sphinx recommendations and conflicts with other pre-commit hooks.
+  "GL08", # Causes issues if we don't have a docstring at the top of the file. Disabling this might fail to catch actual missing docstrings.
+  "PR04", # numpydoc does not currently support PEP484 typehints, which we are using
+  "RT03", # Since sphinx is unable to understand type annotations we need to remove some types from 'Returns', which breaks this check.
+  "SA01", # We do not use Also sections
+  "SS06", # Summary will span multiple lines if too long because of reformatting by other hooks.
+]
+
+exclude = [ # don't report on objects that match any of these regex
+  '\.__len__$',
+  '\.__getitem__$',
+  '\.__iter__$',
+  '\.__setstate__$',
+  '\.__exit__$',
+]
+
+override_SS05 = [ # override SS05 to allow docstrings starting with these words
+  '^Process ',
+  '^Assess ',
+  '^Access ',
+  '^This',
+]
+
+[tool.pytest.ini_options]
+addopts = ["--cov=mednet", "--cov-report=term-missing", "--import-mode=append"]
+junit_logging = "all"
+junit_log_passing_tests = false
+markers = ["slow: marks tests as slow (deselect with '-m \"not slow\"')"]
+testpaths = ["tests"]
+pythonpath = ["tests/src"]
+
+[tool.pyright]
+include = ["tests/src"]
+extraPaths = ["tests/src"]

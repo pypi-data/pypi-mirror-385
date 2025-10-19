@@ -1,0 +1,82 @@
+# SPDX-FileCopyrightText: Copyright © 2024 Idiap Research Institute <contact@idiap.ch>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+digraph cli {
+
+    fontname = "Helvetica";
+    bgcolor = invis;
+    node [shape = rectangle, style = filled, fontname = "Helvetica", fillcolor = gray90, color = white];
+    graph [style = dotted, color = white, fontcolor = white];
+    edge [color = white];
+    rankdir = LR;
+
+    subgraph data {
+        cluster = true;
+        rank = same;
+        label = "datamodule";
+        node [shape = cylinder, fillcolor = gold, fixed = true, width = 1.5, height = 0.7];
+        test_data [
+            label = "Test",
+            href="../data-model.html",
+            target="_top",
+        ];
+    }
+
+    subgraph alternate {
+        cluster = true;
+        rank = same;
+        label = "datamodule";
+        node [shape = cylinder, fillcolor = gold, fixed = true, width = 1.5, height = 0.7];
+        test_data2 [
+            label = "Alternate\nTest",
+            href="../data-model.html",
+            target="_top",
+        ];
+    }
+
+    subgraph segment {
+        cluster = true;
+        label = "segment (subcommand)";
+
+        subgraph products {
+            cluster = false;
+            node [shape = note, fillcolor = aquamarine];
+            model [label = "Model\nweights", fillcolor = coral];
+            predictions [label = "Predictions"];
+            annotations [label = "Dumped\nAnnotations"];
+            evaluation [label = "Evaluation\nTable&Plots"];
+            evaluation_metadata [label = "JSON\nmetadata"];
+            visualizations [label = "Prediction\nVisualizations"];
+        }
+
+        subgraph commands {
+            cluster = false;
+            node [shape = rectangle, fillcolor = gray];
+            dump_annotations [
+                label = "dump-annotations",
+                href="../cli.html#mednet-segment-dump-annotations",
+                target="_top",
+            ];
+            evaluate [
+                label = "evaluate",
+                href="../cli.html#mednet-segment-evaluate",
+                target="_top",
+            ];
+            view [
+                label = "view",
+                href="../cli.html#mednet-segment-view",
+                target="_top",
+            ];
+        }
+
+        subgraph workflow {
+            cluster = false;
+            {test_data model} -> predict -> {predictions prediction_metadata};
+            {test_data2 model} -> dump_annotations -> {annotations};
+            {predictions annotations} -> evaluate -> {evaluation evaluation_metadata};
+            {predictions} -> view -> {visualizations};
+        }
+    }
+
+}

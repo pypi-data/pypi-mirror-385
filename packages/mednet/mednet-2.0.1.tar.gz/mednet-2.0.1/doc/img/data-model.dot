@@ -1,0 +1,89 @@
+# SPDX-FileCopyrightText: Copyright © 2024 Idiap Research Institute <contact@idiap.ch>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+digraph G {
+    rankdir = TB;
+
+    fontname = "Helvetica"
+
+    node [
+        fontname = "Helvetica"
+        shape = "record"
+    ]
+
+    edge [
+        fontname = "Helvetica"
+    ]
+
+    Database [
+        label = "Database\l(on storage)"
+        shape = "cylinder"
+    ]
+
+    DatabaseSplit [
+        label = "{DatabaseSplit|+ __init__(description: JSON)\l+ splits() : dict[str, list]\l}"
+    ]
+
+    RawDataLoader [
+        label = "{RawDataLoader|+ datadir : path\l|+ sample(description : JSON) : Sample \l+ label(description : JSON) : int\l}"
+    ]
+
+    DataModule [
+        label = "{DataModule|- datasets : dict[str, torch.Dataset]\l+ model_transforms : TransformSequence\l|+ setup(stage: str)\l+ train_dataloader() : DataLoader\l+ val_dataloader() : dict[str, DataLoader]\l+ test_dataloader() : dict[str, DataLoader]\l+ predict_dataloader() : dict[str, DataLoader]\l}"
+    ]
+
+    CachingDataModule [
+        label = "{CachingDataModule (lightning.DataModule)}"
+        style = "dashed"
+    ]
+
+    Sample [
+        label = "{Sample (dict)|+ image: torch.Tensor\l+ target: torch.Tensor\l+ name: str\l}"
+    ]
+
+    DataLoader [
+        label = "{DataLoader (torch.DataLoader)|+ __getitem__(key: int)\l+ __iter__()\l}"
+    ]
+
+    edge [
+        arrowhead = "empty"
+    ]
+
+    DataModule -> CachingDataModule
+
+    edge [
+        arrowhead = "diamond"
+        taillabel = "1..1"
+    ]
+
+    DatabaseSplit -> DataModule
+    RawDataLoader -> DataModule
+
+    edge [
+        arrowhead = "diamond"
+        taillabel = "1..*"
+    ]
+
+    Sample -> DataLoader
+
+    edge [
+        arrowhead = "none"
+        taillabel = ""
+        label = "generates"
+    ]
+
+    DataModule -> DataLoader
+
+    edge [
+        arrowhead = "none"
+        headlabel = "1..1"
+        label = "reads"
+    ]
+
+    RawDataLoader -> Database
+
+    { rank = same; Database; CachingDataModule; Sample; }
+    { rank = same; RawDataLoader; DatabaseSplit; DataLoader; }
+
+}
