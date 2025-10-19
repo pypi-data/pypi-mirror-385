@@ -1,0 +1,137 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pydust_utils"
+version = "0.1.1"
+description = "Python utilities for DUST pre- and postprocessing"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.9"
+authors = [{ name = "Alessandro Cocco", email = "alessandro.cocco@polimi.it" }]
+keywords = ["aerodynamics", "cfd", "dust", "mesh-generation", "post-processing"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering",
+]
+
+# Core dependencies for pydust_utils 
+dependencies = [
+    "numpy>=1.20.0",
+    "pandas>=2.0.0",
+    "AeroSandbox>=4.2.0",
+    "pyvista>=0.43.0",
+    "pyvistaqt>=0.11.0",
+    "matplotlib>=3.5.0",
+    "seaborn>=0.12.0",
+    "jupyter>=1.0.0",
+    "ipywidgets>=8.0.0",
+    "ipympl>=0.9.0"
+]
+
+[project.optional-dependencies]
+# Development tools
+dev = [ "pytest>=7.0", 
+        "pytest-cov>=4.0", 
+        "black>=23.0", 
+        "ruff>=0.1.0"
+]
+
+# Documentation
+docs = [
+    "sphinx>=5.0",
+    "sphinx-book-theme>=1.0",
+    "sphinx-autodoc-typehints>=1.23",
+    "numpydoc>=1.5",
+]
+
+
+[project.urls]
+Homepage = "https://www.dust.polimi.it/"
+Repository = "https://public.gitlab.polimi.it/DAER/dust"
+Issues = "https://public.gitlab.polimi.it/DAER/dust/-/issues"
+
+[tool.setuptools]
+packages = ["pydust_utils"]
+
+[tool.setuptools.package-data]
+pydust_utils = ["py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--cov=pydust_utils",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+]
+
+[tool.black]
+line-length = 88
+target-version = ["py39", "py310", "py311", "py312"]
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.ruff]
+line-length = 88
+target-version = "py39"
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "N",  # pep8-naming
+    "UP", # pyupgrade
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "PT", # flake8-pytest-style
+]
+ignore = [
+    "E501", # line too long (handled by black)
+]
+
+[tool.ruff.per-file-ignores]
+"tests/**/*.py" = ["N802", "N803"]
+
+[tool.coverage.run]
+source = ["pydust_utils"]
+omit = ["*/tests/*", "*/test_*.py"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "@abstractmethod",
+]
+
+[tool.sphinx]
+source-dir = "docs/source"
+build-dir = "docs/build"
