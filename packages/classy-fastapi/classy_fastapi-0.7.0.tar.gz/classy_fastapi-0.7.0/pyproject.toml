@@ -1,0 +1,33 @@
+[tool.poetry]
+name = "classy-fastapi"
+version = "0.7.0"
+description = "Class based routing for FastAPI"
+authors = ["Oliver Dain <oliver@dains.org>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://gitlab.com/companionlabs-opensource/classy-fastapi"
+repository = "https://gitlab.com/companionlabs-opensource/classy-fastapi"
+keywords = ["FastAPI", "Class", "Instance", "Routing"]
+
+[tool.poetry.dependencies]
+python = ">=3.9"
+fastapi = ">=0.73.0,<1.0.0"
+pydantic = ">=2.8, <3.0.0"
+
+[tool.poetry.group.dev-dependencies.dependencies]
+# Older versions gave tons of warnings with each assert error due to lack of Python 3.12 support (see
+# https://github.com/pytest-dev/pytest/pull/10894). I couldn't find documentation about which specific release fixes
+# this but the PR linked here was merged in 2023 so as long as we're not using the super old version bundled with
+# Pants we should be OK. Here we specify a version that came out in 2024 to be safe.
+pytest = ">=8.2"
+# Need newer version due to https://github.com/PyCQA/flake8/issues/1701
+flake8 = ">=7.0"
+# Python 3.12 requires a newer version of mypy
+mypy = "^1.18"
+requests = "^2.26.0"
+urllib3 = "^1.26.12"
+httpx = ">=0.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
