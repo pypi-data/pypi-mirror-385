@@ -1,0 +1,24 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": [
+        "config:recommended"
+    ],
+    "minimumReleaseAge": "5 days",
+    "pre-commit": {
+        "enabled": true
+    },
+    "lockFileMaintenance": {
+        "enabled": true,
+        "automerge": true,
+        "automergeType": "pr"
+    },
+    "packageRules": [
+        {
+            "matchManagers": [
+                "pre-commit"
+            ],
+            "automerge": true,
+            "automergeType": "pr"
+        }
+    ]
+}
