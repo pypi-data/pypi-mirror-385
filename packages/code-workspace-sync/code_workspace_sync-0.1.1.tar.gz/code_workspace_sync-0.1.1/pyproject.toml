@@ -1,0 +1,17 @@
+[project]
+name = "code-workspace-sync"
+version = "0.1.1"
+description = "synchronize a VS Code workspace with directories in a source repositories folder"
+readme = "README.md"
+authors = [
+    { name = "W. J. Meijer", email = "houterm@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+code-workspace-sync = "code_workspace_sync:main"
+
+[build-system]
+requires = ["uv_build>=0.9.3,<0.10.0"]
+build-backend = "uv_build"
