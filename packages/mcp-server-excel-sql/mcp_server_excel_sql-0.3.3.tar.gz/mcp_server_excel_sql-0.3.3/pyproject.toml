@@ -1,0 +1,88 @@
+[project]
+name = "mcp-server-excel-sql"
+version = "0.3.3"
+description = "Let Claude query Excel files using SQL - no SQL knowledge required"
+authors = [{name = "Ivan", email = "ivan@eriad.com"}]
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+keywords = [
+    "excel",
+    "sql",
+    "spreadsheet",
+    "query",
+    "duckdb",
+    "mcp",
+    "model-context-protocol",
+    "claude",
+    "llm",
+    "ai",
+    "analytics",
+    "data-analysis",
+    "business-intelligence",
+    "etl",
+    "data",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: Financial and Insurance Industry",
+    "Intended Audience :: Science/Research",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Database",
+    "Topic :: Database :: Front-Ends",
+    "Topic :: Office/Business",
+    "Topic :: Office/Business :: Financial :: Spreadsheet",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+]
+
+dependencies = [
+    "fastmcp>=2.12.5",
+    "duckdb>=1.0.0",
+    "pyyaml>=6.0",
+    "click>=8.1",
+    "pandas>=2.1",
+    "openpyxl>=3.1",
+    "watchdog>=3.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/ivan-loh/mcp-excel"
+Repository = "https://github.com/ivan-loh/mcp-excel"
+Issues = "https://github.com/ivan-loh/mcp-excel/issues"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+    "pytest-cov>=4.1",
+    "pytest-asyncio>=0.23",
+]
+
+[project.scripts]
+mcp-excel = "mcp_excel.server:main"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+asyncio_mode = "auto"
+markers = [
+    "unit: Unit tests for individual components",
+    "integration: Integration tests for end-to-end workflows",
+    "regression: Regression tests for fixed bugs",
+    "concurrency: Concurrency and thread safety tests",
+    "stress: Stress and performance tests",
+]
+addopts = "-v --strict-markers"
