@@ -1,0 +1,73 @@
+2.2.0
+=====
+
+* drop Python 3.8 and 3.9 support (now requires Python >= 3.10)
+* add Python 3.14 classifier
+* migrate from hatchling to setuptools 77 with setuptools_scm
+* adopt PEP 639 license specifiers and PEP 740 build attestations
+* migrate from black + pyupgrade to ruff
+* migrate CI to uv and unified test workflow
+* automate GitHub releases and PyPI publishing via Trusted Publishing
+* include tests in sdist
+* modernize code for Python 3.10+ (remove __future__ annotations, TYPE_CHECKING guards)
+* rename _ParsedLine to ParsedLine
+
+2.1.0
+=====
+
+* fix artifact building - pin minimal version of hatch
+* drop eol python 3.8
+* add python 3.12 and 3.13
+
+2.0.0
+======
+
+* add support for Python 3.7-3.11
+* drop support for Python 2.6-3.6
+* add encoding argument defaulting to utf-8
+* inline and clarify type annotations
+* move parsing code from inline to extra file
+* add typing overloads for helper methods
+
+
+.. note::
+
+  major release due to the major changes in python versions supported + changes in packaging
+
+  the api is expected to be compatible
+
+
+1.1.1
+=====
+
+* fix version determination (thanks @florimondmanca)
+
+1.1.0
+=====
+
+- typing stubs (thanks @bluetech)
+- ci fixes
+
+1.0.1
+=====
+
+pytest 5+ support
+
+1.0
+===
+
+- re-sync with pylib codebase
+- add support for Python 3.4-3.5
+- drop support for Python 2.4-2.5, 3.2
+
+0.2
+===
+
+- added ability to ask "name in iniconfig", i.e. to check
+  if a section is contained.
+
+- fix bug in "name=value" parsing where value was "x=3"
+
+- allow for ': ' to delimit name=value pairs, so that e.g. .pypirc files
+  like http://docs.python.org/distutils/packageindex.html
+  can be successfully parsed
