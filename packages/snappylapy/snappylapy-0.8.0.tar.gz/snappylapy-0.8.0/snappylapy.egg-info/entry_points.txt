@@ -1,0 +1,11 @@
+[console_scripts]
+snappylapy = snappylapy._cli:app
+
+[pytest11]
+snappylapy = snappylapy._plugin
+
+[toolit_plugins]
+snappylapy_clear = snappylapy._cli:clear
+snappylapy_diff = snappylapy._cli:diff
+snappylapy_init = snappylapy._cli:init
+snappylapy_update = snappylapy._cli:update
