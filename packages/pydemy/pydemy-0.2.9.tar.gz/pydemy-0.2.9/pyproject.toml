@@ -1,0 +1,61 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pydemy"
+version = "0.2.9"
+description = "A Python library for interacting with the Udemy Affiliate API."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+keywords = [
+    "Udemy",
+    "API",
+    "Courses",
+    "Education",
+    "Udemy Affiliate API",
+    "Course Finder",
+    "Online Learning",
+    "Udemy Integration",
+    "Education API",
+    "Course Reviews",
+    "Learning Platform",
+    "Affiliate Marketing",
+    "EdTech",
+    "Pydantic",
+]
+dependencies = ["httpx>=0.27,<0.29", "pydantic>=2.9.1,<2.11.0"]
+authors = [{ name = "Robel Asefa", email = "mertigenet@gmail.com" }]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Education",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX",
+    "Operating System :: Unix",
+    "Operating System :: MacOS",
+]
+
+[project.optional-dependencies]
+dev = ["black", "isort", "ruff"]
+
+[project.urls]
+"Homepage" = "https://github.com/robelasefa/pydemy"
+"Bug Tracker" = "https://github.com/robelasefa/pydemy/issues"
+
+[tool.black]
+line-length = 99
+
+[tool.isort]
+profile = "black"
+
+[tool.ruff]
+fix = false
+output-format = "grouped"
+line-length = 99
