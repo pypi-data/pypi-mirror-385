@@ -1,0 +1,139 @@
+
+call: <your_call>
+gridsquare: CM87sr
+myrig: Icom IC7200
+ituzone: 6
+cqzone: 3
+
+qsl_cache: "./cache"
+adif_file: "/path/to/your/wsjtx_log.adi"
+
+# Some logging software do not export the email address in the ADIF file.
+# eqsl will try to fetch the email address from qrz.com. For that to work
+# you need to provide a qrz API key.
+# The key can be found on qrz -> logbook -> settings -> API key
+qrz_key: "your-qrz-api-key-here"
+
+smtp_server: <smtp_server>
+smtp_login: <smtp_login>
+smtp_password: <smtp_password>
+smtp_port: 587
+smtp_from: <you@email_address>
+
+# Full path the your favorite fonts
+# font_call: Ubuntu Mono derivative Powerline Bold.ttf
+# font_text: DroidSansMono.ttf
+# font_foot: VeraMono-Italic.ttf
+
+overlay_color: [0x00, 0x00, 0x00, 0x90]
+text_color: [0, 0, 77]
+
+# Full path to your qsl card
+# The card resolution should be at least 1024x576
+qsl_card: default.jpg
+
+# This signature will appear at the bottom of the QSL card.
+signature: Thank you for the QSO, and I will look forward for our next contact, 73
+
+
+# This following lists maps a country to a mail_template.
+# If a country does not appear in the following list the default template will be used.
+languages:
+  spanish:
+    - argentina
+    - bolivia
+    - chile
+    - colombia
+    - costa rica
+    - cuba
+    - dominican republic
+    - ecuador
+    - el salvador
+    - equatorial guinea
+    - guatemala
+    - honduras
+    - mexico
+    - nicaragua
+    - panama
+    - paraguay
+    - peru
+    - puerto rico
+    - spain
+    - uruguay
+    - venezuela
+  french:
+    - benin
+    - burundi
+    - cameroon
+    - chad
+    - djibouti
+    - france
+    - french polynesia
+    - gabon
+    - guinea
+    - haiti
+    - luxembourg
+    - madagascar
+    - mali
+    - monaco
+    - new caledonia
+    - niger
+    - reunion
+    - senegal
+    - seychelles
+    - switzerland
+    - togo
+    - vanuatu
+
+
+mail_templates:
+  default: |
+    Hello {{ data.name }}, and thank you for our QSO!
+
+    Frequency.: {{ data.frequency }} MHz
+    Band......: {{ data.band }}
+    Mode......: {{ data.mode }}
+    RST.......: {{ data.rst_sent }}
+    RCVD......: {{ data.rst_rcvd }}
+    Date......: {{ data.qso_date }}
+
+    Our contact has also been confirmed on eQSL, QRZ and LOTW.
+
+    I am looking forward for our next QSO.
+
+    73 de {{ data.my_call }}
+    Your friendly ham.
+
+  french: |
+    Bonjour {{ data.name }}, et merci pour le QSO!
+
+    Frequence.....: {{ data.frequency }} MHz
+    Bande.........: {{ data.band }}
+    Mode..........: {{ data.mode }}
+    RST Envoyé....: {{ data.rst_sent }}
+    RST Reçu......: {{ data.rst_rcvd }}
+    Date..........: {{ data.qso_date }}
+
+    Nôtre contact {{ data.mode }} a été confirmé LOTW , eQSL et QRZ.
+
+    J'espère avoir le plaisir de vous recontacter très bientôt.
+
+    73 de {{ data.my_call }}
+    Your friendly ham.
+
+  spanish: |
+    Hola {{ data.name }} ({{ data.call }}), ¡gracias por tu QSO!
+
+    Frecuencia....: {{ data.frequency }} MHz
+    Banda.........: {{ data.band }}
+    Modo..........: {{ data.mode }}
+    RST enviado...: {{ data.rst_sent }}
+    RST recibido..: {{ data.rst_rcvd }}
+    Fecha.........: {{ data.qso_date }}
+
+    Nuestro contacto {{ data.mode }} está confirmado en LOTW, QRZ y eQSL.
+
+    Esperando nuestro próximo contacto.
+
+    73 de {{ data.my_call }}
+    Your Name,
