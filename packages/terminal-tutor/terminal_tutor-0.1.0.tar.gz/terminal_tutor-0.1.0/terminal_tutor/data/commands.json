@@ -1,0 +1,2300 @@
+{
+  "version": "1.0",
+  "commands": {
+    "git": {
+      "description": "Distributed version control system - tracks changes in files",
+      "risk_level": "SAFE",
+      "category": "git"
+    },
+    "git status": {
+      "description": "Show the working tree status",
+      "risk_level": "SAFE",
+      "category": "git"
+    },
+    "git add": {
+      "description": "Add file contents to the index",
+      "risk_level": "SAFE",
+      "category": "git"
+    },
+    "git commit": {
+      "description": "Record changes to the repository",
+      "risk_level": "SAFE",
+      "category": "git"
+    },
+    "git push": {
+      "description": "Update remote refs along with associated objects",
+      "risk_level": "SAFE",
+      "category": "git"
+    },
+    "git pull": {
+      "description": "Fetch from and integrate with another repository",
+      "risk_level": "SAFE",
+      "category": "git"
+    },
+    "git clone": {
+      "description": "Clone a repository into a new directory",
+      "risk_level": "SAFE",
+      "category": "git"
+    },
+    "git branch": {
+      "description": "List, create, or delete branches",
+      "risk_level": "SAFE",
+      "category": "git"
+    },
+    "git checkout": {
+      "description": "Switch branches or restore working tree files",
+      "risk_level": "SAFE",
+      "category": "git"
+    },
+    "git merge": {
+      "description": "Join two or more development histories together",
+      "risk_level": "SAFE",
+      "category": "git"
+    },
+    "git log": {
+      "description": "Show commit logs",
+      "risk_level": "SAFE",
+      "category": "git"
+    },
+    "git diff": {
+      "description": "Show changes between commits, commit and working tree, etc",
+      "risk_level": "SAFE",
+      "category": "git"
+    },
+    "git reset": {
+      "description": "Reset current HEAD to the specified state",
+      "risk_level": "SAFE",
+      "category": "git"
+    },
+    "docker": {
+      "description": "Container platform for building, sharing, and running applications",
+      "risk_level": "SAFE",
+      "category": "docker"
+    },
+    "docker run": {
+      "description": "Run a command in a new container",
+      "risk_level": "SAFE",
+      "category": "docker"
+    },
+    "docker build": {
+      "description": "Build an image from a Dockerfile",
+      "risk_level": "SAFE",
+      "category": "docker"
+    },
+    "docker ps": {
+      "description": "List containers",
+      "risk_level": "SAFE",
+      "category": "docker"
+    },
+    "docker images": {
+      "description": "List images",
+      "risk_level": "SAFE",
+      "category": "docker"
+    },
+    "docker pull": {
+      "description": "Pull an image or a repository from a registry",
+      "risk_level": "SAFE",
+      "category": "docker"
+    },
+    "docker push": {
+      "description": "Push an image or a repository to a registry",
+      "risk_level": "SAFE",
+      "category": "docker"
+    },
+    "docker stop": {
+      "description": "Stop one or more running containers",
+      "risk_level": "SAFE",
+      "category": "docker"
+    },
+    "docker start": {
+      "description": "Start one or more stopped containers",
+      "risk_level": "SAFE",
+      "category": "docker"
+    },
+    "docker restart": {
+      "description": "Restart one or more containers",
+      "risk_level": "SAFE",
+      "category": "docker"
+    },
+    "docker rm": {
+      "description": "Remove one or more containers",
+      "risk_level": "CAUTION",
+      "category": "docker"
+    },
+    "docker rmi": {
+      "description": "Remove one or more images",
+      "risk_level": "CAUTION",
+      "category": "docker"
+    },
+    "docker exec": {
+      "description": "Run a command in a running container",
+      "risk_level": "SAFE",
+      "category": "docker"
+    },
+    "docker logs": {
+      "description": "Fetch the logs of a container",
+      "risk_level": "SAFE",
+      "category": "docker"
+    },
+    "docker inspect": {
+      "description": "Return low-level information on Docker objects",
+      "risk_level": "SAFE",
+      "category": "docker"
+    },
+    "kubectl": {
+      "description": "Kubernetes command-line tool for cluster management",
+      "risk_level": "SAFE",
+      "category": "kubernetes"
+    },
+    "kubectl get": {
+      "description": "Display one or many resources",
+      "risk_level": "SAFE",
+      "category": "kubernetes"
+    },
+    "kubectl get pods": {
+      "description": "List all pods in the current namespace",
+      "risk_level": "SAFE",
+      "category": "kubernetes"
+    },
+    "kubectl get services": {
+      "description": "List all services in the current namespace",
+      "risk_level": "SAFE",
+      "category": "kubernetes"
+    },
+    "kubectl get deployments": {
+      "description": "List all deployments in the current namespace",
+      "risk_level": "SAFE",
+      "category": "kubernetes"
+    },
+    "kubectl get nodes": {
+      "description": "List all nodes in the cluster",
+      "risk_level": "SAFE",
+      "category": "kubernetes"
+    },
+    "kubectl describe": {
+      "description": "Show details of a specific resource",
+      "risk_level": "SAFE",
+      "category": "kubernetes"
+    },
+    "kubectl apply": {
+      "description": "Apply a configuration to a resource by filename or stdin",
+      "risk_level": "SAFE",
+      "category": "kubernetes"
+    },
+    "kubectl delete": {
+      "description": "Delete resources by filenames, stdin, resources and names",
+      "risk_level": "CAUTION",
+      "category": "kubernetes"
+    },
+    "kubectl logs": {
+      "description": "Print the logs for a container in a pod",
+      "risk_level": "SAFE",
+      "category": "kubernetes"
+    },
+    "kubectl exec": {
+      "description": "Execute a command in a container",
+      "risk_level": "SAFE",
+      "category": "kubernetes"
+    },
+    "kubectl port-forward": {
+      "description": "Forward one or more local ports to a pod",
+      "risk_level": "SAFE",
+      "category": "kubernetes"
+    },
+    "kubectl scale": {
+      "description": "Set a new size for a Deployment, ReplicaSet or Replication Controller",
+      "risk_level": "SAFE",
+      "category": "kubernetes"
+    },
+    "ps aux": {
+      "description": "Display information about running processes",
+      "risk_level": "SAFE",
+      "category": "general"
+    },
+    "ps -ef": {
+      "description": "Display full format listing of processes",
+      "risk_level": "SAFE",
+      "category": "general"
+    },
+    "top": {
+      "description": "Display Linux processes in real time",
+      "risk_level": "SAFE",
+      "category": "system"
+    },
+    "htop": {
+      "description": "Interactive process viewer",
+      "risk_level": "SAFE",
+      "category": "system"
+    },
+    "kill": {
+      "description": "Terminate processes by process ID",
+      "risk_level": "SAFE",
+      "category": "system"
+    },
+    "killall": {
+      "description": "Kill processes by name",
+      "risk_level": "SAFE",
+      "category": "system"
+    },
+    "systemctl start": {
+      "description": "Start a systemd service",
+      "risk_level": "SAFE",
+      "category": "system"
+    },
+    "systemctl stop": {
+      "description": "Stop a systemd service",
+      "risk_level": "CAUTION",
+      "category": "system"
+    },
+    "systemctl restart": {
+      "description": "Restart a systemd service",
+      "risk_level": "SAFE",
+      "category": "system"
+    },
+    "systemctl status": {
+      "description": "Show status of a systemd service",
+      "risk_level": "SAFE",
+      "category": "system"
+    },
+    "systemctl enable": {
+      "description": "Enable a systemd service to start at boot",
+      "risk_level": "SAFE",
+      "category": "system"
+    },
+    "systemctl disable": {
+      "description": "Disable a systemd service from starting at boot",
+      "risk_level": "CAUTION",
+      "category": "system"
+    },
+    "ls -la": {
+      "description": "List all files in long format including hidden files",
+      "risk_level": "SAFE",
+      "category": "file-operations"
+    },
+    "ls -l": {
+      "description": "List files in long format with details",
+      "risk_level": "SAFE",
+      "category": "file-operations"
+    },
+    "find": {
+      "description": "Search for files and directories",
+      "risk_level": "SAFE",
+      "category": "file-search"
+    },
+    "grep": {
+      "description": "Search text using patterns",
+      "risk_level": "SAFE",
+      "category": "text-processing"
+    },
+    "grep -r": {
+      "description": "Search recursively through directories",
+      "risk_level": "SAFE",
+      "category": "general"
+    },
+    "chmod": {
+      "description": "Change file permissions",
+      "risk_level": "CAUTION",
+      "category": "general"
+    },
+    "chown": {
+      "description": "Change file ownership",
+      "risk_level": "CAUTION",
+      "category": "general"
+    },
+    "cp -r": {
+      "description": "Copy directories recursively",
+      "risk_level": "SAFE",
+      "category": "file-operations"
+    },
+    "mv": {
+      "description": "Move/rename files and directories",
+      "risk_level": "SAFE",
+      "category": "file-operations"
+    },
+    "rm -rf": {
+      "description": "Remove files and directories forcefully and recursively",
+      "risk_level": "DANGEROUS",
+      "category": "file-operations"
+    },
+    "tar -xzf": {
+      "description": "Extract gzipped tar archive",
+      "risk_level": "SAFE",
+      "category": "compression"
+    },
+    "tar -czf": {
+      "description": "Create gzipped tar archive",
+      "risk_level": "SAFE",
+      "category": "compression"
+    },
+    "netstat -tulpn": {
+      "description": "Display network connections, routing tables, interface statistics",
+      "risk_level": "SAFE",
+      "category": "general"
+    },
+    "ss -tulpn": {
+      "description": "Display socket statistics (modern netstat replacement)",
+      "risk_level": "SAFE",
+      "category": "general"
+    },
+    "iptables -L": {
+      "description": "List all iptables rules",
+      "risk_level": "SAFE",
+      "category": "general"
+    },
+    "ufw enable": {
+      "description": "Enable uncomplicated firewall",
+      "risk_level": "SAFE",
+      "category": "general"
+    },
+    "ufw disable": {
+      "description": "Disable uncomplicated firewall",
+      "risk_level": "SAFE",
+      "category": "general"
+    },
+    "ufw allow": {
+      "description": "Allow traffic through firewall",
+      "risk_level": "SAFE",
+      "category": "general"
+    },
+    "ufw deny": {
+      "description": "Deny traffic through firewall",
+      "risk_level": "SAFE",
+      "category": "general"
+    },
+    "ping": {
+      "description": "Send ICMP echo requests to network hosts",
+      "risk_level": "SAFE",
+      "category": "network"
+    },
+    "curl": {
+      "description": "Transfer data from or to a server",
+      "risk_level": "SAFE",
+      "category": "network"
+    },
+    "wget": {
+      "description": "Download files from the web",
+      "risk_level": "SAFE",
+      "category": "network"
+    },
+    "ssh": {
+      "description": "Secure Shell remote login",
+      "risk_level": "SAFE",
+      "category": "network"
+    },
+    "scp": {
+      "description": "Secure copy files over SSH",
+      "risk_level": "SAFE",
+      "category": "network"
+    },
+    "cd": {
+      "description": "Change current directory",
+      "risk_level": "SAFE",
+      "category": "file-operations"
+    },
+    "pwd": {
+      "description": "Print working directory path",
+      "risk_level": "SAFE",
+      "category": "file-operations"
+    },
+    "ls": {
+      "description": "List directory contents",
+      "risk_level": "SAFE",
+      "category": "file-operations"
+    },
+    "ls -a": {
+      "description": "List all files including hidden ones",
+      "risk_level": "SAFE",
+      "category": "file-operations"
+    },
+    "mkdir": {
+      "description": "Create directories",
+      "risk_level": "SAFE",
+      "category": "file-operations"
+    },
+    "mkdir -p": {
+      "description": "Create directories and parent directories as needed",
+      "risk_level": "SAFE",
+      "category": "file-operations"
+    },
+    "rmdir": {
+      "description": "Remove empty directories",
+      "risk_level": "SAFE",
+      "category": "file-operations"
+    },
+    "touch": {
+      "description": "Create empty files or update timestamps",
+      "risk_level": "SAFE",
+      "category": "file-operations"
+    },
+    "cp": {
+      "description": "Copy files and directories",
+      "risk_level": "SAFE",
+      "category": "file-operations"
+    },
+    "rm": {
+      "description": "Remove files and directories",
+      "risk_level": "SAFE",
+      "category": "file-operations"
+    },
+    "cat": {
+      "description": "Display file contents",
+      "risk_level": "SAFE",
+      "category": "file-operations"
+    },
+    "less": {
+      "description": "View file contents page by page",
+      "risk_level": "SAFE",
+      "category": "file-operations"
+    },
+    "more": {
+      "description": "View file contents page by page",
+      "risk_level": "SAFE",
+      "category": "file-operations"
+    },
+    "head": {
+      "description": "Display first lines of a file",
+      "risk_level": "SAFE",
+      "category": "file-operations"
+    },
+    "tail": {
+      "description": "Display last lines of a file",
+      "risk_level": "SAFE",
+      "category": "file-operations"
+    },
+    "wc": {
+      "description": "Count lines, words, and characters in files",
+      "risk_level": "SAFE",
+      "category": "text-processing"
+    },
+    "sort": {
+      "description": "Sort lines in text files",
+      "risk_level": "SAFE",
+      "category": "text-processing"
+    },
+    "uniq": {
+      "description": "Report or omit repeated lines",
+      "risk_level": "SAFE",
+      "category": "text-processing"
+    },
+    "cut": {
+      "description": "Extract columns from text",
+      "risk_level": "SAFE",
+      "category": "text-processing"
+    },
+    "awk": {
+      "description": "Pattern scanning and text processing",
+      "risk_level": "SAFE",
+      "category": "text-processing"
+    },
+    "sed": {
+      "description": "Stream editor for filtering and transforming text",
+      "risk_level": "SAFE",
+      "category": "text-processing"
+    },
+    "which": {
+      "description": "Locate a command",
+      "risk_level": "SAFE",
+      "category": "file-search"
+    },
+    "whereis": {
+      "description": "Locate binary, source, manual for a command",
+      "risk_level": "SAFE",
+      "category": "file-search"
+    },
+    "file": {
+      "description": "Determine file type",
+      "risk_level": "SAFE",
+      "category": "system-info"
+    },
+    "stat": {
+      "description": "Display file or filesystem status",
+      "risk_level": "SAFE",
+      "category": "system-info"
+    },
+    "du": {
+      "description": "Display directory space usage",
+      "risk_level": "SAFE",
+      "category": "disk-management"
+    },
+    "df": {
+      "description": "Display filesystem disk space usage",
+      "risk_level": "SAFE",
+      "category": "disk-management"
+    },
+    "free": {
+      "description": "Display amount of free and used memory",
+      "risk_level": "SAFE",
+      "category": "system-info"
+    },
+    "uptime": {
+      "description": "Show how long system has been running",
+      "risk_level": "SAFE",
+      "category": "system-info"
+    },
+    "whoami": {
+      "description": "Display current username",
+      "risk_level": "SAFE",
+      "category": "user-management"
+    },
+    "id": {
+      "description": "Display user and group IDs",
+      "risk_level": "SAFE",
+      "category": "user-management"
+    },
+    "date": {
+      "description": "Display or set system date",
+      "risk_level": "SAFE",
+      "category": "utilities"
+    },
+    "history": {
+      "description": "Display command history",
+      "risk_level": "SAFE",
+      "category": "utilities"
+    },
+    "alias": {
+      "description": "Create command aliases",
+      "risk_level": "SAFE",
+      "category": "utilities"
+    },
+    "unalias": {
+      "description": "Remove command aliases",
+      "risk_level": "SAFE",
+      "category": "utilities"
+    },
+    "export": {
+      "description": "Set environment variables",
+      "risk_level": "SAFE",
+      "category": "utilities"
+    },
+    "env": {
+      "description": "Display environment variables",
+      "risk_level": "SAFE",
+      "category": "utilities"
+    },
+    "echo": {
+      "description": "Display text",
+      "risk_level": "SAFE",
+      "category": "utilities"
+    },
+    "printf": {
+      "description": "Format and print text",
+      "risk_level": "SAFE",
+      "category": "utilities"
+    },
+    "clear": {
+      "description": "Clear the terminal screen",
+      "risk_level": "SAFE",
+      "category": "terminal"
+    },
+    "reset": {
+      "description": "Reset terminal to default state",
+      "risk_level": "SAFE",
+      "category": "terminal"
+    },
+    "aws": {
+      "description": "Amazon Web Services command line interface",
+      "risk_level": "SAFE",
+      "category": "aws"
+    },
+    "aws s3 ls": {
+      "description": "List S3 buckets or objects",
+      "risk_level": "SAFE",
+      "category": "aws-s3"
+    },
+    "aws s3 cp": {
+      "description": "Copy files to/from S3",
+      "risk_level": "SAFE",
+      "category": "aws-s3"
+    },
+    "aws s3 mv": {
+      "description": "Move files to/from S3",
+      "risk_level": "SAFE",
+      "category": "aws-s3"
+    },
+    "aws s3 sync": {
+      "description": "Sync directories with S3",
+      "risk_level": "SAFE",
+      "category": "aws-s3"
+    },
+    "aws s3 rm": {
+      "description": "Remove S3 objects",
+      "risk_level": "SAFE",
+      "category": "aws-s3"
+    },
+    "aws s3 mb": {
+      "description": "Create S3 bucket",
+      "risk_level": "SAFE",
+      "category": "aws-s3"
+    },
+    "aws s3 rb": {
+      "description": "Remove S3 bucket",
+      "risk_level": "SAFE",
+      "category": "aws-s3"
+    },
+    "aws s3api create-bucket": {
+      "description": "Create S3 bucket with advanced options",
+      "risk_level": "SAFE",
+      "category": "aws-s3"
+    },
+    "aws s3api delete-bucket": {
+      "description": "Delete S3 bucket",
+      "risk_level": "SAFE",
+      "category": "aws-s3"
+    },
+    "aws s3api put-object": {
+      "description": "Upload object to S3",
+      "risk_level": "SAFE",
+      "category": "aws-s3"
+    },
+    "aws s3api get-object": {
+      "description": "Download object from S3",
+      "risk_level": "SAFE",
+      "category": "aws-s3"
+    },
+    "aws s3api list-objects": {
+      "description": "List objects in S3 bucket",
+      "risk_level": "SAFE",
+      "category": "aws-s3"
+    },
+    "aws s3api put-bucket-policy": {
+      "description": "Set bucket policy",
+      "risk_level": "SAFE",
+      "category": "aws-s3"
+    },
+    "aws s3api get-bucket-policy": {
+      "description": "Get bucket policy",
+      "risk_level": "SAFE",
+      "category": "aws-s3"
+    },
+    "aws ec2 describe-instances": {
+      "description": "Describe EC2 instances",
+      "risk_level": "SAFE",
+      "category": "aws-ec2"
+    },
+    "aws ec2 start-instances": {
+      "description": "Start EC2 instances",
+      "risk_level": "SAFE",
+      "category": "aws-ec2"
+    },
+    "aws ec2 stop-instances": {
+      "description": "Stop EC2 instances",
+      "risk_level": "SAFE",
+      "category": "aws-ec2"
+    },
+    "aws ec2 terminate-instances": {
+      "description": "Terminate EC2 instances",
+      "risk_level": "SAFE",
+      "category": "aws-ec2"
+    },
+    "aws ec2 reboot-instances": {
+      "description": "Reboot EC2 instances",
+      "risk_level": "SAFE",
+      "category": "aws-ec2"
+    },
+    "aws ec2 run-instances": {
+      "description": "Launch new EC2 instances",
+      "risk_level": "SAFE",
+      "category": "aws-ec2"
+    },
+    "aws ec2 describe-images": {
+      "description": "Describe AMI images",
+      "risk_level": "SAFE",
+      "category": "aws-ec2"
+    },
+    "aws ec2 create-image": {
+      "description": "Create AMI from instance",
+      "risk_level": "SAFE",
+      "category": "aws-ec2"
+    },
+    "aws ec2 describe-key-pairs": {
+      "description": "List EC2 key pairs",
+      "risk_level": "SAFE",
+      "category": "aws-ec2"
+    },
+    "aws ec2 create-key-pair": {
+      "description": "Create EC2 key pair",
+      "risk_level": "SAFE",
+      "category": "aws-ec2"
+    },
+    "aws ec2 delete-key-pair": {
+      "description": "Delete EC2 key pair",
+      "risk_level": "SAFE",
+      "category": "aws-ec2"
+    },
+    "aws ec2 describe-security-groups": {
+      "description": "List security groups",
+      "risk_level": "SAFE",
+      "category": "aws-ec2"
+    },
+    "aws ec2 create-security-group": {
+      "description": "Create security group",
+      "risk_level": "SAFE",
+      "category": "aws-ec2"
+    },
+    "aws ec2 delete-security-group": {
+      "description": "Delete security group",
+      "risk_level": "SAFE",
+      "category": "aws-ec2"
+    },
+    "aws ec2 authorize-security-group-ingress": {
+      "description": "Add inbound rule to security group",
+      "risk_level": "SAFE",
+      "category": "aws-ec2"
+    },
+    "aws ec2 revoke-security-group-ingress": {
+      "description": "Remove inbound rule from security group",
+      "risk_level": "SAFE",
+      "category": "aws-ec2"
+    },
+    "aws ec2 describe-volumes": {
+      "description": "List EBS volumes",
+      "risk_level": "SAFE",
+      "category": "aws-ec2"
+    },
+    "aws ec2 create-volume": {
+      "description": "Create EBS volume",
+      "risk_level": "SAFE",
+      "category": "aws-ec2"
+    },
+    "aws ec2 delete-volume": {
+      "description": "Delete EBS volume",
+      "risk_level": "SAFE",
+      "category": "aws-ec2"
+    },
+    "aws ec2 attach-volume": {
+      "description": "Attach EBS volume to instance",
+      "risk_level": "SAFE",
+      "category": "aws-ec2"
+    },
+    "aws ec2 detach-volume": {
+      "description": "Detach EBS volume from instance",
+      "risk_level": "SAFE",
+      "category": "aws-ec2"
+    },
+    "aws iam list-users": {
+      "description": "List IAM users",
+      "risk_level": "SAFE",
+      "category": "aws-iam"
+    },
+    "aws iam create-user": {
+      "description": "Create IAM user",
+      "risk_level": "SAFE",
+      "category": "aws-iam"
+    },
+    "aws iam delete-user": {
+      "description": "Delete IAM user",
+      "risk_level": "SAFE",
+      "category": "aws-iam"
+    },
+    "aws iam list-groups": {
+      "description": "List IAM groups",
+      "risk_level": "SAFE",
+      "category": "aws-iam"
+    },
+    "aws iam create-group": {
+      "description": "Create IAM group",
+      "risk_level": "SAFE",
+      "category": "aws-iam"
+    },
+    "aws iam delete-group": {
+      "description": "Delete IAM group",
+      "risk_level": "SAFE",
+      "category": "aws-iam"
+    },
+    "aws iam list-roles": {
+      "description": "List IAM roles",
+      "risk_level": "SAFE",
+      "category": "aws-iam"
+    },
+    "aws iam create-role": {
+      "description": "Create IAM role",
+      "risk_level": "SAFE",
+      "category": "aws-iam"
+    },
+    "aws iam delete-role": {
+      "description": "Delete IAM role",
+      "risk_level": "SAFE",
+      "category": "aws-iam"
+    },
+    "aws iam list-policies": {
+      "description": "List IAM policies",
+      "risk_level": "SAFE",
+      "category": "aws-iam"
+    },
+    "aws iam create-policy": {
+      "description": "Create IAM policy",
+      "risk_level": "SAFE",
+      "category": "aws-iam"
+    },
+    "aws iam delete-policy": {
+      "description": "Delete IAM policy",
+      "risk_level": "SAFE",
+      "category": "aws-iam"
+    },
+    "aws iam attach-user-policy": {
+      "description": "Attach policy to user",
+      "risk_level": "SAFE",
+      "category": "aws-iam"
+    },
+    "aws iam detach-user-policy": {
+      "description": "Detach policy from user",
+      "risk_level": "SAFE",
+      "category": "aws-iam"
+    },
+    "aws iam list-access-keys": {
+      "description": "List access keys for user",
+      "risk_level": "SAFE",
+      "category": "aws-iam"
+    },
+    "aws iam create-access-key": {
+      "description": "Create access key for user",
+      "risk_level": "SAFE",
+      "category": "aws-iam"
+    },
+    "aws iam delete-access-key": {
+      "description": "Delete access key",
+      "risk_level": "SAFE",
+      "category": "aws-iam"
+    },
+    "aws lambda list-functions": {
+      "description": "List Lambda functions",
+      "risk_level": "SAFE",
+      "category": "aws-lambda"
+    },
+    "aws lambda create-function": {
+      "description": "Create Lambda function",
+      "risk_level": "SAFE",
+      "category": "aws-lambda"
+    },
+    "aws lambda delete-function": {
+      "description": "Delete Lambda function",
+      "risk_level": "SAFE",
+      "category": "aws-lambda"
+    },
+    "aws lambda invoke": {
+      "description": "Invoke Lambda function",
+      "risk_level": "SAFE",
+      "category": "aws-lambda"
+    },
+    "aws lambda update-function-code": {
+      "description": "Update Lambda function code",
+      "risk_level": "SAFE",
+      "category": "aws-lambda"
+    },
+    "aws lambda get-function": {
+      "description": "Get Lambda function details",
+      "risk_level": "SAFE",
+      "category": "aws-lambda"
+    },
+    "aws logs describe-log-groups": {
+      "description": "List CloudWatch log groups",
+      "risk_level": "SAFE",
+      "category": "aws-cloudwatch"
+    },
+    "aws logs describe-log-streams": {
+      "description": "List log streams in log group",
+      "risk_level": "SAFE",
+      "category": "aws-cloudwatch"
+    },
+    "aws logs get-log-events": {
+      "description": "Get log events from log stream",
+      "risk_level": "SAFE",
+      "category": "aws-cloudwatch"
+    },
+    "aws logs tail": {
+      "description": "Tail CloudWatch logs",
+      "risk_level": "SAFE",
+      "category": "aws-cloudwatch"
+    },
+    "aws logs create-log-group": {
+      "description": "Create log group",
+      "risk_level": "SAFE",
+      "category": "aws-cloudwatch"
+    },
+    "aws logs delete-log-group": {
+      "description": "Delete log group",
+      "risk_level": "SAFE",
+      "category": "aws-cloudwatch"
+    },
+    "aws cloudwatch list-metrics": {
+      "description": "List CloudWatch metrics",
+      "risk_level": "SAFE",
+      "category": "aws-cloudwatch"
+    },
+    "aws cloudwatch get-metric-statistics": {
+      "description": "Get metric statistics",
+      "risk_level": "SAFE",
+      "category": "aws-cloudwatch"
+    },
+    "aws cloudwatch put-metric-data": {
+      "description": "Put custom metric data",
+      "risk_level": "SAFE",
+      "category": "aws-cloudwatch"
+    },
+    "aws rds describe-db-instances": {
+      "description": "List RDS database instances",
+      "risk_level": "SAFE",
+      "category": "aws-rds"
+    },
+    "aws rds create-db-instance": {
+      "description": "Create RDS database instance",
+      "risk_level": "SAFE",
+      "category": "aws-rds"
+    },
+    "aws rds delete-db-instance": {
+      "description": "Delete RDS database instance",
+      "risk_level": "SAFE",
+      "category": "aws-rds"
+    },
+    "aws rds start-db-instance": {
+      "description": "Start RDS database instance",
+      "risk_level": "SAFE",
+      "category": "aws-rds"
+    },
+    "aws rds stop-db-instance": {
+      "description": "Stop RDS database instance",
+      "risk_level": "SAFE",
+      "category": "aws-rds"
+    },
+    "aws rds reboot-db-instance": {
+      "description": "Reboot RDS database instance",
+      "risk_level": "SAFE",
+      "category": "aws-rds"
+    },
+    "aws ecs list-clusters": {
+      "description": "List ECS clusters",
+      "risk_level": "SAFE",
+      "category": "aws-ecs"
+    },
+    "aws ecs describe-clusters": {
+      "description": "Describe ECS clusters",
+      "risk_level": "SAFE",
+      "category": "aws-ecs"
+    },
+    "aws ecs list-services": {
+      "description": "List ECS services",
+      "risk_level": "SAFE",
+      "category": "aws-ecs"
+    },
+    "aws ecs describe-services": {
+      "description": "Describe ECS services",
+      "risk_level": "SAFE",
+      "category": "aws-ecs"
+    },
+    "aws ecs list-tasks": {
+      "description": "List ECS tasks",
+      "risk_level": "SAFE",
+      "category": "aws-ecs"
+    },
+    "aws ecs describe-tasks": {
+      "description": "Describe ECS tasks",
+      "risk_level": "SAFE",
+      "category": "aws-ecs"
+    },
+    "aws ecs run-task": {
+      "description": "Run ECS task",
+      "risk_level": "SAFE",
+      "category": "aws-ecs"
+    },
+    "aws ecs stop-task": {
+      "description": "Stop ECS task",
+      "risk_level": "SAFE",
+      "category": "aws-ecs"
+    },
+    "aws eks list-clusters": {
+      "description": "List EKS clusters",
+      "risk_level": "SAFE",
+      "category": "aws-eks"
+    },
+    "aws eks describe-cluster": {
+      "description": "Describe EKS cluster",
+      "risk_level": "SAFE",
+      "category": "aws-eks"
+    },
+    "aws eks create-cluster": {
+      "description": "Create EKS cluster",
+      "risk_level": "SAFE",
+      "category": "aws-eks"
+    },
+    "aws eks delete-cluster": {
+      "description": "Delete EKS cluster",
+      "risk_level": "SAFE",
+      "category": "aws-eks"
+    },
+    "aws eks update-kubeconfig": {
+      "description": "Update kubeconfig for EKS cluster",
+      "risk_level": "SAFE",
+      "category": "aws-eks"
+    },
+    "aws cloudformation list-stacks": {
+      "description": "List CloudFormation stacks",
+      "risk_level": "SAFE",
+      "category": "aws-cloudformation"
+    },
+    "aws cloudformation describe-stacks": {
+      "description": "Describe CloudFormation stacks",
+      "risk_level": "SAFE",
+      "category": "aws-cloudformation"
+    },
+    "aws cloudformation create-stack": {
+      "description": "Create CloudFormation stack",
+      "risk_level": "SAFE",
+      "category": "aws-cloudformation"
+    },
+    "aws cloudformation update-stack": {
+      "description": "Update CloudFormation stack",
+      "risk_level": "SAFE",
+      "category": "aws-cloudformation"
+    },
+    "aws cloudformation delete-stack": {
+      "description": "Delete CloudFormation stack",
+      "risk_level": "SAFE",
+      "category": "aws-cloudformation"
+    },
+    "aws cloudformation validate-template": {
+      "description": "Validate CloudFormation template",
+      "risk_level": "SAFE",
+      "category": "aws-cloudformation"
+    },
+    "aws route53 list-hosted-zones": {
+      "description": "List Route53 hosted zones",
+      "risk_level": "SAFE",
+      "category": "aws-route53"
+    },
+    "aws route53 list-resource-record-sets": {
+      "description": "List DNS records in hosted zone",
+      "risk_level": "SAFE",
+      "category": "aws-route53"
+    },
+    "aws route53 change-resource-record-sets": {
+      "description": "Modify DNS records",
+      "risk_level": "SAFE",
+      "category": "aws-route53"
+    },
+    "apt update": {
+      "description": "Update package index",
+      "risk_level": "SAFE",
+      "category": "package-manager"
+    },
+    "apt upgrade": {
+      "description": "Upgrade installed packages",
+      "risk_level": "SAFE",
+      "category": "package-manager"
+    },
+    "apt install": {
+      "description": "Install packages",
+      "risk_level": "SAFE",
+      "category": "package-manager"
+    },
+    "apt remove": {
+      "description": "Remove packages",
+      "risk_level": "SAFE",
+      "category": "package-manager"
+    },
+    "apt autoremove": {
+      "description": "Remove automatically installed packages no longer needed",
+      "risk_level": "SAFE",
+      "category": "package-manager"
+    },
+    "apt search": {
+      "description": "Search for packages",
+      "risk_level": "SAFE",
+      "category": "package-manager"
+    },
+    "apt show": {
+      "description": "Show package details",
+      "risk_level": "SAFE",
+      "category": "package-manager"
+    },
+    "dpkg -i": {
+      "description": "Install a .deb package",
+      "risk_level": "SAFE",
+      "category": "package-manager"
+    },
+    "dpkg -l": {
+      "description": "List installed packages",
+      "risk_level": "SAFE",
+      "category": "package-manager"
+    },
+    "dpkg -r": {
+      "description": "Remove a package",
+      "risk_level": "SAFE",
+      "category": "package-manager"
+    },
+    "snap install": {
+      "description": "Install snap packages",
+      "risk_level": "SAFE",
+      "category": "package-manager"
+    },
+    "snap list": {
+      "description": "List installed snap packages",
+      "risk_level": "SAFE",
+      "category": "package-manager"
+    },
+    "snap remove": {
+      "description": "Remove snap packages",
+      "risk_level": "SAFE",
+      "category": "package-manager"
+    },
+    "pip install": {
+      "description": "Install Python packages",
+      "risk_level": "SAFE",
+      "category": "package-manager"
+    },
+    "pip list": {
+      "description": "List installed Python packages",
+      "risk_level": "SAFE",
+      "category": "package-manager"
+    },
+    "pip uninstall": {
+      "description": "Uninstall Python packages",
+      "risk_level": "SAFE",
+      "category": "package-manager"
+    },
+    "npm install": {
+      "description": "Install Node.js packages",
+      "risk_level": "SAFE",
+      "category": "package-manager"
+    },
+    "npm list": {
+      "description": "List installed Node.js packages",
+      "risk_level": "SAFE",
+      "category": "package-manager"
+    },
+    "npm uninstall": {
+      "description": "Uninstall Node.js packages",
+      "risk_level": "SAFE",
+      "category": "package-manager"
+    },
+    "yum install": {
+      "description": "Install packages (RHEL/CentOS)",
+      "risk_level": "SAFE",
+      "category": "package-manager"
+    },
+    "yum update": {
+      "description": "Update packages (RHEL/CentOS)",
+      "risk_level": "SAFE",
+      "category": "package-manager"
+    },
+    "dnf install": {
+      "description": "Install packages (Fedora)",
+      "risk_level": "SAFE",
+      "category": "package-manager"
+    },
+    "dnf update": {
+      "description": "Update packages (Fedora)",
+      "risk_level": "SAFE",
+      "category": "package-manager"
+    },
+    "zip": {
+      "description": "Create ZIP archives",
+      "risk_level": "SAFE",
+      "category": "compression"
+    },
+    "unzip": {
+      "description": "Extract ZIP archives",
+      "risk_level": "SAFE",
+      "category": "compression"
+    },
+    "gzip": {
+      "description": "Compress files with gzip",
+      "risk_level": "SAFE",
+      "category": "compression"
+    },
+    "gunzip": {
+      "description": "Decompress gzip files",
+      "risk_level": "SAFE",
+      "category": "compression"
+    },
+    "bzip2": {
+      "description": "Compress files with bzip2",
+      "risk_level": "SAFE",
+      "category": "compression"
+    },
+    "bunzip2": {
+      "description": "Decompress bzip2 files",
+      "risk_level": "SAFE",
+      "category": "compression"
+    },
+    "xz": {
+      "description": "Compress files with xz",
+      "risk_level": "SAFE",
+      "category": "compression"
+    },
+    "unxz": {
+      "description": "Decompress xz files",
+      "risk_level": "SAFE",
+      "category": "compression"
+    },
+    "tar -xvf": {
+      "description": "Extract tar archive",
+      "risk_level": "SAFE",
+      "category": "compression"
+    },
+    "tar -cvf": {
+      "description": "Create tar archive",
+      "risk_level": "SAFE",
+      "category": "compression"
+    },
+    "7z": {
+      "description": "7-Zip compression utility",
+      "risk_level": "SAFE",
+      "category": "compression"
+    },
+    "zcat": {
+      "description": "View compressed file contents",
+      "risk_level": "SAFE",
+      "category": "compression"
+    },
+    "tr": {
+      "description": "Translate or delete characters",
+      "risk_level": "SAFE",
+      "category": "text-processing"
+    },
+    "paste": {
+      "description": "Merge lines of files",
+      "risk_level": "SAFE",
+      "category": "text-processing"
+    },
+    "join": {
+      "description": "Join lines of two files on a common field",
+      "risk_level": "SAFE",
+      "category": "text-processing"
+    },
+    "comm": {
+      "description": "Compare two sorted files line by line",
+      "risk_level": "SAFE",
+      "category": "text-processing"
+    },
+    "column": {
+      "description": "Format text into columns",
+      "risk_level": "SAFE",
+      "category": "text-processing"
+    },
+    "nl": {
+      "description": "Number lines of files",
+      "risk_level": "SAFE",
+      "category": "text-processing"
+    },
+    "fold": {
+      "description": "Wrap lines to specified width",
+      "risk_level": "SAFE",
+      "category": "text-processing"
+    },
+    "expand": {
+      "description": "Convert tabs to spaces",
+      "risk_level": "SAFE",
+      "category": "text-processing"
+    },
+    "unexpand": {
+      "description": "Convert spaces to tabs",
+      "risk_level": "SAFE",
+      "category": "text-processing"
+    },
+    "useradd": {
+      "description": "Create a new user",
+      "risk_level": "SAFE",
+      "category": "user-management"
+    },
+    "usermod": {
+      "description": "Modify user account",
+      "risk_level": "SAFE",
+      "category": "user-management"
+    },
+    "userdel": {
+      "description": "Delete a user account",
+      "risk_level": "SAFE",
+      "category": "user-management"
+    },
+    "groupadd": {
+      "description": "Create a new group",
+      "risk_level": "SAFE",
+      "category": "user-management"
+    },
+    "groupmod": {
+      "description": "Modify a group",
+      "risk_level": "SAFE",
+      "category": "user-management"
+    },
+    "groupdel": {
+      "description": "Delete a group",
+      "risk_level": "SAFE",
+      "category": "user-management"
+    },
+    "passwd": {
+      "description": "Change user password",
+      "risk_level": "SAFE",
+      "category": "user-management"
+    },
+    "su": {
+      "description": "Switch user",
+      "risk_level": "SAFE",
+      "category": "user-management"
+    },
+    "sudo": {
+      "description": "Execute command as another user",
+      "risk_level": "CAUTION",
+      "category": "user-management"
+    },
+    "visudo": {
+      "description": "Edit sudoers file safely",
+      "risk_level": "CAUTION",
+      "category": "user-management"
+    },
+    "groups": {
+      "description": "Show user's groups",
+      "risk_level": "SAFE",
+      "category": "user-management"
+    },
+    "last": {
+      "description": "Show last logged in users",
+      "risk_level": "SAFE",
+      "category": "user-management"
+    },
+    "w": {
+      "description": "Show who is logged on and what they are doing",
+      "risk_level": "SAFE",
+      "category": "user-management"
+    },
+    "who": {
+      "description": "Show who is logged on",
+      "risk_level": "SAFE",
+      "category": "user-management"
+    },
+    "mount": {
+      "description": "Mount a filesystem",
+      "risk_level": "SAFE",
+      "category": "disk-management"
+    },
+    "umount": {
+      "description": "Unmount a filesystem",
+      "risk_level": "SAFE",
+      "category": "disk-management"
+    },
+    "lsblk": {
+      "description": "List block devices",
+      "risk_level": "SAFE",
+      "category": "disk-management"
+    },
+    "blkid": {
+      "description": "Locate/print block device attributes",
+      "risk_level": "SAFE",
+      "category": "disk-management"
+    },
+    "fdisk": {
+      "description": "Partition table manipulator for Linux",
+      "risk_level": "DANGEROUS",
+      "category": "disk-management"
+    },
+    "gdisk": {
+      "description": "GPT partition table manipulator",
+      "risk_level": "SAFE",
+      "category": "disk-management"
+    },
+    "parted": {
+      "description": "Partition manipulation program",
+      "risk_level": "DANGEROUS",
+      "category": "disk-management"
+    },
+    "mkfs.ext4": {
+      "description": "Create ext4 filesystem",
+      "risk_level": "DANGEROUS",
+      "category": "disk-management"
+    },
+    "mkfs.xfs": {
+      "description": "Create XFS filesystem",
+      "risk_level": "DANGEROUS",
+      "category": "disk-management"
+    },
+    "mkswap": {
+      "description": "Set up a Linux swap area",
+      "risk_level": "SAFE",
+      "category": "general"
+    },
+    "swapon": {
+      "description": "Enable swap area",
+      "risk_level": "SAFE",
+      "category": "disk-management"
+    },
+    "swapoff": {
+      "description": "Disable swap area",
+      "risk_level": "SAFE",
+      "category": "disk-management"
+    },
+    "fsck": {
+      "description": "Check and repair filesystem",
+      "risk_level": "SAFE",
+      "category": "disk-management"
+    },
+    "e2fsck": {
+      "description": "Check ext2/ext3/ext4 filesystem",
+      "risk_level": "SAFE",
+      "category": "disk-management"
+    },
+    "resize2fs": {
+      "description": "Resize ext2/ext3/ext4 filesystem",
+      "risk_level": "SAFE",
+      "category": "disk-management"
+    },
+    "tune2fs": {
+      "description": "Adjust tunable filesystem parameters",
+      "risk_level": "SAFE",
+      "category": "disk-management"
+    },
+    "ip addr": {
+      "description": "Show IP addresses",
+      "risk_level": "SAFE",
+      "category": "network"
+    },
+    "ip link": {
+      "description": "Show network interfaces",
+      "risk_level": "SAFE",
+      "category": "network"
+    },
+    "ip route": {
+      "description": "Show routing table",
+      "risk_level": "SAFE",
+      "category": "network"
+    },
+    "ifconfig": {
+      "description": "Configure network interface (legacy)",
+      "risk_level": "SAFE",
+      "category": "network"
+    },
+    "route": {
+      "description": "Show/manipulate IP routing table",
+      "risk_level": "SAFE",
+      "category": "network"
+    },
+    "traceroute": {
+      "description": "Trace route to network host",
+      "risk_level": "SAFE",
+      "category": "network"
+    },
+    "tracepath": {
+      "description": "Trace path to network host",
+      "risk_level": "SAFE",
+      "category": "network"
+    },
+    "dig": {
+      "description": "DNS lookup utility",
+      "risk_level": "SAFE",
+      "category": "network"
+    },
+    "nslookup": {
+      "description": "Query DNS servers",
+      "risk_level": "SAFE",
+      "category": "network"
+    },
+    "host": {
+      "description": "DNS lookup utility",
+      "risk_level": "SAFE",
+      "category": "network"
+    },
+    "nc": {
+      "description": "Netcat - networking utility",
+      "risk_level": "SAFE",
+      "category": "network"
+    },
+    "netcat": {
+      "description": "TCP/UDP connection utility",
+      "risk_level": "SAFE",
+      "category": "network"
+    },
+    "telnet": {
+      "description": "User interface to TELNET protocol",
+      "risk_level": "SAFE",
+      "category": "network"
+    },
+    "nmap": {
+      "description": "Network exploration and security auditing",
+      "risk_level": "SAFE",
+      "category": "network"
+    },
+    "tcpdump": {
+      "description": "Dump network traffic",
+      "risk_level": "SAFE",
+      "category": "network"
+    },
+    "wireshark": {
+      "description": "Network protocol analyzer",
+      "risk_level": "SAFE",
+      "category": "network"
+    },
+    "arp": {
+      "description": "Manipulate ARP cache",
+      "risk_level": "SAFE",
+      "category": "network"
+    },
+    "mtr": {
+      "description": "Network diagnostic tool",
+      "risk_level": "SAFE",
+      "category": "network"
+    },
+    "ethtool": {
+      "description": "Display or change ethernet card settings",
+      "risk_level": "SAFE",
+      "category": "network"
+    },
+    "nmcli": {
+      "description": "NetworkManager command-line tool",
+      "risk_level": "SAFE",
+      "category": "network"
+    },
+    "hostname": {
+      "description": "Show or set system hostname",
+      "risk_level": "SAFE",
+      "category": "network"
+    },
+    "jobs": {
+      "description": "List active jobs",
+      "risk_level": "SAFE",
+      "category": "system"
+    },
+    "fg": {
+      "description": "Bring job to foreground",
+      "risk_level": "SAFE",
+      "category": "system"
+    },
+    "bg": {
+      "description": "Send job to background",
+      "risk_level": "SAFE",
+      "category": "system"
+    },
+    "nohup": {
+      "description": "Run command immune to hangups",
+      "risk_level": "SAFE",
+      "category": "system"
+    },
+    "nice": {
+      "description": "Run command with modified scheduling priority",
+      "risk_level": "SAFE",
+      "category": "system"
+    },
+    "renice": {
+      "description": "Alter priority of running processes",
+      "risk_level": "SAFE",
+      "category": "system"
+    },
+    "pgrep": {
+      "description": "Find processes by name",
+      "risk_level": "SAFE",
+      "category": "system"
+    },
+    "pkill": {
+      "description": "Signal processes by name",
+      "risk_level": "SAFE",
+      "category": "system"
+    },
+    "pidof": {
+      "description": "Find process ID by name",
+      "risk_level": "SAFE",
+      "category": "system"
+    },
+    "pstree": {
+      "description": "Display process tree",
+      "risk_level": "SAFE",
+      "category": "system"
+    },
+    "vmstat": {
+      "description": "Report virtual memory statistics",
+      "risk_level": "SAFE",
+      "category": "system"
+    },
+    "iostat": {
+      "description": "Report CPU and I/O statistics",
+      "risk_level": "SAFE",
+      "category": "system"
+    },
+    "mpstat": {
+      "description": "Report processor statistics",
+      "risk_level": "SAFE",
+      "category": "system"
+    },
+    "sar": {
+      "description": "Collect and report system activity",
+      "risk_level": "SAFE",
+      "category": "system"
+    },
+    "lsof": {
+      "description": "List open files",
+      "risk_level": "SAFE",
+      "category": "system"
+    },
+    "fuser": {
+      "description": "Identify processes using files",
+      "risk_level": "SAFE",
+      "category": "system"
+    },
+    "strace": {
+      "description": "Trace system calls",
+      "risk_level": "SAFE",
+      "category": "system"
+    },
+    "ltrace": {
+      "description": "Trace library calls",
+      "risk_level": "SAFE",
+      "category": "system"
+    },
+    "uname": {
+      "description": "Print system information",
+      "risk_level": "SAFE",
+      "category": "system-info"
+    },
+    "uname -a": {
+      "description": "Print all system information",
+      "risk_level": "SAFE",
+      "category": "system-info"
+    },
+    "lsb_release": {
+      "description": "Print distribution-specific information",
+      "risk_level": "SAFE",
+      "category": "system-info"
+    },
+    "lscpu": {
+      "description": "Display CPU architecture information",
+      "risk_level": "SAFE",
+      "category": "system-info"
+    },
+    "lsmem": {
+      "description": "List memory ranges",
+      "risk_level": "SAFE",
+      "category": "system-info"
+    },
+    "lspci": {
+      "description": "List PCI devices",
+      "risk_level": "SAFE",
+      "category": "system-info"
+    },
+    "lsusb": {
+      "description": "List USB devices",
+      "risk_level": "SAFE",
+      "category": "system-info"
+    },
+    "dmidecode": {
+      "description": "DMI table decoder",
+      "risk_level": "SAFE",
+      "category": "system-info"
+    },
+    "hwinfo": {
+      "description": "Hardware information tool",
+      "risk_level": "SAFE",
+      "category": "system-info"
+    },
+    "inxi": {
+      "description": "System information script",
+      "risk_level": "SAFE",
+      "category": "system-info"
+    },
+    "neofetch": {
+      "description": "Display system information with logo",
+      "risk_level": "SAFE",
+      "category": "system-info"
+    },
+    "screenfetch": {
+      "description": "Display system information with ASCII art",
+      "risk_level": "SAFE",
+      "category": "system-info"
+    },
+    "journalctl": {
+      "description": "Query systemd journal",
+      "risk_level": "SAFE",
+      "category": "logs"
+    },
+    "journalctl -f": {
+      "description": "Follow systemd journal",
+      "risk_level": "SAFE",
+      "category": "logs"
+    },
+    "journalctl -u": {
+      "description": "Show logs for specific unit",
+      "risk_level": "SAFE",
+      "category": "logs"
+    },
+    "dmesg": {
+      "description": "Print kernel ring buffer",
+      "risk_level": "SAFE",
+      "category": "logs"
+    },
+    "dmesg -w": {
+      "description": "Watch kernel messages",
+      "risk_level": "SAFE",
+      "category": "logs"
+    },
+    "logger": {
+      "description": "Make entries in system log",
+      "risk_level": "SAFE",
+      "category": "logs"
+    },
+    "logrotate": {
+      "description": "Rotate log files",
+      "risk_level": "SAFE",
+      "category": "logs"
+    },
+    "tail -f": {
+      "description": "Follow log file in real-time",
+      "risk_level": "SAFE",
+      "category": "file-operations"
+    },
+    "locate": {
+      "description": "Find files by name",
+      "risk_level": "SAFE",
+      "category": "file-search"
+    },
+    "updatedb": {
+      "description": "Update locate database",
+      "risk_level": "SAFE",
+      "category": "file-search"
+    },
+    "rsync": {
+      "description": "Remote file and directory synchronization",
+      "risk_level": "SAFE",
+      "category": "file-search"
+    },
+    "rsync -av": {
+      "description": "Archive mode with verbose sync",
+      "risk_level": "SAFE",
+      "category": "file-search"
+    },
+    "screen": {
+      "description": "Terminal multiplexer",
+      "risk_level": "SAFE",
+      "category": "terminal"
+    },
+    "screen -ls": {
+      "description": "List screen sessions",
+      "risk_level": "SAFE",
+      "category": "terminal"
+    },
+    "screen -r": {
+      "description": "Reattach to screen session",
+      "risk_level": "SAFE",
+      "category": "terminal"
+    },
+    "tmux": {
+      "description": "Terminal multiplexer",
+      "risk_level": "SAFE",
+      "category": "terminal"
+    },
+    "tmux ls": {
+      "description": "List tmux sessions",
+      "risk_level": "SAFE",
+      "category": "terminal"
+    },
+    "tmux attach": {
+      "description": "Attach to tmux session",
+      "risk_level": "SAFE",
+      "category": "terminal"
+    },
+    "tmux new": {
+      "description": "Create new tmux session",
+      "risk_level": "SAFE",
+      "category": "terminal"
+    },
+    "crontab": {
+      "description": "Manage cron jobs",
+      "risk_level": "SAFE",
+      "category": "scheduling"
+    },
+    "crontab -e": {
+      "description": "Edit cron jobs",
+      "risk_level": "SAFE",
+      "category": "scheduling"
+    },
+    "crontab -l": {
+      "description": "List cron jobs",
+      "risk_level": "SAFE",
+      "category": "scheduling"
+    },
+    "at": {
+      "description": "Schedule one-time job",
+      "risk_level": "SAFE",
+      "category": "scheduling"
+    },
+    "atq": {
+      "description": "List pending at jobs",
+      "risk_level": "SAFE",
+      "category": "scheduling"
+    },
+    "atrm": {
+      "description": "Remove at job",
+      "risk_level": "SAFE",
+      "category": "scheduling"
+    },
+    "batch": {
+      "description": "Execute jobs when system load permits",
+      "risk_level": "SAFE",
+      "category": "scheduling"
+    },
+    "iotop": {
+      "description": "I/O usage monitor",
+      "risk_level": "SAFE",
+      "category": "system"
+    },
+    "iftop": {
+      "description": "Network bandwidth monitor",
+      "risk_level": "SAFE",
+      "category": "system"
+    },
+    "nethogs": {
+      "description": "Network traffic per process",
+      "risk_level": "SAFE",
+      "category": "system"
+    },
+    "vnstat": {
+      "description": "Network traffic statistics",
+      "risk_level": "SAFE",
+      "category": "system"
+    },
+    "glances": {
+      "description": "Cross-platform system monitoring tool",
+      "risk_level": "SAFE",
+      "category": "system"
+    },
+    "atop": {
+      "description": "Advanced system and process monitor",
+      "risk_level": "SAFE",
+      "category": "system"
+    },
+    "vim": {
+      "description": "Vi improved text editor",
+      "risk_level": "SAFE",
+      "category": "editor"
+    },
+    "nano": {
+      "description": "Simple text editor",
+      "risk_level": "SAFE",
+      "category": "editor"
+    },
+    "emacs": {
+      "description": "Extensible text editor",
+      "risk_level": "SAFE",
+      "category": "editor"
+    },
+    "vi": {
+      "description": "Visual text editor",
+      "risk_level": "SAFE",
+      "category": "editor"
+    },
+    "gedit": {
+      "description": "GNOME text editor",
+      "risk_level": "SAFE",
+      "category": "editor"
+    },
+    "jetson_clocks": {
+      "description": "Maximize Jetson performance by setting clocks",
+      "risk_level": "SAFE",
+      "category": "nvidia-jetson"
+    },
+    "jetson_clocks --show": {
+      "description": "Show current Jetson clock settings",
+      "risk_level": "SAFE",
+      "category": "nvidia-jetson"
+    },
+    "tegrastats": {
+      "description": "Display Jetson system statistics (CPU, GPU, memory, temperature)",
+      "risk_level": "SAFE",
+      "category": "nvidia-jetson"
+    },
+    "nvpmodel": {
+      "description": "Manage Jetson power modes",
+      "risk_level": "SAFE",
+      "category": "nvidia-jetson"
+    },
+    "nvpmodel -q": {
+      "description": "Query current Jetson power mode",
+      "risk_level": "SAFE",
+      "category": "nvidia-jetson"
+    },
+    "nvpmodel -m": {
+      "description": "Set Jetson power mode",
+      "risk_level": "SAFE",
+      "category": "nvidia-jetson"
+    },
+    "jtop": {
+      "description": "Interactive Jetson monitoring tool",
+      "risk_level": "SAFE",
+      "category": "nvidia-jetson"
+    },
+    "jetson_release": {
+      "description": "Show Jetson board and software information",
+      "risk_level": "SAFE",
+      "category": "nvidia-jetson"
+    },
+    "watch": {
+      "description": "Execute a program periodically and show output",
+      "risk_level": "SAFE",
+      "category": "utilities"
+    },
+    "xargs": {
+      "description": "Build and execute command lines from standard input",
+      "risk_level": "SAFE",
+      "category": "utilities"
+    },
+    "yes": {
+      "description": "Output a string repeatedly until killed",
+      "risk_level": "SAFE",
+      "category": "utilities"
+    },
+    "seq": {
+      "description": "Print sequence of numbers",
+      "risk_level": "SAFE",
+      "category": "utilities"
+    },
+    "shuf": {
+      "description": "Generate random permutations",
+      "risk_level": "SAFE",
+      "category": "utilities"
+    },
+    "tee": {
+      "description": "Read from stdin and write to stdout and files",
+      "risk_level": "SAFE",
+      "category": "utilities"
+    },
+    "timeout": {
+      "description": "Run command with time limit",
+      "risk_level": "SAFE",
+      "category": "utilities"
+    },
+    "time": {
+      "description": "Time command execution",
+      "risk_level": "SAFE",
+      "category": "utilities"
+    },
+    "bc": {
+      "description": "Command-line calculator",
+      "risk_level": "SAFE",
+      "category": "utilities"
+    },
+    "cal": {
+      "description": "Display calendar",
+      "risk_level": "SAFE",
+      "category": "utilities"
+    },
+    "factor": {
+      "description": "Print prime factors",
+      "risk_level": "SAFE",
+      "category": "utilities"
+    },
+    "md5sum": {
+      "description": "Compute MD5 checksum",
+      "risk_level": "SAFE",
+      "category": "utilities"
+    },
+    "sha256sum": {
+      "description": "Compute SHA256 checksum",
+      "risk_level": "SAFE",
+      "category": "utilities"
+    },
+    "base64": {
+      "description": "Base64 encode/decode",
+      "risk_level": "SAFE",
+      "category": "utilities"
+    },
+    "od": {
+      "description": "Dump files in octal and other formats",
+      "risk_level": "SAFE",
+      "category": "utilities"
+    },
+    "hexdump": {
+      "description": "Display file contents in hexadecimal",
+      "risk_level": "SAFE",
+      "category": "utilities"
+    },
+    "strings": {
+      "description": "Print printable strings in files",
+      "risk_level": "SAFE",
+      "category": "utilities"
+    },
+    "diff": {
+      "description": "Compare files line by line",
+      "risk_level": "SAFE",
+      "category": "file-operations"
+    },
+    "patch": {
+      "description": "Apply a diff file to an original",
+      "risk_level": "SAFE",
+      "category": "file-operations"
+    },
+    "cmp": {
+      "description": "Compare two files byte by byte",
+      "risk_level": "SAFE",
+      "category": "file-operations"
+    },
+    "split": {
+      "description": "Split file into pieces",
+      "risk_level": "SAFE",
+      "category": "file-operations"
+    },
+    "csplit": {
+      "description": "Split file based on context",
+      "risk_level": "SAFE",
+      "category": "file-operations"
+    },
+    "ros2": {
+      "description": "ROS 2 (Robot Operating System) - framework for robot software development",
+      "risk_level": "SAFE",
+      "category": "ros2"
+    },
+    "ros2 run": {
+      "description": "Run a ROS 2 executable",
+      "risk_level": "SAFE",
+      "category": "ros2"
+    },
+    "ros2 launch": {
+      "description": "Launch ROS 2 launch files to start multiple nodes",
+      "risk_level": "SAFE",
+      "category": "ros2"
+    },
+    "ros2 topic list": {
+      "description": "List all active ROS 2 topics",
+      "risk_level": "SAFE",
+      "category": "ros2"
+    },
+    "ros2 topic echo": {
+      "description": "Display messages published to a ROS 2 topic",
+      "risk_level": "SAFE",
+      "category": "ros2"
+    },
+    "ros2 topic pub": {
+      "description": "Publish messages to a ROS 2 topic",
+      "risk_level": "SAFE",
+      "category": "ros2"
+    },
+    "ros2 node list": {
+      "description": "List all running ROS 2 nodes",
+      "risk_level": "SAFE",
+      "category": "ros2"
+    },
+    "ros2 node info": {
+      "description": "Show information about a ROS 2 node",
+      "risk_level": "SAFE",
+      "category": "ros2"
+    },
+    "ros2 service list": {
+      "description": "List all available ROS 2 services",
+      "risk_level": "SAFE",
+      "category": "ros2"
+    },
+    "ros2 service call": {
+      "description": "Call a ROS 2 service with request data",
+      "risk_level": "SAFE",
+      "category": "ros2"
+    },
+    "ros2 param list": {
+      "description": "List all parameters for ROS 2 nodes",
+      "risk_level": "SAFE",
+      "category": "ros2"
+    },
+    "ros2 param get": {
+      "description": "Get the value of a ROS 2 parameter",
+      "risk_level": "SAFE",
+      "category": "ros2"
+    },
+    "ros2 param set": {
+      "description": "Set the value of a ROS 2 parameter",
+      "risk_level": "SAFE",
+      "category": "ros2"
+    },
+    "ros2 bag record": {
+      "description": "Record ROS 2 topics to a bag file for later playback",
+      "risk_level": "SAFE",
+      "category": "ros2"
+    },
+    "ros2 bag play": {
+      "description": "Play back recorded ROS 2 topics from a bag file",
+      "risk_level": "SAFE",
+      "category": "ros2"
+    },
+    "ros2 run demo_nodes_cpp talker": {
+      "description": "Run ROS 2 C++ talker demo node",
+      "risk_level": "SAFE",
+      "category": "ros2"
+    },
+    "ros2 run demo_nodes_py listener": {
+      "description": "Run ROS 2 Python listener demo node",
+      "risk_level": "SAFE",
+      "category": "ros2"
+    },
+    "ros2 run rmw_zenoh_cpp rmw_zenohd": {
+      "description": "Run Zenoh router daemon for ROS 2 discovery and communication",
+      "risk_level": "SAFE",
+      "category": "ros2"
+    },
+    "source /opt/ros/humble/setup.bash": {
+      "description": "Setup ROS 2 Humble environment variables and paths",
+      "risk_level": "SAFE",
+      "category": "ros2"
+    },
+    "colcon": {
+      "description": "ROS 2 build tool for building workspaces with multiple packages",
+      "risk_level": "SAFE",
+      "category": "ros2-build"
+    },
+    "colcon build": {
+      "description": "Build all packages in a ROS 2 workspace",
+      "risk_level": "SAFE",
+      "category": "ros2-build"
+    },
+    "colcon build --symlink-install": {
+      "description": "Build ROS 2 workspace with symlinked install for faster iteration",
+      "risk_level": "SAFE",
+      "category": "ros2-build"
+    },
+    "colcon build --cmake-args": {
+      "description": "Build ROS 2 workspace with custom CMake arguments",
+      "risk_level": "SAFE",
+      "category": "ros2-build"
+    },
+    "colcon test": {
+      "description": "Run tests for all packages in ROS 2 workspace",
+      "risk_level": "SAFE",
+      "category": "ros2-build"
+    },
+    "colcon version-check": {
+      "description": "Check for newer versions of colcon and extensions",
+      "risk_level": "SAFE",
+      "category": "ros2-build"
+    },
+    "rosdep": {
+      "description": "ROS dependency management tool",
+      "risk_level": "SAFE",
+      "category": "ros2-build"
+    },
+    "rosdep install": {
+      "description": "Install system dependencies for ROS packages",
+      "risk_level": "CAUTION",
+      "category": "ros2-build"
+    },
+    "rosdep update": {
+      "description": "Update rosdep package database",
+      "risk_level": "SAFE",
+      "category": "ros2-build"
+    },
+    "rosdep install --from-paths src --ignore-src -y": {
+      "description": "Install all dependencies for ROS 2 workspace from src directory",
+      "risk_level": "CAUTION",
+      "category": "ros2-build"
+    },
+    "pro": {
+      "description": "Ubuntu Pro subscription management tool",
+      "risk_level": "SAFE",
+      "category": "ubuntu-pro"
+    },
+    "pro attach": {
+      "description": "Attach Ubuntu Pro subscription to this machine",
+      "risk_level": "SAFE",
+      "category": "ubuntu-pro"
+    },
+    "pro detach": {
+      "description": "Detach Ubuntu Pro subscription from this machine",
+      "risk_level": "SAFE",
+      "category": "ubuntu-pro"
+    },
+    "pro status": {
+      "description": "Show Ubuntu Pro subscription status and enabled services",
+      "risk_level": "SAFE",
+      "category": "ubuntu-pro"
+    },
+    "pro enable": {
+      "description": "Enable an Ubuntu Pro service",
+      "risk_level": "CAUTION",
+      "category": "ubuntu-pro"
+    },
+    "pro enable realtime-kernel": {
+      "description": "Enable Ubuntu Pro real-time kernel for low-latency applications",
+      "risk_level": "CAUTION",
+      "category": "ubuntu-pro"
+    },
+    "pro disable": {
+      "description": "Disable an Ubuntu Pro service",
+      "risk_level": "CAUTION",
+      "category": "ubuntu-pro"
+    },
+    "git lfs": {
+      "description": "Git Large File Storage - track large files in Git repositories",
+      "risk_level": "SAFE",
+      "category": "git"
+    },
+    "git lfs install": {
+      "description": "Install Git LFS hooks for the current user",
+      "risk_level": "SAFE",
+      "category": "git"
+    },
+    "git lfs track": {
+      "description": "Track files with Git LFS using patterns",
+      "risk_level": "SAFE",
+      "category": "git"
+    },
+    "git lfs untrack": {
+      "description": "Stop tracking files with Git LFS",
+      "risk_level": "SAFE",
+      "category": "git"
+    },
+    "git lfs ls-files": {
+      "description": "List files being tracked by Git LFS",
+      "risk_level": "SAFE",
+      "category": "git"
+    },
+    "git clone --recurse-submodules": {
+      "description": "Clone a repository including all submodules recursively",
+      "risk_level": "SAFE",
+      "category": "git"
+    },
+    "add-apt-repository": {
+      "description": "Add a new APT repository to system sources",
+      "risk_level": "CAUTION",
+      "category": "package-manager"
+    },
+    "add-apt-repository universe": {
+      "description": "Enable Ubuntu Universe repository",
+      "risk_level": "SAFE",
+      "category": "package-manager"
+    },
+    "apt install software-properties-common": {
+      "description": "Install tools for managing Ubuntu software repositories",
+      "risk_level": "SAFE",
+      "category": "package-manager"
+    },
+    "sudo apt update": {
+      "description": "Update package index with root privileges",
+      "risk_level": "SAFE",
+      "category": "package-manager"
+    },
+    "sudo apt upgrade": {
+      "description": "Upgrade installed packages with root privileges",
+      "risk_level": "CAUTION",
+      "category": "package-manager"
+    },
+    "sudo apt install": {
+      "description": "Install packages with root privileges",
+      "risk_level": "CAUTION",
+      "category": "package-manager"
+    },
+    "sudo apt remove": {
+      "description": "Remove packages with root privileges",
+      "risk_level": "CAUTION",
+      "category": "package-manager"
+    },
+    "sudo apt autoremove": {
+      "description": "Remove unused packages with root privileges",
+      "risk_level": "CAUTION",
+      "category": "package-manager"
+    },
+    "sudo apt install software-properties-common": {
+      "description": "Install repository management tools with root privileges",
+      "risk_level": "CAUTION",
+      "category": "package-manager"
+    },
+    "sudo add-apt-repository": {
+      "description": "Add APT repository with root privileges",
+      "risk_level": "CAUTION",
+      "category": "package-manager"
+    },
+    "sudo add-apt-repository universe": {
+      "description": "Enable Ubuntu Universe repository with root privileges",
+      "risk_level": "CAUTION",
+      "category": "package-manager"
+    }
+  }
+}

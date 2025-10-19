@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "terminal-tutor"
+version = "0.1.0"
+description = "Real-time terminal command education for Zsh - 36-38ms predictions, 459+ commands (Zsh required)"
+authors = [{name = "Jatin Mayekar", email = "jatin@terminaltutor.dev"}]
+readme = "README.md"
+license = {text = "Proprietary"}
+requires-python = ">=3.7"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: Other/Proprietary License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: System :: Shells",
+    "Topic :: Education",
+]
+dependencies = [
+    "rich>=10.0.0",
+    "requests>=2.25.0",
+    "openai>=1.0.0",
+]
+keywords = ["terminal", "cli", "learning", "commands", "tutorial", "zsh", "shell", "education", "real-time"]
+
+[project.scripts]
+terminal-tutor = "terminal_tutor.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/jatinmayekar/terminal-tutor"
