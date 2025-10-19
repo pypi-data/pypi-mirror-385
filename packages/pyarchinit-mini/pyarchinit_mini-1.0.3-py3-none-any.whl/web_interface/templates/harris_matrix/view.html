@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Matrice di Harris - {{ site_name }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fas fa-chart-bar"></i> Matrice di Harris - {{ site_name }}</h2>
+        <div>
+            <a href="{{ url_for('harris_matrix_graphviz', site_name=site_name, grouping='period_area') }}" class="btn btn-success">
+                <i class="fas fa-project-diagram"></i> Graphviz (Desktop GUI)
+            </a>
+            <a href="{{ url_for('sites_list') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Indietro
+            </a>
+        </div>
+    </div>
+
+    <!-- Visualizer Info -->
+    <div class="alert alert-info mb-4">
+        <i class="fas fa-info-circle"></i>
+        <strong>Visualizzatore Matplotlib (Semplice)</strong> -
+        Per una visualizzazione avanzata con raggruppamenti e stile desktop GUI,
+        <a href="{{ url_for('harris_matrix_graphviz', site_name=site_name, grouping='period_area') }}" class="alert-link">
+            passa a Graphviz <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+
+    <!-- Matrix Statistics -->
+    {% if stats %}
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5>{{ stats.total_nodes }}</h5>
+                    <p class="text-muted mb-0">Unità Stratigrafiche</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5>{{ stats.total_edges }}</h5>
+                    <p class="text-muted mb-0">Relazioni</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5>{{ stats.max_depth }}</h5>
+                    <p class="text-muted mb-0">Profondità Massima</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5>{{ levels|length }}</h5>
+                    <p class="text-muted mb-0">Livelli</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Matrix Visualization -->
+    <div class="card">
+        <div class="card-header">
+            <h5>Visualizzazione Matrice</h5>
+        </div>
+        <div class="card-body text-center">
+            {% if matrix_image %}
+            <img src="data:image/png;base64,{{ matrix_image }}" class="img-fluid" alt="Matrice di Harris">
+            {% else %}
+            <p class="text-muted">Nessuna matrice disponibile per questo sito.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Matrix Levels -->
+    {% if levels %}
+    <div class="card mt-4">
+        <div class="card-header">
+            <h5>Sequenza Stratigrafica</h5>
+        </div>
+        <div class="card-body">
+            <ol>
+                {% for level_num, us_list in levels.items()|sort %}
+                <li><strong>Livello {{ level_num }}:</strong> US {{ us_list|join(', US ') }}</li>
+                {% endfor %}
+            </ol>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
