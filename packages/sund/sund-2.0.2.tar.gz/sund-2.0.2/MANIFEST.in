@@ -1,0 +1,110 @@
+# Include project metadata
+include pyproject.toml
+include README.md
+include LICENSE.md
+
+# Exclude stuff not needed by end users
+prune docs
+prune overrides
+prune tests
+prune dist
+global-exclude .gitlab-ci.yml
+exclude .gitmodules
+exclude pytest.ini
+exclude mkdocs.yml
+exclude .mike.json
+exclude tox.ini
+exclude Dockerfile
+exclude uv.lock
+
+# Include all C/C++ source files and headers
+recursive-include src/_core/_Activity *.cpp *.h
+recursive-include src/_core/_debug *.cpp *.h
+recursive-include src/_core/_Models *.cpp *.h
+recursive-include src/_core/_Simulation *.cpp *.h
+recursive-include src/_core/_StringList *.cpp *.h
+recursive-include src/_core/ExtraFormulas *
+recursive-include src/_core/include *.h
+recursive-include src/_core/sund_sundials *.cpp *.h
+
+recursive-include src/sund/_model_deps *.h *.cpp *.c
+
+# Include Sundials source code, but first remove the 
+#prune src/third_party/sundials
+
+# Include Sundials headers
+recursive-include src/third_party/sundials/include/cvode *.h
+recursive-include src/third_party/sundials/include/ida *.h
+recursive-include src/third_party/sundials/include/sundials *.h
+recursive-include src/third_party/sundials/include/sunlinsol *.h
+recursive-include src/third_party/sundials/include/sunmatrix *.h
+recursive-include src/third_party/sundials/include/sunnonlinsol *.h
+include src/third_party/sundials/include/nvector/nvector_serial.h
+
+# Include Sundials source files
+# CVODE files
+include src/third_party/sundials/src/cvode/cvode.c
+include src/third_party/sundials/src/cvode/cvode_bandpre.c
+include src/third_party/sundials/src/cvode/cvode_bbdpre.c
+include src/third_party/sundials/src/cvode/cvode_diag.c
+include src/third_party/sundials/src/cvode/cvode_fused_stubs.c
+include src/third_party/sundials/src/cvode/cvode_io.c
+include src/third_party/sundials/src/cvode/cvode_ls.c
+include src/third_party/sundials/src/cvode/cvode_nls.c
+include src/third_party/sundials/src/cvode/cvode_proj.c
+recursive-include src/third_party/sundials/src/cvode *.h
+
+# IDA files
+include src/third_party/sundials/src/ida/ida.c
+include src/third_party/sundials/src/ida/ida_bbdpre.c
+include src/third_party/sundials/src/ida/ida_ic.c
+include src/third_party/sundials/src/ida/ida_io.c
+include src/third_party/sundials/src/ida/ida_ls.c
+include src/third_party/sundials/src/ida/ida_nls.c
+recursive-include src/third_party/sundials/src/ida *.h
+
+# NVECTOR files
+include src/third_party/sundials/src/nvector/serial/nvector_serial.c
+
+# SUNDIALS core files
+include src/third_party/sundials/src/sundials/sundials_band.c
+include src/third_party/sundials/src/sundials/sundials_context.c
+include src/third_party/sundials/src/sundials/sundials_dense.c
+include src/third_party/sundials/src/sundials/sundials_direct.c
+include src/third_party/sundials/src/sundials/sundials_errors.c
+include src/third_party/sundials/src/sundials/sundials_hashmap.c
+include src/third_party/sundials/src/sundials/sundials_iterative.c
+include src/third_party/sundials/src/sundials/sundials_linearsolver.c
+include src/third_party/sundials/src/sundials/sundials_logger.c
+include src/third_party/sundials/src/sundials/sundials_math.c
+include src/third_party/sundials/src/sundials/sundials_matrix.c
+include src/third_party/sundials/src/sundials/sundials_nonlinearsolver.c
+include src/third_party/sundials/src/sundials/sundials_nvector.c
+include src/third_party/sundials/src/sundials/sundials_nvector_senswrapper.c
+include src/third_party/sundials/src/sundials/sundials_version.c
+recursive-include src/third_party/sundials/src/sundials *.h
+
+# SUNLINSOL files
+include src/third_party/sundials/src/sunlinsol/band/sunlinsol_band.c
+include src/third_party/sundials/src/sunlinsol/dense/sunlinsol_dense.c
+include src/third_party/sundials/src/sunlinsol/pcg/sunlinsol_pcg.c
+include src/third_party/sundials/src/sunlinsol/spbcgs/sunlinsol_spbcgs.c
+include src/third_party/sundials/src/sunlinsol/spfgmr/sunlinsol_spfgmr.c
+include src/third_party/sundials/src/sunlinsol/spgmr/sunlinsol_spgmr.c
+include src/third_party/sundials/src/sunlinsol/sptfqmr/sunlinsol_sptfqmr.c
+recursive-include src/third_party/sundials/src/sunlinsol *.h
+
+# SUNMATRIX files
+include src/third_party/sundials/src/sunmatrix/band/sunmatrix_band.c
+include src/third_party/sundials/src/sunmatrix/dense/sunmatrix_dense.c
+include src/third_party/sundials/src/sunmatrix/sparse/sunmatrix_sparse.c
+recursive-include src/third_party/sundials/src/sunmatrix *.h
+
+# SUNNONLINSOL files
+include src/third_party/sundials/src/sunnonlinsol/newton/sunnonlinsol_newton.c
+include src/third_party/sundials/src/sunnonlinsol/fixedpoint/sunnonlinsol_fixedpoint.c
+recursive-include src/third_party/sundials/src/sunnonlinsol *.h
+
+# Housekeeping
+exclude .gitignore
+global-exclude *.py[cod] __pycache__ *.so *.dylib *.dll *.DS_Store

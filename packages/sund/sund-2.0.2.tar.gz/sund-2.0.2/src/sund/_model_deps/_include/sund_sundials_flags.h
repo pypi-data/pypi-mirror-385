@@ -1,0 +1,11 @@
+#ifndef SUNDIALS_FLAGS_H
+#define SUNDIALS_FLAGS_H
+
+#define DOFLAG_DDT 0
+#define DOFLAG_FEATURE 1
+#define DOFLAG_OUTPUT 2
+#define DOFLAG_EVENT 3
+#define DOFLAG_EVENTASSIGN 4
+#define DOFLAG_RESIDUAL 5
+
+#endif
