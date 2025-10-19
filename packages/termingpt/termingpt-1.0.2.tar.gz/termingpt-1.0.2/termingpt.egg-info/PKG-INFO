@@ -1,0 +1,125 @@
+Metadata-Version: 2.4
+Name: termingpt
+Version: 1.0.2
+Summary: AI-powered terminal assistant for code generation, security scanning, and interactive AI chat
+Home-page: https://github.com/thenoob4/termingpt
+Author: TheNooB
+Author-email: thenoob@example.com
+Project-URL: Bug Reports, https://github.com/thenoob4/termingpt/issues
+Project-URL: Source, https://github.com/thenoob4/termingpt
+Project-URL: GitHub, https://github.com/codelabwithosman
+Keywords: ai chatgpt gpt-4 code-generator termux kali-linux security-scanner openai cli termingpt
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Code Generators
+Classifier: Topic :: System :: Systems Administration
+Classifier: Topic :: Security
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Operating System :: Android
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Operating System :: MacOS
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: requests>=2.25.0
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: keywords
+Dynamic: license-file
+Dynamic: project-url
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+# File: termigpt-package/README.md
+
+# TermiGPT v1.0.0
+
+AI-Powered Terminal Assistant for code generation, security scanning, and interactive AI chat.
+
+## Features
+
+✨ **Smart Project Detection** - Automatically detects if you want a single file or full project  
+🤖 **5 AI Models** - GPT-4o, GPT-4o Mini, GPT-4 Turbo, Perplexity, Mistral  
+🔒 **Security Scanning** - Port scanning with protocol detection, DNS lookup, WHOIS  
+🕵️ **Stealth Mode** - Use nmap stealth scan techniques  
+⚡ **Auto-Install** - Automatically installs missing Python modules  
+📱 **Termux Ready** - Installs Rust and dependencies automatically on Android  
+
+## Installation
+
+```bash
+pip install termigpt
+```
+
+## Usage
+
+### Interactive Mode
+```bash
+termigpt
+```
+
+### Direct Commands
+```bash
+# Create projects
+termigpt create a todo app
+termigpt code a python script to check weather
+
+# Execute code
+termigpt run script.py
+
+# Security scanning
+termigpt scan google.com
+termigpt scan example.com stealth
+
+# AI Chat
+termigpt ask "explain async/await"
+```
+
+## Available Commands
+
+- `create`, `write`, `code` - Create projects/code
+- `run`, `execute` - Execute code files
+- `scan` - Security scanning
+- `models` - List available AI models
+- `select` - Change AI model
+- `ask` - Ask AI questions
+
+## Models
+
+1. GPT-4o
+2. GPT-4o Mini (default)
+3. GPT-4 Turbo
+4. Perplexity AI
+5. Mistral Large
+
+## Requirements
+
+- Python 3.7+
+- Internet connection
+- (Optional) nmap, rustcan for advanced scanning
+
+## No API Keys Needed!
+
+TermiGPT uses a Cloudflare Worker backend - no API key configuration required!
+
+## Author
+
+**TheNooB**
+- GitHub: https://github.com/thenoob4
+- GitHub: https://github.com/codelabwithosman
+
+## License
+
+MIT License
