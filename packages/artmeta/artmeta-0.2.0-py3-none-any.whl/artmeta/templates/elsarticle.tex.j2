@@ -1,0 +1,36 @@
+{# Template Jinja2 pour la classe elsarticle (Elsevier) #}
+\title{{ '{' }}{{ meta.title }}{{ '}' }}
+
+{# Auteurs avec affiliations #}
+{% for author in meta.authors %}
+{% set affil_refs = author.affiliations|join(',') if author.affiliations else '' %}
+{% if affil_refs %}
+\author[{{ affil_refs }}]{{ '{' }}{{ author.firstname }} {{ author.lastname }}{{ '}' }}
+{% else %}
+\author{{ '{' }}{{ author.firstname }} {{ author.lastname }}{{ '}' }}
+{% endif %}
+{% if author.corresponding and author.email %}
+\ead{{ '{' }}{{ author.email }}{{ '}' }}
+{% endif %}
+{% endfor %}
+
+{# Affiliations #}
+{% for affil in meta.affiliations %}
+\affiliation[{{ affil.id }}]{{ '{' }}organization={{ '{' }}{{ affil.institution }}{{ '}' }}{% if affil.city %},city={{ '{' }}{{ affil.city }}{{ '}' }}{% endif %}{% if affil.country %},country={{ '{' }}{{ affil.country }}{{ '}' }}{% endif %}{{ '}' }}
+{% endfor %}
+
+{# Abstract #}
+{% if meta.abstract %}
+
+\begin{abstract}
+{{ meta.abstract }}
+\end{abstract}
+{% endif %}
+
+{# Keywords #}
+{% if meta.keywords %}
+
+\begin{keyword}
+{{ meta.keywords|join(' \\sep ') }}
+\end{keyword}
+{% endif %}

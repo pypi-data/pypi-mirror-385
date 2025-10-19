@@ -1,0 +1,33 @@
+{# Template Jinja2 pour la classe siamart (SIAM) #}
+\title{{ '{' }}{{ meta.title }}{{ '}' }}
+
+{# Auteurs #}
+{% for author in meta.authors %}
+
+\author{{ '{' }}{{ author.firstname }} {{ author.lastname }}{{ '}' }}
+{% if author.affiliations %}
+{% for affil_id in author.affiliations %}
+{% set affil = affiliations[affil_id] %}
+\address{{ '{' }}{{ affil.institution }}{% if affil.city %}, {{ affil.city }}{% endif %}{% if affil.country %}, {{ affil.country }}{% endif %}{{ '}' }}
+{% endfor %}
+{% endif %}
+{% if author.email %}
+\email{{ '{' }}{{ author.email }}{{ '}' }}
+{% endif %}
+{% endfor %}
+
+{# Abstract #}
+{% if meta.abstract %}
+
+\begin{abstract}
+{{ meta.abstract }}
+\end{abstract}
+{% endif %}
+
+{# Keywords #}
+{% if meta.keywords %}
+
+\keywords{{ '{' }}{{ meta.keywords|join(', ') }}{{ '}' }}
+{% endif %}
+
+\maketitle
