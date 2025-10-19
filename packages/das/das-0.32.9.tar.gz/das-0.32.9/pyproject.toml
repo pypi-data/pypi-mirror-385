@@ -1,0 +1,45 @@
+[build-system]
+requires = ["flit_core >=3.2"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "das"
+authors = [{ name = "Jan Clemens", email = "clemensjan@googlemail.com" }]
+classifiers = ["License :: OSI Approved :: Apache Software License"]
+dynamic = ["version", "description"]
+requires-python = ">=3.10"
+dependencies = [
+    'scipy',
+    'scikit-learn',
+    'matplotlib',
+    'pandas',
+    'matplotlib_scalebar',
+    'xarray-behave',
+    'tqdm',
+    'numpy==1.26.4 ; platform_system == "Windows"',
+]
+
+readme = "README.md"
+
+[project.optional-dependencies]
+dev = ["pytest", "flit"]
+
+[project.urls]
+source = "https://github.com/janclemenslab/das"
+documentation = "https://janclemenslab.org/das/"
+
+[tool.flit.module]
+name = "das"
+
+[project.scripts]
+das = "das.cli:main"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 128
+extend-select = ["C4", "NPY", "PD", "TCH"]
+ignore = ["E501"]
+show-fixes = true
