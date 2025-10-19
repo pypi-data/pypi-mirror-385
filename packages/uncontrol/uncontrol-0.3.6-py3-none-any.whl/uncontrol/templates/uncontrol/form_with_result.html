@@ -1,0 +1,15 @@
+{% extends "htmx_components/form.html" %}
+
+
+{% block modal_after_body %}
+{% if form.processed_message %}
+<div class="row">
+    <div class="col-12">
+        <hr>
+        <div class="alert alert-info" role="alert" style="word-wrap: anywhere;">
+            {{ form.processed_message|safe }}
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock modal_after_body %}
