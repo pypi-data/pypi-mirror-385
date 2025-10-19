@@ -1,0 +1,92 @@
+[project]
+name = 'neo3-boa'
+description = 'A Python compiler for the Neo3 Virtual Machine'
+readme = 'README.md'
+requires-python = '>= 3.12,< 3.14'
+license = 'MIT'
+license-files = ["LICENSE"]
+keywords = ['compiler', 'NEO', '.nef', 'blockchain', 'smartcontract', 'development', 'dApp']
+classifiers = [
+    'Development Status :: 5 - Production/Stable',
+    'Intended Audience :: Developers',
+    'Topic :: Software Development :: Build Tools',
+    'Programming Language :: Python :: 3.12',
+    'Programming Language :: Python :: 3.13',
+]
+dynamic = ['version']
+dependencies = [
+    'base58>=1.0.3',
+    'deprecation>=2.1.0',
+    'wheel>=0.30.0',
+    'requests==2.31.0',
+]
+
+[project.optional-dependencies]
+dev = [
+    'autopep8>=1.4.4',
+    'bump-my-version==0.10.0',
+    'coverage>=6.0.1',
+    'filelock>=3.10.7',
+    'pycodestyle>=2.11.1',
+    'twine>=1.10.0',
+]
+test = [
+    'boa-test-constructor>=0.4.0',
+]
+docs = [
+    'autodocsumm>=0.2.12',
+    'myst-parser==4.0.1',
+    'Sphinx==8.2.3',
+    'sphinx-rtd-theme==3.0.2',
+]
+
+[project.urls]
+repository = 'https://github.com/CityOfZion/neo3-boa'
+documentation = 'https://dojo.coz.io/neo3/boa/index.html'
+changelog = 'https://github.com/CityOfZion/neo3-boa/blob/master/CHANGELOG.md'
+
+[project.scripts]
+neo3-boa = 'boa3.cli:main'
+install_cpm = 'boa3.cpm:main'
+
+[tool.setuptools.packages.find]
+exclude = ['boa3_test.tests.*_tests*']
+include = [
+    'boa3', 'boa3.*',
+    'boa3_test',
+    'boa3_test.test_drive', 'boa3_test.test_drive.*'
+]
+
+[tool.setuptools.package-data]
+boa3 = ['py.typed']
+
+[tool.setuptools.dynamic]
+version = { attr = 'boa3.__version__' }
+
+[tool.bumpversion]
+current_version = '1.4.0'
+commit = true
+tag = true
+
+[[tool.bumpversion.files]]
+filename = './pyproject.toml'
+search = "current_version = '{current_version}'"
+replace = "current_version = '{new_version}'"
+
+[[tool.bumpversion.files]]
+filename = './boa3/__init__.py'
+search = "__version__ = '{current_version}'"
+replace = "__version__ = '{new_version}'"
+
+[[tool.bumpversion.files]]
+filename = './docs/make-pdf.py'
+search = "__version__ = '{current_version}'"
+replace = "__version__ = '{new_version}'"
+
+
+[tool.coverage.run]
+source = ['boa3']
+omit = ['boa3/builtin/*']
+
+[tool.coverage.report]
+omit = ['boa3_test/*']
