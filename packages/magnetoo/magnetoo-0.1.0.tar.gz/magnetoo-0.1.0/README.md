@@ -1,0 +1,74 @@
+# magnetoo
+
+[![GitHub issues](https://img.shields.io/github/issues/homelabshq/magnetoo)](https://github.com/homelabshq/magnetoo)
+[![GitHub forks](https://img.shields.io/github/forks/homelabshq/magnetoo)](https://github.com/homelabshq/magnetoo/network)
+[![GitHub stars](https://img.shields.io/github/stars/homelabshq/magnetoo)](https://github.com/homelabshq/magnetoo)
+[![GitHub license](https://img.shields.io/github/license/homelabshq/magnetoo)](https://github.com/homelabshq/magnetoo/blob/main/LICENSE)
+[![Open Source Love svg1](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) ![contributions welcome](https://img.shields.io/static/v1.svg?label=Contributions&message=Welcome&color=0059b3&style=flat-square) ![GitHub contributors](https://img.shields.io/github/contributors-anon/homelabshq/magnetoo)
+
+find the best magnet links for your torrents on your terminal!
+
+<p align="center">
+    <img src="https://i.pinimg.com/736x/9e/bc/5a/9ebc5a8e8c86a22030acd8456bedbb74.jpg" width="320" height="220">
+</p>
+
+## Installation:
+
+Install and run magnetoo with uv tool
+
+```bash
+
+  uv tool install magnetoo
+
+  magnetoo --help
+```
+Run magnetoo using uvx
+
+```bash
+
+  uvx magnetoo --help
+
+```
+
+Install magnetoo with pip
+
+```bash
+  pip3 install magnetoo
+
+  magnetoo
+```
+
+Install from source
+
+```bash
+  git clone https://github.com/homelabshq/magnetoo
+
+  cd magnetoo
+
+  python3 -m pip3 install -e .
+
+  magnetoo
+```
+
+## Usage:
+
+    $ magnetoo -h
+    usage: magnetoo [-h] [-v] [-s SEARCH_TERMS] [-f FILE]
+
+    options:
+      -h, --help            show this help message and exit
+      -v, --version         Display the magnetoo version
+      -s SEARCH_TERMS, --search-terms SEARCH_TERMS
+                            use double quotes to indicate the search terms
+      -f FILE, --file FILE  save your magnet link to a file
+
+##### TODOs:
+* [ ] Filter by categories.
+
+
+## 🙏 Support++
+
+This project needs your shiny star ⭐.
+Don't forget to leave a star ⭐️
+
+[![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/) [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)

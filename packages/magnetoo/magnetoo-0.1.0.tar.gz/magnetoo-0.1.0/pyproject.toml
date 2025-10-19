@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=80.9.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "magnetoo"
+version = "0.1.0"
+requires-python = ">=3.10"
+description = "find the best magnet links for your torrents on your terminal!"
+readme = "README.md"
+authors = [
+    { name = "Kanishk Pachauri", email = "itskanishkp.py@gmail.com" },
+]
+license = { text = "MIT" }
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Environment :: Console",
+    "Topic :: System :: Shells",
+    "Topic :: Terminals",
+]
+dependencies = [
+    "requests>=2.32.5",
+]
+
+keywords = ["magnet", "torrent", "cli", "commandline", "magnet-finder", "magnetoo"]
+
+[project.urls]
+Homepage = "https://github.com/homelabshq/magnetoo"
+Repository = "https://github.com/homelabshq/magnetoo"
+Issues = "https://github.com/homelabshq/magnetoo/issues"
+
+[project.scripts]
+magnetoo = "magnetoo.main:cli"
