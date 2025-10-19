@@ -1,0 +1,212 @@
+# deeprehab-diagnostics
+
+Diagnostics functions for DeepRehab movement analysis results.
+
+## Installation
+
+```bash
+pip install deeprehab-diagnostics
+```
+
+## Usage
+
+### Basic Example
+
+```python
+from deeprehab_diagnostics import diagnose_movement
+
+# Example angle data from deeprehab-angles package
+left_angles = {
+    "knee": 95.5,
+    "shoulder": 165.2
+}
+
+right_angles = {
+    "knee": 92.3,
+    "shoulder": 162.1
+}
+
+# Angle series data for stability analysis
+angle_series = [
+    {"knee": 95.5, "shoulder": 165.2},
+    {"knee": 94.8, "shoulder": 164.7},
+    {"knee": 95.2, "shoulder": 165.0},
+    {"knee": 94.9, "shoulder": 164.8}
+]
+
+# Perform comprehensive movement diagnostics
+result = diagnose_movement("Deep Squat", left_angles, right_angles, angle_series)
+
+print(f"Movement Type: {result.movement_type}")
+print(f"Asymmetry Score: {result.asymmetry_score:.2f}")
+print(f"Stability Score: {result.stability_score:.2f}")
+print(f"Range of Motion: {result.range_of_motion}")
+print(f"Recommendations: {result.recommendations}")
+print(f"Risk Factors: {result.risk_factors}")
+```
+
+### Squat Error Analysis
+
+```python
+from deeprehab_diagnostics import analyze_squat_errors, generate_feedback
+
+# Example angle data
+angles = {
+    "left_knee": 115,
+    "right_knee": 135,
+    "trunk_tilt": 25
+}
+
+# Analyze squat errors
+errors = analyze_squat_errors(angles)
+print(f"Detected errors: {errors}")
+
+# Generate professional feedback
+feedback = generate_feedback(errors)
+print(f"Feedback: {feedback}")
+```
+
+### Functions
+
+#### `diagnose_movement(movement_type, left_angles, right_angles, angle_series)`
+
+Perform comprehensive movement diagnostics.
+
+Parameters:
+- `movement_type`: Type of movement being analyzed
+- `left_angles`: Dictionary of joint angles for left side
+- `right_angles`: Dictionary of joint angles for right side
+- `angle_series`: List of dictionaries containing angles for each frame
+
+Returns:
+- `DiagnosticResult` with comprehensive analysis
+
+#### `analyze_movement_symmetry(left_angles, right_angles)`
+
+Analyze symmetry between left and right side movements.
+
+Parameters:
+- `left_angles`: Dictionary of joint angles for left side
+- `right_angles`: Dictionary of joint angles for right side
+
+Returns:
+- Asymmetry score (0-1, where 0 is perfectly symmetric)
+
+#### `analyze_movement_stability(angle_series)`
+
+Analyze stability of movement across frames.
+
+Parameters:
+- `angle_series`: List of dictionaries containing angles for each frame
+
+Returns:
+- Stability score (0-1, where 1 is perfectly stable)
+
+#### `generate_recommendations(asymmetry_score, stability_score, range_of_motion)`
+
+Generate recommendations based on diagnostic results.
+
+Parameters:
+- `asymmetry_score`: Movement asymmetry score
+- `stability_score`: Movement stability score
+- `range_of_motion`: Dictionary of joint ranges of motion
+
+Returns:
+- List of recommendations
+
+#### `identify_risk_factors(asymmetry_score, stability_score, range_of_motion)`
+
+Identify potential risk factors based on diagnostic results.
+
+Parameters:
+- `asymmetry_score`: Movement asymmetry score
+- `stability_score`: Movement stability score
+- `range_of_motion`: Dictionary of joint ranges of motion
+
+Returns:
+- List of identified risk factors
+
+#### `analyze_squat_errors(angles)`
+
+Analyze common errors in deep squat movement.
+
+Parameters:
+- `angles`: Dictionary containing joint angles and other measurements
+
+Returns:
+- Dictionary of detected errors
+
+#### `generate_feedback(errors)`
+
+Generate professional rehabilitation feedback based on detected errors.
+
+Parameters:
+- `errors`: Dictionary of detected errors from analyze_squat_errors
+
+Returns:
+- Professional, concise, and actionable feedback string
+
+### Integration with Other DeepRehab Packages
+
+```python
+from deeprehab_pose import extract_landmarks
+from deeprehab_angles import knee_angle, shoulder_angle
+from deeprehab_diagnostics import diagnose_movement, analyze_squat_errors, generate_feedback
+
+# Extract pose landmarks
+landmarks_list = extract_landmarks("squat_video.mp4")
+
+# Calculate angles for each frame
+angle_series = []
+left_angles_first_frame = {}
+right_angles_first_frame = {}
+
+for i, landmarks in enumerate(landmarks_list):
+    left_knee = knee_angle(landmarks, "left")
+    right_knee = knee_angle(landmarks, "right")
+    left_shoulder = shoulder_angle(landmarks, "left")
+    right_shoulder = shoulder_angle(landmarks, "right")
+    
+    frame_angles = {
+        "knee": (left_knee + right_knee) / 2,
+        "shoulder": (left_shoulder + right_shoulder) / 2
+    }
+    angle_series.append(frame_angles)
+    
+    # Save first frame angles for asymmetry analysis
+    if i == 0:
+        left_angles_first_frame = {
+            "knee": left_knee,
+            "shoulder": left_shoulder
+        }
+        right_angles_first_frame = {
+            "knee": right_knee,
+            "shoulder": right_shoulder
+        }
+
+# Perform comprehensive movement diagnostics
+result = diagnose_movement(
+    "Deep Squat", 
+    left_angles_first_frame, 
+    right_angles_first_frame, 
+    angle_series
+)
+
+print(f"Movement Analysis Results:")
+print(f"- Asymmetry Score: {result.asymmetry_score:.2f}")
+print(f"- Stability Score: {result.stability_score:.2f}")
+print(f"- Recommendations: {result.recommendations}")
+
+# Analyze squat errors specifically
+angles = {
+    "left_knee": left_angles_first_frame["knee"],
+    "right_knee": right_angles_first_frame["knee"]
+}
+errors = analyze_squat_errors(angles)
+feedback = generate_feedback(errors)
+print(f"Squat Error Feedback: {feedback}")
+```
+
+## License
+
+MIT
