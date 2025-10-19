@@ -1,0 +1,41 @@
+name: Ontology as Code
+
+on:
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  validate-and-diff:
+    runs-on: ubuntu-latest
+    env:
+      ONTOLOGIA_CONFIG_ROOT: ${{ github.workspace }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: Install dependencies
+        run: uv sync --dev
+
+      - name: Start API
+        run: |
+          nohup uv run ontologia-cli dev --no-docker --no-reload >/dev/null 2>&1 &
+          for i in {1..30}; do
+            if curl -sf http://127.0.0.1:8000/health > /dev/null; then
+              echo "API ready"; break; fi
+            sleep 1
+          done
+
+      - name: OAC Validate
+        run: uv run ontologia-cli validate
+
+      - name: OAC Diff (fail on dangerous)
+        run: uv run ontologia-cli diff --fail-on-dangerous

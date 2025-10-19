@@ -1,0 +1,26 @@
+[project]
+name = "ontologia"
+version = "0.1.0"
+definitions_dir = "example_project/ontology"
+
+[api]
+host = "127.0.0.1"
+port = 8000
+ontology = "default"
+
+[data]
+duckdb_path = "data/local.duckdb"
+kuzu_path = "data/graph.kuzu"
+
+[services]
+postgres_port = 5432
+temporal_port = 7233
+temporal_web_port = 8233
+
+[sdk]
+output_dir = "ontologia_sdk/ontology"
+auto_generate_on_apply = true
+
+[features]
+use_unified_graph = true
+use_temporal_actions = false

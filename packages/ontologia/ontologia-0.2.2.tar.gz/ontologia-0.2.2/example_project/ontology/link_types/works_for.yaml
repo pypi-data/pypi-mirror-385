@@ -1,0 +1,15 @@
+apiName: works_for
+displayName: Works For
+cardinality: MANY_TO_ONE
+fromObjectType: employee
+toObjectType: company
+inverse:
+  apiName: has_employees
+  displayName: Has Employees
+properties:
+  sinceDate:
+    dataType: date
+    displayName: Since
+  role:
+    dataType: string
+    displayName: Role

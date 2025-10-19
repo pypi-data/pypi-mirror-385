@@ -1,0 +1,40 @@
+version: "3.9"
+
+services:
+  temporal:
+    image: temporalio/auto-setup:1.23.1
+    environment:
+      - DB=postgresql
+      - DB_PORT=5432
+      - POSTGRES_USER=temporal
+      - POSTGRES_PWD=temporal
+      - POSTGRES_SEEDS=postgres
+      - DYNAMIC_CONFIG_FILE_PATH=config/dynamicconfig/development.yaml
+    ports:
+      - "7233:7233" # Frontend
+    depends_on:
+      - postgres
+
+  temporal-web:
+    image: temporalio/web:2
+    environment:
+      - TEMPORAL_ADDRESS=temporal:7233
+      - TEMPORAL_NAMESPACE=default
+      - TEMPORAL_CORS_ORIGINS=*
+    ports:
+      - "8233:8080"
+    depends_on:
+      - temporal
+
+  postgres:
+    image: postgres:13-alpine
+    environment:
+      - POSTGRES_USER=temporal
+      - POSTGRES_PASSWORD=temporal
+    ports:
+      - "5432:5432"
+    volumes:
+      - temporal_pgdata:/var/lib/postgresql/data
+
+volumes:
+  temporal_pgdata:

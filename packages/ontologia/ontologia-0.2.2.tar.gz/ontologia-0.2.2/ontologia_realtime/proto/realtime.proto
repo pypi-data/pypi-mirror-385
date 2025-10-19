@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package ontologia.realtime;
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+message UpsertEntityRequest {
+  string entity_id = 1;
+  string object_type = 2;
+  string provenance = 3;
+  double ttl_seconds = 4;
+  map<string, google.protobuf.Struct> components = 5;
+  map<string, string> metadata = 6;
+}
+
+message EntityAck {
+  string entity_id = 1;
+  google.protobuf.Timestamp updated_at = 2;
+}
+
+message RemoveEntityRequest {
+  string entity_id = 1;
+  map<string, string> metadata = 2;
+}
+
+message StreamEntitiesRequest {
+  repeated string object_types = 1;
+}
+
+message EntityUpdate {
+  string entity_id = 1;
+  string object_type = 2;
+  string provenance = 3;
+  google.protobuf.Timestamp expires_at = 4;
+  map<string, google.protobuf.Struct> components = 5;
+  google.protobuf.Timestamp updated_at = 6;
+  bool tombstone = 7;
+  map<string, string> metadata = 8;
+}
+
+message ListEntitiesRequest {
+  repeated string object_types = 1;
+}
+
+message ListEntitiesResponse {
+  repeated EntityUpdate entities = 1;
+}
+
+service RealTimeEntityService {
+  rpc UpsertEntity(UpsertEntityRequest) returns (EntityAck);
+  rpc RemoveEntity(RemoveEntityRequest) returns (EntityAck);
+  rpc StreamEntities(StreamEntitiesRequest) returns (stream EntityUpdate);
+  rpc ListEntities(ListEntitiesRequest) returns (ListEntitiesResponse);
+}
