@@ -1,0 +1,48 @@
+[project]
+name = "clgenomics"
+version = "0.1.1"
+authors = [
+    { name = "Masayuki Nagai", email = "moon.masayukinagai@gmail.com" },
+    { name = "Alan Murphy", email = "alanmurph94@hotmail.com" }
+]
+description = "Continual learning for genomics AI"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "numpy>=2.2.6",
+    "pytorch-lightning>=2.5.0",
+    "scipy>=1.15.3",
+    "torch>=2.6.0",
+]
+
+[project.optional-dependencies]
+borzoi   = ["borzoi-pytorch>=0.4.4"]
+enformer = ["enformer-pytorch>=0.8.10"]
+# peft     = ["peft @ git+https://github.com/huggingface/peft.git@ec5a1b2ce62b14925239f62582eb3db5d9174af2"]
+all      = ["clgenomics[enformer,borzoi]"]
+
+
+[dependency-groups]
+dev = [
+    "build>=1.3.0",
+    "notebook>=7.4.7",
+    "pytest>=8.4.2",
+    "twine>=6.2.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/MasayukiNagai/clgenomics"
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["clgenomics*"]
+
+[tool.ruff]
+line-length = 100
