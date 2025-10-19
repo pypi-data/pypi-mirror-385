@@ -1,0 +1,201 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/arcosoph/nanowakeword/main/assets/logo/logo_0.png" 
+       alt="logo" width="690">
+</p>
+
+# NanoWakeWord
+
+### The Intelligent, One-Command Wake Word Model Trainer
+
+**NanoWakeWord is a next-generation, fully automated framework for creating high-performance, custom wake word models. It's not just a tool; it's an intelligent engine that analyzes your data and crafts the perfect training strategy for you.**
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://nanowakeword-colab.netlify.app)
+[![PyPI](https://badge.fury.io/py/nanowakeword.svg)](https://badge.fury.io/py/nanowakeword)
+[![Python](https://img.shields.io/pypi/pyversions/nanowakeword.svg)](https://pypi.org/project/nanowakeword/)
+[![License](https://img.shields.io/badge/License-Apache_2.0-orange.svg)](https://github.com/arcosoph/nanowakeword/blob/main/LICENSE)
+[![Downloads](https://img.shields.io/pypi/dm/nanowakeword?label=downloads&color=green)](https://pypi.org/project/nanowakeword/)
+</div>
+
+---
+
+## Key Features `(*>﹏<*)′
+
+*   **Intelligent Auto-Configuration:** NanoWakeWord analyzes the size, quality, and balance of your dataset, then automatically generates the optimal hyperparameters. No more guessing!
+*   **One-Command Training:** Go from raw audio files (in any format) to a fully trained, production-ready model with a single command.
+*   **Pro-active Data Harmonizer:** Automatically detects and fixes imbalances in your dataset by synthesizing high-quality positive and negative samples as needed.
+*   **Automatic Pre-processing:** Just drop your raw audio files (MP3, M4A, FLAC, etc.) into the data folders. NanoWakeWord handles resampling, channel conversion, and format conversion automatically.
+*   **Professional Terminal UI:** A clean, elegant, and informative command-line interface that makes the training process a pleasure to watch.
+*   **Flexible & Controllable:** While highly automated, it provides full control to expert users through a clean `.yaml` file.
+
+## Getting Started
+
+### Prerequisites
+
+*   Python 3.8 or higher
+*   Git
+*   `ffmpeg` (for audio processing)
+
+### Installation
+
+Install the lightweight core package for **inference**:
+```bash
+pip install nanowakeword
+```
+
+To **train your own models**, install the full package with all training dependencies:
+```bash
+pip install "nanowakeword[train]"
+```
+
+*If you want our full code*
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/arcosoph/nanowakeword.git
+    cd nanowakeword
+    ```
+
+2.  **Create a virtual environment:**
+    ```bash
+    python -m venv .venv
+    source .venv/bin/activate  # On Windows, use `.venv\Scripts\activate`
+    ```
+
+3.  **Install dependencies:**
+    ```bash
+    pip install -r requirements_lock_3_13.txt
+    ```
+    
+4.   **FFmpeg:** You must have FFmpeg installed on your system and available in your system's PATH. This is required for automatic audio preprocessing.
+*  **On Windows:** Download from [gyan.dev](https://www.gyan.dev/ffmpeg/builds/) and follow their instructions to add it to your PATH.
+*  **On macOS (using Homebrew):** `brew install ffmpeg`
+*  **On Debian/Ubuntu:** `sudo apt update && sudo apt install ffmpeg`
+
+## ⚙️ Usage
+
+### Quick Start: The One-Command Magic
+
+This is the recommended way for most users.
+
+1.  **Prepare Your Data:** Place your raw audio files (in any format) in the respective subfolders inside `./training_data/` (`positive/`, `negative/`, `noise/`, `rir/`).
+
+```
+training_data/
+├── positive/         # Contains examples of your wake word (e.g., "hey_nano.wav")
+│   ├── sample1.wav
+│   └── user_01.mp3
+├── negative/         # Contains other speech/sounds that are NOT the wake word
+│   ├── not_wakeword1.m4a
+│   └── random_speech.wav
+├── noise/            # Contains background noise files (e.g., fan, traffic sounds)
+│   ├── cafe.flac
+│   └── office_noise.aac
+├── rir/              # (Optional but recommended) Contains Room Impulse Response files
+│   ├── small_room.ogg
+│   └── hall.wav
+└── fp_val_data.npy   # (Optional) False positive validation data = long audio without wake words. Used to measure FP/hour.
+```
+
+2.  **Run the Trainer:** Execute the following command. The engine will handle everything else.
+
+    ```bash
+    nanowakeword-train --training_config ./path/to/your.yaml --auto-config --generate_clips --augment_clips --train_model --overwrite
+    ```
+
+### Detailed Workflow
+
+The command above performs the following steps automatically:
+
+1.  **Data Pre-processing:** Converts all audio files in your data directories to the required format (16kHz, mono, WAV).
+2.  **Intelligent Configuration (`--auto-config`):** Analyzes your dataset and generates an optimal training plan and hyperparameters.
+3.  **Synthetic Data Generation (`--generate_clips`):** If the intelligent engine determines a data imbalance, it synthesizes new audio samples to create a robust dataset.
+4.  **Augmentation & Feature Extraction (`--augment_clips`):** Creates thousands of augmented audio variations and extracts numerical features for training.
+5.  **Model Training (`--train_model`):** Trains the model using the intelligently generated configuration on the prepared features.
+
+### Command-Line Arguments
+
+| Argument            | Description                                                                          |
+| ------------------- | ------------------------------------------------------------------------------------ |
+| `--training_config` | **Required.** Path to the base `.yaml` configuration file.                           |
+| `--auto-config`     | Enables the intelligent engine to automatically determine the best hyperparameters.  |
+| `--generate_clips`  | Activates the synthetic data generation step.                                        |
+| `--augment_clips`   | Activates the data augmentation and feature extraction step.                         |
+| `--train_model`     | Activates the final model training step.                                             |
+| `--overwrite`       | If present, overwrites existing feature files during the augmentation step.          |
+
+## Configuration (`config.yaml`)
+
+The `config.yaml` file is the central control center. While `--auto-config` handles most settings, you must specify the essential paths.
+
+```yaml
+# Section 1: Essential Paths (User must fill this)
+model_name: "my_wakeword_v1" #(REQUIRED)
+output_dir: "./trained_models" #(REQUIRED)
+wakeword_data_path: "./training_data/positive" #(REQUIRED)
+# ... and other paths ...
+
+# Model type: "dnn", "lstm", "gru", "cnn", "rnn"
+model_type: dnn # Or other architectures such as `LSTM` #(REQUIRED)
+
+# Manual Training Configuration (Used when --auto-config is NOT present)
+layer_size: 128
+n_blocks: 3
+# ... and other manual settings ... (✿◕‿◕✿)
+```
+*For a full explanation of all parameters, please see the `training_config.yaml` file in our [NanoWakeWord](https://github.com/arcosoph/nanowakeword/blob/main/examples/training_config.yaml) repository.**
+
+
+## Performance and Evaluation
+
+NanoWakeWord is designed to produce high-accuracy models with excellent real-world performance. The models can be trained to achieve high recall rates while maintaining an extremely low number of false positives, making them reliable for always-on applications.
+
+## 🎙️ Pre-trained Models
+
+To help you get started quickly, `nanowakeword` comes with a rich collection of pre-trained models. These pre-trained models are ready to use and support a wide variety of wake words, eliminating the need to spend time training your own model from scratch.
+
+Because our library of models is constantly evolving with new additions and improvements, we maintain a live, up-to-date list directly on our GitHub project page. This ensures you always have access to the latest information.
+
+For a comprehensive list of all available models and their descriptions, please visit the official model registry:
+
+**[View the Official List of Pre-trained Models (✿◕‿◕✿)](https://github.com/arcosoph/nanowakeword?tab=readme-ov-file#-pre-trained-models)**
+
+
+## ⚖️ Our Philosophy
+
+In a world of complex machine learning tools, Nanowakeword is built on a simple philosophy:
+
+1.  **Simplicity First**: You shouldn't need a Ph.D. in machine learning to train a high-quality wake word model. We believe in abstracting away the complexity.
+2.  **Intelligence over Manual Labor**: The best hyperparameters are data-driven. Our goal is to replace hours of manual tuning with intelligent, automated analysis.
+3.  **Performance on the Edge**: Wake word detection should be fast, efficient, and run anywhere. We focus on creating models that are small and optimized for devices like the Raspberry Pi.
+4.  **Empowerment Through Open Source**: Everyone should have access to powerful voice technology. By being fully open-source, we empower developers and hobbyists to build the next generation of voice-enabled applications.
+
+## FAQ
+
+**1. Which Python version should I use?**
+
+> The recommended Python version depends on your preferred output format for the trained model:
+
+> * **For `.onnx` models:** You can use **Python 3.8 to 3.13**. This setup has been tested and is fully supported. A lock file for Python 3.13 (`requirements_lock_3_13.txt`) is provided for reference.
+
+> * **For `.tflite` models:** Due to TensorFlow's dependency limitations, it is highly recommended to use versions below **Python >3.8, <3.11**. TensorFlow does not yet officially support Python versions newer than 3.11, so conversion to `.tflite` will fail.
+
+**2. What kind of hardware do I need for training?**
+> Training is best done on a machine with a dedicated `GPU`, as it can be computationally intensive. However, training on a `CPU` is also possible, although it will be slower. Inference (running the model) is very lightweight and can be run on almost any device, including a Raspberry Pi 3 or 4.
+
+**3. How much data do I need to train a good model?**
+> For a good starting point, we recommend at least 400+ clean recordings of your wake words from a few different voices. You can also create synthetic words using NanoWakeWord. The more data you have, the better your model will be. Our intelligent engine is designed to work well even with small datasets.
+
+**4. Can I train a model for a language other than English?**
+> Yes! NanoWakeWord is language-agnostic. As long as you can provide audio samples for your wake words, you can train a model for any language.
+
+## Contributing
+
+Contributions are welcome! If you have ideas for new features, bug fixes, or improvements to the "formula engine," please open an issue or submit a pull request.
+
+## License
+
+This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgements
+
+* This project stands on the shoulders of giants. It was initially inspired by the architecture and concepts of the `OpenWakeWord` project.

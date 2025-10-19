@@ -1,0 +1,90 @@
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+# pip install nanowakeword
+name = "nanowakeword"
+
+version = "1.2.0"
+authors = [
+  { name="Arcosoph", email="arcosoph.ai@gmail.com" },
+]
+description = "An intelligent framework for automatically training high--performance, custom wake word models."
+
+readme = "README.md"
+requires-python = ">=3.7"
+
+license = "Apache-2.0"
+
+keywords = ["wakeword", "keyword-spotting", "pytorch", "onnx", "tflite", "speech-recognition", "nanowakeword" ]
+
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+dependencies = [
+    "numpy",
+    "onnxruntime"
+]
+
+[project.optional-dependencies]
+
+train  = [
+    "acoustics",
+    "audiomentations",
+    "librosa",
+    "matplotlib",
+    "mutagen",
+    "onnx",
+    "pronouncing",
+    "pydub",
+    "PyYAML",
+    "rich",
+    "sounddevice",
+    "soundfile",
+    "speechbrain",
+    "tensorflow",
+    "torch",
+    "torch_audiomentations",
+    "torchaudio",
+    "torchinfo",
+    "torchmetrics",
+    "phonemize",
+    "requests",
+    "tqdm",
+    "scipy",        
+    "scikit-learn",
+    "psutil"
+    
+]
+
+
+[project.urls]
+"Homepage" = "https://github.com/arcosoph/nanowakeword"
+"Bug Tracker" = "https://github.com/arcosoph/nanowakeword/issues"
+
+[tool.setuptools]
+
+include-package-data = true
+
+[tool.setuptools.packages.find]
+
+where = ["."]
+include = ["nanowakeword*"] # nanowakeword 
+
+[project.scripts]
+nanowakeword-train = "nanowakeword.trainer:train"
