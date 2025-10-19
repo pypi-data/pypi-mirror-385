@@ -1,0 +1,137 @@
+stages:
+  - static-analysis
+  - build
+  - review
+  - deploy
+
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      variables:
+        PIPELINE_NAME: "Merge Request #${CI_MERGE_REQUEST_IID}"
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH'
+      variables:
+        PIPELINE_NAME: "Deploy image with the tag :latest"
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_TAG'
+      variables:
+        PIPELINE_NAME: "Deploy image witht the tag :${CI_COMMIT_TAG}"
+  name: $PIPELINE_NAME
+
+
+# Templates
+
+.static-analysis-base:
+  stage: static-analysis
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: always
+      changes:
+        - src/**/*.py
+        - tests/**/*.py
+        - pyproject.toml
+        - .gitlab-ci.yml
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH'
+      when: always
+    - if:  '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_TAG'
+      when: always
+
+.static-analysis-base-ruff:
+  stage: static-analysis
+  image: ghcr.io/astral-sh/ruff:0.12.11-alpine
+  before_script:
+    - cd $CI_PROJECT_DIR
+    - ruff --version
+
+.static-analysis-base-uv:
+  stage: static-analysis
+  image: quay.io/automotive-toolchain/python3-uv:latest
+  before_script:
+    - uv sync --dev
+
+
+# Static Analisys
+
+check-formatting:
+  extends: .static-analysis-base-ruff
+  script:
+    - ruff format --diff .
+
+lint-source:
+  extends: .static-analysis-base-ruff
+  script:
+    - ruff check .
+
+type-check:
+  extends: .static-analysis-base-uv
+  script:
+    - uv run mypy src/ --junit-xml reports/mypy.xml
+  artifacts:
+    reports:
+      junit: reports/mypy.xml
+
+security-scan:
+  extends: .static-analysis-base-uv
+  script:
+    - uv run bandit -r src/
+
+unit-tests:
+  extends: .static-analysis-base-uv
+  script:
+    - echo "Running unit tests"
+    - uv run pytest --cov=src --cov-report=xml --junitxml=reports/report.xml
+  coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+  artifacts:
+    when: always
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+      junit: reports/report.xml
+
+
+# Container
+
+build-container:
+  image: quay.io/buildah/stable
+  stage: build
+  variables:
+    STORAGE_DRIVER: vfs
+    BUILDAH_FORMAT: docker
+    CONTAINER_NAME: "${CI_REGISTRY_IMAGE}:${CONTAINER_TAG}"
+  before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | buildah login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
+  script:
+    - buildah build -t "${CONTAINER_NAME}" .
+    - buildah push "${CONTAINER_NAME}"
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_TAG'
+      variables:
+        CONTAINER_TAG: "${CI_COMMIT_TAG}"
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      variables:
+        CONTAINER_TAG: "${CI_COMMIT_REF_SLUG}"
+    - if: '$CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH'
+      variables:
+        CONTAINER_TAG: "latest"
+
+# Code Review
+
+ai-review:
+  stage: review
+  image: "${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_SLUG}"
+  allow_failure: true
+  script:
+    - ai-code-review --post
+  variables:
+    AI_API_KEY: $GEMINI_API_KEY
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+
+# Publish the static website
+create-pages:
+  stage: deploy
+  script:
+    - mv web public
+  pages: true
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
