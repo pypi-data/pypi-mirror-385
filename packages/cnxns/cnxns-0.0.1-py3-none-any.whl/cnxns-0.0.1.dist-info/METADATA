@@ -1,0 +1,70 @@
+Metadata-Version: 2.4
+Name: cnxns
+Version: 0.0.1
+Summary: Wrappers for connecting to data systems
+Author-email: n3ddu8 <n3ddu8@proton.me>
+License-Expression: MIT
+Project-URL: Homepage, https://github.com/n3ddu8/cnxns
+Project-URL: Issues, https://github.com/n3ddu8/cnxns/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pyodbc>=5.2.0
+Requires-Dist: sqlalchemy>=2.0.43
+Requires-Dist: pandas>=2.3.2
+Dynamic: license-file
+
+# cnxns
+
+## About
+
+cnxns abstracts the complexity of working with a variety of data systems.
+
+## Supported Systems
+### DBMS
+- Microsoft SQL Server
+- MySQL/MariaDB
+
+### Dataverse
+- Dynamics 365
+
+## Getting started
+
+```shell
+pip install git+https://github.com/n3ddu8/cnxns.git#egg=cnxns
+python
+from cnxns import dbms
+help(dbms)
+```
+
+## Example Usage
+
+```python
+from cnxns import dbms as db
+
+e = db.dbms_cnxn(
+    dbms = "mssql",
+    server = "localhost",
+    uid = "sa",
+    pwd = "YourStrong@Passw0rd",
+    database = "dev",
+)
+
+df = db.dbms_reader(
+    e,
+    table_name = "myAwesomeTable",
+)
+
+db.dbms_writer(
+    e,
+    df,
+    "myAwesomeTableSnapshot",
+    if_exists="append",
+)
+```
+
+## Dependencies
+- ODBC Driver X for SQL Server (tested with 18)
+- MySQL ODBC X driver (tested with 9.4)
