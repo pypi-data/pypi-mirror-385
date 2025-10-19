@@ -1,0 +1,26 @@
+[project]
+name = "iGSTT"
+version = "0.1.1"
+description = "Gemini STT CLI"
+authors = [
+    {name = "iChochy",email = "me@ichochy.com"}
+]
+readme = "docs/README.md"
+keywords = ["LRC", "Gemini"]
+include = ["LICENSE"]
+license = {text = "MIT"}
+requires-python = ">=3.13"
+
+dependencies = [
+    "google-genai (>=1.36.0,<2.0.0)"
+]
+
+[project.scripts]
+igstt = "igstt:main"
+
+[project.urls]
+Homepage = "https://stt.ichochy.com"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
