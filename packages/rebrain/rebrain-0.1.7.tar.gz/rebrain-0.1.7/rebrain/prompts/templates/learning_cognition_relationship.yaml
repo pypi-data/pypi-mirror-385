@@ -1,0 +1,87 @@
+name: "Learning-Cognition Relationship Analysis"
+version: "1.0"
+temperature: 0.1
+output_schema: "LearningCognitionRelationship"
+
+system_instruction: |
+  You are analyzing the semantic relationship between a LEARNING and a COGNITION in a personal knowledge graph.
+  
+  CONTEXT:
+  - The learning was clustered into this cognition during synthesis
+  - But clustering doesn't guarantee a MEANINGFUL semantic relationship
+  - Your job: determine if there's a rich, specific relationship beyond just "belongs to"
+  
+  CRITERIA FOR is_related=True:
+  ✅ The learning is a concrete example/instance of the cognition
+  ✅ The learning demonstrates or applies the principle in the cognition
+  ✅ The learning implements the pattern described in the cognition
+  ✅ The learning provides specific evidence for the cognition
+  ✅ Strong thematic connection with clear semantic relationship
+  
+  CRITERIA FOR is_related=False:
+  ❌ Connection is weak or tangential
+  ❌ Learning seems mis-clustered (doesn't actually relate to cognition theme)
+  ❌ Relationship is generic (just "is about similar topics")
+  ❌ Can't articulate a specific, meaningful relationship
+  
+  OUTPUT REQUIREMENTS:
+  
+  This metadata will be used for SEMANTIC QUERIES about relationship quality/nature.
+  Focus on describing the RELATIONSHIP, not the nodes themselves.
+  
+  If is_related=True:
+  
+  - relation_context:
+    Short phrase (2-5 words) describing the relationship QUALITY or NATURE.
+    This enables queries like "show me concepts that are poorly explained" or "find implementations that contradict theory"
+    
+    Good examples:
+    • "is explained in detail by"
+    • "provides concrete examples for"
+    • "partially implements"
+    • "contradicts the approach in"
+    • "extends the concept from"
+    
+    Bad examples:
+    • "is demonstrated by the user's consistent pattern of..." (too narrative)
+    • "demonstrates" (too generic, no quality/nature)
+  
+  - inverse_context:
+    Short phrase for the reverse direction (2-5 words)
+    
+  - relation_keyword: Edge type (UPPERCASE_WITH_UNDERSCORES)
+  - inverse_keyword: Reverse edge type
+  
+  If is_related=False:
+  - Leave all fields empty
+
+content_format: |
+  ═══════════════════════════════════════════════════════════════
+  {source_type}
+  ═══════════════════════════════════════════════════════════════
+  
+  Title: {source_title}
+  
+  Content:
+  {source_content}
+  
+  Keywords: {source_keywords}
+  Meta: {source_meta}
+  
+  ═══════════════════════════════════════════════════════════════
+  {target_type}
+  ═══════════════════════════════════════════════════════════════
+  
+  Title: {target_title}
+  
+  Content:
+  {target_content}
+  
+  Keywords: {target_keywords}
+  Meta: {target_meta}
+  
+  ═══════════════════════════════════════════════════════════════
+
+metadata:
+  model_recommendation: "gemini-2.5-flash-lite"
+
