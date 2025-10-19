@@ -1,0 +1,48 @@
+[tool.poetry]
+name = "mdformat_wikilink"
+version = "0.3.0"
+description = ""
+authors = ["Tamir Bahar"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/tmr232/mdformat-wikilink"
+
+[tool.poetry.dependencies]
+python = ">=3.10"
+markdown-it-py = ">=2.2.0"
+mdformat = ">=0.7.16"
+
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.0.261"
+black = "^23.3.0"
+isort = "^5.12.0"
+nox = "^2022.11.21"
+mypy = "^1.2.0"
+pytest = "^7.3.0"
+pytest-cov = "^4.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.poetry.plugins."mdformat.parser_extension"]
+"wikilink" = "mdformat_wikilink.mdformat_plugin"
+
+[tool.isort]
+# Configure isort to work without access to site-packages
+known_first_party = ["mdformat_wikilink", "tests"]
+
+# Settings for Black compatibility
+profile = "black"
+
+[tool.mypy]
+check_untyped_defs = true
+
+[tool.pytest.ini_options]
+xfail_strict = true
+addopts = "-ra -q --cov=mdformat_wikilink --cov-report=xml --cov-report=term-missing"
+testpaths = [
+    "tests",
+]
