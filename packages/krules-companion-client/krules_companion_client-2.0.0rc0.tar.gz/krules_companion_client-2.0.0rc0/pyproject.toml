@@ -1,0 +1,30 @@
+[project]
+name = "krules-companion-client"
+version = "2.0.0rc0"
+description = "KRules Companion Client"
+authors = [{name = "AdE", email = "alberto@airspot.tech"}]
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "typer[all]>=0.9.0",
+    "requests>=2.31.0",
+    "validators>=0.20.0",
+    "tomli>=2.0.1",
+    "typing-extensions>=4.8.0",
+    "pydantic>=2.5.3",
+    "firebase-admin>=6.5.0"
+]
+
+[project.optional-dependencies]
+google = ["google-cloud-pubsub>=2.13.11", "cloudevents>=1.10.1"]
+test = ["pytest>=7.4.4"]
+
+[project.scripts]
+cm = "krules_companion_client.commands:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["krules_companion_client"]
