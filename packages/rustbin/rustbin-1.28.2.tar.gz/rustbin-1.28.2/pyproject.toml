@@ -1,0 +1,45 @@
+[project.urls]
+GitHub = "https://github.com/BrokenSource/Rustbin"
+
+[project]
+name        = "rustbin"
+description = "Fast rustup shims for python"
+authors     = [{name="Tremeschin"}]
+version     = "1.28.2"
+readme      = ".github/readme.md"
+license     = {text="MIT OR Apache-2.0"}
+requires-python = ">=3.9"
+
+[tool.uv]
+check-url = "https://test.pypi.org/simple"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+# This package is purely bin files
+[tool.hatch.build.targets.wheel]
+exclude = ["*"]
+
+[tool.hatch.metadata.hooks.custom]
+path = "rustbin/build.py"
+
+[tool.hatch.build.hooks.custom]
+path = "rustbin/build.py"
+dependencies = [
+    "attrs",
+    "cargo-zigbuild",
+    "requests-cache",
+]
+
+# Warn: Required to run build.py
+[dependency-groups]
+dev = [
+    "attrs",
+    "hatchling",
+    "requests-cache",
+    "uv",
+]
+
+[tool.ruff.format]
+exclude = ["*"]

@@ -1,0 +1,24 @@
+[package]
+name        = "rustbin"
+version     = "1.0.0"
+authors     = ["Tremeschin"]
+description = "Fast rustup shims for python"
+repository  = "https://github.com/BrokenSource/Rustbin"
+readme      = ".github/readme.md"
+license     = "MIT OR Apache-2.0"
+edition     = "2024"
+publish     = false
+
+[[bin]]
+name = "rustbin"
+path = "rustbin/main.rs"
+
+[profile.dev]
+strip = true
+
+[profile.release]
+codegen-units = 1
+opt-level = 3
+panic = "abort"
+strip = true
+lto = "fat"
