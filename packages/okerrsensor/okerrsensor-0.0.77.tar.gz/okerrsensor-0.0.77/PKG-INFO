@@ -1,0 +1,127 @@
+Metadata-Version: 2.4
+Name: okerrsensor
+Version: 0.0.77
+Summary: network sensor for okerr monitoring server
+Project-URL: homepage, https://gitlab.com/yaroslaff/sensor
+Author-email: Yaroslav Polyakov <yaroslaff@gmail.com>
+License: MIT License
+        
+        Copyright (c) 2022 Yaroslav Polyakov
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+License-File: LICENSE
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: GNU General Public License (GPL)
+Requires-Python: >=3
+Requires-Dist: async-dnsbl-client>=0.0.5
+Requires-Dist: dnspython
+Requires-Dist: forcediphttpsadapter
+Requires-Dist: icmplib
+Requires-Dist: okerrupdate
+Requires-Dist: pika
+Requires-Dist: pika>=1.1.0
+Requires-Dist: pyopenssl
+Requires-Dist: python-dotenv
+Requires-Dist: python-whois
+Requires-Dist: setproctitle
+Description-Content-Type: text/markdown
+
+Okerr remote network sensor
+
+# Install
+
+~~~shell
+PIPX_HOME=/opt/pipx PIPX_BIN_DIR=/usr/local/bin pipx install git+https://github.com/yaroslaff/sensor/
+
+PIPX_HOME=/opt/pipx PIPX_BIN_DIR=/usr/local/bin pipx reinstall okerrsensor
+
+# or simpler
+pipx install git+https://github.com/yaroslaff/sensor/
+~~~
+
+or (old way):
+~~~
+pip3 install git+https://github.com/yaroslaff/sensor/
+~~~
+
+
+configure `/etc/okerrclient.conf`
+
+Prepare env config file:
+~~~
+root@deb10:~# cat /etc/okerr/env/sensor  
+SENSOR_NAME=deb10@nsk.ru
+RMQ_USER=okerr-rabbit-user
+RMQ_PASS=okerr-rabbit-secret-password
+RMQ_VHOST=okerr
+RMQ_HOST=rabbitmq.example.com
+
+SENSOR_IP=1.2.3.4
+
+## only for local debugging
+#SENSOR_PEM=.local/ssl/client.pem
+# SENSOR_CAPEM=.local/ssl/ca.pem
+export SENSOR_NAME RMQ_HOST RMQ_VHOST  RMQ_USER RMQ_PASS SENSOR_PEM SENSOR_CAPEM
+
+~~~
+## Run from shell
+
+~~~shell
+$ cp .env-example .env
+$ vim .env # Adjust settings
+$ . .env
+$ sudo sensor.py 
+20191228 01:09:35 started sensor deb10@nsk.ru
+~~~
+
+Specify check from CLI:
+~~~
+sensor --manual httpstatus url=https://cat.okerr.com/ status=200 options=addr=88.214.35.64
+~~~
+
+## Install as systemd service
+~~~
+mkdir /var/log/okerr
+
+cp /usr/local/okerrsensor/okerr-sensor.service /etc/systemd/system/
+systemctl daemon-reload
+systemctl enable okerr-sensor
+systemctl start okerr-sensor
+~~~
+
+## Run on low-memory machines
+Use `--oneprocess` option, or set env variable `SENSOR_ONEPROCESS` to any non-empty value (e.g. in `/etc/okerr/env/sensor`)
+
+## Build dist from source
+~~~
+git clone git@github.com:yaroslaff/sensor.git
+python3 setup.py bdist_wheel
+~~~
+
+## Other okerr resources
+- [Okerr main website](https://okerr.com/)
+- [Okerr-server source code repository](https://github.com/yaroslaff/okerr-dev/) 
+- [Okerr client (okerrupdate) repositoty](https://github.com/yaroslaff/okerrupdate) and [okerrupdate documentation](https://okerrupdate.readthedocs.io/)
+- [Okerrbench network server benchmark](https://github.com/yaroslaff/okerrbench)
+- [Okerr custom status page](https://github.com/yaroslaff/okerr-status)
+- [Okerr JS-powered static status page](https://github.com/yaroslaff/okerrstatusjs)
+- [Okerr network sensor](https://github.com/yaroslaff/sensor)
+
+
