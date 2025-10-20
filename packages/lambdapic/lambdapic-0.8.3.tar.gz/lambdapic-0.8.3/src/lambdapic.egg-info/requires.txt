@@ -1,0 +1,33 @@
+numpy
+numba
+scipy
+pydantic
+tqdm
+loguru
+deprecated
+mpi4py
+h5py
+matplotlib
+yaspin
+packaging
+requests
+typer
+threadpoolctl
+dill
+
+[:platform_system != "Windows"]
+pymetis
+
+[:platform_system == "Windows"]
+impi_rt
+
+[mcp]
+mcp[cli]
+
+[test]
+pytest>=7.0
+pytest-mpi>=0.6
+pytest-cov>=4.0
+pytest-xdist>=3.0
+codecov>=2.0
+mcp[cli]
