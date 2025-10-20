@@ -1,0 +1,64 @@
+Metadata-Version: 2.1
+Name: pons
+Version: 0.10.0
+Summary: Async RPC client for Ethereum
+License: MIT
+Author-email: Bogdan Opanchuk <bogdan@opanchuk.net>
+Requires-Python: >=3.10
+Requires-Dist: anyio>=3
+Requires-Dist: compages>=0.3
+Requires-Dist: eth-abi>=5.0.1
+Requires-Dist: eth-account>=0.13
+Requires-Dist: eth-utils>=2
+Requires-Dist: ethereum-rpc>=0.1.1
+Requires-Dist: httpx>=0.22
+Requires-Dist: setuptools
+Provides-Extra: compiler
+Requires-Dist: py-solc-x>=2; extra == "compiler"
+Provides-Extra: docs
+Requires-Dist: sphinx>=4; extra == "docs"
+Requires-Dist: furo; extra == "docs"
+Requires-Dist: sphinxcontrib-trio; extra == "docs"
+Requires-Dist: setuptools-scm; extra == "docs"
+Provides-Extra: http-provider-server
+Requires-Dist: starlette>=0.48; extra == "http-provider-server"
+Requires-Dist: hypercorn>=0.17; extra == "http-provider-server"
+Requires-Dist: trio>=0.31; extra == "http-provider-server"
+Provides-Extra: lint
+Requires-Dist: mypy>=1.4; extra == "lint"
+Requires-Dist: ruff>=0.2; extra == "lint"
+Provides-Extra: local-provider
+Requires-Dist: alysis>=0.6.1; extra == "local-provider"
+Provides-Extra: tests
+Requires-Dist: pytest>=6; extra == "tests"
+Requires-Dist: trio>=0.19.0; extra == "tests"
+Requires-Dist: pytest-trio; extra == "tests"
+Requires-Dist: pytest-cov; extra == "tests"
+Requires-Dist: mypy-extensions>=1; extra == "tests"
+Requires-Dist: py-solc-x>=2; extra == "tests"
+Requires-Dist: alysis>=0.3.0; extra == "tests"
+Requires-Dist: starlette; extra == "tests"
+Requires-Dist: hypercorn; extra == "tests"
+Project-URL: homepage, https://github.com/fjarri-eth/pons
+Description-Content-Type: text/markdown
+
+Async RPC client for Ethereum
+-----------------------------
+
+[![pypi package][pypi-image]][pypi-link] ![License][pypi-license-image] [![Docs][rtd-image]][rtd-link] [![Coverage][cov-image]][cov-link] [![Code style: black][black-image]][black-link]
+
+An experimental client for those who think that [`web3`](https://github.com/ethereum/web3.py) grew too unwieldy, and also wants [`trio`](https://github.com/python-trio/trio) support.
+
+For more information see [the documentation](https://pons.readthedocs.io/en/latest/).
+
+
+[pypi-image]: https://img.shields.io/pypi/v/pons
+[pypi-link]: https://pypi.org/project/pons/
+[pypi-license-image]: https://img.shields.io/pypi/l/pons
+[rtd-image]: https://readthedocs.org/projects/pons/badge/?version=latest
+[rtd-link]: https://pons.readthedocs.io/en/latest/
+[cov-image]: https://codecov.io/gh/fjarri-eth/pons/branch/master/graph/badge.svg?token=RZP1LK1HB2
+[cov-link]: https://codecov.io/gh/fjarri-eth/pons
+[black-image]: https://img.shields.io/badge/code%20style-black-000000.svg
+[black-link]: https://github.com/psf/black
+
