@@ -1,0 +1,68 @@
+Metadata-Version: 2.4
+Name: dbt_run_analyser
+Version: 0.3.0
+Summary: Python library to analyse thread utilisation for dbt runs.
+Project-URL: Homepage, https://github.com/mathiasDK/dbt-run-analyser
+Author-email: Mathias Nørskov <mathiasnoerskov@gmail.com>
+License: MIT
+License-File: LICENSE
+Keywords: dbt_run_analyser
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Requires-Python: <4,>=3.8
+Requires-Dist: click
+Requires-Dist: pandas>=2.2
+Requires-Dist: plotly>=6.0
+Requires-Dist: polars>=1.0
+Provides-Extra: test
+Requires-Dist: black==24.*; extra == 'test'
+Requires-Dist: coverage-badge==1.*; extra == 'test'
+Requires-Dist: coverage==7.2.2; extra == 'test'
+Requires-Dist: dbt-core==1.9.1; extra == 'test'
+Requires-Dist: dbt-duckdb==1.9.1; extra == 'test'
+Requires-Dist: flake8==4.0.1; extra == 'test'
+Requires-Dist: pytest-cov==4.0.0; extra == 'test'
+Requires-Dist: pytest==8.*; extra == 'test'
+Requires-Dist: tox==4.4.7; extra == 'test'
+Requires-Dist: twine==4.0.0; extra == 'test'
+Description-Content-Type: text/markdown
+
+# dbt Run Analyser
+
+![Coverage Badge](docs/coverage.svg)
+
+This package can help you analyse your dbt runs, and help you ensure you're using your threads most optimal.
+
+## Installation
+`pip install dbt-run-analyser`
+
+### Example
+See a set of examples in the [plot.ipynb](https://github.com/mathiasDK/dbt-run-analyser/blob/master/examples/plot.ipynb) file.
+
+## Using the CLI
+
+The `dbt-run-analyser` CLI allows you to analyze your dbt run logs and manifest files to gain insights into your dbt runs. Here is a basic example of how to use the CLI:
+
+1. **Plot Run Times:**
+    To plot the run times of your dbt models, use the following command:
+    ```sh
+    dbt-run-analyser plot-run-times "path/to/manifest.json" "path/to/dbt_run.log"
+    ```
+
+2. **Plot Critical Path:**
+    Show the critical path through the run:
+    ```sh
+    dbt-run-analyser plot-critical-path "path/to/manifest.json" "path/to/dbt_run.log" --model "order_wide"
+    ```
+
+Replace `"path/to/manifest.json"` and `"path/to/dbt_run.log"` with the actual paths to your dbt manifest file and run log file, respectively.
+
+## Functionalities to come
+- cli interface.
+- Improvements/decrease in run time if threads are added or removed.
+- Identification of bottlenecks.
