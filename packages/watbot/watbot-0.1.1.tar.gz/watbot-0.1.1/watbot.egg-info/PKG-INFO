@@ -1,0 +1,184 @@
+Metadata-Version: 2.4
+Name: watbot
+Version: 0.1.1
+Summary: WhatsApp & Instagram Automation Bot with AI-powered responses
+Home-page: https://github.com/nithin434/woat
+Author: Nithin Jambula
+Author-email: nithin@example.com
+Project-URL: Bug Tracker, https://github.com/nithin434/woat/issues
+Project-URL: Documentation, https://github.com/nithin434/woat/wiki
+Project-URL: Source Code, https://github.com/nithin434/woat
+Keywords: whatsapp,instagram,bot,automation,ai,chat,messaging,api
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Web Environment
+Classifier: Framework :: AsyncIO
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Communications :: Chat
+Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Typing :: Typed
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: playwright>=1.40.0
+Requires-Dist: python-dotenv>=1.0.0
+Requires-Dist: requests>=2.31.0
+Requires-Dist: fastapi>=0.104.1
+Requires-Dist: uvicorn>=0.24.0
+Requires-Dist: pydantic>=2.4.2
+Requires-Dist: google-generativeai>=0.3.0
+Requires-Dist: aiohttp>=3.9.0
+Requires-Dist: aiosmtplib>=2.0.2
+Requires-Dist: python-multipart>=0.0.6
+Requires-Dist: pytest>=7.0
+Requires-Dist: pytest-cov>=3.0
+Requires-Dist: pytest-asyncio>=0.21.1
+Requires-Dist: black>=22.0
+Requires-Dist: flake8>=4.0
+Requires-Dist: mypy>=0.950
+Requires-Dist: build>=1.0.3
+Requires-Dist: twine>=4.0.2
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.21.1; extra == "dev"
+Requires-Dist: pytest-cov>=3.0; extra == "dev"
+Requires-Dist: black>=22.0; extra == "dev"
+Requires-Dist: flake8>=4.0; extra == "dev"
+Requires-Dist: mypy>=0.950; extra == "dev"
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: keywords
+Dynamic: license-file
+Dynamic: project-url
+Dynamic: provides-extra
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+# WATBOT - WhatsApp & Instagram Automation Bot
+
+## Quick Links
+
+- 📚 **Documentation**: [README.md](README.md)
+- 🚀 **Quick Start**: [QUICKSTART.md](QUICKSTART.md)
+- 📦 **Deployment**: [DEPLOYMENT.md](DEPLOYMENT.md)
+- 💡 **Examples**: [examples/](examples/)
+
+## Installation & Usage
+
+### Method 1: Interactive (Easiest)
+```bash
+python start.py
+```
+Follow the prompts!
+
+### Method 2: Python Script
+```python
+from watbot import WhatsAppBot
+
+bot = WhatsAppBot()
+bot.start()
+```
+
+### Method 3: Command Line
+```bash
+watbot start
+```
+
+### Method 4: Custom Config
+```python
+from watbot import WhatsAppBot, BotConfig
+
+config = BotConfig()
+config.whatsapp.monitor_contacts = ["Mom", "Dad"]
+config.ai.personality = "friendly and helpful"
+
+bot = WhatsAppBot(config=config)
+bot.start()
+```
+
+## Features
+
+✅ **Implemented**
+- WhatsApp automation with AI responses
+- Context-aware conversations
+- Multiple contact monitoring
+- Debug mode
+- Headless/headed browser support
+- Custom AI personalities
+- Session persistence
+- Config file support
+- CLI interface
+- Python library API
+
+🚧 **Coming Soon**
+- Instagram automation
+- Advanced analytics
+- Web dashboard
+- Multi-language support
+- Scheduled messages
+- Custom triggers
+
+## Project Structure
+
+```
+watbot/                    # Python package
+├── __init__.py           # Package init
+├── config.py             # Configuration
+├── whatsapp_bot.py       # WhatsApp wrapper
+└── cli.py                # Command-line interface
+
+examples/                  # Usage examples
+├── whatsapp_examples.py  # Python examples
+└── config_example.json   # Config template
+
+smart_whatsapp_bot.js     # Node.js automation
+gemini_bot.py             # AI responses
+start.py                  # Interactive launcher
+test_watbot.py            # Test suite
+```
+
+## Development
+
+```bash
+# Clone repo
+git clone https://github.com/nithin434/woat.git
+cd woat
+
+# Install dependencies
+npm install
+pip install -e .
+
+# Run tests
+python test_watbot.py
+
+# Start bot
+python start.py
+```
+
+## Support
+
+- 🐛 Report bugs: [GitHub Issues](https://github.com/nithin434/woat/issues)
+- 💬 Discussions: [GitHub Discussions](https://github.com/nithin434/woat/discussions)
+- 📧 Email: nithin@example.com
+- ⭐ Star the repo if you like it!
+
+## License
+
+MIT License - see [LICENSE](LICENSE)
+
+---
+
+Made with ❤️ by [Nithin Jambula](https://github.com/nithin434)

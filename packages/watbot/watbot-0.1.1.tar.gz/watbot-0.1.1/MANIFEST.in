@@ -1,0 +1,28 @@
+include LICENSE
+include README.md
+include requirements.txt
+include package.json
+
+# Core files
+include watbot/*.py
+include watbot/*.json
+recursive-include watbot/templates *
+recursive-include watbot/static *
+
+# Examples and demos
+recursive-include examples *.py *.json
+include smart_whatsapp_bot.js
+
+# Exclude temp files
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude .DS_Store
+global-exclude __pycache__
+global-exclude .git*
+global-exclude .env
+global-exclude *.egg-info
+global-exclude *.egg
+global-exclude .coverage
+global-exclude htmlcov/
+global-exclude .pytest_cache/
+global-exclude .mypy_cache/
