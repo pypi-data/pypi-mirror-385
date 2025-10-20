@@ -1,0 +1,29 @@
+
+
+[build-system]
+requires = ["poetry-core>=1.9.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "vector-demension"
+version = "0.1.2"
+description = "Constraint checking engine with vectorized NumPy + Numba (no-scale)."
+authors = ["Le Thuc <Lethuc2602@gmail.com>"]
+readme = "README.md"
+license = "Proprietary"
+keywords = ["constraints", "routing", "numba", "numpy"]
+include = [
+  { path = "hyce/TESTING_GUIDE.md" },
+  "README.md",
+]
+
+[tool.poetry.dependencies]
+python = ">=3.9"
+numpy = ">=1.22"
+numba = ">=0.57"
+
+[tool.poetry.scripts]
+hyce-help = "hyce.help_cli:main"
+
+[[tool.poetry.packages]]
+include = "hyce"

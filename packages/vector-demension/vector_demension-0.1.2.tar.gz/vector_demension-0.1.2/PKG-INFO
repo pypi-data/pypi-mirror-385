@@ -1,0 +1,42 @@
+Metadata-Version: 2.4
+Name: vector-demension
+Version: 0.1.2
+Summary: Constraint checking engine with vectorized NumPy + Numba (no-scale).
+License: Proprietary
+Keywords: constraints,routing,numba,numpy
+Author: Le Thuc
+Author-email: Lethuc2602@gmail.com
+Requires-Python: >=3.9
+Classifier: License :: Other/Proprietary License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Requires-Dist: numba (>=0.57)
+Requires-Dist: numpy (>=1.22)
+Description-Content-Type: text/markdown
+
+hybrid-constraint-engine
+========================
+
+A small constraint checking engine using NumPy + Numba with a simple Problem API.
+
+- Pure-Python distribution (no compiled extensions)
+- Depends on numpy and numba (prebuilt wheels required on target platform)
+- Top-level modules installed: Core_class, constraint_kernel, build_attr_schema_auto, dtype_utils
+
+Quick start
+
+- Install: `pip install hybrid-constraint-engine`
+- Use: `from Core_class import Problem`
+
+Build and publish
+
+- Build: `python -m pip install -U build twine` then `python -m build`
+- Upload to TestPyPI: `python -m twine upload -r testpypi dist/*`
+- Upload to PyPI: `python -m twine upload dist/*`
+
+
