@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fuzzytri"
+version = "1.1.0"
+description = "Noravshan mantiq nazariyasi va amaliyoti uchun Python kutubxonasi"
+readme = "README.md"
+authors = [
+    {name = "FuzzyTri Team", email = "fuzzytri@example.com"},
+]
+keywords = ["fuzzy", "logic", "noravshan", "vector", "mathematics"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = []
+requires-python = ">=3.8"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+    "pytest-cov",
+    "black",
+    "flake8",
+    "mypy",
+]
+docs = [
+    "sphinx",
+    "sphinx-rtd-theme",
+]
+
+[project.urls]
+Homepage = "https://github.com/username/fuzzytri"
+Documentation = "https://fuzzytri.readthedocs.io"
+Repository = "https://github.com/username/fuzzytri"
+"Issue Tracker" = "https://github.com/username/fuzzytri/issues"
+
+[tool.setuptools_scm]
+write_to = "fuzzytri/_version.py"
+
+[tool.black]
+line-length = 88
+target-version = ['py38']

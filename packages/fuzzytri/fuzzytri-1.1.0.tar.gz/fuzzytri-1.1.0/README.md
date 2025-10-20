@@ -1,0 +1,250 @@
+
+## FuzzyTri
+
+```
+Noravshan mantiq nazariyasi va amaliyoti uchun Python kutubxonasi. Uchburchak fuzzy sonlar va ular ustida amallarni bajarish imkoniyati.
+
+## Xususiyatlari
+
+- ✅ Uchburchak fuzzy sonlar bilan ishlash
+- ✅ Arifmetik amallar (qo'shish, ayirish, ko'paytirish, bo'lish)
+- ✅ Mantiqiy amallar (birlashma, kesishma, komplement)
+- ✅ Alfa-kesim operatsiyalari
+- ✅ 5 xil defuzzifikatsiya usullari
+- ✅ Vizualizatsiya va grafiklar
+- ✅ Kophadli transformatsiyalar (exp, sin, cos)
+- ✅ JSON va dictionary serializatsiya
+
+## O'rnatish
+
+### PyPI orqali (kelajakda):
+
+```bash
+pip install fuzzytri
+```
+
+### Manba koddan o'rnatish:
+
+**bash**
+
+```
+git clone https://github.com/username/fuzzytri.git
+cd fuzzytri
+pip install -e .
+```
+
+## Tezkor Boshlash
+
+**python**
+
+```
+from fuzzytri import FuzzyTriangular, DefuzzificationMethod
+
+# Fuzzy sonlar yaratish
+yosh = FuzzyTriangular(0, 20, 40, "Yosh")
+orta_yosh = FuzzyTriangular(30, 45, 60, "O'rta yosh")
+qari = FuzzyTriangular(50, 70, 100, "Qari")
+
+# A'zolik darajasini hisoblash
+age = 35
+print(f"{age} yosh uchun a'zolik darajalari:")
+print(f"Yosh: {yosh(age):.3f}")
+print(f"O'rta yosh: {orta_yosh(age):.3f}")
+print(f"Qari: {qari(age):.3f}")
+
+# Arifmetik amallar
+yosh_10 = yosh + 10
+print(f"Yosh + 10 = {yosh_10}")
+
+# Defuzzifikatsiya
+markaz = yosh.defuzzify(DefuzzificationMethod.CENTROID)
+print(f"Yosh fuzzy sonining markazi: {markaz:.2f}")
+```
+
+## Batafsil Misollar
+
+### Asosiy Operatsiyalar
+
+**python**
+
+```
+from fuzzytri import FuzzyTriangular, OperationType
+import matplotlib.pyplot as plt
+
+# Fuzzy sonlar yaratish
+A = FuzzyTriangular(1, 3, 5, "A")
+B = FuzzyTriangular(2, 4, 6, "B")
+
+# Birlashma va kesishma
+birlashma = A.union(B, OperationType.MAX)
+kesishma = A.intersection(B, OperationType.MIN)
+
+# Alfa-kesim
+alpha = 0.7
+alpha_kesim = A.alpha_cut(alpha)
+print(f"Alpha={alpha} kesim: {alpha_kesim}")
+
+# Grafik chizish
+A.plot(color='blue', show_core=True)
+B.plot(color='red', show_core=True)
+plt.show()
+```
+
+### Transformatsiyalar
+
+**python**
+
+```
+from fuzzytri import FuzzyTriangular
+
+# Fuzzy son yaratish
+temp = FuzzyTriangular(15, 25, 35, "Harorat")
+
+# Eksponensial transformatsiya
+exp_data = temp.fuzzy_exp()
+
+# Sinus transformatsiya  
+sin_data = temp.fuzzy_sin()
+
+# Grafik chizish
+temp.plot_transformation('exp')
+temp.plot_transformation('sin')
+```
+
+### Defuzzifikatsiya Usullari
+
+**python**
+
+```
+from fuzzytri import FuzzyTriangular, DefuzzificationMethod
+
+fuzzy_son = FuzzyTriangular(10, 20, 30, "Namuna")
+
+# Turli defuzzifikatsiya usullari
+usullar = [
+    DefuzzificationMethod.CENTROID,
+    DefuzzificationMethod.BISECTOR,
+    DefuzzificationMethod.MEAN_OF_MAXIMUM,
+    DefuzzificationMethod.LARGEST_OF_MAXIMUM,
+    DefuzzificationMethod.SMALLEST_OF_MAXIMUM
+]
+
+for usul in usullar:
+    natija = fuzzy_son.defuzzify(usul)
+    print(f"{usul.value}: {natija:.2f}")
+```
+
+## API Dokumentatsiya
+
+### FuzzyTriangular Klassi
+
+#### Konstruktor
+
+**python**
+
+```
+FuzzyTriangular(a: float, b: float, c: float, name: str = "Triangular")
+```
+
+* `a`: Chap chegarasi (support boshi)
+* `b`: Maksimal qiymat (core)
+* `c`: O'ng chegarasi (support oxiri)
+* `name`: Fuzzy son nomi
+
+#### Asosiy Metodlar
+
+* `membership(x: float) -> float`: x nuqtadagi a'zolik darajasi
+* `alpha_cut(alpha: float) -> Tuple[float, float]`: Alfa-kesim oraliq
+* `defuzzify(method: DefuzzificationMethod) -> float`: Defuzzifikatsiya
+* `plot(**kwargs) -> plt.Axes`: Grafik chizish
+* `union(other, method) -> Callable`: Birlashma amali
+* `intersection(other, method) -> Callable`: Kesishma amali
+* `complement() -> Callable`: Komplement amali
+
+#### Xususiyatlar
+
+* `support`: A'zolik > 0 bo'lgan oraliq
+* `core`: A'zolik = 1 bo'lgan oraliq
+* `height`: Maksimal a'zolik darajasi
+* `area`: Fuzzy to'plam yuzasi
+* `centroid`: Markaz nuqtasi
+
+## Loyihani Ishga Tushirish
+
+**bash**
+
+```
+# Kutubxonani o'rnatish
+pip install -e .
+
+# Testlarni ishga tushirish
+pytest
+
+# Misollarni ishga tushirish
+python examples/basic_usage.py
+python examples/advanced_operations.py
+python examples/visualization_demo.py
+```
+
+## Misollar Katalogi
+
+`examples/` katalogida quyidagi misol fayllari mavjud:
+
+* `basic_usage.py`: Asosiy foydalanish misollari
+* `advanced_operations.py`: Murakkab amallar misollari
+* `visualization_demo.py`: Vizualizatsiya misollari
+* `defuzzification_comparison.py`: Defuzzifikatsiya usullari taqqoslashi
+
+## Rivojatlash
+
+**bash**
+
+```
+# Repository ni klonlash
+git clone https://github.com/username/fuzzytri.git
+cd fuzzytri
+
+# Virtual muhit yaratish
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+# yoki
+venv\Scripts\activate  # Windows
+
+# Zarur kutubxonalarni o'rnatish
+pip install -r requirements.txt
+
+# Testlarni yuritish
+pytest tests/
+```
+
+## Litsenziya
+
+MIT Litsenziyasi
+
+## Aloqa
+
+Savollar va takliflar uchun:
+
+* GitHub Issues: [https://github.com/asilbek3450/fuzzytri/issues](https://github.com/username/fuzzytri/issues)
+* Email: asilbekmirolimov@gmail.com
+
+## Qo'shimcha Ma'lumotlar
+
+* [Noravshan Mantiq Nazariyasi](https://en.wikipedia.org/wiki/Fuzzy_logic)
+* [Uchburchak Fuzzy Sonlar](https://en.wikipedia.org/wiki/Fuzzy_set)
+* [Python Ilmiy Hisoblash](https://scipy-lectures.org/)
+
+---
+
+ **Eslatma** : Bu kutubxona hali rivojlanish jarayonida. Xatoliklar va takliflarni GitHub orqali bildirishingiz mumkin.
+
+**text**
+
+```
+## Asosiy o'zgarishlar:
+1. **Kod bloklari** to'g'ri formatda
+2. **List itemlar** `-` bilan (yoki `*` bilan) 
+3. **Boshqa hamma narsa** bir xil saqlangan
+
+Endi README.md to'g'ri ishlaydi va GitHub'da yaxshi ko'rinadi! 🚀
+```
