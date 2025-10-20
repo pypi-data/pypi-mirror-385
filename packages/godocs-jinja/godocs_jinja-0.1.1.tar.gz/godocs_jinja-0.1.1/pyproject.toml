@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+godocs_jinja = ["py.typed", "constructor/jinja_constructor/models/**/*.jinja"]
+
+[project]
+name = "godocs-jinja"
+version = "0.1.1"
+authors = [
+  { name="Daniel Sousa (nadjiel)", email="oliveira.daaaaniel@gmail.com" },
+]
+description = "Jinja implementation of constructor for Godocs CLI"
+keywords=[ "python", "godot", "documentation", "docs", "godocs", "sphinx", "jinja2" ]
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.0"
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Operating System :: OS Independent",
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Natural Language :: English",
+]
+dependencies = [
+  "jinja2 >= 3.1.6, < 4.0.0",
+]
+
+[project.entry-points."godocs.plugins"]
+jinja = "godocs_jinja.main:JinjaPlugin"
+
+[project.optional-dependencies]
+dev = [
+  "build",
+  "twine",
+  "pytest >= 8.4.1, < 9.0.0",
+]
+peer = [
+  "godocs >= 0.0.1, < 1.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/godocs-godot/godocs-jinja"
+Issues = "https://github.com/godocs-godot/godocs-jinja/issues"
