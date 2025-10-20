@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hybrid-constraint-engine"
+version = "0.1.0"
+description = "Constraint checking engine with vectorized NumPy + Numba (no-scale)."
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+  { name = "Your Name", email = "you@example.com" }
+]
+license = { text = "Proprietary" }
+keywords = ["constraints", "routing", "numba", "numpy"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "License :: Other/Proprietary License",
+  "Operating System :: OS Independent",
+]
+dependencies = [
+  "numpy>=1.22",
+  "numba>=0.57",
+]
+
+[tool.setuptools]
+py-modules = [
+  "Core_class",
+  "constraint_kernel",
+  "build_attr_schema_auto",
+  "dtype_utils",
+]
+
+[tool.setuptools.package-dir]
+"" = "Project Logistic /My_code"
+
