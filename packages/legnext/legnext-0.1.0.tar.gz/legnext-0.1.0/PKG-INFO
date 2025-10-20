@@ -1,0 +1,195 @@
+Metadata-Version: 2.4
+Name: legnext
+Version: 0.1.0
+Summary: Python SDK for Legnext AI API - Professional image and video generation using Midjourney models
+Project-URL: Homepage, https://legnext.ai
+Project-URL: Documentation, https://github.com/your-org/legnext-python
+Project-URL: Repository, https://github.com/your-org/legnext-python
+Project-URL: Issues, https://github.com/your-org/legnext-python/issues
+Author-email: tobias-hui <huikai@tritonix.cn>
+License: Apache-2.0
+License-File: LICENSE
+Keywords: ai,api-client,image-generation,legnext,midjourney,video-generation
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Multimedia :: Graphics
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.10
+Requires-Dist: httpx>=0.27.0
+Requires-Dist: pydantic>=2.0.0
+Requires-Dist: typing-extensions>=4.5.0
+Provides-Extra: dev
+Requires-Dist: black>=24.0.0; extra == 'dev'
+Requires-Dist: isort>=5.13.0; extra == 'dev'
+Requires-Dist: mypy>=1.8.0; extra == 'dev'
+Requires-Dist: pytest-asyncio>=0.23.0; extra == 'dev'
+Requires-Dist: pytest-cov>=4.1.0; extra == 'dev'
+Requires-Dist: pytest-mock>=3.12.0; extra == 'dev'
+Requires-Dist: pytest>=8.0.0; extra == 'dev'
+Requires-Dist: ruff>=0.1.0; extra == 'dev'
+Description-Content-Type: text/markdown
+
+# Legnext Python SDK
+
+Official Python client library for the [Legnext AI API](https://legnext.ai) - Professional image and video generation using Midjourney models.
+
+## Features
+
+- **Comprehensive API Coverage**: Support for all Legnext endpoints
+- **Type Safety**: Full type hints with Pydantic models
+- **Async Support**: Both synchronous and asynchronous clients
+- **Modern Design**: Clean, intuitive API following OpenAI SDK patterns
+- **Task Management**: Built-in polling and webhook support
+- **Error Handling**: Robust error handling with automatic retries
+
+## Installation
+
+```bash
+pip install legnext
+```
+
+Or with uv:
+
+```bash
+uv pip install legnext
+```
+
+## Quick Start
+
+### Basic Usage
+
+```python
+from legnext import Client
+
+client = Client(api_key="your-api-key")
+
+# Generate an image
+response = client.midjourney.diffusion(
+    text="a beautiful sunset over mountains"
+)
+
+print(f"Job ID: {response.job_id}")
+print(f"Status: {response.status}")
+
+# Wait for completion
+result = client.tasks.wait_for_completion(response.job_id)
+print(f"Image URLs: {result.output.image_urls}")
+```
+
+### Async Usage
+
+```python
+import asyncio
+from legnext import AsyncClient
+
+async def main():
+    async with AsyncClient(api_key="your-api-key") as client:
+        response = await client.midjourney.diffusion(
+            text="a futuristic cityscape"
+        )
+        result = await client.tasks.wait_for_completion(response.job_id)
+        print(f"Generated: {result.output.image_urls}")
+
+asyncio.run(main())
+```
+
+## API Coverage
+
+### Midjourney Operations
+
+**Image Generation:**
+- `client.midjourney.diffusion(text)` - Text to image generation (POST /diffusion)
+- `client.midjourney.variation(job_id, image_no, type)` - Create variations (POST /variation)
+- `client.midjourney.upscale(job_id, image_no, type)` - Upscale images (POST /upscale)
+- `client.midjourney.reroll(job_id)` - Re-generate with same prompt (POST /reroll)
+- `client.midjourney.blend(image_urls)` - Blend 2-5 images (POST /blend)
+- `client.midjourney.describe(image_url)` - Generate descriptions (POST /describe)
+- `client.midjourney.shorten(prompt)` - Optimize prompts (POST /shorten)
+- `client.midjourney.pan(job_id, image_no, direction)` - Extend in direction (POST /pan)
+- `client.midjourney.outpaint(job_id, image_no)` - Expand all directions (POST /outpaint)
+- `client.midjourney.inpaint(job_id, image_no, mask, prompt)` - Region editing (POST /inpaint)
+- `client.midjourney.remix(job_id, image_no, prompt)` - Transform with new prompt (POST /remix)
+- `client.midjourney.edit(job_id, image_no, prompt)` - Edit specific areas (POST /edit)
+- `client.midjourney.upload_paint(image, prompt)` - Advanced editing (POST /upload-paint)
+- `client.midjourney.retexture(job_id, image_no, prompt)` - Change textures (POST /retexture)
+- `client.midjourney.remove_background(job_id, image_no)` - Remove background (POST /remove-background)
+- `client.midjourney.enhance(job_id, image_no)` - Improve quality (POST /enhance)
+
+**Video Generation:**
+- `client.midjourney.video_diffusion(prompt, image_url, duration)` - Generate video (POST /video-diffusion)
+- `client.midjourney.extend_video(job_id)` - Extend video (POST /extend-video)
+- `client.midjourney.video_upscale(job_id)` - Upscale video (POST /video-upscale)
+
+### Task Management
+
+- `client.tasks.get()` - Get task status
+- `client.tasks.wait_for_completion()` - Poll until complete
+
+### Account
+
+- `client.account.get_info()` - Get account information
+- `client.account.get_active_tasks()` - List active tasks
+
+## Documentation
+
+- [Full API Documentation](https://github.com/your-org/legnext-python/docs)
+- [Examples](https://github.com/your-org/legnext-python/examples)
+- [Official API Reference](https://legnext.ai/docs)
+
+## Development
+
+### Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/your-org/legnext-python
+cd legnext-python
+
+# Install with dev dependencies
+uv pip install -e ".[dev]"
+```
+
+### Running Tests
+
+```bash
+pytest
+```
+
+### Code Quality
+
+```bash
+# Format code
+black src tests
+isort src tests
+
+# Lint
+ruff check src tests
+
+# Type check
+mypy src
+```
+
+## Requirements
+
+- Python 3.10+
+- httpx
+- pydantic
+
+## License
+
+Apache License 2.0
+
+## Support
+
+- Email: support@legnext.cn
+- Documentation: https://legnext.ai/docs
+- Issues: https://github.com/your-org/legnext-python/issues
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for version history.
