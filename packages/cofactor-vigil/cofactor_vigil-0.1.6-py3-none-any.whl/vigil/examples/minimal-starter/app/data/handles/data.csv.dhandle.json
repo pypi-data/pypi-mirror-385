@@ -1,0 +1,16 @@
+{
+  "uri": "s3://demo-bucket/data/data.csv",
+  "format": "csv",
+  "offline_fallback": "app/data/samples/data.csv",
+  "schema": {
+    "fields": [
+      {"name": "id", "type": "integer"},
+      {"name": "value", "type": "float"},
+      {"name": "label", "type": "string"}
+    ]
+  },
+  "consent": {
+    "approved": true,
+    "scope": "research"
+  }
+}
