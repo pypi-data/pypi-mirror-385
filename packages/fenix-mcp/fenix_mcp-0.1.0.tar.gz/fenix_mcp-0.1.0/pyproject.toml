@@ -1,0 +1,30 @@
+[project]
+name = "fenix-mcp"
+version = "0.1.0"
+description = "Fênix Cloud MCP server implemented in Python"
+authors = [{ name = "Fenix Inc" }]
+requires-python = ">=3.10"
+readme = "README.md"
+dependencies = [
+  "pydantic>=2.5",
+  "requests>=2.31",
+  "urllib3>=2.0",
+  "aiohttp>=3.9",
+  "pydantic-settings>=2.0",
+]
+
+[project.scripts]
+"fenix-mcp" = "fenix_mcp.main:run"
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=7.4",
+  "pytest-asyncio>=0.23",
+]
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta:__legacy__"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
