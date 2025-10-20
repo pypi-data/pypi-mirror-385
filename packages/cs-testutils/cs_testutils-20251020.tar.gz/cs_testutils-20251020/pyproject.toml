@@ -1,0 +1,129 @@
+[project]
+name = "cs-testutils"
+description = "Hacks to assist with testing."
+authors = [
+    { name = "Cameron Simpson", email = "cs@cskk.id.au" },
+]
+keywords = [
+    "python3",
+]
+dependencies = [
+    "cs.context>=20250528",
+    "cs.deco>=20250914",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Programming Language :: Python :: 3",
+    "Topic :: Software Development :: Testing :: Unit",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+]
+version = "20251020"
+
+[project.license]
+text = "GNU General Public License v3 or later (GPLv3+)"
+
+[project.urls]
+"Monorepo Hg/Mercurial Mirror" = "https://hg.sr.ht/~cameron-simpson/css"
+"Monorepo Git Mirror" = "https://github.com/cameron-simpson/css"
+"MonoRepo Commits" = "https://bitbucket.org/cameron_simpson/css/commits/branch/main"
+Source = "https://github.com/cameron-simpson/css/blob/main/lib/python/cs/testutils.py"
+
+[project.readme]
+text = """
+Hacks to assist with testing.
+
+*Latest release 20251020*:
+* Add a default base SetupTeardownMixin.setupTeardown() context manager; this should now play nicely with test cases unaware of SetupTeardownMixin.
+* Remove the dependency on cs.debug.
+
+Short summary:
+* `assertSingleThread`: Test that there is only one `Thread` still running.
+* `product_test`: Decorator for test methods which should run subTests against the Cartesian products from `params`.
+* `SetupTeardownMixin`: A mixin to support a single `setupTeardown()` context manager method.
+
+Module contents:
+- <a name=\"assertSingleThread\"></a>`assertSingleThread(include_daemon=False, exclude=None)`: Test that there is only one `Thread` still running.
+
+  Parameters:
+  * `include_daemon`: also count daemon `Thread`s, normally skipped
+  * `exclude`: optional `Callable[Thread]` to test for other `Thread`s to exclude
+- <a name=\"product_test\"></a>`product_test(*da, **dkw)`: Decorator for test methods which should run subTests
+  against the Cartesian products from `params`.
+
+  A specific TestCase would define its own decorator
+  and apply it throughout the suite.
+  Here is an example from cs.vt.datadir_tests:
+
+    def multitest(test_method):
+      return product_test(
+          test_method,
+          datadirclass=[DataDir, RawDataDir],
+          indexclass=[
+              indexclass_by_name(indexname)
+              for indexname in sorted(indexclass_names())
+          ],
+          hashclass=[
+              HASHCLASS_BY_NAME[hashname]
+              for hashname in sorted(HASHCLASS_BY_NAME.keys())
+          ],
+      )
+
+  whose test suite then just decorates each method with `@multitest`:
+
+      @multitest
+      def test000IndexEntry(self):
+          ....
+
+  Note that because there must be setup and teardown for each product,
+  the TestCase class may well have empty `setUp` and `tearDown` methods
+  and instead is expected to provide:
+  * `product_setup(self,**params)`:
+    a setup method taking keyword arguments for each product
+  * `product_teardown(self)`:
+    the corresponding testdown method
+  There are called around each `subTest`.
+- <a name=\"SetupTeardownMixin\"></a>`class SetupTeardownMixin`: A mixin to support a single `setupTeardown()` context manager method.
+
+*`SetupTeardownMixin.setUp(self)`*:
+Run `super().setUp()` then the set up step of `self.setupTeardown()`.
+
+*`SetupTeardownMixin.setupTeardown(self)`*:
+Base class `setupTeardown` context manager which does nothing.
+
+*`SetupTeardownMixin.tearDown(self)`*:
+Run the tear down step of `self.setupTeardown()`,
+then `super().tearDown()`.
+
+# Release Log
+
+
+
+*Release 20251020*:
+* Add a default base SetupTeardownMixin.setupTeardown() context manager; this should now play nicely with test cases unaware of SetupTeardownMixin.
+* Remove the dependency on cs.debug.
+
+*Release 20250426*:
+Update DISTINFO.
+
+*Release 20241122*:
+assertSingleThread: new optional exclude parameter which is a callable to test where a Thread should be ignored.
+
+*Release 20240623*:
+New assertSingleThread() function to check that there are no left over Threads.
+
+*Release 20230109*:
+* @product_test decorator for running test matrices.
+* SetupTeardownMixin providing unittest setUp/tearDown from setupTeardown context manager method."""
+content-type = "text/markdown"
+
+[build-system]
+build-backend = "flit_core.buildapi"
+requires = [
+    "flit_core >=3.2,<4",
+]
+
+[tool.flit.module]
+name = "cs.testutils"
