@@ -1,0 +1,51 @@
+name: Docker Web Build
+
+# This workflow builds the docker container for the web-version of naviz.
+# It builds both an `amd64` and `arm64` version.
+# The two images are combined into a single manifest following the docker docs:
+# https://docs.docker.com/build/ci/github-actions/multi-platform/#distribute-build-across-multiple-runners
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}/naviz-web
+  CACHE_KEY: container_naviz-web
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to GitHub container registry
+        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@29109295f81e9208d7d86ff1c6c12d2833863392 # v3.6.0
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 # v3.11.1
+      - name: Set metadata (tag, label) for docker
+        id: meta
+        uses: docker/metadata-action@c1e51972afc2121e065aed6d45c65596fe445f3f # v5.8.0
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=sha,enable=${{ github.event_name == 'workflow_dispatch' }},prefix=git-
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+      - name: Build and push
+        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
+        with:
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            BUILDKIT_CONTEXT_KEEP_GIT_DIR=true
+          cache-from: type=gha,scope=${{ env.CACHE_KEY }}
+          cache-to: type=gha,scope=${{ env.CACHE_KEY }},mode=max

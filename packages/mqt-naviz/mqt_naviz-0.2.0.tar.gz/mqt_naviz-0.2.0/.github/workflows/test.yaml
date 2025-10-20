@@ -1,0 +1,56 @@
+name: Test
+
+# This workflow tests the code on multiple platforms.
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  merge_group:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+env:
+  CACHE_KEY: test
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        include:
+          - image: ubuntu-24.04
+            target: x86_64-unknown-linux-gnu
+          - image: ubuntu-24.04-arm
+            target: aarch64-unknown-linux-gnu
+          - image: macos-15-intel
+            target: x86_64-apple-darwin
+          - image: macos-14
+            target: aarch64-apple-darwin
+          - image: windows-2022
+            target: x86_64-pc-windows-msvc
+          - image: windows-11-arm
+            target: aarch64-pc-windows-msvc
+      fail-fast: false
+    name: Test ${{ matrix.target }}
+    runs-on: ${{ matrix.image }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4^
+      - name: Setup Python Toolchain
+        # Setup a compatible python-toolchain for the python-bindings
+        uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c # v6.0.0
+        with:
+          python-version-file: "pyproject.toml"
+      - name: Setup Rust Toolchain
+        uses: actions-rust-lang/setup-rust-toolchain@1780873c7b576612439a134613cc4cc74ce5538c # v1.15.2
+        with:
+          components: clippy
+          cache-key: ${{ env.CACHE_KEY }}-${{ matrix.target}}
+          target: ${{ matrix.target }}
+          rustflags: "" # Don't fail on warnings
+      - name: Run Rust Tests
+        run: cargo test --color=always --all-features --target=${{ matrix.target }}

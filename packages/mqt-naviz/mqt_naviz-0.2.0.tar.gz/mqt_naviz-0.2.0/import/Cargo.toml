@@ -1,0 +1,19 @@
+[package]
+authors = ["FloezeTv <floeze@floeze.tv>"]
+categories = []
+description = "Importer for for converting other formats to the NAViz format"
+edition = "2021"
+keywords = ["naviz", "import"]
+license.workspace = true
+name = "naviz-import"
+repository.workspace = true
+version = "0.2.0"
+
+[dependencies]
+fraction = "0.15.3"
+naviz-parser = {workspace = true}
+serde = {version = "1.0.217", optional = true, features = ["serde_derive"]}
+winnow = "0.7.0"
+
+[features]
+serde = ["dep:serde"]

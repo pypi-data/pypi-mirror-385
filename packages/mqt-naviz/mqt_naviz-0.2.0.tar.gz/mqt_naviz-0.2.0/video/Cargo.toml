@@ -1,0 +1,15 @@
+[package]
+authors = ["FloezeTv <floeze@floeze.tv>"]
+categories = []
+description = "Video export for NAViz"
+edition = "2021"
+keywords = ["naviz", "video", "export"]
+license.workspace = true
+name = "naviz-video"
+repository.workspace = true
+version = "0.4.0"
+
+[dependencies]
+naviz-animator = {workspace = true}
+naviz-renderer = {workspace = true}
+wgpu = {version = "25", default-features = false}

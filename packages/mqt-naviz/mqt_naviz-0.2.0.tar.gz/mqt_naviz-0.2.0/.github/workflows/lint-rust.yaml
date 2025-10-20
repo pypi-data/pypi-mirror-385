@@ -1,0 +1,53 @@
+name: 🦀 Lint
+
+# This workflow lints the code and uploads new findings to GitHub.
+# Newly introduced findings will be added to pull requests as review comments.
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  merge_group:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+env:
+  CACHE_KEY: lint
+
+jobs:
+  lint:
+    name: Run Linters
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+      - name: Setup Rust Toolchain
+        uses: actions-rust-lang/setup-rust-toolchain@1780873c7b576612439a134613cc4cc74ce5538c # v1.15.2
+        with:
+          components: clippy
+          cache-key: ${{ env.CACHE_KEY }}
+          rustflags: "" # Don't report warnings as errors
+          target: wasm32-unknown-unknown # also lint wasm
+      - name: Install tools
+        run: cargo install clippy-sarif sarif-fmt
+      - name: Run Clippy
+        run: |
+          # Lint all installed targets
+          for target in $(rustup target list --installed)
+          do
+            echo "::group::Checking $target"
+            cargo clippy --target="$target" --all-features --all-targets --keep-going --message-format=json | tee -a clippy.json | clippy-sarif | sarif-fmt --color=always
+            echo "::endgroup::"
+          done
+          # Remove duplicates
+          sort -u clippy.json
+          # Generate sarif
+          clippy-sarif -i clippy.json -o clippy.sarif
+      - name: Upload Findings
+        uses: github/codeql-action/upload-sarif@16140ae1a102900babc80a33c44059580f687047 # v4.30.9
+        with:
+          sarif_file: clippy.sarif

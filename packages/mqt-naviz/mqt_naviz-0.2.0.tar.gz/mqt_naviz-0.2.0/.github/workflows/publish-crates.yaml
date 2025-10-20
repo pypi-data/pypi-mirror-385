@@ -1,0 +1,35 @@
+name: Publish Crates
+
+# This workflow publishes all crates in this repository
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+env:
+  CACHE_KEY: publish
+
+jobs:
+  publish:
+    name: Publish Crates
+    runs-on: ubuntu-latest
+    environment: crates.io
+    permissions:
+      id-token: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+      - name: Setup Rust Toolchain
+        uses: actions-rust-lang/setup-rust-toolchain@1780873c7b576612439a134613cc4cc74ce5538c # v1.15.2
+        with:
+          cache-key: ${{ env.CACHE_KEY }}
+      - name: Install Tools
+        run: cargo install cargo-workspaces
+      - name: Authenticate using Trusted Publishing
+        uses: rust-lang/crates-io-auth-action@041cce5b4b821e6b0ebc9c9c38b58cac4e34dcc2 # v1.0.2
+        id: auth
+      - name: Publish Crates
+        env:
+          TOKEN: ${{ steps.auth.outputs.token }}
+        run: cargo ws publish --token "$TOKEN" --publish-as-is --skip-published

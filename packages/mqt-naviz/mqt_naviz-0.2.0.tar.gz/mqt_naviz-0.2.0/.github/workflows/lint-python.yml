@@ -1,0 +1,18 @@
+name: 🐍 Lint
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  merge_group:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  python-linter:
+    name: 🐍 Lint
+    uses: munich-quantum-toolkit/workflows/.github/workflows/reusable-python-linter.yml@56cf3608b07dc10bda5b98d77ed6ad21ecf7ef5d # v1.17.0
