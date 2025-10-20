@@ -1,0 +1,1002 @@
+import traceback
+import json
+import itertools
+import threading  # for bugfix
+from concurrent.futures import ThreadPoolExecutor
+import aiosqlite
+import asyncio
+import time
+from .. import logging
+from ..basenode_serialization import FailedToDeserialize
+from ..enums import WorkerState, InvocationState, TaskState, TaskGroupArchivedState, TaskScheduleStatus
+from ..misc import atimeit
+from ..worker_message_processor_client import WorkerControlClient
+from ..invocationjob import InvocationJob, InvocationRequirements, Invocation
+from ..environment_resolver import EnvironmentResolverArguments
+from ..nodethings import ProcessingResult
+from ..attribute_serialization import serialize_attributes, deserialize_attributes
+from ..exceptions import *
+from .. import aiosqlite_overlay
+from ..ui_events import TaskDelta
+from ..ui_protocol_data import TaskData
+from ..net_messages.address import AddressChain
+
+from .scheduler_component_base import SchedulerComponentBase
+
+from typing import List, TYPE_CHECKING
+
+if TYPE_CHECKING:  # TODO: maybe separate a subset of scheduler's methods to smth like SchedulerData class, or idunno, for now no obvious way to separate, so having a reference back
+    from .scheduler_core import SchedulerCore
+
+
+# import tracemalloc
+# tracemalloc.start()
+
+class TaskProcessor(SchedulerComponentBase):
+    def __init__(
+            self,
+            scheduler: "SchedulerCore",
+    ):
+        super().__init__(scheduler)
+        self.__logger = logging.get_logger('scheduler.task_processor')
+
+        self.__processing_interval = 5  # we don't need interval too small as now things may kick processor out of sleep as needed
+        self.__processing_interval_mult = 1
+        self.__dormant_mode_processing_interval_multiplier = 5
+
+        self.awaiter_lock = asyncio.Lock()
+        # task processing coroutimes
+        self.awaiter_executor = ThreadPoolExecutor(thread_name_prefix='awaiter')  # TODO: max_workers= set from config
+
+        self.__known_device_type_names = set(x.name for x in self.scheduler.config_provider.hardware_device_type_definitions())
+
+        self.__invocation_attempts = self.scheduler.config_provider.invocation_attempts()
+        self.__housekeeping_interval = self.scheduler.config_provider.task_processor_housekeeping_interval()
+
+    def _main_task(self):
+        return self.task_processor()
+
+    def _my_wake(self):
+        self.__logger.info('exiting DORMANT mode. mode is STANDARD now')
+        self.__processing_interval_mult = 1
+        self.poke()
+
+    def _my_sleep(self):
+        self.__logger.info('entering DORMANT mode')
+        self.__processing_interval_mult = self.__dormant_mode_processing_interval_multiplier
+
+    @atimeit()
+    async def _awaiter(self, processor_to_run, task_row, node_config, abort_state: TaskState, skip_state: TaskState):  # TODO: process task generation errors
+        _bench_point_0 = time.perf_counter()
+        task_id = task_row['id']
+        loop = asyncio.get_event_loop()
+
+        try:
+            async with self.scheduler.get_node_lock_by_id(task_row['node_id']).reader_lock:
+                time_processing_start = time.perf_counter()
+                process_result: ProcessingResult = await loop.run_in_executor(self.awaiter_executor, processor_to_run, task_row, node_config)  # TODO: this should have task and node attributes!
+                self.__logger.debug(f'(post)processing for t{task_id}:n{task_row["node_id"]} took {time.perf_counter()-time_processing_start:.4f}')
+        except NodeNotReadyToProcess as e:
+            async with self.awaiter_lock, self.scheduler.data_access.lazy_data_transaction('awaiter_con') as con:
+                await con.execute('UPDATE tasks SET "state" = ? WHERE "id" = ?',
+                                  (abort_state.value, task_id))
+                if await self.scheduler.data_access.hint_task_needs_blocking(task_id, con=con):  # inc it IN awaiter_lock (it will start transaction if needed)
+                    # for ui event
+                    if abort_state == TaskState.WAITING:
+                        abort_state = TaskState.WAITING_BLOCKED
+                    elif abort_state == TaskState.POST_WAITING:
+                        abort_state = TaskState.POST_WAITING_BLOCKED
+
+                # check if anything needs unblocking
+                if e.tasks_to_unblock():
+                    ids_unblocked = []
+                    for unblock_task_id in e.tasks_to_unblock():
+                        if await self.scheduler.data_access.hint_task_needs_unblocking(unblock_task_id, con=con):  # inc it IN transaction, IN awaiter_lock
+                            ids_unblocked.append(unblock_task_id)
+                    if ids_unblocked:
+                        async with con.execute(f'SELECT "state" FROM tasks WHERE "id" in ({",".join(str(x) for x in ids_unblocked)})') as cur:
+                            ui_task_deltas = [TaskDelta(i, state=TaskState(s['state'])) for (i, s) in zip(ids_unblocked, await cur.fetchall())]
+                        con.add_after_commit_callback(self.scheduler.ui_state_access.scheduler_reports_tasks_updated, ui_task_deltas)
+
+                con.add_after_commit_callback(self.scheduler.ui_state_access.scheduler_reports_task_updated, TaskDelta(task_id, state=abort_state))
+                await con.commit(self.poke)
+            self.__logger.debug('node reports: not ready to process yet')
+            return
+        except Exception as e:
+            async with self.awaiter_lock, self.scheduler.data_access.lazy_data_transaction('awaiter_con') as con:
+                state_details = json.dumps({'message': traceback.format_exc(),
+                                            'happened_at': task_row['state'],
+                                            'type': 'exception',
+                                            'exception_str': str(e),
+                                            'exception_type': str(type(e))})
+                await con.execute('UPDATE tasks SET "state" = ?, "state_details" = ? WHERE "id" = ?',
+                                  (TaskState.ERROR.value,
+                                   state_details,
+                                   task_id))
+                con.add_after_commit_callback(self.scheduler.ui_state_access.scheduler_reports_task_updated, TaskDelta(task_id, state=TaskState.ERROR, state_details=state_details))
+                await con.commit(self.poke)
+                self.__logger.exception('error happened %s %s', type(e), e)
+            return
+
+        _bench_point_1 = time.perf_counter()
+        # why is there lock? it looks locking manually is waaaay more efficient than relying on transaction locking
+        # IMPORTANT: note that here we trade the ability to rollback transaction for speed by using SHARED transaction
+        async with self.awaiter_lock, self.scheduler.data_access.lazy_data_transaction('awaiter_con') as con:
+            # con.row_factory = aiosqlite.Row
+            # This implicitly starts transaction
+
+            _bench_point_2 = time.perf_counter()
+            ui_task_delta = TaskDelta(task_id)  # for ui event
+            ui_task_delta_split = None
+
+            if not con.in_transaction:
+                await con.execute('BEGIN IMMEDIATE')
+                assert con.in_transaction
+            _bench_point_3 = time.perf_counter()
+            if process_result.output_name:
+                await con.execute('UPDATE tasks SET "node_output_name" = ? WHERE "id" = ?',
+                                  (process_result.output_name, task_id))
+                ui_task_delta.node_output_name = process_result.output_name  # for ui event
+            _bench_point_4 = time.perf_counter()
+
+            # note: this may be not obvious, but ALL branches of the next if result in implicit transaction start
+            if process_result.do_kill_task:
+                await con.execute('UPDATE tasks SET "state" = ? WHERE "id" = ?',
+                                  (TaskState.DEAD.value, task_id))
+                # killed tasks MAY unblock a parent that waits for children somewhere, so it's generally safe to do this
+                if task_row['parent_id'] is not None:
+                    await self.scheduler.data_access.hint_task_needs_unblocking(task_row['parent_id'], con=con)
+                ui_task_delta.state = TaskState.DEAD  # for ui event
+            else:
+                if process_result.invocation_job is None:  # if no job to do
+                    await con.execute('UPDATE tasks SET "work_data" = ?, "work_data_invocation_attempt" = 0, "state" = ?, "_invoc_requirement_clause" = ? '
+                                      'WHERE "id" = ?',
+                                      (None, skip_state.value, None,
+                                       task_id))
+                    ui_task_delta.work_data_invocation_attempt = 0  # for ui event
+                    ui_task_delta.state = skip_state  # for ui event
+                else:
+                    # if there is an invocation - we force environment wrapper arguments from task onto it
+                    if task_row['environment_resolver_data'] is not None:
+                        process_result.invocation_job._set_envresolver_arguments(await EnvironmentResolverArguments.deserialize_async(task_row['environment_resolver_data']))
+
+                    taskdada_serialized = await process_result.invocation_job.serialize_async()
+                    invoc_requirements_stash = process_result.invocation_job.requirements().pack_selection_info()
+                    job_priority = process_result.invocation_job.priority()
+                    await con.execute('UPDATE tasks SET "work_data" = ?, "work_data_invocation_attempt" = 0, "state" = ?, "_invoc_requirement_clause" = ?, '
+                                      'priority_invocation_adjust = ? '
+                                      'WHERE "id" = ?',
+                                      (taskdada_serialized, TaskState.READY.value,  invoc_requirements_stash,
+                                       job_priority,
+                                       task_id))
+                    ui_task_delta.work_data_invocation_attempt = 0  # for ui event
+                    ui_task_delta.state = TaskState.READY  # for ui event
+
+            _bench_point_5 = time.perf_counter()
+            if process_result.do_split_remove:  # TODO: check that there is no race conditions among splitted tasks to remove the split
+                async with con.execute('SELECT split_sealed FROM task_splits WHERE split_id = ?', (task_row['split_id'],)) as sealcur:
+                    res = await sealcur.fetchone()
+                if res is not None and res['split_sealed'] == 0:  # sealing split does actually exist and not sealed
+                    # async with con.execute('SELECT task_id FROM task_splits WHERE split_id = ?', (task_row['split_id'])) as tcur:
+                    #     task_ids_to_update = [x['task_id'] for x in await tcur.fetchall()]
+                    # await con.executemany('UPDATE tasks set "state" = ? WHERE "id" = ?', ((TaskState.DEAD.value, x) for x in task_ids_to_update))
+                    await con.execute('UPDATE task_splits SET "split_sealed" = 1 '
+                                      'WHERE  "split_id" = ?',
+                                      (task_row['split_id'],))
+                    # teleport original task to us
+                    await con.execute('UPDATE tasks SET "node_id" = ?, "state" = ? WHERE "id" = ?',
+                                      (task_row['node_id'], TaskState.DONE.value, task_row['split_origin_task_id']))
+                    ui_task_delta_split = TaskDelta(task_row['split_origin_task_id'], node_id=task_row['node_id'], state=TaskState.DONE)  # for ui event
+                    if process_result.output_name:
+                        await con.execute('UPDATE tasks SET "node_output_name" = ? WHERE "id" = ?',
+                                          (process_result.output_name, task_row['split_origin_task_id']))
+                        ui_task_delta_split.node_output_name = process_result.output_name  # for ui event
+                        # so sealed split task will get the same output_name as the task that is sealing the split
+                    # and update its attributes if provided
+                    if len(process_result.split_attributes_to_set) > 0:
+                        async with con.execute('SELECT attributes FROM tasks WHERE "id" = ?', (task_row['split_origin_task_id'],)) as attcur:
+                            attributes = await deserialize_attributes((await attcur.fetchone())['attributes'])
+                            attributes.update(process_result.split_attributes_to_set)
+                            result_serialized = await serialize_attributes(attributes)
+                            await con.execute('UPDATE tasks SET "attributes" = ? WHERE "id" = ?',
+                                              (result_serialized, task_row['split_origin_task_id']))
+
+            _bench_point_6 = time.perf_counter()
+            _bench_point_7 = _bench_point_6
+            if process_result.attributes_to_set:  # not None or {}
+                attributes = await deserialize_attributes(task_row['attributes'] or '{}')
+                attributes.update(process_result.attributes_to_set)
+                for k, v in process_result.attributes_to_set.items():  # TODO: hmmm, None is a valid value...
+                    if v is None:
+                        del attributes[k]
+
+                # note, we DON'T expect serialization to fail here, as we expect ProcessingResult to validate its own data
+                result_serialized = await serialize_attributes(attributes)
+
+                _bench_point_7 = time.perf_counter()
+                await con.execute('UPDATE tasks SET "attributes" = ? WHERE "id" = ?',
+                                  (result_serialized, task_id))
+            _bench_point_8 = time.perf_counter()
+
+            if process_result.internal_order is not None:
+                await con.execute('UPDATE tasks SET "priority_tie_order" = ? WHERE "id" == ?',
+                                  (process_result.internal_order, task_id))
+
+            # unblock given tasks
+            if process_result.tasks_to_unblock:
+                assert con.in_transaction and self.awaiter_lock.locked()  # sanity check
+                ids_unblocked = []
+                for unblock_task_id in process_result.tasks_to_unblock:
+                    if await self.scheduler.data_access.hint_task_needs_unblocking(unblock_task_id, con=con):  # inc it IN transaction, IN awaiter_lock
+                        ids_unblocked.append(unblock_task_id)
+                if ids_unblocked:
+                    async with con.execute(f'SELECT "state" FROM tasks WHERE "id" in ({",".join(str(x) for x in ids_unblocked)})') as cur:
+                        ui_task_deltas = [TaskDelta(i, state=TaskState(s['state'])) for (i, s) in zip(ids_unblocked, await cur.fetchall())]
+                    con.add_after_commit_callback(self.scheduler.ui_state_access.scheduler_reports_tasks_updated, ui_task_deltas)
+                    # TODO: killer should also unblock parent and slice waiters?
+
+            # process environment resolver arguments if provided
+            if (envargs := process_result._environment_resolver_arguments) is not None:
+                await con.execute('UPDATE tasks SET environment_resolver_data = ? WHERE "id" = ?',
+                                  (await envargs.serialize_async(), task_id))
+
+            _bench_point_9 = time.perf_counter()
+            # spawning new tasks after all attributes were set, so children inherit
+            # spawn
+            if process_result.spawn_list is not None:
+                for spawn in process_result.spawn_list:
+                    # we do NOT allow spawning children anywhere else but in the same node, and with the task as parent
+                    spawn.force_set_node_task_id(task_row['node_id'], task_row['id'])
+                await self.scheduler.spawn_tasks(process_result.spawn_list, con=con)
+
+            _bench_point_10 = time.perf_counter()
+            # splits
+            if process_result._split_attribs is not None:
+                split_count = len(process_result._split_attribs)
+                split_internal_order = process_result._split_order
+                if not isinstance(split_internal_order, list) or len(split_internal_order) != split_count:
+                    split_internal_order = [0.0 for _ in range(split_count)]
+                    self.__logger.warning('Processing result has incorrect split internal order property, ignoring')
+
+                ui_task_delta.state = TaskState.SPLITTED  # note that split_task ALSO adds a task delta event with state update
+                for internal_order, attr_dict, split_task_id in zip(split_internal_order, process_result._split_attribs, await self.split_task(task_id, split_count, con)):
+                    async with con.execute('SELECT attributes FROM "tasks" WHERE "id" = ?', (split_task_id,)) as cur:
+                        split_task_dict = await cur.fetchone()
+                    assert split_task_dict is not None
+                    split_task_attrs = await deserialize_attributes(split_task_dict['attributes'])
+                    split_task_attrs.update(attr_dict)
+                    await con.execute(
+                        'UPDATE "tasks" SET attributes = ?, priority_tie_order = priority_tie_order + ? WHERE "id" == ?',
+                        (
+                            await serialize_attributes(split_task_attrs),  # TODO: run dumps in executor
+                            internal_order,  # note, internal order is added to split orig task's order
+                            split_task_id,
+                        )
+                    )
+
+            _bench_point_11 = time.perf_counter()
+            con.add_after_commit_callback(self.scheduler.ui_state_access.scheduler_reports_tasks_updated, [ui_task_delta] if ui_task_delta_split is None else [ui_task_delta, ui_task_delta_split])  # ui event
+            await con.commit(self.poke)
+            _bench_point_12 = time.perf_counter()
+        self.__logger.debug(
+            f'_awaiter all: {_bench_point_12 - _bench_point_0}: '
+            f'process: {_bench_point_0 - _bench_point_1}, '
+            f'lock: {_bench_point_1 - _bench_point_2}, '
+            f'tran_begin: {_bench_point_3 - _bench_point_2},'
+            f'upd_out: {_bench_point_4 - _bench_point_3}, '
+            f'upd_rest: {_bench_point_5 - _bench_point_4},'
+            f'split_rm: {_bench_point_6 - _bench_point_5}, '
+            f'attr_set: {_bench_point_7 - _bench_point_6} + {_bench_point_8 - _bench_point_7}, '
+            f'envr_set: {_bench_point_9 - _bench_point_8}, '
+            f'spawn: {_bench_point_10 - _bench_point_9}, '
+            f'split: {_bench_point_11 - _bench_point_10}, '
+            f'commit: {_bench_point_12 - _bench_point_11}')
+
+    # submitter
+    @atimeit()
+    async def _submitter(self, task_row, worker_row):
+        self.__logger.debug(f'submitter started')
+        try:
+            addr = AddressChain(worker_row['last_address'])
+        except ValueError:
+            self.__logger.error('error address converting during unexpected here. ping should have cought it')
+            addr = None  # set to invalid values to exit in error-checking if a bit below
+            # TODO: add nicer error check for invalid address. currently we fail to open connection to None
+
+        task_id = task_row['id']
+        ui_task_delta = TaskDelta(task_id)  # for ui event
+
+        async with self.scheduler.data_access.data_connection() as submit_transaction:
+            submit_transaction.row_factory = aiosqlite.Row
+
+            # get invocation job and task attributes before starting a transaction
+            async with submit_transaction.execute('SELECT work_data, attributes FROM tasks WHERE "id" == ?', (task_id,)) as attcur:
+                work_data, task_attributes_raw = ((await attcur.fetchone()) or [None, '{}'])
+            assert work_data is not None
+            job: InvocationJob = await asyncio.get_event_loop().run_in_executor(None, InvocationJob.deserialize, work_data)
+            # empty job test will happen within transaction later
+            task_attributes = await deserialize_attributes(task_attributes_raw)
+            assert not submit_transaction.in_transaction, 'logic failed, something is wrong with submission logic'
+            #
+
+            # First main transaction of the submission
+            async with self.awaiter_lock:
+                await submit_transaction.execute('BEGIN IMMEDIATE')
+
+                # first of all we check that worker has not changed state since the start of submitter
+                async with submit_transaction.execute('SELECT "state", session_key FROM workers WHERE "id" == ?', (worker_row['id'],)) as incur:
+                    tmp_worker_row = await incur.fetchone()
+                    worker_state = WorkerState(tmp_worker_row['state'])
+                    worker_starting_session_key = tmp_worker_row['session_key']
+
+                # this next is for the case when worker restarted before transaction and already happened to again become INVOKING.
+                # then either another submitter is at BEFORE this place, or AFTER. if AFTER - there's new invoking invocation, we check that,
+                # one of submitters will fail, one will proceed
+                async with submit_transaction.execute('SELECT "id" FROM invocations WHERE "worker_id" == ? AND "state" == ?',
+                                                      (worker_row['id'], InvocationState.INVOKING.value)) as incur:
+                    invocation_already_exists = (await incur.fetchone()) is not None
+
+                # sanity check - this may happen if worker restarted at a very specific inconvenient time
+                # so worker DID change state OR invocation already exists
+                worker_keys_are_good = self.__submitter_worker_session_keys_are_good(worker_row['session_key'], worker_starting_session_key)
+                if not worker_keys_are_good or worker_state != WorkerState.INVOKING or invocation_already_exists:
+                    # TODO: seems like after introducing session_key check - other checks have no point ^
+                    # just report appropriate thing
+                    if not worker_keys_are_good:
+                        self.__logger.warning(f'worker was restarted before submission of {task_id} could begin. aborting')
+                    elif worker_state != WorkerState.INVOKING:
+                        self.__logger.warning('worker changed states before invocation was added, current state: %s, consider submission failed', worker_state)
+                    else:  # ... or invocation_already_exists
+                        self.__logger.warning('worker is in INVOKING state, but another INVOKING invocation exists.'
+                                              'This should only happen in case worker got restarted during submission')
+                    # rever task, but NOT revert worker, as another invocation is dealing with it
+                    # case 1 when it's just not INVOKING - we clearly don't control that worker
+                    # case 2 when there's multiple invocations - we don't touch worker as another invocation deals with it
+                    await self.__submitter_finalize_cancel_transaction(submit_transaction, None, worker_state, task_id)
+                    # do not forget to create an ui event of task state reset
+                    ui_task_delta.state = TaskState.READY  # ui event
+
+                    submit_transaction.add_after_commit_callback(self.scheduler.ui_state_access.scheduler_reports_task_updated, ui_task_delta)
+                    # we poke scheduler after transaction commit to process task again straight away
+                    submit_transaction.add_after_commit_callback(self.poke)
+                    await submit_transaction.commit()
+                    return
+
+                # now check if invocation even needs to be created
+                if not job.args():
+                    # cancel submission as there is nothing to do
+                    await submit_transaction.execute('UPDATE tasks SET state = ? WHERE "id" = ?',
+                                                     (TaskState.POST_WAITING.value, task_id))
+                    await submit_transaction.execute('UPDATE workers SET state = ? WHERE "id" = ?',
+                                                     (WorkerState.IDLE.value, worker_row['id']))
+                    # unset resource usage
+                    await self.scheduler._update_worker_resouce_usage(worker_row['id'], hwid=worker_row['hwid'], connection=submit_transaction)
+                    submit_transaction.add_after_commit_callback(self.scheduler.ui_state_access.scheduler_reports_task_updated, TaskDelta(task_id, state=TaskState.POST_WAITING))
+                    await submit_transaction.commit()
+                    return
+
+                assert job.args() is not None and len(job.args()) > 0, 'logic failed, something is wrong with submission logic'
+
+                # if worker has not changed state - we can start adding invocation
+                async with submit_transaction.execute(
+                        'INSERT INTO invocations ("task_id", "worker_id", "state", "node_id") VALUES (?, ?, ?, ?)',
+                        (task_id, worker_row['id'], InvocationState.INVOKING.value, task_row['node_id'])) as incur:
+                    invocation_id = incur.lastrowid  # rowid should be an alias to id, acc to sqlite manual
+                await submit_transaction.commit()
+            assert not submit_transaction.in_transaction, "logic failed, we must not be in transaction at this point"
+            # first transaction complete here
+            # at this point we've created a new invocation in INVOKING state
+            # worker and task are still in INVOKING state too
+
+            # set some job attributes
+            job._set_task_attributes(task_attributes)  # TODO: this is done here to optimize DB load a bit, but task_attributes must be part of invocationjob definition from it's generation
+            resources = await self.scheduler.data_access.get_invocation_resources_assigned_to(worker_row['id'])
+            assert resources is not None, f'logic failed, resources is None, it cannot be!'
+            invocation = Invocation(job, invocation_id, task_id, resources)
+
+            # actually communicating submission to the worker
+            self.__logger.debug(f'submitting task {task_id}({invocation_id}) to {addr}')
+            try:
+                # this is potentially a long operation - db must NOT be locked during it
+                with WorkerControlClient.get_worker_control_client(addr, self.scheduler.message_processor()) as client:  # type: WorkerControlClient
+                    reply, fail_class, reply_message = await client.give_task(invocation, self.scheduler.server_message_address(addr))
+                    # TODO: introduce optional "worker cookie" - uid that one passes with some commands
+                    #  like give_task to ensure that we are submitting here to the same worker task processing loop selected
+                self.__logger.debug(f'got reply from {task_id}({invocation_id}): {reply} ({fail_class}), ({reply_message})')
+            except Exception as e:
+                self.__logger.error('some unexpected error %s %s' % (str(type(e)), str(e)))
+                reply = TaskScheduleStatus.FAILED
+                fail_class = 'submission'
+                reply_message = None
+
+            worker_keys_are_good = False
+            # Second main transaction of the submission
+            async with self.awaiter_lock:
+                await submit_transaction.execute('BEGIN IMMEDIATE')
+                async with submit_transaction.execute('SELECT "state", session_key FROM workers WHERE "id" == ?', (worker_row['id'],)) as incur:
+                    tmp_worker_row = await incur.fetchone()
+                    worker_state = WorkerState(tmp_worker_row['state'])
+                    worker_current_session_key = tmp_worker_row['session_key']
+                async with submit_transaction.execute('SELECT "state" FROM invocations WHERE "id" == ?', (invocation_id,)) as incur:
+                    # if worker managed to stop and start before we reach this transaction - invocation state will be reset
+                    # we have to check it
+                    maybe_updated_invocation_state = InvocationState((await incur.fetchone())['state'])
+                async with submit_transaction.execute('SELECT "state" FROM tasks WHERE "id" == ?', (task_id,)) as incur:
+                    maybe_updated_task_state = TaskState((await incur.fetchone())['state'])
+
+                # at this point no matter what happens - nothing should ever change invocation and task state from INVOKING
+                # worker restarting should not affect INVOKING invocations
+                assert maybe_updated_invocation_state == InvocationState.INVOKING, f'logic failure, invocation {invocation_id} state is {maybe_updated_invocation_state}'
+                assert maybe_updated_task_state == TaskState.INVOKING, f'logic failure, task {task_id}({invocation_id}) state is {maybe_updated_task_state}'
+
+                worker_restarted = False
+                worker_keys_are_good = self.__submitter_worker_session_keys_are_good(worker_starting_session_key, worker_current_session_key)
+                if not worker_keys_are_good:
+                    worker_restarted = True
+                    self.__logger.warning('submitter: worker was shut down during submitter work')
+                    # if we reach here - scheduling could not have succeeded, safer to assume it's failed
+                    if reply == TaskScheduleStatus.SUCCESS:
+                        self.__logger.warning('submitter succeeded, yet worker state changed to OFF in the middle of submission. forcing reply to FAIL')
+                    reply = TaskScheduleStatus.FAILED
+                    # note that at this time we cannot be sure if worker actually picked invocation or not,
+                    #  but there is nothing really we can do about it, just wait for pingers to resolve the situation
+
+                if reply == TaskScheduleStatus.SUCCESS:
+                    await submit_transaction.execute('UPDATE tasks SET state = ? '
+                                                     'WHERE "id" = ?',
+                                                     (TaskState.IN_PROGRESS.value, task_id))
+                    ui_task_delta.state = TaskState.IN_PROGRESS  # for ui event
+                    async with submit_transaction.execute('SELECT "work_data_invocation_attempt" FROM tasks WHERE "id" == ?', (task_id,)) as tmpcur:  # TODO: remove this extra query!  # ui event
+                        ui_task_delta.work_data_invocation_attempt = (await tmpcur.fetchone())['work_data_invocation_attempt']  # TODO: maybe remove work_data_invocation_attempt from generic ui events/data at all  # ui event
+                    await submit_transaction.execute('UPDATE workers SET state = ? WHERE "id" = ?',
+                                                     (WorkerState.BUSY.value, worker_row['id']))
+                    await submit_transaction.execute('UPDATE invocations SET state = ? WHERE "id" = ?',
+                                                     (InvocationState.IN_PROGRESS.value, invocation_id))
+                else:  # on anything but success - cancel transaction
+                    self.__logger.warning(f'submitter failed, rolling back for wid {worker_row["id"]}')
+                    ui_task_delta.state = TaskState.READY  # for ui event
+                    # for now invoking invocation are invalidated by deletion (here and in scheduler start)
+                    await submit_transaction.execute('DELETE FROM invocations WHERE "id" = ?',
+                                                     (invocation_id,))
+
+                    await self.__submitter_finalize_cancel_transaction(submit_transaction, worker_row if not worker_restarted else None, worker_state, task_id)
+
+                    if reply == TaskScheduleStatus.FAILED:
+                        if reply_message:
+                            state_details = json.dumps({'message': f'worker {worker_row["id"]} failed to take task: {reply_message}',
+                                                        'happened_at': task_row['state'],
+                                                        'type': fail_class,
+                                                        })
+                            await submit_transaction.execute('UPDATE tasks SET state_details = ? WHERE "id" == ?',
+                                                             (state_details, task_id))
+                        # for some fail reasons we put workers into a temporary suspend list,
+                        #  not to spam and get same error hundreds of times per second
+                        if fail_class in ('environment_resolver', 'spawn'):
+                            self.scheduler.data_access.suspend_hwid(task_id, worker_row['hwid'])
+
+                    # we poke scheduler after transaction commit to process task again straight away
+                    submit_transaction.add_after_commit_callback(self.poke)
+                submit_transaction.add_after_commit_callback(self.scheduler.ui_state_access.scheduler_reports_task_updated, ui_task_delta)  # ui event
+                await submit_transaction.commit()
+
+    @staticmethod
+    def __submitter_worker_session_keys_are_good(key_orig, key) -> bool:
+        return key is not None and key_orig == key
+
+    async def __submitter_finalize_cancel_transaction(self, submit_transaction, worker_row, worker_state: WorkerState, task_id: int):
+        """
+        helper for _submitter
+        """
+        await submit_transaction.execute('UPDATE tasks SET state = ? WHERE "id" = ?',
+                                         (TaskState.READY.value,
+                                          task_id))
+
+        # in some cases (like invocation race conditions) we do NOT want to reset worker
+        if worker_row is None:
+            return
+        #
+        await submit_transaction.execute('UPDATE workers SET state = ? WHERE "id" = ?',
+                                         (WorkerState.IDLE.value if worker_state != WorkerState.OFF else WorkerState.OFF.value,
+                                          worker_row['id']))
+        # update resource usage to none
+        await self.scheduler._update_worker_resouce_usage(worker_row['id'], hwid=worker_row['hwid'], connection=submit_transaction)
+
+    @atimeit(0)
+    async def __task_processor_housekeeping(self):
+        """
+        some cleanup operations that can be done every once in a rare while
+        """
+        self.__logger.debug('performing housekeeping')
+        self.scheduler.data_access.prune_suspended_hwids()
+
+        # pruning db_cache
+        await self.scheduler.data_access.housekeeping()
+        # prune done
+
+    async def task_processor(self):
+        # this will hold references to tasks created with asyncio.create_task
+        tasks_to_wait = set()
+        stop_task = asyncio.create_task(self._stop_event.wait())
+        kick_wait_task = asyncio.create_task(self._poke_event.wait())
+        gc_counter = 0
+        housekeeping_timestamp = time.monotonic()
+        # tm_counter = 0
+        self._main_task_is_ready_now()
+        while not self._stop_event.is_set():
+            data_access = self.scheduler.data_access
+            gc_counter += 1
+            # tm_counter += 1
+            if gc_counter >= 120:  # TODO: to config this timing
+                gc_counter = 0
+                self.__logger.debug('========')
+                self.__logger.debug('================================================================')
+                with threading._shutdown_locks_lock:
+                    self.__logger.debug(f'loose threads: {len(threading._shutdown_locks)}')
+                    threading._shutdown_locks.difference_update([lock for lock in threading._shutdown_locks if not lock.locked()])
+                    self.__logger.debug(f'loose threads after cleanup: {len(threading._shutdown_locks)}')
+                self.__logger.debug(f'total tasks: {len(asyncio.all_tasks())}')
+
+                self.__logger.debug(f'size of temp db cache: {data_access.debug_get_cached_data_size()}')
+                self.__logger.debug('================================================================')
+                self.__logger.debug('========')
+
+                # self.__logger.debug(f'\n\n {mem_top(verbose_types=[set], limit=16)} \n\n')
+                #  seems that memtop's gc calls cause some random exceptions on db's fetch all
+                #  https://bugs.python.org/issue37788
+                #  https://bugs.python.org/issue15108
+                #  also https://gist.github.com/ulope/db811b6cf853ff267f27e4295bc4739e
+                # import gc
+                # objs = gc.get_objects()
+                # objs = sorted(objs, key=lambda obj: len(gc.get_referents(obj)), reverse=True)
+                # print(repr(gc.get_referrers(objs[0]))[:200])
+                # print('\n')
+                # print(repr(gc.get_referrers(objs[1]))[:200])
+            # if tm_counter >= 10*60*2:
+            #     tm_counter = 0
+            #     snapshot = tracemalloc.take_snapshot()
+            #     top_stats = snapshot.statistics('lineno')
+            #     self.__logger.warning('\n\n[ Top 10 MEM USERS]\n{}\n\n'.format("\n".join(str(stat) for stat in top_stats[:10])))
+
+            # first prune awaited tasks
+            to_remove = set()
+            for task_to_wait in tasks_to_wait:
+                if task_to_wait.done():
+                    to_remove.add(task_to_wait)
+                    try:
+                        await task_to_wait
+                    except AssertionError:
+                        self.__logger.critical('assertion error in awaitable, safest is to crash!')
+                        raise
+                    except Exception as e:
+                        self.__logger.exception('awaited task raised some problems')
+            tasks_to_wait -= to_remove
+
+            # housekeeping
+            housekeeping_now = time.monotonic()
+            if housekeeping_now - housekeeping_timestamp > self.__housekeeping_interval:
+                await self.__task_processor_housekeeping()
+                housekeeping_timestamp = housekeeping_now
+
+            # now proceed with processing
+            _debug_con = time.perf_counter()
+            total_processed = 0
+            total_state_changes = 0  # note that total_state_changes may be greater than total_processed, as total_processed refers to existing tasks only, but total_state_changes counts new splits as well
+            async with data_access.data_connection() as con:
+                con.row_factory = aiosqlite.Row
+
+                for task_state in (TaskState.WAITING, TaskState.READY, TaskState.DONE, TaskState.POST_WAITING, TaskState.SPAWNED):
+                    _debug_sel = time.perf_counter()
+                    async with con.execute('SELECT tasks.id, tasks.parent_id, tasks.children_count, tasks.active_children_count, tasks.state, {attrs}'
+                                           'tasks.node_id, tasks.node_input_name, tasks.node_output_name, tasks.name, tasks.split_level, '
+                                           '{maybe_get_req_clause}'
+                                           'nodes.type as node_type, nodes.id as node_id, '
+                                           'task_splits.split_id as split_id, task_splits.split_element as split_element, task_splits.split_count as split_count, task_splits.origin_task_id as split_origin_task_id '
+                                           'FROM tasks INNER JOIN nodes ON tasks.node_id=nodes.id '
+                                           'LEFT JOIN task_splits ON tasks.id=task_splits.task_id '
+                                           'WHERE (state = ?) '
+                                           'AND paused = 0 '
+                                           'AND dead = 0 '
+                                           'ORDER BY {prio_sort} RANDOM()'.format(
+                            prio_sort='tasks.priority DESC, tasks.priority_tie_order ASC, ' if task_state == TaskState.READY else '',
+                            attrs='attributes, environment_resolver_data, ' if task_state in (TaskState.WAITING, TaskState.POST_WAITING) else '',
+                            maybe_get_req_clause='tasks.work_data_invocation_attempt, tasks._invoc_requirement_clause, ' if task_state == TaskState.READY else '',
+                            ),
+
+                                           (task_state.value,)) as cur:
+                        all_task_rows = await cur.fetchall()  # we dont want to iterate reading over changing rows - easy to deadlock yourself (as already happened)
+                        # if too much tasks here - consider adding LIMIT to execute and work on portions only
+
+                    _debug_pstart = time.perf_counter()
+                    if _debug_pstart - _debug_sel > 0.05:  # we shouldn't even worry if it's less
+                        self.__logger.debug(f'SELECT took {_debug_pstart - _debug_sel}')
+
+                    if len(all_task_rows) == 0:
+                        continue
+                    total_processed += len(all_task_rows)
+
+                    self.__logger.debug(f'total {task_state.name}: {len(all_task_rows)}')
+                    # TODO: the problem might occur below when there are thousands of processing tasks - it may take some time before implicit transaction lock is given to task_processor
+                    #
+                    # waiting to be processed
+                    if task_state == TaskState.WAITING:
+                        awaiters = []
+                        set_to_stuff = []
+                        for task_row in all_task_rows:
+                            if task_row['node_type'] not in self.scheduler.node_data_provider().node_type_names():
+                                self.__logger.error(f'plugin to process "{task_row["node_type"]}" not found!')
+                                # await con.execute('UPDATE tasks SET "state" = ? WHERE "id" = ?',
+                                #                   (TaskState.ERROR.value, task_row['id']))
+                                set_to_stuff.append((TaskState.ERROR.value, task_row['id']))
+                                total_state_changes += 1
+                            else:
+                                # await con.execute('UPDATE tasks SET "state" = ? WHERE "id" = ?',
+                                #                   (TaskState.GENERATING.value, task_row['id']))
+                                set_to_stuff.append((TaskState.GENERATING.value, task_row['id']))
+                                total_state_changes += 1
+                                # NOTE: awaiters are NOT started here, just coroutines created
+                                try:
+                                    node_object = await self.scheduler._get_node_object_by_id(task_row['node_id'])
+                                except FailedToDeserialize:
+                                    self.__logger.error(f'failed to deserialize node {task_row["node_id"]}, failing task {task_row["id"]} that require it.')
+                                    set_to_stuff.append((TaskState.ERROR.value, task_row['id']))
+                                    continue
+                                except Exception:
+                                    self.__logger.exception('unexpected exception in deserialization, failing affected tasks')
+                                    set_to_stuff.append((TaskState.ERROR.value, task_row['id']))
+                                    continue
+                                node_config = self.scheduler.config_provider.node_configuration(node_object.type_name())
+                                awaiters.append(self._awaiter(node_object._process_task_wrapper, dict(task_row), node_config,
+                                                              abort_state=TaskState.WAITING, skip_state=TaskState.POST_WAITING))
+                        if set_to_stuff:
+                            # ui event
+                            con.add_after_commit_callback(
+                                self.scheduler.ui_state_access.scheduler_reports_tasks_updated, [TaskDelta(_task_id, state=TaskState(_new_state)) for _new_state, _task_id in set_to_stuff]
+                            )
+                            #
+                            await con.executemany('UPDATE tasks SET "state" = ? WHERE "id" = ?', set_to_stuff)
+                            await con.commit()
+                        self.__logger.debug('loop done, creating tasks')
+                        for coro in awaiters:
+                            tasks_to_wait.add(asyncio.create_task(coro))
+                    #
+                    # waiting to be post processed
+                    elif task_state == TaskState.POST_WAITING:
+                        awaiters = []
+                        set_to_stuff = []
+                        for task_row in all_task_rows:
+                            if task_row['node_type'] not in self.scheduler.node_data_provider().node_type_names():
+                                self.__logger.error(f'plugin to process "{task_row["node_type"]}" not found!')
+                                # await con.execute('UPDATE tasks SET "state" = ? WHERE "id" = ?',
+                                #                   (TaskState.ERROR.value, task_row['id']))
+                                set_to_stuff.append((TaskState.ERROR.value, task_row['id']))
+                                total_state_changes += 1
+                            else:
+                                # await con.execute('UPDATE tasks SET "state" = ? WHERE "id" = ?',
+                                #                   (TaskState.POST_GENERATING.value, task_row['id']))
+                                set_to_stuff.append((TaskState.POST_GENERATING.value, task_row['id']))
+                                total_state_changes += 1
+                                try:
+                                    node_object = await self.scheduler._get_node_object_by_id(task_row['node_id'])
+                                except FailedToDeserialize:
+                                    self.__logger.error(f'failed to deserialize node {task_row["node_id"]}, failing task {task_row["id"]} that require it.')
+                                    set_to_stuff.append((TaskState.ERROR.value, task_row['id']))
+                                    continue
+                                except Exception:
+                                    self.__logger.exception('unexpected exception in deserialization, failing affected tasks')
+                                    set_to_stuff.append((TaskState.ERROR.value, task_row['id']))
+                                    continue
+                                node_config = self.scheduler.config_provider.node_configuration(node_object.type_name())
+                                awaiters.append(self._awaiter(node_object._postprocess_task_wrapper, dict(task_row), node_config,
+                                                              abort_state=TaskState.POST_WAITING, skip_state=TaskState.DONE))
+                        if set_to_stuff:
+                            # ui event
+                            con.add_after_commit_callback(
+                                self.scheduler.ui_state_access.scheduler_reports_tasks_updated, [TaskDelta(_task_id, state=TaskState(_new_state)) for _new_state, _task_id in set_to_stuff]
+                            )
+                            #
+                            await con.executemany('UPDATE tasks SET "state" = ? WHERE "id" = ?', set_to_stuff)
+                            await con.commit()
+                        for coro in awaiters:
+                            tasks_to_wait.add(asyncio.create_task(coro))  # note - dont change to run in executors in threads - there are things here like asyncio locks that RELY ON BEING IN SAME THREAD
+                    #
+                    # real scheduling should happen here
+                    elif task_state == TaskState.READY:
+                        total_state_changes += await self.__process_ready(all_task_rows, tasks_to_wait, con=con)
+                    #
+                    # means task is done being processed by current node,
+                    # now it should be passed to the next node
+                    elif task_state == TaskState.DONE or task_state == TaskState.SPAWNED:
+                        ui_task_deltas = []  # for ui event
+                        for task_row in all_task_rows:
+                            if task_row['state'] == TaskState.DONE.value:
+                                out_plug_name = task_row['node_output_name'] or 'main'
+                            else:
+                                out_plug_name = task_row['node_output_name'] or 'spawned'
+                            await self.scheduler.data_access.reset_task_blocking(task_row['id'], con=con)
+                            async with con.execute('SELECT * FROM node_connections WHERE node_id_out = ? AND out_name = ?',
+                                                   (task_row['node_id'], out_plug_name)) as wire_cur:
+                                all_wires = await wire_cur.fetchall()
+                            wire_count = len(all_wires)
+                            if wire_count > 0:
+                                if wire_count == 1:
+                                    wire = all_wires[0]
+                                    await con.execute('UPDATE tasks SET node_id = ?, node_input_name = ?, state = ?, work_data = ? '
+                                                      'WHERE "id" = ?',
+                                                      (wire['node_id_in'], wire['in_name'], TaskState.WAITING.value, None, task_row['id']))
+                                    total_state_changes += 1
+                                    # ui event
+                                    ui_task_deltas.append(TaskDelta(task_row['id'], node_id=wire['node_id_in'], node_input_name=wire['in_name'],
+                                                                    state=TaskState.WAITING))  # for ui event
+                                    #
+                                else:
+                                    for i, splited_task_id in enumerate(await self.split_task(task_row['id'], wire_count, con)):
+                                        await con.execute('UPDATE tasks SET node_id = ?, node_input_name = ?, state = ?, work_data = ?'
+                                                          'WHERE "id" = ?',
+                                                          (all_wires[i]['node_id_in'], all_wires[i]['in_name'], TaskState.WAITING.value, None,
+                                                           splited_task_id))
+                                        ui_task_deltas.append(TaskDelta(splited_task_id, node_id=all_wires[i]['node_id_in'], node_input_name=all_wires[i]['in_name'],
+                                                                        state=TaskState.WAITING))  # for ui event
+                                        total_state_changes += 1
+                                    total_state_changes += 1  # this is for original (for split) task changing state to SPLITTED
+
+                            else:
+                                # the problem is that there are tasks that done, but have no wires to go anywhere
+                                # and that is the point, they are done done. But processing thousands of them every time is painful
+                                # so we need to somehow prevent them from being amilessly processed
+                                # this is a testing desicion, TODO: test and see if thes is a good way to deal with the problem
+                                await con.execute('UPDATE "tasks" SET "paused" = 1 WHERE "id" = ?', (task_row['id'],))
+                                ui_task_deltas.append(TaskDelta(task_row['id'], paused=True))  # for ui event
+
+                        # ui event
+                        if ui_task_deltas:
+                            con.add_after_commit_callback(
+                                self.scheduler.ui_state_access.scheduler_reports_tasks_updated, ui_task_deltas
+                            )
+                        #
+                        await con.commit()
+
+                    self.__logger.debug(f'{task_state.name} took: {time.perf_counter() - _debug_pstart}')
+
+                # out of processing loop, but still in db connection
+                if total_processed == 0:
+                    # check maybe it's time to sleep
+                    if len(tasks_to_wait) == 0:
+                        # instead of NOT IN  here using explicit IN cuz this way db index works # async with con.execute('SELECT COUNT(id) AS total FROM tasks WHERE paused = 0 AND state NOT IN (?, ?)', (TaskState.ERROR.value, TaskState.DEAD.value)) as cur:
+                        async with con.execute('SELECT COUNT(id) AS total FROM tasks WHERE paused = 0 AND state IN ({}) AND dead = 0'
+                                                       .format(','.join(str(state.value)
+                                                                        for state in TaskState
+                                                                        if state not in (TaskState.ERROR, TaskState.DEAD, TaskState.SPLITTED)))) as cur:
+                            total = await cur.fetchone()
+                        if total is None or total['total'] == 0:
+                            self.__logger.debug('no useful tasks seem to be available')
+                            self.sleep()
+                else:
+                    self.scheduler.wake()
+
+            processing_time = time.perf_counter() - _debug_con
+            if processing_time > 1.0:
+                self.__logger.info(f'processing run in {processing_time}')
+            else:
+                self.__logger.debug(f'processing run in {processing_time}')
+
+            # and wait for a bit
+
+            sleeping_tasks = (stop_task, kick_wait_task)
+
+            wdone, _ = await asyncio.wait(sleeping_tasks, timeout=0 if total_state_changes > 0 else self.__processing_interval * self.__processing_interval_mult,
+                                          return_when=asyncio.FIRST_COMPLETED)
+            if kick_wait_task in wdone:
+                kick_wait_task = asyncio.create_task(self._poke_event.wait())
+
+            # stopping
+            if stop_task in wdone:
+                break
+
+        #
+        # Out of while - means we are stopping. time to save all the nodes
+        self.__logger.info('finishing task processor...')
+        for task in (stop_task, kick_wait_task):
+            if not task.done():
+                task.cancel()
+        if len(tasks_to_wait) > 0:
+            await asyncio.wait(tasks_to_wait, return_when=asyncio.ALL_COMPLETED)
+        self.__logger.info('task processor finished')
+
+    async def __process_ready(self, all_task_rows, tasks_to_wait, *, con: aiosqlite_overlay.ConnectionWithCallbacks) -> int:
+        """
+        does all the processing for tasks in READY state
+        helper for task_processor routine
+
+        returns number of tasks that had changes
+        """
+        total_state_changes = 0
+        submitters = []
+        # there may be a lot of similar queries, and if there's nothing available at some point - we may just leave it for next submission iteration
+        # and anyway - if transaction has already started - there wont be any new idle worker, since sqlite block everything
+        where_empty_cache = set()
+        ui_task_deltas = []  # for ui event
+        task_rows_to_retry = []
+        for task_row in itertools.chain(all_task_rows, task_rows_to_retry):
+            # check max attempts first
+            if task_row['work_data_invocation_attempt'] >= self.__invocation_attempts:
+                state_details = json.dumps({'message': 'maximum invocation attempts reached',
+                                            'happened_at': task_row['state'],
+                                            'type': 'limit',
+                                            'limit_threshold': self.__invocation_attempts,
+                                            'limit_value': task_row['work_data_invocation_attempt']})
+                await con.execute('UPDATE tasks SET "state" = ?, "state_details" = ? WHERE "id" = ?',
+                                  (TaskState.ERROR.value,
+                                   state_details,
+                                   task_row['id']))
+                total_state_changes += 1
+                ui_task_deltas.append(TaskDelta(task_row['id'], state=TaskState.ERROR, state_details=state_details))  # for ui event
+                self.__logger.warning(f'{task_row["id"]} reached maximum invocation attempts, setting it to error state')
+                continue
+            #
+            requirements_clause_sql, requirements_clause = InvocationRequirements.unpack_selection_info(task_row["_invoc_requirement_clause"])
+
+            if requirements_clause_sql in where_empty_cache:
+                continue
+            try:
+                self.__logger.debug('submitter selecting worker')
+                # we get total for further optimizations
+                dev_join_clauses = []
+                join_where_clauses = []
+                for dev_type in requirements_clause.devices.device_types():
+                    if dev_type not in self.__known_device_type_names:
+                        raise ConfigurationError(f'unknown device type "{dev_type}"')
+                    dev_type_table_name = f'hardware_device_type__{dev_type}'
+                    for i in range(requirements_clause.devices[dev_type].min):
+                        dev_join_clauses.append(f'LEFT JOIN "{dev_type_table_name}" AS "{dev_type_table_name}__{i}" ON workers.hwid="{dev_type_table_name}__{i}".hwid')
+                        join_where_clauses.append(f'{dev_type_table_name}__{i}.available==1')
+                        if i > 0:
+                            join_where_clauses.append(f'"{dev_type_table_name}__{i-1}".dev_id<"{dev_type_table_name}__{i}".dev_id')
+
+                async with con.execute(f'SELECT COUNT(workers.id) as "total" from workers '
+                                       f'INNER JOIN resources ON workers.hwid=resources.hwid ' +
+                                       ' '.join(dev_join_clauses) +
+                                       f' WHERE state == ? AND ( {requirements_clause_sql} )' +
+                                       (f' AND ({" AND ".join(join_where_clauses)}) ' if join_where_clauses else ''),  # clause to ensure proper dev table join
+                                       (WorkerState.IDLE.value,)) as worcur:
+                    potential_count = (await worcur.fetchone())['total']
+                # actual selecting workers
+                async with con.execute(f'SELECT workers.id, workers.hwid, last_address, session_key from workers '
+                                       f'INNER JOIN resources ON workers.hwid=resources.hwid ' +
+                                       ' '.join(dev_join_clauses) +
+                                       f' WHERE state == ? AND ( {requirements_clause_sql} ) ' +
+                                       (f' AND ({" AND ".join(join_where_clauses)}) ' if join_where_clauses else '') +  # clause to ensure proper dev table join
+                                       f'AND workers.hwid NOT IN ({",".join(str(x) for x in self.scheduler.data_access.get_suspended_hwids(task_row["id"]))}) '
+                                       f'ORDER BY RANDOM() LIMIT 1', (WorkerState.IDLE.value,)) as worcur:
+                    worker = await worcur.fetchone()
+            except aiosqlite.Error as e:  # wait, how can this happen?
+                state_details = json.dumps({'message': traceback.format_exc(),
+                                            'happened_at': task_row['state'],
+                                            'type': 'exception',
+                                            'exception_str': str(e),
+                                            'exception_type': str(type(e))})
+                await con.execute('UPDATE tasks SET "state" = ?, "state_details" = ? WHERE "id" = ?',
+                                  (TaskState.ERROR.value,
+                                   state_details,
+                                   task_row['id']))
+                total_state_changes += 1
+                ui_task_deltas.append(TaskDelta(task_row['id'], state=TaskState.ERROR, state_details=state_details))  # for ui event
+                self.__logger.exception(f'error matching workers for the task {task_row["id"]}')
+                continue
+            if potential_count == 0:  # nothing available
+                where_empty_cache.add(requirements_clause_sql)
+            if worker is None:
+                self.__logger.debug('submitter: no worker available')
+                continue
+            # note that there might be no implicit transaction here yet, so previously selected
+            # worker might have changed states between that select and this update
+            # so we doublecheck in a transaction
+            if not con.in_transaction:
+                await con.execute('BEGIN IMMEDIATE')
+                async with con.execute('SELECT "state" FROM workers WHERE "id" == ?', (worker['id'],)) as worcur:
+                    actual_state = (await worcur.fetchone())['state']
+                    if actual_state != WorkerState.IDLE.value:
+                        self.__logger.debug(f'submitter: worker changed state (to {actual_state}) while trying to submit, skipping')
+                        # we add to retry list, and we don't care to limit it,
+                        # cuz this code is only reachable if we were NOT in a transaction, and now we are
+                        task_rows_to_retry.append(task_row)
+                        continue
+
+            # set resource usage straight away
+            try:
+                await self.scheduler._update_worker_resouce_usage(worker['id'], resources=requirements_clause, hwid=worker['hwid'], connection=con)
+            except NotEnoughResources:
+                self.__logger.exception(f'inconsistency in worker resource tracking! could not submit to worker {worker["id"]}')
+                continue
+
+            await con.execute('UPDATE tasks SET state = ? WHERE "id" = ?',
+                              (TaskState.INVOKING.value, task_row['id']))
+            total_state_changes += 1
+            ui_task_deltas.append(TaskDelta(task_row['id'], state=TaskState.INVOKING))  # for ui event
+            await con.execute('UPDATE workers SET state = ? WHERE "id" = ?',
+                              (WorkerState.INVOKING.value, worker['id']))
+
+            submitters.append(self._submitter(dict(task_row), dict(worker)))
+            self.__logger.debug('submitter scheduled')
+        # ui event
+        if ui_task_deltas:
+            con.add_after_commit_callback(
+                self.scheduler.ui_state_access.scheduler_reports_tasks_updated, ui_task_deltas
+            )
+        #
+        await con.commit()
+        for coro in submitters:
+            tasks_to_wait.add(asyncio.create_task(coro))
+
+        return total_state_changes
+
+    # helpers
+
+    async def split_task(self, task_id: int, into: int, con: aiosqlite_overlay.ConnectionWithCallbacks) -> List[int]:
+        """
+        con is expected to be a opened db connection with dict factory
+        :param task_id
+        :param into:
+        :param con:
+        :return:
+        """
+        if into < 1:
+            raise ValueError('cant split into less than 1 part')
+
+        if not con.in_transaction:
+            await con.execute('BEGIN IMMEDIATE')
+        # even first selects are only safe to do within a transaction
+
+        async with con.execute('SELECT * FROM tasks WHERE "id" = ?', (task_id,)) as cur:
+            task_row = await cur.fetchone()
+        new_split_level = task_row['split_level'] + 1
+
+        next_split_id = await self.scheduler.data_access.get_next_split_id(bump_split_id=True, con=con)
+        await con.execute('UPDATE tasks SET state = ? WHERE "id" = ?',
+                          (TaskState.SPLITTED.value, task_id))
+        con.add_after_commit_callback(self.scheduler.ui_state_access.scheduler_reports_task_updated, TaskDelta(task_id, state=TaskState.SPLITTED))  # ui event
+        # await con.execute('INSERT INTO "task_splits" ("split_id", "task_id", "split_element", "split_count", "origin_task_id") VALUES (?,?,?,?,?)',
+        #                   (next_split_id, task_row['id'], 0, into, task_id))
+        all_split_ids = []
+        all_split_data = []
+        for split_element in range(into):
+            async with con.execute(
+                    'INSERT INTO tasks (parent_id, "state", "node_id", '
+                    '"node_input_name", "node_output_name", '
+                    '"work_data", "environment_resolver_data", "name", "attributes", "split_level", '
+                    '"priority_tie_order") '
+                    'VALUES (?,?,?,?,?,?,?,?,?,?,?)',
+                    (
+                        None,
+                        task_row['state'],
+                        task_row['node_id'],
+                        task_row['node_input_name'],
+                        task_row['node_output_name'],
+                        task_row['work_data'],
+                        task_row['environment_resolver_data'],
+                        task_row['name'],
+                        task_row['attributes'],
+                        new_split_level,
+                        task_row['priority_tie_order'],
+                    )
+            ) as insert_cur:
+                new_task_id = insert_cur.lastrowid
+
+            # copy groups  # TODO:SQL OPTIMIZE
+            async with con.execute('SELECT "group" FROM task_groups WHERE "task_id" = ?', (task_id,)) as gcur:
+                groups = [x['group'] for x in await gcur.fetchall()]
+            if len(groups) > 0:
+                await con.executemany('INSERT INTO task_groups ("task_id", "group") VALUES (?, ?)',
+                                      zip(itertools.repeat(new_task_id, len(groups)), groups))
+
+            all_split_ids.append(new_task_id)
+            await con.execute('INSERT INTO "task_splits" ("split_id", "task_id", "split_element", "split_count", "origin_task_id") VALUES (?,?,?,?,?)',
+                              (next_split_id, new_task_id, split_element, into, task_id))
+            all_split_data.append(TaskData(new_task_id, None, 0, 0, TaskState(task_row['state']), '', False, task_row['node_id'],
+                                           task_row['node_input_name'], task_row['node_output_name'], task_row['name'],
+                                           new_split_level, 0, None, task_id, next_split_id, None, set(groups)))
+        # now increase number of children to the parent of the task being splitted
+
+        assert into == len(all_split_ids)
+        con.add_after_commit_callback(self.scheduler.ui_state_access.scheduler_reports_tasks_added, all_split_data)  # ui event
+        self.scheduler.wake()  # do we need it here?
+        return all_split_ids

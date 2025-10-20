@@ -1,0 +1,49 @@
+import pickle
+from io import BytesIO
+from dataclasses import dataclass
+from .basenode_serialization import NodeSerializerBase, IncompatibleDeserializationMethod
+from .basenode import BaseNode
+from .enums import NodeParameterType
+
+from typing import Callable, Optional, Tuple, Union
+
+from .node_dataprovider_base import NodeDataProvider
+
+
+@dataclass
+class ParameterData:
+    name: str
+    type: NodeParameterType
+    unexpanded_value: Union[int, float, str, bool]
+    expression: Optional[str]
+
+
+def create_node_maker(node_data_provider: NodeDataProvider) -> Callable[[str, str], BaseNode]:
+    def create_node(type_name: str, name: str, *args, **kwargs) -> BaseNode:  # *args, **kwargs there - for compatibility. extra args should be safely ignored
+        node = node_data_provider.node_factory(type_name)(name)
+        return node
+    return create_node
+
+
+class NodeSerializerV1(NodeSerializerBase):
+    def serialize(self, node: BaseNode) -> Tuple[bytes, Optional[bytes]]:
+        raise DeprecationWarning('no use this!')
+
+    def deserialize(self, node_data_provider: NodeDataProvider, data: bytes, state: Optional[bytes]) -> BaseNode:
+        # this be pickled
+        # we do hacky things here fo backward compatibility
+        class Unpickler(pickle.Unpickler):
+            def find_class(self, module, name):
+                if module == 'lifeblood.pluginloader' and name == 'create_node':
+                    return create_node_maker(node_data_provider)
+                return super(Unpickler, self).find_class(module, name)
+
+        if state is not None:
+            raise IncompatibleDeserializationMethod('deserialization v1 is not expecting a separate state data')
+
+        try:
+            newobj: BaseNode = Unpickler(BytesIO(data)).load()
+        except Exception as e:
+            raise IncompatibleDeserializationMethod(f'error loading pickle: {e}') from None
+
+        return newobj
