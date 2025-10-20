@@ -1,0 +1,101 @@
+Metadata-Version: 2.4
+Name: nastya-tail-lnu
+Version: 0.1.2
+Summary: Lightweight and optimized implementation of Unix tail utility
+Home-page: https://github.com/Nastia2004/nastya-tail-lnu
+Author: Nastya
+Author-email: nastavasilik1@gmail.com
+Keywords: tail cli utility unix file-processing
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Environment :: Console
+Classifier: Topic :: Utilities
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: click>=8.0
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: keywords
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+# nastya-tail
+
+⚡ Lightweight and optimized implementation of Unix `tail` utility in Python with Click framework.
+
+## Features
+
+- ✅ Output last N lines from files or stdin (default: 10)
+- ✅ Byte-based output with `-c` option
+- ✅ Multiple file support with headers
+- ✅ Memory-efficient using `deque` for large files
+- ✅ Optimized file seeking for byte operations
+- ✅ Compatible with Unix tail behavior
+- ✅ Published on PyPI
+
+## Installation
+```bash
+pip install nastya-tail-lnu
+```
+
+## Usage
+```bash
+# Last 10 lines (default)
+tail file.txt
+
+# Last 20 lines
+tail -n 20 file.txt
+
+# Last 100 bytes
+tail -c 100 file.txt
+
+# Multiple files with headers
+tail file1.txt file2.txt
+```
+
+## Command Options
+
+| Option | Description |
+|--------|-------------|
+| `-n, --lines N` | Output the last N lines (default: 10) |
+| `-c, --bytes N` | Output the last N bytes |
+| `-v, --verbose` | Always print filename headers |
+| `-q, --quiet` | Never print filename headers |
+| `-h, --help` | Show help message |
+
+## Performance
+
+- Uses `collections.deque` for memory efficiency
+- File seeking for byte operations
+- Memory usage: O(n) where n is number of lines to output
+- Works efficiently with GB-sized files
+
+---
+
+## 📁 Структура директорій
+
+Створіть таку структуру:
+```
+nastya-tail/
+├── .github/
+│   └── workflows/
+│       └── pypi-publish.yml
+├── nastya_tail/
+│   ├── __init__.py
+│   └── cli.py
+├── .gitignore
+├── LICENSE
+├── MANIFEST.in
+├── pyproject.toml
+├── README.md
+└── setup.py
