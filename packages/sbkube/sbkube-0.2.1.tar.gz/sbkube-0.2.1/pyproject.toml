@@ -1,0 +1,92 @@
+[project]
+name = "sbkube"
+version = "0.2.1"
+license = "MIT"
+description = "k3s용 헬름+yaml+git 배포 자동화 CLI 도구"
+authors = [{ name = "archmagece", email = "archmagece@users.noreply.github.com" }]
+requires-python = ">=3.12"
+readme = "README.md"
+
+dependencies = [
+  "click>=8.1",
+  "pyyaml",
+  "gitpython",
+  "jinja2",
+  "rich",
+  "pytest>=8.3.5",
+  "toml>=0.10.2",
+  "jsonschema>=4.23.0",
+  "pydantic>=2.7.1",
+  "sqlalchemy>=2.0.0",
+  "requests>=2.31.0",
+  "kubernetes>=28.1.0",
+]
+
+[project.scripts]
+sbkube = "sbkube.cli:main_with_exception_handling"
+
+[tool.setuptools]
+packages = ["sbkube"]
+
+[tool.hatch.build.targets.sdist]
+include = ["sbkube"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "twine>=6.1.0",
+    "ruff>=0.7.0",
+    "mypy>=1.13.0",
+    "black>=24.0.0",
+    "isort>=5.13.0",
+    "pre-commit>=4.0.0",
+    "types-PyYAML>=6.0.0",
+    "bandit>=1.8.6",
+    "mdformat>=0.7.22",
+    "types-toml>=0.10.8",
+    "types-requests>=2.31.0",
+]
+test = [
+    "pytest>=8.3.5",
+    "pytest-cov>=4.1.0",
+    "pytest-xdist>=3.5.0",
+    "pytest-timeout>=2.2.0",
+    "pytest-mock>=3.12.0",
+    "pytest-benchmark>=4.0.0",
+    "pytest-asyncio>=0.23.0",
+    "testcontainers[k3s]>=4.0.0",
+    "kubernetes>=28.1.0",
+    "faker>=22.0.0",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["sbkube"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "*/__init__.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if __name__ == .__main__.:",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if TYPE_CHECKING:",
+]
+
+[tool.coverage.html]
+directory = "htmlcov"
+
+
+[tool.bandit]
+# 보안 검사 설정 (Makefile과 일치)
+exclude_dirs = ["tests", "scripts", "debug", "examples"]
+skips = ["B101", "B404", "B603", "B607", "B602"]
