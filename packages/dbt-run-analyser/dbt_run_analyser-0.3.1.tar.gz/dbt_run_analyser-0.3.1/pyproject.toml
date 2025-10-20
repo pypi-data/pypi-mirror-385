@@ -1,0 +1,67 @@
+[project]
+name = "dbt_run_analyser"
+version = "0.3.1"
+description = "Python library to analyse thread utilisation for dbt runs."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+    { name = "Mathias Nørskov", email = "mathiasnoerskov@gmail.com" } 
+]
+requires-python = ">=3.8,<4"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "License :: OSI Approved :: Apache Software License",
+]
+keywords = ["dbt_run_analyser"]
+dependencies = [
+    "pandas>=2.2",
+    "plotly>=6.0",
+    "polars>=1.0",
+    "click"
+] 
+
+[project.urls]
+Homepage = "https://github.com/mathiasDK/dbt-run-analyser"
+
+[project.optional-dependencies]
+test = [
+    "black==24.*",
+    "pytest==8.*",
+    "tox==4.4.7",
+    "flake8==4.0.1",
+    "coverage==7.2.2",
+    "coverage-badge==1.*",
+    "pytest-cov==4.0.0",
+    "twine==4.0.0",
+    "dbt-core==1.9.1",
+    "dbt-duckdb==1.9.1",
+]
+
+[project.scripts]
+dbt-run-analyser = "dbt_run_analyser.cli:cli"
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = "-ra"
+testpaths = [
+    "tests"
+]
+
+[tool.hatch.build.targets.sdist]
+exclude = ["docs*", "logs*", "quantum*", "test_data*", "examples*"]
+
+[tool.setuptools.packages.find]
+include = ["dbt_run_analyser"]
+
+[tool.black]
+line-length = 88
+target-version = ['py311']
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
