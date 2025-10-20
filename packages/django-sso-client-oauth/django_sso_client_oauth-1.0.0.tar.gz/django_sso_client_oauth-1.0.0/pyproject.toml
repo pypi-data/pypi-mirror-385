@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "django-sso-client-oauth"
+version = "1.0.0"
+description = "Reusable Django app for integrating Single Sign-On (SSO) functionality"
+authors = [{name = "Ankit"}]
+license = "MIT"
+license-files = ["LICENSE"]
+readme = "README.md"
+dependencies = [
+    "django>=3.2",
+    "requests-oauthlib>=2.0.0"
+]
+keywords = ["django", "sso", "single-sign-on", "authentication"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Framework :: Django",
+    "Framework :: Django :: 3.2",
+    "Framework :: Django :: 4.0",
+    "Framework :: Django :: 4.1",
+    "Framework :: Django :: 4.2",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+requires-python = ">=3.8"
