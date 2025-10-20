@@ -1,0 +1,366 @@
+Metadata-Version: 2.4
+Name: evo2_mcp
+Version: 0.1.0
+Summary: MCP server for generating, scoring and embedding genomic sequences using Evo 2
+Project-URL: Documentation, https://evo2-mcp.readthedocs.io/
+Project-URL: Homepage, https://github.com/not-a-feature/evo2-mcp
+Project-URL: Source, https://github.com/not-a-feature/evo2-mcp
+Project-URL: Bug Tracker, https://github.com/not-a-feature/evo2-mcp/issues
+Project-URL: Changelog, https://evo2-mcp.readthedocs.io/en/latest/changelog.html
+Project-URL: BioContextAI, https://biocontext.ai/registry/not-a-feature/evo2-mcp
+Author: Jules Kreuer
+Maintainer-email: Jules Kreuer <jules.kreuer@uni-tuebingen.de>
+License:                    GNU LESSER GENERAL PUBLIC LICENSE
+                               Version 3, 29 June 2007
+        
+         Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
+         Everyone is permitted to copy and distribute verbatim copies
+         of this license document, but changing it is not allowed.
+        
+        
+          This version of the GNU Lesser General Public License incorporates
+        the terms and conditions of version 3 of the GNU General Public
+        License, supplemented by the additional permissions listed below.
+        
+          0. Additional Definitions.
+        
+          As used herein, "this License" refers to version 3 of the GNU Lesser
+        General Public License, and the "GNU GPL" refers to version 3 of the GNU
+        General Public License.
+        
+          "The Library" refers to a covered work governed by this License,
+        other than an Application or a Combined Work as defined below.
+        
+          An "Application" is any work that makes use of an interface provided
+        by the Library, but which is not otherwise based on the Library.
+        Defining a subclass of a class defined by the Library is deemed a mode
+        of using an interface provided by the Library.
+        
+          A "Combined Work" is a work produced by combining or linking an
+        Application with the Library.  The particular version of the Library
+        with which the Combined Work was made is also called the "Linked
+        Version".
+        
+          The "Minimal Corresponding Source" for a Combined Work means the
+        Corresponding Source for the Combined Work, excluding any source code
+        for portions of the Combined Work that, considered in isolation, are
+        based on the Application, and not on the Linked Version.
+        
+          The "Corresponding Application Code" for a Combined Work means the
+        object code and/or source code for the Application, including any data
+        and utility programs needed for reproducing the Combined Work from the
+        Application, but excluding the System Libraries of the Combined Work.
+        
+          1. Exception to Section 3 of the GNU GPL.
+        
+          You may convey a covered work under sections 3 and 4 of this License
+        without being bound by section 3 of the GNU GPL.
+        
+          2. Conveying Modified Versions.
+        
+          If you modify a copy of the Library, and, in your modifications, a
+        facility refers to a function or data to be supplied by an Application
+        that uses the facility (other than as an argument passed when the
+        facility is invoked), then you may convey a copy of the modified
+        version:
+        
+           a) under this License, provided that you make a good faith effort to
+           ensure that, in the event an Application does not supply the
+           function or data, the facility still operates, and performs
+           whatever part of its purpose remains meaningful, or
+        
+           b) under the GNU GPL, with none of the additional permissions of
+           this License applicable to that copy.
+        
+          3. Object Code Incorporating Material from Library Header Files.
+        
+          The object code form of an Application may incorporate material from
+        a header file that is part of the Library.  You may convey such object
+        code under terms of your choice, provided that, if the incorporated
+        material is not limited to numerical parameters, data structure
+        layouts and accessors, or small macros, inline functions and templates
+        (ten or fewer lines in length), you do both of the following:
+        
+           a) Give prominent notice with each copy of the object code that the
+           Library is used in it and that the Library and its use are
+           covered by this License.
+        
+           b) Accompany the object code with a copy of the GNU GPL and this license
+           document.
+        
+          4. Combined Works.
+        
+          You may convey a Combined Work under terms of your choice that,
+        taken together, effectively do not restrict modification of the
+        portions of the Library contained in the Combined Work and reverse
+        engineering for debugging such modifications, if you also do each of
+        the following:
+        
+           a) Give prominent notice with each copy of the Combined Work that
+           the Library is used in it and that the Library and its use are
+           covered by this License.
+        
+           b) Accompany the Combined Work with a copy of the GNU GPL and this license
+           document.
+        
+           c) For a Combined Work that displays copyright notices during
+           execution, include the copyright notice for the Library among
+           these notices, as well as a reference directing the user to the
+           copies of the GNU GPL and this license document.
+        
+           d) Do one of the following:
+        
+               0) Convey the Minimal Corresponding Source under the terms of this
+               License, and the Corresponding Application Code in a form
+               suitable for, and under terms that permit, the user to
+               recombine or relink the Application with a modified version of
+               the Linked Version to produce a modified Combined Work, in the
+               manner specified by section 6 of the GNU GPL for conveying
+               Corresponding Source.
+        
+               1) Use a suitable shared library mechanism for linking with the
+               Library.  A suitable mechanism is one that (a) uses at run time
+               a copy of the Library already present on the user's computer
+               system, and (b) will operate properly with a modified version
+               of the Library that is interface-compatible with the Linked
+               Version.
+        
+           e) Provide Installation Information, but only if you would otherwise
+           be required to provide such information under section 6 of the
+           GNU GPL, and only to the extent that such information is
+           necessary to install and execute a modified version of the
+           Combined Work produced by recombining or relinking the
+           Application with a modified version of the Linked Version. (If
+           you use option 4d0, the Installation Information must accompany
+           the Minimal Corresponding Source and Corresponding Application
+           Code. If you use option 4d1, you must provide the Installation
+           Information in the manner specified by section 6 of the GNU GPL
+           for conveying Corresponding Source.)
+        
+          5. Combined Libraries.
+        
+          You may place library facilities that are a work based on the
+        Library side by side in a single library together with other library
+        facilities that are not Applications and are not covered by this
+        License, and convey such a combined library under terms of your
+        choice, if you do both of the following:
+        
+           a) Accompany the combined library with a copy of the same work based
+           on the Library, uncombined with any other library facilities,
+           conveyed under the terms of this License.
+        
+           b) Give prominent notice with the combined library that part of it
+           is a work based on the Library, and explaining where to find the
+           accompanying uncombined form of the same work.
+        
+          6. Revised Versions of the GNU Lesser General Public License.
+        
+          The Free Software Foundation may publish revised and/or new versions
+        of the GNU Lesser General Public License from time to time. Such new
+        versions will be similar in spirit to the present version, but may
+        differ in detail to address new problems or concerns.
+        
+          Each version is given a distinguishing version number. If the
+        Library as you received it specifies that a certain numbered version
+        of the GNU Lesser General Public License "or any later version"
+        applies to it, you have the option of following the terms and
+        conditions either of that published version or of any later version
+        published by the Free Software Foundation. If the Library as you
+        received it does not specify a version number of the GNU Lesser
+        General Public License, you may choose any version of the GNU Lesser
+        General Public License ever published by the Free Software Foundation.
+        
+          If the Library as you received it specifies that a proxy can decide
+        whether future versions of the GNU Lesser General Public License shall
+        apply, that proxy's public statement of acceptance of any version is
+        permanent authorization for you to choose that version for the
+        Library.
+License-File: LICENSE
+Keywords: bioinformatics,deep-learning,embeddings,evo2,genomics,mcp,model-context-protocol,sequence-generation
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Classifier: Topic :: Scientific/Engineering :: Bio-Informatics
+Requires-Python: >=3.12
+Requires-Dist: click
+Requires-Dist: fastmcp
+Requires-Dist: torch
+Provides-Extra: dev
+Requires-Dist: pre-commit; extra == 'dev'
+Requires-Dist: twine>=4.0.2; extra == 'dev'
+Provides-Extra: doc
+Requires-Dist: docutils!=0.18.*,!=0.19.*,>=0.8; extra == 'doc'
+Requires-Dist: ipykernel; extra == 'doc'
+Requires-Dist: ipython; extra == 'doc'
+Requires-Dist: myst-nb>=1.1; extra == 'doc'
+Requires-Dist: pandas; extra == 'doc'
+Requires-Dist: setuptools; extra == 'doc'
+Requires-Dist: sphinx-autoapi; extra == 'doc'
+Requires-Dist: sphinx-book-theme>=1; extra == 'doc'
+Requires-Dist: sphinx-copybutton; extra == 'doc'
+Requires-Dist: sphinx-tabs; extra == 'doc'
+Requires-Dist: sphinx>=8.1; extra == 'doc'
+Requires-Dist: sphinxext-opengraph; extra == 'doc'
+Provides-Extra: evo2
+Requires-Dist: evo2; extra == 'evo2'
+Provides-Extra: test
+Requires-Dist: coverage; extra == 'test'
+Requires-Dist: pytest; extra == 'test'
+Requires-Dist: pytest-asyncio; extra == 'test'
+Description-Content-Type: text/markdown
+
+# evo2-mcp
+
+<a href="https://biocontext.ai/registry/not-a-feature/evo2-mcp">![BioContext][badge-biocontext]</a>
+[![Tests][badge-tests]][tests]
+[![Documentation][badge-docs]][documentation]
+
+[badge-biocontext]: docs/biocontext.svg
+[badge-tests]: https://img.shields.io/github/actions/workflow/status/not-a-feature/evo2-mcp/test.yaml?branch=main
+[badge-docs]: https://img.shields.io/readthedocs/evo2-mcp
+
+MCP server for generating, scoreing and embedding genomic sequences using Evo 2
+
+## Getting started
+
+Please refer to the [documentation][],
+in particular, the [API documentation][].
+
+You can also find the project on [BioContextAI](https://biocontext.ai), the community-hub for biomedical MCP servers: [evo2-mcp on BioContextAI](https://biocontext.ai/registry/not-a-feature/evo2-mcp).
+
+## Installation
+
+### Prerequisites
+
+You need to have Python 3.12 or newer installed on your system.
+If you don't have Python installed, we recommend installing [uv][].
+
+### Installing Evo2 Dependencies (Required)
+
+**Important**: Evo2 has specific installation requirements that must be completed **before** installing this MCP server. Follow these steps in order:
+
+1. **Install CUDA dependencies** (using conda):
+   ```bash
+   conda install -c nvidia cuda-nvcc cuda-cudart-dev
+   conda install -c conda-forge transformer-engine-torch=2.3.0
+   ```
+
+2. **Install flash-attn**:
+   ```bash
+   pip install flash-attn==2.8.0.post2 --no-build-isolation
+   ```
+
+3. **Install evo2**:
+   ```bash
+   pip install evo2
+   ```
+
+This installation order is **strongly recommended** to ensure all dependencies are properly configured.
+
+### Installing evo2-mcp
+
+Once Evo2 is installed, there are several options to install evo2-mcp:
+
+1. Use `uvx` to run it immediately:
+
+```bash
+uvx evo2_mcp
+```
+
+2. Include it in one of various clients that supports the `mcp.json` standard, please use:
+
+```json
+{
+  "mcpServers": {
+    "server-name": {
+      "command": "uvx",
+      "args": ["evo2_mcp"],
+      "env": {
+        "UV_PYTHON": "3.12"
+      }
+    }
+  }
+}
+```
+
+3. Install it through `pip`:
+
+```bash
+pip install --user evo2_mcp
+```
+
+4. Install the latest development version:
+
+```bash
+pip install git+https://github.com/not-a-feature/evo2-mcp.git@main
+```
+
+## Development and Testing
+
+### Using the Dummy Implementation
+
+For testing and development without requiring the full Evo2 model dependencies, you can use a dummy implementation that mimics the Evo2 interface:
+
+```bash
+export EVO2_MCP_USE_DUMMY=true  # On Linux/macOS
+# or
+set EVO2_MCP_USE_DUMMY=true     # On Windows (cmd)
+# or
+$env:EVO2_MCP_USE_DUMMY="true"  # On Windows (PowerShell)
+```
+
+This is automatically enabled in GitHub Actions CI/CD pipelines to speed up testing without requiring access to actual model weights.
+
+The dummy implementation:
+- Returns realistic output shapes and types
+- Generates plausible random values for scores and embeddings
+- Does not require downloading or loading any model weights
+- Is deterministic (uses fixed random seed) for reproducible tests
+
+### Running Tests
+
+To run tests with the dummy implementation:
+
+```bash
+EVO2_MCP_USE_DUMMY=true pytest
+```
+
+To run tests with the real Evo2 model (requires model installation):
+
+```bash
+pytest -m real_evo2
+```
+
+## Contact
+
+If you found a bug, please use the [issue tracker][].
+
+## Citation
+
+If you use evo2-mcp in your research, please cite:
+
+```bibtex
+@software{evo2_mcp,
+  author = {Kreuer, Jules},
+  title = {evo2-mcp: MCP server for Evo 2 genomic sequence operations},
+  year = {2025},
+  url = {https://github.com/not-a-feature/evo2-mcp},
+  version = {0.1.0}
+}
+```
+
+For the underlying Evo 2 model, please also cite the original Evo 2 publication.
+
+[uv]: https://github.com/astral-sh/uv
+[issue tracker]: https://github.com/not-a-feature/evo2-mcp/issues
+[tests]: https://github.com/not-a-feature/evo2-mcp/actions/workflows/test.yaml
+[documentation]: https://evo2-mcp.readthedocs.io
+[changelog]: https://evo2-mcp.readthedocs.io/en/latest/changelog.html
+[api documentation]: https://evo2-mcp.readthedocs.io/en/latest/api.html
+[pypi]: https://pypi.org/project/evo2-mcp
