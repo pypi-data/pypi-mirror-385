@@ -1,0 +1,48 @@
+{% macro nav_link(endpoint_group, endpoint, name) %}
+    {% if request.url.path.startswith(endpoint_group) %}
+        <li class="nav-item active"><a class="nav-link" href="{{ url_for(endpoint) }}">{{ name }}</a></li>
+    {% else %}
+        <li class="nav-item"><a class="nav-link" href="{{ url_for(endpoint) }}">{{ name }}</a></li>
+    {% endif %}
+{% endmacro %}
+
+{% macro modal_editor_open(id, label, color) %}
+    <button type="button" class="btn btn-{{ color }}" data-bs-toggle="modal"
+            data-bs-target="#modal-{{ id }}">{{ label }}
+    </button>
+{% endmacro %}
+
+{% macro modal_editor(id, title, submit_label, submit_color) %}
+    <div class="modal fade" id="modal-{{ id }}" tabindex="-1"
+         aria-labelledby="modal-add-result-label" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modal-{{ id }}-title">{{ title }}</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="form-{{ id }}">
+                        {{ caller() }}
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <div class="btn-group">
+                        <input type="button" id="submit-{{ id }}" form="form-{{ id }}" class="btn btn-{{ submit_color }}"
+                               value="{{ submit_label }}"/>
+                        <input type="reset" class="btn btn-secondary"/>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro format_player(player) %}
+    {{ player.name }} ({{ player.id }})
+{% endmacro %}
+
+{% macro format_session(session) %}
+    {% if session.name %}{{ session.name }} ({{ session.id }}){% else %}{{ session.id }}{% endif %}
+{% endmacro %}

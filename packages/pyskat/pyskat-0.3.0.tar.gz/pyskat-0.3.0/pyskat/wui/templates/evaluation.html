@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% from "macros.html" import modal_editor, modal_editor_open, format_session %}
+{% block title %}PySkat - Evaluation{% endblock %}
+{% block head %}{% endblock %}
+{% block content %}
+<h1>Evaluation{% if session %} for Session {{ session.id }}{% endif %}</h1>
+
+<div class="input-group">
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" >Filter for Session</button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{{ url_for('wui_evaluation') }}">None</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('wui_evaluation_session', session_id="current") }}">Current</a></li>
+            <li><hr class="dropdown-divider"></li>
+            {% for s in sessions %}
+            <li><a class="dropdown-item" href="{{ url_for('wui_evaluation_session', session_id=s.id) }}">{{ format_session(s) }}</a></li>
+            {% endfor %}
+        </ul>
+</div>
+
+{% for display in displays %}
+<div class="mt-5">
+    {% include display %}
+</div>
+{% endfor %}
+{% endblock %}
