@@ -1,0 +1,73 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bayescalc2"
+version = "v1.0.3"
+description = "Bayesian network calculator v2"
+authors = [ { name = "ljp" } ]
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+dependencies = [
+    "prompt_toolkit>=3.0.0",
+    "numpy>=2.3.3",
+    "graphviz>=0.20.0",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Education",
+    "Topic :: Scientific/Engineering :: Mathematics",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.4.2",
+    "pytest-xdist>=3.8.0",
+    "pytest-cov>=7.0.0",
+    "black>=25.9.0",
+    "flake8>=7.3.0",
+    "mypy>=1.0.0",
+    "build>=1.3.0",
+    "twine>=6.2.0",
+]
+docs = [
+    "mkdocs>=1.5.0",
+    "mkdocs-material>=9.0.0",
+    "mkdocstrings[python]>=0.24.0",
+    "pymdown-extensions>=10.0",
+]
+
+[project.scripts]
+bayescalc2 = "bayescalc.main:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["bayescalc*"]
+
+[tool.coverage.run]
+source = ["src"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "*/__main__.py"
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod"
+]

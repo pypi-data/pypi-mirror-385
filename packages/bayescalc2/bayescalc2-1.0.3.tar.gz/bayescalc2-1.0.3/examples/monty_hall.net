@@ -1,0 +1,79 @@
+# Monty Hall Problem Bayesian Network
+# Models the famous Monty Hall game show probability puzzle
+#
+# Network Structure:
+#
+#   PrizeDoor
+#      |
+#      v
+#  SelectedDoor    -->    MontyOpens
+#
+# Characteristics:
+# - Small 3-variable model with multi-valued variables
+# - Models the famous probability puzzle
+# - Good for demonstrating counter-intuitive probability results
+# - Shows importance of conditional dependencies
+# - Can be used to prove why switching doors is optimal strategy
+
+variable PrizeDoor {Door1, Door2, Door3}
+variable SelectedDoor {Door1, Door2, Door3}
+variable MontyOpens {Door1, Door2, Door3}
+
+PrizeDoor {
+    P(Door1) = 0.333
+    P(Door2) = 0.333
+    P(Door3) = 0.334
+}
+
+SelectedDoor {
+    P(Door1) = 0.333
+    P(Door2) = 0.333
+    P(Door3) = 0.334
+}
+
+MontyOpens | PrizeDoor, SelectedDoor {
+    # If contestant selected prize, Monty chooses randomly between other doors
+    P(Door1 | Door1, Door1) = 0.0
+    P(Door2 | Door1, Door1) = 0.5
+    P(Door3 | Door1, Door1) = 0.5
+    
+    # If prize is door 1 and contestant selected door 2
+    P(Door1 | Door1, Door2) = 0.0
+    P(Door2 | Door1, Door2) = 0.0
+    P(Door3 | Door1, Door2) = 1.0
+    
+    # If prize is door 1 and contestant selected door 3
+    P(Door1 | Door1, Door3) = 0.0
+    P(Door2 | Door1, Door3) = 1.0
+    P(Door3 | Door1, Door3) = 0.0
+    
+    # If prize is door 2 and contestant selected door 1
+    P(Door1 | Door2, Door1) = 0.0
+    P(Door2 | Door2, Door1) = 0.0
+    P(Door3 | Door2, Door1) = 1.0
+    
+    # If prize is door 2 and contestant selected door 2
+    P(Door1 | Door2, Door2) = 0.5
+    P(Door2 | Door2, Door2) = 0.0
+    P(Door3 | Door2, Door2) = 0.5
+    
+    # If prize is door 2 and contestant selected door 3
+    P(Door1 | Door2, Door3) = 1.0
+    P(Door2 | Door2, Door3) = 0.0
+    P(Door3 | Door2, Door3) = 0.0
+    
+    # If prize is door 3 and contestant selected door 1
+    P(Door1 | Door3, Door1) = 0.0
+    P(Door2 | Door3, Door1) = 1.0
+    P(Door3 | Door3, Door1) = 0.0
+    
+    # If prize is door 3 and contestant selected door 2
+    P(Door1 | Door3, Door2) = 1.0
+    P(Door2 | Door3, Door2) = 0.0
+    P(Door3 | Door3, Door2) = 0.0
+    
+    # If prize is door 3 and contestant selected door 3
+    P(Door1 | Door3, Door3) = 0.5
+    P(Door2 | Door3, Door3) = 0.5
+    P(Door3 | Door3, Door3) = 0.0
+}
