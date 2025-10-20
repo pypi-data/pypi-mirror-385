@@ -1,0 +1,38 @@
+---
+allowed-tools: {{ALLOWED_TOOLS}}
+argument-hint: {{ARGUMENT_HINT}}
+description: {{DESCRIPTION}}
+---
+
+# {{COMMAND_NAME}}
+
+User input: $ARGUMENTS
+
+## Context
+
+{{BASH_COMMANDS}}
+
+## Reference Files
+
+{{FILE_REFERENCES}}
+
+## Task
+
+Invoke the {{AGENT_NAME}} subagent to {{TASK_DESCRIPTION}}
+
+**Arguments**:
+- {{ARG_1_NAME}}: {{ARG_1_DESCRIPTION}}
+- {{ARG_2_NAME}}: {{ARG_2_DESCRIPTION}}
+
+**Task**: {{SPECIFIC_TASK}}
+
+**Success Criteria**:
+- {{SUCCESS_1}}
+- {{SUCCESS_2}}
+
+**Output**: {{OUTPUT_PATH}}
+
+---
+
+**Generated from**: multiagent_core/templates/.multiagent/build-system/templates/commands/command.md.template
+**Template Version**: 1.0.0

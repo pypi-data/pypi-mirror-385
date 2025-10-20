@@ -1,0 +1,39 @@
+# Node.js Containerfile Template (Podman)
+# Note: Podman uses Containerfile by convention, but Dockerfile works too
+FROM node:{{NODE_VERSION}}-alpine
+
+WORKDIR /app
+
+# Install system dependencies if needed
+RUN apk add --no-cache curl
+
+# Copy package files first for better caching
+COPY package*.json ./
+RUN npm ci --only=production
+
+# Copy application code
+COPY . .
+
+# Build if needed (e.g., TypeScript, Next.js)
+{{#BUILD_COMMAND}}
+RUN npm run build
+{{/BUILD_COMMAND}}
+
+# Podman runs rootless by default, but we still create a user for consistency
+RUN addgroup -g 1000 appuser && \
+    adduser -D -u 1000 -G appuser appuser && \
+    chown -R appuser:appuser /app
+USER appuser
+
+# Environment variables
+ENV NODE_ENV=production \
+    PORT={{PORT}}
+
+# Health check (Podman 4.0+ supports healthchecks)
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:{{PORT}}/health || exit 1
+
+# Run application
+CMD ["node", "{{MAIN_FILE}}"]
+
+EXPOSE {{PORT}}

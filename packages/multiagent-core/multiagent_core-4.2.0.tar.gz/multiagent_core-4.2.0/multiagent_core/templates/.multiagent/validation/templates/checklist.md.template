@@ -1,0 +1,235 @@
+# {{SUBSYSTEM_NAME}} Subsystem - Validation Checklist
+
+**Validation Date**: {{DATE}}
+**Status**: {{STATUS}}
+**Overall Progress**: {{PROGRESS}}% complete
+
+## Validation Summary
+
+### ✅ Passed Validations
+{{PASSED_ITEMS}}
+
+### ⏳ Pending Validations
+{{PENDING_ITEMS}}
+
+### ❌ Failed Validations
+{{FAILED_ITEMS}}
+
+---
+
+## Pre-Validation Setup
+
+- [ ] Subsystem directory exists at `multiagent_core/templates/.multiagent/{{SUBSYSTEM_NAME}}/`
+- [ ] README.md exists and is comprehensive
+- [ ] All mechanical scripts exist in `scripts/`
+- [ ] Commands exist at `~/.claude/commands/{{SUBSYSTEM_NAME}}/`
+- [ ] Agents exist at `~/.claude/agents/`
+- [ ] Settings registered: `SlashCommand(/{{SUBSYSTEM_NAME}}:*)` in `~/.claude/settings.json`
+
+---
+
+## Mechanical Scripts Validation
+
+### Script Structure (All Scripts)
+- [ ] Shebang present: `#!/usr/bin/env bash`
+- [ ] PURPOSE comment header
+- [ ] Error handling: `set -euo pipefail`
+- [ ] Executable: `chmod +x`
+- [ ] No intelligence - only file I/O, string ops, arithmetic
+- [ ] Clear success/error messages
+
+### Individual Script Tests
+{{SCRIPT_TESTS}}
+
+---
+
+## Agent Prompt Validation
+
+### Agent Definition Structure
+- [ ] YAML frontmatter present
+- [ ] `model: claude-sonnet-4-5-20250929`
+- [ ] `tools: [...]` array complete
+- [ ] Description is one-line (not verbose)
+- [ ] No hardcoded file paths
+- [ ] Prompt uses structured sections (<background>, <instructions>, etc.)
+
+### Agent Behavior Tests
+- [ ] Agent produces expected outputs
+- [ ] Agent follows instructions accurately
+- [ ] Agent uses correct tools
+- [ ] Agent error handling is graceful
+
+---
+
+## Command Validation
+
+### Command Structure (All Commands)
+- [ ] YAML frontmatter complete
+- [ ] Command length < 80 lines
+- [ ] Pure orchestration (no embedded bash)
+- [ ] Delegates to scripts for mechanical operations
+- [ ] Delegates to agents for intelligence
+- [ ] Clear step-by-step workflow
+- [ ] Error handling present
+
+### Individual Command Tests
+{{COMMAND_TESTS}}
+
+---
+
+## Template Validation
+
+### Template Structure
+- [ ] PURPOSE comment header
+- [ ] All variables documented: `{{VAR1}}, {{VAR2}}`
+- [ ] Agent attribution included
+- [ ] Template location documented
+- [ ] Placeholders use `{{VARIABLE}}` format
+
+### Template Rendering Tests
+- [ ] All placeholders get filled
+- [ ] No `{{UNFILLED}}` variables remain
+- [ ] Output format is valid (YAML/JSON/Markdown)
+- [ ] Frontmatter structure is correct
+
+---
+
+## Determinism Testing
+
+### Consistency Tests
+- [ ] Agent run 1: Output captured
+- [ ] Agent run 2: Output captured
+- [ ] Agent run 3: Output captured
+- [ ] Agent run 4: Output captured
+- [ ] Agent run 5: Output captured
+- [ ] Similarity score calculated
+- [ ] Variation within acceptable range (<15%)
+
+### Baseline Comparison
+- [ ] Golden baseline exists in `baselines/{{SUBSYSTEM_NAME}}/`
+- [ ] Current output compared to baseline
+- [ ] Differences analyzed
+- [ ] Regression detected (if applicable)
+
+---
+
+## Integration Tests
+
+### Cross-Subsystem Integration
+{{INTEGRATION_TESTS}}
+
+---
+
+## Workflow Validation
+
+### End-to-End Workflows
+{{WORKFLOW_TESTS}}
+
+---
+
+## Context Engineering Quality
+
+### Prompt Quality (from Anthropic principles)
+- [ ] Right altitude: Not too brittle, not too vague
+- [ ] Structured sections present
+- [ ] Token efficiency measured
+- [ ] Canonical examples included
+- [ ] Clear success criteria
+
+### Context Management
+- [ ] Context usage < 10K tokens (optimal)
+- [ ] No stale content in context (>20%)
+- [ ] Attention budget not exceeded
+- [ ] Tool results not bloated
+
+### Tool Effectiveness
+- [ ] Task completion accuracy >85%
+- [ ] Tool selection accuracy >90%
+- [ ] Tool call efficiency appropriate
+- [ ] Parameter error rate <10%
+
+---
+
+## Documentation Validation
+
+### README.md
+- [ ] Purpose statement clear
+- [ ] Architecture diagram present
+- [ ] All commands documented
+- [ ] All scripts documented
+- [ ] Integration points explained
+- [ ] Troubleshooting section
+- [ ] Usage examples provided
+
+### Command Documentation
+- [ ] Usage examples for each command
+- [ ] Parameters documented
+- [ ] Workflow steps clear
+- [ ] Error handling documented
+
+---
+
+## Performance Validation
+
+- [ ] Command completes in <30 seconds (typical case)
+- [ ] Scripts execute in <1 second each
+- [ ] Agent generation completes in <2 minutes
+- [ ] No unnecessary file I/O
+- [ ] No duplicate operations
+
+---
+
+## Security Validation
+
+- [ ] Scripts validate all input parameters
+- [ ] No shell injection vulnerabilities
+- [ ] File paths properly escaped
+- [ ] No arbitrary command execution
+- [ ] Safe handling of user input
+
+---
+
+## Architecture Compliance
+
+### Separation of Concerns
+- [ ] Scripts are 100% mechanical (no intelligence)
+- [ ] Agents provide all intelligence
+- [ ] Commands orchestrate only
+- [ ] No logic duplication across components
+
+### File Organization
+- [ ] Mechanical scripts in `scripts/`
+- [ ] Commands in `~/.claude/commands/`
+- [ ] Agents in `~/.claude/agents/`
+- [ ] Templates in `templates/`
+- [ ] Documentation in subsystem root
+
+---
+
+## Success Criteria
+
+### Core Functionality
+- [ ] All scripts work independently
+- [ ] Commands orchestrate full workflows
+- [ ] Agents generate quality outputs
+- [ ] Integration with other subsystems works
+
+### Quality Metrics
+- [ ] Determinism score >85%
+- [ ] Task completion >85%
+- [ ] Tool selection accuracy >90%
+- [ ] Context efficiency >70%
+- [ ] Error rate <10%
+
+### Production Readiness
+- [ ] All validations pass
+- [ ] Documentation complete
+- [ ] No known bugs
+- [ ] Integration validated
+- [ ] Performance acceptable
+- [ ] Security verified
+
+---
+
+**Validation Report**: `docs/reports/validation/{{SUBSYSTEM_NAME}}-validation-{{DATE}}.md`
+**Next Steps**: {{NEXT_STEPS}}

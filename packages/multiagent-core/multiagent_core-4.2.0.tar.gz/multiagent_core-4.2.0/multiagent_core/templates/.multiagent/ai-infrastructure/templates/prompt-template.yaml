@@ -1,0 +1,143 @@
+# Prompt Template System
+# Purpose: Manage versioned prompts with A/B testing and analytics
+
+prompts:
+  # System Prompts
+  system:
+    - id: default_assistant
+      version: 1.0
+      active: true
+      content: |
+        You are a helpful AI assistant. You provide accurate, concise,
+        and relevant responses to user queries.
+
+    - id: code_assistant
+      version: 2.1
+      active: true
+      content: |
+        You are an expert software engineer. You write clean, efficient,
+        well-documented code following best practices.
+
+  # User Prompt Templates
+  user_templates:
+    - id: summarize_document
+      version: 1.0
+      active: true
+      template: |
+        Please summarize the following document in {length} sentences,
+        focusing on {focus_areas}:
+
+        {document}
+
+      variables:
+        - name: length
+          type: integer
+          default: 3
+        - name: focus_areas
+          type: string
+          default: "key points"
+        - name: document
+          type: string
+          required: true
+
+    - id: code_review
+      version: 1.5
+      active: true
+      template: |
+        Review the following {language} code for:
+        - Security vulnerabilities
+        - Performance issues
+        - Best practices
+        - Code quality
+
+        ```{language}
+        {code}
+        ```
+
+      variables:
+        - name: language
+          type: string
+          required: true
+        - name: code
+          type: string
+          required: true
+
+    - id: generate_tests
+      version: 1.0
+      active: true
+      template: |
+        Generate {test_type} tests for the following function using {framework}:
+
+        ```{language}
+        {function_code}
+        ```
+
+        Include:
+        - Happy path tests
+        - Edge cases
+        - Error handling
+
+      variables:
+        - name: test_type
+          type: string
+          default: "unit"
+        - name: framework
+          type: string
+          required: true
+        - name: language
+          type: string
+          required: true
+        - name: function_code
+          type: string
+          required: true
+
+# Prompt Versioning
+versioning:
+  enabled: true
+  strategy: semantic  # semantic, timestamp, incremental
+
+  # A/B Testing
+  ab_testing:
+    enabled: true
+    traffic_split: 50  # Percentage to new version
+    duration_hours: 24
+    metrics:
+      - response_quality
+      - user_satisfaction
+      - token_efficiency
+
+# Prompt Analytics
+analytics:
+  track_usage: true
+  track_performance: true
+  track_costs: true
+
+  metrics:
+    - prompt_id
+    - version
+    - tokens_used
+    - cost
+    - latency_ms
+    - user_rating
+    - conversion_rate
+
+# Prompt Optimization
+optimization:
+  # Automatic token reduction
+  auto_optimize: true
+  target_token_reduction: 20  # Percentage
+
+  # Caching
+  cache_prompts: true
+  cache_ttl_seconds: 3600
+
+# Safety & Moderation
+safety:
+  content_filtering: true
+  pii_detection: true
+  toxicity_check: true
+
+  blocked_patterns:
+    - "(?i)ignore.*previous.*instructions"
+    - "(?i)disregard.*safety"
+    - "(?i)bypass.*filter"

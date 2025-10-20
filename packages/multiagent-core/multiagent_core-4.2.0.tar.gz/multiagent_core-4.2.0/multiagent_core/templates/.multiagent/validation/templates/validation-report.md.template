@@ -1,0 +1,232 @@
+# Validation Report: {{SUBSYSTEM_NAME}}
+
+**Validation Date**: {{DATE}}
+**Validation Type**: {{TYPE}}
+**Status**: {{STATUS}}
+**Overall Score**: {{SCORE}}/100
+
+---
+
+## Executive Summary
+
+{{SUMMARY}}
+
+**Key Findings**:
+{{KEY_FINDINGS}}
+
+**Recommendation**: {{RECOMMENDATION}}
+
+---
+
+## Validation Metrics
+
+### Context Engineering Quality
+
+| Metric | Target | Actual | Status |
+|--------|--------|--------|--------|
+| Prompt Structure Score | >80% | {{PROMPT_SCORE}}% | {{PROMPT_STATUS}} |
+| Context Efficiency | >70% | {{CONTEXT_EFF}}% | {{CONTEXT_STATUS}} |
+| Token Usage (optimal) | <10K | {{TOKEN_USAGE}}K | {{TOKEN_STATUS}} |
+| Stale Content | <20% | {{STALE_CONTENT}}% | {{STALE_STATUS}} |
+
+### Agent Performance
+
+| Metric | Target | Actual | Status |
+|--------|--------|--------|--------|
+| Task Completion | >85% | {{TASK_COMPLETION}}% | {{TASK_STATUS}} |
+| Tool Selection Accuracy | >90% | {{TOOL_ACCURACY}}% | {{TOOL_STATUS}} |
+| Determinism Score | >85% | {{DETERMINISM}}% | {{DETERMINISM_STATUS}} |
+| Error Rate | <10% | {{ERROR_RATE}}% | {{ERROR_STATUS}} |
+
+### Command Quality
+
+| Metric | Target | Actual | Status |
+|--------|--------|--------|--------|
+| Command Length | <80 lines | {{CMD_LENGTH}} lines | {{CMD_LENGTH_STATUS}} |
+| Orchestration Purity | 100% | {{ORCHESTRATION}}% | {{ORCHESTRATION_STATUS}} |
+| Error Handling | Complete | {{ERROR_HANDLING}} | {{ERROR_HANDLING_STATUS}} |
+
+### Template Quality
+
+| Metric | Target | Actual | Status |
+|--------|--------|--------|--------|
+| Placeholder Filling | 100% | {{PLACEHOLDER_FILL}}% | {{PLACEHOLDER_STATUS}} |
+| Variable Documentation | 100% | {{VAR_DOCS}}% | {{VAR_DOCS_STATUS}} |
+| Output Validity | 100% | {{OUTPUT_VALID}}% | {{OUTPUT_STATUS}} |
+
+---
+
+## Detailed Findings
+
+### Agent Prompt Validation
+
+**Script**: `validate-agent-prompt.sh`
+**Result**: {{AGENT_PROMPT_RESULT}}
+
+{{AGENT_PROMPT_DETAILS}}
+
+### Command Structure Validation
+
+**Script**: `validate-command-structure.sh`
+**Result**: {{COMMAND_STRUCTURE_RESULT}}
+
+{{COMMAND_STRUCTURE_DETAILS}}
+
+### Template Variable Validation
+
+**Script**: `validate-template-vars.sh`
+**Result**: {{TEMPLATE_VAR_RESULT}}
+
+{{TEMPLATE_VAR_DETAILS}}
+
+### Determinism Testing
+
+**Script**: `run-determinism-test.sh`
+**Runs**: {{NUM_RUNS}}
+**Result**: {{DETERMINISM_RESULT}}
+
+{{DETERMINISM_DETAILS}}
+
+**Output Comparison**:
+```
+Run 1 vs Run 2: {{SIMILARITY_1_2}}% similarity
+Run 2 vs Run 3: {{SIMILARITY_2_3}}% similarity
+Run 3 vs Run 4: {{SIMILARITY_3_4}}% similarity
+Run 4 vs Run 5: {{SIMILARITY_4_5}}% similarity
+
+Average Similarity: {{AVG_SIMILARITY}}%
+Variation: {{VARIATION}}%
+```
+
+### Context Rot Detection
+
+**Script**: `detect-context-rot.sh`
+**Result**: {{CONTEXT_ROT_RESULT}}
+
+**Performance by Context Length**:
+| Context Size | Performance | Degradation |
+|--------------|-------------|-------------|
+| 1K tokens | {{PERF_1K}}% | Baseline |
+| 5K tokens | {{PERF_5K}}% | {{DEG_5K}}% |
+| 10K tokens | {{PERF_10K}}% | {{DEG_10K}}% |
+| 25K tokens | {{PERF_25K}}% | {{DEG_25K}}% |
+| 50K tokens | {{PERF_50K}}% | {{DEG_50K}}% |
+
+**Context Rot Coefficient**: {{ROT_COEFFICIENT}}% per 10K tokens
+
+### Workflow Validation
+
+**Workflows Tested**: {{WORKFLOW_COUNT}}
+
+{{WORKFLOW_RESULTS}}
+
+---
+
+## Integration Testing
+
+### Cross-Subsystem Integration
+
+{{INTEGRATION_RESULTS}}
+
+---
+
+## Baseline Comparison
+
+**Baseline**: `baselines/{{SUBSYSTEM_NAME}}/{{BASELINE_DATE}}/`
+**Comparison Method**: {{COMPARISON_METHOD}}
+
+**Changes Detected**:
+{{BASELINE_CHANGES}}
+
+**Regression Analysis**:
+{{REGRESSION_ANALYSIS}}
+
+---
+
+## Context Engineering Analysis
+
+### From Anthropic Principles
+
+**1. Tools > Prompts**
+{{TOOL_QUALITY_ANALYSIS}}
+
+**2. Context Efficiency**
+{{CONTEXT_EFFICIENCY_ANALYSIS}}
+
+**3. What Agents Omit**
+{{AGENT_OMISSION_ANALYSIS}}
+
+**4. Evaluation-Driven Improvements**
+{{EVALUATION_RECOMMENDATIONS}}
+
+---
+
+## Issues Found
+
+### Critical (Blocking)
+{{CRITICAL_ISSUES}}
+
+### High Priority
+{{HIGH_PRIORITY_ISSUES}}
+
+### Medium Priority
+{{MEDIUM_PRIORITY_ISSUES}}
+
+### Low Priority
+{{LOW_PRIORITY_ISSUES}}
+
+---
+
+## Recommendations
+
+### Immediate Actions
+{{IMMEDIATE_ACTIONS}}
+
+### Short-Term Improvements
+{{SHORT_TERM_IMPROVEMENTS}}
+
+### Long-Term Optimizations
+{{LONG_TERM_OPTIMIZATIONS}}
+
+---
+
+## Test Execution Details
+
+**Validation Scripts Run**:
+{{SCRIPTS_EXECUTED}}
+
+**Agents Tested**:
+{{AGENTS_TESTED}}
+
+**Commands Validated**:
+{{COMMANDS_VALIDATED}}
+
+**Templates Checked**:
+{{TEMPLATES_CHECKED}}
+
+**Total Execution Time**: {{EXECUTION_TIME}}
+
+---
+
+## Attachments
+
+**Detailed Logs**: `{{LOG_DIRECTORY}}`
+**Raw Outputs**: `{{OUTPUT_DIRECTORY}}`
+**Baseline Files**: `{{BASELINE_DIRECTORY}}`
+**Checklist**: `checklists/{{SUBSYSTEM_NAME}}-subsystem.md`
+
+---
+
+## Sign-Off
+
+**Validated By**: {{VALIDATOR}}
+**Validation Tool**: `/validation:validate`
+**Framework Version**: {{FRAMEWORK_VERSION}}
+**Report Generated**: {{TIMESTAMP}}
+
+---
+
+**Next Steps**:
+{{NEXT_STEPS}}
+
+**Status**: {{FINAL_STATUS}}

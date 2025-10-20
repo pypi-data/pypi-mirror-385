@@ -1,0 +1,47 @@
+# Development Notes
+
+Last updated: {{TIMESTAMP}}
+
+## Open Notes (0)
+
+_No open notes yet. Create your first note with `/note "description"`_
+
+---
+
+## Closed Notes (0)
+
+_No closed notes yet._
+
+---
+
+## Note Types
+
+- **BUG** - Something broken that needs fixing
+- **TODO** - Task to complete
+- **OBSERVATION** - Something noticed (performance, pattern, etc.)
+- **QUESTION** - Something that needs clarification
+- **IDEA** - Feature or improvement to consider
+- **REFACTOR** - Code quality improvement needed
+- **NOTE** - General note
+
+## Priority Levels
+
+- **P1** - Critical/urgent (blocks work, production issue)
+- **P2** - Important (should fix soon)
+- **P3** - Nice to have (low priority)
+
+## Commands
+
+```bash
+# Create note
+/note "description" [--type=TYPE] [--priority=PRIORITY] [--file=PATH]
+
+# List notes
+/note:list [--type=TYPE] [--priority=PRIORITY] [--status=STATUS] [--file=PATH]
+
+# Close note
+/note:close <ID> [--reason="REASON"]
+
+# Import from GitHub (future)
+/note:import <ISSUE_NUMBER>
+```
