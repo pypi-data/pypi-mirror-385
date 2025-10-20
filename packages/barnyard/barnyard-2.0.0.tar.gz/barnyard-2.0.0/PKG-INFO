@@ -1,0 +1,299 @@
+Metadata-Version: 2.4
+Name: barnyard
+Version: 2.0.0
+Summary: Temporary Delete System for Safe Batch Automation and Lead Distribution
+Author: Henry
+Author-email: osas2henry@gmail.com
+License: MIT
+Keywords: automation batch processing deletion safety recovery leads
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: keywords
+Dynamic: license
+Dynamic: license-file
+Dynamic: requires-python
+Dynamic: summary
+
+# 🐴 BarnYard: Temporary Delete System for Batch Automation and Distribution
+
+BarnYard is a Python utility that safely distributes leads or records across multiple concurrent automation processes without risking data loss or duplication.
+
+It solves a real-world challenge. How do you "delete" a record from a shared source such as SQL only after a task is truly complete, even when multiple processes are pulling from the same source?
+
+---
+
+## 🧠 Why BarnYard
+
+In a typical setup, when you pull a lead or task from a shared source like an SQL table, the instinct is to delete it immediately to prevent other processes from touching the same item.
+
+### ❌ The Problem
+
+If you delete a lead right after pulling it, but your process:
+
+* Crashes unexpectedly
+* Gets force stopped
+* Or fails midway through the task
+
+Then that data is gone forever, even though the task was never completed.
+
+This becomes a critical issue when scaling automation across multiple tabs, terminals, or machines. Deleting too early causes data loss. Not deleting causes duplicate processing.
+
+---
+
+### 💡 The BarnYard Solution
+
+BarnYard introduces a smarter pattern known as the temporary delete.
+
+Instead of deleting immediately, BarnYard moves the record into a temporary holding area called a barn. Think of this like a soft delete or a checkout system.
+
+Based on what happens next:
+
+* ✅ If the task completes successfully  
+  The lead is shed and permanently removed.
+
+* 💥 If the task fails or is force stopped  
+  The lead is not lost. BarnYard reinstates it later.
+
+* 🧺 If multiple tabs or scripts are running  
+  Each gets its own unique batch to avoid overlap or conflict.
+
+---
+
+### ✅ The Outcome
+
+With BarnYard, you get:
+
+* Safer automation. No accidental data loss.
+* Easier scaling. Multiple processes can run in parallel.
+* Better recovery. Failed or interrupted tasks are recoverable.
+* Cleaner logic. Delete only when the task is truly complete.
+* Lower costs. No server needed. BarnYard is entirely local and does not rely on third-party systems.
+
+---
+
+### 💸 Philosophy: High Scale. Low Cost.
+
+BarnYard is built with a simple idea. Not every client has the budget for complex infrastructure. You should not need Redis, message queues, or cloud hosting to scale automation safely. BarnYard runs entirely on local resources with zero dependencies, yet gives you parallel-safe, failure-tolerant task distribution that would normally require expensive systems. This tool is part of a larger philosophy: build automation that is affordable, scalable, and tough enough to handle real-world failure.
+
+---
+
+## ℹ️ What is a Lead?
+
+A **lead** in BarnYard is a single unit of work. It is typically represented as a list of values, for example:
+
+```python
+["John Doe", "Grade A", 21]
+```
+
+Each list is treated as one lead or record. BarnYard uses indexing and internal keys to manage these leads safely. Your `add` function should return a list of such records.
+
+---
+
+## Main Functions and Usage
+
+| Function    | Purpose                                                        |
+| ----------- | -------------------------------------------------------------- |
+| `next()`    | Main entry point. Orchestrates fetch, assign, and reinstate.   |
+| `shed()`    | Removes completed leads from barn and reinstate lists.         |
+| `info()`    | Displays all active and reinstated leads in a formatted view.  |
+| `listdir()` | Lists all barn names.                                          |
+| `remove()`  | Deletes a barn and its reinstate records.                      |
+| `find()`    | Searches records by key or value.                              |
+
+---
+
+### 1. `next(barn, add, *, batch, duration, expire, calls=1, display=True)`
+
+Fetches leads, assigns them to a barn, and reinstates expired leads.
+
+**Parameters:**
+
+* `barn` (str): Name of the barn.
+* `add` (callable): A function that returns a list of leads. Each lead must be a list of values. For example:
+
+  ```python
+  def fetch_leads():
+      return [
+          ["Alice", "Math", 20],
+          ["Bob", "Science", 22]
+      ]
+  ```
+
+  Then pass `fetch_leads` as the `add` argument.
+
+* `batch` (int): Number of leads to process per batch.
+* `duration` (int or float): Time interval to control processing pulse in seconds.
+* `expire` (int or float): Time after which uncompleted leads are reinstated. You set this based on how long your task should take. If a lead remains unprocessed beyond this time, it is automatically returned to the barn so it can be picked up again.
+* `calls` (int): Number of fetch cycles to perform. Default is 1. You can set this to a higher number if you want the `add` function to be called multiple times. This is helpful when you want to fetch data in safer, smaller chunks.
+
+  > For example, instead of pulling 100 leads in one go, which may be lost if the script crashes, you can use a batch size of 10 and set `calls=10`. This improves safety across multiple runs.
+
+* `display` (bool): If True, shows logs. Default is True.
+
+**Example:**
+
+```python
+BarnYard.next(
+    barn="my_barn",
+    add=fetch_leads,
+    batch=5,
+    duration=10,
+    expire=20,
+    calls=3,
+    display=True
+)
+```
+
+---
+
+### 2. `shed(barn, keys, display=True)`
+
+Permanently removes completed leads from both barn and reinstate lists.
+
+**Parameters:**
+
+* `barn` (str): Name of the barn.
+* `keys` (str or list): One or more keys. Pass a single key directly or multiple in a list.
+* `display` (bool): If True, prints logs. Default is True.
+
+**Example:**
+
+```python
+BarnYard.shed("my_barn", "key123", display=True)
+BarnYard.shed("my_barn", ["key1", "key2"], display=True)
+```
+
+---
+
+### 3. `info(barn, display=True)`
+
+Displays all current leads in both barn and reinstate records.
+
+**Parameters:**
+
+* `barn` (str): Name of the barn.
+* `display` (bool): If True, prints formatted leads. Default is True.
+
+**Returns:** List of `[lead, key]` pairs.
+
+**Example:**
+
+```python
+leads = BarnYard.info("my_barn", display=True)
+```
+
+---
+
+### 4. `listdir(display=True)`
+
+Lists all barns that currently exist. Reinstate barns are excluded.
+
+**Parameters:**
+
+* `display` (bool): If True, prints barn names. Default is True.
+
+**Returns:** List of barn names as strings.
+
+**Example:**
+
+```python
+BarnYard.listdir(display=True)
+```
+
+---
+
+### 5. `remove(barn, display=True)`
+
+Deletes a barn and its corresponding reinstate barn if it exists.
+
+**Parameters:**
+
+* `barn` (str): Name of the barn. Do not pass a reinstate barn name directly.
+* `display` (bool): If True, prints deletion logs. Default is True.
+
+**Example:**
+
+```python
+BarnYard.remove("my_barn", display=True)
+```
+
+---
+
+### 6. `find(barn, keys=None, values=None, display=True)`
+
+Searches for records in a barn by their keys or values.
+
+**Parameters:**
+
+* `barn` (str): Name of the barn.
+* `keys` (str, tuple, list, or set): One or more keys to search. Use a single key or a list of multiple keys.
+* `values` (list or list of lists): One or more lead value sets to search. Use a single list or a list of multiple lists.
+* `display` (bool): If True, shows results nicely. Default is True.
+
+**Returns:**
+
+* If using `keys`: Returns matching lead items.
+* If using `values`: Returns matching keys.
+
+**Examples:**
+
+```python
+# Find by single key
+BarnYard.find("my_barn", keys="abc123", display=True)
+
+# Find by multiple keys
+BarnYard.find("my_barn", keys=["key1", "key2"], display=True)
+
+# Find by single value
+BarnYard.find("my_barn", values=["Alice", "Math", 20], display=True)
+
+# Find by multiple values
+BarnYard.find("my_barn", values=[["Alice", "Math", 20], ["Bob", "Science", 22]], display=True)
+```
+
+---
+
+## Help
+
+Run the `help()` function to quickly see concise usage instructions and parameter explanations:
+
+```python
+BarnYard.help()
+```
+
+---
+
+## Installation
+
+```bash
+pip install barnyard
+```
+
+---
+
+## Use Case
+
+BarnYard is perfect when:
+
+* You have multiple bots, tabs, or scripts pulling from a single shared SQL source.
+* You need to prevent duplicate processing.
+* You want to safely delay deletion until a task is confirmed complete.
+* You want the ability to recover unfinished tasks after crashes.
+* You want to avoid server costs by keeping everything local and lightweight.
+
+---
+
+## License
+
+MIT License
