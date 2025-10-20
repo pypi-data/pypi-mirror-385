@@ -1,0 +1,48 @@
+[project]
+name = "thesisquality"
+version = "0.0.3"
+description = "Skripsi quality scorer (ID/EN), >=20 metrik per bab, rekomendasi, chart, estimasi publikasi (heuristik)."
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [{name="Your Name", email="you@example.com"}]
+license = { text = "MIT OR Apache-2.0 OR BSD-3-Clause" }
+keywords = ["skripsi","thesis","quality","assessment","ID","EN","heuristic"]
+dependencies = ["python-docx","pypdf2","matplotlib"]
+
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering :: Information Analysis",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "License :: DFSG approved",
+  "License :: OSI Approved",
+  "License :: OSI Approved :: MIT License",
+  "License :: OSI Approved :: Apache Software License",
+  "License :: OSI Approved :: BSD License"
+]
+
+[project.urls]
+Homepage = "https://example.com/thesisquality"
+Source = "https://example.com/thesisquality/repo"
+Issues = "https://example.com/thesisquality/issues"
+
+[project.scripts]
+thesisquality = "thesisquality.cli:main"
+
+[tool.setuptools]
+license-files = ["LICENSES/*"]
+
+[build-system]
+requires = ["setuptools>=68","wheel"]
+build-backend = "setuptools.build_meta"
+
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["thesisquality"]
+exclude = ["LICENSES*","dist*","build*","tests*"]

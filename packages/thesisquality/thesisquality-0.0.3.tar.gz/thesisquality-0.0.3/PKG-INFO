@@ -1,0 +1,43 @@
+Metadata-Version: 2.4
+Name: thesisquality
+Version: 0.0.3
+Summary: Skripsi quality scorer (ID/EN), >=20 metrik per bab, rekomendasi, chart, estimasi publikasi (heuristik).
+Author-email: Your Name <you@example.com>
+License: MIT OR Apache-2.0 OR BSD-3-Clause
+Project-URL: Homepage, https://example.com/thesisquality
+Project-URL: Source, https://example.com/thesisquality/repo
+Project-URL: Issues, https://example.com/thesisquality/issues
+Keywords: skripsi,thesis,quality,assessment,ID,EN,heuristic
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Science/Research
+Classifier: Topic :: Scientific/Engineering :: Information Analysis
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: License :: DFSG approved
+Classifier: License :: OSI Approved
+Classifier: License :: OSI Approved :: MIT License
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: License :: OSI Approved :: BSD License
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSES/LICENSE-Apache-2.0.txt
+License-File: LICENSES/LICENSE-BSD-3-Clause.txt
+License-File: LICENSES/LICENSE-MIT.txt
+Requires-Dist: python-docx
+Requires-Dist: pypdf2
+Requires-Dist: matplotlib
+Dynamic: license-file
+
+# thesisquality
+MVP penilaian skripsi (ID/EN) dari file .docx/.pdf/.txt: >=20 metrik, rekomendasi, estimasi target publikasi (heuristik), dan 2 grafik.
+
+## Pakai
+pip install thesisquality
+thesisquality path/ke/skripsi.pdf
+
+## Lisensi
+Dual/triple-licensing: MIT OR Apache-2.0 OR BSD-3-Clause (OSI Approved; DFSG approved).
