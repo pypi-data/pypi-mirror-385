@@ -1,0 +1,45 @@
+{
+  "nodes": {
+    "Input_0": {
+      "name": "Input_0",
+      "type": "Input",
+      "init_args": [
+        { "name": "input_shape", "default": [1, 3, 64, 64] }
+      ]
+    },
+    "Conv2d_0": {
+      "name": "Conv2d_0",
+      "type": "Conv2d",
+      "in_channels": 3,
+      "out_channels": 8,
+      "kernel_size": 3,
+      "stride": 1,
+      "padding": 1
+    },
+    "ReLU_0": {
+      "name": "ReLU_0",
+      "type": "ReLU"
+    },
+    "Flatten_0": {
+      "name": "Flatten_0",
+      "type": "Flatten"
+    },
+    "Linear_0": {
+      "name": "Linear_0",
+      "type": "Linear",
+      "in_features": 8192,
+      "out_features": 10
+    },
+    "Output_0": {
+      "name": "Output_0",
+      "type": "Output"
+    }
+  },
+  "edges": [
+    ["Input_0", "Conv2d_0"],
+    ["Conv2d_0", "ReLU_0"],
+    ["ReLU_0", "Flatten_0"],
+    ["Flatten_0", "Linear_0"],
+    ["Linear_0", "Output_0"]
+  ]
+}

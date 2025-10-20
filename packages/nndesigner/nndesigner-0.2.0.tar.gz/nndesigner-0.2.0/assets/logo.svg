@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- nndesigner logo: Node network core, blue-purple gradient -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="grad" x1="0" x2="1">
+      <stop offset="0%" stop-color="#1976d2"/>
+      <stop offset="100%" stop-color="#7C4DFF"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2.2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- rounded background -->
+  <rect x="0" y="0" width="128" height="128" rx="18" ry="18" fill="#0f1720" />
+
+  <!-- central neuron ring (centered vertically) -->
+  <circle cx="64" cy="64" r="18" fill="url(#grad)" filter="url(#glow)" />
+  <circle cx="64" cy="64" r="10" fill="#0f1720" />
+
+  <!-- radial connectors (adjusted for centered layout) -->
+  <g stroke="url(#grad)" stroke-width="3" stroke-linecap="round" fill="none">
+    <path d="M64 46 L40 34" opacity="0.9" />
+    <path d="M64 46 L88 34" opacity="0.9" />
+    <path d="M46 74 L28 96" opacity="0.9" />
+    <path d="M82 74 L100 96" opacity="0.9" />
+  </g>
+
+  <!-- terminal nodes (moved to align with centered design) -->
+  <circle cx="40" cy="34" r="4" fill="#7C4DFF" />
+  <circle cx="88" cy="34" r="4" fill="#4FC3F7" />
+  <circle cx="28" cy="96" r="4" fill="#4FC3F7" />
+  <circle cx="100" cy="96" r="4" fill="#7C4DFF" />
+
+  <!-- subtle grid nodes for depth -->
+  <g fill="#ffffff" opacity="0.06">
+    <circle cx="24" cy="24" r="2" />
+    <circle cx="104" cy="24" r="2" />
+    <circle cx="20" cy="104" r="2" />
+    <circle cx="108" cy="104" r="2" />
+  </g>
+
+</svg>

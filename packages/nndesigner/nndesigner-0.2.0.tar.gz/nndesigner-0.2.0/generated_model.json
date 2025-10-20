@@ -1,0 +1,104 @@
+{
+  "nodes": {
+    "0x2490df0db80": {
+      "name": "InputLayer_1",
+      "type": "InputLayer",
+      "init_args": [
+        {
+          "name": "B",
+          "type": "int",
+          "default": "2"
+        },
+        {
+          "name": "C",
+          "type": "int",
+          "default": "3"
+        },
+        {
+          "name": "H",
+          "type": "int",
+          "default": "640"
+        },
+        {
+          "name": "W",
+          "type": "int",
+          "default": "640"
+        }
+      ],
+      "forward_args": [],
+      "forward_return": "Tensor",
+      "forward_return_count": 1
+    },
+    "0x2490df0e5d0": {
+      "name": "Conv2d_0",
+      "type": "Conv2d",
+      "init_args": [
+        {
+          "name": "in_channels",
+          "type": "int",
+          "default": "3"
+        },
+        {
+          "name": "out_channels",
+          "type": "int",
+          "default": "64"
+        },
+        {
+          "name": "kernel_size",
+          "type": "Union",
+          "default": "1"
+        },
+        {
+          "name": "stride",
+          "type": "Union",
+          "default": 1
+        },
+        {
+          "name": "padding",
+          "type": "Union",
+          "default": 0
+        },
+        {
+          "name": "dilation",
+          "type": "Union",
+          "default": 1
+        },
+        {
+          "name": "groups",
+          "type": "int",
+          "default": 1
+        },
+        {
+          "name": "bias",
+          "type": "bool",
+          "default": true
+        },
+        {
+          "name": "padding_mode",
+          "type": "str",
+          "default": "zeros"
+        },
+        {
+          "name": "device",
+          "type": null,
+          "default": null
+        },
+        {
+          "name": "dtype",
+          "type": null,
+          "default": null
+        }
+      ],
+      "forward_args": [
+        {
+          "name": "input",
+          "type": "Tensor",
+          "default": null
+        }
+      ],
+      "forward_return": "Tensor",
+      "forward_return_count": 1
+    }
+  },
+  "edges": {}
+}
