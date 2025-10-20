@@ -1,0 +1,43 @@
+[package]
+name = "helios-fhir"
+version.workspace = true
+edition.workspace = true
+description = "The helios-fhir crate is the comprehensive FHIR (Fast Healthcare Interoperability Resources) specification model implementation that contains strongly-typed Rust representations of all FHIR data types, and resourcess for each supported version of the FHIR specification."
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage = "https://github.com/HeliosSoftware/hfs/tree/main/crates/fhir"
+readme = "README.md"
+exclude = ["tests/data/**"]
+
+[features]
+default = ["R4"]
+R4 = []
+R4B = []
+R5 = []
+R6 = []
+skip-r6-download = []
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true, features = ["raw_value"] }
+clap = { version = "4.0", features = ["derive"] }
+helios-fhir-macro = { path = "../fhir-macro", version = "0.1.25" }
+helios-fhirpath-support = { path = "../fhirpath-support", version = "0.1.25" }
+time = "0.3"
+chrono = { workspace = true }
+# Re-add serde-with-arbitrary-precision, keep macros
+rust_decimal = { version = "1.0", features = ["serde-with-arbitrary-precision", "macros"] }
+
+[dev-dependencies]
+rust_decimal_macros = "1.0"
+
+[build-dependencies]
+reqwest = { version = "0.12", features = ["blocking"] }
+zip = "0.6"
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+

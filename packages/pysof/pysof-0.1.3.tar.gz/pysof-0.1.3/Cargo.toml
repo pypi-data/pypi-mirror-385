@@ -1,0 +1,34 @@
+[package]
+name = "pysof"
+version = "0.1.2"
+edition = "2024"
+description = "Python bindings for helios-sof using PyO3"
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+
+# PyO3 extension metadata
+[lib]
+name = "pysof"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = ">=0.24.1", features = ["extension-module"] }
+helios-sof = { path = "../sof", version = "0.1.25" }
+helios-fhir = { path = "../fhir", version = "0.1.25" }
+serde = { version = "=1.0.219", features = ["derive"] }
+serde_json = { version = "=1.0.143" }
+chrono = { version = "0.4", features = ["serde"] }
+pythonize = "0.24"
+csv = "1.3"
+
+[features]
+default = ["R4"]
+R4 = ["helios-sof/R4", "helios-fhir/R4"]
+R4B = ["helios-sof/R4B", "helios-fhir/R4B"]
+R5 = ["helios-sof/R5", "helios-fhir/R5"]
+R6 = ["helios-sof/R6", "helios-fhir/R6"]
+
+[build-dependencies]
+pyo3-build-config = "0.24"
