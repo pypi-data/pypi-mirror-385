@@ -1,0 +1,77 @@
+Metadata-Version: 2.1
+Name: dftracer-utils
+Version: 0.0.2
+Summary: Python binding for dftracer-utils
+Author-Email: Ray Andrew Sinurat <raydreww@gmail.com>, "Hariharan Devarajan (Hari)" <hariharandev1@llnl.gov>
+License: MIT
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: C++
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.8
+Provides-Extra: dev
+Requires-Dist: pytest>=6.0; extra == "dev"
+Requires-Dist: ruff; extra == "dev"
+Requires-Dist: dask[bag,dataframe,distributed]<2025,>=2024.1.0; python_version >= "3.9" and extra == "dev"
+Requires-Dist: dask_jobqueue~=0.8.0; python_version >= "3.9" and extra == "dev"
+Requires-Dist: dask_jobqueue~=0.8.0; extra == "dev"
+Description-Content-Type: text/markdown
+
+# dftracer-utils
+
+A collection of utilities for DFTracer
+
+[![Documentation Status](https://readthedocs.org/projects/dftracer-utils/badge/?version=latest)](https://dftracer.readthedocs.io/projects/utils/)
+
+## Documentation
+
+Full documentation is available at [Read the Docs](https://dftracer.readthedocs.io/projects/utils/).
+
+To build documentation locally:
+
+```bash
+pip install .
+cd docs
+pip install -r requirements.txt
+make html
+```
+
+See [docs/README.md](docs/README.md) for detailed documentation building instructions.
+
+## Building
+
+### Prerequisites
+
+- CMake 3.5 or higher
+- C++17 compatible compiler
+- zlib development library
+- SQLite3 development library
+- pkg-config
+
+### Build
+
+```bash
+mkdir build && cd build
+cmake ..
+make
+```
+
+## Installation
+
+```bash
+mkdir build && cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=<LOCATION>
+make
+make install
+```
+
+## Developers Guide
+
+Please see [Developers Guide](DEVELOPERS_GUIDE.md) for more information how to test, run coverage, etc.
