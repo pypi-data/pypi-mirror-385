@@ -1,0 +1,49 @@
+Metadata-Version: 2.4
+Name: recipe_lib
+Version: 0.2.0
+Summary: A Python library to manage and explore recipes
+Home-page: https://github.com/eldar/recipe_lib
+Author: Eldar Eliyev
+Author-email: eldar@example.com
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: license-file
+Dynamic: requires-python
+Dynamic: summary
+
+# Recipe Lib
+
+A Python library to manage, explore, and plan recipes.
+
+## Installation
+
+\\\ash
+pip install recipe_lib
+\\\
+
+## Usage
+
+\\\python
+from recipe_lib import RecipeManager
+
+manager = RecipeManager()
+manager.add_recipe(
+    name='Pasta',
+    ingredients=['pasta', 'tomato', 'cheese'],
+    steps=['Boil pasta', 'Add tomato sauce', 'Sprinkle cheese']
+)
+recipe = manager.get_recipe('Pasta')
+print(recipe)
+\\\
+"@
+
