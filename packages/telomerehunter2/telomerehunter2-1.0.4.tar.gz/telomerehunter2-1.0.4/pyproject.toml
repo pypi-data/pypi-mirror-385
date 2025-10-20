@@ -1,0 +1,92 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel", "build>=0.10.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "telomerehunter2"
+version = "1.0.4"
+description = "An advanced version of TelomereHunter for Python 3, with new features"
+authors = [
+  {name = "FP", email = "f.popp@dkfz.de"},
+  {name = "LF", email = "l.feuerbach@dkfz.de"},
+  {name = "LS"}
+]
+readme = "README.md"
+license = {file = "LICENSE.txt", source = "GPL-3.0-or-later"}
+keywords = ["telomere content", "read", "NGS", "WGS", "tumor control"]
+requires-python = ">=3.8"
+dependencies = [
+    "pysam>=0.20.0",
+    "pandas>=1.4.0",
+    "numpy>=1.22.0",
+    "PyPDF2>=2.0.0",
+    "plotly>=5.0.0",
+    "kaleido>=0.2.1"
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14"
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.1.6",
+    "tox>=4.0.0"
+]
+
+[project.urls]
+homepage = "https://www.dkfz.de/en/applied-bioinformatics/telomerehunter/telomerehunter.html"
+repository = "https://github.com/ferdinand-popp/telomerehunter2"
+documentation = "https://github.com/ferdinand-popp/telomerehunter2#readme"
+
+[project.scripts]
+telomerehunter2 = "telomerehunter2.telomerehunter2_main:main"
+telomerehunter2-sc = "telomerehunter2.telomerehunter2_sc:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+packages = ["telomerehunter2"]
+include-package-data = true
+
+[tool.setuptools.package-data]
+telomerehunter2 = ["README.md", "cytoband_files/*"]
+
+[tool.unittest]
+testpaths = ["tests"]
+
+[tool.tox]
+envlist = ["py38", "py39", "py310", "py311", "py312", "py313", "ruff"]
+
+[tool.tox.testenv]
+description = "Run unittests for telomerehunter2"
+deps = [
+    "pysam>=0.20.0",
+    "pandas>=1.4.0",
+    "numpy>=1.22.0",
+    "PyPDF2>=2.0.0",
+    "plotly>=5.0.0",
+    "kaleido>=0.2.1"
+]
+usedevelop = true
+
+[tool.tox.env_run_base]
+commands = [["python", "-m", "unittest", "discover", "-s", "tests", "-v"]]
+
+
+[testenv.ruff]
+description = "Run linting, formatting, and import sorting checks using ruff"
+deps = ["ruff>=0.1.6"]
+commands = [
+    "ruff check src",
+    "ruff format src --check",
+    "ruff check src --select I"
+]
