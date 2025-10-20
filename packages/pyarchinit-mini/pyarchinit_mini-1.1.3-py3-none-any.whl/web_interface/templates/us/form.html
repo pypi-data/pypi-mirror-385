@@ -1,0 +1,442 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <h2>{{ title }}</h2>
+
+    <form method="POST" class="mt-4">
+        {{ form.hidden_tag() }}
+
+        {% if form.errors %}
+        <div class="alert alert-danger">
+            <strong>Errori nel form:</strong>
+            <ul>
+            {% for field_name, errors in form.errors.items() %}
+                {% for error in errors %}
+                <li>{{ field_name }}: {{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <!-- Bootstrap Tabs -->
+        <ul class="nav nav-tabs" id="usFormTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic" type="button" role="tab" aria-controls="basic" aria-selected="true">
+                    <i class="fas fa-info-circle"></i> Informazioni Base
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab" aria-controls="description" aria-selected="false">
+                    <i class="fas fa-align-left"></i> Descrizioni
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="physical-tab" data-bs-toggle="tab" data-bs-target="#physical" type="button" role="tab" aria-controls="physical" aria-selected="false">
+                    <i class="fas fa-ruler"></i> Caratteristiche Fisiche
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="chronology-tab" data-bs-toggle="tab" data-bs-target="#chronology" type="button" role="tab" aria-controls="chronology" aria-selected="false">
+                    <i class="fas fa-calendar-alt"></i> Cronologia
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="relationships-tab" data-bs-toggle="tab" data-bs-target="#relationships" type="button" role="tab" aria-controls="relationships" aria-selected="false">
+                    <i class="fas fa-project-diagram"></i> Relazioni Stratigrafiche
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="documentation-tab" data-bs-toggle="tab" data-bs-target="#documentation" type="button" role="tab" aria-controls="documentation" aria-selected="false">
+                    <i class="fas fa-file-alt"></i> Documentazione
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content border border-top-0 p-4" id="usFormTabContent">
+            <!-- TAB 1: Informazioni Base -->
+            <div class="tab-pane fade show active" id="basic" role="tabpanel" aria-labelledby="basic-tab">
+                <!-- Identificazione -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Identificazione</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Sito *</label>
+                                {{ form.sito(class="form-select", required=True) }}
+                                {% if form.sito.errors %}
+                                    <div class="text-danger">{{ form.sito.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Area</label>
+                                {{ form.area(class="form-control") }}
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label fw-bold">Numero US *</label>
+                                {{ form.us(class="form-control", required=True) }}
+                                {% if form.us.errors %}
+                                    <div class="text-danger">{{ form.us.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Tipo Unità</label>
+                                {{ form.unita_tipo(class="form-select") }}
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Settore</label>
+                                {{ form.settore(class="form-control") }}
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Ambiente</label>
+                                {{ form.ambient(class="form-control") }}
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Saggio</label>
+                                {{ form.saggio(class="form-control") }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">Quadrato/Partizione</label>
+                                {{ form.quad_par(class="form-control") }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dati di Scavo -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Dati di Scavo</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Anno Scavo</label>
+                                {{ form.anno_scavo(class="form-control", placeholder="AAAA") }}
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Scavato</label>
+                                {{ form.scavato(class="form-select") }}
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Metodo di Scavo</label>
+                                {{ form.metodo_di_scavo(class="form-select") }}
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Data Schedatura</label>
+                                {{ form.data_schedatura(class="form-control", placeholder="AAAA-MM-GG") }}
+                                <small class="text-muted">Formato: AAAA-MM-GG</small>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Schedatore</label>
+                                {{ form.schedatore(class="form-control") }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Direttore US</label>
+                                {{ form.direttore_us(class="form-control") }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Responsabile US</label>
+                                {{ form.responsabile_us(class="form-control") }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">Attività</label>
+                                {{ form.attivita(class="form-control") }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Catalogazione ICCD -->
+                <div class="card mb-4">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0">Catalogazione ICCD</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">N. Catalogo Generale</label>
+                                {{ form.n_catalogo_generale(class="form-control") }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">N. Catalogo Interno</label>
+                                {{ form.n_catalogo_interno(class="form-control") }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">N. Catalogo Internazionale</label>
+                                {{ form.n_catalogo_internazionale(class="form-control") }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">Soprintendenza</label>
+                                {{ form.soprintendenza(class="form-control") }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: Descrizioni -->
+            <div class="tab-pane fade" id="description" role="tabpanel" aria-labelledby="description-tab">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Descrizione Stratigrafica</label>
+                    {{ form.d_stratigrafica(class="form-control", rows=4) }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Descrizione Interpretativa</label>
+                    {{ form.d_interpretativa(class="form-control", rows=4) }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Descrizione Dettagliata</label>
+                    {{ form.descrizione(class="form-control", rows=6) }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Interpretazione</label>
+                    {{ form.interpretazione(class="form-control", rows=6) }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Osservazioni</label>
+                    {{ form.osservazioni(class="form-control", rows=4) }}
+                </div>
+            </div>
+
+            <!-- TAB 3: Caratteristiche Fisiche -->
+            <div class="tab-pane fade" id="physical" role="tabpanel" aria-labelledby="physical-tab">
+                <!-- Caratteristiche -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Caratteristiche</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Formazione</label>
+                                {{ form.formazione(class="form-select") }}
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Stato di Conservazione</label>
+                                {{ form.stato_di_conservazione(class="form-select") }}
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Colore</label>
+                                {{ form.colore(class="form-control") }}
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Consistenza</label>
+                                {{ form.consistenza(class="form-select") }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">Struttura</label>
+                                {{ form.struttura(class="form-control") }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Misure -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Misure</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Quota Relativa</label>
+                                {{ form.quota_relativa(class="form-control", placeholder="es. 10.50") }}
+                                <small class="text-muted">Metri</small>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Quota Assoluta</label>
+                                {{ form.quota_abs(class="form-control", placeholder="es. 120.50") }}
+                                <small class="text-muted">Metri s.l.m.</small>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Lunghezza Max</label>
+                                {{ form.lunghezza_max(class="form-control", placeholder="es. 250") }}
+                                <small class="text-muted">cm</small>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Larghezza Media</label>
+                                {{ form.larghezza_media(class="form-control", placeholder="es. 150") }}
+                                <small class="text-muted">cm</small>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Altezza Max</label>
+                                {{ form.altezza_max(class="form-control", placeholder="es. 50") }}
+                                <small class="text-muted">cm</small>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Altezza Min</label>
+                                {{ form.altezza_min(class="form-control", placeholder="es. 10") }}
+                                <small class="text-muted">cm</small>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Profondità Max</label>
+                                {{ form.profondita_max(class="form-control", placeholder="es. 80") }}
+                                <small class="text-muted">cm</small>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Profondità Min</label>
+                                {{ form.profondita_min(class="form-control", placeholder="es. 20") }}
+                                <small class="text-muted">cm</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 4: Cronologia -->
+            <div class="tab-pane fade" id="chronology" role="tabpanel" aria-labelledby="chronology-tab">
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Periodizzazione</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Periodo Iniziale</label>
+                                {{ form.periodo_iniziale(class="form-select") }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Fase Iniziale</label>
+                                {{ form.fase_iniziale(class="form-control") }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Periodo Finale</label>
+                                {{ form.periodo_finale(class="form-select") }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Fase Finale</label>
+                                {{ form.fase_finale(class="form-control") }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Datazione</label>
+                                {{ form.datazione(class="form-control", placeholder="es. I secolo d.C.") }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Affidabilità</label>
+                                {{ form.affidabilita(class="form-select") }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Suggerimento:</strong> Specificare il periodo iniziale e finale aiuta a contestualizzare cronologicamente l'unità stratigrafica nel sito archeologico.
+                </div>
+            </div>
+
+            <!-- TAB 5: Relazioni Stratigrafiche -->
+            <div class="tab-pane fade" id="relationships" role="tabpanel" aria-labelledby="relationships-tab">
+                <div class="alert alert-info mb-4">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Formato rapporti stratigrafici:</strong><br>
+                    Inserire i rapporti nel formato: <code>copre 1002, taglia 1005, si appoggia a 1010</code><br>
+                    Tipi di rapporto: copre, taglia, si appoggia a, riempie, uguale a, si lega a
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Rapporti Stratigrafici</label>
+                    {{ form.rapporti(class="form-control", rows=8) }}
+                    <small class="form-text text-muted">
+                        Esempio: "Copre 1002, Copre 1003, Taglia 1005, Si appoggia a 1010"
+                    </small>
+                </div>
+
+                <div class="card">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0">Relazioni Harris Matrix</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-2">
+                            <i class="fas fa-lightbulb text-warning"></i>
+                            Dopo aver salvato la US, sarà possibile visualizzare la Harris Matrix completa del sito nella sezione apposita.
+                        </p>
+                        <p class="mb-0">
+                            <i class="fas fa-check-circle text-success"></i>
+                            Il sistema validerà automaticamente i rapporti stratigrafici per individuare eventuali paradossi o cicli.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 6: Documentazione -->
+            <div class="tab-pane fade" id="documentation" role="tabpanel" aria-labelledby="documentation-tab">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Inclusi</label>
+                    {{ form.inclusi(class="form-control", rows=4) }}
+                    <small class="text-muted">Materiali o elementi inclusi nell'US</small>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Campioni</label>
+                    {{ form.campioni(class="form-control", rows=4) }}
+                    <small class="text-muted">Campioni prelevati dall'US</small>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Flottazione</label>
+                        {{ form.flottazione(class="form-select") }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Setacciatura</label>
+                        {{ form.setacciatura(class="form-select") }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Documentazione</label>
+                    {{ form.documentazione(class="form-control", rows=4) }}
+                    <small class="text-muted">Riferimenti a documentazione fotografica, grafica, ecc.</small>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Contenitori/Contenuti</label>
+                    {{ form.cont_per(class="form-control", rows=4) }}
+                    <small class="text-muted">Relazioni di contenimento (es. "Contenitore: US 1000")</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="mt-4 mb-4">
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i class="fas fa-save"></i> Salva US
+            </button>
+            <a href="{{ url_for('us_list') }}" class="btn btn-secondary btn-lg">
+                <i class="fas fa-times"></i> Annulla
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>{{ title }}</h2>
+
+    <form method="POST" class="mt-4">
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+            <label for="sito" class="form-label">Nome Sito *</label>
+            {{ form.sito(class="form-control", required=True) }}
+        </div>
+
+        <div class="mb-3">
+            <label for="nazione" class="form-label">Nazione</label>
+            {{ form.nazione(class="form-control") }}
+        </div>
+
+        <div class="mb-3">
+            <label for="regione" class="form-label">Regione</label>
+            {{ form.regione(class="form-control") }}
+        </div>
+
+        <div class="mb-3">
+            <label for="comune" class="form-label">Comune</label>
+            {{ form.comune(class="form-control") }}
+        </div>
+
+        <div class="mb-3">
+            <label for="provincia" class="form-label">Provincia</label>
+            {{ form.provincia(class="form-control") }}
+        </div>
+
+        <div class="mb-3">
+            <label for="definizione_sito" class="form-label">Definizione Sito</label>
+            {{ form.definizione_sito(class="form-control") }}
+        </div>
+
+        <div class="mb-3">
+            <label for="descrizione" class="form-label">Descrizione</label>
+            {{ form.descrizione(class="form-control", rows=5) }}
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">Salva</button>
+            <a href="{{ url_for('sites_list') }}" class="btn btn-secondary">Annulla</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

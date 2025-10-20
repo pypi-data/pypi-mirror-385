@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}PyArchInit-Mini{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        .navbar-brand {
+            font-weight: bold;
+            color: #2E86AB !important;
+        }
+        .card-header {
+            background-color: #E8F4FD;
+            border-bottom: 2px solid #2E86AB;
+        }
+        .btn-primary {
+            background-color: #2E86AB;
+            border-color: #2E86AB;
+        }
+        .btn-primary:hover {
+            background-color: #1A5A7A;
+            border-color: #1A5A7A;
+        }
+        .table-header {
+            background-color: #E8F4FD;
+        }
+        .sidebar {
+            background-color: #f8f9fa;
+            min-height: calc(100vh - 56px);
+        }
+        .main-content {
+            padding: 20px;
+        }
+        .stats-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .stats-card .card-body {
+            text-align: center;
+        }
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        /* Real-time notification styles */
+        .notification-container {
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 350px;
+        }
+
+        .notification-toast {
+            margin-bottom: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            animation: slideInRight 0.3s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .online-users-badge {
+            background-color: #28a745;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            margin-left: 10px;
+        }
+
+        .online-users-badge i {
+            margin-right: 5px;
+        }
+
+        /* ===== MOBILE & TABLET OPTIMIZATIONS ===== */
+
+        /* Touch-friendly buttons */
+        .btn {
+            min-height: 44px;
+            padding: 10px 16px;
+        }
+
+        .btn-sm {
+            min-height: 38px;
+            padding: 8px 12px;
+        }
+
+        /* Responsive tables - Card view on mobile */
+        @media (max-width: 767px) {
+            /* Hide table on mobile, show card view */
+            .table-responsive table {
+                display: none;
+            }
+
+            /* Mobile card layout */
+            .mobile-card {
+                display: block;
+                background: white;
+                border: 1px solid #dee2e6;
+                border-radius: 8px;
+                padding: 15px;
+                margin-bottom: 15px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+
+            .mobile-card-header {
+                font-weight: bold;
+                font-size: 1.1rem;
+                color: #2E86AB;
+                margin-bottom: 10px;
+                padding-bottom: 10px;
+                border-bottom: 2px solid #E8F4FD;
+            }
+
+            .mobile-card-body {
+                margin-bottom: 10px;
+            }
+
+            .mobile-card-body .label {
+                font-weight: 600;
+                color: #6c757d;
+                font-size: 0.85rem;
+                display: block;
+                margin-bottom: 3px;
+            }
+
+            .mobile-card-body .value {
+                color: #212529;
+                margin-bottom: 8px;
+            }
+
+            .mobile-card-actions {
+                margin-top: 12px;
+                padding-top: 12px;
+                border-top: 1px solid #e9ecef;
+            }
+
+            .mobile-card-actions .btn {
+                width: 100%;
+                margin-bottom: 8px;
+            }
+
+            .mobile-card-actions .btn-group {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .mobile-card-actions .btn-group .btn {
+                border-radius: 0.375rem !important;
+                margin-bottom: 5px;
+            }
+
+            /* Compact header on mobile */
+            .d-flex.justify-content-between {
+                flex-direction: column;
+                align-items: flex-start !important;
+            }
+
+            .d-flex.justify-content-between h2 {
+                font-size: 1.5rem;
+                margin-bottom: 15px;
+            }
+
+            .d-flex.justify-content-between .btn {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            /* Container padding on mobile */
+            .container {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            /* Form improvements */
+            .form-control,
+            .form-select {
+                min-height: 44px;
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+
+            .form-label {
+                font-weight: 600;
+                margin-bottom: 8px;
+            }
+
+            /* Notification container on mobile */
+            .notification-container {
+                top: 10px;
+                right: 10px;
+                left: 10px;
+                max-width: none;
+            }
+
+            /* Stats card mobile */
+            .stats-number {
+                font-size: 2rem;
+            }
+
+            /* Navbar adjustments */
+            .navbar-brand {
+                font-size: 1.1rem;
+            }
+
+            .online-users-badge {
+                font-size: 0.75rem;
+                padding: 4px 8px;
+                margin-left: 0;
+                margin-top: 5px;
+            }
+
+            /* Search and filter forms */
+            .input-group .btn,
+            .input-group .form-control {
+                min-height: 44px;
+            }
+
+            /* Dropdown menus full width on mobile */
+            .dropdown-menu {
+                width: 100%;
+            }
+        }
+
+        /* Tablet optimizations (768px - 991px) */
+        @media (min-width: 768px) and (max-width: 991px) {
+            .container {
+                max-width: 720px;
+            }
+
+            .btn-group-sm .btn {
+                font-size: 0.85rem;
+                padding: 6px 10px;
+            }
+
+            .table {
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Large tablets and small desktops (992px - 1199px) */
+        @media (min-width: 992px) and (max-width: 1199px) {
+            .container {
+                max-width: 960px;
+            }
+        }
+
+        /* Landscape phone optimization */
+        @media (max-width: 767px) and (orientation: landscape) {
+            .navbar-collapse {
+                max-height: 300px;
+                overflow-y: auto;
+            }
+        }
+
+        /* Small phones (< 375px) */
+        @media (max-width: 374px) {
+            .btn {
+                font-size: 0.85rem;
+                padding: 8px 12px;
+            }
+
+            h2 {
+                font-size: 1.3rem;
+            }
+
+            .mobile-card {
+                padding: 12px;
+            }
+        }
+
+        /* Hide table header text on small screens, keep icons */
+        @media (max-width: 991px) {
+            .btn-sm .fa,
+            .btn-sm .fas {
+                margin-right: 0;
+            }
+
+            /* Hide button text on tablets, keep icons */
+            .btn-sm span.d-none.d-lg-inline {
+                display: none !important;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .navbar,
+            .btn,
+            .notification-container {
+                display: none !important;
+            }
+
+            .container {
+                max-width: 100% !important;
+            }
+        }
+    </style>
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <i class="fas fa-monument"></i> PyArchInit-Mini
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('analytics') }}">
+                            <i class="fas fa-chart-line"></i> Analytics
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="sitesDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-map-marked-alt"></i> Siti
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ url_for('sites_list') }}">Elenco Siti</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('create_site') }}">Nuovo Sito</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="usDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-layer-group"></i> US
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ url_for('us_list') }}">Elenco US</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('create_us') }}">Nuova US</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="inventarioDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-archive"></i> Inventario
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ url_for('inventario_list') }}">Elenco Reperti</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('create_inventario') }}">Nuovo Reperto</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('upload_media') }}">
+                            <i class="fas fa-images"></i> Media
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="harrisDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-project-diagram"></i> Harris Matrix
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="harrisDropdown">
+                            <li><a class="dropdown-item" href="{{ url_for('sites_list') }}"><i class="fas fa-eye"></i> Visualizza</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('export_harris_graphml') }}"><i class="fas fa-file-export"></i> Export GraphML (yEd)</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('export_page') }}">
+                            <i class="bi bi-file-earmark-spreadsheet"></i> Export/Import
+                        </a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav">
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <span class="online-users-badge" id="online-users-badge">
+                            <i class="fas fa-users"></i>
+                            <span id="online-users-count">0</span> online
+                        </span>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('admin_database') }}">
+                            <i class="fas fa-database"></i> Database
+                        </a>
+                    </li>
+                    {% if current_user.is_authenticated and current_user.can_manage_users() %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth.users_list') }}">
+                            <i class="fas fa-users"></i> Utenti
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/docs" target="_blank">
+                            <i class="fas fa-book"></i> API Docs
+                        </a>
+                    </li>
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user"></i> {{ current_user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </a></li>
+                        </ul>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth.login') }}">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-2 d-none d-md-block sidebar">
+                <div class="position-sticky pt-3">
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>Navigazione</span>
+                    </h6>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('index') }}">
+                                <i class="fas fa-home"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('sites_list') }}">
+                                <i class="fas fa-map-marked-alt"></i> Siti Archeologici
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('us_list') }}">
+                                <i class="fas fa-layer-group"></i> Unità Stratigrafiche
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('inventario_list') }}">
+                                <i class="fas fa-archive"></i> Inventario Materiali
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>Strumenti</span>
+                    </h6>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('upload_media') }}">
+                                <i class="fas fa-upload"></i> Carica Media
+                            </a>
+                        </li>
+                    </ul>
+
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>Amministrazione</span>
+                    </h6>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('admin_database') }}">
+                                <i class="fas fa-database"></i> Gestione Database
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Page Content -->
+            <main class="col-md-10 ms-sm-auto px-md-4 main-content">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ 'danger' if category == 'error' else 'success' if category == 'success' else 'info' }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    {% if current_user.is_authenticated %}
+    <div class="notification-container" id="notification-container"></div>
+    {% endif %}
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Socket.IO Client -->
+    {% if current_user.is_authenticated %}
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script>
+        // Initialize Socket.IO connection
+        const socket = io();
+
+        // Track online users count
+        let onlineUsersCount = 0;
+
+        // Connection event handlers
+        socket.on('connect', function() {
+            console.log('[WebSocket] Connected to server');
+        });
+
+        socket.on('disconnect', function() {
+            console.log('[WebSocket] Disconnected from server');
+        });
+
+        // Online users events
+        socket.on('online_users', function(data) {
+            onlineUsersCount = data.users.length;
+            document.getElementById('online-users-count').textContent = onlineUsersCount;
+            console.log(`[WebSocket] Online users: ${onlineUsersCount}`);
+        });
+
+        socket.on('user_joined', function(data) {
+            showNotification('info', `${data.username} si è collegato`, 'far fa-user');
+            onlineUsersCount++;
+            document.getElementById('online-users-count').textContent = onlineUsersCount;
+        });
+
+        socket.on('user_left', function(data) {
+            showNotification('info', `${data.username} si è disconnesso`, 'far fa-user');
+            onlineUsersCount--;
+            document.getElementById('online-users-count').textContent = onlineUsersCount;
+        });
+
+        // Site events
+        socket.on('site_created', function(data) {
+            showNotification('success',
+                `${data.user} ha creato il sito "${data.site_name}"`,
+                'fas fa-map-marked-alt');
+        });
+
+        socket.on('site_updated', function(data) {
+            showNotification('info',
+                `${data.user} ha modificato il sito "${data.site_name}"`,
+                'fas fa-map-marked-alt');
+        });
+
+        socket.on('site_deleted', function(data) {
+            showNotification('warning',
+                `${data.user} ha eliminato il sito "${data.site_name}"`,
+                'fas fa-map-marked-alt');
+        });
+
+        // US events
+        socket.on('us_created', function(data) {
+            showNotification('success',
+                `${data.user} ha creato US ${data.us_number} (${data.site})`,
+                'fas fa-layer-group');
+        });
+
+        socket.on('us_updated', function(data) {
+            showNotification('info',
+                `${data.user} ha modificato US ${data.us_number} (${data.site})`,
+                'fas fa-layer-group');
+        });
+
+        socket.on('us_deleted', function(data) {
+            showNotification('warning',
+                `${data.user} ha eliminato US ${data.us_number} (${data.site})`,
+                'fas fa-layer-group');
+        });
+
+        // Inventario events
+        socket.on('inventario_created', function(data) {
+            showNotification('success',
+                `${data.user} ha creato reperto ${data.numero_inventario} (${data.site})`,
+                'fas fa-archive');
+        });
+
+        socket.on('inventario_updated', function(data) {
+            showNotification('info',
+                `${data.user} ha modificato reperto ${data.numero_inventario} (${data.site})`,
+                'fas fa-archive');
+        });
+
+        socket.on('inventario_deleted', function(data) {
+            showNotification('warning',
+                `${data.user} ha eliminato reperto ${data.numero_inventario} (${data.site})`,
+                'fas fa-archive');
+        });
+
+        // Notification display function
+        function showNotification(type, message, icon) {
+            const container = document.getElementById('notification-container');
+
+            // Create toast element
+            const toast = document.createElement('div');
+            toast.className = `toast notification-toast show bg-${type === 'success' ? 'success' : type === 'warning' ? 'warning' : 'info'} text-white`;
+            toast.setAttribute('role', 'alert');
+            toast.innerHTML = `
+                <div class="toast-header bg-${type === 'success' ? 'success' : type === 'warning' ? 'warning' : 'info'} text-white">
+                    <i class="${icon} me-2"></i>
+                    <strong class="me-auto">Notifica</strong>
+                    <small>Ora</small>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+                </div>
+                <div class="toast-body">
+                    ${message}
+                </div>
+            `;
+
+            container.appendChild(toast);
+
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 5000);
+        }
+    </script>
+    {% endif %}
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
