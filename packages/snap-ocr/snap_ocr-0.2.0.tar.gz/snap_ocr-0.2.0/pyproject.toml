@@ -1,0 +1,54 @@
+[project]
+name = "snap-ocr"
+version = "0.2.0"
+description = "Background tray utility that screenshots and OCRs in one hotkey press."
+authors = [{ name = "Brandon Johnson" }]
+requires-python = ">=3.10"
+readme = "README.md"
+license = { file = "LICENSE" }
+keywords = ["screenshot", "ocr", "tray", "productivity", "macos", "windows"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Win32 (MS Windows)",
+    "Environment :: MacOS X",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Utilities",
+]
+dependencies = [
+    "mss==9.0.1",
+    "pynput==1.7.6",
+    "Pillow==10.4.0",
+    "pytesseract==0.3.10",
+    "PyYAML==6.0.1",
+    "platformdirs==4.2.2",
+    "pystray==0.19.5",
+    "plyer==2.1.0",
+    "typing-extensions==4.12.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pyinstaller>=6.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/jbj0005/snap-ocr"
+Repository = "https://github.com/jbj0005/snap-ocr"
+Issues = "https://github.com/jbj0005/snap-ocr/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.package-data]
+snap_ocr = ["assets/icon.png"]
+
+[project.entry-points."gui_scripts"]
+snap-ocr = "snap_ocr.__main__:main"
