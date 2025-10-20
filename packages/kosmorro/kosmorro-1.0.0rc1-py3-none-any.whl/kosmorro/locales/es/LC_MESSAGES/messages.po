@@ -1,0 +1,416 @@
+# Translations template for kosmorro.
+# Copyright (C) 2021 ORGANIZATION
+# This file is distributed under the same license as the kosmorro project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
+# gallegonovato <fran-carro@hotmail.es>, 2023.
+msgid ""
+msgstr ""
+"Project-Id-Version: kosmorro 0.9.0\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2024-05-26 11:23+0200\n"
+"PO-Revision-Date: 2023-01-11 16:48+0000\n"
+"Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/kosmorro/cli/es/"
+">\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.15.1-dev\n"
+"Generated-By: Babel 2.9.0\n"
+
+#: kosmorro/__main__.py:61
+msgid ""
+"Save the planet and paper!\n"
+"Consider printing your PDF document only if really necessary, and use the "
+"other side of the sheet."
+msgstr ""
+"¡Salva el planeta y ahorra papel!\n"
+"Imprima el documento PDF solo si es necesario y recuerde utilizar el reverso "
+"de la hoja."
+
+#: kosmorro/__main__.py:70
+msgid ""
+"PDF output will not contain the ephemerides, because you didn't provide the "
+"observation coordinates."
+msgstr ""
+"La salida PDF no contendrá las efemérides, porque usted no proporcionó las "
+"coordenadas de observación."
+
+#: kosmorro/__main__.py:115
+msgid "The file could not be saved in \"{path}\": {error}"
+msgstr "No se ha podido guardar el archivo en \"{path}\": {error}"
+
+#: kosmorro/__main__.py:129
+msgid "Please provide a file path to export in this format (--output)."
+msgstr ""
+"Proporcione una ruta al archivo para exportar lo en este formato (--output)."
+
+#: kosmorro/__main__.py:162
+msgid "Moon phase can only be computed between {min_date} and {max_date}"
+msgstr "La fase lunar sólo puede calcularse entre {min_date} y {max_date}"
+
+#: kosmorro/__main__.py:201
+msgid ""
+"Running on Python {python_version} with Kosmorrolib v{kosmorrolib_version}"
+msgstr ""
+"Ejecutando en Python {python_version} con Kosmorrolib v{kosmorrolib_version}"
+
+#: kosmorro/__main__.py:214
+msgid ""
+"Compute the ephemerides and the events for a given date and a given position "
+"on Earth."
+msgstr ""
+"Calcule las efemérides y los eventos para una fecha y una posición dadas en "
+"la Tierra."
+
+#: kosmorro/__main__.py:217
+msgid ""
+"By default, only the events will be computed for today.\n"
+"To compute also the ephemerides, latitude and longitude arguments are needed."
+msgstr ""
+"Por defecto, sólo se calculan las efemérides de hoy.\n"
+"Para calcular también las efemérides, se necesitan los datos de latitud y "
+"longitud."
+
+#: kosmorro/__main__.py:230
+msgid "Show the program version"
+msgstr "Mostrar la versión del programa"
+
+#: kosmorro/__main__.py:238
+msgid "The format to output the information to"
+msgstr "Formato de salida de la información"
+
+#: kosmorro/__main__.py:245
+msgid ""
+"The observer's latitude on Earth. Can also be set in the KOSMORRO_LATITUDE "
+"environment variable."
+msgstr ""
+"La latitud del observador en la Tierra. También se puede establecer en la "
+"variable ambiental KOSMORRO_LATITUDE."
+
+#: kosmorro/__main__.py:255
+msgid ""
+"The observer's longitude on Earth. Can also be set in the KOSMORRO_LONGITUDE "
+"environment variable."
+msgstr ""
+"La longitud del observador en la Tierra. También se puede establecer en la "
+"variable ambiental KOSMORRO_LONGITUDE."
+
+#: kosmorro/__main__.py:265
+msgid ""
+"The date for which the ephemerides must be calculated. Can be in the YYYY-MM-"
+"DD format or an interval in the \"[+-]YyMmDd\" format (with Y, M, and D "
+"numbers). Defaults to current date."
+msgstr ""
+"Fecha para la que deben calcularse las efemérides. Puede estar en el formato "
+"AAAA-MM-DD o un intervalo en el formato \"[+-]AAAA-MMDd\" (con los números "
+"Y, M y D). Por defecto es la fecha actual."
+
+#: kosmorro/__main__.py:276
+msgid ""
+"The timezone to display the hours in (e.g. 2 for UTC+2 or -3 for UTC-3). Can "
+"also be set in the KOSMORRO_TIMEZONE environment variable."
+msgstr ""
+"La zona horaria en la que se muestran las horas (por ejemplo, 2 para UTC+2 o "
+"-3 para UTC-3). También se puede establecer en la variable de entorno "
+"KOSMORRO_TIMEZONE."
+
+#: kosmorro/__main__.py:285
+msgid "Disable the colors in the console."
+msgstr "Deshabilita los colores de la consola."
+
+#: kosmorro/__main__.py:292
+msgid ""
+"A file to export the output to. If not given, the standard output is used. "
+"This argument is needed for PDF format."
+msgstr ""
+"Un archivo al que exportar la salida. Si no se da, se utiliza la salida "
+"estándar. Este argumento es necesario para el formato PDF."
+
+#: kosmorro/__main__.py:301
+msgid ""
+"Do not generate a graph to represent the rise and set times in the PDF "
+"format."
+msgstr ""
+"No genere un gráfico para representar el aumento y los tiempos de ajuste en "
+"el formato PDF."
+
+#: kosmorro/__main__.py:309
+msgid "Show debugging messages"
+msgstr "Mostrar mensajes de depuración"
+
+#: kosmorro/date.py:17
+msgid "The date {date} is not valid: {error}"
+msgstr "La fecha no es válida: {error}"
+
+#: kosmorro/date.py:39
+msgid ""
+"The date {date} does not match the required YYYY-MM-DD format or the offset "
+"format."
+msgstr ""
+"La fecha {fecha} no coincide con el formato requerido AAAA-MM-DD o el "
+"formato de desplazamiento."
+
+#: kosmorro/dumper.py:137
+msgid "Expected events:"
+msgstr "Eventos esperados:"
+
+#: kosmorro/dumper.py:144
+msgid "Note: All the hours are given in UTC."
+msgstr "Nota: Todas las horas se dan en UTC."
+
+#: kosmorro/dumper.py:151
+msgid "Note: All the hours are given in the UTC{offset} timezone."
+msgstr "Nota: Todas las horas se dan en la zona horaria UTC."
+
+#: kosmorro/dumper.py:205 kosmorro/dumper.py:333
+msgid "Object"
+msgstr "Objeto"
+
+#: kosmorro/dumper.py:206 kosmorro/dumper.py:334
+msgid "Rise time"
+msgstr "Tiempo de ascenso"
+
+#: kosmorro/dumper.py:207 kosmorro/dumper.py:336
+msgid "Culmination time"
+msgstr "Tiempo de culminación"
+
+#: kosmorro/dumper.py:208 kosmorro/dumper.py:338
+msgid "Set time"
+msgstr "Establecer hora"
+
+#: kosmorro/dumper.py:234
+msgid "Moon phase is unavailable for this date."
+msgstr "La fase lunar no está disponible para esta fecha."
+
+#: kosmorro/dumper.py:238 kosmorro/dumper.py:342
+msgid "Moon phase:"
+msgstr "Fase lunar:"
+
+#: kosmorro/dumper.py:242
+msgid "{next_moon_phase} on {next_moon_phase_date} at {next_moon_phase_time}"
+msgstr "{next_moon_phase} en {next_moon_phase_date} a {next_moon_phase_time}"
+
+#: kosmorro/dumper.py:306
+msgid "Overview of your sky"
+msgstr "Vista general de su cielo"
+
+#: kosmorro/dumper.py:314
+msgid ""
+"This document summarizes the ephemerides and the events of {date}. It aims "
+"to help you to prepare your observation session. All the hours are given in "
+"{timezone}."
+msgstr ""
+"Este documento resume las efemérides y los eventos de {fecha}. Su objetivo "
+"es ayudarle a preparar su sesión de observación. Todas las horas están dadas "
+"en {zona horaria}."
+
+#: kosmorro/dumper.py:324
+msgid ""
+"Don't forget to check the weather forecast before you go out with your "
+"equipment."
+msgstr ""
+"No olvides comprobar el pronóstico del tiempo antes de salir con tu equipo."
+
+#: kosmorro/dumper.py:331
+msgid "Ephemerides of the day"
+msgstr "Las efemérides del día"
+
+#: kosmorro/dumper.py:340
+msgid "hours"
+msgstr "horas"
+
+#: kosmorro/dumper.py:347
+msgid "Expected events"
+msgstr "Eventos esperados"
+
+#: kosmorro/dumper.py:487
+msgid ""
+"Building PDF was not possible, because some dependencies are not installed.\n"
+"Please look at the documentation at https://kosmorro.space/cli/generate-pdf/ "
+"for more information."
+msgstr ""
+"No fue posible compilar PDF porque algunas dependencias no están "
+"instaladas. \n"
+"Consulte la documentación en https://kosmorro.space/cli/generate-pdf/ para "
+"obtener más información."
+
+#: kosmorro/dumper.py:540
+#, python-format
+msgid ""
+"An error occurred during the compilation of the PDF.\n"
+"Please open an issue at https://github.com/Kosmorro/kosmorro/issues and "
+"share the content of the log file at /tmp/kosmorro-%s.log"
+msgstr ""
+"Ocurrió un error durante la compilación del PDF.\n"
+"Abra un problema en https://github.com/Kosmorro/kosmorro/issues y comparta "
+"el contenido del archivo de registro en /tmp/kosmorro-%s.log"
+
+#: kosmorro/exceptions.py:35
+msgid "The date must be between {minimum_date} and {maximum_date}"
+msgstr "La fecha debe estar entre {fecha_mínima} y {fecha_máxima}"
+
+#: kosmorro/i18n/strings.py:11
+#, python-format
+msgid "%s is in opposition"
+msgstr "%s está en la oposición"
+
+#: kosmorro/i18n/strings.py:12
+#, python-format
+msgid "%s and %s are in conjunction"
+msgstr "Los %s y %s están en conjunción"
+
+#: kosmorro/i18n/strings.py:13
+#, python-format
+msgid "%s occults %s"
+msgstr "%s ocultos %s"
+
+#: kosmorro/i18n/strings.py:15
+#, python-format
+msgid "Elongation of %s is maximal"
+msgstr "El alargamiento de %s es máximo"
+
+#: kosmorro/i18n/strings.py:18
+#, python-format
+msgid "%s is at its periapsis"
+msgstr "%s está en su periapsis"
+
+#: kosmorro/i18n/strings.py:19
+#, python-format
+msgid "%s is at its apoapsis"
+msgstr "%s está en su apoapsis"
+
+#: kosmorro/i18n/strings.py:35
+msgid "New Moon"
+msgstr "Luna Nueva"
+
+#: kosmorro/i18n/strings.py:36
+msgid "Waxing Crescent"
+msgstr "Luna creciente"
+
+#: kosmorro/i18n/strings.py:37
+msgid "First Quarter"
+msgstr "Primer cuarto"
+
+#: kosmorro/i18n/strings.py:38
+msgid "Waxing Gibbous"
+msgstr "Luna menguante"
+
+#: kosmorro/i18n/strings.py:39
+msgid "Full Moon"
+msgstr "Luna llena"
+
+#: kosmorro/i18n/strings.py:40
+msgid "Waning Gibbous"
+msgstr "Giboso menguante"
+
+#: kosmorro/i18n/strings.py:41
+msgid "Last Quarter"
+msgstr "Último cuarto"
+
+#: kosmorro/i18n/strings.py:42
+msgid "Waning Crescent"
+msgstr "Menguante"
+
+#: kosmorro/i18n/strings.py:53
+msgid "Sun"
+msgstr "Sol"
+
+#: kosmorro/i18n/strings.py:54
+msgid "Moon"
+msgstr "Luna"
+
+#: kosmorro/i18n/strings.py:55
+msgid "Mercury"
+msgstr "Mercurio"
+
+#: kosmorro/i18n/strings.py:56
+msgid "Venus"
+msgstr "Venus"
+
+#: kosmorro/i18n/strings.py:57
+msgid "Earth"
+msgstr "Tierra"
+
+#: kosmorro/i18n/strings.py:58
+msgid "Mars"
+msgstr "Marte"
+
+#: kosmorro/i18n/strings.py:59
+msgid "Jupiter"
+msgstr "Júpiter"
+
+#: kosmorro/i18n/strings.py:60
+msgid "Saturn"
+msgstr "Saturno"
+
+#: kosmorro/i18n/strings.py:61
+msgid "Uranus"
+msgstr "Urano"
+
+#: kosmorro/i18n/strings.py:62
+msgid "Neptune"
+msgstr "Neptuno"
+
+#: kosmorro/i18n/strings.py:63
+msgid "Pluto"
+msgstr "Plutón"
+
+#: kosmorro/i18n/utils.py:27
+msgid "{day_of_week} {month} {day_number}, {year}"
+msgstr "{day_of_week} {month} {day_number}, {year}"
+
+#: kosmorro/i18n/utils.py:30
+msgid "{month} {day_number}, {hours}:{minutes}"
+msgstr "{mes} {número de día}, {horas}:{minutos}"
+
+#: kosmorro/i18n/utils.py:33
+msgid "{month} {day_number}, {year}"
+msgstr "{mes} {número_de_día}, {año}"
+
+#: kosmorro/i18n/utils.py:36
+msgid "{hours}:{minutes}"
+msgstr "{hours}:{minutes}"
+
+#, fuzzy
+#~ msgid "Do you really want to clear Kosmorro's cache? [yN] "
+#~ msgstr "¿De verdad quieres limpiar el alijo de Kosmorro? [yN] "
+
+#, fuzzy
+#~ msgid "Incorrect answer, cache not cleared."
+#~ msgstr ""
+#~ "La respuesta no coincidía con las opciones esperadas, la memoria caché no "
+#~ "se había vaciado."
+
+#, fuzzy
+#~ msgid "Delete all the files from Kosmorro's cache."
+#~ msgstr "Borre todos los archivos que Kosmorro guardó en la memoria."
+
+#, fuzzy
+#~ msgid "Unknown phase"
+#~ msgstr "Fase lunar:"
+
+#~ msgid "A Summary of your Sky"
+#~ msgstr "Un resumen de su cielo"
+
+#~ msgid "%s's largest elongation"
+#~ msgstr "El mayor alargamiento de los %s"
+
+#~ msgid "Selected output format needs an output file (--output)."
+#~ msgstr ""
+#~ "El formato de salida seleccionado necesita un archivo de salida (--"
+#~ "output)."
+
+#, fuzzy
+#~ msgid ""
+#~ "Building PDF was not possible, because some dependencies are not "
+#~ "installed.\n"
+#~ "Please look at the documentation at http://kosmorro.space for more "
+#~ "information."
+#~ msgstr ""
+#~ "La construcción de PDFs no fue posible, porque algunas dependencias no "
+#~ "están instaladas.\n"
+#~ "Por favor, consulte la documentación en http://kosmorro.space para más "
+#~ "información."
