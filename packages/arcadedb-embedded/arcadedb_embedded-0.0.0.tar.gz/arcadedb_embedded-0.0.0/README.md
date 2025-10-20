@@ -1,0 +1,13 @@
+# ArcadeDB Embedded (Placeholder)
+
+This is a placeholder release (version 0.0.0) to reserve the package name on PyPI.
+
+The real `arcadedb-embedded` package with full functionality is coming soon and will include:
+- Complete ArcadeDB graph/document database embedded in Python
+- Gremlin and GraphQL support
+- High-performance Java integration via JPype1
+
+Please check back soon or visit:
+- Homepage: https://arcadedb.com
+- Documentation: https://docs.arcadedb.com
+- Repository: https://github.com/ArcadeData/arcadedb
