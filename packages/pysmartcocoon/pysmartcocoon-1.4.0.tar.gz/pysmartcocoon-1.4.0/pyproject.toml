@@ -1,0 +1,80 @@
+# pyproject.toml
+
+[build-system]
+requires = ["setuptools>=61.0.0","wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pysmartcocoon"
+version = "1.4.0"
+
+description = "Library built for Home Assistant to integrate with the SmartCocoon"
+readme = "README.md"
+authors = [{ name = "Dave Pearce", email = "davepearce@live.com" }]
+license = "MIT"
+requires-python = ">=3.13.2"
+
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+]
+
+keywords = ["smartcocoon", "fan"]
+
+dependencies = [
+    "aiohttp>=3.8",
+    "async_timeout>=4.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "build",
+    "bumpversion",
+    "pylint",
+    "twine",
+]
+test = [
+    "mypy",
+    "pre-commit",
+    "pytest",
+    "pytest-cov",
+]
+
+[project.urls]
+Homepage = "https://github.com/davecpearce/pysmartcocoon"
+
+[tool.bumpver]
+current_version = "1.4.0"
+version_pattern = "MAJOR.MINOR.PATCH"
+commit_message = "bump version {old_version} -> {new_version}"
+commit = true
+tag = true
+push = true
+
+[tool.bumpver.file_patterns]
+"pyproject.toml" = [
+    'current_version = "{version}"',
+    'version = "{version}"'
+]
+
+[tool.pytest.ini_options]
+markers = [
+    "integration: marks tests as integration tests (require real API credentials)",
+]
+
+[tool.pylint.messages_control]
+disable = [
+    "duplicate-code",  # Allow duplicate code in test files
+]
+
+[tool.mypy]
+python_version = "3.13"
+warn_unused_ignores = true
+disallow_untyped_defs = true
+no_implicit_optional = true
+strict_equality = true
+check_untyped_defs = true
+exclude = [
+    "tests/",
+]
