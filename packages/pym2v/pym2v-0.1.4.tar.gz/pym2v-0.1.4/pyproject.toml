@@ -1,0 +1,98 @@
+[project]
+name = "pym2v"
+version = "0.1.4"
+description = "Python wrapper to interact with the Eurogard m2v IoT platform"
+authors = [
+    {name = "Stefan Langenbach", email = "stefan.langenbach@bytecare.tech"}
+]
+maintainers = [
+    {name = "Stefan Langenbach", email = "stefan.langenbach@bytecare.tech"}
+]
+readme = "README.md"
+license = "AGPL-3.0-only"
+license-files = ["LICENSE"]
+keywords = ["eurogard", "m2v", "iot", "iiot", "api"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    "Programming Language :: Python :: 3",
+    "Topic :: Software Development",
+    "Typing :: Typed"
+]
+requires-python = ">=3.12"
+dependencies = [
+    "loguru>=0.7.3",
+    "pandas[excel]>=2.2.3",
+    "pyarrow>=21.0.0",
+    "pydantic-settings>=2.6.1",
+    "requests-oauthlib>=2.0.0",
+    "tenacity>=9.0.0",
+    "tqdm>=4.67.1",
+]
+
+[project.urls]
+Homepage = "https://www.bytecare.tech"
+Documentation = "https://www.bytecare.tech/pym2v"
+Repository = "https://github.com/bytecaretech/pym2v"
+
+[dependency-groups]
+dev = [
+    "ipykernel>=6.29.5",
+    "ipywidgets>=8.1.5",
+    "pytest-cov>=6.0.0",
+    "pytest>=8.3.3",
+    "pre-commit>=4.0.1",
+    "nbconvert>=7.16.4",
+    "pytest-mock>=3.14.0",
+]
+
+docs = [
+    "mkdocs-material>=9.6.1",
+    "mkdocs>=1.6.1",
+    "mkdocstrings[python]>=0.27.0",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+
+[tool.ruff.format]
+docstring-code-format = true
+docstring-code-line-length = "dynamic"
+
+[tool.ruff.lint]
+select = ["B", "E", "D", "F", "I", "S", "PD", "PT", "SIM"]
+ignore = ["D211", "D212"]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["D104"]
+"**/{tests}/*" = ["D100", "D103", "S101"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --strict-markers --cov --cov-report=term"
+markers = [
+    "local: marks tests as running locally only (deselect with '-m \"not local\"')"
+]
+xfail_strict = true
+
+[tool.coverage.run]
+branch = true
+source = ["src"]
+
+[tool.coverage.report]
+fail_under = 60
+
+[[tool.uv.index]]
+name = "testpypi"
+url = "https://test.pypi.org/simple/"
+publish-url = "https://test.pypi.org/legacy/"
+explicit = true
+
+[build-system]
+requires = ["uv_build>=0.9.4,<0.10.0"]
+build-backend = "uv_build"
