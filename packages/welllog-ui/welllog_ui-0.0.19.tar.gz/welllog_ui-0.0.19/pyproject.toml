@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "welllog_ui"
+dynamic = ["version"]
+description = "WellLog UI with PySide6 and DL pipeline"
+readme = "README.md"
+requires-python = ">=3.9,<3.10"
+license = { text = "Proprietary" }
+authors = [
+  { name="wxiong_swpu", email="1305483753@qq.com" },
+]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Operating System :: Microsoft :: Windows",
+  "Topic :: Scientific/Engineering",
+]
+
+dependencies = [
+  "PySide6>=6.9.2",
+  "numpy",
+  "torch",
+  "pytorch-lightning",
+  "scikit-learn",
+  "pyqtgraph>=0.13.7",
+  "PyWavelets",
+  "chardet",
+]
+
+[project.urls]
+Homepage = "https://github.com/wxiong_swpu/welllog_ui"
+Issues   = "https://github.com/wxiong_swpu/welllog_ui/issues"
+
+[project.scripts]
+welllog_ui = "welllog_ui.main_V2:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["welllog_ui*"]
+
+[tool.setuptools.dynamic]
+version = { attr = "welllog_ui.__version__" } 
