@@ -1,0 +1,38 @@
+Metadata-Version: 2.4
+Name: acorn-py
+Version: 0.1.31
+Classifier: Development Status :: 1 - Planning
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Information Technology
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Operating System :: MacOS
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Rust
+Classifier: Topic :: Scientific/Engineering
+Summary: Python bindings for acorn-lib crate
+Keywords: research,automation
+Author-email: Jason Wohlgemuth <wohlgemuthjh@ornl.gov>
+License-Expression: MIT
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown; charset=UTF-8; variant=GFM
+Project-URL: Repository, https://code.ornl.gov/research-enablement/acorn.git
+Project-URL: Changelog, https://code.ornl.gov/research-enablement/acorn/-/blob/main/CHANGELOG.md
+
+# ACORN 🌱
+[<img alt="gitlab" src="https://img.shields.io/badge/code.ornl.gov-research_enablement-00662C?style=for-the-badge&logo=gitlab&color=%2300662C
+" height="20">](https://research.ornl.gov)
+[<img alt="PyPI" src="https://img.shields.io/pypi/v/acorn-py?style=for-the-badge&logo=python" height="20">](https://pypi.org/project/acorn-py/)
+> Python bindings for the [acorn-lib](https://crates.io/crates/acorn-lib) crate
+
+## Example Usage
+```python
+from acorn.schema.validate import is_doi, is_orcid, is_ror
+
+assert is_doi("10.11578/dc.20250604.1")
+assert is_orcid("https://orcid.org/0000-0002-2057-9115")
+assert is_ror("01qz5mb56")
+```
