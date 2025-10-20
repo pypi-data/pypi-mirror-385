@@ -1,0 +1,51 @@
+Metadata-Version: 2.4
+Name: oop-es
+Version: 0.3.0
+Summary: OOP Event Sourcing package
+Author: Volodymyr Chub
+License: MIT
+Project-URL: Homepage, https://github.com/ChubV/oop-es
+Project-URL: Issues, https://github.com/ChubV/oop-es/issues
+Description-Content-Type: text/markdown
+Provides-Extra: test
+Requires-Dist: pytest; extra == "test"
+Requires-Dist: pytest-asyncio; extra == "test"
+Requires-Dist: ty; extra == "test"
+Requires-Dist: ruff; extra == "test"
+Provides-Extra: pg
+Requires-Dist: oop-es-pg; extra == "pg"
+
+# OOP ES - OOP Event sourcing
+
+### WARNING
+
+Not yet finished
+
+### What is this
+
+Just another implementation of event sourcing in Python. For now, it can handle commands, emit/save events,
+manage read models.
+
+### Installation
+
+```
+pip install oop-es
+```
+
+### Postgres adapter
+
+Use `pip install oop-es[pg]` instead. Use [this script](./oop_es_pg/tests/integration/init.sql) to init the tables.
+You can rename the `events` or use a custom schema, just pass the table name during the `PostgresEventStore` 
+initialization.
+
+### Usage
+
+Check the `example` folder
+
+### TODO
+
+- [ ] add Projector into the example to illustrate how do views (read-models) work
+- [ ] snapshotting
+- [ ] upcasting
+- [ ] better docs
+- [ ] metadata collection
