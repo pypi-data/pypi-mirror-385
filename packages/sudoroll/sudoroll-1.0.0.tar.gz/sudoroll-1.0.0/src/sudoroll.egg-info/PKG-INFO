@@ -1,0 +1,38 @@
+Metadata-Version: 2.4
+Name: sudoroll
+Version: 1.0.0
+Summary: A simple, slightly mean command-line dice roller.
+Author-email: laulowcode <enigma15012001@gmail.com>
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+Requires-Dist: importlib_resources; python_version < "3.9"
+
+# Sudo Roll 🎲
+
+A simple CLI dice roller that delivers a bash-themed taunt if your roll is less than half the die's value.  
+Find it on PyPI: https://pypi.org/project/sudoroll/
+
+![Example usage](img/example.png)
+
+## Installation
+
+```bash
+pip install sudoroll
+```
+
+## Usage
+
+**Roll a standard 6-sided die:**
+
+```bash
+sudoroll
+```
+
+**Roll a die with a custom number of sides (e.g., 20-sided):**
+
+```bash
+sudoroll --sides 20
+```
