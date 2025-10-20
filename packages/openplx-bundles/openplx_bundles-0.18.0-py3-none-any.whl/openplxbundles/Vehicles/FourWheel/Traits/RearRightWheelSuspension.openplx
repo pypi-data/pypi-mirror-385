@@ -1,0 +1,7 @@
+trait RearRightWheelSuspension:
+    rear_right_suspension becomes Vehicles.Wheels.Interactions.Suspension:
+        wheel: rear_right_wheel
+        suspension_connector: chassis.rear_right_connector
+    chassis.rear_right_connector is Vehicles.Wheels.Charges.SuspensionConnector:
+        forward_vector: chassis.forward_vector
+        up_vector: chassis.up_vector

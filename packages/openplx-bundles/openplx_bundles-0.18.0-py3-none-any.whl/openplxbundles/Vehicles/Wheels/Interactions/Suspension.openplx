@@ -1,0 +1,11 @@
+Suspension is Physics3D.Interactions.Mate:
+    .doc: """
+A Suspension is a constraint to attach a wheel to a chassi or the world.
+The Suspension has one degree of freedom. A steering trait can be added to
+open up a second degree of freedom.
+"""
+    wheel is Wheel reference
+    stiffness is Real
+    damping is Real
+    suspension_connector is Vehicles.Wheels.Charges.SuspensionConnector reference
+    charges: [suspension_connector, wheel.connector]
