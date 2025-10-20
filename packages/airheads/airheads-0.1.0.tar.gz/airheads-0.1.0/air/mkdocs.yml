@@ -1,0 +1,161 @@
+site_name: AIR
+site_url: http://feldroy.github.io/air/
+repo_url: https://github.com/feldroy/air
+
+nav:
+  - Home: index.md
+  - Why?: why.md
+  - Learn:
+    - learn/index.md
+    - Quickstart: learn/quickstart.md
+    - Air Tags: learn/air_tags.md
+    - Escaping HTML: learn/escaping_html.md
+    - Forms: learn/forms.md
+    - Jinja: learn/jinja.md
+    - Layouts: learn/layouts.md
+    - SQL: learn/sqlmodel.md
+    - Cookbook:
+      - learn/cookbook/index.md
+      - app.page decorator: learn/cookbook/page-decorator.md
+      - Authentication: learn/cookbook/authentication.md
+      - Bigger applications: learn/cookbook/bigger-applications.md
+      - Charts: learn/cookbook/charts.md
+      - Minimal app: learn/cookbook/minimal.md
+      - Forms & validation: learn/cookbook/forms.md
+      - Static files: learn/cookbook/static.md
+  - Book:
+    - Book Introduction: book/README.md
+    - Introduction to Air: book/01-introduction.md
+    - Getting Started: book/02-getting-started.md
+    - 'AI-Enhanced Development Setup': book/03-ai-enhanced-development-setup.md
+    - 'Air Tags and Layouts': book/04-air-tags-and-layouts.md
+    - 'Building Our Blog Application': book/05-building-blog-application.md
+    - 'Advanced Routing and URL Management': book/06-advanced-routing.md
+    - 'Forms and Data Validation': book/07-forms-validation.md
+    - 'Working with Databases': book/08-databases.md
+    - 'API Development': book/09-api-development.md
+    - 'HTMX and Interactive Interfaces': book/10-htmx-interfaces.md
+    - 'Authentication and Security': book/11-authentication-security.md
+    - Testing: book/12-testing.md
+    - Deployment: book/13-deployment.md
+    - 'Advanced Patterns and Best Practices': book/14-advanced-patterns.md
+  - Reference:
+    - api/index.md
+    - Applications: api/applications.md
+    - Background Tasks: api/background.md
+    - Dependencies: api/dependencies.md
+    - Exception Handlers: api/exception_handlers.md
+    - Exceptions: api/exceptions.md
+    - Ext:
+      - Ext: api/ext/index.md
+      - Auth: api/ext/auth.md
+      - SQLModel: api/ext/sqlmodel.md
+    - Forms: api/forms.md
+    - Layouts: api/layouts.md
+    - Middleware: api/middleware.md
+    - Requests: api/requests.md
+    - Responses: api/responses.md
+    - Routing: api/routing.md
+    - SVG:
+      - SVG: api/svg/index.md
+      - "SVG A-D": api/svg/svg-tags-a-d.md
+      - "SVG E-M": api/svg/svg-tags-e-m.md
+      - "SVG N-S": api/svg/svg-tags-n-s.md
+      - "SVG T-Z": api/svg/svg-tags-t-z.md
+    - Tags:
+      - Tags: api/tags/index.md
+      - "Tags A-D": api/tags/tags-a-d.md
+      - "Tags E-M": api/tags/tags-e-m.md
+      - "Tags N-S": api/tags/tags-n-s.md
+      - "Tags T-Z": api/tags/tags-t-z.md
+    - Templating: api/templating.md
+    - Utils: api/utils.md
+
+
+  - About:
+    - about/index.md
+    - about/inspirations.md
+    - about/help_air.md
+    - about/roadmap.md    
+
+  - Tools: tools.md
+
+theme:
+  name: material
+  features:
+    - content.code.copy
+    - content.code.annotate    
+    - content.tabs.link
+    - navigation.indexes
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.tracking
+    - search.suggest
+    - search.highlight
+    - search.share
+    - navigation.tabs    
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: black
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: white
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - footnotes
+  - md_in_html
+  - pymdownx.emoji
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [.]
+          options:
+            show_source: true
+            separate_signature: true
+            unwrap_annotated: true
+            docstring_options:
+              ignore_init_summary: true
+            merge_init_into_class: true
+  - redirects:
+      redirect_maps:
+        'about/alternatives.md': 'about/inspirations.md'
+        'roadmap.md': 'about/roadmap.md'
+  - llmstxt:
+      markdown_description: "Air is a Python web framework that provides a friendly layer over FastAPI for building modern web applications that combine beautiful HTML pages with powerful REST APIs."
+      full_output: llms-full.txt
+      sections:
+        Usage documentation:
+        - index.md
+        - learn/quickstart.md
+        - learn/air_tags.md
+        - learn/escaping_html.md        
+        - learn/forms.md                
+        - learn/jinja.md                
+        - learn/layouts.md
+        - learn/cookbook/*.md   
+        - api/*.md
+        - api/tags/*.md
+        - api/svg/*.md
+        - tools.md
