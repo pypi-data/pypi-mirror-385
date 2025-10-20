@@ -1,0 +1,109 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "neopipe"
+dynamic = ["version"]
+description = 'A Python library for seamless function orchestration, Designed to streamline workflow management in microservices and AI-powered applications'
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+keywords = ["pipeline", "function", "orchestration"]
+authors = [
+  { name = "MrDataPsycho", email = "mr.data.psycho@gmail.com" },
+]
+classifiers = [
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = []
+
+[project.optional-dependencies]
+testing = [
+    "pytest",
+    "pytest-cov",
+    "pytest-mock",
+    "pytest-asyncio",
+]
+
+dev = [
+  "ruff",
+  "mypy",
+  "isort",
+]
+
+example = [
+  "httpx",
+  "pydantic",
+  "openai",
+  "dotenv",
+]
+
+docs = [
+  "mkdocs",
+  "mkdocs-material",
+  "mkdocstrings[python]"
+]
+
+[project.urls]
+Documentation = "https://mrdatapsycho.github.io/neopipe"
+Issues = "https://github.com/MrDataPsycho/neopipe/issues"
+Source = "https://github.com/MrDataPsycho/neopipe"
+
+[tool.hatch.version]
+path = "src/neopipe/__about__.py"
+
+[tool.hatch.envs.default]
+dependencies = ["project[testing]"]
+
+[tool.pytest.ini_options]
+addopts = "--cov=src/neopipe --cov-report=term-missing"
+
+[tool.hatch.envs.types]
+extra-dependencies = [
+  "mypy>=1.0.0",
+]
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src/neopipe_example tests}"
+
+[tool.coverage.run]
+source_pkgs = ["neopipe", "tests"]
+branch = true
+parallel = true
+omit = [
+  "src/neopipe/__about__.py",
+  "tests/*",
+  "src/neopipe/__init__.py",
+]
+
+[tool.coverage.paths]
+neopipe_example = ["src/neopipe"]
+tests = ["tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
+
+[tool.hatch.envs.docs]
+dependencies = [
+  "mkdocs"
+]
+
+[tool.hatch.envs.docs.scripts]
+build = "mkdocs build --clean --strict"
+serve = "mkdocs serve --dev-addr localhost:8000"
+
+[tool.hatch.build]
+exclude = [
+  "/.*",
+  "/docs",
+  "/tests",
+]
