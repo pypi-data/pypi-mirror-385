@@ -1,0 +1,161 @@
+# PyAsyncSQL
+
+**PyAsyncSQL** is an ultra-fast, asynchronous SQL layer that mimics MongoDB-style operations with full Redis caching and background write queue support.  
+It’s designed for high-performance systems that need MongoDB-like flexibility over PostgreSQL.
+
+---
+
+## 🚀 Features
+
+- ⚡ **Async I/O** – Fully asynchronous using `aiopg` and `aioredis`  
+- 🧠 **MongoDB-like syntax** – Use familiar methods like `find_one`, `insert_one`, `update_many`, etc.  
+- 🔁 **Redis caching** – Automatic query caching with TTL  
+- 🧩 **Background SQL Worker Queue** – Batched inserts/updates/deletes to reduce I/O overhead  
+- 🔎 **Pub/Sub Watcher** – Real-time change streaming via Redis channels  
+- 💥 **Automatic Retry + Reconnect** – Fault-tolerant retry for transient SQL/Redis errors  
+- 🧰 **Dynamic Collections** – Access collections as attributes or subscripts (e.g. `db.users` or `db["users"]`)  
+- 🧹 **Safe Shutdown** – Waits for all pending operations before closing
+
+---
+
+## 🧑‍💻 Installation
+
+```bash
+pip install pyasyncsql
+```
+
+---
+
+## ⚙️ Quick Start
+
+```python
+import asyncio
+from pyasyncsql import AsyncSqlDB
+
+DSN = "postgres://user:password@hostname:port/dbname?sslmode=require"
+REDIS_URL = "redis://localhost:6379"
+
+async def main():
+    db = AsyncSqlDB(DSN, REDIS_URL)
+    await db.connect()
+
+    users = db["users"]
+
+    # Insert
+    await users.insert_one({"name": "Alice", "age": 25})
+
+    # Find
+    user = await users.find_one({"name": "Alice"})
+    print(user)
+
+    # Update
+    await users.update_many({"name": "Alice"}, {"$set": {"age": 26}})
+
+    # Delete
+    await users.delete_one({"name": "Alice"})
+
+    # Close safely (waits for background queue to finish)
+    await db.close()
+
+asyncio.run(main())
+```
+
+---
+
+## 🔄 Watcher (Real-Time Stream)
+
+```python
+import asyncio
+
+async def listener(data):
+    print("Database change detected:", data)
+
+async def watch_changes():
+    db = AsyncSqlDB(DSN, REDIS_URL)
+    await db.connect()
+    users = db["users"]
+    await users.watch(listener)
+
+asyncio.run(watch_changes())
+```
+
+---
+
+## 🧮 API Reference
+
+### `AsyncSqlDB`
+| Method | Description |
+|--------|-------------|
+| `connect()` | Initialize PostgreSQL + Redis connection |
+| `close()` | Gracefully close and flush all background tasks |
+| `__getitem__` / `__getattr__` | Access collection dynamically |
+
+### `AsyncMongoLikeCollection`
+| Method | Description |
+|--------|-------------|
+| `find_one(filter)` | Fetch one document |
+| `find(filter)` | Return list of matching documents |
+| `insert_one(doc)` | Insert a new document |
+| `insert_many(docs)` | Insert multiple documents |
+| `update_one(filter, update)` | Update a single document |
+| `update_many(filter, update)` | Update multiple documents |
+| `delete_one(filter)` | Delete a single document |
+| `delete_many(filter)` | Delete multiple documents |
+| `count_documents(filter)` | Count matching documents |
+| `watch(callback)` | Listen for real-time change events via Redis |
+
+---
+
+## 🧱 Background Worker Queue
+
+All write operations (insert/update/delete) are queued and flushed in batches to PostgreSQL, improving throughput dramatically under high load.
+
+```python
+await db.close()  # ensures all batched operations are written before shutdown
+```
+
+---
+
+## ⚠️ Error Handling
+
+- Automatic retries with exponential backoff for SQL and Redis operations  
+- Transparent reconnects for transient connection failures  
+- Warnings are logged via Python’s `logging` module
+
+---
+
+## 🧰 Example Architecture
+
+```text
+         ┌────────────────┐
+         │   Your App     │
+         └──────┬─────────┘
+                │
+        Async API Calls
+                │
+         ┌──────▼─────────┐
+         │  PyAsyncSQL    │
+         │  (Mongo-like)  │
+         └──────┬─────────┘
+                │
+     ┌──────────┴───────────┐
+     │                      │
+┌────▼─────┐           ┌────▼────┐
+│PostgreSQL│           │ Redis   │
+│(storage) │           │(cache + │
+│          │           │ pub/sub)│
+└──────────┘           └─────────┘
+```
+
+---
+
+## 🧾 License
+
+MIT License © 2025 Sathishzus
+
+---
+
+## 💬 Author
+
+**Sathishzus** – Open Source Systems & Cloud Performance Tools  
+🔗 [GitHub](https://github.com/sathishzuss) | 🌐 [Website](https://sathishzus.qzz.io)
