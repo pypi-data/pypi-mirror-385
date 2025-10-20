@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "oneforall_kjl"
+description = "oneforall打包"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "Your Name", email = "your.email@example.com"},
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+dynamic = ["version"]
+
+[project.scripts]
+oneforall_kjl-setup = "oneforall_kjl.main:main"
+
+[project.urls]
+Homepage = "https://github.com/yourusername/test1v2"
+"Bug Tracker" = "https://github.com/yourusername/test1v2/issues"
+
+[tool.setuptools.dynamic]
+version = {attr = "oneforall_kjl.__version__"}
