@@ -1,0 +1,39 @@
+"""2025년 9월 Wordit 에듀템 사용 통계 조회"""
+
+import os
+import asyncio
+from poly_mcp_server.server import handle_wordit_edutem_usage
+
+
+async def test_2025_09():
+    """2025년 9월 사용 통계 조회"""
+    # .vscode/.env 환경변수 로드
+    env_file = ".vscode/.env"
+    if os.path.exists(env_file):
+        with open(env_file, encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith("#") and "=" in line:
+                    key, value = line.split("=", 1)
+                    os.environ[key.strip()] = value.strip()
+    
+    print("=" * 60)
+    print("Wordit 에듀템 2025년 9월 사용 통계")
+    print("=" * 60)
+    print()
+    
+    try:
+        result = await handle_wordit_edutem_usage({
+            "period": "2025년 9월",
+            "output_path": "./output"
+        })
+        print(result[0].text)
+        
+    except Exception as e:
+        print(f"❌ 오류: {e}")
+        import traceback
+        traceback.print_exc()
+
+
+if __name__ == "__main__":
+    asyncio.run(test_2025_09())
