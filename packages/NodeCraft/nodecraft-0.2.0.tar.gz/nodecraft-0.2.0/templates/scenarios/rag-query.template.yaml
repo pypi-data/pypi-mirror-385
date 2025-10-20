@@ -1,0 +1,54 @@
+scenario:
+  id: {{ name }}
+  name: {{ Name }}
+  version: 1.0.0
+  author: {{ author }}
+  description: {{ description }}
+
+parameters:
+  patterns:
+    type: list
+    default: ["**/*.py"]
+    description: File patterns to include in context
+
+  query:
+    type: str
+    required: true
+    description: Question to ask about the codebase
+
+  model:
+    type: str
+    default: "claude-3-haiku-20240307"
+    description: LLM model to use
+
+  format:
+    type: str
+    default: "xml"
+    description: Output format (xml or markdown)
+
+  cxml:
+    type: bool
+    default: false
+    description: Use compact XML format
+
+steps:
+  - node: "@common/get_files"
+    name: get_files
+    params:
+      patterns: "{% raw %}{{params.patterns}}{% endraw %}"
+
+  - node: "@common/files_to_prompt"
+    name: format_context
+    params:
+      format: "{% raw %}{{params.format}}{% endraw %}"
+      cxml: "{% raw %}{{params.cxml}}{% endraw %}"
+
+  - node: "@common/call_llm"
+    name: query_llm
+    params:
+      model: "{% raw %}{{params.model}}{% endraw %}"
+      prompt: |
+        {% raw %}{{params.query}}{% endraw %}
+
+        Context:
+        {% raw %}{{formatted_prompt}}{% endraw %}

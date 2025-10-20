@@ -1,0 +1,65 @@
+scenario:
+  id: {{ name }}
+  name: {{ Name }}
+  version: 1.0.0
+  author: {{ author }}
+  description: {{ description }}
+
+parameters:
+  action:
+    type: str
+    default: "create"
+    description: Action to perform (create, restore, list)
+
+  snapshot_name:
+    type: str
+    default: ""
+    description: Snapshot name (required for create/restore)
+
+  patterns:
+    type: list
+    default: ["**/*.py", "**/*.yaml", "**/*.json"]
+    description: File patterns to snapshot
+
+  snapshot_dir:
+    type: str
+    default: ".outcomeforge/snapshots"
+    description: Directory to store snapshots
+
+steps:
+  - node: "@common/get_files"
+    name: get_files
+    params:
+      patterns: "{% raw %}{{params.patterns}}{% endraw %}"
+    condition: "{% raw %}{{params.action == 'create'}}{% endraw %}"
+
+  # TODO: Implement snapshot/restore logic
+  #
+  # For create:
+  # - node: "@custom/create_snapshot"
+  #   name: create
+  #   params:
+  #     snapshot_name: "{% raw %}{{params.snapshot_name}}{% endraw %}"
+  #     snapshot_dir: "{% raw %}{{params.snapshot_dir}}{% endraw %}"
+  #     files: "{% raw %}{{files}}{% endraw %}"
+  #
+  # For restore:
+  # - node: "@custom/restore_snapshot"
+  #   name: restore
+  #   params:
+  #     snapshot_name: "{% raw %}{{params.snapshot_name}}{% endraw %}"
+  #     snapshot_dir: "{% raw %}{{params.snapshot_dir}}{% endraw %}"
+  #   condition: "{% raw %}{{params.action == 'restore'}}{% endraw %}"
+  #
+  # For list:
+  # - node: "@custom/list_snapshots"
+  #   name: list
+  #   params:
+  #     snapshot_dir: "{% raw %}{{params.snapshot_dir}}{% endraw %}"
+  #   condition: "{% raw %}{{params.action == 'list'}}{% endraw %}"
+
+  # Snapshot format suggestion:
+  # - Hash files for integrity verification
+  # - Store metadata (timestamp, author, description)
+  # - Support incremental snapshots
+  # - Enable rollback to any point

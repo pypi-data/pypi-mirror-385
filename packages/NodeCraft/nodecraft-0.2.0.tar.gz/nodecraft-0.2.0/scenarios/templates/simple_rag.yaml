@@ -1,0 +1,64 @@
+# Simple RAG Scenario Template
+# A lightweight RAG workflow for codebase Q&A
+
+scenario:
+  id: simple_rag
+  name: Simple RAG Query
+  description: Quick LLM-based codebase understanding and Q&A
+  author: OutcomeForge Team
+  version: 1.0.0
+
+parameters:
+  patterns:
+    type: list
+    default: ["**/*.py"]
+    description: File patterns to include in context
+
+  query:
+    type: str
+    required: true
+    description: Question to ask about the codebase
+
+  model:
+    type: str
+    default: claude-3-haiku-20240307
+    description: LLM model to use
+
+  format:
+    type: str
+    default: xml
+    description: Output format (xml or markdown)
+
+  cxml:
+    type: bool
+    default: false
+    description: Use compact XML format
+
+steps:
+  - node: "@common/get_files"
+    name: get_files
+    params:
+      patterns: "{{params.patterns}}"
+      exclude: ["node_modules/**", ".git/**", "__pycache__/**", "*.pyc"]
+
+  - node: "@common/files_to_prompt"
+    name: format_context
+    params:
+      format: "{{params.format}}"
+      cxml: "{{params.cxml}}"
+      include_stats: true
+
+  - node: "@common/call_llm"
+    name: query_llm
+    params:
+      prompt_template: |
+        Here is the codebase context:
+
+        {formatted_prompt}
+
+        Question: {{params.query}}
+
+        Please analyze the codebase and answer the question.
+      model: "{{params.model}}"
+      temperature: 0.2
+      max_tokens: 4000

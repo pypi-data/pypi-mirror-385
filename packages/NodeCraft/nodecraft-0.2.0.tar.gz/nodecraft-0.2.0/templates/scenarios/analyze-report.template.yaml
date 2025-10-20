@@ -1,0 +1,60 @@
+scenario:
+  id: {{ name }}
+  name: {{ Name }}
+  version: 1.0.0
+  author: {{ author }}
+  description: {{ description }}
+
+parameters:
+  patterns:
+    type: list
+    default: ["**/*.py"]
+    description: Files to analyze
+
+  analysis_type:
+    type: str
+    default: "quality"
+    description: Type of analysis (quality, security, performance)
+
+  model:
+    type: str
+    default: "claude-3-haiku-20240307"
+    description: LLM model to use
+
+  output_file:
+    type: str
+    default: "analysis_report.md"
+    description: Output report file path
+
+steps:
+  - node: "@common/get_files"
+    name: get_files
+    params:
+      patterns: "{% raw %}{{params.patterns}}{% endraw %}"
+
+  - node: "@common/files_to_prompt"
+    name: format_files
+    params:
+      format: "xml"
+
+  - node: "@common/call_llm"
+    name: analyze
+    params:
+      model: "{% raw %}{{params.model}}{% endraw %}"
+      prompt: |
+        Analyze the following code for {% raw %}{{params.analysis_type}}{% endraw %}.
+
+        Provide a detailed report covering:
+        1. Key findings
+        2. Issues identified
+        3. Recommendations
+        4. Overall assessment
+
+        Code:
+{% raw %}        {{formatted_prompt}}{% endraw %}
+
+  - node: "@common/write_file"
+    name: save_report
+    params:
+      file_path: "{% raw %}{{params.output_file}}{% endraw %}"
+      data_key: "llm_response"

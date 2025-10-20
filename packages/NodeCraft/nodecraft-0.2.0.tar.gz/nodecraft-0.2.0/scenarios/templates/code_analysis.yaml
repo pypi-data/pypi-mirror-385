@@ -1,0 +1,70 @@
+# Code Analysis Scenario Template
+# Comprehensive code analysis with LLM
+
+scenario:
+  id: code_analysis
+  name: Code Analysis
+  description: Analyze codebase for quality, patterns, and improvements
+  author: OutcomeForge Team
+  version: 1.0.0
+
+parameters:
+  patterns:
+    type: list
+    default: ["**/*.py"]
+    description: File patterns to analyze
+
+  analysis_type:
+    type: str
+    default: general
+    description: Type of analysis (general, security, performance, quality)
+
+  model:
+    type: str
+    default: gpt-4
+    description: LLM model for analysis
+
+  output_file:
+    type: str
+    default: null
+    description: Output file path (optional)
+
+steps:
+  - node: "@common/get_files"
+    name: get_files
+    params:
+      patterns: "{{params.patterns}}"
+
+  - node: "@common/parse_code"
+    name: parse_code
+
+  - node: "@common/files_to_prompt"
+    name: format_context
+    params:
+      format: xml
+      cxml: true
+      include_line_numbers: false
+
+  - node: "@common/call_llm"
+    name: analyze
+    params:
+      prompt_template: |
+        Analyze the following codebase for {{params.analysis_type}} issues:
+
+        {formatted_prompt}
+
+        Provide:
+        1. Key findings
+        2. Potential issues
+        3. Improvement suggestions
+        4. Code quality score (1-10)
+      model: "{{params.model}}"
+      temperature: 0.3
+      max_tokens: 4000
+
+  - node: "@common/write_file"
+    name: save_report
+    condition: params.output_file is not None
+    params:
+      file_path: "{{params.output_file}}"
+      content: "{llm_response}"
