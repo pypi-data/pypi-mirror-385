@@ -1,0 +1,39 @@
+Agent: @qwen
+Read: ~/.qwen/QWEN.md for full instructions
+
+STEP 1: VERIFY YOU ARE IN YOUR WORKTREE
+Run these commands:
+  pwd
+  git branch --show-current
+
+Expected output:
+  pwd should show: ../PROJECT-worktrees/qwen
+  branch should show: agent-qwen-XXX (XXX = spec number)
+
+If not in worktree:
+  git worktree list
+  cd ../PROJECT-worktrees/qwen
+  git fetch origin main && git merge origin/main
+
+STEP 2: FIND YOUR TASKS
+  grep "@qwen" specs/XXX-*/agent-tasks/layered-tasks.md
+
+STEP 3: UPDATE TASKS AS YOU WORK
+Mark tasks complete in layered-tasks.md with [x]
+Update your todo list as you complete work
+Check off each task immediately after finishing
+
+STEP 4: COMMIT AFTER EACH TASK
+After completing EACH task:
+  git add -A
+  git commit -m "[WORKING] Completed TXXX: brief description"
+
+When ALL assigned tasks are complete:
+  git push -u origin agent-qwen-XXX
+  gh pr create --title "feat: description" --body "Summary of all tasks"
+
+CRITICAL RULES:
+NO hardcoded API keys or absolute paths
+COMMIT after each task completion (not just at end)
+CREATE PR only when ALL assigned tasks complete
+Work ONLY in your assigned worktree

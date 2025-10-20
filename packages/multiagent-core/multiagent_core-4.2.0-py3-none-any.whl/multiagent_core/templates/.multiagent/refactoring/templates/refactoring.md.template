@@ -1,0 +1,293 @@
+---
+id: {{ID}}
+area: {{AREA}}
+status: {{STATUS}}
+priority: {{PRIORITY}}
+source: {{SOURCE}}
+effort: {{EFFORT}}
+created: {{CREATED_DATE}}
+updated: {{UPDATED_DATE}}
+---
+
+# Refactoring: {{TITLE}}
+
+**ID**: {{ID}}
+**Related Area**: {{AREA}}
+**Status**: {{STATUS}} (proposed | approved | in-progress | completed | archived)
+**Priority**: {{PRIORITY}} (critical | high | medium | low)
+**Source**: {{SOURCE}} (manual | analysis-report | tech-debt | code-review)
+**Estimated Effort**: {{EFFORT}} (hours/days/weeks)
+
+---
+
+## Description
+
+{{DESCRIPTION}}
+
+---
+
+## Problem Statement
+
+**Current State:**
+- What code patterns exist today
+- What's problematic or inefficient
+- Why it needs refactoring
+
+**Technical Impact:**
+- Performance implications
+- Maintainability concerns
+- Code quality issues
+
+---
+
+## Proposed Refactoring
+
+[High-level overview of the refactoring approach]
+
+### Expected Outcomes
+
+{{EXPECTED_OUTCOMES}}
+
+### Changes Required
+
+**Files Modified:**
+1. `path/to/file1` - What changes
+2. `path/to/file2` - What changes
+
+**Files Created:**
+1. `path/to/new-file` - Purpose
+
+**Files Deleted:**
+1. `path/to/old-file` - Reason for removal
+
+**Components Affected:**
+- Component 1 - How it's affected
+- Component 2 - How it's affected
+
+### Refactoring Approach
+
+1. Step 1: ...
+2. Step 2: ...
+3. Step 3: ...
+
+---
+
+## Code Examples
+
+### Before (Current Code)
+
+```{{LANGUAGE}}
+// Problematic code pattern
+{{BEFORE_CODE_EXAMPLE}}
+```
+
+**Issues:**
+- Issue 1
+- Issue 2
+- Issue 3
+
+### After (Refactored Code)
+
+```{{LANGUAGE}}
+// Improved code pattern
+{{AFTER_CODE_EXAMPLE}}
+```
+
+**Improvements:**
+- Improvement 1
+- Improvement 2
+- Improvement 3
+
+---
+
+## Integration
+
+**Primary Area**: {{AREA}}
+
+**Related Areas:**
+- area-name - How they interact
+- another-area - Integration points
+
+**Dependencies:**
+- Depends on: [other refactorings or features]
+- Blocks: [what's waiting for this]
+
+**Project Context:**
+- [ ] Backend / API
+- [ ] Frontend / UI
+- [ ] Infrastructure / DevOps
+- [ ] Database / Data Layer
+- [ ] Authentication / Security
+- [ ] Testing / QA
+- [ ] Documentation
+- [ ] [Custom area for your project]
+
+---
+
+## Impact Analysis
+
+### Benefits
+- Benefit 1
+- Benefit 2
+- Benefit 3
+
+### Risks
+- Risk 1 - Mitigation strategy
+- Risk 2 - Mitigation strategy
+
+### Performance Impact
+- Expected performance change: [+X% faster | no change | careful monitoring needed]
+- Benchmarks to run: [list specific benchmarks]
+
+### Breaking Changes
+- [ ] No breaking changes
+- [ ] Breaking changes (describe below)
+
+[If breaking changes, describe and provide migration path]
+
+---
+
+## Success Criteria
+
+{{SUCCESS_CRITERIA}}
+
+- [ ] All tests passing
+- [ ] No performance regression
+- [ ] Code quality metrics improved
+- [ ] Documentation updated
+- [ ] No new linting/type errors
+
+---
+
+## Implementation Plan
+
+### Phase 1: [Name]
+**Duration**: [estimate]
+
+- [ ] Task 1
+- [ ] Task 2
+- [ ] Task 3
+
+### Phase 2: [Name]
+**Duration**: [estimate]
+
+- [ ] Task 4
+- [ ] Task 5
+- [ ] Task 6
+
+---
+
+## Testing Strategy
+
+**Unit Tests:**
+- Test scenario 1
+- Test scenario 2
+
+**Integration Tests:**
+- Integration scenario 1
+- Integration scenario 2
+
+**Regression Tests:**
+- Ensure no functionality broken
+- Verify performance maintained/improved
+
+**Validation:**
+- [ ] All tests pass
+- [ ] No performance regression
+- [ ] Code coverage maintained or improved
+- [ ] Manual testing completed
+
+---
+
+## Rollback Plan
+
+**If issues are discovered:**
+
+```bash
+# Rollback changes
+git revert {{COMMIT_HASH}}
+
+# Or restore specific files
+git checkout {{BEFORE_COMMIT}} -- file1 file2
+```
+
+**Monitoring:**
+- Watch for errors in logs
+- Monitor performance metrics
+- Check user reports
+
+---
+
+## Documentation Updates
+
+**Files to Update:**
+- `docs/path/to/doc1.md` - What to add
+- `docs/path/to/doc2.md` - What to change
+
+**New Documentation:**
+- `docs/path/to/new-doc.md` - Purpose
+
+---
+
+## Original Context
+
+{{ORIGINAL_CONTEXT}}
+
+---
+
+## References
+
+**Source**: {{SOURCE_REFERENCE}}
+{{ADDITIONAL_REFERENCES}}
+
+**Related Refactorings:**
+- refactoring-name.md - How related
+
+**External References:**
+- [Link to docs](url)
+- [Link to issue](url)
+
+**Similar Refactorings:**
+- Similar refactoring 1
+- Similar refactoring 2
+
+---
+
+## Timeline
+
+**Proposed Start**: {{START_DATE}}
+**Estimated Completion**: {{END_DATE}}
+**Actual Completion**: TBD
+
+---
+
+## Approval
+
+**Proposed By**: {{AUTHOR}}
+**Reviewed By**: TBD
+**Approved By**: TBD
+**Approval Date**: TBD
+
+---
+
+**Document Location**: `{{DOCUMENT_LOCATION}}`
+**Last Updated**: {{UPDATED_DATE}}
+
+---
+
+## Usage Notes
+
+**Area Examples:**
+- **For multiagent-core framework:** core, agents, testing, deployment, etc.
+- **For web apps:** authentication, api-layer, database-access, caching, etc.
+- **For APIs:** endpoints, middleware, validation, error-handling, etc.
+- **For CLI tools:** commands, parsing, output-formatting, etc.
+
+**Refactoring Types:**
+- **Code Duplication**: Extract duplicated code into shared utilities
+- **Legacy Patterns**: Modernize callbacks to async/await, update deprecated APIs
+- **Performance**: Optimize algorithms, reduce N+1 queries, add caching
+- **Complexity**: Simplify nested logic, break down large functions
+- **Technical Debt**: Remove dead code, clean up TODOs, update documentation
+
+Adapt the "Area" field and "Project Context" checkboxes to match your project's structure.

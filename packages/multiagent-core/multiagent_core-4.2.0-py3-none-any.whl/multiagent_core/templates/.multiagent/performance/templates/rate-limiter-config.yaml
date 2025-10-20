@@ -1,0 +1,168 @@
+# Rate Limiter Configuration
+# Purpose: Configure rate limiting for API endpoints and users
+
+# Global Settings
+global:
+  enabled: true
+  storage_backend: redis  # redis, memory, database
+  redis_url: "redis://localhost:6379/0"
+
+# Default Limits (applied if no specific rule matches)
+defaults:
+  requests_per_minute: 60
+  requests_per_hour: 1000
+  requests_per_day: 10000
+  burst_size: 10  # Allow burst above rate limit
+
+# Per-Endpoint Limits
+endpoints:
+  # Public endpoints (stricter limits)
+  - path: /api/public/*
+    methods: [GET, POST]
+    limits:
+      anonymous:
+        requests_per_minute: 10
+        requests_per_hour: 100
+      authenticated:
+        requests_per_minute: 60
+        requests_per_hour: 1000
+
+  # AI endpoints (cost-sensitive)
+  - path: /api/ai/chat
+    methods: [POST]
+    limits:
+      free_tier:
+        requests_per_minute: 5
+        requests_per_hour: 50
+        requests_per_day: 200
+      pro_tier:
+        requests_per_minute: 60
+        requests_per_hour: 1000
+        requests_per_day: 10000
+      enterprise:
+        requests_per_minute: 1000
+        requests_per_hour: 50000
+        requests_per_day: 500000
+
+  # Authentication endpoints (prevent brute force)
+  - path: /api/auth/login
+    methods: [POST]
+    limits:
+      requests_per_minute: 5
+      requests_per_hour: 20
+      lockout_duration_minutes: 15
+      max_failures: 5
+
+  # Admin endpoints (relaxed for internal use)
+  - path: /api/admin/*
+    methods: [GET, POST, PUT, DELETE]
+    limits:
+      requests_per_minute: 120
+      requests_per_hour: 5000
+
+  # Data export (resource-intensive)
+  - path: /api/export/*
+    methods: [GET, POST]
+    limits:
+      requests_per_hour: 5
+      requests_per_day: 20
+
+# Per-User Tier Limits
+user_tiers:
+  anonymous:
+    requests_per_minute: 10
+    requests_per_hour: 100
+    requests_per_day: 500
+
+  free:
+    requests_per_minute: 30
+    requests_per_hour: 500
+    requests_per_day: 2000
+
+  pro:
+    requests_per_minute: 120
+    requests_per_hour: 5000
+    requests_per_day: 50000
+
+  enterprise:
+    requests_per_minute: 1000
+    requests_per_hour: 50000
+    requests_per_day: 1000000
+
+# IP-based Limits (DDoS protection)
+ip_limits:
+  enabled: true
+  requests_per_minute: 100
+  requests_per_hour: 1000
+  whitelist:
+    - 127.0.0.1
+    - 10.0.0.0/8
+  blacklist: []
+
+# Cost-based Limits (for AI endpoints)
+cost_limits:
+  enabled: true
+  daily_budget_usd: 10.00
+  monthly_budget_usd: 200.00
+
+  per_user:
+    free_tier: 0.50
+    pro_tier: 50.00
+    enterprise: 1000.00
+
+# Response Headers
+response_headers:
+  include_limit_headers: true
+  headers:
+    - X-RateLimit-Limit
+    - X-RateLimit-Remaining
+    - X-RateLimit-Reset
+
+# Error Responses
+error_responses:
+  status_code: 429
+  message: "Rate limit exceeded. Please try again later."
+  include_retry_after: true
+
+# Algorithms
+algorithms:
+  default: token_bucket  # token_bucket, leaky_bucket, fixed_window, sliding_window
+
+  # Token Bucket (allows bursts)
+  token_bucket:
+    refill_rate: 10  # Tokens per second
+    bucket_size: 100
+
+  # Sliding Window (more accurate)
+  sliding_window:
+    window_size_seconds: 60
+    max_requests: 60
+
+# Monitoring
+monitoring:
+  enabled: true
+  metrics:
+    - rate_limit_hits
+    - rate_limit_exceeded
+    - requests_by_tier
+    - requests_by_endpoint
+
+  # Alert on excessive rate limiting
+  alerts:
+    - condition: rate_limit_exceeded_percent > 10
+      severity: warning
+      message: "More than 10% of requests being rate limited"
+
+# Bypass Rules
+bypass:
+  # Internal services
+  service_accounts:
+    - name: monitoring
+      token: "${MONITORING_SERVICE_TOKEN}"
+      bypass: true
+
+  # Health checks
+  health_check_paths:
+    - /health
+    - /readiness
+    - /liveness

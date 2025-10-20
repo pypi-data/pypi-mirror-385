@@ -1,0 +1,200 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2025-10-17T14:00:00Z",
+  "managed_by": "docs subsystem",
+  "description": "Central configuration for all documentation references across the framework",
+  "architecture": {
+    "overview": {
+      "file": "docs/architecture/01-architecture-overview.md",
+      "alias": "ARCH_OVERVIEW",
+      "description": "Complete system architecture, three-tier, 21 subsystems",
+      "project_types": ["all"]
+    },
+    "development_guide": {
+      "file": "docs/architecture/02-development-guide.md",
+      "alias": "ARCH_DEV_GUIDE",
+      "description": "Build standards, dependencies, coding standards",
+      "project_types": ["all"]
+    },
+    "system_setup": {
+      "file": "docs/architecture/03-system-setup.md",
+      "alias": "ARCH_SETUP",
+      "description": "Installation, templates, configuration",
+      "project_types": ["all"]
+    },
+    "operations_reference": {
+      "file": "docs/architecture/04-operations-reference.md",
+      "alias": "ARCH_OPS",
+      "description": "Commands, MCP, project types, troubleshooting",
+      "project_types": ["all"]
+    },
+    "quick_start": {
+      "file": "docs/architecture/05-quick-start.md",
+      "alias": "ARCH_QUICKSTART",
+      "description": "5-minute onboarding guide",
+      "project_types": ["all"]
+    }
+  },
+  "sections": {
+    "layered_orchestration": {
+      "file": "docs/architecture/01-architecture-overview.md",
+      "section": "layered-orchestration-pattern",
+      "alias": "ARCH_ORCHESTRATION",
+      "description": "Parallel agent spawning, layer execution",
+      "project_types": ["all"]
+    },
+    "build_order": {
+      "file": "docs/architecture/02-development-guide.md",
+      "section": "dependencies--build-order",
+      "alias": "ARCH_BUILD_ORDER",
+      "description": "Subsystem dependencies and build sequence",
+      "project_types": ["all"]
+    },
+    "build_standards": {
+      "file": "docs/architecture/02-development-guide.md",
+      "section": "coding-standards",
+      "alias": "ARCH_BUILD_STANDARDS",
+      "description": "Command, agent, script, template standards",
+      "project_types": ["all"]
+    },
+    "integration_workflows": {
+      "file": "docs/architecture/01-architecture-overview.md",
+      "section": "integration-workflows",
+      "alias": "ARCH_WORKFLOWS",
+      "description": "Cross-subsystem integration patterns",
+      "project_types": ["all"]
+    },
+    "template_system": {
+      "file": "docs/architecture/03-system-setup.md",
+      "section": "template-management-system",
+      "alias": "ARCH_TEMPLATES",
+      "description": "Template swapping and variants",
+      "project_types": ["all"]
+    },
+    "mcp_registry": {
+      "file": "docs/architecture/04-operations-reference.md",
+      "section": "mcp-registry-management",
+      "alias": "ARCH_MCP",
+      "description": "MCP server registry and management",
+      "project_types": ["all"]
+    },
+    "project_types": {
+      "file": "docs/architecture/04-operations-reference.md",
+      "section": "project-type-system",
+      "alias": "ARCH_PROJECT_TYPES",
+      "description": "Landing page → SaaS scaling",
+      "project_types": ["all"]
+    },
+    "subsystem_lifecycle": {
+      "file": "docs/architecture/04-operations-reference.md",
+      "section": "subsystem-lifecycle",
+      "alias": "ARCH_LIFECYCLE",
+      "description": "Add, update, delete subsystems",
+      "project_types": ["all"]
+    },
+    "command_patterns": {
+      "file": "docs/architecture/04-operations-reference.md",
+      "section": "command-flag-patterns",
+      "alias": "ARCH_CMD_PATTERNS",
+      "description": "Consistent flag patterns across commands",
+      "project_types": ["all"]
+    }
+  },
+  "guides": {
+    "agent_workflow": {
+      "file": ".multiagent/agents/docs/workflow.md",
+      "alias": "GUIDE_AGENT_WORKFLOW",
+      "description": "Agent coordination and workflow",
+      "project_types": ["all"]
+    },
+    "git_worktree": {
+      "file": ".multiagent/iterate/docs/git-worktree-setup.md",
+      "alias": "GUIDE_WORKTREE",
+      "description": "Git worktree setup and management",
+      "project_types": ["web-app", "ai-app", "saas", "integrations"]
+    },
+    "testing_flow": {
+      "file": ".multiagent/testing/docs/testing-flow.md",
+      "alias": "GUIDE_TESTING",
+      "description": "Testing strategy and execution",
+      "project_types": ["all"]
+    }
+  },
+  "reference_format": {
+    "markdown_link": "[{{DESCRIPTION}}]({{FILE}}{{SECTION}})",
+    "section_separator": "#",
+    "examples": [
+      "See {{ARCH_BUILD_STANDARDS}} for coding standards",
+      "Details: [Build Order]({{ARCH_BUILD_ORDER}})",
+      "@{{ARCH_OVERVIEW}} - Load architecture context"
+    ]
+  },
+  "update_strategy": {
+    "on_consolidation": "Update only this config file",
+    "on_rename": "Update only this config file",
+    "on_new_doc": "Add new entry to appropriate section",
+    "validation": "Run .multiagent/scripts/validate-doc-references.sh"
+  },
+  "automation": {
+    "auto_update_commands": [
+      "testing:test",
+      "supervisor:end",
+      "build:subsystem-full",
+      "build:slash-command",
+      "build:agent",
+      "docs:consolidate"
+    ],
+    "optional_update_commands": [
+      "core:project-setup",
+      "deployment:deploy-prepare",
+      "frontend:develop",
+      "backend:develop"
+    ],
+    "never_update_commands": [
+      "docs:update",
+      "docs:validate",
+      "docs:sync",
+      "docs:init",
+      "*:status",
+      "*:list",
+      "mcp:*"
+    ],
+    "update_flags": {
+      "enable": "--update-docs",
+      "disable": "--skip-docs",
+      "quiet": "--quiet"
+    }
+  },
+  "project_type_overrides": {
+    "landing-page": {
+      "exclude": ["ai-infrastructure", "observability", "compliance", "iterate", "backend"],
+      "architecture_focus": ["frontend", "deployment", "core"],
+      "description": "Simple marketing sites - minimal subsystems"
+    },
+    "website": {
+      "exclude": ["ai-infrastructure", "observability", "compliance", "iterate"],
+      "architecture_focus": ["frontend", "backend", "deployment", "core"],
+      "description": "Content-driven sites with basic backend"
+    },
+    "web-app": {
+      "exclude": ["ai-infrastructure"],
+      "architecture_focus": ["frontend", "backend", "deployment", "core", "security", "testing"],
+      "description": "Full-stack applications with user auth"
+    },
+    "integrations": {
+      "exclude": ["frontend"],
+      "architecture_focus": ["backend", "reliability", "github", "observability", "deployment"],
+      "description": "Zapier-like workflow automation platforms"
+    },
+    "ai-app": {
+      "exclude": [],
+      "architecture_focus": ["all"],
+      "description": "AI-powered applications - all subsystems relevant"
+    },
+    "saas": {
+      "exclude": [],
+      "architecture_focus": ["all"],
+      "description": "Production SaaS platforms - complete framework"
+    }
+  }
+}

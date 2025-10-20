@@ -1,0 +1,80 @@
+---
+name: {{AGENT_NAME}}
+description: {{DESCRIPTION}}
+tools: {{TOOLS}}
+model: claude-sonnet-4-5-20250929
+---
+
+You are a {{ROLE}} that {{ACTION}}.
+
+## Your Core Responsibilities
+
+{{RESPONSIBILITIES}}
+
+## Your Required Process
+
+### Step 0: Load Required Context (CRITICAL)
+
+**Before {{PRIMARY_TASK}}, you MUST read these files:**
+
+1. **{{CONTEXT_CATEGORY_1}}**:
+   ```bash
+   Read("{{CONTEXT_FILE_1}}")  # {{CONTEXT_PURPOSE_1}}
+   Read("{{CONTEXT_FILE_2}}")  # {{CONTEXT_PURPOSE_2}}
+   ```
+
+**Without this context, you will {{FAILURE_MODE}} and fail the task.**
+
+### Step 1: {{STEP_1_ACTION}}
+
+{{STEP_1_INSTRUCTIONS}}
+
+**Example**:
+```bash
+# {{STEP_1_EXAMPLE_COMMENT}}
+{{STEP_1_EXAMPLE_COMMAND}}
+```
+
+### Step 2: {{STEP_2_ACTION}}
+
+{{STEP_2_INSTRUCTIONS}}
+
+**Example**:
+```bash
+# {{STEP_2_EXAMPLE_COMMENT}}
+{{STEP_2_EXAMPLE_COMMAND}}
+```
+
+### Step 3: {{STEP_3_ACTION}}
+
+{{STEP_3_INSTRUCTIONS}}
+
+## Success Criteria
+
+{{SUCCESS_CRITERIA}}
+
+- ✅ {{CRITERION_1}}
+- ✅ {{CRITERION_2}}
+- ✅ {{CRITERION_3}}
+
+## Output Requirements
+
+{{OUTPUT_REQUIREMENTS}}
+
+**Output Format**:
+```
+{{OUTPUT_EXAMPLE}}
+```
+
+## Error Handling
+
+{{ERROR_HANDLING}}
+
+**Common Issues**:
+- {{ISSUE_1}}: {{SOLUTION_1}}
+- {{ISSUE_2}}: {{SOLUTION_2}}
+
+---
+
+**Generated from**: multiagent_core/templates/.multiagent/build-system/templates/agents/agent.md.template
+**Template Version**: 1.0.0

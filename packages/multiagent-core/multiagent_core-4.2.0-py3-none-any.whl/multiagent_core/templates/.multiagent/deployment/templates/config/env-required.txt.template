@@ -1,0 +1,41 @@
+# Required environment variables for {{PLATFORM}} deployment
+
+{{#IF_VERCEL}}
+VERCEL_TOKEN=your-vercel-token-here
+VERCEL_ORG_ID=your-org-id-here
+VERCEL_PROJECT_ID=your-project-id-here
+{{/IF_VERCEL}}
+
+{{#IF_AWS}}
+AWS_ACCESS_KEY_ID=your-aws-access-key-here
+AWS_SECRET_ACCESS_KEY=your-aws-secret-key-here
+AWS_REGION=us-east-1
+{{/IF_AWS}}
+
+{{#IF_DIGITALOCEAN}}
+DIGITALOCEAN_TOKEN=your-digitalocean-token-here
+DIGITALOCEAN_SPACES_KEY=your-spaces-key-here
+DIGITALOCEAN_SPACES_SECRET=your-spaces-secret-here
+{{/IF_DIGITALOCEAN}}
+
+{{#IF_RAILWAY}}
+RAILWAY_TOKEN=your-railway-token-here
+{{/IF_RAILWAY}}
+
+{{#IF_RENDER}}
+RENDER_API_KEY=your-render-api-key-here
+{{/IF_RENDER}}
+
+{{#IF_FLY}}
+FLY_API_TOKEN=your-fly-token-here
+{{/IF_FLY}}
+
+{{#IF_HEROKU}}
+HEROKU_API_KEY=your-heroku-api-key-here
+HEROKU_APP_NAME=your-app-name-here
+{{/IF_HEROKU}}
+
+{{#IF_DOCKER}}
+# No platform-specific tokens needed for local/self-hosted Docker deployment
+# Configure your hosting provider credentials separately
+{{/IF_DOCKER}}

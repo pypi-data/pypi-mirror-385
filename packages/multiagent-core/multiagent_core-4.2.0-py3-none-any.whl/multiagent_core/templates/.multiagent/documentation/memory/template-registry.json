@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Template Registry",
+  "description": "Central registry for all universal documentation templates with metadata and usage tracking",
+  "version": "1.0.0",
+  "last_updated": null,
+  "templates": [],
+  "_schema": {
+    "template_entry": {
+      "template_id": "string - Unique identifier for the template",
+      "name": "string - Human-readable template name",
+      "file_path": "string - Relative path to template file",
+      "category": "enum - readme|architecture|api|database|deployment|testing|contributing|custom",
+      "description": "string - Purpose and usage of this template",
+      "project_types": "array - List of project types this template applies to (python|javascript|react|nextjs|fastapi|django|universal)",
+      "placeholders": "array - List of placeholder objects with name and description",
+      "required_placeholders": "array - List of placeholder names that MUST be filled",
+      "optional_placeholders": "array - List of placeholder names that are optional",
+      "dependencies": "array - List of template_ids that should exist before using this template",
+      "usage_count": "integer - Number of times this template has been used",
+      "last_used": "ISO 8601 timestamp - When template was last instantiated",
+      "created_at": "ISO 8601 timestamp - When template was added to registry",
+      "created_by": "string - Agent or user who created the template",
+      "validation_rules": "object - Rules for validating filled templates",
+      "example_output": "string - Path to example of filled template",
+      "tags": "array - Categorization tags for discovery",
+      "version": "string - Semantic version of the template"
+    }
+  },
+  "_example": [
+    {
+      "template_id": "readme-universal-001",
+      "name": "Universal README Template",
+      "file_path": ".multiagent/documentation/templates/README.template.md",
+      "category": "readme",
+      "description": "Standard README template that adapts to any project type with intelligent placeholder filling",
+      "project_types": ["universal"],
+      "placeholders": [
+        {"name": "{{PROJECT_NAME}}", "description": "Name of the project", "required": true},
+        {"name": "{{DESCRIPTION}}", "description": "One-line project description", "required": true},
+        {"name": "{{INSTALLATION}}", "description": "Installation instructions", "required": false},
+        {"name": "{{USAGE}}", "description": "Basic usage examples", "required": false}
+      ],
+      "required_placeholders": ["{{PROJECT_NAME}}", "{{DESCRIPTION}}"],
+      "optional_placeholders": ["{{INSTALLATION}}", "{{USAGE}}"],
+      "dependencies": [],
+      "usage_count": 0,
+      "last_used": null,
+      "created_at": "2025-10-15T21:00:00Z",
+      "created_by": "@claude",
+      "validation_rules": {
+        "min_description_length": 20,
+        "max_description_length": 200,
+        "required_sections": ["Installation", "Usage", "License"]
+      },
+      "example_output": ".multiagent/documentation/examples/README.example.md",
+      "tags": ["core", "universal", "entry-point"],
+      "version": "1.0.0"
+    },
+    {
+      "template_id": "architecture-universal-001",
+      "name": "Universal Architecture Documentation Template",
+      "file_path": ".multiagent/documentation/templates/ARCHITECTURE.template.md",
+      "category": "architecture",
+      "description": "Comprehensive architecture documentation template with system design patterns",
+      "project_types": ["universal"],
+      "placeholders": [
+        {"name": "{{SYSTEM_DESIGN}}", "description": "High-level system architecture overview", "required": true},
+        {"name": "{{COMPONENTS}}", "description": "Major system components and their relationships", "required": true},
+        {"name": "{{DATA_FLOW}}", "description": "Data flow diagrams and patterns", "required": false},
+        {"name": "{{TECH_STACK}}", "description": "Technology stack and decisions", "required": false}
+      ],
+      "required_placeholders": ["{{SYSTEM_DESIGN}}", "{{COMPONENTS}}"],
+      "optional_placeholders": ["{{DATA_FLOW}}", "{{TECH_STACK}}"],
+      "dependencies": ["readme-universal-001"],
+      "usage_count": 0,
+      "last_used": null,
+      "created_at": "2025-10-15T21:00:00Z",
+      "created_by": "@qwen",
+      "validation_rules": {
+        "must_have_diagrams": false,
+        "required_sections": ["Overview", "Components", "Design Decisions"]
+      },
+      "example_output": ".multiagent/documentation/examples/ARCHITECTURE.example.md",
+      "tags": ["architecture", "design", "universal"],
+      "version": "1.0.0"
+    }
+  ]
+}

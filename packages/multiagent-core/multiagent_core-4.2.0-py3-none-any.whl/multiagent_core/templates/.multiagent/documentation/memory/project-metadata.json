@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Project Metadata Registry",
+  "description": "Auto-detection patterns and metadata for different project types to enable intelligent documentation generation",
+  "version": "1.0.0",
+  "last_updated": null,
+  "detected_project_type": null,
+  "detection_confidence": 0.0,
+  "project_types": [],
+  "_schema": {
+    "project_type_entry": {
+      "project_type": "string - Unique identifier for project type (python-cli|python-api|nextjs|react|django|fastapi|nodejs|universal)",
+      "name": "string - Human-readable project type name",
+      "description": "string - Description of this project type",
+      "detection_patterns": "object - Patterns to automatically detect this project type",
+      "file_indicators": "array - Files that indicate this project type",
+      "directory_indicators": "array - Directories that indicate this project type",
+      "content_indicators": "array - File content patterns that indicate this project type",
+      "priority": "integer - Detection priority (higher = checked first)",
+      "confidence_weights": "object - Weights for calculating detection confidence",
+      "template_mappings": "object - Which templates to use for this project type",
+      "documentation_structure": "object - Recommended doc structure for this project",
+      "placeholder_defaults": "object - Default values for common placeholders",
+      "tech_stack": "array - Technologies typically used in this project type"
+    }
+  },
+  "_example": [
+    {
+      "project_type": "python-cli",
+      "name": "Python CLI Application",
+      "description": "Python command-line interface tool or utility",
+      "detection_patterns": {
+        "file_indicators": ["pyproject.toml", "setup.py", "cli.py", "__main__.py"],
+        "directory_indicators": ["src/", "tests/", ".venv/"],
+        "content_indicators": [
+          {"file": "pyproject.toml", "pattern": "console_scripts"},
+          {"file": "**/*.py", "pattern": "argparse|click|typer"}
+        ]
+      },
+      "priority": 80,
+      "confidence_weights": {
+        "pyproject_toml": 0.3,
+        "console_scripts": 0.4,
+        "cli_framework": 0.3
+      },
+      "template_mappings": {
+        "readme": "README.template.md",
+        "architecture": "ARCHITECTURE.template.md",
+        "contributing": "CONTRIBUTING.template.md",
+        "testing": "TESTING.template.md"
+      },
+      "documentation_structure": {
+        "root": ["README.md", "LICENSE", "CONTRIBUTING.md"],
+        "docs": ["architecture/", "api/", "examples/"],
+        "required_sections": ["Installation", "Usage", "CLI Reference"]
+      },
+      "placeholder_defaults": {
+        "{{INSTALLATION}}": "pip install {{PROJECT_NAME}}",
+        "{{USAGE}}": "{{PROJECT_NAME}} --help",
+        "{{TECH_STACK}}": "Python 3.8+, Click/Typer for CLI"
+      },
+      "tech_stack": ["python", "click", "typer", "pytest", "setuptools"]
+    },
+    {
+      "project_type": "nextjs",
+      "name": "Next.js Web Application",
+      "description": "React-based web application using Next.js framework",
+      "detection_patterns": {
+        "file_indicators": ["next.config.js", "next.config.mjs", "package.json"],
+        "directory_indicators": ["app/", "pages/", "public/", "components/"],
+        "content_indicators": [
+          {"file": "package.json", "pattern": "\"next\":\\s*\""},
+          {"file": "**/*.tsx", "pattern": "from 'next/"}
+        ]
+      },
+      "priority": 90,
+      "confidence_weights": {
+        "next_config": 0.4,
+        "package_json_next": 0.3,
+        "app_or_pages_dir": 0.3
+      },
+      "template_mappings": {
+        "readme": "README.template.md",
+        "architecture": "ARCHITECTURE.template.md",
+        "api": "API.template.md",
+        "deployment": "DEPLOYMENT.template.md"
+      },
+      "documentation_structure": {
+        "root": ["README.md", "LICENSE"],
+        "docs": ["architecture/", "api/", "components/", "deployment/"],
+        "required_sections": ["Getting Started", "Development", "Deployment", "Environment Variables"]
+      },
+      "placeholder_defaults": {
+        "{{INSTALLATION}}": "npm install",
+        "{{USAGE}}": "npm run dev",
+        "{{DEPLOYMENT}}": "Vercel (recommended) or Docker",
+        "{{TECH_STACK}}": "Next.js 14+, React 18+, TypeScript"
+      },
+      "tech_stack": ["nextjs", "react", "typescript", "tailwindcss", "vercel"]
+    },
+    {
+      "project_type": "fastapi",
+      "name": "FastAPI Backend Service",
+      "description": "Python backend API using FastAPI framework",
+      "detection_patterns": {
+        "file_indicators": ["main.py", "pyproject.toml", "requirements.txt"],
+        "directory_indicators": ["app/", "routers/", "models/", "tests/"],
+        "content_indicators": [
+          {"file": "**/*.py", "pattern": "from fastapi import|FastAPI\\("},
+          {"file": "pyproject.toml", "pattern": "fastapi"}
+        ]
+      },
+      "priority": 85,
+      "confidence_weights": {
+        "fastapi_import": 0.5,
+        "api_structure": 0.3,
+        "pyproject_fastapi": 0.2
+      },
+      "template_mappings": {
+        "readme": "README.template.md",
+        "architecture": "ARCHITECTURE.template.md",
+        "api": "API.template.md",
+        "database": "DATABASE.template.md",
+        "deployment": "DEPLOYMENT.template.md"
+      },
+      "documentation_structure": {
+        "root": ["README.md", "LICENSE", "API.md"],
+        "docs": ["architecture/", "api/", "database/", "deployment/"],
+        "required_sections": ["API Endpoints", "Authentication", "Database Schema", "Deployment"]
+      },
+      "placeholder_defaults": {
+        "{{INSTALLATION}}": "pip install -r requirements.txt",
+        "{{USAGE}}": "uvicorn main:app --reload",
+        "{{AUTHENTICATION}}": "OAuth2 with JWT tokens",
+        "{{TECH_STACK}}": "FastAPI, SQLAlchemy, Pydantic, PostgreSQL"
+      },
+      "tech_stack": ["python", "fastapi", "sqlalchemy", "pydantic", "uvicorn", "postgresql"]
+    },
+    {
+      "project_type": "universal",
+      "name": "Universal/Unknown Project",
+      "description": "Fallback for projects that don't match specific patterns",
+      "detection_patterns": {
+        "file_indicators": [],
+        "directory_indicators": [],
+        "content_indicators": []
+      },
+      "priority": 0,
+      "confidence_weights": {},
+      "template_mappings": {
+        "readme": "README.template.md",
+        "contributing": "CONTRIBUTING.template.md"
+      },
+      "documentation_structure": {
+        "root": ["README.md", "LICENSE"],
+        "docs": ["architecture/", "api/"],
+        "required_sections": ["Overview", "Installation", "Usage"]
+      },
+      "placeholder_defaults": {
+        "{{INSTALLATION}}": "See installation instructions",
+        "{{USAGE}}": "See usage documentation"
+      },
+      "tech_stack": []
+    }
+  ]
+}

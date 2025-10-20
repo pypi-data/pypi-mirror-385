@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Documentation State Tracker",
+  "description": "Tracks the lifecycle and status of all project documentation files",
+  "version": "1.0.0",
+  "last_updated": null,
+  "documents": [],
+  "_schema": {
+    "document_entry": {
+      "doc_id": "string - Unique identifier for the document",
+      "file_path": "string - Relative path from project root",
+      "doc_type": "enum - readme|architecture|api|database|deployment|testing|contributing",
+      "status": "enum - draft|in_progress|review|complete|deprecated",
+      "created_at": "ISO 8601 timestamp - When document was first created",
+      "last_updated": "ISO 8601 timestamp - Last modification time",
+      "last_updated_by": "string - Agent or user who last updated (@codex, @claude, etc.)",
+      "template_source": "string - Path to template file if created from template",
+      "placeholders_total": "integer - Total number of placeholders in template",
+      "placeholders_filled": "integer - Number of placeholders successfully filled",
+      "validation_status": "enum - valid|invalid|not_validated",
+      "validation_issues": "array - List of validation errors or warnings",
+      "cross_references": "array - List of doc_ids this document references",
+      "referenced_by": "array - List of doc_ids that reference this document",
+      "tags": "array - Categorization tags for search and filtering",
+      "checksum": "string - SHA-256 hash for change detection"
+    }
+  },
+  "_example": [
+    {
+      "doc_id": "readme-001",
+      "file_path": "README.md",
+      "doc_type": "readme",
+      "status": "complete",
+      "created_at": "2025-10-15T21:00:00Z",
+      "last_updated": "2025-10-15T21:30:00Z",
+      "last_updated_by": "@copilot",
+      "template_source": ".multiagent/documentation/templates/README.template.md",
+      "placeholders_total": 8,
+      "placeholders_filled": 8,
+      "validation_status": "valid",
+      "validation_issues": [],
+      "cross_references": ["architecture-001", "contributing-001"],
+      "referenced_by": [],
+      "tags": ["core", "entry-point"],
+      "checksum": "abc123def456..."
+    }
+  ]
+}
