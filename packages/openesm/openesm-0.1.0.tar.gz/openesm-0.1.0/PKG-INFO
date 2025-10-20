@@ -1,0 +1,75 @@
+Metadata-Version: 2.4
+Name: openesm
+Version: 0.1.0
+Summary: Access openESM experience sampling datasets
+Author-email: "Björn S. Siepe" <bjoernsiepe@gmail.com>
+License: MIT
+License-File: LICENSE
+Requires-Python: >=3.9
+Requires-Dist: platformdirs>=3.0.0
+Requires-Dist: polars>=0.20.0
+Requires-Dist: requests>=2.31.0
+Requires-Dist: rich>=13.5.2
+Provides-Extra: dev
+Requires-Dist: bandit; extra == 'dev'
+Requires-Dist: build; extra == 'dev'
+Requires-Dist: mypy; extra == 'dev'
+Requires-Dist: pre-commit; extra == 'dev'
+Requires-Dist: pytest-cov>=4.1.0; extra == 'dev'
+Requires-Dist: pytest>=7.4.0; extra == 'dev'
+Requires-Dist: requests-mock>=1.11.0; extra == 'dev'
+Requires-Dist: ruff; extra == 'dev'
+Requires-Dist: safety; extra == 'dev'
+Requires-Dist: twine; extra == 'dev'
+Requires-Dist: types-requests; extra == 'dev'
+Description-Content-Type: text/markdown
+
+# openESM Python Package
+
+[![CI](https://github.com/bsiepe/openesm-py/workflows/CI/badge.svg)](https://github.com/bsiepe/openesm-py/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/bsiepe/openesm-py/branch/main/graph/badge.svg)](https://codecov.io/gh/bsiepe/openesm-py)
+[![Python versions](https://img.shields.io/pypi/pyversions/openesm.svg)](https://pypi.org/project/openesm/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+> **Python interface for accessing openly available Experience Sampling Method (ESM) datasets**
+
+This package provides a Python equivalent to the [openESM R package](https://github.com/bsiepe/openesm), allowing researchers to programmatically access and download ESM datasets from the openESM repository. All datasets are hosted on Zenodo with proper DOIs for citation.
+
+## Features
+
+- **Simple API** - Download datasets with a single function call
+- **Automatic Caching** - Datasets cached locally to avoid re-downloads
+- **Citation Helper** - Built-in methods for proper dataset citation
+
+
+## Installation
+
+```bash
+pip install openesm
+```
+
+## Quick Start
+
+```python
+import openesm
+
+# List available datasets
+datasets = openesm.list_datasets()
+print(datasets)
+
+# Download a specific dataset
+dataset = openesm.get_dataset("0001")
+print(dataset.data)  # Access the polars DataFrame
+print(dataset.cite())  # Get citation information
+
+# Download multiple datasets
+datasets = openesm.get_dataset(["0001", "0002"])
+```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
