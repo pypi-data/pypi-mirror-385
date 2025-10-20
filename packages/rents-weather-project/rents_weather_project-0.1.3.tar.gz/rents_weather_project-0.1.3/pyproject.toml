@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "rents_weather_project"
+version = "0.1.3"
+description = "Rentaoshu's test MCP weather server."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "dotenv>=0.9.9",
+    "mcp>=1.18.0",
+    "openai>=2.5.0",
+]
+[project.scripts]
+rents_weather_script = "rents_weather:main"
+[tool.setuptools]
+package-dir = {"" = "src"}
+[tool.setuptools.packages.find]
+where = ["src"]
