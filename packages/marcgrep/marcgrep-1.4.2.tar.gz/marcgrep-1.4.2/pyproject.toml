@@ -1,0 +1,47 @@
+[project]
+name = "marcgrep"
+version = "1.4.2"
+description = "search MARC files for regex matches"
+authors = [{name = "Eric Phetteplace", email = "phette23@gmail.com"}]
+license = "MIT"
+readme = "readme.md"
+keywords = ["marc", "grep", "regex", "libraries", "cli", "metadata", "bibliographic", "cataloging"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Topic :: Utilities",
+]
+dependencies = [
+    # click 8.2 is python 3.10+
+    "click==8.1.8",
+    "pymarc==5.3.1",
+    "termcolor==3.1.0"
+]
+requires-python = ">=3.9"
+
+[dependency-groups]
+dev = [
+    "pytest==8.4.2",
+]
+
+[project.scripts]
+marcgrep = "marcgrep.cli:main"
+
+[project.urls]
+homepage = "https://github.com/phette23/marcgreppy"
+issues = "https://github.com/phette23/marcgreppy/issues"
+repository = "https://github.com/phette23/marcgreppy"
+
+[tool.setuptools.packages.find]
+where = ["marcgrep"]
+
+[tool.uv.build-backend]
+module-name = "marcgrep"
+module-root = ""
+
+[build-system]
+requires = ["uv_build"]
+build-backend = "uv_build"
