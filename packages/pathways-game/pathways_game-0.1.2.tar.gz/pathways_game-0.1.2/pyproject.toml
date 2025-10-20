@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pathways-game"
+version = "0.1.2"
+description = "A game made with pygame"
+authors = [
+    {name = "Gavin Gilchrist", email = "gavin.d.gilchrist@gmail.com"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "numpy>=2.0",
+    "pygame>=2.6",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/gavingilchrist/pathways"
