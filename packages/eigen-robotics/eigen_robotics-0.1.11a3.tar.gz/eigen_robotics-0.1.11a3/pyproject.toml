@@ -1,0 +1,59 @@
+[project]
+name = "eigen-robotics"                     # <— PyPI distribution name
+version = "0.1.11a3"
+description = "A Python-first robotics framework (framework, robots, sensors) in one package."
+readme = "README.md"
+requires-python = ">=3.11,<3.12"            # match your target exactly if needed
+authors = [{ name = "Sarthak Das", email = "sdas4@icloud.com" }]
+license = { file = "LICENSE" }
+keywords = ["robotics", "ml", "framework"]
+
+# Runtime deps shared by everything
+dependencies = [
+    # e.g. "numpy>=1.26", "pydantic>=2", ...
+    "ipython>=8.26",
+    "numpy>=1.26",
+    "opencv-python>=4.10",
+    "pandas>=2.2",
+    "pillow>=10.4",
+    "pydantic>=2",
+    "scipy>=1.11",
+    "matplotlib>=3.8",
+    "tqdm>=4.66",
+    "rich>=13.5",
+    "typer>=0.9",
+    "graphviz>=0.21",
+    "lcm>=1.5.1",
+    "pyyaml>=6.0",
+]
+
+[project.scripts]
+eigen = "eigen.framework.cli.main:app"
+
+# Optional extras (install-time feature flags for external deps; code is already included)
+[project.optional-dependencies]
+pybullet = ["pybullet>=3.2.5"]
+genesis  = ["genesis-world>=0.0.0"]            # replace with real package when ready
+dev = ["pytest>=8", "pytest-cov>=6", "ruff>=0.5", "pre-commit>=4"]
+
+[project.urls]
+Homepage = "https://github.com/Eigen-Robotics/Eigen-Robotics"
+Repository = "https://github.com/Eigen-Robotics/Eigen-Robotics"
+Issues = "https://github.com/Eigen-Robotics/Eigen-Robotics/issues"
+
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+# Tell setuptools to use src/ layout and include all subpackages under eigen/*
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["eigen*"]
+
+# If you ship non-.py files:
+# [tool.setuptools.package-data]
+# "eigen*" = ["py.typed", "*.json", "assets/**/*"]
+
+# If your README is Markdown:
+[tool.setuptools]
+zip-safe = false
