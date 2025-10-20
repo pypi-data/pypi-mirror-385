@@ -1,0 +1,62 @@
+[build-system]
+requires = ["flit_core>=3.4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name =  "magma-converter"
+version = "1.9.4"
+authors = [
+    {name = "Martanto", email = "martanto@live.com"},
+    {name = "Devy Kamil Syahbana", email = "devy.syahbana@gmail.com"},
+    {name = "Syarif Abdul Manaf", email = "riefmof@gmail.com"},
+]
+description = "Convert CVGHM seismic data structures into SDS format."
+readme = "README.md"
+license = {file = "LICENSE"}
+keywords = ["seismic", "volcano", "volcanology", "convert", "sds", "seiscomp", "mseed"]
+requires-python = ">=3.11"
+dependencies = [
+    "obspy>=1.4.2",
+    "openpyxl>=3.1.5",
+    "pandas>=2.2.2",
+    "numpy>=2.2.5",
+    "matplotlib>=3.9.0",
+    "magma-database>=1.5.0",
+    "peewee>=3.17.5",
+    "seaborn>=0.13.0",
+    "python-dotenv>=1.0.1",
+    "pytz>=2024.1",
+#    "kaleido==0.1.0.post1",
+    "kaleido",
+    "plotly>=5.23.0",
+    "tqdm>=4.67.0",
+    "ipywidgets>=8.1.5",
+]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+[project.optional-dependencies]
+base = [
+    "obspy",
+    "openpyxl",
+    "pandas",
+    "numpy",
+    "matplotlib",
+    "magma-database",
+    "peewee",
+    "seaborn",
+    "python-dotenv",
+    "pytz",
+    "kaleido",
+    "plotly",
+    "tqdm",
+    "ipywidgets",
+]
+
+[project.urls]
+Homepage = "https://github.com/martanto/magma-converter"
+Issues = "https://github.com/martanto/magma-converter/issues"
