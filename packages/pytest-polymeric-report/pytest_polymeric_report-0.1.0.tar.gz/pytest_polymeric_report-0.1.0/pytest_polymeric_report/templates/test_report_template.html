@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>📊 {{ results.title if results.title else '通用测试报告' }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- 引入外部资源 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* 基础样式优化 */
+    :root {
+      --primary-color: #2563eb;
+      --primary-light: #3b82f6;
+      --success-color: #10b981;
+      --danger-color: #ef4444;
+      --warning-color: #f59e0b;
+      --skipped-color: #6366f1; /* 跳过用例颜色（靛蓝色） */
+      --text-dark: #1e293b;
+      --text-light: #64748b;
+      --bg-light: #f8fafc;
+      --border-color: #e2e8f0;
+      --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      --hover-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+      --transition: all 0.3s ease;
+    }
+
+    body {
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+      line-height: 1.6;
+      padding: 20px 0;
+    }
+
+    /* 头部样式 */
+    header {
+      margin-bottom: 2rem;
+      padding: 2rem 1rem;
+      background: linear-gradient(135deg, var(--primary-color), #1e40af);
+      border-radius: 12px;
+      box-shadow: var(--card-shadow);
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .header-content {
+      position: relative;
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    header h1 {
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 0.8rem;
+      font-size: 2.2rem;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    header p {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.1rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* 卡片样式优化 */
+    .card {
+      border: none;
+      border-radius: 12px;
+      box-shadow: var(--card-shadow);
+      transition: var(--transition);
+      margin-bottom: 2rem;
+      overflow: hidden;
+      background-color: white;
+    }
+
+    .card:hover {
+      box-shadow: var(--hover-shadow);
+      transform: translateY(-2px);
+    }
+
+    .card-header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 1.2rem 1.5rem;
+      border-bottom: none;
+      font-size: 1.15rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+    }
+
+    .card-header i {
+      margin-right: 0.8rem;
+      font-size: 1.3rem;
+    }
+
+    .card-body {
+      padding: 1.8rem;
+    }
+
+    /* 统计数字样式 */
+    .stat-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-card {
+      flex: 1;
+      min-width: 180px;
+      background: white;
+      border-radius: 10px;
+      padding: 1.5rem 1rem;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      transition: var(--transition);
+      border-top: 4px solid transparent;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    .stat-total { border-top-color: var(--primary-color); }
+    .stat-passed { border-top-color: var(--success-color); }
+    .stat-failed { border-top-color: var(--danger-color); }
+    .stat-errors { border-top-color: var(--warning-color); }
+    .stat-skipped { border-top-color: var(--skipped-color); }
+
+    .stat-card h5 {
+      color: var(--text-light);
+      font-size: 0.95rem;
+      margin-bottom: 0.8rem;
+      font-weight: 500;
+    }
+
+    .stat-card .stat-value {
+      font-weight: 700;
+      font-size: 2rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .stat-card .stat-percent {
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+
+    /* 图表容器样式 */
+    .chart-container {
+      background: white;
+      border-radius: 10px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      margin-top: 1.5rem;
+      border: 1px solid var(--border-color);
+      height: 300px; /* 固定图表高度，确保显示完整 */
+    }
+
+    /* 表格样式优化 */
+    .table {
+      margin-bottom: 0;
+      border-collapse: separate;
+      border-spacing: 0;
+      width: 100%;
+    }
+
+    .table thead {
+      background-color: #f1f5f9;
+    }
+
+    .table th {
+      padding: 1rem 1.2rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      border-bottom: 2px solid var(--border-color);
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .table td {
+      padding: 1.2rem 1.2rem;
+      vertical-align: middle;
+      text-align: center;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .table tbody tr {
+      transition: var(--transition);
+    }
+
+    .table tbody tr:hover {
+      background-color: rgba(37, 99, 235, 0.03);
+    }
+
+    /* 用例描述样式 */
+    .case-description {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--text-light);
+      margin-top: 0.3rem;
+      font-style: italic;
+      line-height: 1.4;
+      word-break: break-word; /* 长描述自动换行 */
+    }
+
+    /* 状态标签样式 */
+    .badge {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border-radius: 20px;
+    }
+
+    .status-passed {
+      color: var(--success-color);
+      font-weight: 600;
+      display: inline-block;
+      padding: 0.3rem 0.8rem;
+      background-color: rgba(16, 185, 129, 0.1);
+      border-radius: 6px;
+    }
+
+    .status-failed {
+      color: var(--danger-color);
+      font-weight: 600;
+      display: inline-block;
+      padding: 0.3rem 0.8rem;
+      background-color: rgba(239, 68, 68, 0.1);
+      border-radius: 6px;
+    }
+
+    .status-error {
+      color: var(--warning-color);
+      font-weight: 600;
+      display: inline-block;
+      padding: 0.3rem 0.8rem;
+      background-color: rgba(245, 158, 11, 0.1);
+      border-radius: 6px;
+    }
+
+    .status-skipped {
+      color: var(--skipped-color);
+      font-weight: 600;
+      display: inline-block;
+      padding: 0.3rem 0.8rem;
+      background-color: rgba(99, 102, 241, 0.1);
+      border-radius: 6px;
+    }
+
+    /* 折叠按钮样式 */
+    .toggle-details {
+      background: none;
+      border: none;
+      color: var(--primary-color);
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: var(--transition);
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .toggle-details:hover {
+      background-color: rgba(37, 99, 235, 0.1);
+    }
+
+    .toggle-details .icon {
+      transition: transform 0.3s ease;
+    }
+
+    .toggle-details:not(.collapsed) .icon {
+      transform: rotate(90deg);
+    }
+
+    /* 折叠面板样式 */
+    .accordion-collapse {
+      border-top: 1px solid var(--border-color);
+      background-color: #fafafa;
+    }
+
+    .accordion-body {
+      padding: 1.5rem;
+      background-color: white;
+      font-size: 0.95rem;
+      text-align: left;
+      border-top: 1px dashed var(--border-color);
+    }
+
+    .detail-section {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .detail-section:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .detail-section h5 {
+      font-size: 1rem;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .detail-section h5 i {
+      margin-right: 0.5rem;
+      color: var(--primary-color);
+    }
+
+    /* 日志区域样式 */
+    pre {
+      background-color: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: var(--text-dark);
+      overflow-x: auto;
+      margin-top: 0.5rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    /* 页脚样式 */
+    footer {
+      margin-top: 3rem;
+      padding: 2rem 1rem;
+      background-color: #1e293b;
+      color: rgba(255, 255, 255, 0.8);
+      text-align: center;
+      border-radius: 12px;
+      box-shadow: var(--card-shadow);
+    }
+
+    footer p {
+      margin-bottom: 0;
+      font-size: 0.95rem;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* 响应式适配优化 */
+    @media (max-width: 1200px) {
+      .container {
+        max-width: 95%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 1.5rem 1rem;
+      }
+
+      header h1 {
+        font-size: 1.8rem;
+      }
+
+      .card-body {
+        padding: 1.2rem;
+      }
+
+      .table th, .table td {
+        padding: 0.8rem 0.5rem;
+        font-size: 0.9rem;
+      }
+
+      .stat-card .stat-value {
+        font-size: 1.6rem;
+      }
+
+      .chart-container {
+        padding: 1rem;
+        height: 250px;
+      }
+
+      .toggle-details {
+        font-size: 1rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .stat-container {
+        flex-direction: column;
+      }
+
+      .stat-card {
+        min-width: auto;
+      }
+
+      .accordion-body {
+        padding: 1rem;
+      }
+
+      pre {
+        padding: 0.8rem;
+        font-size: 0.85rem;
+      }
+
+      /* 小屏幕隐藏耗时列，优先展示关键信息 */
+      .table th:nth-child(3),
+      .table td:nth-child(3) {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body class="container">
+
+  <!-- 报告头部 -->
+  <header>
+    <div class="header-content">
+      <h1>🧪 {{ results.title if results.title else '通用测试报告' }}</h1>
+      <p>{{ results.desc if results.desc else '一致、美观且可复用的测试报告模板 — 关键信息一目了然' }}</p>
+    </div>
+  </header>
+
+  <!-- 统计摘要卡片 -->
+  <div class="card">
+    <div class="card-header">
+      <i class="fa fa-bar-chart"></i> 测试摘要
+    </div>
+    <div class="card-body">
+      <!-- 统计数字行 -->
+      <div class="stat-container">
+        <div class="stat-card stat-total">
+          <h5>总用例数</h5>
+          <div class="stat-value">{{ results.total }}</div>
+          <div class="stat-percent">100%</div>
+        </div>
+        <div class="stat-card stat-passed">
+          <h5>通过用例</h5>
+          <div class="stat-value">{{ results.passed }}</div>
+          <div class="stat-percent">
+            {% set total = results.total | int %}
+            {% if total > 0 %}
+              {{ "%.1f"|format((results.passed | int / total) * 100) }}%
+            {% else %}
+              0%
+            {% endif %}
+          </div>
+        </div>
+        <div class="stat-card stat-failed">
+          <h5>失败用例</h5>
+          <div class="stat-value">{{ results.failed }}</div>
+          <div class="stat-percent">
+            {% set total = results.total | int %}
+            {% if total > 0 %}
+              {{ "%.1f"|format((results.failed | int / total) * 100) }}%
+            {% else %}
+              0%
+            {% endif %}
+          </div>
+        </div>
+        <div class="stat-card stat-errors">
+          <h5>错误用例</h5>
+          <div class="stat-value">{{ results.errors }}</div>
+          <div class="stat-percent">
+            {% set total = results.total | int %}
+            {% if total > 0 %}
+              {{ "%.1f"|format((results.errors | int / total) * 100) }}%
+            {% else %}
+              0%
+            {% endif %}
+          </div>
+        </div>
+        <div class="stat-card stat-skipped">
+          <h5>跳过用例</h5>
+          <div class="stat-value">{{ results.skipped }}</div>
+          <div class="stat-percent">
+            {% set total = results.total | int %}
+            {% if total > 0 %}
+              {{ "%.1f"|format((results.skipped | int / total) * 100) }}%
+            {% else %}
+              0%
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- 图表容器 -->
+      <div class="chart-container">
+        <canvas id="summaryChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- 测试用例详情卡片 -->
+  <div class="card">
+    <div class="card-header">
+      <i class="fa fa-list-alt"></i> 测试用例详情
+    </div>
+    <div class="card-body table-responsive">
+      <table class="table table-striped table-hover table-bordered align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>测试类</th>
+            <th>测试名称 & 描述</th>
+            <th>耗时(秒)</th>
+            <th>状态</th>
+            <th>详情</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for case in results.cases %}
+          <tr>
+            <!-- 用例类名（文件路径） -->
+            <td>{{ case.classname if case.classname else '未分类' }}</td>
+            <!-- 用例名称 + 描述 -->
+            <td class="text-left" style="word-break: break-word;">
+              <i class="fa fa-file-text-o text-muted me-2"></i>{{ case.name }}
+              {% if case.description %}
+                <span class="case-description">描述: {{ case.description }}</span>
+              {% endif %}
+            </td>
+            <!-- 执行时长 -->
+            <td>
+              <span class="badge bg-secondary">
+                {% if case.time and case.time.replace('.', '', 1).isdigit() %}
+                  {{ "%.2f"|format(case.time|float) }}
+                {% else %}
+                  {{ case.time or '0.00' }}
+                {% endif %}
+              </span>
+            </td>
+            <!-- 执行状态 -->
+            <td>
+              {% if case.status == 'passed' %}
+                <span class="status-passed"><i class="fa fa-check-circle me-1"></i>通过</span>
+              {% elif case.status == 'failed' %}
+                <span class="status-failed"><i class="fa fa-times-circle me-1"></i>失败</span>
+              {% elif case.status == 'skipped' %}
+                <span class="status-skipped"><i class="fa fa-forward me-1"></i>跳过</span>
+              {% else %}
+                <span class="status-error"><i class="fa fa-exclamation-triangle me-1"></i>错误</span>
+              {% endif %}
+            </td>
+            <!-- 折叠开关 -->
+            <td>
+              <button class="toggle-details collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#collapse{{ loop.index }}" aria-expanded="false">
+                <i class="fa fa-chevron-right icon"></i>
+              </button>
+            </td>
+          </tr>
+          <!-- 详情折叠行 -->
+          {% if case.status != 'passed' or case.log or case.stack_trace %}
+          <tr>
+            <td colspan="5" class="p-0">
+              <div id="collapse{{ loop.index }}" class="accordion-collapse collapse">
+                <div class="accordion-body">
+                  <!-- 失败/错误/跳过信息 -->
+                  {% if case.message %}
+                  <div class="detail-section">
+                    <h5>
+                      {% if case.status == 'skipped' %}
+                        <i class="fa fa-info-circle" style="color: var(--skipped-color);"></i>跳过信息
+                      {% else %}
+                        <i class="fa fa-exclamation-circle text-danger"></i>
+                        {% if case.status == 'error' %}错误信息{% else %}失败信息{% endif %}
+                      {% endif %}
+                    </h5>
+                    <p class="text-dark">{{ case.message }}</p>
+                  </div>
+                  {% endif %}
+
+                  <!-- 堆栈跟踪 -->
+                  {% if case.stack_trace %}
+                  <div class="detail-section">
+                    <h5><i class="fa fa-code-fork text-danger"></i>堆栈跟踪</h5>
+                    <pre>{{ case.stack_trace }}</pre>
+                  </div>
+                  {% endif %}
+
+                  <!-- 自定义日志 -->
+                  {% if case.log %}
+                  <div class="detail-section">
+                    <h5><i class="fa fa-file-text text-primary"></i>自定义日志输出</h5>
+                    <pre>{{ case.log }}</pre>
+                  </div>
+                  {% endif %}
+                </div>
+              </div>
+            </td>
+          </tr>
+          {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 页脚 -->
+  <footer>
+    <p>&copy; 2025 通用测试报告 | 为清晰性和一致性而设计 | 生成时间: {{ results.generated_time }}</p>
+  </footer>
+
+  <!-- 图表初始化脚本 -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 初始化测试结果饼图
+      const ctx = document.getElementById('summaryChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['通过', '失败', '错误', '跳过'],
+          datasets: [{
+            data: [{{ results.passed }}, {{ results.failed }}, {{ results.errors }}, {{ results.skipped }}],
+            backgroundColor: [
+              'rgba(16, 185, 129, 0.8)',   // 通过-绿色
+              'rgba(239, 68, 68, 0.8)',    // 失败-红色
+              'rgba(245, 158, 11, 0.8)',   // 错误-黄色
+              'rgba(99, 102, 241, 0.8)'    // 跳过-靛蓝色
+            ],
+            borderColor: [
+              'rgba(16, 185, 129, 1)',
+              'rgba(239, 68, 68, 1)',
+              'rgba(245, 158, 11, 1)',
+              'rgba(99, 102, 241, 1)'
+            ],
+            borderWidth: 1,
+            hoverOffset: 15
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '60%',
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                padding: 20,
+                font: {
+                  size: 12,
+                  weight: '500',
+                  family: "'Microsoft YaHei', sans-serif"
+                },
+                color: '#1e293b'
+              }
+            },
+            tooltip: {
+              padding: 12,
+              titleFont: {
+                size: 14,
+                weight: '600',
+                family: "'Microsoft YaHei', sans-serif"
+              },
+              bodyFont: {
+                size: 13,
+                family: "'Microsoft YaHei', sans-serif"
+              },
+              callbacks: {
+                label: function(context) {
+                  const label = context.label || '';
+                  const value = context.raw || 0;
+                  const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                  const percentage = Math.round((value / total) * 100);
+                  return `${label}: ${value} (${percentage}%)`;
+                }
+              }
+            }
+          },
+          animation: {
+            animateScale: true,
+            animateRotate: true,
+            duration: 1500,
+            easing: 'easeOutQuart'
+          }
+        }
+      });
+
+      // 折叠按钮动画（展开/收起箭头旋转）
+      const toggleButtons = document.querySelectorAll('.toggle-details');
+      toggleButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          this.classList.toggle('collapsed');
+        });
+      });
+    });
+  </script>
+
+  <!-- 引入Bootstrap脚本（支持折叠、响应式等交互） -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
