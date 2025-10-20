@@ -1,0 +1,19 @@
+[project]
+name = "weather-x"
+version = "0.1.0"
+description = "A weather information tool based on FastMCP framework with support for Chinese city weather alerts"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastmcp>=2.12.4",
+    "httpx>=0.28.1",
+    "mcp[cli]>=1.18.0",
+]
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["weather*"]
