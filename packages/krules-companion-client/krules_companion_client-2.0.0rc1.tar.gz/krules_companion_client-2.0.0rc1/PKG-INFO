@@ -1,0 +1,18 @@
+Metadata-Version: 2.4
+Name: krules-companion-client
+Version: 2.0.0rc1
+Summary: KRules Companion Client
+Author-email: AdE <alberto@airspot.tech>
+Requires-Python: >=3.9
+Requires-Dist: firebase-admin>=6.5.0
+Requires-Dist: pydantic>=2.5.3
+Requires-Dist: requests>=2.31.0
+Requires-Dist: tomli>=2.0.1
+Requires-Dist: typer[all]>=0.9.0
+Requires-Dist: typing-extensions>=4.8.0
+Requires-Dist: validators>=0.20.0
+Provides-Extra: google
+Requires-Dist: cloudevents>=1.10.1; extra == 'google'
+Requires-Dist: google-cloud-pubsub>=2.13.11; extra == 'google'
+Provides-Extra: test
+Requires-Dist: pytest>=7.4.4; extra == 'test'
