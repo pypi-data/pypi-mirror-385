@@ -1,0 +1,25 @@
+[project]
+name = "datetoolz"
+version = "0.1.0"
+description = "Tiny date helper library - get today, yesterday, tomorrow, weekday, etc."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [{ name = "Jayanth Sanku", email = "jaythedataguy@gmail.com" }]
+keywords = ["date", "datetime", "helpers"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+]
+dependencies = []
+
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["datetoolz*"]
+
+
