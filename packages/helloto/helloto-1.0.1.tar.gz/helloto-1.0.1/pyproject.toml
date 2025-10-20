@@ -1,0 +1,16 @@
+[project]
+name = "helloto"
+version = "1.0.1"
+description = "For saying hello."
+readme = { file = "README.md", content-type = "text/markdown" }
+authors = [
+    { name="Lunethra" }
+]
+dependencies = [
+    "typer[all]",
+    "rich",
+    "pyfiglet"
+]
+
+[project.scripts]
+helloto = "helloto.main:app"
