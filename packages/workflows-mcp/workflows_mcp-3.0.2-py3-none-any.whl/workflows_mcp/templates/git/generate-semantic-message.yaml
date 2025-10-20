@@ -1,0 +1,104 @@
+name: generate-semantic-message
+description: Generate semantic commit message from git diff using LLM or Python script
+version: 1.0.0
+tags: [git, commit, semantic, llm]
+
+inputs:
+  diff_content:
+    type: string
+    description: Git diff content
+    required: true
+
+  file_status:
+    type: string
+    description: Git status output
+    required: true
+
+  diff_stat:
+    type: string
+    description: Git diff stat output
+    default: ""
+
+  use_llm:
+    type: boolean
+    description: Use LLM for message generation (requires Prompt block)
+    default: true
+
+  manual_message:
+    type: string
+    description: Manual commit message (overrides LLM/script generation)
+    default: ""
+
+blocks:
+  # Manual message has highest priority
+  - id: use_manual_message
+    type: Shell
+    inputs:
+      command: echo "${inputs.manual_message}"
+    condition: ${inputs.manual_message} != ''
+
+  # LLM-based generation (second priority)
+  - id: llm_generate_message
+    type: Prompt
+    inputs:
+      prompt: |
+        Generate a semantic commit message following the Conventional Commits specification.
+
+        ## Format
+        <type>(<scope>): <summary>
+
+        <body>
+
+        ## Types
+        - feat: New feature
+        - fix: Bug fix
+        - docs: Documentation changes
+        - style: Code formatting (no logic change)
+        - refactor: Code restructuring
+        - perf: Performance improvement
+        - test: Test additions/changes
+        - chore: Maintenance (deps, config)
+        - ci: CI/CD changes
+
+        ## Guidelines
+        - Summary: imperative mood, lowercase, no period, max 72 chars
+        - Body: explain what and why (optional)
+        - Scope: component/module affected (optional)
+
+        ## Changes
+        ${inputs.diff_stat}
+
+        ${inputs.diff_content}
+
+        Generate ONLY the commit message (no quotes, no explanations):
+    condition: ${inputs.use_llm} and ${inputs.manual_message} == ''
+
+  # Python script-based generation (fallback)
+  - id: script_generate_message
+    type: Shell
+    inputs:
+      command: |
+        SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
+        python3 "$SCRIPT_DIR/scripts/analyze_semantic_commit.py" \
+          "${inputs.diff_content}" \
+          "${inputs.file_status}"
+    condition: not ${inputs.use_llm} and ${inputs.manual_message} == ''
+
+  # Final selection block - no dependencies since conditional blocks are mutually exclusive
+  - id: select_final_message
+    type: Shell
+    inputs:
+      command: |
+        # Priority: manual > LLM > script
+        if [ -n "${inputs.manual_message}" ]; then
+          echo "${inputs.manual_message}"
+        elif [ "${inputs.use_llm}" = "true" ]; then
+          # This will only exist if llm_generate_message ran
+          echo "${blocks.llm_generate_message.outputs.response:-}"
+        else
+          # This will only exist if script_generate_message ran
+          echo "${blocks.script_generate_message.outputs.stdout:-}"
+        fi
+
+outputs:
+  commit_message: "${blocks.select_final_message.outputs.stdout}"
