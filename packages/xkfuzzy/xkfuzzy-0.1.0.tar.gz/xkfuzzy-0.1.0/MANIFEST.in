@@ -1,0 +1,13 @@
+include README.md
+include LICENSE
+include requirements.txt
+include pyproject.toml
+recursive-include xkfuzzy *.py
+recursive-include tests *.py
+global-exclude *.pyc
+global-exclude __pycache__
+global-exclude .git*
+global-exclude .DS_Store
+global-exclude *.egg-info
+global-exclude dist
+global-exclude build
