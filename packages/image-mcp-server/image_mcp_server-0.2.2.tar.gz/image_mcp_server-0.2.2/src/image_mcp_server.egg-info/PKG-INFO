@@ -1,0 +1,255 @@
+Metadata-Version: 2.4
+Name: image-mcp-server
+Version: 0.2.2
+Summary: 一个简洁的 MCP 服务器，用于图片内容分析，支持本地文件、HTTP URL 和剪贴板图片
+Author-email: Your Name <your.email@example.com>
+License: MIT
+Project-URL: Homepage, https://github.com/yourusername/image-mcp-server
+Project-URL: Repository, https://github.com/yourusername/image-mcp-server.git
+Project-URL: Issues, https://github.com/yourusername/image-mcp-server/issues
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.12
+Requires-Python: >=3.12
+Description-Content-Type: text/markdown
+Requires-Dist: mcp>=1.0.0
+Requires-Dist: httpx[socks]>=0.25.0
+Requires-Dist: Pillow>=9.0.0
+Requires-Dist: python-dotenv>=1.0.0
+Requires-Dist: pyperclip>=1.8.0
+Requires-Dist: requests>=2.25.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0.0; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.21.0; extra == "dev"
+Requires-Dist: black>=23.0.0; extra == "dev"
+Requires-Dist: isort>=5.0.0; extra == "dev"
+Requires-Dist: mypy>=1.0.0; extra == "dev"
+
+# Image MCP Server
+
+一个简洁的 MCP (Model Context Protocol) 服务器，专门用于图片内容分析。基于阿里云通义千问3-VL-Plus模型，支持本地图片文件和剪贴板图片的分析。
+
+## 功能特点
+
+- 🖼️ **多格式支持**: 支持 JPEG、PNG、GIF、WebP、BMP、TIFF 等主流图片格式
+- 📋 **剪贴板支持**: 可以直接分析剪贴板中的图片
+- 🔧 **简单易用**: 通过 uvx 一键安装和配置
+- 🤖 **智能分析**: 基于通义千问3-VL-Plus的强大视觉理解能力
+- ⚡ **高性能**: 异步处理，支持快速响应
+
+## 安装
+
+### 使用 uvx 安装（推荐）
+
+```bash
+# 通过 uvx 安装最新版本
+uvx image-mcp-server@latest
+```
+
+### 使用 pip 安装
+
+```bash
+pip install image-mcp-server
+```
+
+## 配置
+
+### 1. 获取 API 密钥
+
+访问 [阿里云百炼平台](https://bailian.console.aliyun.com/) 获取 DashScope API 密钥。
+
+### 2. 配置 Claude Desktop
+
+在 Claude Desktop 的配置文件中添加以下配置：
+
+**macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+**Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+
+```json
+{
+  "mcpServers": {
+    "image-mcp-server": {
+      "command": "uvx",
+      "args": ["image-mcp-server@latest"],
+      "env": {
+        "IMAGE_MCP_DASHSCOPE_API_KEY": "your-dashscope-api-key-here"
+      }
+    }
+  }
+}
+```
+
+### 3. 环境变量配置
+
+你也可以通过环境变量配置 API 密钥：
+
+```bash
+export IMAGE_MCP_DASHSCOPE_API_KEY="your-dashscope-api-key-here"
+```
+
+或者创建 `.env` 文件：
+
+```bash
+# 复制示例文件
+cp .env.example .env
+
+# 编辑 .env 文件，填入你的 API 密钥
+```
+
+## 使用方法
+
+### 1. 分析本地图片文件
+
+```
+请分析这张图片: ./path/to/your/image.jpg
+```
+
+### 2. 分析剪贴板图片
+
+```
+请分析剪贴板中的图片
+```
+
+### 3. 带问题分析
+
+```
+分析这张图片并回答: 这张图片中主要展示了什么内容？
+```
+
+## 支持的输入格式
+
+- **文件路径**: `./image.jpg`, `/path/to/image.png`, `../images/photo.gif`
+- **剪贴板**: `clipboard` (关键词)
+- **相对路径**: 支持相对当前工作目录的路径
+- **绝对路径**: 支持完整的文件系统路径
+
+## 支持的图片格式
+
+- JPEG (.jpg, .jpeg)
+- PNG (.png)
+- GIF (.gif)
+- WebP (.webp)
+- BMP (.bmp)
+- TIFF (.tiff)
+
+## 开发
+
+### 环境准备
+
+```bash
+# 克隆仓库
+git clone https://github.com/yourusername/image-mcp-server.git
+cd image-mcp-server
+
+# 创建虚拟环境
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+
+# 安装依赖
+pip install -e ".[dev]"
+```
+
+### 运行测试
+
+```bash
+pytest
+```
+
+### 代码格式化
+
+```bash
+black src/
+isort src/
+```
+
+### 类型检查
+
+```bash
+mypy src/
+```
+
+## 项目结构
+
+```
+image_mcp_server/
+├── src/image_mcp_server/
+│   ├── __init__.py          # 包初始化
+│   ├── server.py            # MCP 服务器主逻辑
+│   ├── image_handler.py     # 图片处理模块
+│   └── api_client.py        # DashScope API 客户端
+├── tests/                   # 测试文件
+├── pyproject.toml          # 项目配置
+├── README.md               # 项目文档
+├── .env.example            # 环境变量示例
+└── .gitignore              # Git 忽略文件
+```
+
+## API 说明
+
+### analyze_image 工具
+
+分析图片内容的主要工具。
+
+**参数:**
+- `image` (必需): 图片来源，可以是文件路径或 "clipboard"
+- `question` (可选): 关于图片的问题，默认为 "请分析这张图片的内容"
+
+**返回:**
+图片的详细分析文本内容。
+
+## 故障排除
+
+### 常见问题
+
+1. **API 密钥错误**
+   - 确保环境变量 `IMAGE_MCP_DASHSCOPE_API_KEY` 设置正确
+   - 检查 API 密钥是否有效且未过期
+
+2. **图片文件不存在**
+   - 确保图片文件路径正确
+   - 检查文件权限
+
+3. **剪贴板访问失败**
+   - 确保剪贴板中有图片数据
+   - 在某些系统上可能需要额外的权限
+
+4. **网络连接问题**
+   - 确保网络连接正常
+   - 检查防火墙设置
+
+### 调试模式
+
+启用详细日志：
+
+```bash
+export IMAGE_MCP_LOG_LEVEL=DEBUG
+```
+
+## 许可证
+
+MIT License
+
+## 贡献
+
+欢迎提交 Issue 和 Pull Request！
+
+## 更新日志
+
+### v0.2.0
+- 重构为统一的 base64 处理逻辑
+- 简化为单一图片分析工具
+- 改进剪贴板支持
+- 优化错误处理
+
+### v0.1.5
+- 初始版本
+- 基础图片分析功能
+
+## 支持
+
+如果你遇到问题或有建议，请：
+1. 查看 [FAQ](#故障排除)
+2. 搜索 [Issues](https://github.com/yourusername/image-mcp-server/issues)
+3. 创建新的 Issue
