@@ -1,0 +1,127 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "bitcart"
+dynamic = ["version"]
+description = "Bitcart coins support library"
+readme = "README.md"
+license = "MIT"
+authors = [{ name = "MrNaif2018", email = "chuff184@gmail.com" }]
+requires-python = ">=3.12"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Build Tools",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+keywords = ["electrum", "daemon", "bitcart", "bitcartcc"]
+dependencies = ["jsonrpcclient", "aiohttp", "universalasync"]
+
+[project.optional-dependencies]
+proxy = ["aiohttp_socks"]
+
+[project.urls]
+Homepage = "https://github.com/bitcart/bitcart-sdk"
+Source = "https://github.com/bitcart/bitcart-sdk"
+Changelog = "https://github.com/bitcart/bitcart-sdk/blob/master/CHANGELOG.md"
+
+[dependency-groups]
+dev = [
+    "pre-commit",
+    "pytest",
+    "pytest-cov",
+    "pytest-asyncio",
+    "pytest-mock",
+    "ruff",
+    "mypy",
+]
+docs = [
+    "commonmark",
+    "mock",
+    "pillow",
+    "recommonmark",
+    "sphinx",
+    "sphinx-rtd-theme",
+]
+all = [{ include-group = 'dev' }, { include-group = 'docs' }]
+
+[tool.uv]
+default-groups = ["dev"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["bitcart"]
+
+[tool.hatch.version]
+path = "bitcart/version.py"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 127
+
+[tool.ruff.lint]
+select = [
+    "F",
+    "E",
+    "I",
+    "UP",
+    "YTT",
+    "B",
+    "T10",
+    "C",
+    "SIM",
+    "RUF100",
+    "RET",
+    "A",
+    "S",
+    "ASYNC",
+]
+ignore = ["RET502", "RET503", "S104", "S507", "ASYNC110"]
+mccabe = { max-complexity = 12 }
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S"]
+"examples/*" = ["SIM"]
+
+[tool.mypy]
+warn_redundant_casts = true
+warn_unused_ignores = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+check_untyped_defs = true
+warn_return_any = true
+no_implicit_optional = true
+strict_optional = true
+ignore_missing_imports = true
+exclude = ["examples", "tests", "docs"]
+
+[tool.pytest.ini_options]
+addopts = ["--cov=bitcart", "--cov-report", "term-missing"]
+filterwarnings = [
+    "error::DeprecationWarning",
+    "error::PendingDeprecationWarning",
+]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+
+[tool.coverage.run]
+omit = [
+    "*__init__.py",
+    "tests/*",
+    "venv/*",
+    "env/*",
+    "setup.py",
+    "bitcart/providers/jsonrpcrequests.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "raise NotImplementedError()",
+    "if TYPE_CHECKING:",
+]
