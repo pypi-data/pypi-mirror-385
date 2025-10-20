@@ -1,0 +1,37 @@
+# Include documentation
+include README.md
+include LICENSE
+include requirements.txt
+
+# Include prompt templates (important!)
+graft prompts
+
+# Include node and scenario templates
+graft templates
+
+# Include scenario YAML templates
+recursive-include scenarios *.yaml
+
+# Include example scripts (optional, for reference)
+recursive-include examples *.sh *.py
+
+# Include test data if needed
+# recursive-include tests/fixtures *
+
+# Exclude compiled Python files
+global-exclude __pycache__
+global-exclude *.py[cod]
+global-exclude *$py.class
+global-exclude *.so
+
+# Exclude output directories
+prune .ai-snapshots
+prune .cloned_repos
+prune output
+prune wiki_output
+prune tutorial_output
+prune tutorial_examples
+
+# Exclude cache files
+exclude llm_cache.json
+exclude tutorial_state.json

@@ -1,0 +1,43 @@
+scenario:
+  id: {{ name }}
+  name: {{ Name }}
+  version: 1.0.0
+  author: {{ author }}
+  description: {{ description }}
+
+parameters:
+  patterns:
+    type: list
+    default: ["**/*"]
+    description: File patterns to collect
+
+  extensions:
+    type: list
+    default: []
+    description: File extensions to filter (e.g., [".py", ".js"])
+
+  exclude:
+    type: list
+    default: ["node_modules/**", ".git/**", "__pycache__/**"]
+    description: Patterns to exclude
+
+steps:
+  - node: "@common/get_files"
+    name: collect_files
+    params:
+      patterns: "{% raw %}{{params.patterns}}{% endraw %}"
+      extensions: "{% raw %}{{params.extensions}}{% endraw %}"
+      exclude: "{% raw %}{{params.exclude}}{% endraw %}"
+
+  # TODO: Add your processing steps here
+  # Example:
+  # - node: "@custom/process_files"
+  #   name: process
+  #   params:
+  #     operation: "transform"
+  #
+  # - node: "@common/write_file"
+  #   name: save_results
+  #   params:
+  #     file_path: "output/results.json"
+  #     data_key: "processed_data"

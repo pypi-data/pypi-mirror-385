@@ -1,0 +1,58 @@
+scenario:
+  id: {{ name }}
+  name: {{ Name }}
+  version: 1.0.0
+  author: {{ author }}
+  description: {{ description }}
+
+parameters:
+  # TODO: Define your parameters
+  #
+  # Example:
+  # input_file:
+  #   type: str
+  #   required: true
+  #   description: Input file path
+  #
+  # output_dir:
+  #   type: str
+  #   default: "output"
+  #   description: Output directory
+  #
+  # verbose:
+  #   type: bool
+  #   default: false
+  #   description: Enable verbose output
+
+steps:
+  # TODO: Add your workflow steps
+  #
+  # Example:
+  # - node: "@common/get_files"
+  #   name: get_files
+  #   params:
+  #     patterns: ["**/*.py"]
+  #
+  # - node: "@custom/my_processor"
+  #   name: process
+  #   params:
+  #     input: "{% raw %}{{files}}{% endraw %}"
+  #
+  # - node: "@common/write_file"
+  #   name: save
+  #   params:
+  #     file_path: "output/result.json"
+  #     data_key: "processed_data"
+  #
+  # Available common nodes:
+  # - @common/get_files: Collect files matching patterns
+  # - @common/files_to_prompt: Format files for LLM
+  # - @common/call_llm: Call LLM API
+  # - @common/parse_code: Parse code to AST
+  # - @common/parse_diff: Parse git diff
+  # - @common/write_file: Write data to file
+  #
+  # Parameter binding:
+  # - Use {% raw %}{{params.param_name}}{% endraw %} to reference parameters
+  # - Use {% raw %}{{step_name.output_key}}{% endraw %} to reference previous step outputs
+  # - Use {% raw %}{{context_key}}{% endraw %} to reference shared context
