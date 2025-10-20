@@ -1,0 +1,13 @@
+include README.md
+include requirements.txt
+include LICENSE
+recursive-include blog/templates *
+recursive-include blog/static *
+recursive-include blog/migrations *
+recursive-include blog/templatetags *
+recursive-include blog/middleware *
+global-exclude *.pyc
+global-exclude __pycache__
+global-exclude *.pyo
+global-exclude *.pyd
+global-exclude .DS_Store
