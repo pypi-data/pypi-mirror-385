@@ -1,0 +1,175 @@
+[project]
+name = "ontologia"
+version = "0.2.4"
+description = "An ontology management system built on Registro and SQLModel"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    {name = "Kevin Saltarelli", email = "kevinqz@gmail.com"}
+]
+license = {text = "MIT"}
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "sqlmodel>=0.0.24",
+    "registro>=0.2.2",
+    "pydantic>=2.0.0",
+    "ulid-py>=1.1.0",
+    "fastapi>=0.118.0",
+    "httpx>=0.28.1",
+    "grpcio>=1.65.0",
+    "pyyaml>=6.0.0",
+    "protobuf>=4.25.0",
+    "dagster>=1.7.0",
+    "dagster-dbt>=0.23.0",
+    "temporalio>=1.7.0",
+    "pydantic-settings>=2.3.0",
+    "python-jose[cryptography]>=3.3.0",
+    "python-multipart>=0.0.6",
+    "fastmcp>=0.1.0",
+    "gitpython>=3.1.0",
+    "jinja2>=3.1.0",
+    "questionary>=2.0.1",
+    "rich>=13.7.0",
+    "typer>=0.12.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "ruff>=0.0.272",
+    "black>=23.3.0",
+    "mypy>=1.3.0",
+    "grpcio-tools>=1.65.0",
+    "ty>=0.0.1a22",
+    "hypothesis>=6.100",
+    "schemathesis>=3.18.4",
+    "pytest-benchmark>=4.0.0",
+    "mkdocs>=1.5.0",
+    "mkdocs-material>=9.5.0",
+    "pre-commit>=3.7.0",
+    "dbt-duckdb>=1.8.0",
+    "duckdb>=1.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/kevinqz/ontologia"
+Repository = "https://github.com/kevinqz/ontologia"
+Issues = "https://github.com/kevinqz/ontologia/issues"
+
+[project.scripts]
+ontologia-cli = "ontologia_cli.main:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["ontologia", "ontologia_cli", "ontologia_sdk"]
+
+[dependency-groups]
+dev = [
+    "pytest>=7.0.0",
+    "ruff>=0.0.272",
+    "black>=23.3.0",
+    "mypy>=1.3.0",
+    "grpcio-tools>=1.65.0",
+    "ty>=0.0.1a22",
+    "hypothesis>=6.100",
+    "schemathesis>=3.18.4",
+    "pytest-benchmark>=4.0.0",
+    "mkdocs>=1.5.0",
+    "mkdocs-material>=9.5.0",
+    "twine>=6.2.0",
+    "pre-commit>=3.7.0",
+    "dbt-duckdb>=1.8.0",
+    "duckdb>=1.0.0",
+]
+
+agents = [
+    "pydantic-ai>=0.1.0",
+    "openai>=1.50.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "B", "I", "N", "UP", "S", "A", "C90", "BLE", "FBT", "Q"]
+ignore = ["A003", "B008", "N805", "E501", "BLE001", "S110", "C901", "N803", "E402"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "E501", "E402"]
+"examples/**" = ["S101", "BLE001", "B007", "E501", "E402", "F841", "F821", "C901"]
+"example_project/examples/**" = ["S101", "BLE001", "B007", "E501", "E402", "F841", "F821", "C901"]
+"api/v2/schemas/**" = ["N815"]
+"ontologia/domain/metamodels/types/interface_type.py" = ["N815"]
+"ontologia/domain/metamodels/types/link_type_unified.py" = ["E402"]
+"ontologia/application/sync_service.py" = ["BLE001", "S608", "C901", "FBT003"]
+"api/v2/routers/object_types.py" = ["N803"]
+"api/main.py" = ["BLE001", "S104"]
+"api/v2/routers/objects.py" = ["N803"]
+"api/v2/routers/linked_objects.py" = ["N803"]
+"ontologia/domain/metamodels/instances/dtos.py" = ["F821"]
+"ontologia/domain/metamodels/types/object_type.py" = ["E402"]
+"api/services/analytics_service.py" = ["BLE001", "S110", "C901"]
+"api/services/instances_service.py" = ["BLE001", "C901", "S110"]
+"api/services/linked_objects_service.py" = ["BLE001", "S110", "C901"]
+"ontologia_realtime/proto/**/*.py" = ["ALL"]
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_functions = "test_*"
+python_classes = "Test*"
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+strict_optional = true
+
+[tool.ty.environment]
+python-version = "3.11"
+
+[tool.ty.src]
+include = [
+    "api",
+    "ontologia",
+    "ontologia_cli",
+    "ontologia_sdk",
+    "scripts",
+]
+exclude = [
+    "alembic/**",
+    "docs/**",
+    "example_project/**",
+    "infra/**",
+    "tests/**",
+]
+
+[[tool.ty.overrides]]
+include = [
+    "api/repositories/kuzudb_repository.py",
+    "ontologia/application/sync_service.py",
+    "api/services/data_analysis_service.py",
+]
+
+[tool.ty.overrides.rules]
+unresolved-import = "ignore"

@@ -1,0 +1,22 @@
+repositories:
+  - name: temporal
+    url: https://temporalio.github.io/helm-charts
+  - name: bitnami
+    url: https://charts.bitnami.com/bitnami
+
+releases:
+  - name: temporal-postgres
+    namespace: temporal-system
+    chart: bitnami/postgresql
+    version: 15.5.5
+    values:
+      - values-postgres.yaml
+
+  - name: temporal
+    namespace: temporal-system
+    chart: temporal/temporal
+    version: 0.39.0
+    needs:
+      - temporal-system/temporal-postgres
+    values:
+      - values-temporal.yaml

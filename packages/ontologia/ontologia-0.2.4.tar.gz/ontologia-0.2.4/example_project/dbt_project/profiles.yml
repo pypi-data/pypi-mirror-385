@@ -1,0 +1,7 @@
+ontologia_transforms:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      # Use the same database file as the sync service via env var
+      path: "{{ env_var('DUCKDB_PATH', '../../data.duckdb') }}"

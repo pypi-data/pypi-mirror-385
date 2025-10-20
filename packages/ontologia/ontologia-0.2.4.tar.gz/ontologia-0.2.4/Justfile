@@ -1,0 +1,183 @@
+# ╔════════════════════════════════════════════════════════╗
+# ║ JUSTFILE • Ontologia                                  ║
+# ║ uv/uvx • Black • Ruff • Ty/Pyright/Mypy • Pytest       ║
+# ╚════════════════════════════════════════════════════════╝
+
+set shell := ["bash", "-cu"]
+set dotenv-load := true
+
+# ── Config ────────────────────────────────────────────────
+APP := env_var_or_default("APP", "api/main.py")
+HOST := env_var_or_default("HOST", "127.0.0.1")
+PORT := env_var_or_default("PORT", "8000")
+dbt_dir := "example_project/dbt_project"
+
+# ── UI helpers ────────────────────────────────────────────
+hdr msg:
+	printf "\n\033[1;36m── %s ───────────────────────────────────────\033[0m\n" "{{msg}}"
+
+row n d:
+	printf " \033[1m%-20s\033[0m %s\n" "{{n}}" "{{d}}"
+
+# ── Default / Help ────────────────────────────────────────
+alias d := help
+
+default: help
+
+help:
+	@just hdr "Tasks"
+	@just row "setup" "Instala dependências de desenvolvimento (uv)"
+	@just row "fmt" "Black + Ruff --fix"
+	@just row "lint" "Ruff (checagem)"
+	@just row "type" "Type-check (Ty → Pyright → Mypy)"
+	@just row "test" "Pytest"
+	@just row "check" "fmt → lint → type → test"
+	@just row "pkg-build" "Build wheel/sdist artefacts"
+	@just row "pkg-verify" "Build artefacts and run twine check"
+	@just row "db-migrate" "Autogerar migration Alembic"
+	@just row "db-upgrade" "Aplicar migrations pendentes"
+	@just row "api" "Sobe API FastAPI via Uvicorn"
+	@just row "temporal-up" "Sobe Temporal dev stack (docker compose)"
+	@just row "temporal-down" "Derruba Temporal dev stack"
+	@just row "temporal-worker" "Executa worker de Actions (Temporal)"
+	@just row "prepare-raw" "Cria e semeia tabelas brutas no DuckDB (raw_data.*)"
+	@just row "dbt-deps" "Instala dependências do DBT"
+	@just row "dbt-build" "Compila modelos DBT (Bronze/Silver/Gold)"
+	@just row "dbt-docs-generate" "Gera documentação do DBT"
+	@just row "pipeline" "Executa pipeline completo via ontologia CLI"
+	@just row "sync" "Executa apenas o carregamento (Gold → Grafo)"
+	@just row "contract" "Roda validação de contrato DuckDB ↔ Ontologia"
+	@just row "clean" "Remove caches/artefatos"
+	@just row "deps" "Instala/atualiza ferramentas CLI (black, ruff, pyright, mypy, ty, pytest)"
+	printf "\n\033[2m.env é lido (e.g., DUCKDB_PATH, SYNC_ASSUME_GOLD_SCHEMA). USE_UNIFIED_GRAPH é sempre verdadeiro.\033[0m\n"
+# ── Environment Setup ─────────────────────────────────────
+setup:
+	uv sync --dev
+
+# ── Quality ───────────────────────────────────────────────
+fmt:
+	uvx black .
+	uvx ruff check . --fix
+
+lint:
+	uvx ruff check .
+
+type:
+	if uv run ty --version >/dev/null 2>&1; then \
+		uv run ty check; \
+	elif command -v pyright >/dev/null 2>&1; then \
+		uvx pyright; \
+	else \
+		uvx mypy .; \
+	fi
+
+test:
+	uv run pytest -q
+
+check:
+	just fmt
+	just lint
+	just type
+	just test
+
+pkg-build:
+	rm -rf dist
+	uvx python -m build
+
+pkg-verify:
+	just pkg-build
+	uvx twine check dist/*
+
+db-migrate message="auto revision":
+	uv run alembic revision --autogenerate -m "{{message}}"
+
+db-upgrade target="head":
+	uv run alembic upgrade {{target}}
+
+precommit:
+	uv run pre-commit run -a
+
+clean:
+	find . -name "__pycache__" -type d -prune -exec rm -rf {} +
+	find . -name "*.pyc" -delete
+	rm -rf .pytest_cache .ruff_cache .mypy_cache .pytype .coverage htmlcov
+
+deps:
+	uvx pip install -U black ruff pytest pytest-cov pyright mypy ty
+
+# ── Run / Serve ───────────────────────────────────────────
+run *args:
+	uv run {{APP}} {{args}}
+
+serve:
+	APP_MODE=http HOST={{HOST}} PORT={{PORT}} uv run uvicorn api.main:app --host $HOST --port $PORT --reload
+
+# ── Temporal ───────────────────────────────────────────────
+temporal-up:
+	docker compose -f docker-compose.temporal.yml up -d
+
+temporal-down:
+	docker compose -f docker-compose.temporal.yml down -v
+
+temporal-worker:
+	uv run python scripts/run_temporal_worker.py
+
+# ── Dagster ───────────────────────────────────────────────
+dagster-dev:
+	uv run dagster dev -m ontologia_dagster
+
+dagster-run:
+	DUCKDB_PATH="${DUCKDB_PATH:-$(pwd)/data.duckdb}" uv run dagster job execute -m ontologia_dagster -j pipeline_job
+
+# ── DBT ───────────────────────────────────────────────────
+dbt-deps:
+	cd {{dbt_dir}} && DBT_PROFILES_DIR="$(pwd)" uv run dbt deps
+
+dbt-build:
+	cd {{dbt_dir}} && DBT_PROFILES_DIR="$(pwd)" uv run dbt build
+
+dbt-build-warn-error:
+	cd {{dbt_dir}} && DBT_PROFILES_DIR="$(pwd)" uv run dbt build --warn-error
+
+dbt-docs-generate:
+	cd {{dbt_dir}} && DBT_PROFILES_DIR="$(pwd)" uv run dbt docs generate
+
+dbt-docs-serve:
+	cd {{dbt_dir}} && DBT_PROFILES_DIR="$(pwd)" uv run dbt docs serve
+
+# ── Data Prep ─────────────────────────────────────────────
+prepare-raw:
+	DUCKDB_PATH="${DUCKDB_PATH:-$(pwd)/data.duckdb}" uv run python scripts/prepare_duckdb_raw.py
+
+# ── Pipeline / Sync ───────────────────────────────────────
+pipeline:
+	DUCKDB_PATH="${DUCKDB_PATH:-$(pwd)/data.duckdb}" \
+		ONTOLOGIA_CONFIG_ROOT="${ONTOLOGIA_CONFIG_ROOT:-$(pwd)}" \
+		uv run ontologia-cli pipeline run
+
+sync:
+	DUCKDB_PATH="${DUCKDB_PATH:-$(pwd)/data.duckdb}" uv run python scripts/main_sync.py
+
+contract:
+	DUCKDB_PATH="${DUCKDB_PATH:-$(pwd)/data.duckdb}" \
+		ONTOLOGIA_CONFIG_ROOT="${ONTOLOGIA_CONFIG_ROOT:-$(pwd)}" \
+		uv run ontologia-cli test-contract
+
+# ── Graph (optional) ──────────────────────────────────────
+graph-deps:
+	# Install optional graph dependencies into the project environment
+	uv pip install -U polars kuzu
+
+graph-pipeline:
+	just graph-deps
+	DUCKDB_PATH="${DUCKDB_PATH:-$(pwd)/data.duckdb}" uv run dagster job execute -m ontologia_dagster -j pipeline_job
+
+# ── Ontology as Code (OaC) ─────────────────────────────────
+oac-validate:
+    uv run ontologia-cli validate --dir example_project/ontology --host http://{{HOST}}:{{PORT}} --ontology default
+
+oac-diff *args:
+    uv run ontologia-cli diff --dir example_project/ontology --host http://{{HOST}}:{{PORT}} --ontology default {{args}}
+
+oac-apply *args:
+    uv run ontologia-cli apply --dir example_project/ontology --host http://{{HOST}}:{{PORT}} --ontology default {{args}}

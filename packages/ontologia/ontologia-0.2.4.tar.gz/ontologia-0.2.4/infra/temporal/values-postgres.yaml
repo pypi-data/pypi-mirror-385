@@ -1,0 +1,25 @@
+architecture: standalone
+
+auth:
+  username: temporal
+  password: CHANGEME_TEMPORAL_PASSWORD
+  database: temporal
+
+primary:
+  persistence:
+    enabled: true
+    size: 50Gi
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 2
+      memory: 4Gi
+  initdb:
+    scripts:
+      create-visibility-db.sql: |
+        CREATE DATABASE temporal_visibility;
+
+metrics:
+  enabled: true

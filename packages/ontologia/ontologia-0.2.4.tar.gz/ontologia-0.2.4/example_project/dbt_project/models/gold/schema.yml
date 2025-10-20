@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: ontologia_employees
+    description: "Gold model aligned to ObjectType 'employee'"
+    columns:
+      - name: id
+        description: "Primary key"
+        tests:
+          - unique
+          - not_null
+
+  - name: ontologia_works_for
+    description: "Gold model aligning to LinkType 'works_for' (emp_id -> company_id)"
+    columns:
+      - name: emp_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('ontologia_employees')
+                field: id
+      - name: company_id
+        tests:
+          - not_null
+
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: ["emp_id", "company_id"]

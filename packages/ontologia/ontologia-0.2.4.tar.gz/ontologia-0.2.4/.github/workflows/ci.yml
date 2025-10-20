@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      ONTOLOGIA_CONFIG_ROOT: ${{ github.workspace }}
+      DUCKDB_PATH: ${{ github.workspace }}/data.duckdb
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: Sync dependencies
+        run: uv sync --dev
+
+      - name: Format (black)
+        run: uvx black --check .
+
+      - name: Type check (ty)
+        run: uv run ty check
+
+      - name: Lint (ruff)
+        run: uvx ruff check .
+
+      - name: Build SDK package
+        run: |
+          rm -rf dist
+          uvx python -m build
+
+      - name: Verify SDK package
+        run: uvx twine check dist/*
+
+      - name: Run Ontologia pipeline
+        run: uv run ontologia-cli pipeline run
+
+      - name: DBT docs generate
+        working-directory: example_project/dbt_project
+        env:
+          DBT_PROFILES_DIR: ${{ github.workspace }}/example_project/dbt_project
+        run: |
+          uv run dbt docs generate
+
+      - name: Upload DBT docs artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dbt-docs
+          path: example_project/dbt_project/target
+
+      - name: Run tests
+        run: uv run pytest -q

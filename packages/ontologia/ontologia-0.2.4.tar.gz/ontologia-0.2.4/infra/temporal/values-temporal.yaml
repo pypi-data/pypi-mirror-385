@@ -1,0 +1,73 @@
+namespace: temporal-system
+
+server:
+  replicaCount: 3
+  config:
+    log:
+      stdout: true
+    persistence:
+      default:
+        driver: sql
+        sql:
+          driver: postgres
+          host: temporal-postgres-postgresql
+          port: 5432
+          database: temporal
+          user: temporal
+          passwordSecret:
+            name: temporal-postgres-postgresql
+            key: postgres-password
+      visibility:
+        driver: sql
+        sql:
+          driver: postgres
+          host: temporal-postgres-postgresql
+          port: 5432
+          database: temporal_visibility
+          user: temporal
+          passwordSecret:
+            name: temporal-postgres-postgresql
+            key: postgres-password
+    tls:
+      enabled: true
+      frontend:
+        server:
+          certSecretName: temporal-frontend-tls
+          certSecretKey: tls.crt
+          keySecretName: temporal-frontend-tls
+          keySecretKey: tls.key
+          clientCaSecretName: temporal-ca
+          clientCaSecretKey: ca.crt
+        client:
+          certSecretName: temporal-worker-mtls
+          certSecretKey: tls.crt
+          keySecretName: temporal-worker-mtls
+          keySecretKey: tls.key
+          serverCaSecretName: temporal-ca
+          serverCaSecretKey: ca.crt
+  metrics:
+    enabled: true
+
+web:
+  enabled: true
+  replicaCount: 2
+  ingress:
+    enabled: false
+
+admintools:
+  enabled: true
+
+schema:
+  setup:
+    enabled: true
+  update:
+    enabled: true
+
+prometheus:
+  enabled: true
+
+grafana:
+  enabled: false
+
+elasticsearch:
+  enabled: false
