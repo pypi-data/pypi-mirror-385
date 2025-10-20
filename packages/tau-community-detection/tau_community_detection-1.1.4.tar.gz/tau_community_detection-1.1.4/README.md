@@ -1,0 +1,143 @@
+# TAU Community Detection
+
+[![PyPI](https://img.shields.io/pypi/v/tau-community-detection.svg)](https://pypi.org/project/tau-community-detection/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
+
+`tau-community-detection` implements TAU, an evolutionary community detection algorithm
+that couples genetic search with Leiden refinements. It is designed for scalable graph
+clustering with configurable hyper-parameters and multiprocessing support.
+
+---
+
+## Highlights
+
+- **Evolutionary search**: Maintains a population of candidate partitions and applies
+  crossover/mutation tailored for graph clustering.
+- **Leiden optimisation**: Refines every candidate with Leiden to ensure modularity gains.
+- **Multiprocessing aware**: Utilises worker pools for population optimisation.
+- **Deterministic options**: Accepts a user-specified random seed for reproducibility.
+- **Simple API**: Access everything through the `TauClustering` class.
+
+---
+
+## Installation
+
+The project targets Python 3.10 or newer (required for slot-based dataclasses).
+
+```bash
+pip install tau-community-detection
+```
+
+To work from a clone, install the package in editable mode inside a virtual environment:
+
+```bash
+git clone https://github.com/HillelCharbit/community_TAU.git
+cd community_TAU
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+pip install -e .
+```
+
+---
+
+## Quick Start (Python API)
+
+```python
+from tau_community_detection import TauClustering
+import networkx as nx
+
+graph = nx.read_adjlist("path/to/graph.adjlist")
+
+clustering = TauClustering(
+    graph,
+    population_size=80,
+    max_generations=250,
+)
+membership, modularity_history = clustering.run()
+
+print("community for node 0:", membership[0])
+print("best modularity:", modularity_history[-1])
+```
+
+Need detailed per-generation metrics? Call `run(track_stats=True)` to receive
+`(membership, modularity_history, generation_stats)` where `generation_stats`
+is a list of dictionaries containing time and fitness diagnostics.
+```
+
+### Graph input
+
+`TauClustering` accepts either an `igraph.Graph` or a `networkx.Graph` instance. Nodes are
+internally remapped to contiguous integers to maximise igraph performance. If your data
+resides on disk, load it into memory first (for example with `nx.read_adjlist`) before
+initialising `TauClustering`.
+
+---
+
+## Example Script
+
+The repository ships with a runnable example that uses the bundled
+`src/tau_community_detection/examples/example.graph` file. To execute it from the project
+root:
+
+```bash
+python3 src/tau_community_detection/run_clustering.py
+```
+
+The script prints the detected membership vector and the modularity score history.
+
+> Note: multiprocessing may be restricted inside some sandboxed environments. Run the
+> example on a local machine for best results.
+
+---
+
+## Configuration
+
+All algorithm hyper-parameters live on the `TauConfig` dataclass. You can pass a custom
+configuration instance to `TauClustering` or adjust attributes on the default one. Key
+fields include:
+
+- `population_size`: number of partitions maintained per generation.
+- `max_generations`: upper bound on evolutionary iterations.
+- `elite_fraction` / `immigrant_fraction`: govern selection pressure.
+- `stopping_generations` / `stopping_jaccard`: convergence checks based on membership
+  stability.
+- `random_seed`: makes runs reproducible across processes.
+
+See `src/tau_community_detection/config.py` for the complete list.
+
+---
+
+## Development
+
+```bash
+pip install -r requirements-dev.txt
+make lint
+make test
+```
+
+To build local distributions:
+
+```bash
+make build
+```
+
+### Continuous Integration
+
+- GitHub Actions run lint, tests, and package builds on pushes and pull requests.
+- Set the `CODECOV_TOKEN` secret to upload coverage reports.
+
+### Publishing
+
+1. Bump the version in `setup.cfg`/`pyproject.toml` and commit.
+2. Tag the release with `git tag vX.Y.Z && git push --tags`.
+3. Run the **Publish Package** workflow (defaults to TestPyPI). For PyPI, supply the `pypi`
+   input and ensure `PYPI_API_TOKEN` is set. Use `TEST_PYPI_API_TOKEN` for dry runs.
+
+---
+
+## License
+
+Released under the [MIT License](https://opensource.org/licenses/MIT). See `LICENSE` for
+details.
