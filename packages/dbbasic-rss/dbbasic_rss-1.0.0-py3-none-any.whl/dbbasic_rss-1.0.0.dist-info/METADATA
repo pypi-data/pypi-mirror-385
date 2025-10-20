@@ -1,0 +1,574 @@
+Metadata-Version: 2.4
+Name: dbbasic-rss
+Version: 1.0.0
+Summary: Simple, composable RSS feed generation for Python. Framework-agnostic, works with TSV/CSV/JSON, follows Unix philosophy.
+Author-email: Ask Robots <hello@askrobots.com>
+License: MIT
+Project-URL: Homepage, https://github.com/askrobots/dbbasic-rss
+Project-URL: Documentation, https://github.com/askrobots/dbbasic-rss#readme
+Project-URL: Repository, https://github.com/askrobots/dbbasic-rss
+Project-URL: Issues, https://github.com/askrobots/dbbasic-rss/issues
+Keywords: rss,feed,atom,xml,dbbasic,blog,podcast,syndication
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content :: News/Diary
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.0.0; extra == "dev"
+Provides-Extra: tsv
+Requires-Dist: dbbasic-tsv>=1.0.0; extra == "tsv"
+Provides-Extra: yaml
+Requires-Dist: pyyaml>=6.0; extra == "yaml"
+Dynamic: license-file
+
+# dbbasic-rss
+
+Simple, composable RSS feed generation for Python. Framework-agnostic, works with TSV/CSV/JSON, follows Unix philosophy.
+
+## Features
+
+- **Simple Day-1 Usage**: One-liner to generate RSS feeds
+- **Framework Agnostic**: Works with Flask, Django, FastAPI, static sites, or plain Python
+- **Multiple Data Sources**: TSV, CSV, JSON, Python lists, or directories of files
+- **No Heavy Dependencies**: Pure stdlib for core functionality
+- **Composable**: Works naturally with `dbbasic-tsv` and other modules
+- **Standards Compliant**: Generates valid RSS 2.0 feeds
+- **Git-Friendly**: Generate static RSS files to commit
+- **Type-Safe**: Full type hints for better IDE support
+
+## Installation
+
+```bash
+pip install dbbasic-rss
+```
+
+Optional dependencies:
+
+```bash
+# For TSV support with dbbasic-tsv
+pip install dbbasic-rss[tsv]
+
+# For YAML frontmatter in from_directory()
+pip install dbbasic-rss[yaml]
+
+# For development
+pip install dbbasic-rss[dev]
+```
+
+## Quick Start
+
+### One-Liner
+
+```python
+import dbbasic_rss as rss
+
+# Auto-detects format and generates feed
+rss.generate('articles.tsv', 'feed.xml',
+             title='My Blog',
+             url_pattern='https://example.com/{slug}/')
+```
+
+### From TSV File
+
+```python
+import dbbasic_rss as rss
+
+feed = rss.from_tsv(
+    'articles.tsv',
+    title='My Blog',
+    link='https://example.com',
+    description='Articles about Python and web development',
+    url_pattern='https://example.com/{slug}/'
+)
+
+# Save to file
+feed.write('feed.xml')
+
+# Or get as string
+xml = feed.to_xml()
+print(xml)
+```
+
+### From Python List
+
+```python
+import dbbasic_rss as rss
+
+posts = [
+    {
+        'title': 'Getting Started with Python',
+        'date': '2025-10-19',
+        'content': 'Learn the basics...',
+        'slug': 'getting-started-python',
+        'author': 'Dan Quellhorst'
+    },
+    {
+        'title': 'Advanced Python Tips',
+        'date': '2025-10-18',
+        'content': 'Expert techniques...',
+        'slug': 'advanced-python-tips'
+    }
+]
+
+feed = rss.from_posts(
+    posts,
+    title='Python Blog',
+    link='https://example.com',
+    description='Learn Python programming',
+    url_pattern='https://example.com/posts/{slug}/'
+)
+
+feed.write('feed.xml')
+```
+
+### Manual Feed Building
+
+```python
+import dbbasic_rss as rss
+
+# Create feed
+feed = rss.Feed(
+    title='My Tech Blog',
+    link='https://example.com',
+    description='Articles about software engineering',
+    language='en',
+    author='Dan Quellhorst',
+    author_email='dan@example.com'
+)
+
+# Add posts
+feed.add_post(
+    title='Understanding RSS Feeds',
+    link='https://example.com/understanding-rss/',
+    description='A comprehensive guide to RSS',
+    content='<p>Full HTML content here...</p>',
+    pub_date='2025-10-19',
+    author='Dan Quellhorst',
+    categories=['rss', 'web', 'tutorial']
+)
+
+feed.add_post(
+    title='Python Web Frameworks',
+    link='https://example.com/python-frameworks/',
+    description='Comparing Flask, Django, and FastAPI',
+    pub_date='2025-10-18',
+    categories=['python', 'web']
+)
+
+# Generate XML
+xml = feed.to_xml()
+
+# Or write to file
+feed.write('feed.xml')
+```
+
+## Framework Integration
+
+### Flask
+
+```python
+from flask import Flask, Response
+import dbbasic_rss as rss
+
+app = Flask(__name__)
+
+@app.route('/rss')
+def rss_feed():
+    # Load your posts data
+    posts = load_posts()  # Your data loading logic
+
+    feed = rss.from_posts(
+        posts,
+        title='My Blog',
+        link='https://example.com',
+        description='Latest blog posts',
+        url_pattern='https://example.com/{slug}/'
+    )
+
+    return Response(feed.to_xml(), mimetype='application/rss+xml')
+```
+
+### Django
+
+```python
+from django.http import HttpResponse
+import dbbasic_rss as rss
+
+def rss_feed(request):
+    # Query your models
+    articles = Article.objects.all().order_by('-published_date')[:20]
+
+    # Convert to list of dicts
+    posts = list(articles.values('title', 'slug', 'content', 'published_date', 'author__name'))
+
+    feed = rss.from_posts(
+        posts,
+        title='My Django Blog',
+        link='https://example.com',
+        description='Latest articles',
+        url_pattern='https://example.com/articles/{slug}/',
+        date_field='published_date',
+        author_field='author__name'
+    )
+
+    return HttpResponse(feed.to_xml(), content_type='application/rss+xml')
+```
+
+### FastAPI
+
+```python
+from fastapi import FastAPI
+from fastapi.responses import Response
+import dbbasic_rss as rss
+
+app = FastAPI()
+
+@app.get('/rss', response_class=Response)
+async def rss_feed():
+    posts = await get_posts()  # Your async data loading
+
+    feed = rss.from_posts(
+        posts,
+        title='FastAPI Blog',
+        link='https://example.com',
+        description='Latest posts',
+        url_pattern='https://example.com/posts/{id}/'
+    )
+
+    return Response(content=feed.to_xml(), media_type='application/rss+xml')
+```
+
+### Static Site Generator
+
+```python
+import dbbasic_rss as rss
+
+# Generate from markdown files
+feed = rss.from_directory(
+    'content/posts/',
+    pattern='*.md',
+    extract_metadata=True,  # Reads YAML frontmatter
+    title='My Static Blog',
+    link='https://example.com',
+    description='Static blog posts',
+    url_pattern='https://example.com/posts/{stem}/'
+)
+
+# Write static file
+feed.write('public/rss.xml')
+```
+
+## Data Sources
+
+### From TSV
+
+```python
+# articles.tsv:
+# title	slug	date	description	author
+# Post 1	post-1	2025-10-19	Description...	Dan
+
+feed = rss.from_tsv(
+    'articles.tsv',
+    title='Blog',
+    url_pattern='https://example.com/{slug}/'
+)
+```
+
+### From CSV
+
+```python
+feed = rss.from_csv(
+    'posts.csv',
+    title='Blog',
+    url_pattern='https://example.com/{id}/'
+)
+```
+
+### From JSON
+
+```python
+# posts.json:
+# [
+#   {"title": "Post 1", "url": "https://...", "date": "2025-10-19"},
+#   ...
+# ]
+
+feed = rss.from_json(
+    'posts.json',
+    title='Blog',
+    link='https://example.com'
+)
+```
+
+### From Directory of Markdown Files
+
+```python
+# Reads markdown files with YAML frontmatter:
+# ---
+# title: My Post
+# date: 2025-10-19
+# author: Dan
+# ---
+# Content here...
+
+feed = rss.from_directory(
+    'posts/',
+    pattern='*.md',
+    extract_metadata=True,
+    title='Blog',
+    url_pattern='https://example.com/{stem}/'
+)
+```
+
+## Advanced Features
+
+### Custom Field Mapping
+
+```python
+posts = [
+    {
+        'headline': 'My Article',
+        'published': '2025-10-19',
+        'body': 'Article content...',
+        'permalink': 'https://example.com/articles/my-article'
+    }
+]
+
+feed = rss.from_posts(
+    posts,
+    title_field='headline',
+    date_field='published',
+    content_field='body',
+    url_field='permalink'
+)
+```
+
+### Categories/Tags
+
+```python
+posts = [
+    {
+        'title': 'Python Tutorial',
+        'url': 'https://example.com/tutorial',
+        'tags': 'python,tutorial,beginner'  # Comma-separated
+    }
+]
+
+feed = rss.from_posts(
+    posts,
+    categories_field='tags'
+)
+```
+
+### HTML Content with Separate Description
+
+```python
+feed.add_post(
+    title='Article Title',
+    link='https://example.com/article',
+    description='Short plain-text description for RSS readers',
+    content='<p>Full <strong>HTML</strong> content for readers that support it</p>',
+    pub_date='2025-10-19'
+)
+```
+
+### Feed Image/Logo
+
+```python
+feed = rss.Feed(
+    title='My Blog',
+    link='https://example.com',
+    description='Blog description',
+    image_url='https://example.com/logo.png',
+    image_title='My Blog Logo',
+    image_link='https://example.com'
+)
+```
+
+### Podcast Support (Enclosures)
+
+```python
+feed.add_post(
+    title='Episode 1: Introduction',
+    link='https://example.com/podcast/ep1',
+    description='In this episode...',
+    pub_date='2025-10-19',
+    enclosure={
+        'url': 'https://example.com/audio/ep1.mp3',
+        'type': 'audio/mpeg',
+        'length': '12345678'  # Size in bytes
+    }
+)
+```
+
+### Feed Validation
+
+```python
+feed = rss.Feed(title='', link='https://example.com')
+warnings = feed.validate()
+
+for warning in warnings:
+    print(f"Warning: {warning}")
+# Output: Warning: Feed title is missing
+```
+
+### Feed Statistics
+
+```python
+print(f"Total posts: {feed.count()}")
+print(f"Oldest post: {feed.oldest()}")
+print(f"Newest post: {feed.newest()}")
+```
+
+## Working with dbbasic-tsv
+
+```python
+from dbbasic_tsv import TSV
+import dbbasic_rss as rss
+
+# Read and query with dbbasic-tsv
+db = TSV('articles.tsv')
+posts = db.query(category='python', limit=10)
+
+# Generate RSS feed
+feed = rss.from_posts(
+    posts,
+    title='Python Articles',
+    url_pattern='https://example.com/{slug}/'
+)
+
+feed.write('python-feed.xml')
+```
+
+## API Reference
+
+### `Feed(title, link, description, ...)`
+
+Main feed class.
+
+**Parameters:**
+- `title` (str): Feed title
+- `link` (str): Feed URL
+- `description` (str): Feed description
+- `language` (str): Language code (default: 'en')
+- `author` (str): Author name
+- `author_email` (str): Author email
+- `image_url` (str): Feed image/logo URL
+- `ttl` (int): Cache time-to-live in minutes
+- `category` (str): Feed category
+
+**Methods:**
+- `add_post(**kwargs)`: Add a post to the feed
+- `to_xml()`: Generate RSS XML string
+- `write(filepath)`: Write feed to file
+- `validate()`: Return list of validation warnings
+- `count()`: Return number of items
+- `oldest()`: Return oldest publication date
+- `newest()`: Return newest publication date
+
+### `from_posts(posts, ...)`
+
+Generate feed from list of dictionaries.
+
+**Parameters:**
+- `posts` (list): List of post dictionaries
+- `title` (str): Feed title
+- `link` (str): Feed URL
+- `description` (str): Feed description
+- `url_pattern` (str): URL pattern with {field} placeholders
+- `title_field` (str): Field name for title (default: 'title')
+- `date_field` (str): Field name for date (default: 'date')
+- `content_field` (str): Field name for content (default: 'content')
+- `author_field` (str): Field name for author (default: 'author')
+- `url_field` (str): Field name for URL (default: 'url')
+- `categories_field` (str): Field name for categories
+- `**kwargs`: Additional Feed() arguments
+
+### `from_tsv(filepath, ...)`, `from_csv(filepath, ...)`, `from_json(filepath, ...)`
+
+Generate feed from file. Same parameters as `from_posts()`.
+
+### `from_directory(directory, pattern='*.md', ...)`
+
+Generate feed from directory of files.
+
+**Additional Parameters:**
+- `directory` (str): Directory path
+- `pattern` (str): Glob pattern (default: '*.md')
+- `extract_metadata` (bool): Extract YAML frontmatter (default: True)
+
+### `generate(source, output, ...)`
+
+One-liner to generate feed from file to file.
+
+**Parameters:**
+- `source` (str): Input file path (.tsv, .csv, .json)
+- `output` (str): Output XML file path
+- `**kwargs`: Same as `from_posts()`
+
+## Why dbbasic-rss?
+
+### Unix Philosophy
+
+- **Do one thing well**: Generate RSS feeds
+- **Plain text**: Works with TSV, CSV, JSON files
+- **Composable**: Pipes data through functions
+- **No vendor lock-in**: Framework-agnostic
+
+### Comparison to Other Libraries
+
+**feedgen** (most popular):
+- ❌ Heavy API, steep learning curve
+- ❌ Framework-specific patterns
+- ❌ Complex for simple use cases
+
+**dbbasic-rss**:
+- ✅ One-liner for 80% of use cases
+- ✅ Works with any framework
+- ✅ Composable with other tools
+- ✅ Educational (shows how RSS works)
+
+### Teaching Tool
+
+RSS is just XML! `dbbasic-rss` helps you understand RSS by providing:
+- Clear, readable code
+- Simple templates (no magic)
+- Standards compliance
+- Incremental learning (simple → advanced)
+
+## Contributing
+
+Contributions welcome! Please:
+
+1. Fork the repository
+2. Create a feature branch
+3. Add tests for new functionality
+4. Ensure all tests pass: `pytest`
+5. Submit a pull request
+
+## License
+
+MIT License - see LICENSE file for details.
+
+## Links
+
+- **GitHub**: https://github.com/askrobots/dbbasic-rss
+- **PyPI**: https://pypi.org/project/dbbasic-rss/
+- **Documentation**: https://github.com/askrobots/dbbasic-rss#readme
+- **Issues**: https://github.com/askrobots/dbbasic-rss/issues
+
+## Credits
+
+Created by [Ask Robots](https://askrobots.com) as part of the DBBasic framework.
+
+Inspired by the Unix philosophy and built for simplicity, composability, and ease of learning.
