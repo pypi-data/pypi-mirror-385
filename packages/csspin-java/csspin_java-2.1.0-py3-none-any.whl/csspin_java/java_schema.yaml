@@ -1,0 +1,20 @@
+# -*- mode: yaml; coding: utf-8 -*-
+#
+# Schema of the java plugin for csspin
+
+java:
+    type: object
+    help: Configuration regarding the java plugin for csspin
+    properties:
+        version:
+            type: str
+            help: Java version
+        install_dir:
+            type: path
+            help: The directory in which JAVA should be installed
+        java_home:
+            type: path internal
+            help: The path to the JAVA installation path
+        use:
+            type: path
+            help: The path to an existing JAVA installation

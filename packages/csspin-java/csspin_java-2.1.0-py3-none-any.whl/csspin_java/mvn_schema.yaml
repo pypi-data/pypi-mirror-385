@@ -1,0 +1,41 @@
+# -*- mode: yaml; coding: utf-8 -*-
+#
+# Schema of the mvn plugin for csspin
+
+mvn:
+    type: object
+    help: Configuration regarding the mvn plugin for csspin
+    properties:
+        exe:
+            type: path
+            help: The mvn executable
+        version:
+            type: str
+            help: Java version
+        goals:
+            type: list
+            help: List of goals to be executed by the mvn plugin
+        opts:
+            type: list
+            help: Options passed to the mvn call
+        defines:
+            type: object
+            help: Key-value pairs for defining properties in the mvn call
+        pom_file:
+            type: path
+            help: Path to the pom.xml file
+        packages:
+            type: list
+            help: List of packages to be included in the build
+        mirrors:
+            type: list
+            help: List of mirrors to use when pulling packages
+        url:
+            type: str
+            help: URL pointing to the mvn binary
+        use:
+            type: str
+            help: Use a local Apache Maven installation
+        install_dir:
+            type: path
+            help: Directory to store caches
