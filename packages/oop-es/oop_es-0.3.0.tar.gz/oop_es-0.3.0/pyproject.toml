@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=64", "setuptools_scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "oop-es"
+dynamic = ["version"]
+description = "OOP Event Sourcing package"
+readme = "README.md"
+authors = [{name = "Volodymyr Chub"}]
+license = { text = "MIT" }
+
+[project.optional-dependencies]
+test = ["pytest", "pytest-asyncio", "ty", "ruff"]
+pg = ["oop-es-pg"]
+
+[project.urls]
+Homepage = "https://github.com/ChubV/oop-es"
+Issues = "https://github.com/ChubV/oop-es/issues"
+
+[tool.ruff]
+line-length = 80
+select = ["E", "F", "B", "A"]
+ignore = ["E203", "E501"]
+
+[tool.setuptools_scm]
+version_scheme = "guess-next-dev"
+local_scheme = "node-and-date"
+root = "../"
