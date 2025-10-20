@@ -1,0 +1,54 @@
+[project]
+name = "paicorelib"
+version = "1.5.0"
+description = "Library of PAICORE"
+authors = [{ name = "Ziru Pan", email = "zrpan@stu.pku.edu.cn" }]
+license = { text = "GPL-3.0-or-later" }
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["pydantic (>=2.10.0,<3.0.0)", "numpy (>=2.1.0,<3.0.0)"]
+maintainers = [
+    { name = "Siyuan Gao", email = "siyuan-gao@outlook.com" },
+    { name = "Zhaoyang Hao", email = "hzyang2218@gmail.com" },
+    { name = "Ziru Pan", email = "zrpan@stu.pku.edu.cn" },
+]
+classifiers = [
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries",
+]
+keywords = ["PAIlib", "PAICORE", "neuromorphic-chip", "brain-inspired-ai"]
+
+[project.urls]
+repository = "https://github.com/PAICookers/PAIlib"
+homepage = "https://github.com/PAICookers/PAIlib"
+documentation = "https://github.com/PAICookers/PAIlib#readme"
+
+[tool.poetry]
+packages = [{ include = "paicorelib" }]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[[tool.poetry.source]]
+name = "tsinghua"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+priority = "primary"
+
+[tool.poetry.group.test.dependencies]
+pytest = ">=8.0"
+pytest-md = ">=0.2"
+pytest-cov = ">=6.0"
+
+[tool.pytest.ini_options]
+minversion = "8.0.0"
+testpaths = ["tests"]
+addopts = "--cov=paicorelib --cov-report=term"
