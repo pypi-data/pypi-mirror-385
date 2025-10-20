@@ -1,0 +1,17 @@
+{% load i18n %}
+
+<h4>{% trans "Search" %}</h4>
+
+<form method="get" class="w-full">
+  <label class="input mx-auto w-full 2xl:input-lg">
+    <i data-lucide="search" class="size-4 text-primary lg:size-6"></i>
+    <input
+      required
+      type="search"
+      name="{{ param }}"
+      value="{{ term }}"
+      class="placeholder-primary grow"
+      placeholder="{% trans 'Search' %}"
+    />
+  </label>
+</form>
