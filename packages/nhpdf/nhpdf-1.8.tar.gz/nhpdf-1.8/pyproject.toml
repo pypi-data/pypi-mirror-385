@@ -1,0 +1,36 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "nhpdf"
+version = "1.8"
+dependencies = [
+  "beautifulsoup4",
+  "img2pdf",
+  "requests",
+  "cloudscraper",
+]
+requires-python = ">=3.8"
+authors = [
+  {name = "Aze543", email = "eizen.9258437663@gmail.com"},
+]
+maintainers = [
+  {name = "Aze543", email = "eizen.9258437663@gmail.com"},
+]
+description = "Download NHentai doujins as PDF"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICEN[CS]E.*"]
+keywords = ["pdf", "scraper", "goon"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python"
+]
+
+[project.urls]
+Homepage = "https://github.com/Aze543/NhentaiDoujinToPDFMaker"
+Issues = "https://github.com/Aze543/NhentaiDoujinToPDFMaker/issues"
+
+[project.scripts]
+nhpdf = "nhpdf.nhpdf:start_nhpdf"
