@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mao-mcp-test-01"
+version = "0.1.0"
+description = "mao test"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.13"
+dependencies = ["mcp"]
+authors = [{ name = "mao li", email = "1437935584@qq.com" }]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.scripts]
+mao-mcp-test-01 = "mao_mcp_test_01.server:main"
+
