@@ -1,0 +1,35 @@
+{% extends "rest_framework/base.html" %}{% load i18n %}
+
+<!---->
+{% block title %}{{ block.super }} | {% trans 'Login' %}{% endblock %}
+
+<!---->
+{% block content %}
+<section class="flex items-center justify-center size-full p-4">
+  <div
+    class="card card-sm bg-base-100 border border-base-300 shadow-xl w-full max-w-xl md:card-md xl:card-xl 2xl:card-xl"
+  >
+    <div class="card-body container-prose">
+      <h1>{% trans 'Login' %}</h1>
+
+      {% if next %}
+      <!---->
+      {% if user.is_authenticated %}
+      <p>
+        {% blocktrans trimmed %}Your account doesn't have access to this page.
+        To proceed, please login with an account that has access.
+        <!---->
+        {% endblocktrans %}
+      </p>
+      {% else %}
+      <p>{% trans 'Please login to continue.' %}</p>
+      {% endif %}
+      <!---->
+      {% endif %}
+
+      <!---->
+      {% include 'rest_framework/components/form.html' %}
+    </div>
+  </div>
+</section>
+{% endblock %}
