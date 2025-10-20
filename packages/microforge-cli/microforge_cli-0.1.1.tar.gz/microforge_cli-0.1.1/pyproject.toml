@@ -1,0 +1,63 @@
+[tool.poetry]
+name = "microforge-cli"
+version = "0.1.1"
+description = "A production-ready project generator for modern Python microservices"
+authors = ["Klejdi <klejdi94@gmail.com>"]
+readme = "README.md"
+license = "MIT"
+homepage = "https://github.com/klejdi94/microforge-cli"
+repository = "https://github.com/klejdi94/microforge-cli"
+keywords = ["microservices", "fastapi", "celery", "cli", "generator", "scaffold"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+packages = [{ include = "microforge" }]
+include = ["microforge/templates/**", "microforge/py.typed"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+jinja2 = "^3.1.0"
+pyyaml = "^6.0.1"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+pytest-cov = "^4.1.0"
+black = "^24.0.0"
+ruff = "^0.3.0"
+mypy = "^1.8.0"
+
+[tool.poetry.group.publish.dependencies]
+twine = "^4.0.0"
+
+[tool.poetry.scripts]
+microforge = "microforge.cli:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 100
+target-version = ['py39', 'py310', 'py311', 'py312']
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+# Publishing configuration
+# Note: Repository configuration should be done via poetry config command
+# poetry config repositories.artifactory https://your-artifactory-url/api/pypi/pypi-local/
+
