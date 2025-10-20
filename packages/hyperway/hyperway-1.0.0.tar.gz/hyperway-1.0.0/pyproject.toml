@@ -1,0 +1,54 @@
+# https://packaging.python.org/en/latest/specifications/declaring-project-metadata/#example
+[tool.portray]
+output_dir = "documentation_website"
+modules = ["hyperway"]
+port = 8001
+
+[project]
+name = "hyperway"
+version = "1.0.0"
+authors = [
+  { name="Strangemother", email="hyperway@strangemother.com" },
+]
+description = "A functional graph execution engine - execute computational graphs with clean, composable node connections"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+license = {text='MIT'}
+# dynamic = ['version']
+# dependencies
+# dynamic
+# entry-points
+# gui-scripts
+# keywords
+# license
+# maintainers
+# optional-dependencies
+[project.optional-dependencies]
+dev = [
+  "pytest",
+]
+# scripts
+# urls
+
+[tool.setuptools.package-data]
+trim = ["**/*.js", "**/*.css","**/*.html"]
+
+# [project.scripts]
+# trim = 'trim.cli.primary:main'
+# trim-admin = 'trim.cli.primary:main_admin'
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project.urls]
+"Homepage" = "http://github.com/Strangemother/python-hyperway"
+"Bug Tracker" = "http://github.com/Strangemother/python-hyperway/issues"
