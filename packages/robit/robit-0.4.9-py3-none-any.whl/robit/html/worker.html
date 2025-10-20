@@ -1,0 +1,315 @@
+<html xmlns="http://www.w3.org/1999/html" lang="en">
+
+<head>
+
+    <title>||title||</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="icon" type="image/x-icon" href="icon.png">
+
+    <link class="style" href="bootstrap.css" rel="stylesheet">
+    <link class="style" href="index.css" rel="stylesheet">
+
+    <script src="alpine.js" defer></script>
+    <script type="application/javascript" src="core.js"></script>
+    <script type="application/javascript" src="worker.js"></script>
+
+</head>
+
+<body class="bg-layer">
+
+<div x-data="worker" class="container-fluid pb-3">
+
+    <div id="container" class="d-none">
+        <div class="row sticky-top bg-worker-nav shadow-sm">
+            <div class="col-6 col-md-4 px-3 py-2">
+                <span class="h7 text-light-muted">Worker v||version||</span><br/>
+                <span class="h5 text-light" x-text="data.name"></span>
+            </div>
+            <div class="col-6 col-md-4 px-3 py-2 text-end text-md-center">
+                <span class="h7 text-light-muted">Date & Time - ||timezone||</span><br/>
+                <span class="h5 text-light" x-text="data.clock.now"></span>
+            </div>
+            <div class="col-12 col-md-4 p-3 py-2 text-end">
+                <span class="h7 text-light-muted">Health</span><br/>
+                <span class="h5 text-light" x-text="data.health + '%'"></span>
+            </div>
+        </div>
+
+        <div class="modal fade" id="job-results-modal" tabindex="-1" aria-labelledby="job-results-modal-label"
+             aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-job-layer py-2 px-3">
+                        <h5 class="modal-title fs-5" id="job-results-modal-label"
+                            x-text="job_results.job_detail.name"></h5>
+                        <button type="button" class="btn-close fs-7" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div id="job-results-modal-body" class="modal-body">
+                        <table class="table table-sm table-responsive">
+                            <thead>
+                            <tr>
+                                <th class="fs-7">Datetime</th>
+                                <th class="fs-7">Type</th>
+                                <th class="fs-7">Result</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <template x-for="(result, i) in job_results.results">
+                                <tr :key="i" class="col-12 px-4 border-bottom">
+                                    <td class="fs-7"
+                                        x-text="result.datetime_entered"></td>
+                                    <td class="fs-7"
+                                        :class="{
+                                            'text-status-running': result.type === 'Completed',
+                                            'text-status-error': result.type === 'Errored',
+                                        }"
+                                        x-text="result.type"></td>
+                                    <td class="fs-7"
+                                        x-html="result.message.replaceAll('\n', '<br>')"></td>
+                                </tr>
+                            </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <template x-if="data.groups.length > 0">
+
+            <div class="row">
+
+                <template x-for="(group, i) in data.groups">
+
+                    <div :key="i" class="col-12">
+
+                        <div class="row px-2 px-md-3 pt-3">
+                            <div class="col-12 bg-group-layer shadow rounded-3 p-3">
+
+                                <div class="row pb-2">
+                                    <div class="col-7 col-md-10">
+                                        <span class="fs-7 text-worker-muted fw-bold">Group</span><br/>
+                                        <span class="h5" x-text="group.name"></span>
+                                    </div>
+                                    <div class="col-5 col-md-2 text-end">
+                                        <span class="fs-7 text-worker-muted">Health</span><br/>
+                                        <span class="h5" x-text="group.health + '%'"></span>
+                                    </div>
+                                </div>
+
+                                <template x-if="group.jobs.length > 0">
+
+                                    <div class="row">
+
+                                        <template x-for="(job, i) in group.jobs">
+
+                                            <div :key="i" class="col-12 px-2 py-1">
+
+                                                <div x-on:click="get_job_details(job.id)" class="row px-2 px-md-3 pt-2">
+                                                    <div class="col-12 bg-job-layer shadow-sm rounded-3 p-2">
+                                                        <div class="row">
+                                                            <div class="col-12 col-sm-4 pb-3 pb-sm-0">
+                                                                <span class="fs-7 text-worker-muted fw-bold">Job <span
+                                                                        class="text-muted fw-normal"
+                                                                        x-text="'next run at ' + job.next_run_datetime"></span></span>
+                                                                <br/>
+                                                                <span class="h6" x-text="job.name"></span>
+                                                            </div>
+                                                            <div class="col-6 col-sm-2 text-center pb-2 pb-sm-0">
+                                                                <span class="fs-7 text-worker-muted">Status</span><br/>
+                                                                <span
+                                                                        x-text="job.status"
+                                                                        class="h6"
+                                                                        :class="{
+                                                                            'text-status-running': job.status === 'Running',
+                                                                            'text-status-running-now': job.status === 'Running Now',
+                                                                            'text-status-retrying': job.status === 'Retrying',
+                                                                            'text-status-error': job.status === 'Error',
+                                                                            'text-status-paused': job.status === 'Paused',
+                                                                            'text-status-waiting': job.status === 'Queued'
+                                                                        }"
+                                                                ></span>
+
+                                                            </div>
+                                                            <div class="col-6 text-center pb-2 pb-sm-0 d-block d-sm-none">
+                                                                <span class="fs-7 text-worker-muted">Health</span><br/>
+                                                                <span class="h6" x-text="job.health + '%'"></span>
+                                                            </div>
+                                                            <div class="col-6 col-sm-2 text-center">
+                                                                <span class="fs-7 text-worker-muted">Success</span><br/>
+                                                                <span class="h6" x-text="job.success_count"></span>
+                                                            </div>
+                                                            <div class="col-6 col-sm-2 text-center">
+                                                                <span class="fs-7 text-worker-muted">Failed</span><br/>
+                                                                <span class="h6" x-text="job.failed_count"></span>
+                                                            </div>
+                                                            <div class="col-sm-2 text-center d-none d-sm-block">
+                                                                <span class="fs-7 text-worker-muted">Health</span><br/>
+                                                                <span class="h6" x-text="job.health + '%'"></span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div :id="'job-' + job.id" class="row" style="display: none;">
+
+                                                            <template x-if="job_details[job.id]">
+
+                                                                <div class="col">
+
+                                                                    <div class="row p-0 m-0">
+                                                                        <div class="col p-0 m-0">
+                                                                            <hr class="text-muted my-2"/>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row pb-2">
+                                                                        <div class="col-sm-4 d-none d-sm-block">
+                                                                            <span class="fs-7 text-worker-muted">Method</span><br/>
+                                                                            <span class="fs-7 ps-2"
+                                                                                  x-text="job_details[job.id].method"></span>
+                                                                        </div>
+                                                                        <div class="col-6 col-sm-2 text-center pb-2 pb-sm-0">
+                                                                            <span class="fs-7 text-worker-muted">Average Runtime</span><br/>
+                                                                            <span class="h6"
+                                                                                  x-text="job_details[job.id].timer.average_duration + 'sec'"></span>
+                                                                        </div>
+                                                                        <div class="col-6 col-sm-2 text-center pb-2 pb-sm-0">
+                                                                            <span class="fs-7 text-worker-muted">Last Runtime</span><br/>
+                                                                            <span class="h6"
+                                                                                  x-text="job_details[job.id].timer.last_duration + 'sec'"></span>
+                                                                        </div>
+                                                                        <div class="col-6 col-sm-2 text-center">
+                                                                            <span class="fs-7 text-worker-muted">Shortest Runtime</span><br/>
+                                                                            <span class="h6"
+                                                                                  x-text="job_details[job.id].timer.shortest_duration + 'sec'"></span>
+                                                                        </div>
+                                                                        <div class="col-6 col-sm-2 text-center">
+                                                                            <span class="fs-7 text-worker-muted">Longest Runtime</span><br/>
+                                                                            <span class="h6"
+                                                                                  x-text="job_details[job.id].timer.longest_duration + 'sec'"></span>
+                                                                        </div>
+                                                                        <div class="col-12 d-block d-sm-none pt-2">
+                                                                            <span class="fs-7 text-worker-muted">Method</span><br/>
+                                                                            <span class="h6"
+                                                                                  x-text="job_details[job.id].method"></span>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div x-show="job_details[job.id].failed_log.length > 0"
+                                                                         class="row mb-1">
+                                                                        <div class="col-12">
+                                                                            <span class="fs-7 text-worker-muted">Exceptions</span>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div x-show="job_details[job.id].failed_log.length > 0"
+                                                                         class="row mb-1 me-1 overflow-auto"
+                                                                         style="max-height: 300px;">
+
+                                                                        <template
+                                                                                x-for="(message, i) in job_details[job.id].failed_log">
+                                                                            <div :key="i" class="col-12 px-4">
+                                                                                <li class="fs-7 text-muted pb-1"
+                                                                                    x-html="message.replaceAll('\n', '<br>')"></li>
+                                                                            </div>
+                                                                        </template>
+
+                                                                    </div>
+
+                                                                    <div x-show="job_details[job.id].result_log.length > 0"
+                                                                         class="row mb-1">
+                                                                        <div class="col-12">
+                                                                            <span class="fs-7 text-worker-muted">Results</span>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div x-show="job_details[job.id].result_log.length > 0"
+                                                                         class="row mb-1 me-1 overflow-auto"
+                                                                         style="max-height: 300px;">
+                                                                        <template
+                                                                                x-for="(message, i) in job_details[job.id].result_log">
+                                                                            <div :key="i" class="col-12 px-4">
+                                                                                <li class="fs-7 text-muted pb-1"
+                                                                                    x-text="message"></li>
+                                                                            </div>
+                                                                        </template>
+                                                                    </div>
+                                                                    <div class="row mb-0 mt-3">
+                                                                        <template x-if="||database_logging||">
+                                                                            <div class="col-5">
+                                                                                <button x-on:click.stop="get_job_results(job.id)"
+                                                                                        class="btn btn-outline-dark fs-7 px-2 py-1 fw-bold"
+                                                                                        data-bs-toggle="modal"
+                                                                                        data-bs-target="#job-results-modal">
+                                                                                    Display All Results
+                                                                                </button>
+                                                                            </div>
+                                                                        </template>
+                                                                        <template x-if="||controls||">
+                                                                            <div class="col-7 text-end">
+                                                                                <button x-on:click.stop="run_job_action(job.id, 'run_now')"
+                                                                                        class="btn btn-outline-success fs-7 px-2 py-1 ms-1 fw-bold">
+                                                                                    Run Now
+                                                                                </button>
+                                                                                <button x-on:click.stop="run_job_action(job.id, 'pause')"
+                                                                                        class="btn btn-outline-danger fs-7 px-2 py-1 ms-1 fw-bold">
+                                                                                    <span x-show="job.status === 'Paused'">Un-Pause</span>
+                                                                                    <span x-show="job.status !== 'Paused'">Pause</span>
+                                                                                </button>
+                                                                            </div>
+                                                                        </template>
+                                                                    </div>
+
+                                                                </div>
+
+                                                            </template>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </template>
+
+                                    </div>
+
+                                </template>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </template>
+
+            </div>
+
+        </template>
+
+    </div>
+
+    <div id="loading" class="d-block">
+        <div class="row h-25">
+        </div>
+        <div class="row h-75">
+            <div class="col h-100 text-center">
+                <h1 class="text-muted align-middle h-100">Loading ... !</h1>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="application/javascript">
+    hide_loading()
+</script>
+
+<script type="application/javascript" src="bootstrap.js"></script>
+
+</body>
+
+</html>
