@@ -1,0 +1,25 @@
+[project]
+name = "asyncsqlpy"
+version = "0.1.7"
+description = "Async SQL + Redis wrapper with Mongo-like interface, fire-and-forget SQL background updates."
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+    { name = "sathish20004", email = "sourechebala19470@gmail.com" },
+    { name = "Sathishzus", email = "sathishzus@ridemap.in" }
+]
+license = { text = "MIT" }
+keywords = ["async", "postgresql", "redis", "mongodb", "jsonb", "aiopg", "aioredis"]
+
+# ✅ Dependencies must be inside [project], not [build-system]
+dependencies = [
+    "aiopg>=1.3.0",
+    "redis>=5.0.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/sathishzuss/asyncsqlpy"
+
+[build-system]
+requires = ["setuptools>=61.0","wheel"]
+build-backend = "setuptools.build_meta"
