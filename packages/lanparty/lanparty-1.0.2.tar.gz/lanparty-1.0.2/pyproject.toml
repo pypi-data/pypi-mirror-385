@@ -1,0 +1,33 @@
+[project]
+name = "lanparty"
+version = "1.0.2"
+description = "Local chat via LAN"
+authors = [
+    {name="EnderLumi"},
+    {name="Leon"}
+]
+license = {text = "GPL-3.0"}
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "colorama>=0.4.6"
+]
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project.scripts]
+localchat = "localchat.__main__:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["localchat*"]
+exclude = ["tests*", "Scripts*"]
+
+[project.urls]
+Homepage = "https://github.com/enderlumi/localchat"
+Source = "https://github.com/enderlumi/localchat"
+Issues = "https://github.com/enderlumi/localchat/issues"
