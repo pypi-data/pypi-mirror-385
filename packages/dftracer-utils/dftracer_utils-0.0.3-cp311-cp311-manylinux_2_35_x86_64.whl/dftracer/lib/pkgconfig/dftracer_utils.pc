@@ -1,0 +1,13 @@
+prefix=/tmp/tmpfyko6ua0/wheel/platlib
+exec_prefix=${prefix}
+libdir=${exec_prefix}/dftracer/lib
+includedir=${prefix}/dftracer/include
+
+Name: dftracer_utils
+Description: DFTracer utils library for processing gzipped files
+Version: 0.1.0
+URL: https://github.com/LLNL/dftracer-utils
+Requires:  sqlite3
+Libs.private:  -lsqlite3 -lz
+Libs: -L${libdir} -ldftracer_utils
+Cflags: -I${includedir}
