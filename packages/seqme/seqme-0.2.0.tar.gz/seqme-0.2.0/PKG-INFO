@@ -1,0 +1,173 @@
+Metadata-Version: 2.4
+Name: seqme
+Version: 0.2.0
+Summary: Metrics for evaluating biological sequence design.
+Project-URL: Documentation, https://seqme.readthedocs.io
+Project-URL: Source, https://github.com/szczurek-lab/seqme
+Project-URL: Home-page, https://github.com/szczurek-lab/seqme
+Author: Rasmus Møller-Larsen, Adam Izdebski, Jan Olszewski, Pankhil Gawade, Michal Kmicikiewicz, Wojciech Zarzecki, Ewa Szczurek
+Maintainer: Rasmus Møller-Larsen
+License: BSD 3-Clause License
+        
+        Copyright (c) 2025, Szczurek lab
+        
+        Redistribution and use in source and binary forms, with or without
+        modification, are permitted provided that the following conditions are met:
+        
+        1. Redistributions of source code must retain the above copyright notice, this
+           list of conditions and the following disclaimer.
+        
+        2. Redistributions in binary form must reproduce the above copyright notice,
+           this list of conditions and the following disclaimer in the documentation
+           and/or other materials provided with the distribution.
+        
+        3. Neither the name of the copyright holder nor the names of its
+           contributors may be used to endorse or promote products derived from
+           this software without specific prior written permission.
+        
+        THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+        AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+        IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+        DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+        FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+        DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+        SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+        CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+        OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+        OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+License-File: LICENSE
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Console
+Classifier: Framework :: Jupyter
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Classifier: Topic :: Scientific/Engineering :: Bio-Informatics
+Classifier: Topic :: Scientific/Engineering :: Visualization
+Requires-Python: >=3.10
+Requires-Dist: matplotlib>=3.6
+Requires-Dist: moocore
+Requires-Dist: numpy
+Requires-Dist: pandas>=1.5
+Requires-Dist: pylatex
+Requires-Dist: pylev
+Requires-Dist: scikit-learn
+Requires-Dist: scipy
+Requires-Dist: torch
+Requires-Dist: tqdm
+Requires-Dist: umap-learn
+Provides-Extra: aadescriptors
+Requires-Dist: modlamp; extra == 'aadescriptors'
+Provides-Extra: dev
+Requires-Dist: ipykernel; extra == 'dev'
+Requires-Dist: ipywidgets; extra == 'dev'
+Requires-Dist: mypy; extra == 'dev'
+Requires-Dist: nbstripout; extra == 'dev'
+Requires-Dist: pre-commit>=3.0.0; extra == 'dev'
+Requires-Dist: pytest; extra == 'dev'
+Requires-Dist: pytest-cov; extra == 'dev'
+Requires-Dist: ruff; extra == 'dev'
+Provides-Extra: doc
+Requires-Dist: ipykernel; extra == 'doc'
+Requires-Dist: ipywidgets; extra == 'doc'
+Requires-Dist: myst-nb; extra == 'doc'
+Requires-Dist: myst-parser; extra == 'doc'
+Requires-Dist: nbsphinx; extra == 'doc'
+Requires-Dist: scanpydoc; extra == 'doc'
+Requires-Dist: seaborn; extra == 'doc'
+Requires-Dist: sphinx; extra == 'doc'
+Requires-Dist: sphinx-autodoc-typehints; extra == 'doc'
+Requires-Dist: sphinx-book-theme; extra == 'doc'
+Requires-Dist: sphinx-copybutton; extra == 'doc'
+Requires-Dist: sphinx-gallery; extra == 'doc'
+Provides-Extra: esm2
+Requires-Dist: transformers; extra == 'esm2'
+Provides-Extra: gena-lm
+Requires-Dist: einops; extra == 'gena-lm'
+Requires-Dist: transformers; extra == 'gena-lm'
+Provides-Extra: hyformer
+Requires-Dist: einops>=0.7; extra == 'hyformer'
+Requires-Dist: torchvision; extra == 'hyformer'
+Requires-Dist: transformers; extra == 'hyformer'
+Provides-Extra: hyformer-molecules
+Requires-Dist: deepchem; extra == 'hyformer-molecules'
+Requires-Dist: torchvision; extra == 'hyformer-molecules'
+Requires-Dist: transformers; extra == 'hyformer-molecules'
+Provides-Extra: prostt5
+Requires-Dist: sentencepiece; extra == 'prostt5'
+Requires-Dist: transformers; extra == 'prostt5'
+Provides-Extra: rna-fm
+Requires-Dist: rna-fm; extra == 'rna-fm'
+Description-Content-Type: text/markdown
+
+<p align="left">
+    <img src="https://raw.githubusercontent.com/szczurek-lab/seqme/main/docs/_static/logo_title.svg" alt="seqme logo" width="30%">
+</p>
+
+[![PyPI](https://img.shields.io/pypi/v/seqme.svg)](https://pypi.org/project/seqme/)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![License](https://img.shields.io/github/license/szczurek-lab/seqme?v=2)](https://opensource.org/license/bsd-3-clause)
+[![Read the Docs](https://img.shields.io/readthedocs/seqme)](https://seqme.readthedocs.io/)
+
+**seqme** is a modular and highly extendable python library containing model-agnostic metrics for evaluating biological sequence designs.
+
+## Installation
+
+You need to have Python 3.10 or newer installed on your system. To install the base package do:
+
+```bash
+$ pip install seqme
+```
+
+To also install domain-specific models, add extras specifiers.
+Read the [docs](https://seqme.readthedocs.io/en/stable/api/models_index.html) for more information on the supported models.
+
+## Quick start
+
+Install seqme and the protein language model, ESM-2.
+
+```bash
+$ pip install 'seqme[esm2]'
+```
+
+Run in a Jupyter notebook:
+
+```python
+import seqme as sm
+
+sequences = {
+    "Random": ["MKQW", "RKSPL"],
+    "UniProt": ["KKWQ", "RKSPL", "RASD"],
+    "HydrAMP": ["MMRK", "RKSPL", "RRLSK", "RRLSK"],
+}
+
+cache = sm.Cache(
+    models={"esm2": sm.models.Esm2(
+        model_name="facebook/esm2_t6_8M_UR50D", batch_size=256, device="cpu")
+    }
+)
+
+metrics = [
+    sm.metrics.Uniqueness(),
+    sm.metrics.Novelty(reference=sequences["UniProt"]),
+    sm.metrics.FBD(reference=sequences["Random"], embedder=cache.model("esm2")),
+]
+
+df = sm.evaluate(sequences, metrics)
+sm.show(df) # Note: Will only display the table in a notebook.
+```
+
+Read the [docs](https://seqme.readthedocs.io/en/stable/tutorials/index.html) for more tutorials and examples.
+
+## Citation
+
+Preprint is coming soon.
