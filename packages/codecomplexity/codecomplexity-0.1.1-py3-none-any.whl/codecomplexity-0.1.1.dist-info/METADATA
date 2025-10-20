@@ -1,0 +1,152 @@
+Metadata-Version: 2.4
+Name: codecomplexity
+Version: 0.1.1
+Summary: A simple code complexity analyzer for Python
+Home-page: https://github.com/yourusername/codecomplexity
+Author: Your Name
+Author-email: Ayaan Bandey <ayaanniaz@gmail.com>
+License: MIT
+Project-URL: Homepage, https://github.com/ayaanniaz/codecomplexity
+Project-URL: Bug Tracker, https://github.com/ayaanniaz/codecomplexity/issues
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Quality Assurance
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Dynamic: author
+Dynamic: home-page
+Dynamic: requires-python
+
+# CodeComplexity
+
+A simple and powerful Python library for analyzing code complexity metrics.
+
+## Features
+
+- **Cyclomatic Complexity**: Measures the number of linearly independent paths through code
+- **Cognitive Complexity**: Measures how difficult code is to understand
+- **Nesting Depth**: Tracks maximum nesting level
+- **Lines of Code**: Counts actual code lines per function
+- **Parameter Count**: Tracks function parameters
+- **Return Count**: Counts return statements
+
+## Installation
+
+```bash
+pip install codecomplexity
+```
+
+## Usage
+
+### As a Library
+
+```python
+from codecomplexity import analyze_code, analyze_file, format_report
+
+# Analyze code string
+code = """
+def example_function(x, y):
+    if x > 0:
+        for i in range(y):
+            if i % 2 == 0:
+                return i
+    return -1
+"""
+
+metrics = analyze_code(code)
+print(format_report(metrics))
+```
+
+### Command Line Interface
+
+```bash
+# Analyze a single file
+codecomplexity script.py
+
+# Analyze all Python files in a directory recursively
+codecomplexity src/ --recursive
+
+# Only show functions above complexity threshold
+codecomplexity script.py --threshold 10
+
+# Output as JSON
+codecomplexity script.py --format json
+
+# Save results to file
+codecomplexity script.py --output report.txt
+```
+
+## Understanding the Metrics
+
+### Cyclomatic Complexity
+- **1-5**: Simple function, low risk
+- **6-10**: Moderate complexity, medium risk
+- **11-20**: Complex function, high risk
+- **21+**: Very complex, very high risk
+
+### Cognitive Complexity
+Measures how difficult code is to understand by weighting nested control structures.
+
+### Nesting Depth
+Maximum level of nested blocks (if, for, while, etc.). Aim for depth ≤ 4.
+
+## API Reference
+
+### `analyze_code(code: str) -> List[ComplexityMetrics]`
+Analyze a Python code string.
+
+### `analyze_file(filepath: str) -> List[ComplexityMetrics]`
+Analyze a Python file.
+
+### `format_report(metrics: List[ComplexityMetrics], threshold: Optional[int] = None) -> str`
+Format metrics into a readable report.
+
+### `ComplexityMetrics`
+Dataclass containing:
+- `name`: Function name
+- `type`: Type of code unit
+- `lines_of_code`: Line count
+- `cyclomatic_complexity`: Cyclomatic complexity score
+- `cognitive_complexity`: Cognitive complexity score
+- `nesting_depth`: Maximum nesting level
+- `parameters`: Parameter count
+- `returns`: Return statement count
+
+## Development
+
+```bash
+# Clone repository
+git clone https://github.com/yourusername/codecomplexity.git
+cd codecomplexity
+
+# Install in development mode
+pip install -e ".[dev]"
+
+# Run tests
+pytest
+
+# Format code
+black .
+
+# Lint
+flake8
+```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+MIT License - see LICENSE file for details.
+
+## Acknowledgments
+
+Inspired by various code complexity tools including McCabe, Radon, and SonarQube.
