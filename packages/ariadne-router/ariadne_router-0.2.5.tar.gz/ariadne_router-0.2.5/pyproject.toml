@@ -1,0 +1,185 @@
+[project]
+name = "ariadne-router"
+description = "Intelligent quantum circuit routing system with automatic backend selection and performance optimization"
+readme = "README.md"
+requires-python = ">=3.11"
+dynamic = ["version"]
+license = "Apache-2.0"
+authors = [
+  { name = "Hunter Bown", email = "hunter@shannonlabs.dev" }
+]
+keywords = ["quantum", "simulator", "qasm3", "quantum-computing", "apple-silicon", "cuda", "jax", "metal", "intelligent-routing", "ariadne", "quantum-routing"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Education",
+  "Intended Audience :: Science/Research",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering",
+  "Topic :: Scientific/Engineering :: Physics",
+  "Topic :: Education",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+  "qiskit>=2.1.1",
+  "qiskit-aer>=0.17.2",
+  "stim>=1.15.0",
+  "quimb>=1.11.2",
+  "cotengra>=0.7.5",
+  "opt_einsum>=3.3",
+  "numpy>=1.21",
+  "scipy>=1.7",
+  "networkx>=3.0",
+  "matplotlib>=3.5.0",
+  "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+cuda = [
+  "cupy-cuda12x>=12.0.0"
+]
+apple = [
+  "jax>=0.4; platform_system=='Darwin' and platform_machine=='arm64'",
+  "jaxlib>=0.4; platform_system=='Darwin' and platform_machine=='arm64'",
+  "jax-metal>=0.1; platform_system=='Darwin' and platform_machine=='arm64'",
+]
+advanced = [
+  "mqt.ddsim>=2.0.0",
+  "qulacs>=0.6.4",
+  "cirq>=1.0.0",
+]
+viz = [
+  "matplotlib>=3.5",
+  "seaborn>=0.11",
+  "plotly>=5.0",
+]
+dev = [
+  "pytest>=7.0",
+  "pytest-cov>=3.0",
+  "pytest-asyncio>=0.21.0",
+  "ruff>=0.6.0",
+  "pre-commit>=3.5",
+  "mypy>=1.11.0",
+  "pytest-timeout>=2.1",
+  "pytest-xdist>=2.5",
+  "pytest-mock>=3.6",
+  "coverage>=6.0",
+  "bandit>=1.7",
+  "safety>=2.0",
+]
+docs = [
+  "sphinx>=5.0",
+  "sphinx-rtd-theme>=1.2",
+  "myst-parser>=0.18",
+]
+
+[project.scripts]
+ariadne = "ariadne.cli.main:main"
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+extend-exclude = ["src/ariadne/_version.py"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "B", "C4", "UP"]
+ignore = ["E501", "B008"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["B011"]
+"examples/*" = ["B006"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = [
+  "ariadne.backends.*",
+  "ariadne.async_.*",
+  "ariadne.performance.memory",
+  "ariadne.validation.*",
+  "ariadne.analysis.*",
+  "ariadne.route.enhanced_router",
+  "ariadne.route.context_detection",
+  "ariadne.route.routing_tree",
+  "ariadne.route.performance_model",
+  "ariadne.optimization.multi_objective",
+  "ariadne.performance.parallel",
+  "ariadne",
+]
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = ["yaml", "toml"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short --strict-markers"
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+markers = [
+  "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+  "integration: marks tests as integration tests",
+  "unit: marks tests as unit tests",
+  "benchmark: marks tests as benchmark tests",
+  "asyncio: marks tests that use asyncio",
+]
+
+[tool.coverage.run]
+source = ["ariadne"]
+omit = ["*/tests/*", "*/test_*"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "pragma: no cover",
+  "def __repr__",
+  "if self.debug:",
+  "if settings.DEBUG",
+  "raise AssertionError",
+  "raise NotImplementedError",
+  "if 0:",
+  "if __name__ == .__main__.:",
+  "class .*\\bProtocol\\):",
+  "@(abc\\.)?abstractmethod",
+]
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["ariadne*"]
+exclude = ["tests*", "docs*", "__pycache__*"]
+
+[tool.setuptools.package-data]
+ariadne = ["*.txt", "*.md", "*.yml", "*.yaml"]
+
+[tool.setuptools_scm]
+write_to = "src/ariadne/_version.py"
+local_scheme = "no-local-version"
+version_scheme = "guess-next-dev"
