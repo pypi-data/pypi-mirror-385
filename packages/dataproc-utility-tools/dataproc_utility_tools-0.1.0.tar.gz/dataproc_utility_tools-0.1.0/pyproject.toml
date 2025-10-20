@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dataproc-utility-tools"
+version = "0.1.0"
+description = "Dataproc Utility Tools - A comprehensive toolkit for data quality analysis, schema validation, and dataset cleaning with PySpark integration"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+  { name = "Rodrigo Ribeiro", email = "rodrigo.s.ribeiro98@gmail.com" }
+]
+dependencies = [
+  "pandas>=2.1.0",
+  "numpy>=2.1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=6.0",
+  "ruff>=0.1.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/rodrigo-sr/dataproc_utility_tools"
+Repository = "https://github.com/rodrigo-sr/dataproc_utility_tools"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[project.scripts]
+dqu-validate = "dataproc_utility_tools.cli:main"
+
+[tool.setuptools]
+py-modules = []
