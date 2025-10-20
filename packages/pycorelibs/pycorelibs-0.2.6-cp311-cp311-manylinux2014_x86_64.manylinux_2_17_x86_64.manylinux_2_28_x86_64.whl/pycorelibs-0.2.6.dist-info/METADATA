@@ -1,0 +1,661 @@
+Metadata-Version: 2.4
+Name: pycorelibs
+Version: 0.2.6
+Summary: A collection of reusable python core library from AI Lingues.
+Author-email: AI Lingues <support@ailingues.com>
+License: MIT
+Keywords: AILingues,components,core,library
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: aiohappyeyeballs~=2.6.1
+Requires-Dist: aiohttp~=3.12.15
+Requires-Dist: aiosignal~=1.4.0
+Requires-Dist: annotated-types~=0.7.0
+Requires-Dist: async-timeout~=5.0.1
+Requires-Dist: attrs~=25.3.0
+Requires-Dist: backports.tarfile~=1.2.0
+Requires-Dist: beautifulsoup4~=4.13.4
+Requires-Dist: build~=1.3.0
+Requires-Dist: certifi~=2025.8.3
+Requires-Dist: cffi~=1.17.1
+Requires-Dist: charset-normalizer~=3.4.2
+Requires-Dist: click~=8.2.1
+Requires-Dist: colorama~=0.4.6
+Requires-Dist: cssselect~=1.3.0
+Requires-Dist: cryptography~=45.0.6
+Requires-Dist: Cython~=3.1.2
+Requires-Dist: ddgs~=9.5.2
+Requires-Dist: docutils~=0.22
+Requires-Dist: feedfinder2~=0.0.4
+Requires-Dist: feedparser~=6.0.11
+Requires-Dist: filelock~=3.18.0
+Requires-Dist: frozenlist~=1.7.0
+Requires-Dist: html2text~=2025.4.15
+Requires-Dist: id~=1.5.0
+Requires-Dist: idna~=3.10
+Requires-Dist: importlib_metadata~=8.7.0
+Requires-Dist: jaraco.classes~=3.4.0
+Requires-Dist: jaraco.context~=6.0.1
+Requires-Dist: jaraco.functools~=4.2.1
+Requires-Dist: jieba3k~=0.35.1
+Requires-Dist: joblib~=1.5.1
+Requires-Dist: keyring~=25.6.0
+Requires-Dist: lxml~=6.0.0
+Requires-Dist: lxml_html_clean~=0.4.2
+Requires-Dist: markdown-it-py~=3.0.0
+Requires-Dist: mdurl~=0.1.2
+Requires-Dist: more-itertools~=10.7.0
+Requires-Dist: multidict~=6.6.3
+Requires-Dist: newspaper3k~=0.2.8
+Requires-Dist: nh3~=0.3.0
+Requires-Dist: nltk~=3.9.1
+Requires-Dist: packaging~=25.0
+Requires-Dist: pillow~=11.3.0
+Requires-Dist: primp~=0.15.0
+Requires-Dist: propcache~=0.3.2
+Requires-Dist: psutil~=7.0.0
+Requires-Dist: py-cpuinfo~=9.0.0
+Requires-Dist: pycparser==2.22
+Requires-Dist: pydantic~=2.11.7
+Requires-Dist: pydantic_core~=2.33.2
+Requires-Dist: Pygments~=2.19.2
+Requires-Dist: pyproject_hooks~=1.2.0
+Requires-Dist: python-dateutil~=2.9.0.post0
+Requires-Dist: pywin32-ctypes~=0.2.3
+Requires-Dist: PyYAML~=6.0.2
+Requires-Dist: readme_renderer~=44.0
+Requires-Dist: redis~=6.3.0
+Requires-Dist: regex~=2025.7.34
+Requires-Dist: requests~=2.32.4
+Requires-Dist: requests-file~=2.1.0
+Requires-Dist: requests-toolbelt~=1.0.0
+Requires-Dist: rfc3986~=2.0.0
+Requires-Dist: rich~=14.1.0
+Requires-Dist: sgmllib3k~=1.0.0
+Requires-Dist: six~=1.17.0
+Requires-Dist: soupsieve~=2.7
+Requires-Dist: tinysegmenter~=0.3
+Requires-Dist: tldextract~=5.3.0
+Requires-Dist: tqdm~=4.67.1
+Requires-Dist: twine~=6.1.0
+Requires-Dist: typing-inspection~=0.4.1
+Requires-Dist: typing_extensions~=4.14.1
+Requires-Dist: urllib3~=2.5.0
+Requires-Dist: yarl~=1.20.1
+Requires-Dist: zipp~=3.23.0
+
+# PyCoreLibs
+
+AI Lingues 基础组件库- PyCoreLibs
+
+## Message
+
+消息库，基于redis的异步消息框架
+
+参考:redis/README.md
+
+## Network
+
+### search 搜索引擎
+
+互联网搜索引擎
+
+### requests 请求
+
+- fetch_url 强化版通用网络请求函数，增加了重试机制,并适用于复杂场景。
+
+- is_url 验证是否为合法url
+
+### scrawer 网页文本获取
+
+- HTMLContent 提取网页内容
+
+
+## security 模块
+
+- base64s 模块
+
+- cryptographys 模块 
+  - AsymmetricCrypto: 稳健可靠的非对称加解密 + 签名/验签 工具类
+
+    - 加解密：RSA-OAEP(SHA-256) + AES-GCM(256) 的混合加密（任意长度数据）
+    - 签名：RSA-PSS(SHA-256)，返回 JSON 打包（Base64）
+    - 设计目标：健壮、跨语言友好（JSON+Base64）、异常统一封装
+
+    - 示例
+      ```python
+          from pycorelibs.security.cryptographys import AsymmetricCrypto
+          message = b"hello, asymmetric crypto! \xf0\x9f\x94\x90"
+
+          # 1) 生成密钥对（内存）
+          priv, pub = AsymmetricCrypto.generate_keypair(
+              key_size=2048, private_password=b"pass"
+          )
+
+          # 2) 加密（可选 AAD）
+          aad = b"meta:example"
+          blob = AsymmetricCrypto.encrypt(message, pub, aad=aad)
+
+          # 3) 解密
+          plain = AsymmetricCrypto.decrypt(blob, priv, private_password=b"pass")
+          assert plain == message
+          print("Decrypt OK:", plain.decode("utf-8"))
+
+          # 4) 签名
+          sig_blob = AsymmetricCrypto.sign(message, priv, private_password=b"pass")
+
+          # 5) 验签（成功）
+          ok = AsymmetricCrypto.verify(message, sig_blob, pub)
+          print("Verify OK:", ok)
+
+          # 6) 验签（失败示例：数据被改动）
+          tampered = message + b"!"
+          bad = AsymmetricCrypto.verify(tampered, sig_blob, pub)
+          print("Verify with tamper:", bad)
+
+      ```
+- fingerprints 模块
+
+    跨平台硬件指纹
+
+    - 只用 Python 库，不走系统命令；信息更稳定
+    - 多网卡：枚举全部，带过滤选项（是否包含虚拟/回环、是否只取UP、是否要求有IP）
+    - 主 MAC 选择策略可配置
+    - 生成哈希指纹（可传入 salt 提高伪造成本）
+
+
+    示例：
+    ```python
+        from pycorelibs.security.fingerprints import generate_hardware_fingerprint
+        # 典型：只要UP、排除虚拟和回环；无IP也可（离线机器也能给出指纹）
+        fp = generate_hardware_fingerprint()
+        print(fp)
+        print("*" * 80)
+        # 更“联网语义”：要求接口必须有非回环IP
+        fp_net = generate_hardware_fingerprint(require_ip=True)
+        print(fp_net)
+        print("*" * 80)
+        # 有授权/反爬需求：加盐
+        fp_salted = generate_hardware_fingerprint(salt="your-secret-salt-123")
+        print(fp_salted)
+        print("*" * 80)
+
+    ```
+
+- md5s 模块
+  - md5 函数 
+
+    计算输入内容的 MD5 值
+
+    参数:
+
+      - text (Any): 任意可转为字符串的输入内容。
+      - length (int): 结果长度，可选 16 或 32（默认 32）。
+      - isHex (bool): 是否以十六进制格式输出（默认为 True）。
+
+    返回:
+
+      (bool, Optional[str]): 成功与否、以及 MD5 值字符串或 None。
+
+        
+      
+
+## system 信息
+
+### SystemInfo
+
+获取当前系统信息
+
+- OS 操作系统
+- CPU
+- Macs 网卡
+- MB 主板
+
+### RunTimeInfo 运行期信息
+
+- get_boot_time 获取系统启动时间和系统已运行时长
+
+    跨平台细节：
+
+        Linux：boot_time 基本来自 btime（自启动以来的挂钟差，包含睡眠/休眠的停留时间）。
+
+        Windows：psutil 内部通常用系统 tick 估算，一般不包含睡眠时间（更接近“活跃运行时长”）。
+      
+- get_uptime 获取自 start_mono（monotonic 起点）至今的运行时长（不受系统时钟跳变影响，如被 NTP/手动调整，或夏令时切换）
+
+## Utils
+
+### config配置模块
+
+通用的本地配置存取层（与数据结构无关）
+  1. 面向任意Python对象：通过可插拔 Serializer 适配（JSON/YAML/TOML/Pickle/自定义均可）
+  2. 原子写入、自动创建目录、可选自动保存
+  3. 多命名空间：各自文件、各自序列化器，互不干扰
+  4. 默认保存到“应用同目录”
+  5. 支持配置文件加密存储
+
+- ConfigRepo类
+仓库：管理多个命名空间。
+
+  一个应用一个仓库，里面可注册多个命名空间。
+
+  每个命名空间：独立文件 + 独立序列化器 + 独立默认值
+
+  - 构造函数
+  ```python
+    __init__(self, root: Optional[str] = None, subdir: Optional[str] = None)
+  ```
+    **作用**：创建一个配置仓库实例，确定所有命名空间文件的根目录。
+
+    **参数**：
+
+    - root：str | None
+
+      仓库根目录的绝对/相对路径。若为 None，则自动解析为**应用同目录**：
+
+      - PyInstaller 打包后：os.path.dirname(sys.executable)
+
+      - 普通脚本：os.path.dirname(os.path.abspath(sys.argv[0] or __file__))
+
+    - subdir：str | None
+
+      root 下的子目录名（例如 "config"），用于把配置集中到 root/subdir。
+
+    **返回**：
+      
+    无。
+
+    **副作用**：
+    
+    若目录不存在会自动创建。
+
+    **示例**：
+    ```python
+
+    # 保存到应用目录下的 ./config/
+    repo = ConfigRepo(subdir="config")
+
+    # 保存到指定绝对路径
+    repo = ConfigRepo(root="D:/myapp/config")
+    ```
+
+-  register注册命名空间
+    ```python
+    register(self, name: str, serializer: Serializer[Any], filename: Optional[str] = None, default_factory: Optional[Callable[[], Any]] = None, autosave: bool = False, backup_on_save: bool = False, cipher: Optional[AesGcmBox] = None, cipher_policy: str = "auto", encrypt_on_save_if_cipher: bool = True) -> Namespace[Any]
+    ```
+
+    **作用**：
+
+    注册一个命名空间（即一个逻辑“配置空间”），绑定文件、序列化器、默认值与加密策略。
+
+    **参数**：
+
+    - name：str
+    命名空间名称（在仓库内唯一）。
+
+    - serializer：Serializer[Any]
+    序列化器实例：如 JsonSerializer()、PickleSerializer() 或自定义实现（需提供 dumps(obj)->bytes 与 loads(bytes)->obj）。
+
+    - filename：str | None
+    文件名。若省略：当 serializer 为 JsonSerializer 时默认 "<name>.json"，否则为 "<name>.bin"。
+
+    - default_factory：() -> Any | None
+    当文件不存在或需重置时，用此函数惰性生成默认对象（如 dict/list/自定义对象）。若省略，默认值为 None。
+
+    - autosave：bool
+    设为 True 时，调用 set() / update() / reset() 等修改后会自动保存到文件。
+
+    - backup_on_save：bool
+    保存前若目标文件已存在，将其重命名为 *.bak 作为备份。
+
+    - cipher：AesGcmBox | None
+    可选的加密盒；提供则进行加密存储（AES-GCM）。不提供则明文存储。
+
+    - cipher_policy："auto" | "require"（默认 "auto"）
+
+      - "auto"：读取时若检测到加密魔数则解密，否则按明文加载（兼容旧文件）；
+
+      - "require"：强制要求文件为加密格式，若无魔数直接抛错（适合敏感空间）。
+
+    - encrypt_on_save_if_cipher：bool（默认 True）
+    当 cipher 存在且此前是明文加载的旧文件，保存时会自动迁移为加密格式。
+
+    **返回**：
+
+    Namespace[Any]：已注册的命名空间对象。
+
+    **异常**：
+    
+    无（但后续加载/保存时可能抛出序列化/IO/解密类异常）。
+
+    **示例**：
+    ```python
+    # 明文 JSON 偏好设置
+    ui = repo.register(
+        name="ui",
+        serializer=JsonSerializer(),
+        filename="ui.json",
+        default_factory=lambda: {"theme": "light", "recent_files": []},
+        autosave=True
+    )
+
+    # 加密的 Pickle 缓存（旧明文文件可兼容读取，保存后自动迁移为密文）
+    cache = repo.register(
+        name="cache",
+        serializer=PickleSerializer(),
+        filename="cache.dat",
+        default_factory=list,
+        autosave=True,
+        cipher=AesGcmBox(password=os.environ["CACHE_PASSWORD"]),
+        cipher_policy="auto",
+        encrypt_on_save_if_cipher=True,
+    )
+    ```
+    ----
+
+- space 取命名空间对象
+  ```python
+  space(self, name: str) -> Namespace[Any]
+  ```
+  **作用**：按名称获取已注册的命名空间对象。
+
+  **参数**：
+
+  - name：str
+  注册时使用的命名空间名称。
+
+  **返回**：
+
+  - Namespace[Any]：命名空间对象。
+
+  **异常**：
+
+  - KeyError：当 name 尚未注册时抛出。
+
+  **示例**：
+
+  ```python
+  cache_ns = repo.space("cache")
+  ```
+  ----
+
+- get直接存取对象（便捷方法）
+
+  ```python
+  get(self, name: str) -> Any
+  ```
+
+  **作用**：从指定命名空间读取对象（内部若未加载会自动调用 Namespace.load()）。
+
+  **参数**：
+
+    - name：str
+
+  **返回**：
+
+  - Any：命名空间中的对象（可能是 dict/list/自定义对象/None 等）。
+
+  **异常**：
+
+  - KeyError：命名空间未注册；
+
+  - 反序列化/解密/IO 异常：底层抛出的 ValueError、OSError 等。
+
+  **示例**：
+  ```python
+  ui_data = repo.get("ui")  # 例如: {"theme": "light", "recent_files": []}
+  ```
+  ----
+
+- set(self, name: str, value: Any, save: Optional[bool] = None) -> None
+
+  **作用**：设置命名空间对象并可选择保存。
+
+  **参数**：
+
+  - name：str
+
+  - value：Any
+  要写入的对象（会通过绑定的 serializer 持久化）。
+
+  - save：bool | None
+
+      **True**：立即保存；
+
+      **False**：只更新内存缓存，不落盘；
+
+      **None**：跟随命名空间的 autosave 设置（若为 True 则保存）。
+
+  **返回**：无。
+
+  **异常**：同 get()。
+
+  **示例**：
+  ```python
+    repo.set("ui", {"theme": "dark"}, save=True)
+  ```
+  ----
+
+- update(self, name: str, mutator: Callable[[Any], Any], save: Optional[bool] = None) -> Any
+
+  **作用**：在原对象基础上以函数式方式变换并回写（读 -> 变换 -> 写）。
+
+  **参数**：
+
+  - name：str
+
+  - mutator：(obj: Any) -> Any
+  入参是当前对象，返回变换后的新对象（函数内应返回新值）。
+
+  - save：bool | None
+  语义同 set() 的 save。
+
+  **返回**：
+
+  - Any：变换后的新对象。
+
+  **异常**：同 get()/set()。
+
+  **示例**：
+  ```python
+  def add_recent(d):
+      d = d or {}
+      rec = (d.get("recent_files") or []) + ["a.sdf"]
+      return {**d, "recent_files": rec[-10:]}  # 只保留最近10条
+
+  new_ui = repo.update("ui", add_recent, save=True)
+  ```
+  ----
+
+- 批量操作
+save_all(self) -> None
+
+  **作用**：对所有“已加载过”的命名空间执行 save()（避免无意义的空写）。
+
+  **参数**：无。
+
+  **返回**：无。
+
+  **异常**：底层保存可能抛出 IO/序列化/加密相关异常。
+
+  注意：
+
+  仅对内部标记 _loaded == True 的空间生效；
+
+  若你需要确保所有空间都有初值并保存，可先 load_all() 或逐个 space(...).get() 激活。
+
+  **示例**：
+  ```python
+  # 某些空间 autosave=False，集中一次性保存
+  repo.save_all()
+  ```
+  ----
+
+- load_all(self) -> None
+
+  **作用**：对所有已注册的命名空间执行 load()（将文件内容加载到内存缓存）。
+
+  **参数**：无。
+
+  **返回**：无。
+
+  **异常**：底层加载可能抛出 IO/反序列化/解密相关异常。
+
+  **示例**：
+
+  ```python
+  # 应用启动时预热全部配置
+  repo.load_all()
+  ```
+
+#### 常见问题与注意事项
+
+- 路径选择：
+
+  默认落在应用同目录，便于“就地携带”。如需跨用户共享或写权限受限（Windows Program Files），建议显式指定 root。
+
+- 默认值：
+
+  default_factory 推荐传入 可调用（如 dict/list/lambda），避免可变对象作为默认参数带来的共享副作用。
+
+- 加密策略：
+
+  - **"auto"**：适合从旧明文平滑迁移为密文；
+
+  - **"require"**：适合强约束的敏感空间（若非加密立刻报错）。
+
+- 备份文件：
+
+  backup_on_save=True 时会生成 *.bak；其内容可能为上一次保存时的明文或密文，读取时可用 AesGcmBox.is_encrypted() 判别。
+
+- 异常处理：
+
+  解密失败通常是口令/密钥不匹配或文件损坏；请捕获 ValueError 并引导用户检查口令来源。
+
+- 线程/进程并发：
+  
+  当前实现是单进程内使用的简单本地层；若存在多进程/多实例同时写入同一文件，请自行加锁或采用更高级别的存储方案。
+
+#### 典型用法示例（整合）
+```python
+from pycorelibs.utils.config import ConfigRepo, JsonSerializer, PickleSerializer
+from pycorelibs.security.aesgcmbox import AesGcmBox
+import os
+
+repo = ConfigRepo(subdir="config")
+
+# 明文 UI 配置
+ui = repo.register(
+    name="ui",
+    serializer=JsonSerializer(),
+    filename="ui.json",
+    default_factory=lambda: {"theme": "light", "recent_files": []},
+    autosave=True,
+)
+
+# 加密的缓存（从旧明文自动迁移）
+cache = repo.register(
+    name="cache",
+    serializer=PickleSerializer(),
+    filename="cache.dat",
+    default_factory=list,
+    autosave=True,
+    cipher=AesGcmBox(password=os.environ.get("CACHE_PW", "CHANGE_ME")),
+    cipher_policy="auto",
+    encrypt_on_save_if_cipher=True,
+)
+
+# 读取 / 更新 / 批量保存
+ui_data = repo.get("ui")
+repo.update("ui", lambda d: {**(d or {}), "theme": "dark"})
+repo.update("cache", lambda lst: (lst or []) + ["session#1"])
+repo.save_all()
+
+```
+----
+
+### files文件处理
+
+- EnumFileSizeUnit
+
+- FilesInfo 类
+
+  - get_file_size
+    获取文件大小，并返回指定单位的大小。
+
+        支持B,KB,MB,GB,TB
+
+  - line_count
+
+        获取指定文件的总行数
+
+        Windows系统: 使用换行符作为判断标记
+        Linux系统: 使用系统自带的wc命令统计
+
+        注: 近适用于文本类型文件,其他类型如二进制文件统计结果不具备参考意义
+
+  - get_directory_last_modified_time
+  获取指定目录最后修改时间
+
+  - get_directory_last_modified_timestamp
+  获取指定目录最后修改时间戳
+
+### formate 数据格式化指定类型
+
+Formates 类，静态方法如下：
+
+- fInt 转换为整数
+- fFloat 转换为浮点数
+- fBool 转换为布尔值
+- fDate 按指定格式解析日期
+- fEnum 校验值是否在允许集合内（用于枚举字段）
+- fJSON 解析为 JSON 对象
+
+### logger日志
+
+- 支持自动产生日志
+- 支持同时向控制台和日志文件输出
+- 支持进度条
+- 支持info、warning和error三个级别的日志
+
+### strings 字符串处理
+
+- UniCodeGenerator 模块
+
+  创建随机码，日期前缀 + 随机码
+
+  可配置、使用 secrets 生成高强度随机码的编码生成类
+
+  | 场景            | 参数示例                                        |
+  | ----------------| ---------------------------------------------- |
+  | 邀请码（短）     | `prefix_date=False, random_length=6`           |    
+  | 订单号（当天唯一）| `prefix_date=True, random_length=4`            |
+  | URL 安全短码     | `charset=string.ascii_letters + string.digits` |
+
+- json_dumps_bytes 函数
+
+  将 dict 序列化为紧凑 UTF-8 JSON bytes
+
+- json_loads_bytes 函数
+
+  将 UTF-8 JSON bytes 解析为 dict，并进行基本类型校验
+    
+- split_text_by_marker函数
+  
+  **作用**: 按照指定字符串 marker 分割文本，可选择是否保留 marker，并支持严格模式。
+
+  **参数**：
+  - text (str): 需要分割的原始文本。
+  - marker (str): 分割标记字符串。
+  - keep_marker (bool): 是否保留 marker 到结果中，默认为 True。
+  - strict (bool): 严格模式。当 marker 不存在时抛异常。默认为 False。
+
+  **返回**：
+  - List[str]: 分割后的文本列表。
+    如果 strict=False 且 marker 不存在，返回空列表。
+    如果 strict=True 且 marker 不存在，抛出 ValueError。
