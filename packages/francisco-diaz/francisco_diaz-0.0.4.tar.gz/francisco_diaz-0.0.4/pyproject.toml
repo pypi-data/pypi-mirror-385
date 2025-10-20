@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "francisco_diaz"
+version = "0.0.4"
+requires-python = ">=3.10"
+description = "simple python package for testing"
+readme = "README.md"
+authors = [
+    { name = "Francisco Diaz", email = "fxcisco.contact@gmail.com" }
+]
+maintainers = [
+    { name = "Francisco Diaz", email = "fxcisco.contact@gmail.com" }
+]
+license = { file = "LICENSE.txt" }
+keywords = [
+    "francisco"
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: BSD License",
+    "Intended Audience :: Developers",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: Microsoft :: Windows",
+]
+dependencies = [
+    "colorama~=0.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "twine",
+    "build"
+]
+
+
+[project.urls]
+"Homepage" = "https://github.com/fxcisco/francisco_diaz"
+"Documentation" = "https://github.com/fxcisco/francisco_diaz/README.md"
+
+[project.scripts]
+francisco_diaz = "francisco_diaz.__main__:main"
