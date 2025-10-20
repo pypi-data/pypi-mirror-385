@@ -1,0 +1,31 @@
+{# Template Jinja2 pour la classe article (LaTeX standard) #}
+\title{{ '{' }}{{ meta.title }}{{ '}' }}
+
+{# Auteurs (simple, sans affiliations détaillées) #}
+{% if meta.authors %}
+\author{{ '{' }}{% for author in meta.authors %}{{ author.firstname }} {{ author.lastname }}{% if not loop.last %} \and {% endif %}{% endfor %}{{ '}' }}
+{% endif %}
+
+\date{\today}
+
+\maketitle
+
+{# Abstract #}
+{% if meta.abstract %}
+
+\begin{abstract}
+{{ meta.abstract }}
+\end{abstract}
+{% endif %}
+
+{# Affiliations et emails en commentaire #}
+% Affiliations et emails:
+{% for author in meta.authors %}
+% {{ author.firstname }} {{ author.lastname }}: {{ author.email if author.email else 'N/A' }}
+{% if author.affiliations %}
+{% for affil_id in author.affiliations %}
+{% set affil = affiliations[affil_id] %}
+%   - {{ affil.institution if affil.institution else affil.name }}
+{% endfor %}
+{% endif %}
+{% endfor %}

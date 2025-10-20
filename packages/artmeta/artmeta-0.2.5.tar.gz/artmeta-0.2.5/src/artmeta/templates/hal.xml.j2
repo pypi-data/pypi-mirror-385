@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tei xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      {# Title statement #}
+      <titleStmt>
+        <title xml:lang="en">{{ meta.title }}</title>
+      </titleStmt>
+
+      {# Publication statement #}
+      <publicationStmt>
+        <distributor>HAL</distributor>
+      </publicationStmt>
+
+      {# Source description #}
+      <sourceDesc>
+        <biblStruct>
+          <analytic>
+            {# Authors #}
+            {% for author in meta.authors %}
+            <author>
+              <persName>
+                <forename type="first">{{ author.firstname }}</forename>
+                <surname>{{ author.lastname }}</surname>
+              </persName>
+              {% if author.email %}
+              <email>{{ author.email }}</email>
+              {% endif %}
+              {% if author.orcid %}
+              <idno type="ORCID">{{ author.orcid }}</idno>
+              {% endif %}
+              {% if author.affiliations %}
+                {% for aff_id in author.affiliations %}
+                  {% set affiliation = affiliations[aff_id] %}
+              <affiliation>
+                <orgName>{{ affiliation.name }}</orgName>
+                <orgName>{{ affiliation.institution }}</orgName>
+                <address>
+                  <addrLine>{{ affiliation.city }}</addrLine>
+                  <country>{{ affiliation.country }}</country>
+                </address>
+              </affiliation>
+                {% endfor %}
+              {% endif %}
+            </author>
+            {% endfor %}
+
+            {# Abstract #}
+            {% if meta.abstract %}
+            <abstract xml:lang="en">
+              <p>{{ meta.abstract }}</p>
+            </abstract>
+            {% endif %}
+          </analytic>
+        </biblStruct>
+      </sourceDesc>
+    </fileDesc>
+
+    {# Profile description (keywords, MSC, HAL domains) #}
+    <profileDesc>
+      {% if meta.keywords %}
+      <textClass>
+        <keywords scheme="author">
+          {% for kw in meta.keywords %}
+          <term xml:lang="en">{{ kw }}</term>
+          {% endfor %}
+        </keywords>
+      </textClass>
+      {% endif %}
+
+      {# HAL specific domains #}
+      {% if meta.hal and meta.hal.domains %}
+      <textClass>
+        <classCode scheme="halDomain">
+          {% for domain in meta.hal.domains %}
+          <term>{{ domain }}</term>
+          {% endfor %}
+        </classCode>
+      </textClass>
+      {% endif %}
+
+      {# MSC codes #}
+      {% if meta.msc_codes %}
+      <textClass>
+        <keywords scheme="msc">
+          {% for code in meta.msc_codes %}
+          <term>{{ code }}</term>
+          {% endfor %}
+        </keywords>
+      </textClass>
+      {% endif %}
+    </profileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <!-- Corps du document -->
+    </body>
+  </text>
+</tei>
