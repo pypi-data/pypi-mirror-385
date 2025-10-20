@@ -1,0 +1,247 @@
+Metadata-Version: 2.4
+Name: sphinx-linter
+Version: 0.0.11
+Summary: A lightweight Python linter for checking Sphinx docstrings.
+Author-email: rmoralespp <rmoralespp@gmail.com>
+Project-URL: Source, https://github.com/rmoralespp/sphinxlinter
+Project-URL: Homepage, https://github.com/rmoralespp/sphinxlinter
+Project-URL: Changelog, https://github.com/rmoralespp/sphinxlinter/blob/main/CHANGELOG.md
+Project-URL: Issues, https://github.com/rmoralespp/sphinxlinter/issues
+Keywords: python,documentation,linter,developer-tools,code-quality,docstrings
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Information Technology
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Internet
+Classifier: Topic :: Utilities
+Classifier: Topic :: Documentation
+Classifier: Topic :: Software Development :: Quality Assurance
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Dynamic: license-file
+
+# sphinx-linter
+
+[![PyPI](https://img.shields.io/pypi/v/sphinx-linter.svg)](https://pypi.python.org/pypi/sphinx-linter)
+[![CI](https://github.com/rmoralespp/sphinxlinter/workflows/CI/badge.svg)](https://github.com/rmoralespp/sphinxlinter/actions?query=event%3Arelease+workflow%3ACI)
+[![codecov](https://codecov.io/gh/rmoralespp/sphinxlinter/branch/main/graph/badge.svg)](https://app.codecov.io/gh/rmoralespp/sphinxlinter)
+[![License](https://img.shields.io/github/license/rmoralespp/sphinxlinter.svg)](https://github.com/rmoralespp/sphinxlinter/blob/main/LICENSE)
+
+A lightweight Python linter for **Sphinx-style docstrings**.  
+It validates structure, field consistency, and alignment between documentation and code.
+
+---
+
+## Overview
+
+Sphinx-style docstrings are widely used across Python projects, but existing tools such as
+[pydocstyle](https://www.pydocstyle.org), [pydoclint](https://jsh9.github.io/pydoclint/),
+and [ruff](https://docs.astral.sh/ruff/) focus primarily on general docstring formatting, PEP 257 compliance, and style
+enforcement.
+
+It is designed to **complement**, not overlap with, these tools.  
+It targets **Sphinx-specific field list conventions** and performs **semantic consistency checks**
+that go beyond what other linters cover.
+
+Specifically, it focuses on:
+
+- Enforcing **Sphinx field list syntax** (`:param:`, `:type:`, `:return:`, `:raises:`, etc.)
+- Verifying **alignment** between documented fields and function signatures or type hints
+- Validating **section order, duplication, type hints syntax and completeness**
+- Producing **concise, CI-friendly reports** with structured rule codes
+
+---
+
+## Installation
+
+Requires **Python ≥ 3.9**.
+
+*No dependencies beyond the Python standard library.*
+
+```bash
+pip install sphinx-linter
+```
+
+---
+
+## Quick Start
+
+To use the standalone script, download the `sphinxlinter.py` script from
+following [link](https://github.com/rmoralespp/sphinxlinter/archive/refs/heads/main.zip) and run it with Python:
+
+```bash
+python sphinxlinter.py path/to/source/
+```
+
+- Run in the current directory: `sphinxlinter .`
+- Or use the short alias: `spxl .`
+
+Run on specific files or directories:
+
+```bash
+spxl path/to/file.py path/to/package/
+```
+
+Directories are scanned recursively for `.py` files, ignoring virtual environments and cache folders.
+
+---
+
+## Command Line Usage
+
+| Argument / Option | Description                                         |
+|-------------------|-----------------------------------------------------|
+| `[FILES]`         | Files or directories to lint.                       |
+| `--help`          | Show help message and exit.                         |
+| `--enable`        | Enable specific rule codes (or `ALL`).              |
+| `--disable`       | Disable specific rule codes (overrides `--enable`). |
+| `--ignore`        | Exclude directories (e.g. `venv`, `.cache`).        |
+| `--statistics`    | Show per-rule violation counts.                     |
+| `--quiet`         | Suppress all output except summary.                 |
+
+---
+
+## Output Format
+
+Example:
+
+```text
+src/module.py:42: [DOC102] Invalid parameter type syntax ('List[int]')
+src/module.py:10: [DOC101] Parameter documented but not in signature ('unused_param')
+```
+
+**Format:**  
+`filename:line: [CODE] message`
+
+**Categories:**
+
+- `DOC0xx`: Structure and formatting issues
+- `DOC1xx`: Parameter issues
+- `DOC2xx`: Return issues
+- `DOC3xx`: Raises issues
+- `DOC4xx`: Variable issues
+
+---
+
+## Violation Codes
+
+### DOC0xx — Structure
+
+| Code   | Description                                      | Purpose                                                                         |
+|--------|--------------------------------------------------|---------------------------------------------------------------------------------|
+| DOC001 | Invalid docstring section                        | Detects unsupported Sphinx fields.                                              |
+| DOC002 | Malformed section                                | Ensures valid field list syntax.                                                |
+| DOC003 | Missing blank line after docstring               | Improves readability.                                                           |
+| DOC004 | Missing blank line between summary and sections  | Enforces structure consistency.                                                 |
+| DOC005 | Too many consecutive blank lines                 | Prevents unnecessary whitespace.                                                |
+| DOC006 | Trailing empty lines                             | Keeps docstrings compact.                                                       |
+| DOC007 | Misplaced section                                | Enforces section order and grouping.                                            |
+| DOC008 | One-line docstring should end with a period      | Complies with [PEP 257](https://peps.python.org/pep-0257/#one-line-docstrings). |
+| DOC009 | Docstring must not use more than 3 double quotes | Promotes consistent quoting.                                                    |
+
+---
+
+**DOC008**: This rule differs from Ruff’s similar rule [
+`missing-trailing-period`](https://docs.astral.sh/ruff/rules/missing-trailing-period),
+which enforces a trailing period on the first line of both one-line and multi-line docstrings. By contrast, the rule
+**DOC008** only enforces a trailing period on *one-line* docstrings, following the recommendation
+in [PEP 257](https://peps.python.org/pep-0257/#one-line-docstrings).
+
+**DOC009**: Unlike Ruff [
+`triple-single-quotes`](https://docs.astral.sh/ruff/rules/triple-single-quotes/#triple-single-quotes-d300),
+this rule only checks that multi-line docstrings do not start or end with more than three double quotes.
+
+---
+
+### DOC1xx — Parameters
+
+| Code   | Description                               | Purpose                                   |
+|--------|-------------------------------------------|-------------------------------------------|
+| DOC101 | Parameter documented but not in signature | Detects undocumented or extra parameters. |
+| DOC102 | Invalid parameter type syntax             | Enforces valid Python type hints.         |
+| DOC103 | Parameter type already in signature       | Avoids redundant type info.               |
+| DOC104 | Parameter type mismatch with annotation   | Ensures consistency with annotations.     |
+| DOC105 | Duplicated parameter                      | Prevents repetition.                      |
+
+---
+
+### DOC2xx — Returns
+
+| Code   | Description                                            | Purpose                                 |
+|--------|--------------------------------------------------------|-----------------------------------------|
+| DOC201 | Return documented but function has no return statement | Detects unnecessary return sections.    |
+| DOC202 | Invalid return type syntax                             | Enforces valid type expressions.        |
+| DOC203 | Return type already in signature                       | Avoids redundancy.                      |
+| DOC204 | Return type mismatch with annotation                   | Validates against function annotations. |
+| DOC205 | Duplicated return section                              | Prevents duplication.                   |
+
+---
+
+### DOC3xx — Raises
+
+| Code   | Description                   | Purpose                                |
+|--------|-------------------------------|----------------------------------------|
+| DOC302 | Invalid exception type syntax | Ensures valid Python exception syntax. |
+| DOC305 | Duplicated exception type     | Prevents redundant entries.            |
+
+---
+
+### DOC4xx — Variables
+
+| Code   | Description                               | Purpose                           |
+|--------|-------------------------------------------|-----------------------------------|
+| DOC402 | Invalid variable type syntax              | Enforces valid Python type hints. |
+| DOC403 | Variable name contains invalid whitespace | Ensures valid identifiers.        |
+| DOC405 | Duplicated variable                       | Prevents repetition.              |
+
+---
+
+## How It Works
+
+The tool statically analyzes Python source code using the built-in AST module:
+
+1. Parses `FunctionDef`, `AsyncFunctionDef`, `ClassDef`, and `Module` nodes.
+2. Extracts Sphinx-style docstring fields.
+3. Validates structure, syntax, and consistency with annotations.
+
+The tool prints findings to stdout and never modifies source files.
+
+**CI Integration:**  
+Treat any output as a failure signal in your build pipeline.
+
+---
+
+## Development
+
+**Setup**
+
+```bash
+python -m pip install --upgrade pip
+pip install --group=test --group=lint
+```
+
+**Run Tests**
+
+```bash
+pytest tests/
+pytest --cov sphinxlinter
+```
+
+**Run Linter**
+
+```bash
+ruff check .
+```
+
+---
+
+## License
+
+Licensed under the [MIT License](LICENSE).
