@@ -1,0 +1,19 @@
+include README.md
+include requirements.txt
+
+include src/jupyter_tigervnc_novnc_proxy/vnc.sh
+
+include src/jupyter_tigervnc_novnc_proxy/novnc/vnc.html
+include src/jupyter_tigervnc_novnc_proxy/novnc/defaults.json
+include src/jupyter_tigervnc_novnc_proxy/novnc/mandatory.json
+include src/jupyter_tigervnc_novnc_proxy/novnc/karma.conf.js
+include src/jupyter_tigervnc_novnc_proxy/novnc/package.json
+graft src/jupyter_tigervnc_novnc_proxy/novnc/app
+graft src/jupyter_tigervnc_novnc_proxy/novnc/core
+graft src/jupyter_tigervnc_novnc_proxy/novnc/utils
+graft src/jupyter_tigervnc_novnc_proxy/novnc/vendor/pako/
+
+graft src/jupyter_tigervnc_novnc_proxy/extras
+
+global-exclude *.py[cod]
+global-exclude __pycache__
