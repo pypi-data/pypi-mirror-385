@@ -1,0 +1,12 @@
+version: 1
+org: your-org
+project: minimal-starter
+resolverHost: labs.example
+capsule:
+  image: ghcr.io/your-org/capsule-minimal@sha256:0000000000000000000000000000000000000000000000000000000000000000
+  extensions:
+    - ms-python.python@2024.6.0
+inputs:
+  - s3://demo-bucket/data/
+policies:
+  requireReceipts: true
