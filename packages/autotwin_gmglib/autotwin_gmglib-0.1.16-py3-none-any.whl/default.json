@@ -1,0 +1,73 @@
+{
+    "name": "System",
+    "version": "",
+    "work_path": "",
+    "neo4j": {
+        "uri": "neo4j://localhost:7687",
+        "username": "neo4j",
+        "password": "12345678",
+        "database": "neo4j"
+    },
+    "data": {
+        "path": "log.csv",
+        "clustering": {
+            "path": "",
+            "default": ""
+        },
+        "filters": {
+            "interval": [
+                0.0,
+                0.0
+            ],
+            "station": [],
+            "family": [],
+            "type": []
+        },
+        "usage": 0.5,
+        "mappings": {
+            "column": {
+                "time": "time",
+                "unit": "unit",
+                "station": "station",
+                "part": "part",
+                "family": "family",
+                "type": "type",
+                "activity": "activity",
+                "npt": "npt",
+                "ntt": "ntt"
+            },
+            "activity": {
+                "ENTER": "ENTER",
+                "EXIT": "EXIT",
+                "EXIT_AP": "EXIT_AP",
+                "EXIT_AR": "EXIT_AR"
+            }
+        },
+        "workday": {
+            "start": "00:00",
+            "end": "00:00"
+        }
+    },
+    "model": {
+        "path": "model.json",
+        "time_unit": "s",
+        "operation": {
+            "io_ratio": 1.5,
+            "co_ratio": 0.5,
+            "oi_ratio": 1.5,
+            "ci_ratio": 0.5
+        },
+        "formula": {
+            "ratio": 0.0
+        },
+        "delays": {
+            "seize": 0.0,
+            "release": 0.0
+        },
+        "cdf": {
+            "replace_pts": false,
+            "replace_tts": false,
+            "points": 100
+        }
+    }
+}
