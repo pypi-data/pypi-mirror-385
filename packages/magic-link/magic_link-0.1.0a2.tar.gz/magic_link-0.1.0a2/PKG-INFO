@@ -1,0 +1,54 @@
+Metadata-Version: 2.4
+Name: magic-link
+Version: 0.1.0a2
+Summary: Modular, framework-agnostic passwordless authentication engine.
+Author: magic-link maintainers
+License: MIT
+Project-URL: Homepage, https://github.com/h8v6/magic-link
+Project-URL: Documentation, https://github.com/h8v6/magic-link/tree/main/docs
+Project-URL: Repository, https://github.com/h8v6/magic-link
+Project-URL: Issues, https://github.com/h8v6/magic-link/issues
+Keywords: authentication,magic-link,security,passwordless,python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Security :: Cryptography
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: python-dotenv>=1.0
+Provides-Extra: sqlalchemy
+Requires-Dist: SQLAlchemy>=2.0; extra == "sqlalchemy"
+Requires-Dist: psycopg[binary]>=3.1; extra == "sqlalchemy"
+Provides-Extra: redis
+Requires-Dist: redis>=5.0; extra == "redis"
+Requires-Dist: hiredis>=2.0; extra == "redis"
+Provides-Extra: smtp
+Requires-Dist: email-validator>=2.1; extra == "smtp"
+Provides-Extra: cli
+Requires-Dist: click>=8.1; extra == "cli"
+Provides-Extra: dev
+Requires-Dist: pytest>=7.4; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.23; extra == "dev"
+Requires-Dist: pytest-cov>=4.1; extra == "dev"
+Requires-Dist: ruff>=0.3; extra == "dev"
+Requires-Dist: black>=24.0; extra == "dev"
+Requires-Dist: mypy>=1.7; extra == "dev"
+Requires-Dist: aiosmtpd>=1.4; extra == "dev"
+Requires-Dist: hypothesis>=6.0; extra == "dev"
+Dynamic: license-file
+
+# magic_link
+
+The main documentation lives under `docs/`. Start with:
+
+- `docs/README.md` – project overview and FastAPI quick start.
+- `docs/quickstart.md` – step-by-step setup instructions.
+- `docs/recipes/` – integration recipes (e.g., Flask).
+
+For contributing guidelines, open an issue or pull request on GitHub.
