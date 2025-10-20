@@ -1,0 +1,39 @@
+Metadata-Version: 2.4
+Name: datetoolz
+Version: 0.1.0
+Summary: Tiny date helper library - get today, yesterday, tomorrow, weekday, etc.
+Author-email: Jayanth Sanku <jaythedataguy@gmail.com>
+License: MIT
+Keywords: date,datetime,helpers
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Dynamic: license-file
+
+﻿# datetoolz
+
+Tiny date helper library - get today, yesterday, tomorrow, weekday, etc.
+
+## Install (editable)
+
+```bash
+pip install -e .
+```
+
+## Usage
+
+```python
+from datetoolz import today, yesterday
+print(today())     # 2025-10-20
+print(yesterday()) # 2025-10-19
+```
+
+### API
+
+- today() -> str: ISO date YYYY-MM-DD
+- yesterday() -> str: ISO date YYYY-MM-DD
+- tomorrow() -> str: ISO date YYYY-MM-DD
+- weekday(fmt: Literal["name","abbr","index"]) -> str | int
