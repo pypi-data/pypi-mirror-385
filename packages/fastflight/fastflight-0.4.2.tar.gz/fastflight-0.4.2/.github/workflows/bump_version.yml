@@ -1,0 +1,72 @@
+name: Bump Version and Create Tag
+on:
+  workflow_dispatch:
+    inputs:
+      version_type:
+        description: 'Type of version bump (patch, minor, major)'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  bump_version:
+    name: Bump Version and Create Tag
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          python-version: '3.11'
+
+
+      - name: Configure Git
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+
+      - name: Bump version files
+        id: bump
+        run: |
+          set -eo pipefail
+          VERSION_TYPE="${{ github.event.inputs.version_type }}"
+          OUTPUT=$(uv run --with bump2version bump2version --list "$VERSION_TYPE")
+          echo "$OUTPUT"
+          CURRENT_VERSION=$(echo "$OUTPUT" | grep '^current_version=' | cut -d= -f2)
+          NEW_VERSION=$(echo "$OUTPUT" | grep '^new_version=' | cut -d= -f2)
+          echo "current=$CURRENT_VERSION" >> "$GITHUB_OUTPUT"
+          echo "new=$NEW_VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Regenerate uv.lock
+        run: uv lock
+
+      - name: Commit changes
+        run: |
+          set -eo pipefail
+          CURRENT_VERSION="${{ steps.bump.outputs.current }}"
+          NEW_VERSION="${{ steps.bump.outputs.new }}"
+          git add pyproject.toml uv.lock .bumpversion.cfg
+          git commit -m "🔖 Bump version: ${CURRENT_VERSION} → ${NEW_VERSION}"
+
+      - name: Create release tag
+        run: |
+          set -eo pipefail
+          NEW_VERSION="${{ steps.bump.outputs.new }}"
+          git tag -a "v${NEW_VERSION}" -m "Release ${NEW_VERSION}"
+
+      - name: Push commit and tag
+        run: |
+          set -eo pipefail
+          NEW_VERSION="${{ steps.bump.outputs.new }}"
+          git push origin main
+          git push origin "v${NEW_VERSION}"

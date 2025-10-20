@@ -1,0 +1,374 @@
+name: Publish Package
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_run:
+    workflows: [ "Bump Version and Create Tag" ]
+    types:
+      - completed
+  workflow_dispatch:
+    inputs:
+      tag_version:
+        description: "Tag version to build and publish (e.g., v0.5.0)."
+        required: true
+        type: string
+      environment:
+        description: "Environment to publish to"
+        required: true
+        default: "pypi"
+        type: choice
+        options:
+          - testpypi
+          - pypi
+      skip_tests:
+        description: "Skip test suite (not recommended for production)"
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  PYTHON_VERSION: "3.11"
+
+jobs:
+  # Pre-release validation
+  validate-release:
+    name: Validate Release
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      is-prerelease: ${{ steps.version.outputs.is-prerelease }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.ref }}
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Extract version
+        id: version
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            VERSION="${{ github.event.inputs.tag_version }}"
+            VERSION=${VERSION#v}
+          elif [[ "${{ github.event_name }}" == "workflow_run" ]]; then
+            VERSION=$(grep "version = " pyproject.toml | head -n 1 | sed 's/version = "\(.*\)"/\1/')
+          elif [[ "${{ github.event_name }}" == "push" ]]; then
+            VERSION="${{ github.ref_name }}"
+            VERSION=${VERSION#v}
+          fi
+          
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          
+          # Check if it's a pre-release (contains alpha, beta, rc, etc.)
+          if [[ "$VERSION" =~ (alpha|beta|rc|dev) ]]; then
+            echo "is-prerelease=true" >> $GITHUB_OUTPUT
+          else
+            echo "is-prerelease=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Validate version format
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          if ! [[ $VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+([a-zA-Z0-9.\-]+)?$ ]]; then
+            echo "Invalid version format: $VERSION"
+            echo "Expected format: X.Y.Z or X.Y.Z-suffix"
+            exit 1
+          fi
+
+      - name: Check if version exists in pyproject.toml
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          if ! grep -q "version = \"$VERSION\"" pyproject.toml; then
+            echo "Version $VERSION not found in pyproject.toml"
+            echo "Current version in pyproject.toml:"
+            grep "version = " pyproject.toml
+            exit 1
+          fi
+
+      - name: Install dependencies and validate package
+        run: |
+          uv sync --all-extras --dev
+          uv run python -c "import fastflight; print(f'Package version: {fastflight.__version__}')"
+
+  # Run comprehensive tests before release
+  release-tests:
+    name: Release Tests
+    needs: validate-release
+    uses: ./.github/workflows/build.yml
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.skip_tests != 'true' }}
+    secrets: inherit
+
+  # Build release artifacts
+  build-release:
+    name: Build Release Artifacts
+    runs-on: ubuntu-latest
+    needs: [ validate-release, release-tests ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.ref }}
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Build package
+        run: |
+          uv build
+
+          # Generate checksums (stored outside dist to avoid publishing issues)
+          sha256sum dist/* > SHA256SUMS
+
+      - name: Verify build
+        run: |
+          shopt -s nullglob
+          ARTIFACTS=(dist/*.whl dist/*.tar.gz)
+          if [ ${#ARTIFACTS[@]} -gt 0 ]; then
+            uv run --with twine twine check "${ARTIFACTS[@]}"
+          else
+            echo "No distribution artifacts found for twine check."
+          fi
+          
+          # Test installation in clean environment
+          uv venv --python ${{ env.PYTHON_VERSION }} test-install
+          uv pip install --python test-install dist/*.whl
+          uv run --python test-install python -c "
+          import fastflight
+          print(f'Successfully installed FastFlight {fastflight.__version__}')
+          
+          # Basic smoke test
+          from fastflight import FastFlightBouncer 
+          print('Core components imported successfully')
+          "
+
+      - name: Generate Software Bill of Materials (SBOM)
+        run: |
+          set -eo pipefail
+          TARGET="dist/fastflight-${{ needs.validate-release.outputs.version }}-sbom.json"
+          echo "Generating SBOM at $TARGET"
+          if ! uv run --with cyclonedx-py -- cyclonedx-py environment --format json --output "$TARGET"; then
+            echo "CycloneDX CLI not available, skipping SBOM generation." >&2
+            rm -f "$TARGET"
+          fi
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-artifacts-${{ needs.validate-release.outputs.version }}
+          path: |
+            dist/*.whl
+            dist/*.tar.gz
+          retention-days: 90
+
+  # Security scan
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    needs: [ validate-release, build-release ]
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.ref }}
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: release-artifacts-${{ needs.validate-release.outputs.version }}
+          path: dist/
+
+      - name: Prepare distribution artifacts
+        run: |
+          set -eo pipefail
+          mkdir -p dist
+          echo "Contents of dist/ before cleanup:"
+          ls -al dist || true
+          shopt -s nullglob
+          ARTIFACTS=(dist/*.whl dist/*.tar.gz)
+          if [ ${#ARTIFACTS[@]} -eq 0 ]; then
+            echo "❌ No distribution artifacts (*.whl, *.tar.gz) found in dist/."
+            exit 1
+          fi
+
+          echo "Artifacts to publish:"
+          ls -al dist
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v6
+
+      - name: Security scan with pip-audit
+        run: |
+          echo "🛡️ Scanning dependencies for vulnerabilities..."
+          uv run --with pip-audit -- pip-audit -r pyproject.toml --format json --output security-report.json || true
+          uv run --with pip-audit -- pip-audit -r pyproject.toml || true  # Console output
+
+      - name: Scan wheel for known vulnerabilities
+        run: |
+          echo "🎯 Scanning built wheel for vulnerabilities..."
+          uv run --with pip-audit -- pip-audit dist/*.whl --format json --output audit-report.json || true
+          uv run --with pip-audit -- pip-audit dist/*.whl || true  # Console output
+
+      - name: Upload security reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-reports-${{ needs.validate-release.outputs.version }}
+          path: |
+            security-report.json
+            audit-report.json
+
+  # Publish to PyPI
+  publish-pypi:
+    name: Publish Package
+    runs-on: ubuntu-latest
+    needs: [ validate-release, build-release, security-scan ]
+    timeout-minutes: 10
+    environment:
+      name: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.environment) || (needs.validate-release.outputs.is-prerelease == 'true' && 'testpypi') || 'pypi' }}
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: release-artifacts-${{ needs.validate-release.outputs.version }}
+          path: dist/
+
+      - name: Publish to Test PyPI
+        if: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'testpypi') || (github.event_name != 'workflow_dispatch' && needs.validate-release.outputs.is-prerelease == 'true') }}
+        id: publish-test
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          print-hash: true
+
+      - name: Publish to PyPI
+        if: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'pypi') || (github.event_name != 'workflow_dispatch' && needs.validate-release.outputs.is-prerelease == 'false') }}
+        id: publish-prod
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
+          print-hash: true
+
+      - name: Set output URL
+        id: publish
+        run: |
+          TARGET_ENV="${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.environment) || (needs.validate-release.outputs.is-prerelease == 'true' && 'testpypi') || 'pypi' }}"
+          if [[ "$TARGET_ENV" == "testpypi" ]]; then
+            echo "url=https://test.pypi.org/project/fastflight/" >> $GITHUB_OUTPUT
+          else
+            echo "url=https://pypi.org/project/fastflight/" >> $GITHUB_OUTPUT
+          fi
+
+  # Post-release validation
+  post-release-validation:
+    name: Post-Release Validation
+    runs-on: ubuntu-latest
+    needs: [ validate-release, publish-pypi ]
+    timeout-minutes: 15
+    if: success()
+
+    steps:
+      - name: Install UV
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Wait for package availability
+        run: |
+          VERSION="${{ needs.validate-release.outputs.version }}"
+          TARGET_ENV="${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.environment) || (needs.validate-release.outputs.is-prerelease == 'true' && 'testpypi') || 'pypi' }}"
+          REPO_URL=""
+          
+          if [[ "$TARGET_ENV" == "testpypi" ]]; then
+            REPO_URL="--index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/"
+          fi
+          
+          echo "Waiting for package to be available..."
+          for i in {1..30}; do
+            if pip install --dry-run $REPO_URL fastflight==$VERSION 2>/dev/null; then
+              echo "Package found after $i attempts"
+              break
+            fi
+            echo "Attempt $i: Package not yet available, waiting 30s..."
+            sleep 30
+          done
+
+      - name: Test installation from PyPI
+        run: |
+          VERSION="${{ needs.validate-release.outputs.version }}"
+          TARGET_ENV="${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.environment) || (needs.validate-release.outputs.is-prerelease == 'true' && 'testpypi') || 'pypi' }}"
+          
+          if [[ "$TARGET_ENV" == "testpypi" ]]; then
+            pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ fastflight==$VERSION
+          else
+            pip install fastflight==$VERSION
+          fi
+          
+          # Verify installation
+          python -c "
+          import fastflight
+          assert fastflight.__version__ == '$VERSION', f'Version mismatch: {fastflight.__version__} != $VERSION'
+          print(f'✅ Successfully installed and verified FastFlight {fastflight.__version__}')
+          
+          # Basic functionality test
+          from fastflight import FastFlightBouncer
+          print('✅ Core components working correctly')
+          "
+
+  # Notify on completion
+  notify:
+    name: Notify Release Completion
+    runs-on: ubuntu-latest
+    needs: [ validate-release, post-release-validation ]
+    if: always()
+
+    steps:
+      - name: Create release summary
+        run: |
+          VERSION="${{ needs.validate-release.outputs.version }}"
+          TARGET_ENV="${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.environment) || (needs.validate-release.outputs.is-prerelease == 'true' && 'testpypi') || 'pypi' }}"
+          ENV_LABEL="PyPI"
+          if [[ "$TARGET_ENV" == "testpypi" ]]; then
+            ENV_LABEL="TestPyPI"
+          fi
+          
+          echo "## 🚀 FastFlight Release Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** $VERSION" >> $GITHUB_STEP_SUMMARY
+          echo "**Environment:** $ENV_LABEL" >> $GITHUB_STEP_SUMMARY
+          echo "**Status:** ${{ needs.post-release-validation.result == 'success' && '✅ Success' || '❌ Failed' }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [[ "${{ needs.post-release-validation.result }}" == "success" ]]; then
+            echo "🎉 FastFlight $VERSION has been successfully published!" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Installation:** \`pip install fastflight==$VERSION\`" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Release process encountered issues. Please check the logs." >> $GITHUB_STEP_SUMMARY
+          fi
