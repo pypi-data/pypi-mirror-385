@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "django-patango"  # Nombre visible en PyPI
+version = "0.2.0"
+description = "A Django library with frontend integration"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.8"
+
+authors = [
+  { name = "Galech Mercado Alejandro", email = "your@email.com" }
+]
+
+dependencies = [
+  "django>=3.0",
+  "pandas",
+]
+
+[project.urls]
+Homepage = "https://github.com/galech/patango"
+"Bug Tracker" = "https://github.com/galech/patango/issues"
+"Source Code" = "https://github.com/galech/patango"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
