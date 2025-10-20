@@ -1,0 +1,51 @@
+Metadata-Version: 2.4
+Name: spin-hmi
+Version: 0.8.3
+Summary: Control box monitoring system
+Home-page: https://forge.frm2.tum.de/review/plugins/gitiles/mlz/controlbox/spin
+Author: Georg Brandl
+Author-email: Georg Brandl <g.brandl@fz-juelich.de>, Enrico Faulhaber <enrico.faulhaber@frm2.tum.de>, Alexander Zaft <a.zaft@fz-juelich.de>
+License: GPLv2 License
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Scientific/Engineering :: Human Machine Interfaces
+Requires-Python: >=3.9
+Description-Content-Type: text/x-rst
+Requires-Dist: aiohttp
+Requires-Dist: mlzlog
+Requires-Dist: zapf
+Provides-Extra: tango
+Requires-Dist: pytango>=9.3; extra == "tango"
+
+SPanish INquisition (spin)
+==========================
+
+A web-based tool for showing information obtained from things on a rack
+(i.e. usually devices connected to control boxes).
+
+Requirements
+------------
+
+Spin requires the `aiohttp` and `mlzlog` Python packages.  For accessing Tango
+and PILS devices, `pytango` and `zapf` are required, respectively.
+
+Demo
+----
+
+There is a configuration for testing in the `demo` directory.  It connects to
+all supported backends, exercises most features of the frontend and also
+provides a custom plugin example.
+
+Running `bin/spin` from a Git checkout will use that configuration instead of
+looking in `/etc/spin` by default.
+
+Documentation
+-------------
+
+Is available in `doc/`, build it using Sphinx.

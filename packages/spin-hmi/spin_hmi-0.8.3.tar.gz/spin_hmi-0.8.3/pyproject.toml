@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=61.0", "setuptools_scm>=6"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "spin-hmi"
+dynamic = ["version"]
+authors = [
+    {name = "Georg Brandl", email = "g.brandl@fz-juelich.de"},
+    {name = "Enrico Faulhaber", email = "enrico.faulhaber@frm2.tum.de"},
+    {name = "Alexander Zaft", email = "a.zaft@fz-juelich.de"},
+]
+description = "Control box monitoring system"
+readme = "README.rst"
+requires-python = ">= 3.9"
+license = {text = "GPLv2 License"}
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Human Machine Interfaces",
+]
+dependencies = [
+    "aiohttp",
+    "mlzlog",
+    "zapf",
+]
+
+[project.optional-dependencies]
+tango = [
+    "pytango>=9.3",
+]
+
+[project.scripts]
+spin = "spin.server:main"
+
+[tool.setuptools.package-data]
+spin = ["assets/*", "plugins/*/*"]
+
+[tool.setuptools]
+packages = ["spin"]
+
+[tool.setuptools_scm]
