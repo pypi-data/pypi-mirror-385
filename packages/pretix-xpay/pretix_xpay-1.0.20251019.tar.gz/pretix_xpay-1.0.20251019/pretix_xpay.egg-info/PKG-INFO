@@ -1,0 +1,23 @@
+Metadata-Version: 2.4
+Name: pretix-xpay
+Version: 1.0.20251019
+Summary: Accept payments through the Nexi's XPay interface
+Author-email: Furizon Team <webservice@furizon.net>, Luca Sorace <public.stranck@gmail.com>
+Maintainer-email: Furizon Team <webservice@furizon.net>, Luca Sorace <public.stranck@gmail.com>
+License: Apache
+Project-URL: homepage, https://github.com/APSfurizon/pretix-xpay
+Project-URL: repository, https://github.com/APSfurizon/pretix-xpay
+Keywords: pretix
+Description-Content-Type: text/x-rst
+License-File: LICENSE
+Dynamic: license-file
+
+Accept payments through the Nexi's XPay interface
+
+This implements the XPay Italian legacy system (https://ecommerce.nexi.it/specifiche-tecniche/), which should be implemented (as stated by the Nexi's support) if you haven't subscribed a contract with Banca Intesa or ex consorzio triveneto.
+We started implementing the XPay global/italian system (https://developer.nexi.it/en/servizio-ecommerce), but after a while we discovered we were using the other system so we stopped.
+You can find the implementation on the other branch (https://github.com/APSfurizon/pretix-xpay/tree/xpay-global).
+
+Copyright 2024 Furizon Team
+
+Released under the terms of the Apache License 2.0
