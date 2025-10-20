@@ -1,0 +1,50 @@
+Metadata-Version: 2.3
+Name: vdata
+Version: 0.1.3
+Summary: Annotated multivariate observation of timestamped data
+License: LICENSE
+Author: Matteo Bouvier
+Author-email: m.bouvier@vidium-solutions.com
+Requires-Python: >=3.10,<4.0
+Classifier: License :: Other/Proprietary License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Requires-Dist: anndata (==0.8)
+Requires-Dist: numpy-indexed (>=0.3.7,<0.4.0)
+Requires-Dist: pympler (>=1.1,<2.0)
+Requires-Dist: scanpy (>=1.10.2,<2.0.0)
+Requires-Dist: tqdm (>=4.66.5,<5.0.0)
+Description-Content-Type: text/markdown
+
+# VData - Annotated multivariate observation data with time dimension.
+
+VData provides a container for simulated data across time points, heavily inspired by the AnnData project 
+(https://anndata.readthedocs.io/en/latest/).
+
+The VData object allows to store information about cells (observations), whose gene expression (variables) is 
+measured over a time series (time points).
+
+A VData object is build around layers (.layers). Each layer is a 3D matrix of : obs (cells) x var (genes) x time 
+points (2D matrices at each time point can have different numbers of obs). All layers must have the same shape.
+
+Around the layers, pandas DataFrames allow to describe variables (.var) and time points (.time_points), while custom 
+TemporalDataFrames (dataframes extended by one dimension) describe observations (.obs). 
+
+![doc/img.png](doc/VData.png)
+
+## Multi-dimension annotation
+
+The arrays .obsm and .varm allow to store annotations that need more than one dimension (e.g. PCA coordinates).
+
+## Pairwise annotation
+
+The arrays .obsp and .varp allow to store annotations on pairs of observations or variables (e.g. distance matrices).
+
+## Unstructured annotations
+
+The array .uns allows to store information not directly related to observations, variables and time points, which 
+can take many different shapes (e.g. colors for plottings groups of observations). 
+
