@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tno.quantum.ml.clustering"
+description = "Clustering"
+readme = "README.md"
+authors = [{ name = "TNO Quantum Code Lab", email = "tnoquantum@tno.nl" }]
+maintainers = [{ name = "TNO Quantum Code Lab", email = "tnoquantum@tno.nl" }]
+keywords = ["Quantum", "TNO", "Clustering"]
+license = { text = "Apache License, Version 2.0" }
+classifiers = [
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: Science/Research",
+    "Typing :: Typed",
+]
+urls = { Homepage = "https://github.com/TNO-Quantum/", Documentation = "https://github.com/TNO-Quantum/", Source = "https://github.com/TNO-Quantum/ml.clustering" }
+dynamic = ["version"]
+requires-python = ">=3.10"
+dependencies = [
+    "tno.quantum.ml.clustering.kmedoids~=2.0",
+    "tno.quantum.ml.clustering.bkmeans~=2.0",
+]
+
+[project.optional-dependencies]
+tests = [
+    "pytest>=8.1.1",
+    "pytest-cov>=4.1.0",
+    "tomlkit",
+    "tno.quantum.ml.clustering.kmedoids[tests]",
+    "tno.quantum.ml.clustering.bkmeans[tests]",
+]
+
+[tool.setuptools]
+platforms = ["any"]
+
+[tool.setuptools.dynamic]
+version = { attr = "tno.quantum.ml.clustering.__version__" }
+
+[tool.setuptools.package-data]
+"*" = ["py.typed"]
