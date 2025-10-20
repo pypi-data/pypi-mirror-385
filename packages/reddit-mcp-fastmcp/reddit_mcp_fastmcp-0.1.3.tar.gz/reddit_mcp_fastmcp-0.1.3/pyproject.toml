@@ -1,0 +1,88 @@
+[project]
+name = "reddit-mcp-fastmcp"
+version = "0.1.3"
+description = "Reddit API tools and examples"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "certifi>=2025.1.31",
+    "charset-normalizer>=3.4.1",
+    "idna>=3.10",
+    "praw>=7.8.1",
+    "prawcore>=2.4.0",
+    "python-dotenv>=1.0.1",
+    "requests>=2.32.3",
+    "update-checker>=0.18.0",
+    "urllib3>=2.3.0",
+    "websocket-client>=1.8.0",
+    "pydantic>=2.10.0",
+    "mcp[cli]>=1.4.1",
+]
+
+[project.urls]
+Homepage = "https://github.com/fastmcp-me/reddit-mcp-gridfireai#readme"
+Repository = "https://github.com/fastmcp-me/reddit-mcp-gridfireai.git"
+Issues = "https://github.com/fastmcp-me/reddit-mcp-gridfireai/issues"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src", "."]
+include = ["reddit_mcp*", "scripts*"]
+
+[tool.uv.workspace]
+members = ["examples/autogen", "examples/openai-function-calling"]
+
+[tool.uv.sources]
+reddit-mcp = { workspace = true }
+
+[dependency-groups]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.23.0",
+]
+
+[project.scripts]
+dump-schemas = "scripts.dump_schemas:main"
+reddit-mcp = "reddit_mcp:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v"
+
+[tool.pyright]
+include = ["src", "tests"]
+exclude = ["**/node_modules", "**/__pycache__", ".venv"]
+strict = ["src"]
+
+typeCheckingMode = "strict"
+useLibraryCodeForTypes = true
+reportMissingTypeStubs = "warning"
+reportUnknownMemberType = "warning"
+reportUnknownVariableType = "warning"
+reportUnknownArgumentType = "warning"
+reportMissingParameterType = "error"
+reportMissingTypeArgument = "error"
+reportInvalidTypeVarUse = "error"
+reportUntypedFunctionDecorator = "warning"
+reportUnknownParameterType = "warning"
+reportPrivateUsage = "warning"
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "N",  # pep8-naming
+    "UP",  # pyupgrade
+    "ANN",  # flake8-annotations
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/reddit_mcp"]
