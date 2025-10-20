@@ -1,0 +1,42 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "codekoala"
+version = "0.0.1"
+description = "Local-first LLM-powered code review and commit assistant"
+readme = "README.md"
+authors = [
+    { name = "Pieter OHearn", email = "pieter.ohearn@gmail.com" },
+]
+license = { text = "MIT" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Quality Assurance",
+]
+keywords = ["code-review", "llm", "git", "commit-message", "ollama"]
+dependencies = [
+    "click>=8.1",
+    "GitPython>=3.1",
+    "ollama>=0.1.6",
+    "pyperclip>=1.8",
+    "rich>=13.0"
+]
+requires-python = ">=3.10"
+
+[project.urls]
+Homepage = "https://github.com/pieter-ohearn/codekoala"
+Issues = "https://github.com/pieter-ohearn/codekoala/issues"
+
+[project.scripts]
+codekoala = "codekoala.cli:cli"
+
+[tool.hatch.build.targets.wheel]
+packages = ["codekoala"]
