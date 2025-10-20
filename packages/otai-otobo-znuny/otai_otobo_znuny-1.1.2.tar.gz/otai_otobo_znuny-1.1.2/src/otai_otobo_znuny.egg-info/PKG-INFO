@@ -1,0 +1,85 @@
+Metadata-Version: 2.4
+Name: otai_otobo_znuny
+Version: 1.1.2
+Summary: OTOBO/Znuny ticket system plugin for Open Ticket AI
+Author-email: Tobias Bück <tab@softoft.de>
+License-Expression: LGPL-2.1-only
+Project-URL: Homepage, https://open-ticket-ai.com
+Project-URL: Repository, https://github.com/Softoft-Orga/open-ticket-ai
+Project-URL: Documentation, https://open-ticket-ai.com/en/guide/available-plugins.html
+Project-URL: Changelog, https://github.com/Softoft-Orga/open-ticket-ai/blob/main/packages/otai_otobo_znuny/CHANGELOG.md
+Keywords: open-ticket-ai,plugin,otobo,znuny,otrs,ticket-system,automation
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Information Technology
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: System :: Systems Administration
+Requires-Python: >=3.14
+Description-Content-Type: text/markdown
+Requires-Dist: open-ticket-ai<2.0.0,>=1.0.0
+Requires-Dist: otobo-znuny>=1.4.0
+Requires-Dist: injector>=0.22.0
+Requires-Dist: pydantic>=2.11.7
+Provides-Extra: dev
+Requires-Dist: pytest>=8.4.0; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.24.0; extra == "dev"
+Requires-Dist: ruff; extra == "dev"
+Requires-Dist: mypy; extra == "dev"
+
+# OTOBO/Znuny Plugin for Open Ticket AI
+
+This plugin provides integration with OTOBO and Znuny ticket systems for Open Ticket AI.
+
+## Installation
+
+```bash
+pip install otai-otobo-znuny
+```
+
+## Configuration
+
+The plugin requires the following configuration in your Open Ticket AI config file:
+
+```yaml
+open_ticket_ai:
+  defs:
+    - id: "otobo_znuny"
+      use: "otai_otobo_znuny.OTOBOZnunyTicketSystemService"
+      base_url: "https://your-otobo-instance.com"
+      webservice_name: "OpenTicketAI"
+      username: "open_ticket_ai"
+      password: "{{ env.OTAI_OTOBO_ZNUNY_PASSWORD }}"
+      operation_urls:
+        search: "ticket-search"
+        get: "ticket-get"
+        update: "ticket-update"
+```
+
+## Setup
+
+You can use the CLI to help set up the plugin:
+
+```bash
+open-ticket-ai otobo-znuny setup
+```
+
+This will guide you through the setup process and optionally generate a configuration file.
+
+## Requirements
+
+- Python 3.13+
+- open-ticket-ai >= 1.0.0rc1
+- otobo-znuny >= 1.4.0
+
+## License
+
+LGPL-2.1-only
+
+## Links
+
+- Homepage: https://open-ticket-ai.com
+- Documentation: https://open-ticket-ai.com/en/guide/available-plugins.html
+- Repository: https://github.com/Softoft-Orga/open-ticket-ai
