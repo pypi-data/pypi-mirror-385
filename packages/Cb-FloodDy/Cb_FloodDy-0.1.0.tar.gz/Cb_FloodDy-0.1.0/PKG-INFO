@@ -1,0 +1,46 @@
+Metadata-Version: 2.1
+Name: Cb_FloodDy
+Version: 0.1.0
+Summary: Cluster-based Flood Dynamics: Voronoi clustering + attention-based flood depth modeling
+Author: Samuel Daramola
+Author-email: Your Name <you@example.com>
+License: MIT
+Project-URL: Homepage, https://example.com/Cb_FloodDy
+Project-URL: Repository, https://example.com/Cb_FloodDy.git
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Intended Audience :: Science/Research
+Classifier: Topic :: Scientific/Engineering :: GIS
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+
+# Cb_FloodDy
+
+Cluster-based flood dynamics utilities and models.
+
+## Install (editable)
+```bash
+pip install -e .
+```
+
+## Quick start
+
+```python
+# Access submodules directly
+from Cb_FloodDy import voronoi_clusters, model_training, model_prediction, bayesian_opt_tuning
+
+# Example: generate Voronoi clusters (see voronoi_clusters module for data expectations)
+# polygons = voronoi_clusters.generate_voronoi_clusters_and_empty_areas(station_coords, floodmap_union)
+```
+
+## CLI
+After installation:
+```bash
+cbf-train    # calls Cb_FloodDy.model_training.main()
+cbf-predict  # calls Cb_FloodDy.model_prediction.main()
+cbf-tune     # calls Cb_FloodDy.bayesian_opt_tuning.main()
+```
+
+> Note: the underlying modules should define a `main()` function for these CLI commands.
