@@ -1,0 +1,24 @@
+pip-licenses-lib>=1.0.0
+prettytable>=3.13.0
+
+[:python_version < "3.11"]
+tomli>=2
+
+[dev]
+pip-licenses-cli[spdx]
+black
+coverage[toml]
+cryptography>=45.0.3
+docutils
+flake8
+flake8-bugbear
+isort
+mypy
+pep8-naming
+twine
+tomli-w
+types-docutils
+wheel
+
+[spdx]
+license-expression
