@@ -1,0 +1,112 @@
+Metadata-Version: 2.4
+Name: tno.quantum.optimization.qubo.solvers
+Version: 1.5.0
+Summary: QUBO solvers
+Author-email: TNO Quantum Code Lab <tnoquantum@tno.nl>
+Maintainer-email: TNO Quantum Code Lab <tnoquantum@tno.nl>
+License: Apache License, Version 2.0
+Project-URL: Homepage, https://github.com/TNO-Quantum/
+Project-URL: Documentation, https://github.com/TNO-Quantum/
+Project-URL: Source, https://github.com/TNO-Quantum/optimization.qubo.solvers
+Keywords: TNO,Quantum,Optimization,QUBO,Solvers
+Platform: any
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Operating System :: OS Independent
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Information Technology
+Classifier: Intended Audience :: Science/Research
+Classifier: Typing :: Typed
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy
+Requires-Dist: tno.quantum.utils~=5.0
+Requires-Dist: tno.quantum.optimization.qubo.components>=1.0.2,~=1.0
+Provides-Extra: dwave
+Requires-Dist: dwave-system>=1.30; extra == "dwave"
+Requires-Dist: dwave-hybrid>=0.6.14; extra == "dwave"
+Requires-Dist: dwave-samplers>=1.4; extra == "dwave"
+Requires-Dist: dwave-preprocessing>=0.6.8; extra == "dwave"
+Provides-Extra: qubovert
+Requires-Dist: qubovert~=1.1; extra == "qubovert"
+Provides-Extra: dqo
+Requires-Dist: torch; extra == "dqo"
+Requires-Dist: pennylane; extra == "dqo"
+Requires-Dist: tqdm; extra == "dqo"
+Requires-Dist: matplotlib; extra == "dqo"
+Provides-Extra: all
+Requires-Dist: tno.quantum.optimization.qubo.solvers[dqo,dwave,qubovert]; extra == "all"
+Provides-Extra: tests
+Requires-Dist: pennylane-lightning; extra == "tests"
+Requires-Dist: pytest>=8.1.1; extra == "tests"
+Requires-Dist: pytest-cov>=4.1.0; extra == "tests"
+Requires-Dist: tomlkit; extra == "tests"
+Requires-Dist: tno.quantum.optimization.qubo.solvers[all]; extra == "tests"
+Requires-Dist: tno.quantum.optimization.qubo.preprocessors~=1.0; extra == "tests"
+Dynamic: license-file
+
+# TNO Quantum: Optimization - QUBO - Solvers
+
+TNO Quantum provides generic software components aimed at facilitating the development
+of quantum applications.
+
+This package contains implementations of QUBO solvers.
+
+## Documentation
+
+Documentation of the `tno.quantum.optimization.qubo.solvers` package can be found [here](https://tno-quantum.github.io/documentation/).
+
+
+## Install
+
+Easily install the `tno.quantum.optimization.qubo.solvers` package using pip:
+
+```console
+$ python -m pip install tno.quantum.optimization.qubo.solvers
+```
+
+By default, the package is installed without external solver dependencies. You can
+specify which QUBO solvers you would like to install. Available options are
+``[dwave, qubovert, dqo]``. Alternatively, you can install all solvers
+simultaneously using the ``[all]`` option
+
+```console
+$ python -m pip install tno.quantum.optimization.qubo.solvers[all]
+```
+
+## Usage
+
+The following example shows how to list the available solvers and how to instantiate them.
+
+```python
+from tno.quantum.optimization.qubo.components import SolverConfig
+
+supported_solvers = list(SolverConfig.supported_items())
+solver = SolverConfig(name='bf_solver').get_instance()
+```
+
+Once a solver is instantiated, it can be used to solve a `QUBO` as follows.
+
+```python
+from tno.quantum.optimization.qubo.components import QUBO
+
+# Construct QUBO
+qubo = QUBO([
+     [1,   2, 3],
+     [4, -50, 6],
+     [7,   8, 9]
+ ])
+
+# Solve QUBO
+result = solver.solve(qubo)
+result.best_bitvector # BitVector(010)
+result.best_value # -50.0
+```
+
+## (End)use limitations
+The content of this software may solely be used for applications that comply with international export control laws.
