@@ -1,0 +1,69 @@
+Metadata-Version: 2.4
+Name: parlant-activefence
+Version: 0.1.0
+Summary: ActiveFence integration for Parlant
+Project-URL: Repository, https://github.com/ActiveFence/parlant-activefence
+Keywords: parlant,activefence,security,threat-detection,content-moderation
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: parlant>=3.0.2
+Requires-Dist: activefence-client-sdk>=0.0.10
+Provides-Extra: dev
+Requires-Dist: pytest>=6.0; extra == "dev"
+Requires-Dist: pytest-cov>=2.0; extra == "dev"
+Requires-Dist: black>=21.0; extra == "dev"
+Requires-Dist: flake8>=3.8; extra == "dev"
+Requires-Dist: mypy>=0.800; extra == "dev"
+Dynamic: license-file
+
+# parlant-activefence
+
+ActiveFence integration for Parlant - A Python package that provides content moderation and compliance checking for Parlant applications using ActiveFence's threat analysis & detection services.
+
+## Installation
+
+You can install `parlant-activefence` using pip:
+
+```bash
+pip install parlant-activefence
+```
+
+## Usage
+
+### Basic Usage
+
+The `parlant-activefence` package integrates with Parlant's framework to provide automatic content moderation and compliance checking. Here's how to use it:
+
+```python
+from parlant.contrib.activefence import ActiveFence
+
+# Configure Parlant server to use ActiveFence moderation services
+# Will use environment variables for configuration
+async with p.Server(configure_container=ActiveFence().configure_container) as server:
+
+```
+
+At a minimum, an API key must be configured. This and more can be supplied using environment variables.
+The following environment variables can be used to configure ActiveFence integration:
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `ACTIVEFENCE_API_KEY` | ActiveFence API key for authentication | None (required) |
+| `ACTIVEFENCE_APP_NAME` | Application name for identification | Unknown |
+| `ACTIVEFENCE_BLOCKED_MESSAGE` | Message to display when content is blocked | "The generated message was blocked by guardrails." |
+
+These values can also be passed directly when initializing the container:
+
+```python
+from parlant.contrib.activefence import ActiveFence
+
+moderation = ActiveFence(api_key="API_KEY",app_name="APP_NAME", blocked_message="This message was blocked")
+async with p.Server(configure_container=moderation.configure_container) as server:
+```
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
