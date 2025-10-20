@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "maruadmin-agent"
+version = "0.2.6"
+description = "MaruAdmin Remote Server Management Agent"
+readme = "README_RASPBERRY_PI.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "MaruAdmin Team"}
+]
+keywords = ["server", "management", "monitoring", "agent", "docker", "haproxy"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: System Administrators",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS",
+    "Topic :: System :: Monitoring",
+    "Topic :: System :: Systems Administration",
+]
+dependencies = [
+    "paramiko>=3.0.0",
+    "psutil>=5.9.0",
+    "requests>=2.28.0",
+    "cryptography>=40.0.0",
+]
+
+[project.scripts]
+maruadmin-agent = "maruadmin_agent.main:main"
+maruadmin-agent-cmd = "maruadmin_agent.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/dirmich/maruadmin"
+Repository = "https://github.com/dirmich/maruadmin"
+Issues = "https://github.com/dirmich/maruadmin/issues"
+
+[tool.setuptools]
+packages = ["maruadmin_agent"]
