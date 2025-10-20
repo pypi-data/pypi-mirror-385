@@ -1,0 +1,18 @@
+[package]
+name = "rsmime"
+version = "0.7.0"
+edition = "2021"
+readme = "README.md"
+
+[lib]
+name = "rsmime"
+crate-type = ["cdylib"]
+
+[dependencies]
+openssl = { version = "0.10", features = ["vendored"] }
+pyo3 = { version = "0.26", features = ["extension-module"] }
+
+
+[features]
+abi3 = ["pyo3/abi3-py37", "generate-import-lib"]
+generate-import-lib = ["pyo3/generate-import-lib"]

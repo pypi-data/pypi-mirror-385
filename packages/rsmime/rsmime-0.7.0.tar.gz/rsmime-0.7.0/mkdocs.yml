@@ -1,0 +1,45 @@
+site_name: rsmime
+repo_name: rsmime
+site_url: https://tiwilliam.github.io/rsmime/
+repo_url: https://github.com/tiwilliam/rsmime
+theme:
+  name: material
+  custom_dir: overrides
+  icon:
+    repo: fontawesome/brands/github
+    logo: material/draw-pen
+
+watch:
+  - python
+
+extra:
+  version:
+    provider: mike
+    default: latest
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+    
+plugins:
+  - search
+  - autorefs
+  - mike:
+      version_selector: true
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [python]
+          options:
+            heading_level: 3
+            show_source: false
+            docstring_section_style: list
+            docstring_style: google
+            members_order: source
+            show_root_heading: true
+            separate_signature: true
+            show_signature_annotations: true
+            merge_init_into_class: true
+            show_if_no_docstring: false
