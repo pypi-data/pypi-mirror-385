@@ -1,0 +1,498 @@
+name: git-commit
+description: |
+  Create a semantic commit with an AI-generated message based on staged changes.
+
+  Supports two generation modes:
+  1. Bash heuristics (use_llm: false): Fast pattern-matching analysis
+  2. LLM generation (default): Intelligent semantic analysis using LLM
+
+  Analyzes diffs to determine commit type (feat, fix, docs, refactor, test, chore, perf, style),
+  extracts scope, and generates a meaningful description following Conventional Commits specification.
+version: "2.0.0"
+author: "workflows-mcp"
+tags: [git, commit, semantic, conventional-commits, interactive]
+
+inputs:
+  stage_all:
+    type: boolean
+    default: false
+    description: "(Optional) Stage all modified files before analyzing (default: use already staged files)"
+
+  path:
+    type: string
+    default: "."
+    description: "(Optional) Path to the git repository"
+
+  auto_commit:
+    type: boolean
+    default: true
+    description: "(Optional) Skip interactive confirmation and commit immediately with generated message"
+
+  use_llm:
+    type: boolean
+    default: true
+    description: "(Optional) Use LLM to generate semantic commit message instead of bash heuristics"
+
+  commit_message:
+    type: string
+    default: ""
+    description: "(Optional) Manually provide commit message (skips auto-generation)"
+
+blocks:
+  - id: get_branch
+    type: Shell
+    description: Determine current branch name
+    inputs:
+      command: |
+        git branch --show-current > "$SCRATCH/branch.txt"
+      timeout: 5
+    outputs:
+      branch:
+        description: "Determined or provided branch name"
+        type: string
+        path: "$SCRATCH/branch.txt"
+
+  - id: stage_files
+    type: Shell
+    inputs:
+      command: |
+        git add -A
+        echo "Staged all files"
+      working_dir: "${inputs.path}"
+    condition: ${inputs.stage_all}
+
+  - id: git_diff
+    type: Shell
+    inputs:
+      command: |
+        if git diff --cached --quiet; then
+          echo "false" > "$SCRATCH/changes.txt"
+        else
+          echo "true" > "$SCRATCH/changes.txt"
+        fi
+      working_dir: "${inputs.path}"
+    outputs:
+      has_changes:
+        description: "Indicates if there are staged changes"
+        type: bool
+        path: "$SCRATCH/changes.txt"
+    depends_on:
+      - block: stage_files
+        required: false
+
+  - id: get_file_status
+    type: Shell
+    inputs:
+      command: "git diff --cached --name-status"
+      working_dir: "${inputs.path}"
+    condition: ${blocks.git_diff.outputs.has_changes}
+    depends_on:
+      - git_diff
+
+  - id: get_diff_stat
+    type: Shell
+    inputs:
+      command: |
+        git diff --cached --stat
+      working_dir: ${inputs.path}
+    condition: ${blocks.git_diff.outputs.has_changes}
+    depends_on:
+      - git_diff
+
+  # Step 5: Get actual diff content (for analysis)
+  - id: get_diff_content
+    type: Shell
+    inputs:
+      command: "git diff --cached --unified=1 | head -n 200"
+      working_dir: "${inputs.path}"
+    condition: ${blocks.git_diff.outputs.has_changes}
+    depends_on:
+      - git_diff
+
+  - id: llm_generate_message
+    type: Prompt
+    condition: ${inputs.use_llm} and ${inputs.commit_message} == ''
+    depends_on:
+      - get_diff_content
+      - get_file_status
+      - get_diff_stat
+    inputs:
+      prompt: |
+        Generate a semantic commit message following the Conventional Commits specification.
+
+        === STAGED FILES ===
+        ${blocks.get_file_status.outputs.stdout}
+
+        === DIFF SUMMARY ===
+        ${blocks.get_diff_stat.outputs.stdout}
+
+        === DIFF CONTENT (first 200 lines) ===
+        ${blocks.get_diff_content.outputs.stdout}
+
+        === CONVENTIONAL COMMITS SPECIFICATION ===
+        Format: type(scope): description
+
+        Types:
+        - feat: New feature
+        - fix: Bug fix
+        - docs: Documentation changes
+        - test: Adding or updating tests
+        - refactor: Code restructuring without behavior change
+        - perf: Performance improvements
+        - style: Code formatting (whitespace, semicolons, etc.)
+        - chore: Maintenance tasks, dependency updates
+        - ci: CI/CD changes
+        - build: Build system or dependency changes
+        - revert: Revert previous commit
+
+        Scope: Optional, indicates the module/component affected (e.g., auth, api, core)
+
+        Breaking Changes: Add 'BREAKING' in the commit message
+        Example: feat(api): BREAKING change authentication endpoint
+
+        Guidelines:
+        - Use imperative mood ("add" not "added", "change" not "changed")
+        - Keep description under 72 characters
+        - No period at the end
+        - Be specific and descriptive
+        - Focus on WHY and WHAT changed, not HOW
+
+        Examples:
+        - feat(auth): add OAuth2 authentication support
+        - fix(api): resolve timeout issues in user endpoint
+        - docs(readme): update installation instructions
+        - refactor(core): simplify data validation logic
+        - perf(queries): optimize database query performance
+
+        Please generate ONLY the commit message in the exact format: type(scope): description
+        Do not include any explanations, quotes, or additional text.
+
+  - id: analyze_and_generate
+    type: Shell
+    condition: ${inputs.commit_message} == '' and not ${inputs.use_llm}
+    depends_on:
+      - get_diff_content
+      - get_file_status
+      - llm_generate_message
+    outputs:
+      message:
+        description: "Generated commit message"
+        type: string
+        path: "$SCRATCH/message.txt"
+    inputs:
+      command: |
+        # Get change data
+        FILE_STATUS=$(git diff --cached --name-status)
+        FILES=$(git diff --cached --name-only)
+        DIFF=$(git diff --cached --unified=1)
+
+        # Count change types
+        NEW_FILES=$(echo "$FILE_STATUS" | grep -c "^A" || true)
+        DELETED_FILES=$(echo "$FILE_STATUS" | grep -c "^D" || true)
+        MODIFIED_FILES=$(echo "$FILE_STATUS" | grep -c "^M" || true)
+        RENAMED_FILES=$(echo "$FILE_STATUS" | grep -c "^R" || true)
+        TOTAL_FILES=$(echo "$FILES" | wc -l | tr -d ' ')
+
+        # Analyze file types
+        HAS_TESTS=$(echo "$FILES" | grep -ci "test\|spec\|\.test\.\|\.spec\." || true)
+        HAS_DOCS=$(echo "$FILES" | grep -ci "README\|\.md$\|docs/\|CHANGELOG\|LICENSE" || true)
+        HAS_CONFIG=$(echo "$FILES" | grep -ci "config\|\.json$\|\.ya?ml$\|\.toml$\|\.ini$\|\.conf$\|package\.json\|requirements\.txt\|Cargo\.toml" || true)
+        HAS_PYTHON=$(echo "$FILES" | grep -c "\.py$" || true)
+        HAS_JS=$(echo "$FILES" | grep -ci "\.jsx?$\|\.tsx?$" || true)
+        HAS_STYLE=$(echo "$FILES" | grep -ci "\.css$\|\.scss$\|\.sass$\|\.less$" || true)
+        HAS_CI=$(echo "$FILES" | grep -ci "\.github/\|\.gitlab-ci\|jenkins\|\.travis" || true)
+
+        # Initialize variables
+        TYPE="chore"
+        SCOPE=""
+        BREAKING=false
+        DESC=""
+
+        # === COMMIT TYPE DETECTION ===
+
+        # Check for breaking changes first
+        if echo "$DIFF" | grep -qi "BREAKING CHANGE\|breaking:"; then
+          BREAKING=true
+        fi
+
+        # Docs: Only documentation files changed
+        if [ "$HAS_DOCS" -gt 0 ] && [ "$HAS_DOCS" -eq "$TOTAL_FILES" ]; then
+          TYPE="docs"
+
+        # Test: Only test files changed
+        elif [ "$HAS_TESTS" -gt 0 ] && [ "$((HAS_TESTS + HAS_CONFIG))" -ge "$TOTAL_FILES" ]; then
+          TYPE="test"
+
+        # CI: CI/CD configuration changes
+        elif [ "$HAS_CI" -gt 0 ]; then
+          TYPE="ci"
+
+        # Style: Only style files or formatting changes
+        elif [ "$HAS_STYLE" -eq "$TOTAL_FILES" ] || echo "$DIFF" | grep -qi "format\|prettier\|eslint\|ruff format"; then
+          TYPE="style"
+
+        # Fix: Bug fixes (keywords in diff)
+        elif echo "$DIFF" | grep -qi "\bfix\b\|\bbug\b\|issue\|error\|crash\|correct\|repair"; then
+          TYPE="fix"
+
+        # Feat: New files or new functionality
+        elif [ "$NEW_FILES" -gt 0 ] && [ "$NEW_FILES" -ge "$((MODIFIED_FILES / 2))" ]; then
+          TYPE="feat"
+
+        # Feat: Feature keywords in diff
+        elif echo "$DIFF" | grep -qi "\badd\b.*feature\|\bnew\b.*feature\|implement\|introduce"; then
+          TYPE="feat"
+
+        # Perf: Performance optimization
+        elif echo "$DIFF" | grep -qi "performance\|optimi[zs]e\|faster\|speed\|cache\|lazy"; then
+          TYPE="perf"
+
+        # Refactor: Code restructuring
+        elif echo "$DIFF" | grep -qi "refactor\|restructur\|reorgani[zs]e\|simplif\|clean up"; then
+          TYPE="refactor"
+
+        # Build: Dependency or build system changes
+        elif [ "$HAS_CONFIG" -gt 0 ] && echo "$FILES" | grep -qi "package\|requirements\|cargo\|pom\.xml\|build\|dependencies"; then
+          TYPE="build"
+
+        # Revert: Revert commits
+        elif echo "$DIFF" | grep -qi "revert"; then
+          TYPE="revert"
+
+        # Default to feat for source changes, chore otherwise
+        elif [ "$HAS_PYTHON" -gt 0 ] || [ "$HAS_JS" -gt 0 ]; then
+          TYPE="feat"
+        fi
+
+        # === SCOPE DETECTION ===
+
+        # Find most common directory/component
+        SCOPE_DIR=$(echo "$FILES" | sed 's|/.*||' | sort | uniq -c | sort -rn | head -1 | awk '{print $2}')
+
+        # Clean scope name
+        if [ -n "$SCOPE_DIR" ] && [ "$SCOPE_DIR" != "." ]; then
+          # Check for common patterns
+          case "$SCOPE_DIR" in
+            src|lib)
+              # Look deeper for better scope
+              SECOND_LEVEL=$(echo "$FILES" | grep "^$SCOPE_DIR/" | sed 's|^[^/]*/||' | sed 's|/.*||' | sort | uniq -c | sort -rn | head -1 | awk '{print $2}')
+              if [ -n "$SECOND_LEVEL" ]; then
+                SCOPE="($SECOND_LEVEL)"
+              else
+                SCOPE="(core)"
+              fi
+              ;;
+            tests|test)
+              SCOPE="(tests)"
+              ;;
+            docs|documentation)
+              SCOPE="(docs)"
+              ;;
+            *)
+              SCOPE="($(echo "$SCOPE_DIR" | tr '_' '-' | tr '[:upper:]' '[:lower:]'))"
+              ;;
+          esac
+        fi
+
+        # === DESCRIPTION GENERATION ===
+
+        if [ "$TOTAL_FILES" -eq 1 ]; then
+          FILENAME=$(basename "$(echo "$FILES" | head -1)" | sed 's/\.[^.]*$//')
+
+          case "$TYPE" in
+            feat)
+              DESC="add $FILENAME implementation"
+              ;;
+            fix)
+              DESC="resolve issues in $FILENAME"
+              ;;
+            docs)
+              DESC="update $FILENAME documentation"
+              ;;
+            test)
+              DESC="add tests for $FILENAME"
+              ;;
+            refactor)
+              DESC="improve $FILENAME structure"
+              ;;
+            perf)
+              DESC="optimize $FILENAME performance"
+              ;;
+            style)
+              DESC="format $FILENAME"
+              ;;
+            ci)
+              DESC="update CI configuration"
+              ;;
+            build)
+              DESC="update dependencies"
+              ;;
+            *)
+              DESC="update $FILENAME"
+              ;;
+          esac
+        else
+          # Multiple files
+          case "$TYPE" in
+            feat)
+              if [ "$NEW_FILES" -gt 0 ]; then
+                DESC="add new functionality across $TOTAL_FILES files"
+              else
+                DESC="enhance functionality in $TOTAL_FILES files"
+              fi
+              ;;
+            fix)
+              DESC="resolve issues in $TOTAL_FILES files"
+              ;;
+            docs)
+              DESC="update documentation"
+              ;;
+            test)
+              DESC="expand test coverage"
+              ;;
+            refactor)
+              DESC="improve code structure and organization"
+              ;;
+            perf)
+              DESC="optimize performance"
+              ;;
+            style)
+              DESC="apply code formatting"
+              ;;
+            ci)
+              DESC="update CI/CD pipeline"
+              ;;
+            build)
+              DESC="update project dependencies"
+              ;;
+            chore)
+              DESC="update $TOTAL_FILES files"
+              ;;
+            *)
+              DESC="update $TOTAL_FILES files"
+              ;;
+          esac
+        fi
+
+        # === CONSTRUCT COMMIT MESSAGE ===
+
+        BREAKING_PREFIX=""
+        if [ "$BREAKING" = true ]; then
+          BREAKING_PREFIX="!"
+        fi
+
+        MESSAGE="${TYPE}${SCOPE}${BREAKING_PREFIX}: ${DESC}"
+        echo "$MESSAGE" > "$SCRATCH/message.txt"
+      working_dir: "${inputs.path}"
+
+  - id: commit_message
+    type: Shell
+    inputs:
+      command: |
+        # Priority: commit_message > LLM-generated > bash-generated
+        if [ -n "${inputs.commit_message}" ]; then
+          echo "${inputs.commit_message}" > "$SCRATCH/message.txt"
+        elif [ "$(echo '${inputs.use_llm}' | tr '[:upper:]' '[:lower:]')" = "true" ]; then
+          echo "${blocks.llm_generate_message.outputs.response}" > "$SCRATCH/message.txt"
+        else
+          echo "${blocks.analyze_and_generate.outputs.message}" > "$SCRATCH/message.txt"
+        fi
+      working_dir: "${inputs.path}"
+    condition: ${blocks.git_diff.outputs.has_changes}
+    outputs:
+      message:
+        description: "Select commit message to use"
+        type: string
+        path: "$SCRATCH/message.txt"
+    depends_on:
+      - block: analyze_and_generate
+        required: false
+      - block: llm_generate_message
+        required: false
+
+  - id: llm_confirm_commit
+    type: Prompt
+    condition: not ${inputs.auto_commit}
+    depends_on:
+      - commit_message
+      - get_file_status
+      - get_diff_stat
+    inputs:
+      prompt: |
+        === PROPOSED SEMANTIC COMMIT ===
+
+        Message: ${blocks.commit_message.outputs.message}
+
+        === STAGED FILES ===
+        ${blocks.get_file_status.outputs.stdout}
+
+        === DIFF SUMMARY ===
+        ${blocks.get_diff_stat.outputs.stdout}
+
+        Proceed with commit?
+        Respond with 'yes' or 'no'
+
+  - id: create_commit
+    type: Shell
+    inputs:
+      command: |
+        MESSAGE="${blocks.commit_message.outputs.message}"
+
+        # Commit with the message
+        git commit -m "$MESSAGE"
+
+        # Get the commit hash
+        COMMIT_HASH=$(git rev-parse HEAD)
+
+        echo "✓ Created commit $COMMIT_HASH"
+        echo "  $MESSAGE"
+      working_dir: "${inputs.path}"
+    condition: >
+      ${inputs.auto_commit} or (${blocks.llm_confirm_commit.outputs.response} == 'yes')
+    depends_on:
+      - block: git_diff
+        required: true
+      - block: commit_message
+        required: true
+      - block: llm_confirm_commit
+        required: false
+
+  - id: get_commit_hash
+    type: Shell
+    depends_on:
+      - create_commit
+    inputs:
+      command: "git rev-parse HEAD"
+      working_dir: "${inputs.path}"
+
+  - id: report_cancelled
+    type: Shell
+    condition: ${blocks.llm_confirm_commit.outputs.response} != 'yes'
+    depends_on:
+      - llm_confirm_commit
+    inputs:
+      command: |
+        echo "Commit cancelled by user."
+        echo "Staged changes remain uncommitted."
+      working_dir: "${inputs.path}"
+
+  - id: report_no_changes
+    type: Shell
+    inputs:
+      command: |
+        echo "No staged changes to commit."
+        echo "Run 'git add <files>' to stage changes, or use stage_all: true"
+      working_dir: "${inputs.path}"
+    condition: not ${blocks.git_diff.outputs.has_changes}
+    depends_on:
+      - git_diff
+
+outputs:
+  has_changes: "${blocks.git_diff.outputs.has_changes}"
+  commit_message: "${blocks.commit_message.outputs.message}"
+  generated_message: "${blocks.commit_message.outputs.stdout}"
+  confirmed: "${blocks.llm_confirm_commit.outputs.response} == 'yes'"
+  commit_created: "${blocks.create_commit.outputs.success}"
+  commit_hash: "${blocks.get_commit_hash.outputs.stdout}"
+  file_status: "${blocks.get_file_status.outputs.stdout}"
+  diff_summary: "${blocks.get_diff_stat.outputs.stdout}"
