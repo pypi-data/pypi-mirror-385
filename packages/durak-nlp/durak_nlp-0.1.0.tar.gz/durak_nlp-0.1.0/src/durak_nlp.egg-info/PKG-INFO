@@ -1,0 +1,59 @@
+Metadata-Version: 2.4
+Name: durak-nlp
+Version: 0.1.0
+Summary: Durak: modular Turkish NLP preprocessing toolkit.
+Author: Fatih Burak Karagöz
+License-Expression: LicenseRef-Durak-1.0
+Project-URL: Homepage, https://karagoz.io
+Project-URL: Repository, https://github.com/fbkaragoz/durak
+Project-URL: Issues, https://github.com/fbkaragoz/durak/issues
+Keywords: turkish nlp,text processing,preprocessing,lemmatization,tokenization
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: Natural Language :: Turkish
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Text Processing :: Linguistic
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Provides-Extra: dev
+Requires-Dist: black>=24.0.0; extra == "dev"
+Requires-Dist: ruff>=0.3.0; extra == "dev"
+Requires-Dist: pytest>=8.0.0; extra == "dev"
+Requires-Dist: coverage[toml]>=7.0.0; extra == "dev"
+Dynamic: license-file
+
+# Durak
+
+<p align="center">
+  <img src="docs/durak.svg" alt="Durak logo" width="200" />
+</p>
+
+Durak is a Turkish natural language processing toolkit focused on reliable preprocessing building blocks. It offers configurable cleaning, tokenisation, stopword management, lemmatisation adapters, and frequency statistics so projects can bootstrap robust text pipelines quickly.
+
+- Personal homepage: [karagoz.io](https://karagoz.io)
+- Source repository: [github.com/fbkaragoz/durak](https://github.com/fbkaragoz/durak)
+
+## Getting Started
+
+Durak is under active development. The first public release will provide:
+
+- Unicode-aware cleaning functions tuned for Turkish data sources.
+- Tokenisation strategies ranging from regex to pluggable subword engines.
+- Stopword curation helpers with domain-specific override support.
+- Pluggable lemmatisation interface with adapters for Zemberek, spaCy, and Stanza.
+- Frequency statistics utilities for exploratory corpus analysis.
+
+## Contributing
+
+1. Create a virtual environment (`conda activate nlp.env` or `python -m venv .venv`).
+2. Install development dependencies: `pip install -e .[dev]`.
+3. Run the test suite: `pytest`.
+
+Roadmap and task planning live in `ROADMAP.md`. Update the roadmap as you make progress if you want to contribute.
