@@ -1,0 +1,158 @@
+
+/******************************
+ * main layout
+ ******************************/
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.content-wrapper {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+
+/******************************
+ * header
+ ******************************/
+
+/* this is the one in the very top left of screen, next to logo and linked to
+the home page */
+#global-header-title {
+    margin-left: 0.3rem;
+}
+
+header .level {
+    /* TODO: not sure what this 60px was supposed to do? but it broke the */
+    /* styles for the feedback dialog, so disabled it is.
+    /* height: 60px; */
+    /* line-height: 60px; */
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+}
+
+header .level #header-logo {
+    display: inline-block;
+}
+
+header .level .global-title,
+header .level-left .global-title {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+/* indent nested menu items a bit */
+header .navbar-item.nested {
+    padding-left: 2.5rem;
+}
+
+header span.header-text {
+    font-size: 2em;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+#content-title h1 {
+    margin-bottom: 0;
+    margin-right: 1rem;
+    max-width: 50%;
+    overflow: hidden;
+    padding: 0 0.3rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/******************************
+ * content
+ ******************************/
+
+#page-body {
+    padding: 0.4em;
+}
+
+/******************************
+ * context menu
+ ******************************/
+
+#context-menu {
+    margin-bottom: 1em;
+    margin-left: 1em;
+    text-align: right;
+    white-space: nowrap;
+}
+
+/******************************
+ * "object helper" panel
+ ******************************/
+
+.object-helpers .panel {
+    margin: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.object-helpers .panel-heading {
+    white-space: nowrap;
+}
+
+.object-helpers a {
+    white-space: nowrap;
+}
+
+.object-helper {
+    border: 1px solid black;
+    margin: 1em;
+    padding: 1em;
+    width: 20em;
+}
+
+.object-helper-content {
+    margin-top: 1em;
+}
+
+/******************************
+ * markdown
+ ******************************/
+
+.rendered-markdown p,
+.rendered-markdown ul {
+    margin-bottom: 1rem;
+}
+
+.rendered-markdown .codehilite {
+    margin-bottom: 2rem;
+}
+
+/******************************
+ * fix datepicker within modals
+ * TODO: someday this may not be necessary? cf.
+ * https://github.com/buefy/buefy/issues/292#issuecomment-347365637
+ ******************************/
+
+.modal .animation-content .modal-card {
+    overflow: visible !important;
+}
+
+.modal-card-body {
+    overflow: visible !important;
+}
+
+/* TODO: a simpler option we might try sometime instead?  */
+/* cf. https://github.com/buefy/buefy/issues/292#issuecomment-1073851313 */
+
+/* .dropdown-content{ */
+/*     position: fixed; */
+/* } */
+
+/******************************
+ * feedback
+ ******************************/
+
+.feedback-dialog .red {
+    color: red;
+    font-weight: bold;
+}

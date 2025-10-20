@@ -1,0 +1,23 @@
+<div tal:define="name name|field.name;
+                 css_class css_class|field.widget.css_class;
+                 oid oid|field.oid;
+                 field_display field_display;
+                 style style|field.widget.style;
+                 url url|field.widget.service_url;"
+     tal:omit-tag="">
+
+  <div tal:define="vmodel vmodel|'field_model_' + name;"
+       tal:omit-tag="">
+    <tailbone-autocomplete name="${name}"
+                           ref="${ref}"
+                           service-url="${url}"
+                           v-model="${vmodel}"
+                           initial-label="${field_display}"
+                           tal:attributes=":assigned-label assigned_label or 'null';
+                                           @input input_handler|input_callback|'';
+                                           @new-label new_label_callback|'';">
+
+    </tailbone-autocomplete>
+  </div>
+
+</div>

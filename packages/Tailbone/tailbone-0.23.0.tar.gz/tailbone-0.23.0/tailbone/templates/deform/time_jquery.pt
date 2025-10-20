@@ -1,0 +1,19 @@
+<!--! -*- mode: html; -*- -->
+<span tal:define="size size|field.widget.size;
+                  css_class css_class|field.widget.css_class;
+                  oid oid|field.oid;
+                  style style|field.widget.style|None;
+                  type_name type_name|field.widget.type_name;
+                  field_name field_name|field.name;"
+      tal:omit-tag="">
+
+  <div tal:define="vmodel vmodel|'field_model_' + field_name;">
+    ${field.start_mapping()}
+    <tailbone-timepicker name="time"
+                         id="${oid}"
+                         v-model="${vmodel}">
+    </tailbone-timepicker>
+    ${field.end_mapping()}
+  </div>
+
+</span>

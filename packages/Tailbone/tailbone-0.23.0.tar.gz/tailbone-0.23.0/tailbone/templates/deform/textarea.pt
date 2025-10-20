@@ -1,0 +1,16 @@
+<div tal:define="rows rows|field.widget.rows;
+                 cols cols|field.widget.cols;
+                 css_class css_class|field.widget.css_class;
+                 oid oid|field.oid;
+                 name name|field.name;
+                 style style|field.widget.style;"
+     tal:omit-tag="">
+
+  <div tal:define="vmodel vmodel|'field_model_' + name;">
+    <b-input type="textarea"
+             name="${name}"
+             v-model="${vmodel}"
+             tal:attributes="attributes|field.widget.attributes|{};">
+    </b-input>
+  </div>
+</div>

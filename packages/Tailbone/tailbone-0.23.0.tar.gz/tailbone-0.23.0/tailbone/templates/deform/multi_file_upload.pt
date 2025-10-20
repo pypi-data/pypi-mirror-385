@@ -1,0 +1,7 @@
+<tal:block tal:define="field_name field_name|field.name;
+                       vmodel vmodel|'field_model_' + field_name;">
+  ${field.start_sequence()}
+  <multi-file-upload v-model="${vmodel}">
+  </multi-file-upload>
+  ${field.end_sequence()}
+</tal:block>

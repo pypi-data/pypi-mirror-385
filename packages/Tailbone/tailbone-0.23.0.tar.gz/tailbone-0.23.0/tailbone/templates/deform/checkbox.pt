@@ -1,0 +1,15 @@
+<div tal:define="name name|field.name;
+                 true_val true_val|field.widget.true_val;
+                 css_class css_class|field.widget.css_class;
+                 style style|field.widget.style;
+                 oid oid|field.oid;"
+     tal:omit-tag="">
+
+  <div tal:define="vmodel vmodel|'field_model_' + name;">
+    <b-checkbox name="${name}"
+                v-model="${vmodel}"
+                native-value="${true_val}">
+      {{ ${vmodel} }}
+    </b-checkbox>
+  </div>
+</div>

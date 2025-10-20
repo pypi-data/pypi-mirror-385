@@ -1,0 +1,19 @@
+<span tal:define="name name|field.name;
+                  css_class css_class|field.widget.css_class;
+                  oid oid|field.oid;
+                  mask mask|field.widget.mask;
+                  mask_placeholder mask_placeholder|field.widget.mask_placeholder;
+                  style style|field.widget.style;
+                  placeholder placeholder|getattr(field.widget, 'placeholder', '');
+                  autocomplete autocomplete|getattr(field.widget, 'autocomplete', 'on');"
+      tal:omit-tag="">
+  <div tal:define="vmodel vmodel|'field_model_' + name;"
+       tal:omit-tag="">
+    <b-input tal:attributes="name name;
+                             v-model vmodel;
+                             placeholder placeholder;
+                             autocomplete autocomplete;
+                             attributes|field.widget.attributes|{};">
+    </b-input>
+  </div>
+</span>

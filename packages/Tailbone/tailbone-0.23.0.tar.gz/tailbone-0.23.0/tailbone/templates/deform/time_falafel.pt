@@ -1,0 +1,7 @@
+<div tal:omit-tag=""
+     tal:define="name name|field.name;
+                 vmodel vmodel|'field_model_' + name;">
+  <tailbone-timepicker name="${name}"
+                       v-model="${vmodel}">
+  </tailbone-timepicker>
+</div>

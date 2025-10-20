@@ -1,0 +1,23 @@
+<div tal:omit-tag=""
+     tal:define="name name|field.name;
+                 vmodel vmodel|'field_model_' + name;">
+
+  <b-field grouped>
+    ${field.start_mapping()}
+
+    <b-field label="Date">
+      <tailbone-datepicker name="date"
+                           v-model="${vmodel}.date">
+      </tailbone-datepicker>
+    </b-field>
+
+    <b-field label="Time">
+      <tailbone-timepicker name="time"
+                           v-model="${vmodel}.time">
+      </tailbone-timepicker>
+    </b-field>
+
+    ${field.end_mapping()}
+  </b-field>
+
+</div>

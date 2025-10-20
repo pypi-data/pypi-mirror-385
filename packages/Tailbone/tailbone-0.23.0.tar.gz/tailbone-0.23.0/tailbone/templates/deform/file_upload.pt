@@ -1,0 +1,44 @@
+<!--! -*- mode: html; -*- -->
+<tal:block tal:define="oid oid|field.oid;
+                       css_class css_class|field.widget.css_class;
+                       style style|field.widget.style;
+                       field_name field_name|field.name;
+                       use_oruga use_oruga;">
+
+  <div tal:define="vmodel vmodel|'field_model_' + field_name;">
+    ${field.start_mapping()}
+
+    <b-field class="file"
+             tal:condition="not use_oruga">
+      <b-upload name="upload"
+                v-model="${vmodel}">
+        <a class="button is-primary">
+          <b-icon pack="fas" icon="upload"></b-icon>
+          <span>Click to upload</span>
+        </a>
+      </b-upload>
+      <span class="file-name" v-if="${vmodel}">
+        {{ ${vmodel}.name }}
+      </span>
+    </b-field>
+
+    <o-field class="file"
+             tal:condition="use_oruga">
+      <o-upload name="upload"
+                v-slot="{ onclick }"
+                v-model="${vmodel}">
+        <o-button variant="primary"
+                  @click="onclick">
+          <o-icon icon="upload" />
+          <span>Click to upload</span>
+        </o-button>
+      </o-upload>
+      <span class="file-name" v-if="${vmodel}">
+        {{ ${vmodel}.name }}
+      </span>
+    </o-field>
+
+    ${field.end_mapping()}
+  </div>
+
+</tal:block>

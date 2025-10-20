@@ -1,0 +1,17 @@
+<div tal:define="name name|field.name;"
+     tal:omit-tag="">
+  <div tal:define="vmodel vmodel|'field_model_' + name;"
+       tal:omit-tag="">
+    <b-field grouped>
+      <input type="hidden" name="${name}"
+             tal:attributes=":value 'JSON.stringify('+vmodel+')';" />
+      <b-checkbox v-model="${vmodel}.day0">${day_labels[0]['abbr']}</b-checkbox>
+      <b-checkbox v-model="${vmodel}.day1">${day_labels[1]['abbr']}</b-checkbox>
+      <b-checkbox v-model="${vmodel}.day2">${day_labels[2]['abbr']}</b-checkbox>
+      <b-checkbox v-model="${vmodel}.day3">${day_labels[3]['abbr']}</b-checkbox>
+      <b-checkbox v-model="${vmodel}.day4">${day_labels[4]['abbr']}</b-checkbox>
+      <b-checkbox v-model="${vmodel}.day5">${day_labels[5]['abbr']}</b-checkbox>
+      <b-checkbox v-model="${vmodel}.day6">${day_labels[6]['abbr']}</b-checkbox>
+    </b-field>
+  </div>
+</div>

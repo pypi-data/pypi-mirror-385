@@ -1,0 +1,31 @@
+<!--! -*- mode: html; -*- -->
+<div tal:define="oid oid|field.oid;
+                 name name|field.name;
+                 css_class css_class|field.widget.css_class;
+                 style style|field.widget.style;"
+     i18n:domain="deform"
+     tal:omit-tag="">
+
+  <div tal:define="vmodel vmodel|'field_model_' + name;"
+       tal:omit-tag="">
+
+    ${field.start_mapping()}
+
+    <b-field label="Cases">
+      <b-input name="cases" autocomplete="off"
+               tal:attributes="v-model string: ${vmodel + '.cases'};
+                               cases_attributes|field.widget.cases_attributes|{};">
+      </b-input>
+    </b-field>
+
+    <b-field label="Units">
+      <b-input name="units" autocomplete="off"
+               tal:attributes="v-model string: ${vmodel + '.units'};
+                               units_attributes|field.widget.units_attributes|{};">
+      </b-input>
+    </b-field>
+
+    ${field.end_mapping()}
+  </div>
+
+</div>
