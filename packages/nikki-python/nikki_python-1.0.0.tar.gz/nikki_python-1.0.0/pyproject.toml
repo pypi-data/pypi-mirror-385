@@ -1,0 +1,47 @@
+[build-system]
+# This defines the build tools required (setuptools and wheel)
+requires = [
+    "setuptools>=61.0.0", # Updated version for modern setuptools usage
+    "wheel"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+# Metadata translated from setup.cfg [metadata] section
+name = "nikki_python"
+version = "1.0.0"
+description = "initial beta version"
+readme = {file = "README.md", content-type = "text/markdown"}
+requires-python = ">=3.8"
+license = {text = "MIT License"}
+
+authors = [
+    {name = "dev nikki", email = "dev.nikki.build@gmail.com"},
+]
+
+urls = {"Homepage" = "https://github.com/nikki-build/nikki.python", "Bug Tracker" = "https://github.com/pypa/sampleproject/issues"}
+
+# Critical runtime dependencies
+dependencies = [
+    "websockets",
+]
+
+# Classifiers
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[tool.setuptools]
+# Equivalent of [options] package_dir = = src
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+# Equivalent of [options.packages.find] where = src
+where = ["src"]
