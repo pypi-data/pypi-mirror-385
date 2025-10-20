@@ -1,0 +1,30 @@
+- condition:
+    TO: listes@ok.com
+    operator: CONTAINS
+  actions:
+    - action: move
+      dest: foutoir/listes
+    - action: delete
+- condition:
+    FROM: hello@ok.com
+    operator: EQUALS
+  actions:
+    - action: flag
+      flag: FLAGGED
+- condition:
+    ALL:
+      - FROM: hello@ok.com
+        operator: EQUALS
+      - TO: listes@ok.com
+        operator: CONTAINS
+  actions:
+    - action: flag
+      flag: FLAGGED
+
+- condition:
+    TO: listes@ok.com
+    operator: CONTAINS
+  move_to: lists
+  actions:
+    - delete
+    - mark_read

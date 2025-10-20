@@ -1,0 +1,81 @@
+[project]
+name = "mmuxer"
+description = "Manage mail from your server."
+authors = [
+    { name = "Mathias Millet", email = "mathias@mmill.eu" },
+]
+readme = "README.md"
+requires-python = ">=3.9,<3.13"
+dependencies = [
+    "typer[all]>0.19, <0.20",
+    "pydantic>2",
+    "pydantic-settings",
+    "pyyaml",
+    "imap-tools==v1.6.0",
+    "certifi",
+    "watchfiles >= 0.18",
+    "boolean.py >= 4.0",
+]
+classifiers = [
+    "Topic :: Communications :: Email :: Filters",
+]
+dynamic = []
+version = "0.6.7a0"
+
+[project.license]
+text = "AGPL-3.0"
+
+[project.urls]
+Homepage = "https://github.com/sapristi/mmuxer"
+
+[project.scripts]
+mmuxer = "mmuxer.__main__:app"
+
+[project.optional-dependencies]
+systemd = [
+    "cysystemd>=1.6.2",
+]
+
+[tool.pdm.version]
+source = "file"
+path = "mmuxer/__init__.py"
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "pytest >= 7.0",
+    "pre-commit>=3.7.0",
+    "pytest-bg-process",
+    "pytz",
+]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = [
+    "mmuxer*",
+]
+
+[tool.pytest.ini_options]
+background-cmd = "python tests/imap_server.py"
+background-log = ".imap_server.log"
+
+[tool.pycln]
+all = true
+
+[tool.black]
+line-length = 99
+
+[tool.isort]
+line_length = 99
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+
+[build-system]
+requires = [
+    "pdm-backend",
+]
+build-backend = "pdm.backend"
