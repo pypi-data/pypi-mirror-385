@@ -1,0 +1,33 @@
+{
+  "version": "1.0.0",
+  "ref": "refs/heads/main",
+  "capsule": {
+    "image": "ghcr.io/acme-lab/capsule-cuda@sha256:58b3e701ed9da8768554a21ffe7fa9afd995702d002b4b5d4798365a79310277",
+    "extensions": [
+      "ms-python.python@2024.6.0",
+      "ms-toolsai.jupyter@2024.2.0",
+      "ms-toolsai.jupyter-renderers@2024.2.0",
+      "ms-toolsai.jupyter-keymap@1.1.0",
+      "ms-toolsai.vscode-jupyter-cell-tags@0.1.8",
+      "redhat.vscode-yaml@1.14.0"
+    ]
+  },
+  "inputs": [
+    "s3://demo-bucket/microscopy/"
+  ],
+  "scopes": [
+    "preview_data",
+    "run_target",
+    "promote"
+  ],
+  "resources": {
+    "cpu": "2",
+    "memory": "4Gi",
+    "gpu": "1"
+  },
+  "policies": {
+    "requireReceipts": true
+  },
+  "issuedAt": "2024-01-01T00:00:00Z",
+  "signature": "UNSIGNED-DEV"
+}
