@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Sciencecast Timeline",
+  "description": "Narrated timeline for replaying a pipeline run in Vigil/Sciencecast viewers.",
+  "type": "object",
+  "required": ["metadata", "events"],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "required": ["run_id", "generated_at", "pipeline"],
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "description": "Unique identifier for the pipeline invocation that produced the replay."
+        },
+        "generated_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when this timeline JSON was generated."
+        },
+        "pipeline": {
+          "type": "string",
+          "description": "Name or path of the pipeline that produced this replay."
+        },
+        "inputs": {
+          "type": "array",
+          "description": "List of key input resources referenced in the run (handles, params, etc).",
+          "items": {
+            "type": "string"
+          }
+        },
+        "artifacts": {
+          "type": "object",
+          "description": "Mapping of artifact labels to file paths, URIs, or receipt identifiers.",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "events": {
+      "type": "array",
+      "description": "Ordered list of timeline beats for the replay.",
+      "items": {
+        "type": "object",
+        "required": ["offset_seconds", "label", "narration"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Stable identifier for the event (used for deep-linking)."
+          },
+          "offset_seconds": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Time offset (in seconds) from the start of the replay."
+          },
+          "duration_seconds": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Optional duration of the event if it spans multiple seconds."
+          },
+          "label": {
+            "type": "string",
+            "description": "Short title for the event."
+          },
+          "narration": {
+            "type": "string",
+            "description": "Narrative description of what happens during the event."
+          },
+          "details": {
+            "type": "object",
+            "description": "Additional structured metadata the viewer can surface (metrics, file paths, etc).",
+            "additionalProperties": {}
+          }
+        }
+      }
+    }
+  }
+}
