@@ -1,0 +1,59 @@
+Metadata-Version: 2.4
+Name: python-metadata-parser
+Version: 0.1.3
+Summary: Parse Core Metadata, pyproject.toml, inline script metadata
+Project-URL: Documentation, https://github.com/FlavioAmurrioCS/python-metadata-parser#readme
+Project-URL: Issues, https://github.com/FlavioAmurrioCS/python-metadata-parser/issues
+Project-URL: Source, https://github.com/FlavioAmurrioCS/python-metadata-parser
+Author-email: Flavio Amurrio <25621374+FlavioAmurrioCS@users.noreply.github.com>
+License-Expression: MIT
+License-File: LICENSE.txt
+Keywords: core-metadata,metadata,pep723,pyproject.toml
+Classifier: Development Status :: 4 - Beta
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Programming Language :: Python :: Implementation :: PyPy
+Requires-Python: >=3.9
+Requires-Dist: tomli>=1.1.0; python_version < '3.11'
+Provides-Extra: tests
+Requires-Dist: pytest; extra == 'tests'
+Provides-Extra: types
+Requires-Dist: mypy; extra == 'types'
+Requires-Dist: pyrefly; extra == 'types'
+Requires-Dist: pyright[nodejs]; extra == 'types'
+Requires-Dist: pytest; extra == 'types'
+Requires-Dist: tomlkit; extra == 'types'
+Requires-Dist: ty; extra == 'types'
+Requires-Dist: typing-extensions; extra == 'types'
+Description-Content-Type: text/markdown
+
+# python-metadata-parser
+
+[![PyPI - Version](https://img.shields.io/pypi/v/python-metadata-parser.svg)](https://pypi.org/project/python-metadata-parser)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/python-metadata-parser.svg)](https://pypi.org/project/python-metadata-parser)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/FlavioAmurrioCS/python-metadata-parser/main.svg)](https://results.pre-commit.ci/latest/github/FlavioAmurrioCS/python-metadata-parser/main)
+
+-----
+
+## Table of Contents
+
+- [python-metadata-parser](#python-metadata-parser)
+  - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [License](#license)
+
+## Installation
+
+```console
+pip install python-metadata-parser
+```
+
+## License
+
+`python-metadata-parser` is distributed under the terms of the [MIT](https://spdx.org/licenses/MIT.html) license.
