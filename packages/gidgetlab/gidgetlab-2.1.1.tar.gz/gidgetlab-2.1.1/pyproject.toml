@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools>=60", "setuptools_scm>=8.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gidgetlab"
+dynamic = ["version"]
+requires-python = ">= 3.10"
+authors = [{ name = "Benjamin Bertrand", email = "beenje@gmail.com" }]
+description = "An async GitLab API library"
+readme = "README.rst"
+license = { file = "LICENSE" }
+keywords = ["gitlab", "sans-io", "async"]
+classifiers = [
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Development Status :: 5 - Production/Stable",
+    "Programming Language :: Python",
+]
+
+[project.urls]
+Homepage = "https://gitlab.com/beenje/gidgetlab"
+Documentation = "https://gidgetlab.readthedocs.io"
+Repository = "https://gitlab.com/beenje/gidgetlab"
+
+[project.optional-dependencies]
+docs = ["sphinx>=4.0.0", "sphinx-autodoc-typehints", "sphinx-rtd-theme"]
+tests = [
+    "pytest>=3.0.0",
+    "pytest-asyncio",
+    "pytest-cov",
+    "pytest-aiohttp",
+    "importlib-resources",
+]
+aiohttp = ["aiohttp", "cachetools"]
+httpx = ["httpx>=0.11.0"]
+tornado = ["tornado"]
+# "dev" target contains all previous dependencies
+dev = [
+    "sphinx>=4.0.0",
+    "sphinx-autodoc-typehints",
+    "sphinx-rtd-theme",
+    "pytest>=3.0.0",
+    "pytest-asyncio",
+    "pytest-cov",
+    "pytest-aiohttp",
+    "importlib-resources",
+    "aiohttp",
+    "cachetools",
+    "httpx>=0.11.0",
+    "tornado",
+]
+
+[tool.setuptools_scm]
+version_file = "gidgetlab/_version.py"

@@ -1,0 +1,53 @@
+stages:
+  - check
+  - build
+  - test
+  - release
+
+default:
+  image: ghcr.io/astral-sh/uv:python3.13-bookworm
+
+check:
+  stage: check
+  script:
+    - uvx pre-commit run --all-files
+
+run-pytest:
+  stage: test
+  parallel:
+    matrix:
+      - PYTHON_VERSION: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+  image: ghcr.io/astral-sh/uv:python${PYTHON_VERSION}-bookworm
+  before_script:
+    - uv venv -p python${PYTHON_VERSION}
+    - uv pip install .[dev]
+  script:
+    - uv run pytest -v --junitxml=report.xml --cov=gidgetlab tests
+  artifacts:
+    when: always
+    reports:
+      junit: report.xml
+
+build-pypi-package:
+  stage: build
+  script:
+    - uvx --with build python -m build
+    - uvx twine check dist/*
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - dist/
+
+release-pypi:
+  stage: release
+  variables:
+    GIT_STRATEGY: none
+  id_tokens:
+    PYPI_ID_TOKEN:
+      aud: pypi
+  script:
+    - uvx twine upload dist/*
+  environment:
+    name: release
+  rules:
+    - if: $CI_COMMIT_TAG
