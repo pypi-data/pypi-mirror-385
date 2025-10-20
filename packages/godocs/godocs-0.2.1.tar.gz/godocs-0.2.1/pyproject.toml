@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+godocs = ["py.typed"]
+
+[project]
+name = "godocs"
+version = "0.2.1"
+authors = [
+  { name="Daniel Sousa (nadjiel)", email="oliveira.daaaaniel@gmail.com" },
+]
+description = "CLI tool for converting Godot's XML docs into RST Markdown"
+keywords=[ "python", "godot", "documentation", "docs", "godocs", "sphinx", "jinja2" ]
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.0"
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Operating System :: OS Independent",
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Natural Language :: English",
+]
+dependencies = []
+
+[project.scripts]
+godocs = "godocs.cli:main"
+
+[project.optional-dependencies]
+dev = [
+  "build",
+  "twine",
+  "pytest >= 8.4.1, < 9.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/godocs-godot/godocs"
+Issues = "https://github.com/godocs-godot/godocs/issues"
