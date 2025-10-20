@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tlssysloghandler"
+version = "2.0.0"
+description = "SysLogHandler with TLS"
+readme = "README.rst"
+license = {text = "ISC"}
+keywords = ["handler", "logging", "logger", "syslog", "tls"]
+requires-python = ">= 3.11"
+authors = [
+  {name = "A Tammy", email = "atammy@bsd.ac"},
+  {name = "Craig Weber", email = "crgwbr@gmail.com"},
+]
+classifiers = [
+  "Programming Language :: Python"
+]
+
+[project.urls]
+Repository = "https://github.com/bsd-ac/tlssysloghandler"
+License = "https://github.com/bsd-ac/tlssysloghandler/blob/main/LICENSE"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[dependency-groups]
+dev = [
+    "cryptography>=46.0.3",
+    "pytest>=8.4.2",
+    "pytest-cov>=7.0.0",
+    "ruff>=0.14.1",
+]
