@@ -1,0 +1,35 @@
+[build-system]
+requires = ["hatchling>=1.18"]
+build-backend = "hatchling.build"
+
+[project]
+name = "postech-pressao"
+version = "0.1.0"
+description = "Classificação simples de pressão arterial (BAIXA/NORMAL/ALTA) a partir de pares sistólica/diastólica."
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [{name = "Edmilson Teixeira"}]
+keywords = ["saude", "pressao-arterial", "ml", "sklearn", "pós-tech", "fiap", "alura"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Intended Audience :: Developers",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence"
+]
+dependencies = [
+  "scikit-learn>=1.4",
+  "numpy>=1.23"
+]
+
+[project.urls]
+Homepage = "https://github.com/edmilsonteixeira/postech-pressao"
+Repository = "https://github.com/edmilsonteixeira/postech-pressao"
+Issues = "https://github.com/edmilsonteixeira/postech-pressao/issues"
+
+[project.scripts]
+postech-pressao = "postech_pressao.__main__:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/postech_pressao"]
