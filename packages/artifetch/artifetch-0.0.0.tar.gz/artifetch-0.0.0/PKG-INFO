@@ -1,0 +1,34 @@
+Metadata-Version: 2.4
+Name: artifetch
+Version: 0.0.0
+Summary: Universal artifact fetcher for Artifactory, GitLab, and Git.
+Author: Gemma Mcgee
+Description-Content-Type: text/markdown
+Requires-Dist: requests
+Requires-Dist: python-gitlab
+Requires-Dist: python-dotenv
+Provides-Extra: dev
+Requires-Dist: build; extra == "dev"
+Requires-Dist: twine; extra == "dev"
+Requires-Dist: setuptools; extra == "dev"
+Requires-Dist: setuptools-scm; extra == "dev"
+Requires-Dist: wheel; extra == "dev"
+Requires-Dist: deptry; extra == "dev"
+
+# Artifetch
+
+Artifetch is a universal artifact fetcher for developers, testers and CI/CD systems.
+
+It can:
+- Download artifacts from Artifactory
+- Download job artifacts from GitLab
+- Clone Git repositories
+
+Artifetch works both as:
+- A **Python library** (`from artifetch import fetch`)
+- A **CLI tool** (`artifetch gitlab://...`)
+
+Project goals:
+- Minimal dependencies
+- Safe and robust downloads
+- Fallback to pure Python if official tools aren’t installed
