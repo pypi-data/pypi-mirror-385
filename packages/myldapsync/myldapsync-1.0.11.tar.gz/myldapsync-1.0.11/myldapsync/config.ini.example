@@ -1,0 +1,148 @@
+##########################################################################
+#
+# config.ini.example
+#
+# This file is a template for your site-specific configuration. Copy it,
+# and modify to suit your requirements.
+#
+# Some values have defaults which are specified in config_default.ini.
+# Others *must* be set in your configuration file.
+#
+##########################################################################
+
+##########################################################################
+# LDAP access configuration
+##########################################################################
+
+[ldap]
+
+# Debug LDAP connections?
+debug = false
+
+# LDAP server connection details (REQUIRED)
+server_uri = ldap://ldap.example.com
+
+# User to bind to the directory as. Leave empty for anonymous binding.
+bind_username =
+bind_password =
+
+# Use TLS? If the URI scheme is ldaps://, this is ignored.
+use_starttls = false
+
+# TLS/SSL certificates. Specify if required, otherwise leave empty
+ca_cert_file =
+cert_file =
+key_file =
+
+# Search scope for users (one of BASE, LEVEL or SUBTREE)
+search_scope = LEVEL
+
+# The base DN for the user search (REQUIRED)
+base_dn = CN=Users,dc=example,dc=com
+
+# Filter string for the user search. For OpenLDAP, '(cn=*)' may well be enough.
+# For AD, you might use '(objectClass=user)' for users or '(objectClass=group)' for groups (REQUIRED).
+# For OpenLDAP '(objectClass=groupOfNames)' for groups.
+filter_string = (objectClass=user)
+
+# The base DN for the admin user search. This may be the same as the base_dn, or
+# may point to an alternate OU. If empty, no search will be performed.
+admin_base_dn = CN=Users,dc=example,dc=com
+
+# The filter string for users that should have with "WITH ADMIN OPTION" and "WITH GRANT OPTION"
+# for roles and privileges.
+# With AD you might use a filter
+# such as: (&(objectClass=user)(memberof=CN=MYGROUP,CN=Users,dc=example,dc=com))
+# '(objectClass=group)' or '(objectClass=groupOfNames)' should be used for groups synchronization with AD or
+# OpenLdap accordingly.
+# If, for example on OpenLDAP, your admin users are members of an alternate OU,
+# then a filter of (cn=*) may suffice.
+# If empty, no search will be performed.
+admin_filter_string = (&(objectClass=user)(memberof=CN=MYGROUP,CN=Users,dc=example,dc=com))
+
+# The LDAP attribute containing user names. In OpenLDAP, this may be 'uid'
+# whilst in AD, 'sAMAccountName' might be appropriate. (REQUIRED)
+username_attribute = uid
+
+# A command delimited list of users to ignore
+ignore_users = Manager,ldap.sync
+
+# Kerberos authentication parameters
+use_kerberos =
+SERVICE_NAME =
+LDAP_SERVER_IP =
+
+
+##########################################################################
+# MySQL access configuration
+##########################################################################
+
+[mysql]
+
+# A comma delimited list of users to ignore
+ignore_users = root
+
+# Connection parameters
+host = localhost
+db = mysql
+user = root
+password = 
+auth_plugin = mysql_native_password
+ssl_ca =
+ssl_cert =
+ssl_key =
+ssl_verify_identity =
+ssl_verify_cert =
+use_pure =
+SERVICE_NAME =
+
+##########################################################################
+# General configuration
+##########################################################################
+
+[general]
+
+# Authentication plugin (one of simple, sasl or pam)
+auth_plugin = pam
+
+# Oracle-compatible PAM
+compat = false
+
+# Database management system - one of mysql, psms (Percona Server for MySQL) or mariadb.
+dbms = psms
+
+# Add LDAP users to MySQL if they don't exist, or ignore them?
+add_ldap_users_to_mysql = true
+
+# Remove MySQL users if they don't exist in LDAP, or ignore them?
+remove_users_from_mysql = true
+
+# Database for privileges granting. If empty privileges will be granted for everything i.e. *.*.
+# Wildcard could be used like "db%" so grants will be applied for every database with "db" name prefix.
+database =
+
+# Privileges to grant to users in MySQL.
+# Note these privileges are only applied to users when created. Existing users are unaffected.
+user_privilege_all = false
+user_privilege_create = false
+user_privilege_create_role = false
+user_privilege_alter = false
+user_privilege_create_user = false
+user_privilege_alter_rename = false
+user_privilege_event = false
+user_privilege_execute = false
+user_privilege_trigger = false
+user_privilege_insert = false
+user_privilege_update = false
+user_privilege_delete = false
+user_privilege_drop = false
+
+# A comma delimited list of roles to grant membership to when creating
+# users. Note that existing users will not be modified. Roles specified
+# here must already exist in MySQL. Supported in MySQL 8+ and MariaDB 10+.
+roles_to_grant = group1,group2
+
+# A comma delimited list of roles to grant membership to with ADMIN when
+# creating users. Note that existing users will not be modified. Roles
+# specified here must already exist in MySQL. Supported in MySQL 8+ and MariaDB 10+.
+roles_to_grant_with_admin = group3
