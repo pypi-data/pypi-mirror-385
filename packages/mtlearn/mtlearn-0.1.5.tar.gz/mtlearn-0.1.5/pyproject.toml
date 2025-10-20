@@ -1,0 +1,56 @@
+[build-system]
+requires = [
+  "scikit-build-core>=0.9",
+  "pybind11>=2.10",
+  "setuptools-scm>=8"
+]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "mtlearn"
+version = "0.1.5"
+description = "Morphological tree learning utilities built on top of mmcfilters"
+readme = "README.md"
+authors = [{ name = "Wonder Alexandre Luz Alves", email = "worderalexandre@gmail.com" }]
+requires-python = ">=3.9"
+classifiers = [
+  "Programming Language :: Python",
+  "Programming Language :: C++",
+  "Topic :: Scientific/Engineering :: Image Processing",
+  "Operating System :: MacOS",
+  "Operating System :: Microsoft :: Windows",
+  "Operating System :: POSIX :: Linux",
+]
+dependencies = [
+  "mmcfilters>=0.1.23"
+]
+
+[tool.scikit-build]
+wheel.packages = ["python/mtlearn"]
+
+[tool.scikit-build.cmake]
+build-type = "Release"
+
+[tool.scikit-build.cmake.define]
+MTLEARN_BUILD_TESTS = "OFF"
+MTLEARN_ENABLE_EMBED = "OFF"
+MTLEARN_ENABLE_ASSERTS = "OFF"
+MTLEARN_WITH_TORCH = "ON"
+
+[project.optional-dependencies]
+torch = ["torch>=2.0"]
+
+[tool.scikit-build.sdist]
+include = [
+  "CMakeLists.txt",
+  "src/**",
+  "bindings/**",
+  "python/**",
+  "external/MorphologicalAttributeFilters/**",
+  "README.md"
+]
+exclude = [
+  "dat/**",
+  "notebooks/**",
+  "build/**"
+]
