@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pydera"
+version = "0.0.3"
+description = "Think2Action orchestration engine powering ActionStudio.ai (placeholder alpha)"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "Apache-2.0"}
+authors = [{name="Think2Action", email="support@actionstudio.ai"}]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: Apache Software License",
+  "Operating System :: OS Independent",
+]
+keywords = ["orchestration","automation","workflow","scheduler"]
+[project.scripts]
+pydera = "pydera.cli:main"
+
+[project.urls]
+Homepage = "https://actionstudio.ai"
