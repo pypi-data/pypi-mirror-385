@@ -1,0 +1,46 @@
+Metadata-Version: 2.4
+Name: tno.quantum.ml
+Version: 1.1.0
+Summary: TNO Quantum Machine Learning
+Author-email: TNO Quantum Code Lab <tnoquantum@tno.nl>
+Maintainer-email: TNO Quantum Code Lab <tnoquantum@tno.nl>
+License: Apache License, Version 2.0
+Project-URL: Homepage, https://github.com/TNO-Quantum/
+Project-URL: Documentation, https://tno-quantum.github.io/documentation/
+Project-URL: Source, https://github.com/TNO-Quantum/ml
+Keywords: Quantum,TNO,Machine Learning
+Platform: any
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Operating System :: OS Independent
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Information Technology
+Classifier: Intended Audience :: Science/Research
+Classifier: Typing :: Typed
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: tno.quantum.ml.datasets~=2.0
+Requires-Dist: tno.quantum.ml.clustering~=1.0
+Requires-Dist: tno.quantum.ml.classifiers~=1.0
+Requires-Dist: tno.quantum.ml.regression.linear_regression~=1.0
+Provides-Extra: tests
+Requires-Dist: tno-dev-utils[tests]; extra == "tests"
+Requires-Dist: tno.quantum.ml.datasets[tests]; extra == "tests"
+Requires-Dist: tno.quantum.ml.classifiers[tests]; extra == "tests"
+Requires-Dist: tno.quantum.ml.clustering[tests]; extra == "tests"
+Requires-Dist: tno.quantum.ml.regression.linear_regression[tests]; extra == "tests"
+Dynamic: license-file
+
+# TNO Quantum: Machine learning
+
+TNO Quantum provides generic software components aimed at facilitating the development of quantum applications.
+
+This package is a macrolib for all TNO Quantum machine learning packages.
+
+## (End)use limitations
+The content of this software may solely be used for applications that comply with international export control laws.
