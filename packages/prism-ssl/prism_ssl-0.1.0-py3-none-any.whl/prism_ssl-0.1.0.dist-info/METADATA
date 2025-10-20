@@ -1,0 +1,493 @@
+Metadata-Version: 2.4
+Name: prism-ssl
+Version: 0.1.0
+Summary: A Self-Supervised Learning Library
+Author: Melika Shirian
+Author-email: Kianoosh Vadaei <kia.vadaei@gmail.com>
+License: MIT License
+        
+        Copyright (c) 2025  PrismSSL
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+Project-URL: Homepage, https://github.com/PrismaticLab/PrismSSL
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Science/Research
+Classifier: Intended Audience :: Education
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: axial_positional_embedding
+Requires-Dist: colorlog
+Requires-Dist: editdistance
+Requires-Dist: einops
+Requires-Dist: huggingface_hub
+Requires-Dist: jiwer
+Requires-Dist: joblib
+Requires-Dist: numpy
+Requires-Dist: opencv_python
+Requires-Dist: optuna
+Requires-Dist: pandas
+Requires-Dist: peft
+Requires-Dist: Pillow
+Requires-Dist: plotly
+Requires-Dist: scikit_learn
+Requires-Dist: setuptools
+Requires-Dist: torch
+Requires-Dist: torch_geometric
+Requires-Dist: torchaudio
+Requires-Dist: torcheval
+Requires-Dist: torchmetrics
+Requires-Dist: torchvision
+Requires-Dist: tqdm
+Requires-Dist: transformers
+Requires-Dist: wandb
+Dynamic: license-file
+Dynamic: requires-python
+
+<p align="center">
+  
+  <img src="./docs/assets/img/logo.png" alt="PrismSSL Logo" width="300"/>
+  <br>
+
+</p>
+
+<h1 align="center">
+PrismSSL: One Interface, Many Modalities; A Single-Interface Library for Multimodal Self-Supervised Learning
+</h1>
+
+<p align="center">
+  <em>A research-driven library with high-level APIs, tightly integrated with HuggingFace, PyTorch Lightning, and state-of-the-art tools for self-supervised learning.</em>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/license-MIT-blue.svg" />
+  <img src="https://img.shields.io/badge/api-high--level-informational" />
+  <img src="https://img.shields.io/badge/compatibility-huggingface-orange" />
+  
+</p>
+
+---
+
+## 📚 Table of Contents
+
+* [📍 Overview](#-overview)
+* [🧠 What is Self-Supervised Learning?](#-what-is-self-supervised-learning)
+* [🚀 Supported Methods](#-supported-methods)
+* [📦 Installation](#-installation)
+* [🛠️ Usage Tutorial](#-usage-tutorial)
+* [📊 Benchmarks](#-benchmarks)
+* [🔧 Extra Superpowers](#-extra-superpowers)
+* [🧬 HuggingFace Example](#-huggingface-example)
+* [🤝 Collaborators and Advisors](#-collaborators-and-advisors)
+* [📜 License](#-license)
+
+---
+
+## 📍 Overview
+
+Say hello to **PrismSSL** — a library born from late-night debugging sessions, too much coffee, and the realization that self-supervised learning didn’t need to feel like solving a Rubik’s cube in the dark. In our research, we bounced between half-finished repos, clashing APIs, and “it worked on my machine” moments. Out of that chaos, we decided to build something cleaner: one place where SSL across audio, vision, graph, and cross-modal data actually makes sense.
+
+At its core, PrismSSL is a **unified playground** for SSL. Imagine a command center where you can test state-of-the-art methods, swap modalities with a single line change, and still keep your sanity intact. Everything is modular, transparent, and reproducible — because science should be fun, not frustrating.
+
+We also wanted PrismSSL to be **welcoming**. Whether you’re a student curious about representation learning, a researcher hunting for benchmarks, or a practitioner putting SSL into production, this library has your back. With HuggingFace and PyTorch Lightning baked in, plus support for distributed training, hyperparameter tuning, and lightweight fine-tuning, you’ll spend less time wrestling with setup and more time exploring ideas.
+
+In short: PrismSSL is where **rigor meets playfulness**. Built from academic struggles but polished for the community, it lowers the barriers to SSL while giving you the tools to push the boundaries further.
+
+---
+
+## 🧠 What is Self-Supervised Learning?
+
+Self-Supervised Learning (SSL) is basically the art of teaching machines to **make up their own homework** and then solve it. Instead of us spoon-feeding models with expensive, hand-labeled data, SSL lets them invent clever tasks using only the raw input. Mask part of an audio signal and predict it? Shuffle an image and put it back together? Align speech with text? All of these are ways for models to get smarter without needing humans to sit down and annotate millions of examples.
+
+From an academic angle, SSL has become a **game-changer**. It powers breakthroughs in speech recognition for low-resource languages, revolutionizes medical imaging where labels are scarce, and even helps scientists model molecules and proteins. At the same time, it’s the secret sauce behind today’s most powerful foundation models — making it both theoretically fascinating and practically indispensable.
+
+But SSL isn’t just serious science — it’s also a bit of fun. There’s something delightful about watching a model reconstruct missing audio or fill in the gaps of an image, almost like it’s playing puzzles at scale. That blend of rigor and playfulness is exactly why we built PrismSSL: to give you a sandbox where curiosity, research, and real-world applications all come together.
+
+---
+
+## 🚀 Supported Methods
+
+### 🎧 Audio-based Methods
+
+Self-supervised audio modeling has transformed speech processing by enabling models to generalize from unlabeled sound. PrismSSL includes all the major paradigms, each capturing a different angle of how machines can learn to understand sound.
+
+#### Wav2Vec2
+
+Wav2Vec2 masks segments of raw audio and predicts them using latent features. The clever trick is that it forces the model to capture contextual information in speech without needing phonetic labels. This method has shown that even with minimal annotated data, models can reach near state-of-the-art performance in automatic speech recognition. It is especially impactful for languages and domains where labeled datasets are scarce.
+
+#### HuBERT
+
+HuBERT (Hidden-Unit BERT) takes the Wav2Vec2 philosophy further. It introduces pseudo-labeling through k-means clustering of hidden representations and uses those as targets for a BERT-like masked prediction. This iterative process of clustering and prediction refines the model over time, resulting in more robust and generalizable embeddings that can transfer effectively to multiple downstream tasks.
+
+#### SpeechSimCLR
+
+SpeechSimCLR adapts the contrastive learning approach SimCLR from vision to the audio domain. By applying augmentations such as time warping, noise injection, and speed perturbation, it teaches models to bring augmented versions of the same audio close together in representation space. This results in representations that are robust to noise and variations, and useful for speaker verification, classification, and general audio understanding.
+
+#### COLA
+
+COLA (Contrastive Learning with Alignment) emphasizes the temporal aspect of speech. Instead of treating audio as independent segments, it enforces alignment such that temporally close segments are nearby in the embedding space, while distant segments are pushed apart. This design makes embeddings more faithful to the sequential nature of speech, aiding tasks like dialogue modeling and speech segmentation.
+
+#### EAT
+
+The Embedding Audio Transformer (EAT) introduces the concept of masked autoencoders into the audio domain. It converts audio into spectrogram patches, masks random sections, and trains the model to reconstruct them. This pushes the model to learn high-level acoustic structures and relationships, similar to how vision transformers learn about images. EAT is especially promising for music understanding and large-scale pretraining where context-rich embeddings matter.
+
+---
+
+### 🖼️ Vision-based Method
+
+#### MAE (Masked AutoEncoder)
+
+MAE is a vision SSL method that masks random patches of an image and reconstructs them. The beauty of MAE is that it does not require labels yet learns powerful visual representations by solving this reconstruction puzzle. It has proven highly effective as a pretraining approach, enabling models to perform well with fewer labels in transfer tasks like object classification, segmentation, and fine-grained recognition.
+
+### 🖼️ Vision-based Method
+
+#### MAE (Masked AutoEncoder)
+
+MAE is a vision SSL method that masks random patches of an image and reconstructs them. The beauty of MAE is that it does not require labels yet learns powerful visual representations by solving this reconstruction puzzle. It has proven highly effective as a pretraining approach, enabling models to perform well with fewer labels in transfer tasks like object classification, segmentation, and fine-grained recognition.
+
+#### Barlow Twins
+
+Barlow Twins minimizes redundancy between representations of two distorted versions of the same image. Instead of relying on negative samples, it enforces invariance by aligning embeddings while decorrelating their dimensions. This simple yet elegant objective allows the network to learn robust, non-trivial visual features without labels, making it effective for transfer learning tasks such as classification and detection.
+
+#### BYOL (Bootstrap Your Own Latent)
+
+BYOL learns visual representations by predicting one network’s output from another without using negative pairs. It employs an online and a target encoder that bootstrap each other, gradually improving representations through self-prediction. This method shows that contrastive negatives are not strictly necessary for high-quality self-supervised learning, achieving strong performance across multiple vision benchmarks.
+
+#### DINO (Self-Distillation with No Labels)
+
+DINO leverages a teacher–student setup where both networks share the same architecture but have different parameters updated via momentum. The model learns by matching their feature distributions over augmentations, leading to meaningful, structured representations that often exhibit emergent clustering behavior. DINO’s ability to capture semantic information without supervision makes it particularly strong in unsupervised segmentation and feature visualization tasks.
+
+#### MoCov2 (Momentum Contrast v2)
+
+MoCov2 builds on contrastive learning by maintaining a dynamic dictionary of feature representations updated with a momentum encoder. It introduces improved data augmentations and projection head designs that stabilize training and enhance performance. The method excels at learning discriminative embeddings for downstream vision tasks, bridging the gap between supervised and unsupervised performance.
+
+#### MoCov3 (Momentum Contrast v3)
+
+MoCov3 refines the momentum contrast framework using architectures like Vision Transformers (ViT) and adopts improvements inspired by SimCLR and BYOL. It focuses on better normalization and predictor design, enabling stable training in non-contrastive settings. MoCov3 achieves state-of-the-art results in self-supervised visual representation learning, showcasing adaptability across different backbone architectures.
+
+#### SimCLR (Simple Framework for Contrastive Learning of Visual Representations)
+
+SimCLR popularized contrastive learning by maximizing agreement between differently augmented views of the same image using a contrastive loss. Its strength lies in simplicity—data augmentations, a nonlinear projection head, and large batch training yield powerful representations. SimCLR laid the groundwork for many subsequent SSL models and remains a benchmark for simplicity and effectiveness.
+
+#### SimSiam (Simple Siamese Representation Learning)
+
+SimSiam demonstrates that meaningful self-supervised learning can be achieved without negative samples or momentum encoders. It relies on a Siamese network that learns by predicting one branch’s representation from another while stopping gradients to prevent collapse. Despite its minimal design, SimSiam achieves impressive results and highlights the importance of architectural balance and predictor asymmetry.
+
+#### SwAV (Swapping Assignments between Multiple Views)
+
+SwAV combines contrastive and clustering principles by assigning features from different image views to shared prototypes and swapping these assignments. This approach encourages the model to learn consistent, high-level features across augmentations. SwAV achieves strong performance with fewer resources and faster convergence, making it a practical and scalable SSL method for vision tasks.
+
+---
+
+### 🧬 Graph-based Method
+
+#### GraphCL
+
+GraphCL applies contrastive learning to graph-structured data. It creates multiple augmented versions of the same graph through techniques such as edge perturbation, node dropping, and attribute masking, and then aligns their embeddings. By doing so, it captures structural invariances that are central to understanding graphs. This makes it valuable for applications such as molecular property prediction, biological network analysis, and social network embeddings.
+
+---
+
+### 🔀 Cross-Modal Methods
+
+Cross-modal SSL allows models to bridge domains like text, audio, and images, which is crucial for multimodal AI systems.
+
+#### CLAP
+
+CLAP learns joint embeddings for paired audio and text data. It aligns sound with natural language, enabling models to perform cross-modal retrieval and semantic classification. This makes it possible to, for instance, search for sound effects by typing text queries, or build systems that understand both speech and textual descriptions.
+
+#### AudioCLIP
+
+AudioCLIP extends the CLIP architecture into the audio domain, aligning text, audio, and image together. This tri-modal alignment creates a rich shared embedding space that can be applied to multimedia search, generative AI, and multimodal classification tasks. It essentially gives models the ability to understand and connect three different modalities at once.
+
+#### Wav2CLIP
+
+Wav2CLIP simplifies the cross-modal problem by directly mapping raw audio into the pretrained CLIP embedding space. With frozen CLIP encoders guiding the training, it leverages the vast visual-text knowledge already baked into CLIP and transfers it to audio. This opens doors to creative tasks like audio-to-image retrieval and multimodal creative applications.
+
+#### CLAP
+
+CLAP learns joint embeddings for paired audio and text data. It aligns sound with natural language, enabling models to perform cross-modal retrieval and semantic classification. This makes it possible to, for instance, search for sound effects by typing text queries, or build systems that understand both speech and textual descriptions.
+
+#### AudioCLIP
+
+AudioCLIP extends the CLIP architecture into the audio domain, aligning text, audio, and image together. This tri-modal alignment creates a rich shared embedding space that can be applied to multimedia search, generative AI, and multimodal classification tasks. It essentially gives models the ability to understand and connect three different modalities at once.
+
+#### Wav2CLIP
+
+Wav2CLIP simplifies the cross-modal problem by directly mapping raw audio into the pretrained CLIP embedding space. With frozen CLIP encoders guiding the training, it leverages the vast visual-text knowledge already baked into CLIP and transfers it to audio. This opens doors to creative tasks like audio-to-image retrieval and multimodal creative applications.
+
+#### CLIP (Contrastive Language–Image Pretraining)
+
+CLIP learns to connect images and text by training on large-scale web data of image–caption pairs. Using a contrastive loss, it aligns image and text embeddings in a shared space, allowing zero-shot classification and multimodal retrieval. CLIP revolutionized how models generalize across modalities, showing that natural language supervision can effectively replace manual labeling at scale.
+
+#### ALBEF (Align Before Fuse)
+
+ALBEF combines vision and language by first aligning unimodal encoders using contrastive learning before fusing them through cross-attention. This two-stage process strengthens cross-modal grounding and reduces reliance on massive labeled datasets. ALBEF has been highly successful for visual question answering, image captioning, and other tasks that require deep semantic understanding across modalities.
+
+#### SimVLM (Simple Visual Language Model)
+
+SimVLM unifies pretraining for vision and language under a simple yet powerful architecture. It trains on large text–image pairs using a prefix language modeling objective, enabling both understanding and generation capabilities. The model scales efficiently and achieves state-of-the-art results in multimodal benchmarks, making it a strong foundation for vision–language generation tasks.
+
+#### SLIP (Self-supervision meets Language–Image Pretraining)
+
+SLIP enhances CLIP-style training by combining contrastive language–image objectives with self-supervised visual pretraining. This hybrid approach enriches the learned representations, improving performance in low-data and transfer scenarios. SLIP shows that integrating unsupervised and multimodal signals leads to more generalizable and robust embeddings.
+
+#### UNITER (Universal Image–Text Representation)
+
+UNITER learns fine-grained alignments between image regions and textual phrases through a unified transformer framework. It integrates multiple pretraining tasks—like masked language modeling, word–region alignment, and image–text matching—to capture cross-modal dependencies. UNITER has been instrumental in advancing tasks such as visual reasoning and multimodal understanding.
+
+#### VSE++ (Visual–Semantic Embedding++)
+
+VSE++ refines earlier visual–semantic embedding models by introducing hard negative mining to better align images and textual descriptions. It learns discriminative shared embeddings that improve retrieval and caption matching performance. Despite its simplicity, VSE++ remains a foundational approach for many modern multimodal learning architectures.
+
+---
+
+## 📦 Installation
+
+```bash
+pip install prism-ssl
+```
+
+Requirements:
+
+* Python ≥ 3.8
+* PyTorch ≥ 1.12
+* CUDA-enabled GPU recommended for large-scale training
+
+---
+
+## 🛠️ Usage Tutorial
+
+With PrismSSL, you can go from **raw data to results in minutes**. The design philosophy is **plug-and-play**, letting you switch methods or modalities seamlessly.
+
+### 🧩 Trainer Initialization (Audio Example)
+
+```python
+from PrismSSL.audio.Trainer import Trainer
+
+trainer = Trainer(
+    method = 'wav2vec2',
+    backbone = None,
+    save_dir = './',
+    wandb_project = 'wav2vec2-pretext',
+    wandb_mode = "online",
+    use_data_parallel = True,
+    checkpoint_interval = 5,
+    verbose = True,
+    reload_checkpoint=False,
+    mixed_precision_training=False
+)
+```
+
+### 🎯 Train the Model
+
+```python
+trainer.train(
+    train_dataset=train_dataset,
+    val_dataset=val_dataset,
+    batch_size=16,
+    epochs=100,
+    lr=1e-4,
+    weight_decay=1e-2,
+    optimizer="adamw",
+    use_hpo=True,
+    n_trials=20,
+    tuning_epochs=5,
+    use_embedding_logger=True,
+    logger_loader=logger_loader
+)
+```
+
+### 🧪 Evaluate on Downstream Task
+
+```python
+trainer.evaluate(
+    train_dataset=train_dataset,
+    test_dataset=test_dataset,
+    num_classes=39,
+    batch_size=64,
+    lr=1e-3,
+    epochs=10,
+    freeze_backbone=True
+)
+```
+
+---
+
+## 📊 Benchmarks
+
+PrismSSL is designed for **reproducible benchmarking** across domains.
+
+### 🎧 Audio (Wav2Vec2 - TESS Emotion Dataset)
+
+Wav2Vec2 pretrained with PrismSSL.
+
+<img src="./docs/assets/img/wav2vec2_libri.png" alt="libri_wav2vec2" width="400"/>
+<br>
+
+<img src="./docs/assets/img/wav2vec2_timit.png" alt="timit_wav2vec2" width="400"/>
+<br>
+
+<img src="./docs/assets/img/wav2vec2_vctk.png" alt="vctk_wav2vec2" width="400"/>
+<br>
+<br>
+
+
+| Task        | Dataset                                                                 | Model          | Accuracy |
+|-------------|-------------------------------------------------------------------------|----------------|----------|
+| Emotion Clf | [Speaker Recognition (2 speakers)](https://www.kaggle.com/datasets/kongaevans/speaker-recognition-dataset) | Speech SimCLR | 72.5%    |
+| Emotion Clf | [TESS](https://www.kaggle.com/datasets/ejlok1/toronto-emotional-speech-set-tess)             | COLA          | 88.39%   |
+| Speaker Clf | [TESS](https://www.kaggle.com/datasets/ejlok1/toronto-emotional-speech-set-tess)             | EAT           | 93.21%   |
+
+
+---
+
+### 🔀 Cross-Modal (Wav2CLIP)
+
+Wav2CLIP learns powerful joint embeddings, enabling intuitive cross-modal retrieval.
+
+<img src="./docs/assets/img/wav2clip_zero.png" alt="wav2clip_zero_shot" width="400"/>
+<br>
+
+<img src="./docs/assets/img/wav2clip_dog.png" alt="wav2clip_dog_prediction" width="400"/>
+<br>
+
+<img src="./docs/assets/img/wav2clip_cat.png" alt="wav2clip_cat_prediction" width="400"/>
+<br>
+
+<img src="./docs/assets/img/wav2clip_sim.png" alt="wav2clip_sim" width="400"/>
+<br>
+<br>
+
+
+---
+
+### 🖼️ Vision
+
+Vision models pretrained on CIFAR-10 with PrismSSL yields competitive performance with limited fine-tuning.
+
+| Method      | Linear-prob Top1 | Fine-tune Top1 |
+| ----------- | ---------------- | -------------- |
+| MAE         | 61.84%           | 87.98%         |
+| SimCLR v2   | 73.07%           | 81.52%         |
+| BarlowTwins | 70.92%           | 79.50%         |
+| MoCo v2     | 70.08%           | 78.71%         |
+| SwAv        | 33.36%           | 74.14%         |
+| MoCo v3     | 59.98%           | 74.20%         |
+| SimSiam     | 19.77%           | 70.77%         |
+| BYOL        | 71.06%           | 71.04%         |
+| SimCLR v1   | 73.09%           | 72.75%         |
+| DINO        | 9.91%            | 9.76%          |
+
+#### MAE on CIFAR-10 reconstructoin result
+
+
+<img src="./docs/assets/img/mae_result.png" alt="MAE Result" width="400"/>
+<br>
+<br>
+
+---
+
+### 🧬 Graph (GraphCL)
+
+GraphCL learns molecular-level embeddings competitive with supervised baselines.
+
+
+<img src="./docs/assets/img/graphcl_result.png" alt="GraphCL BBBP" width="400"/>
+<br>
+<br>
+
+| Dataset | Accuracy           | AUC    |
+|---------|--------------------|--------|
+| BBBP    | 89.76%             | 92.62% |
+| Tox21   | task0: 96.61%      | –      |
+| Tox21   | task1: 97.25%      | –      |
+| Tox21   | task2: 87.28%      | –      |
+| Tox21   | task3: 91.39%      | –      |
+| Tox21   | task4: 86.73%      | –      |
+| Tox21   | task5: 96.30%      | –      |
+| Tox21   | task6: 96.11%      | –      |
+| Tox21   | task7: 76.65%      | –      |
+| Tox21   | task8: 94.61%      | –      |
+| Tox21   | task9: 91.71%      | –      |
+| Tox21   | task10: 83.11%     | –      |
+| Tox21   | task11: 88.78%     | –      |
+| Tox21   | **12-task avg: 90.54%** | – |
+
+
+
+---
+
+## 🔧 Extra Superpowers
+
+PrismSSL isn’t just a collection of SSL methods — it’s armed with extra superpowers that make your research life smoother, faster, and a lot more fun. Think of these as the cheat codes we always wished existed when we were wrestling with messy experiments:
+
+* 🖥️ **Distributed Deep Learning (DDL)** — Scale your experiments across multiple GPUs or nodes without needing to summon a cluster-wrangling wizard. Big models? Big data? Bring it on.
+* 🎯 **Hyperparameter Optimization (HPO)** — Stop playing guessing games. Automated tuning with Optuna helps you find the sweet spots without losing weeks of your life.
+* 🧠 **LoRA Finetuning** — Efficiently adapt giant models with lightweight parameter updates. It’s like upgrading your model’s brain without burning your GPU.
+* 📊 **WandB Integration** — Track, visualize, and share every training run like a pro. Who doesn’t love pretty dashboards?
+* 🧾 **Logging System** — Clean, colorful, and customizable logs that won’t make your terminal cry.
+* 🤗 **HuggingFace Compatibility** — Plug and play with transformers and pretrained backbones. Because reinventing the wheel is overrated.
+* 🎥 **Dynamic Visualizations** — Watch your embeddings evolve over time with animated plots. It’s science, but make it art.
+
+In other words: PrismSSL doesn’t just help you run experiments — it helps you run **better** experiments, with less pain and more insight.
+
+---
+
+## 🧬 HuggingFace Example
+
+```python
+from transformers import BertForPreTraining, AutoTokenizer
+model = BertForPreTraining.from_pretrained("bert-base-uncased")
+tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
+
+trainer = GenericSSLTrainer(
+    model=model,
+    use_lora=True,
+    loss_fn=bert_loss_fn,
+    dataloader=dataloader,
+    optimizer_ctor=optimizer,
+    epochs=10
+)
+trainer.fit()
+```
+
+---
+
+## 🤝 Collaborators and Advisors
+
+This project was made possible through our collaborative research and academic mentorship. The main contributors are:
+
+* [Kianoosh Vadaei](https://github.com/kianoosh-vadaei)
+* [Melika Shirian](https://github.com/MelikaShirian12)
+* [Kian Maklessi](https://github.com/kianmajl)
+* [Arshia Hemmat](https://github.com/arshiahemmat)
+  
+Our combined efforts shaped the design, implementation, and structure of **PrismSSL**. The project was further enriched by the guidance of [Dr. Peyman Adibi](https://scholar.google.com/citations?user=u-FQZMkAAAAJ) and [Dr. Hossein Karshenas](https://scholar.google.com/citations?user=BjMFkWEAAAAJ), whose academic mentorship ensured rigor and practical impact.
+
+---
+
+## 📜 License
+
+We’re keeping things chill with the **MIT License**. In plain English: do whatever you want with this code — use it, remix it, build something wild on top of it. Just don’t sue us if your GPU explodes or your cat walks across your keyboard mid-training and somehow invents AGI. Fair game? Cool. 🚀
