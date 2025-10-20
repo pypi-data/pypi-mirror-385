@@ -1,0 +1,94 @@
+Metadata-Version: 2.4
+Name: qtlets
+Version: 0.4
+Summary: Qt with less boilerplate
+Author-email: Samuel Palato <7659022+spalato@users.noreply.github.com>
+License-Expression: MIT
+Project-URL: Homepage, https://github.com/spalato/qtlets
+Project-URL: Source, https://github.com/spalato/qtlets
+Project-URL: Tracker, https://github.com/spalato/qtlets/issues
+Keywords: qt,qtwidgets,pyside6,gui
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: PySide6
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: attrs; extra == "dev"
+Requires-Dist: traitlets; extra == "dev"
+Dynamic: license-file
+
+# qtlets
+Automatic linking of data to qt widgets. MCV without the boilerplate.
+
+`qtlets` provides a simple way to keep in sync Qt widgets and data, without 
+forcing a redesign of your data classes. The rule is: *if you like your class, you can
+keep your class*. 
+
+Currently, bidirectional linking can be performed in a simple call<sup>1</sup>:
+`instance.link_widget(my_widget, "name")`
+The data displayed on `my_widget` will be updated whenever `instance.name` is
+modified. Changing the value on `my_widget` will update `instance.name`. 
+Multiple widgets can be kept synchronized in this way.
+ 
+This functionnality is provided by a lightweight Mixin class called `HasQtlets`.
+To enable `qtlets` on an `Existing` class, simply do:
+```
+class Data(HasQtlets, Existing): pass
+``` 
+and then use `Data` as a drop-in replacement for `Existing`. To link widgets,
+make calls to `link_widget`. The widget should be able to send and receive the
+appropriate data type. A few basic types are availalbe in `qtlets.widgets`
+
+
+This library is currently in early stages. The documentation is light, and 
+the API is changing quickly. All help is appreciated...
+
+<sup>1</sup> Some conditions currently apply, see the Features section.
+
+# Getting started
+
+Requires an environment with python 3.8.
+
+## Install dependencies
+```
+pip install -r requirements.txt
+pip install -e .
+```
+
+## Run tests
+`py.test`
+
+# Features
+
+The following features are currently supported:
+- Linking of widgets and data. Currently, scalar data members are supported;
+- Multiple widgets can be linked with the same data attribute;
+- Compatibility with simple vanilla classes, as well as more complex 
+  third-party libraries such as `traitlets` (Even `attrs`! Isn't inheritance 
+  wonderful?);
+- Support for `properties`;
+- The signal and slots used to communicate with the widget can be specified
+  explicitly. For some widgets, a reasonable default is provided. 
+
+
+The following features are desired:
+- Adding more data types and widgets.
+- Streamlined type conversions and checks. For type conversion, we can pass
+  conversion functions to `link_widget`.
+- Support for collections attributes (ex: `instance.values = []`)
+- Support polling (`inst.link(widget, attrname, poll_interval=15)`)
+- Leverage Qt's thread affinity when using signals and slots, for setting as 
+  well as for getting. 
+- More dedicated widgets.
+- Use either PySide6 or PyQt. See how pyqtgraph does it.

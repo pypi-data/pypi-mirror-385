@@ -1,0 +1,115 @@
+import logging
+
+from PySide6.QtCore import Signal
+from PySide6.QtGui import QIntValidator, QDoubleValidator
+from PySide6.QtWidgets import QPushButton, QLabel, QComboBox, QLineEdit
+
+logger = logging.getLogger(__name__)
+
+class TypedLineEdit(QLineEdit):
+    valueEdited = Signal(object)
+    def __init__(self, contents, fmt="{}", *a, **kw):
+        super().__init__(str(contents), *a, **kw)
+        self.fmt = fmt
+        self.editingFinished.connect(self.onValueEdited)
+
+    def onValueEdited(self):
+        self.valueEdited.emit(self.value())
+
+    def setValue(self, v):
+        self.setText(self.fmt.format(v))
+
+    def value(self):
+        return self.text()
+
+
+class IntEdit(TypedLineEdit):
+    valueEdited = Signal(int)
+
+    def __init__(self, *a,
+                 bottom: int = None, top: int = None,
+                 **kw):
+        """
+        Line edit for integer.
+
+        Automates type conversion and includes a Validator. Parameters `minimum`
+        and `maximum` are used to setup the validator. All other parameters are
+        forwarded to QLineEdit.
+
+        Parameters:
+        -----------
+        minimum : int
+            Set minimum value for validator.
+        maximum : int
+            Set maximum value for validator.
+
+        """
+        super().__init__(*a, **kw)
+        self.setValidator(QIntValidator())
+        if bottom is not None: self.validator().setBottom(bottom)
+        if top is not None: self.validator().setTop(top)
+
+    def value(self):
+        return int(self.text())
+
+
+class FloatEdit(TypedLineEdit):
+    valueEdited = Signal(float)
+
+    def __init__(self, *a,
+                 bottom: float = None, top: float = None, decimals: int = None,
+                 **kw):
+        """
+        Line edit for float.
+
+        Automates type conversion and includes a Validator. Parameters `bottom`,
+        `top` and `decimals` are used to setup the validator. All other
+        parameters are forwarded to QLineEdit.
+
+        """
+        super().__init__(*a, **kw)
+        self.setValidator(QDoubleValidator())
+        if bottom is not None: self.validator().setBottom(bottom)
+        if top is not None: self.validator().setTop(top)
+        if decimals is not None: self.validator().setDecimals(decimals)
+
+    def value(self):
+        return float(self.text())
+
+
+class StrEdit(TypedLineEdit):
+    valueEdited = Signal(str)
+
+    def value(self):
+        return self.text()
+
+
+class ValuedComboBox(QComboBox):
+    valueEdited = Signal(object)
+
+    def __init__(self, *a, **kw):
+        super().__init__(*a, **kw)
+        self.activated.connect(self.__onIndexChanged)
+
+    def __onIndexChanged(self):
+        self.valueEdited.emit(self.currentData())
+
+    def setValue(self, obj):
+        i = self.findData(obj)
+        logger.debug(f"obj index: {obj!r} {i}")
+        self.setCurrentIndex(i)
+
+
+class TextComboBox(QComboBox):
+    valueEdited = Signal(str)
+    def __init__(self, *a, **kw):
+        super().__init__(*a, **kw)
+        self.activated.connect(self.__onIndexChanged)
+
+    def __onIndexChanged(self):
+        self.valueEdited.emit(self.currentText())
+
+    def setValue(self, txt):
+        i = self.findText(txt)
+        logger.debug(f"txt index: {txt!r} {i}")
+        self.setCurrentIndex(i)
