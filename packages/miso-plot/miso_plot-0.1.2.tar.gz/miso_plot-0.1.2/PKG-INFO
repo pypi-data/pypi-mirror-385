@@ -1,0 +1,203 @@
+Metadata-Version: 2.4
+Name: miso-plot
+Version: 0.1.2
+Summary: Simple visualization tool for clustered high-density data.
+Author-email: Aleksandra Suwalska <aleksandra.suwalska@polsl.pl>
+License: MIT
+Project-URL: Homepage, https://github.com/Aleksandra795/miso-plot
+Project-URL: Bug Tracker, https://github.com/Aleksandra795/miso-plot/issues
+Keywords: visualization,clustering,data science,umap,big data,matplotlib
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy>=1.21
+Requires-Dist: matplotlib>=3.5
+Requires-Dist: pandas>=1.3
+Requires-Dist: seaborn>=0.11
+Requires-Dist: scikit-learn>=1.0
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: pytest-cov; extra == "dev"
+Dynamic: license-file
+
+ <div align="center">
+ 
+ <h1>miso-plot</h1>
+ 
+ <p align="center">
+ <img src="https://github.com/Aleksandra795/miso-plot/raw/main/docs/miso_logo.png" alt="miso-plot logo" width="300"/>
+ </p>
+ <p align="center">
+ <em>A lightweight visualization tool for clustered high-density data</em>
+ </p>
+ <p>
+ <a href="https://pypi.org/project/miso-plot/"><img src="https://img.shields.io/pypi/v/miso-plot.svg?color=blue" alt="PyPI"></a>
+ <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
+ <img src="https://img.shields.io/badge/Python-3.8%2B-blue.svg" alt="Python 3.8+">
+ <a href="https://github.com/Aleksandra795/miso-plot/actions"><img src="https://github.com/Aleksandra795/miso-plot/actions/workflows/python-tests.yml/badge.svg" alt="Build"></a>
+ </p>
+ 
+ </div>
+ 
+ <hr/>
+ 
+ <h2>Overview</h2>
+ 
+ <p><strong>miso-plot</strong> is a simple yet efficient Python library for visualizing large clustered datasets.
+ It was designed for fast exploration of high-density 2D embeddings such as UMAP, t-SNE, or PCA outputs,
+ using adaptive density smoothing and perceptually uniform color palettes.</p>
+ 
+ <p>Typical use cases include:</p>
+ <ul>
+   <li>visual inspection of clustering quality in large datasets,</li>
+   <li>density-based highlighting of local data structures,</li>
+   <li>generation of publication-quality scatter plots.</li>
+ </ul>
+ 
+ 
+ <hr/>
+ 
+ <h2>Installation</h2>
+ 
+ <pre><code class="language-bash">
+ pip install miso-plot
+ </code></pre>
+ 
+ <p>Or install the latest development version directly from GitHub:</p>
+ 
+ <pre><code class="language-bash">
+ pip install git+https://github.com/Aleksandra795/miso-plot.git
+ </code></pre>
+ 
+ <hr/>
+ 
+ <h2>Quick Example</h2>
+ 
+ <pre><code class="language-python">
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import make_blobs
+from miso_plot import miso_plot
+
+# Generate synthetic clustered data
+X, labels = make_blobs(n_samples=50000, centers=6, n_features=2, random_state=42)
+Y = X[:, 1]
+X = X[:, 0]
+
+# Plot simple scatterplot of the data
+plt.figure()
+plt.scatter(X, Y, s=10, c=labels, alpha=0.5, cmap='tab10')
+plt.xlabel("x")
+plt.ylabel("y")
+plt.title("simple scatter plot")
+plt.grid(True)
+plt.show()
+  </code></pre>
+<p align="center">
+   <img src="https://github.com/Aleksandra795/miso-plot/raw/main/docs/exemplary_data_scatterplot.png" alt="Example scatter plot" width="500"/>
+ </p>
+
+Because often the clusters overlap substantially, identifying their true centers is challenging.
+miso-plot facilitates this process by visualizing each cluster’s density distribution, highlighting regions representing the top <i>m</i> fraction of its overall density.
+
+<pre><code class="language-python">
+# Show cluster density centers with miso-plot
+fig, ax = plt.subplots()
+plt.scatter(X, Y, s=10, c='#D6D6D6', alpha=0.5)
+miso_plot(X, Y, labels, cmap="tab10", m=0.5, ax=ax)  
+plt.xlabel("x")
+plt.ylabel("y")
+plt.title("mISO plot, m=0.5")
+plt.grid(True)
+plt.show()
+ </code></pre>
+ 
+ <p align="center">
+   <img src="https://github.com/Aleksandra795/miso-plot/raw/main/docs/exemplary_data_miso_05.png" alt="Example miso plot" width="500"/>
+ </p>
+ 
+ The usefulness of miso-plot is best illustrated using real experimental data.
+ Below is an example based on single-cell mass cytometry data from Samusik et al. (2016) — “Automated mapping of phenotype space with single-cell data” (Nature Methods, 13, 493–496; DOI: 10.1038/nmeth.3863) — containing 24 manually annotated bone marrow cell subtypes.
+ miso-plot clearly reveals the dominant spatial organization of these subtypes on the UMAP projection while suppressing outliers and low-density noise, making the overall cluster structure easier to interpret.
+
+<p align="center">
+   <img src="https://github.com/Aleksandra795/miso-plot/raw/main/docs/cytof_example.png" alt="Example miso plot" width="800"/>
+ </p>
+
+ <hr/>
+ 
+ <h2>API Overview</h2>
+ 
+ <p><code>miso_plot(X, Y, labels, cmap='miso24', m=0.5, lam=20, ax=None, alpha=0.3, marker='s', size=10)</code></p>
+ <p>Generates a smoothed scatter plot with adaptive density highlighting.</p>
+ 
+ <table>
+ <thead>
+ <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+ </thead>
+ <tbody>
+ <tr><td><code>X</code>, <code>Y</code></td><td><code>np.ndarray</code></td><td>Coordinates of points</td></tr>
+ <tr><td><code>labels</code></td><td><code>np.ndarray</code></td><td>Cluster labels for each point</td></tr>
+ <tr><td><code>cmap</code></td><td><code>str</code> or <code>list</code></td><td>Colormap ('miso24', matplotlib/seaborn name, or list of hex)</td></tr>
+ <tr><td><code>m</code></td><td><code>float</code></td><td>Density threshold</td></tr>
+ <tr><td><code>lam</code></td><td><code>int</code></td><td>Smoothing parameter</td></tr>
+ <tr><td><code>ax</code></td><td><code>matplotlib.axes.Axes</code> or <code>None</code></td><td>Optional existing Axes; creates a new one if None</td></tr>
+ <tr><td><code>alpha</code></td><td><code>float</code></td><td>Transparency of points</td></tr>
+ <tr><td><code>marker</code></td><td><code>str</code></td><td>Marker style</td></tr>
+ <tr><td><code>size</code></td><td><code>int</code></td><td>Size of each point</td></tr>
+ </tbody>
+ </table>
+
+The <i>m</i> parameter has the strongest impact on the visual output of miso-plot.
+Its default value is 0.5, corresponding to the median density isoline, but it can be adjusted to control how much of the cluster density is visualized.
+Common choices include 0.25 (top 75% of the densest regions) and 0.75 (top 25%), depending on the desired level of detail.
+ 
+ <p align="center">
+   <img src="https://github.com/Aleksandra795/miso-plot/raw/main/docs/m_parameter.png" alt="m parameter" width="1000"/>
+ </p>
+
+ <hr/>
+ 
+ <h2>Color Palettes</h2>
+ 
+ <p>Built-in palette: <strong>miso24</strong><br/>
+ Designed for cluster visualization (24 clusters) with high perceptual separation.</p>
+ 
+ <p align="center">
+   <img src="https://github.com/Aleksandra795/miso-plot/raw/main/docs/miso24_palette.png" alt="miso24 palette" width="800"/>
+ </p>
+
+ <p>You may also pass:</p>
+ <ul>
+   <li>any matplotlib/seaborn palette name (e.g. 'viridis', 'tab10'),</li>
+   <li>a custom list of hex colors (e.g. ['ff0000', '00ff00', '0000ff']).</li>
+ </ul>
+ 
+ <hr/>
+ 
+ 
+ <h2>Citation</h2>
+ 
+ <p>If you use <strong>miso-plot</strong> or the underlying method in your research or publications, please cite:</p>
+ 
+ <blockquote>
+ Suwalska, A.; Polanska, J.<br/>
+ <em>GMM-Based Expanded Feature Space as a Way to Extract Useful Information for Rare Cell Subtypes Identification in Single-Cell Mass Cytometry.</em><br/>
+ <strong>Int. J. Mol. Sci.</strong> 2023, 24(18), 14033.<br/>
+ <a href="https://doi.org/10.3390/ijms241814033">https://doi.org/10.3390/ijms241814033</a><br/>
+ (<a href="https://www.mdpi.com/1422-0067/24/18/14033">Open Access</a>)
+ </blockquote>
+ 
+ <hr/>
+ 
+ <h2>License</h2>
+ 
+ <p>This project is distributed under the <a href="LICENSE">MIT License</a>.</p>
+ 
+ <hr/>
+ 
+ <div align="center">
+ Created with ❤️ and scientific curiosity.
+ </div>
