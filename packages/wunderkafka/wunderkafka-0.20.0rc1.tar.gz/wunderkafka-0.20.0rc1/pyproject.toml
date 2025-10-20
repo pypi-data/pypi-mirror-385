@@ -1,0 +1,111 @@
+[project]
+name = "wunderkafka"
+version = "v0.20.0rc1"
+description = "librdkafka-powered client for Kafka for python with (hopefully) more handful API"
+readme = "README.md"
+keywords = ["kafka", "cloudera", "confluent"]
+license = {text = "Apache-2.0"}
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: POSIX :: Linux",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+authors = [{name = "Kirill Tribunsky", email = "tribunsky.kir@yandex.ru"}]
+urls = {"Homepage" = "https://github.com/wunderkafka/wunderkafka", "Bug Tracker" = "https://github.com/wunderkafka/wunderkafka/issues"}
+requires-python = ">=3.9"
+
+dependencies = [
+	"confluent-kafka[schema-registry]>=1.9.0",
+	"avro-python3>=1.10.0",
+	"dataclasses-avroschema[pydantic]>=0.53.0",
+	"fastavro>=1.4.7",
+	"pydantic-settings>2.0",
+	"pydantic>=2.7.0",
+	"setuptools>=80.3.1",
+]
+
+[project.optional-dependencies]
+krb = ["requests-kerberos>=0.13.0", "python-dateutil"]
+json = ["jsonschema>=4.17.3"]
+iam = ["aws-msk-iam-sasl-signer-python>=1.0.2"]
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+
+[tool.setuptools.packages.find]
+include = ["wunderkafka", "wunderkafka.*"]
+
+[tool.pytest.ini_options]
+python_classes = "!Test"
+
+[tool.mypy]
+plugins = ["pydantic.mypy"]
+exclude = "examples"
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+warn_redundant_casts = true
+warn_unused_ignores = false
+no_implicit_optional = true
+strict_optional = true
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+warn_untyped_fields = true
+
+[[tool.mypy.overrides]]
+module = [
+    "aws_msk_iam_sasl_signer.*",
+	"confluent_kafka.*",
+	"dateutil.*",
+	"dataclasses_avroschema.*",
+	"fastavro.*",
+	"loguru.*",
+	"pydantic.*",
+	"requests.*",
+	"requests_kerberos.*",
+	"setuptools.*"
+]
+ignore_missing_imports = true
+
+[tool.ruff]
+line-length = 120
+indent-width = 4
+target-version="py39"
+exclude = [
+	"wunderkafka/config/generated/*",
+	"examples/*",
+    # for now, thet test requires fixing the generator
+    # OR running ruff on generated code also and then comparing with the 'answer'
+    "tests/fixtures/config/answers/models.py"
+]
+
+[tool.ruff.lint]
+select = ["I"]
+ignore = [
+    "D",
+    "TC001",
+    "TC002",
+    "TC003",
+    "FIX002",
+]
+
+[tool.ruff.lint.isort]
+length-sort = true
+
+[tool.uv]
+dev-dependencies = [
+    "mypy>=1.15.0",
+    "pytest-cov>=6.1.1",
+    "ruff>=0.9.7",
+]
