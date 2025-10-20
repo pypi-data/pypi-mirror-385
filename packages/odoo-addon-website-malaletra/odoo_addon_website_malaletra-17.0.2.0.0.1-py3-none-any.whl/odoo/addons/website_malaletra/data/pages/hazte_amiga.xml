@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+     <!-- === Amigxs Page === -->
+    <record id="friends_page" model="website.page">
+        <field name="name">Amigas de Malaletra</field>
+        <field name="website_published">True</field>
+        <field name="url">/amigas</field>
+        <field name="type">qweb</field>
+        <field name="key">theme_malaletra.friends_page</field>
+        <field name="arch" type="xml">
+            <t t-name="theme_malaletra.friends_page_template">
+                <t t-call="website.layout">
+                    <div id="wrap">
+                        <section class="s_text_image pt-5 bg-primary" data-name="Text - Image"
+                            style="">
+                            <div class="container px-5">
+                                <div class="row align-items-center">
+                                    <div class="col-lg-12 pt-2 pb-2 text-center text-white">
+                                        <h2>hazte amiga de la <br /> <span class="text-secondary">
+                                            malaletra</span></h2>
+                                        <p class="o_default_snippet_text text-justify">Las <strong>actividades
+                                            programadas por malaletra son gratuitas y así accesibles
+                                            a todo el barrio</strong>. Esta política es sostenible
+                                            en el tiempo si aquellas personas que pueden aportar
+                                            algún pago lo hacen para sostener la gratuidad del
+                                            espacio.</p>
+                                        <p class="o_default_snippet_text text-justify pb-4">Cuánto más apoyo recibimos
+                                            con las amigas de la librería, más podemos volcar
+                                            nuestra actividad en un sentido militante (mayor fondo
+                                            en la librería, talleres, formaciones, ferias de
+                                            libros…). Las amigas de la malaletra nos permiten
+                                            ampliar las potencias de la librería y montar un mayor
+                                            número de actividades gratuitas. Al hacerte amiga de
+                                            malaletra además de obtener ventajas en la compra de tus
+                                            libros estarás participando en la creación de una
+                                            cultura de barrio variada y peleona.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="s_comparisons pb-5 bg-primary" data-name="Comparisons" id="tiers">
+                            <div class="container px-5">
+                                <div class="row">
+                                    <div class="col-lg-4 px-4 pb-2 pt-2 s_col_no_bgcolor text-center"
+                                        data-name="Box">
+                                        <div class="bg-200 card">
+                                            <h4 class="card-header">pirata</h4>
+                                            <h4 class="card-header price">7€/mes</h4>
+                                            <div class="card-body py-5">
+                                                <ul class="list-group list-group-flush">
+                                                    <li class="list-group-item">
+                                                        <i class="fa mr-1 padding-small fa-check"></i>
+                                                        5% de descuento
+                                                    </li>
+                                                    <li class="list-group-item">&amp;nbsp;<br />&amp;nbsp;</li>
+                                                </ul>
+                                            </div>
+                                            <div class="card-footer">
+                                                <a href="#contact-form" class="btn btn-secondary"
+                                                    data-original-title="" title=""
+                                                    aria-describedby="tooltip478953">¡me apunto!</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 px-4 pb-2 pt-2 s_col_no_bgcolor text-center"
+                                        data-name="Box">
+                                        <div class="bg-200 card">
+                                            <h4 class="card-header">pantera</h4>
+                                            <h4 class="card-header price">14€/mes</h4>
+                                            <div class="card-body py-5">
+                                                <ul class="list-group list-group-flush">
+                                                    <li class="list-group-item">
+                                                        <i class="fa mr-1 padding-small fa-check"></i>
+                                                        5% de descuento
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        <i class="fa mr-1 padding-small fa-check"></i>
+                                                        Compra cinco libros y llevate uno gratis
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="card-footer">
+                                                <a href="#contact-form" class="btn btn-secondary"
+                                                    data-original-title="" title=""
+                                                    aria-describedby="tooltip478953">¡me apunto!</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 px-4 pb-2 pt-2 s_col_no_bgcolor text-center"
+                                        data-name="Box">
+                                        <div class="bg-200 card">
+                                            <h4 class="card-header">bruja</h4>
+                                            <h4 class="card-header price">21€/mes</h4>
+                                            <div class="card-body py-5">
+                                                <ul class="list-group list-group-flush">
+                                                    <li class="list-group-item">
+                                                        <i class="fa mr-1 padding-small fa-check"></i>
+                                                        5% de descuento
+                                                    </li>
+                                                     <li class="list-group-item">
+                                                        <i class="fa mr-1 padding-small fa-check"></i>
+                                                        Compra cuatro libros y llevate uno gratis
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="card-footer">
+                                                <a href="#contact-form" class="btn btn-secondary"
+                                                    data-original-title="" title=""
+                                                    aria-describedby="tooltip478953">¡me apunto!</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="s_text_image pt-5 pb-4" data-name="Text - Image" id="contact-form">
+                            <div class="container">
+                                <div class="row align-items-start">
+                                    <div class="col-lg-6 pt-2 pb-2">
+                                        <h2 class="s_title_default ml-category-name text-primary"
+                                            style="text-align: left;">¡hazte amiga de la malaletra!</h2>
+                                        <p class="py-3 mb-0" >Aquí te dejamos el formulario para hacerte amiga de la malaletra y domiciliar la ayuda en tu cuenta bancaria. Todos los campos son obligatorios. ¡Muchas gracias por apoyarnos!</p>
+                                        <form action="/website_form/" method="post"
+                                            class="s_website_form container-fluid o_fake_not_editable"
+                                            enctype="multipart/form-data" data-name="Form Builder"
+                                            data-model_name="mail.mail"
+                                            data-success_page="/">
+                                            <div class="container">
+                                                <div class="row form-group form-field d-none pb-4">
+                                                    <div class="col-12">
+                                                        <label class="col-form-label" for="email_to"></label>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <input type="text"
+                                                            class="form-control o_website_form_input"
+                                                            name="email_to" value="amigas@malaletra.org" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row form-field o_website_form_custom o_website_form_required_custom pb-4">
+                                                    <div class="col-12">
+                                                        <label class="col-form-label"
+                                                            for="name">nombre</label>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <input type="text"
+                                                            placeholder="escribe tu nombre"
+                                                            class="form-control o_website_form_input"
+                                                            name="name" required="" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row form-field o_website_form_custom o_website_form_required_custom pb-4">
+                                                    <div class="col-12">
+                                                        <label class="col-form-label"
+                                                            for="surname-1">primer apellido</label>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <input type="text"
+                                                            placeholder="escribe tu primer apellido"
+                                                            class="form-control o_website_form_input"
+                                                            name="surname-1" required="" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row form-field o_website_form_custom o_website_form_required_custom pb-4">
+                                                    <div class="col-12">
+                                                        <label class="col-form-label"
+                                                            for="surname-2">segundo apellido</label>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <input type="text"
+                                                            placeholder="escribe tu segundo apellido"
+                                                            class="form-control o_website_form_input"
+                                                            name="surname-2" required="" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row form-field o_website_form_required_custom pb-4">
+                                                    <div class="col-12">
+                                                        <label class="col-form-label"
+                                                            for="phone-number">número de teléfono</label>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <input type="text"
+                                                            placeholder="escribe tu número de teléfono"
+                                                            class="form-control o_website_form_input"
+                                                            name="phone-number" required="" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row form-field o_website_form_required_custom pb-4">
+                                                    <div class="col-12">
+                                                        <label class="col-form-label"
+                                                            for="email_from">dirección de e-mail</label>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <input type="email"
+                                                            placeholder="escribe tu dirección de e-mail"
+                                                            class="form-control o_website_form_input"
+                                                            name="email_from" required="" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row form-field o_website_form_required_custom pb-4">
+                                                    <div class="col-12">
+                                                        <label class="col-form-label"
+                                                            for="id-number">DNI/NIF/NIE</label>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <input type="text"
+                                                            placeholder="escribe tu número de documento"
+                                                            class="form-control o_website_form_input"
+                                                            name="id-number" required="" />
+                                                    </div>
+                                                </div>
+                                                <div class="row form-group form-field o_website_form_required_custom pb-4">
+                                                    <div class="col-12">
+                                                        <label class="col-form-label o_fake_editable" for="tier">
+                                                            ¿qué tipo de amiga quieres ser?
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="o_website_form_flex flex-column pl-4">
+                                                            <div class="radio o_website_form_flex_item">
+                                                                <label> 
+                                                                    <input type="radio" 
+                                                                        class="o_website_form_input"
+                                                                        name="tier"
+                                                                        value="pirata" required="" />
+                                                                    <span class="o_fake_editable">
+                                                                        pirata
+                                                                    </span>
+                                                                </label>
+                                                            </div>
+                                                            <div class="radio o_website_form_flex_item">
+                                                                <label>
+                                                                    <input type="radio"
+                                                                        class="o_website_form_input"
+                                                                        name="tier"
+                                                                        value="pantera" required="" />
+                                                                    <span class="o_fake_editable">
+                                                                        pantera
+                                                                    </span>
+                                                                </label>
+                                                            </div>
+                                                            <div class="radio o_website_form_flex_item">
+                                                                <label>
+                                                                    <input type="radio"
+                                                                        class="o_website_form_input"
+                                                                        name="tier"
+                                                                        value="bruja" required="" />
+                                                                    <span class="o_fake_editable">
+                                                                        bruja
+                                                                    </span>
+                                                                </label>
+                                                            </div>
+                                                            <div class="radio o_website_form_flex_item">
+                                                                <label>
+                                                                    <input type="radio"
+                                                                        class="o_website_form_input"
+                                                                        name="tier"
+                                                                        value="super-bruja" required="" />
+                                                                    <span class="o_fake_editable">
+                                                                        super bruja*
+                                                                    </span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row form-group form-field o_website_form_custom pb-4">
+                                                    <div class="col-12">    
+                                                        <label class="col-form-label" for="monthly-amount">cuota superbruja</label>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <input type="text" placeholder="introduce tu cuota mensual"
+                                                            class="form-control o_website_form_input"
+                                                            name="monthly-amount"/>
+
+                                                        <div class="s_btn text-left pt-2">
+                                                            <p class="p-4 bg-black text-white"><strong>*</strong> Las <strong>superbrujas</strong> son todas aquellas brujas, con sus mismos descuentos y beneficios, que quieren aportar más al proyecto de malaletra y ayudar a sostener de una forma más sólida esta librería. Cada superbruja escoge su propia aportación.</p>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="form-group row form-field o_website_form_custom pb-4">
+                                                    <div class="col-12">
+                                                        <label class="col-form-label" for="account-number">datos de pago</label>
+                                                    </div>
+                                                    <div class="col-12 pb-4">
+                                                        <input type="text" placeholder="IBAN"
+                                                            class="form-control o_website_form_input"
+                                                            name="account-number"/>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <input type="text"
+                                                            placeholder="Titular de la cuenta"
+                                                            class="form-control o_website_form_input"
+                                                            name="account-owner"/>
+                                                    </div>
+                                                </div>
+
+                                                <div
+                                                    class="form-group row form-field o_website_form_custom o_website_form_custom">
+                                                    <div class="col-12">
+                                                        <label class="col-form-label"
+                                                            for="what-channel">¿cómo nos has
+                                                            conocido?</label>
+                                                    </div>
+                                                    <div class="col-12 pb-4">
+                                                        <textarea
+                                                            class="form-control o_website_form_input"
+                                                            name="what-channel" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="row form-group form-field o_website_form_required_custom">
+                                                    <div class="col-12">
+                                                        <label class="col-form-label o_fake_editable" for="coms">
+                                                            ¿Quieres que te vayamos contando cómo estamos?
+                                                        </label>
+                                                        <p>Una de las cosas que más ilusión nos hace de tener amigas es poder contaros cómo estamos y qué estamos haciendo. ¿Te gustaría recibir un correo del tipo <i>newsletter</i> donde te actualicemos sobre las noticias de la librería?</p>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="o_website_form_flex flex-column pl-4">
+                                                            <div class="radio o_website_form_flex_item">
+                                                                <label>
+                                                                    <input type="radio"
+                                                                        class="o_website_form_input"
+                                                                        name="coms"
+                                                                        value="yes" required="" />
+                                                                    <span class="o_fake_editable">
+                                                                        ¡Sí!
+                                                                    </span>
+                                                                </label>
+                                                            </div>
+                                                            <div class="radio o_website_form_flex_item pb-4">
+                                                                <label> 
+                                                                    <input type="radio" 
+                                                                        class="o_website_form_input"
+                                                                        name="coms"
+                                                                        value="no" required="" />
+                                                                    <span class="o_fake_editable">
+                                                                        De momento mejor no
+                                                                    </span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <div class="col">
+                                                        <button class="btn btn-primary btn-lg o_website_form_send o_default_snippet_text">
+                                                            enviar
+                                                        </button>
+                                                        <span id="o_website_form_result" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="col-lg-6 pt-2 pb-2">
+                                        <img src="/website_malaletra/static/img/formulario-hazte-amiga.jpeg"
+                                            class="img img-fluid mx-auto"
+                                            alt="Odoo • Text and Image" />
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- === Snippets' area === -->
+                        <div class="oe_structure" />
+                    </div>
+                </t>
+            </t>
+        </field>
+    </record>
+
+    <record id="friends_page_link" model="website.menu">
+        <field name="name">hazte amiga</field>
+        <field name="page_id" ref="friends_page" />
+        <field name="parent_id" ref="website.main_menu" />
+        <field name="sequence" type="int">40</field>
+    </record>
+</odoo>
