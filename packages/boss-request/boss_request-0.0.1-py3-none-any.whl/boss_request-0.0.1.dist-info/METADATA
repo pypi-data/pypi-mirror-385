@@ -1,0 +1,23 @@
+Metadata-Version: 2.4
+Name: boss-request
+Version: 0.0.1
+Summary: Патч библиотек httpx, curl-cffi для удобного экспорта куки и нормализации json
+Author-email: Limby <bogo44tor@gmail.com>
+License-Expression: MIT
+Keywords: request,cookies,export_cookies,import_cookies
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Provides-Extra: httpx
+Requires-Dist: httpx>=0.28.1; extra == "httpx"
+Provides-Extra: curl-cffi
+Requires-Dist: curl-cffi>=0.13.0; extra == "curl-cffi"
+Provides-Extra: all
+Requires-Dist: httpx>=0.28.1; extra == "all"
+Requires-Dist: curl-cffi>=0.13.0; extra == "all"
+Provides-Extra: dev
+Requires-Dist: pytest>=6.0; extra == "dev"
+Requires-Dist: pytest-asyncio; extra == "dev"
+Requires-Dist: black; extra == "dev"
+Requires-Dist: isort; extra == "dev"
+Requires-Dist: mypy; extra == "dev"
+Requires-Dist: flake8; extra == "dev"
