@@ -1,0 +1,18 @@
+# Include important metadata files
+include LICENSE
+include README.md
+include CHANGELOG.md
+
+# Include documentation
+recursive-include docs *.md
+
+# Exclude test files and development artifacts
+recursive-exclude tests *
+recursive-exclude .anyt *
+exclude .env*
+exclude .gitignore
+exclude Makefile
+exclude docker-compose.yml
+exclude Dockerfile
+exclude railway.json
+

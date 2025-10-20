@@ -1,0 +1,334 @@
+# AnyTask CLI
+
+> AI-native task management CLI for coding agents and human developers
+
+AnyTask CLI is a command-line interface for managing tasks and projects, designed specifically for AI agents and developers working together. It provides Linear-style task management with agent-aware features, MCP (Model Context Protocol) integration, and powerful AI-assisted commands.
+
+## Features
+
+### Core Capabilities
+
+-   **Linear-style Task Management**: Human-readable task IDs (DEV-123), status workflows, priorities, and dependencies
+-   **Multi-Environment Support**: Manage tasks across dev, staging, and production environments
+-   **Workspace & Project Organization**: Isolated workspaces with role-based access
+-   **Rich Terminal UI**: Beautiful, color-coded task boards and visualizations
+-   **Agent Integration**: Native support for AI agents via API keys and MCP server
+
+### CLI Commands
+
+-   **Environment Management**: `anyt env` - Configure and switch between environments
+-   **Authentication**: `anyt auth login` - Authenticate with user tokens or agent API keys
+-   **Workspace Management**: `anyt workspace` - List, select, and manage workspaces
+-   **Task CRUD**: `anyt task create/get/update/delete` - Full task lifecycle management
+-   **Task Views**: `anyt task list/board` - View tasks in lists or Kanban boards
+-   **Dependencies**: `anyt task dep` - Manage task dependencies
+-   **Active Task**: `anyt task pick/drop` - Track current task in progress
+-   **AI Commands**: `anyt ai decompose` - AI-powered task decomposition
+-   **MCP Server**: `anyt mcp start` - Run MCP server for Claude Code integration
+
+## Quick Start
+
+### Prerequisites
+
+-   **Python 3.12+** with uv installed
+-   **AnyTask Backend Server** (API endpoint)
+-   **Authentication**: User token (JWT) or Agent API key
+
+### Installation
+
+#### Option 1: Install from PyPI (Coming Soon)
+
+```bash
+pip install anyt
+```
+
+#### Option 2: Install from Source
+
+```bash
+git clone <repository-url>
+cd AnyTaskCLI
+make install
+```
+
+### Initial Setup
+
+1. **Configure environment**
+
+    The CLI comes pre-configured with a production environment. To use a local development server instead:
+
+    ```bash
+    anyt env add dev http://localhost:8000
+    anyt env use dev
+    ```
+
+    To verify your current environment:
+
+    ```bash
+    anyt env list
+    ```
+
+2. **Authenticate**
+
+    For human users:
+
+    ```bash
+    anyt auth login
+    # Paste your JWT token when prompted
+    ```
+
+    For AI agents:
+
+    ```bash
+    anyt auth login --agent-key anyt_agent_xxxxxxxxxxxxx
+    ```
+
+3. **Select workspace**
+
+    ```bash
+    anyt workspace list
+    anyt workspace select DEV
+    ```
+
+4. **Create your first task**
+    ```bash
+    anyt task create "Implement user authentication" --status todo --priority 1
+    ```
+
+## Usage Examples
+
+### View Tasks
+
+```bash
+# List all tasks
+anyt task list
+
+# Filter by status
+anyt task list --status inprogress
+
+# View as Kanban board
+anyt task board
+
+# Get task details
+anyt task get DEV-123
+```
+
+### Manage Tasks
+
+```bash
+# Create task
+anyt task create "Add API endpoint" --status todo --priority 2
+
+# Update task
+anyt task update DEV-123 --status inprogress
+
+# Add dependency
+anyt task dep add DEV-124 --blocks DEV-123
+
+# Delete task
+anyt task delete DEV-123
+```
+
+### Active Task Workflow
+
+```bash
+# Pick a task to work on
+anyt task pick DEV-123
+
+# View current active task
+anyt task active
+
+# Mark as done and drop
+anyt task update DEV-123 --status done
+anyt task drop
+```
+
+### AI-Powered Commands
+
+```bash
+# Decompose a goal into tasks
+anyt ai decompose "Implement user authentication system" --project-id 1
+```
+
+### MCP Server for Claude Code
+
+```bash
+# Start MCP server
+anyt mcp start
+
+# Use with Claude Code by adding to claude_desktop_config.json:
+# {
+#   "mcpServers": {
+#     "anytask": {
+#       "command": "anyt",
+#       "args": ["mcp", "start"]
+#     }
+#   }
+# }
+```
+
+## Claude Code Integration
+
+AnyTask provides seamless integration with Claude Code through slash commands, enabling AI-assisted task management directly in your development environment.
+
+### Quick Setup
+
+1. **Install and configure AnyTask CLI** (see Quick Start above)
+2. **Start using slash commands** in Claude Code:
+   - `/anyt-next` - Get intelligent task recommendations
+   - `/anyt-active` - View your current task
+   - `/anyt-create` - Create new tasks interactively
+   - `/anyt-board` - See your Kanban board
+
+### Example Workflow
+
+```
+User: /anyt-next
+
+Claude: "📋 Top Task Recommendations:
+
+1. DEV-42: Implement OAuth callback (Score: 15.0)
+   • Priority: 2 (Urgent)
+   • All dependencies complete ✓
+   • Unblocks 2 other tasks
+
+Which task would you like to work on?"
+
+User: "Let's do DEV-42"
+
+Claude: "Great! Now working on DEV-42. Let me help you implement it..."
+```
+
+### Features
+
+- **Smart Task Selection**: AI analyzes priority, dependencies, and impact to recommend the best task
+- **Interactive Task Creation**: Claude guides you through creating well-structured tasks
+- **Progress Tracking**: View active tasks and board status without leaving your editor
+- **Context-Aware Help**: Claude understands your current task and offers relevant assistance
+
+### Learn More
+
+See **[Claude Code Integration Guide](docs/CLAUDE_CODE_INTEGRATION.md)** for:
+- Complete setup instructions
+- All available slash commands
+- Workflow examples and best practices
+- Troubleshooting tips
+
+**Two Integration Options:**
+1. **CLI-based** (recommended for getting started) - Simple slash commands, no extra setup
+2. **MCP Integration** (advanced) - Full Model Context Protocol integration with real-time updates
+
+## Configuration
+
+### Environment Configuration
+
+Configuration is stored in `~/.config/anyt/config.json`:
+
+```json
+{
+    "environments": {
+        "prod": {
+            "api_url": "http://anyt.up.railway.app",
+            "auth_token": "your-token-here",
+            "default_workspace": 1
+        },
+        "dev": {
+            "api_url": "http://localhost:8000",
+            "auth_token": "your-dev-token-here",
+            "default_workspace": 1
+        }
+    },
+    "current_environment": "prod"
+}
+```
+
+### Workspace Configuration
+
+Workspace settings are stored in `.anyt/anyt.json`:
+
+```json
+{
+    "workspace_id": "1",
+    "name": "Development",
+    "api_url": "http://localhost:8000",
+    "last_sync": "2025-10-18T10:00:00Z"
+}
+```
+
+## Development
+
+### Setup Development Environment
+
+```bash
+# Clone repository
+git clone <repository-url>
+cd AnyTaskCLI
+
+# Install dependencies
+make install
+
+# Run tests
+make test
+
+# Run type checking
+make typecheck
+
+# Format code
+make format
+
+# Lint code
+make lint
+```
+
+### Project Structure
+
+```
+src/
+├── cli/                   # CLI application
+│   ├── main.py           # Entry point
+│   ├── client.py         # API client
+│   ├── config.py         # Configuration management
+│   └── commands/         # Command modules
+│       ├── env.py
+│       ├── auth.py
+│       ├── workspace.py
+│       ├── task.py
+│       ├── ai.py
+│       └── mcp.py
+└── anytask_mcp/          # MCP server
+    ├── server.py
+    ├── tools.py
+    └── resources.py
+
+tests/
+└── cli/
+    ├── unit/             # Unit tests
+    └── integration/      # Integration tests
+```
+
+### Running Tests
+
+```bash
+# Run all tests
+make test
+
+# Run only unit tests
+make test-cli-unit
+
+# Run integration tests (requires server)
+make test-cli-integration
+```
+
+## Documentation
+
+-   **[CLI Usage Guide](docs/CLI_USAGE.md)** - Comprehensive CLI command reference
+-   **[Claude Code Integration](docs/CLAUDE_CODE_INTEGRATION.md)** - Using AnyTask with Claude Code slash commands
+-   **[MCP Integration](docs/MCP_INTEGRATION.md)** - Advanced Model Context Protocol integration
+-   **[Development Guide](CLAUDE.md)** - Developer guidelines and architecture
+
+## License
+
+Proprietary - AnyTransformer Inc.
+
+## Support
+
+For issues and feature requests, please contact: contact@anytransformer.com
