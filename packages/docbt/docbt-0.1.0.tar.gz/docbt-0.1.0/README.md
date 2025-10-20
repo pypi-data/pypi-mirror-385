@@ -1,0 +1,375 @@
+# 🔧 docbt - AI-Powered DBT Documentation Assistant
+
+[![CI](https://github.com/aleenprd/docbt/actions/workflows/ci.yml/badge.svg)](https://github.com/aleenprd/docbt/actions/workflows/ci.yml)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+[![Code style: ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+
+> Generate YAML documentation for DBT models with AI assistance. Built with Streamlit for an intuitive web interface.
+
+## 📖 Overview
+
+**docbt** is an AI-powered assistant designed to streamline DBT (Data Build Tool) documentation workflows. Upload your data, chat with AI models, and generate professional YAML documentation ready for your DBT projects.
+
+### ✨ Key Features
+
+- **🤖 Multi-LLM Support**: Choose from [OpenAI's GPT models](https://openai.com/api/), local [Ollama](https://ollama.com/), or [LM Studio.](https://lmstudio.ai/)
+- **💬 Interactive Chat**: Ask questions about your data and get specific recommendations.
+- **🔧 Developer Mode**: Token metrics, response times, parameters, prompts and debugging information.
+- **⚙️ Advanced Configuration**: Fine-tune generation parameters (temperature, max tokens, top-p, stop sequences).
+- **🧠 Chain of Thought**: View AI reasoning process (when available).
+- **📈 Real-time Metrics**: Monitor API usage, token consumption, and performance.
+
+### More to come
+- **📊 Data Upload & Analysis**: Upload files for intelligent data insights.
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Python 3.10 or higher
+- Optional: Ollama, LM Studio, or OpenAI API key
+- Optional: Docker (for containerized deployment)
+
+### Installation
+
+#### Option 1: Using Docker (Recommended)
+
+```bash
+# Clone the repository
+git clone <your-repo-url>
+cd docbt
+
+# Run with Docker Compose
+docker-compose up docbt
+
+# Access at http://localhost:8501
+```
+
+For detailed Docker instructions, see [Docker Guide](docs/DOCKER.md).
+
+#### Option 2: Using pip
+
+1. **Clone the repository**
+   ```bash
+   git clone <your-repo-url>
+   cd docbt
+   ```
+
+2. **Install dependencies**
+   ```bash
+   pip install -e .
+
+   # With optional providers
+   pip install -e ".[snowflake]"  # For Snowflake support
+   pip install -e ".[bigquery]"   # For BigQuery support
+   pip install -e ".[all-providers]"  # For all providers
+   ```
+
+3. **Set up environment variables** (optional)
+   ```bash
+   # Copy and edit the environment file
+   cp .env.example .env
+
+   # Add your API keys (optional)
+   OPENAI_API_KEY=your_openai_api_key_here
+   OLLAMA_HOST=localhost
+   OLLAMA_PORT=11434
+   LMSTUDIO_HOST=localhost
+   LMSTUDIO_PORT=1234
+   ```
+
+4. **Run the application**
+   ```bash
+   # Using the CLI
+   docbt run
+
+   # Or directly with Python
+   python -m streamlit run src/docbt/server/server.py
+   ```
+
+## 🎯 Usage
+
+### 1. Setup Tab
+Configure your AI provider and settings:
+- **Choose Provider**: OpenAI, Ollama, or LM Studio
+- **Developer Mode**: Enable advanced settings and metrics
+- **System Prompt**: Customize AI behavior (developer mode)
+- **Generation Parameters**: Control temperature, max tokens, top-p, stop sequences
+
+### 2. Chat Tab
+Interact with your AI assistant:
+- Ask questions about DBT best practices
+- Get recommendations for data modeling
+- Request specific YAML configurations
+- Enable "Chain of Thought" to see AI reasoning
+
+### 3. Data Tab
+Upload and analyze your datasets:
+- **Supported Formats**: CSV, JSON
+- **Auto-Analysis**: Column types, sample data, statistics
+- **Context Integration**: Data automatically included in AI conversations
+
+### 4. Additional Tabs
+- **Columns**: Column-specific analysis and recommendations
+- **File**: File management and operations
+- **Docs**: Documentation generation and export
+
+## 🔧 Configuration
+
+### LLM Providers
+
+#### OpenAI
+```bash
+# Set your API key
+export OPENAI_API_KEY="sk-..."
+
+# Or add to .env file
+OPENAI_API_KEY=sk-...
+```
+
+**Supported Models**:
+- gpt-4o (latest)
+- gpt-4o-mini (cost-effective)
+- gpt-4-turbo
+- gpt-3.5-turbo
+
+#### Ollama (Local)
+```bash
+# Install Ollama
+curl -fsSL https://ollama.ai/install.sh | sh
+
+# Pull a model
+ollama pull llama2
+ollama pull mistral
+
+# Start server (default: http://localhost:11434)
+ollama serve
+```
+
+#### LM Studio (Local)
+1. Download from [lmstudio.ai](https://lmstudio.ai/)
+2. Load a model in the Chat tab
+3. Enable "Local Server" (default: http://localhost:1234)
+
+### Advanced Parameters
+
+In Developer Mode, fine-tune AI generation:
+
+- **Max Tokens**: Maximum response length (100-4000)
+- **Temperature**: Creativity level (0.0-2.0)
+  - `0.0`: Deterministic, focused
+  - `1.0`: Balanced
+  - `2.0`: Creative, random
+- **Top P**: Nucleus sampling (0.0-1.0)
+- **Stop Sequences**: Custom stop words/phrases
+
+## 💡 Example Workflows
+
+### DBT Schema Generation
+1. Upload your CSV data in the **Data** tab
+2. Go to **Chat** tab
+3. Ask: *"Generate a DBT schema.yml for this dataset with appropriate tests"*
+4. Get YAML output with column tests, descriptions, and constraints
+
+### Data Quality Assessment
+1. Upload data and ask: *"What data quality issues do you see?"*
+2. Get recommendations for:
+   - Column-level tests (`not_null`, `unique`, `accepted_values`)
+   - Model-level tests (freshness, volume checks)
+   - Relationship validations
+
+### Custom Documentation
+1. Ask: *"Create documentation for these columns with business context"*
+2. Get professional descriptions ready for your DBT models
+
+## 🔍 Features Deep Dive
+
+### Data Context Enhancement
+When you upload data, the AI automatically receives:
+- File metadata (name, size, record count)
+- Column information (names, data types in JSON format)
+- Sample data (first 10 records as JSON)
+- Statistical summaries
+
+### Token Optimization
+- **Smart Context**: Data context sent once in system prompt (not repeated per message)
+- **Token Counting**: Real-time token usage monitoring
+- **Cost Control**: Configurable limits and usage tracking
+
+### Developer Tools
+- **Response Metrics**: Time, tokens/second, model info
+- **Request Debugging**: Full system prompts with data context
+- **Chain of Thought**: AI reasoning visibility
+- **Error Handling**: Graceful fallbacks and error reporting
+
+## 🏗️ Project Structure
+
+```
+docdt/
+├── src/docbt/
+│   ├── cli/               # Command-line interface
+│   │   ├── __init__.py
+│   │   └── docbt_cli.py   # CLI entry point
+│   └── server/            # Streamlit application
+│       ├── __init__.py
+│       ├── server.py      # Main application
+│       └── logo.png       # Application logo
+├── pyproject.toml         # Project configuration
+├── README.md             # This file
+├── .env                  # Environment variables
+└── requirements.txt      # Dependencies
+```
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+
+**Quick Start:**
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes and add tests
+4. Run `ruff format .` and `pytest`
+5. Commit your changes (`git commit -m 'feat: add amazing feature'`)
+6. Push to the branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
+
+**CI/CD:** All pull requests are automatically tested with our CI pipeline. See [CI/CD Documentation](docs/CICD.md) for details.
+
+## 📋 Requirements
+
+### System Requirements
+- Python 3.10+
+- 2GB RAM minimum (4GB+ recommended for local models)
+- Internet connection (for OpenAI API)
+
+### Dependencies
+- `streamlit` - Web interface
+- `openai` - OpenAI API client
+- `requests` - HTTP client for local models
+- `tiktoken` - Token counting
+- `pandas` - Data manipulation
+- `python-dotenv` - Environment management
+- `loguru` - Logging
+- `click` - CLI framework
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+**LLM Connection Errors**
+```bash
+# Check if Ollama is running
+curl http://localhost:11434/api/tags
+
+# Verify LM Studio server
+curl http://localhost:1234/v1/models
+
+# Test OpenAI API key
+curl -H "Authorization: Bearer $OPENAI_API_KEY" https://api.openai.com/v1/models
+```
+
+**Import Errors**
+```bash
+# Reinstall in development mode
+pip install -e .
+
+# Or install from requirements
+pip install -r requirements.txt
+```
+
+**Permission Issues**
+```bash
+# Fix file permissions
+chmod +x docbt
+```
+
+**Docker Issues**
+```bash
+# View container logs
+docker-compose logs docbt
+
+# Check if container is running
+docker ps
+
+# Restart container
+docker-compose restart docbt
+```
+
+See [Docker Guide](docs/DOCKER.md) for more Docker-specific troubleshooting.
+
+## 🚢 Deployment
+
+### Docker Deployment (Recommended)
+
+**Local Development:**
+```bash
+docker-compose up docbt
+```
+
+**Production with Cloud Providers:**
+```bash
+docker-compose --profile production up -d docbt-production
+```
+
+**Build and Push to Registry:**
+```bash
+# Build
+docker build -t your-registry/docbt:latest .
+
+# Push to Docker Hub
+docker push your-registry/docbt:latest
+
+# Or push to GitHub Container Registry
+docker tag docbt:latest ghcr.io/your-username/docbt:latest
+docker push ghcr.io/your-username/docbt:latest
+```
+
+### Cloud Platforms
+
+**AWS ECS/Fargate:**
+- Use the production Docker image
+- Mount secrets for API keys
+- Configure ALB for port 8501
+
+**Google Cloud Run:**
+```bash
+# Build and deploy
+gcloud builds submit --tag gcr.io/PROJECT-ID/docbt
+gcloud run deploy docbt --image gcr.io/PROJECT-ID/docbt --platform managed
+```
+
+**Azure Container Instances:**
+```bash
+az container create \
+  --resource-group myResourceGroup \
+  --name docbt \
+  --image your-registry/docbt:latest \
+  --ports 8501 \
+  --environment-variables DOCBT_OPENAI_API_KEY=sk-...
+```
+
+**Kubernetes:**
+See [Kubernetes deployment examples](docs/DOCKER.md#kubernetes-deployment) in the Docker guide.
+
+For detailed deployment instructions, see [Docker Guide](docs/DOCKER.md).
+
+## 📝 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🙏 Acknowledgments
+
+- Built with [Streamlit](https://streamlit.io/)
+- Powered by [OpenAI](https://openai.com/), [Ollama](https://ollama.ai/), and [LM Studio](https://lmstudio.ai/)
+- Inspired by the [DBT](https://www.getdbt.com/) community
+
+## 📬 Support
+
+- 🐛 **Issues**: [GitHub Issues](https://github.com/your-username/docdt/issues)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/your-username/docdt/discussions)
+- 📧 **Email**: your-email@example.com
+
+---
+
+**Happy documenting!** 🎉 Generate better DBT documentation with AI assistance.
