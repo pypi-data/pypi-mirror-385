@@ -1,0 +1,281 @@
+Metadata-Version: 2.4
+Name: maruadmin-agent
+Version: 0.2.7
+Summary: MaruAdmin Remote Server Management Agent
+Author: MaruAdmin Team
+License: MIT
+Project-URL: Homepage, https://github.com/dirmich/maruadmin
+Project-URL: Repository, https://github.com/dirmich/maruadmin
+Project-URL: Issues, https://github.com/dirmich/maruadmin/issues
+Keywords: server,management,monitoring,agent,docker,haproxy
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: System Administrators
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Operating System :: MacOS
+Classifier: Topic :: System :: Monitoring
+Classifier: Topic :: System :: Systems Administration
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: paramiko>=3.0.0
+Requires-Dist: psutil>=5.9.0
+Requires-Dist: requests>=2.28.0
+Requires-Dist: cryptography>=40.0.0
+Dynamic: requires-python
+
+# Raspberry Pi 설치 가이드
+
+## 지원 모델 및 권장 사양
+
+| 모델 | RAM | OS | Python | Agent 용도 | 상태 |
+|------|-----|-----|--------|-----------|------|
+| **Raspberry Pi 5** | 4GB/8GB | Bookworm | 3.11 | 전체 기능 | ✅ 권장 |
+| **Raspberry Pi 4** | 4GB/8GB | Bullseye/Bookworm | 3.9/3.11 | 전체 기능 | ✅ 권장 |
+| **Raspberry Pi 4** | 2GB | Bullseye | 3.9 | Agent 전용 | ⚠️ 제한적 |
+| **Raspberry Pi 3** | 1GB | Bullseye+ | 3.9+ | Agent 전용 | ⚠️ 제한적 |
+| Raspberry Pi 3 | 1GB | Stretch | 3.5 | - | ❌ 미지원 |
+
+## 빠른 시작
+
+### 권장: OS 업그레이드 (Raspberry Pi 3/4)
+
+```bash
+# 현재 OS 버전 확인
+cat /etc/os-release
+
+# Raspbian 9 (Stretch) 이하는 업그레이드 필요
+# Python 3.8+ 필요 (Bullseye 이상)
+```
+
+**Raspberry Pi OS 업그레이드 방법**:
+1. 데이터 백업
+2. [Raspberry Pi Imager](https://www.raspberrypi.com/software/) 다운로드
+3. **Raspberry Pi OS (64-bit)** 선택 (Bookworm 권장)
+4. SD 카드에 굽기
+5. 재부팅 후 설치
+
+### 옵션 1: PyPI 설치 (가장 간단)
+
+```bash
+# Python 3.8+ 필요 (Bullseye 이상)
+sudo pip3 install maruadmin-agent
+
+# 설정 파일 생성
+sudo mkdir -p /etc/maruadmin
+sudo nano /etc/maruadmin/agent.conf
+
+# 서비스 설정 (install.sh 참고)
+```
+
+### 옵션 2: GitHub에서 로컬 설치 (권장)
+
+```bash
+# 1. Git으로 전체 저장소 클론
+git clone https://github.com/dirmich/maruadmin.git
+cd maruadmin/agent
+
+# 2. 설치 스크립트 실행 (로컬 소스 자동 감지)
+sudo ./install.sh
+
+# 로컬 소스가 있으면 자동으로 PyPI 대신 로컬에서 설치됩니다
+```
+
+### 옵션 2: 원격 설치 (최신 OS만)
+
+```bash
+# Python 3.8+ 필요 (Bullseye 이상)
+curl -fsSL https://raw.githubusercontent.com/dirmich/maruadmin/main/agent/install.sh | sudo bash
+```
+
+### 옵션 3: 수동 설치 (고급 사용자)
+
+```bash
+# 1. 저장소 클론
+git clone https://github.com/dirmich/maruadmin.git
+cd maruadmin/agent
+
+# 2. 가상 환경 생성
+sudo python3 -m venv /opt/maruadmin/venv
+
+# 3. 의존성 설치
+sudo /opt/maruadmin/venv/bin/pip install --upgrade pip
+sudo /opt/maruadmin/venv/bin/pip install -r requirements.txt
+
+# 4. Agent 설치
+sudo /opt/maruadmin/venv/bin/pip install -e .
+
+# 5. 설정 파일 복사
+sudo mkdir -p /etc/maruadmin
+sudo cp agent.conf.example /etc/maruadmin/agent.conf
+
+# 6. Systemd 서비스 생성 (install.sh 참고)
+```
+
+## Raspberry Pi 3 최적화
+
+### Swap 메모리 증설 (필수)
+
+```bash
+# 현재 Swap 확인
+free -h
+
+# Swap 크기 변경 (2GB 권장)
+sudo dphys-swapfile swapoff
+sudo nano /etc/dphys-swapfile
+
+# 다음 라인 수정:
+# CONF_SWAPSIZE=2048
+
+# 적용
+sudo dphys-swapfile setup
+sudo dphys-swapfile swapon
+
+# 확인
+free -h
+```
+
+### 메모리 분할 조정
+
+```bash
+# GPU 메모리 최소화 (서버 전용)
+sudo raspi-config
+# Performance Options → GPU Memory → 16MB
+
+# 또는 직접 수정
+sudo nano /boot/config.txt
+# gpu_mem=16
+```
+
+### 불필요한 서비스 비활성화
+
+```bash
+# Bluetooth 비활성화
+sudo systemctl disable bluetooth
+sudo systemctl stop bluetooth
+
+# WiFi 비활성화 (유선 연결 사용 시)
+sudo systemctl disable wpa_supplicant
+
+# Desktop 환경 비활성화 (Lite 버전 권장)
+sudo systemctl set-default multi-user.target
+```
+
+## Docker 설치 (컨테이너 관리용)
+
+```bash
+# Docker 설치
+curl -fsSL https://get.docker.com | sudo sh
+
+# maruadmin 사용자를 docker 그룹에 추가
+sudo usermod -aG docker maruadmin
+
+# 재부팅 또는 재로그인
+sudo reboot
+
+# 확인
+docker ps
+```
+
+## 문제 해결
+
+### Python 3.5 SSL 오류
+
+```
+SSLError: [SSL: SSLV3_ALERT_HANDSHAKE_FAILURE]
+```
+
+**원인**: Python 3.5는 최신 TLS를 지원하지 않음
+
+**해결**: OS 업그레이드 (Bullseye 이상)
+
+### 메모리 부족
+
+```
+MemoryError or system freezing
+```
+
+**해결**:
+1. Swap 메모리 증설 (위 참고)
+2. GPU 메모리 최소화
+3. 불필요한 서비스 비활성화
+
+### 성능 저하
+
+**Raspberry Pi 3 최적화**:
+- Agent만 실행 (Backend/Frontend는 다른 서버)
+- Docker 컨테이너 수 제한 (2-3개)
+- 모니터링 간격 증가 (60초 → 120초)
+
+```bash
+# /etc/maruadmin/agent.conf
+monitor_interval = 120
+heartbeat_interval = 60
+```
+
+## 네트워크 설정
+
+### 고정 IP 설정 (권장)
+
+```bash
+# /etc/dhcpcd.conf 수정
+sudo nano /etc/dhcpcd.conf
+
+# 다음 추가 (예시):
+interface eth0
+static ip_address=192.168.1.100/24
+static routers=192.168.1.1
+static domain_name_servers=8.8.8.8 8.8.4.4
+
+# 적용
+sudo systemctl restart dhcpcd
+```
+
+### SSH 활성화
+
+```bash
+# SSH 서비스 활성화
+sudo systemctl enable ssh
+sudo systemctl start ssh
+
+# 공개키 추가 (Backend에서 생성된 키)
+mkdir -p ~/.ssh
+echo 'ssh-rsa AAAA...' >> ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
+chmod 700 ~/.ssh
+```
+
+## 벤치마크 (참고)
+
+| 작업 | Pi 5 (8GB) | Pi 4 (4GB) | Pi 3 (1GB) |
+|------|-----------|-----------|-----------|
+| Agent 시작 | ~2초 | ~5초 | ~15초 |
+| 하트비트 | <1ms | ~2ms | ~5ms |
+| 컨테이너 목록 | ~50ms | ~100ms | ~200ms |
+| 메모리 사용 | ~50MB | ~80MB | ~120MB |
+
+## FAQ
+
+**Q: Raspberry Pi 3에서 Backend도 실행 가능한가요?**
+A: 가능하지만 권장하지 않습니다. Agent만 실행하세요.
+
+**Q: Docker 없이 사용 가능한가요?**
+A: 가능합니다. 컨테이너 관리 기능만 비활성화됩니다.
+
+**Q: 여러 Raspberry Pi를 연결할 수 있나요?**
+A: 가능합니다. 각 Pi에 Agent를 설치하고 다른 이름으로 등록하세요.
+
+**Q: 전력 소비는 어느 정도인가요?**
+A: Pi 5 (5W), Pi 4 (3W), Pi 3 (2.5W) - Agent 실행 시
+
+## 추가 리소스
+
+- [Raspberry Pi OS 다운로드](https://www.raspberrypi.com/software/)
+- [Raspberry Pi 공식 문서](https://www.raspberrypi.com/documentation/)
+- [Docker on Raspberry Pi](https://docs.docker.com/engine/install/debian/)
+- [MaruAdmin 메인 문서](../INSTALL.md)
