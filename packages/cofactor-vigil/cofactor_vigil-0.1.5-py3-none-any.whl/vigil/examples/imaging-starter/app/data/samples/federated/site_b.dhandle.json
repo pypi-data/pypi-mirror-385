@@ -1,0 +1,15 @@
+{
+  "uri": "s3://demo-bucket/federated/site_b.csv",
+  "format": "csv",
+  "schema": {
+    "columns": {
+      "participant_id": "string",
+      "score": "float32",
+      "label": "int32"
+    }
+  },
+  "offline_fallback": "app/data/samples/federated/site_b.csv",
+  "offline_format": "csv",
+  "consent": "internal",
+  "use_restrictions": ["federated-simulation"]
+}
