@@ -1,0 +1,55 @@
+name: git-commit-with-message
+description: Create git commit with provided message, with optional confirmation
+version: 2.0.0
+tags: [git, commit, interactive]
+
+inputs:
+  commit_message:
+    type: string
+    description: (Required) Commit message to use
+    required: true
+
+  working_dir:
+    type: string
+    description: (Optional) Working directory for git operations
+    default: "."
+    required: false
+
+  auto_commit:
+    type: boolean
+    description: (Optional) Skip confirmation and commit automatically
+    default: true
+    required: false
+
+blocks:
+  - id: confirm
+    type: Prompt
+    description: "Prompt user for commit confirmation"
+    inputs:
+      prompt: |
+        About to create commit with message:
+
+        ${inputs.commit_message}
+
+        Proceed with commit? Respond with 'yes' or 'no'
+    condition: not ${inputs.auto_commit}
+
+  # Create the commit (runs if auto OR manually confirmed)
+  - id: create_commit
+    type: Shell
+    inputs:
+      command: |
+        # Create commit and get hash
+        git commit -m "${inputs.commit_message}"
+        git rev-parse HEAD
+      working_dir: "${inputs.working_dir}"
+    condition: ${inputs.auto_commit} or ${blocks.confirm.outputs.response} == 'yes'
+    depends_on:
+      - block: confirm
+        required: false
+
+outputs:
+  success: "${blocks.create_commit.success}"
+  commit_hash: "${blocks.create_commit.outputs.stdout}"
+  exit_code: "${blocks.create_commit.outputs.exit_code}"
+  message: "Commit created successfully"

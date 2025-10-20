@@ -1,0 +1,59 @@
+name: git-analyze-changes
+description: Analyze git repository for uncommitted changes and extract diff information
+version: 1.0.0
+tags: [git, analysis, diff]
+
+inputs:
+  working_dir:
+    type: string
+    description: Working directory for git operations
+    default: "."
+
+blocks:
+  - id: changes
+    type: Shell
+    inputs:
+      command: |
+        if git diff --cached --quiet; then
+          printf "false" > $SCRATCH/changes.txt
+        else
+          printf "true" > $SCRATCH/changes.txt
+        fi
+      working_dir: "${inputs.working_dir}"
+    outputs:
+      detected:
+        type: bool
+        description: "Indicates if there are staged changes (true/false)"
+        path: "$SCRATCH/changes.txt"
+  - id: get_diff_content
+    type: Shell
+    inputs:
+      command: git diff --cached
+      working_dir: "${inputs.working_dir}"
+    condition: ${blocks.changes.outputs.detected}
+    depends_on:
+      - changes
+
+  - id: get_file_status
+    type: Shell
+    inputs:
+      command: git status --short --porcelain
+      working_dir: "${inputs.working_dir}"
+    condition: ${blocks.changes.outputs.detected}
+    depends_on:
+      - changes
+
+  - id: get_diff_stat
+    type: Shell
+    inputs:
+      command: git diff --cached --stat
+      working_dir: "${inputs.working_dir}"
+    condition: ${blocks.changes.outputs.detected}
+    depends_on:
+      - changes
+
+outputs:
+  has_changes: "${blocks.changes.outputs.detected}"
+  diff_content: "${blocks.get_diff_content.outputs.stdout}"
+  file_status: "${blocks.get_file_status.outputs.stdout}"
+  diff_stat: "${blocks.get_diff_stat.outputs.stdout}"

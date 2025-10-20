@@ -1,0 +1,107 @@
+name: git-commit
+description: |
+  Create a semantic commit with an AI-generated message based on staged changes.
+
+  Supports two generation modes:
+  1. Python script (use_llm: false): Fast pattern-matching analysis
+  2. LLM generation (default): Intelligent semantic analysis using LLM
+
+  Analyzes diffs to determine commit type (feat, fix, docs, refactor, test, chore, perf, style),
+  extracts scope, and generates a meaningful description following Conventional Commits specification.
+
+  This workflow composes three focused sub-workflows:
+  - git-analyze-changes: Checks for changes and extracts diff information
+  - generate-semantic-message: Creates commit message (LLM, script, or manual)
+  - git-commit-with-message: Creates the commit with optional confirmation
+version: "3.0.0"
+author: "workflows-mcp"
+tags: [git, commit, semantic, conventional-commits, interactive, composed]
+
+inputs:
+  stage_all:
+    type: boolean
+    default: false
+    description: "(Optional) Stage all modified files before analyzing (default: use already staged files)"
+    required: false
+
+  working_dir:
+    type: string
+    default: "."
+    description: "(Optional) Path to the git repository"
+    required: false
+
+  auto_commit:
+    type: boolean
+    default: true
+    description: "(Optional) Skip interactive confirmation and commit immediately with generated message"
+    required: false
+
+  use_llm:
+    type: boolean
+    default: true
+    description: "Use LLM to generate semantic commit message instead of Python script"
+
+  commit_message:
+    type: string
+    default: ""
+    description: "Manually provide commit message (skips auto-generation)"
+
+blocks:
+  - id: stage_files
+    type: Shell
+    description: "Stage all modified files in git repository"
+    inputs:
+      command: git add -A
+      working_dir: "${inputs.working_dir}"
+    condition: ${inputs.stage_all}
+
+  - id: analyze_changes
+    type: ExecuteWorkflow
+    description: "Analyze staged changes in git repository"
+    inputs:
+      workflow: "git-analyze-changes"
+      inputs:
+        working_dir: "${inputs.working_dir}"
+
+  - id: no_changes_message
+    type: Shell
+    description: "No changes to commit"
+    inputs:
+      command: echo "No changes to commit"
+    condition: "not ${blocks.analyze_changes.outputs.has_changes}"
+    depends_on:
+      - analyze_changes
+
+  - id: generate_message
+    type: ExecuteWorkflow
+    description: "Generate semantic commit message based on analyzed changes"
+    inputs:
+      workflow: "generate-semantic-message"
+      inputs:
+        diff_content: "${blocks.analyze_changes.outputs.diff_content}"
+        file_status: "${blocks.analyze_changes.outputs.file_status}"
+        diff_stat: "${blocks.analyze_changes.outputs.diff_stat}"
+        use_llm: ${inputs.use_llm}
+        manual_message: "${inputs.commit_message}"
+    condition: ${blocks.analyze_changes.outputs.has_changes}
+    depends_on:
+      - analyze_changes
+
+  - id: commit
+    type: ExecuteWorkflow
+    description: "Create git commit with generated semantic message"
+    inputs:
+      workflow: "git-commit-with-message"
+      inputs:
+        commit_message: "${blocks.generate_message.outputs.commit_message}"
+        working_dir: "${inputs.working_dir}"
+        auto_commit: ${inputs.auto_commit}
+    condition: ${blocks.analyze_changes.outputs.has_changes}
+    depends_on:
+      - generate_message
+
+outputs:
+  success: "${blocks.commit.outputs.success}"
+  commit_hash: "${blocks.commit.outputs.commit_hash}"
+  message: "${blocks.analyze_changes.outputs.has_changes and blocks.commit.outputs.message or blocks.no_changes_message.outputs.stdout}"
+  has_changes: "${blocks.analyze_changes.outputs.has_changes}"
