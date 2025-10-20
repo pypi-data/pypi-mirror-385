@@ -1,0 +1,61 @@
+[
+    {
+        "name": "Fireball",
+        "description": "Deals 15 damage and inflicts fire on one target",
+        "tp": 2,
+        "targets": 1,
+        "damage": 15,
+        "effects": [
+            {
+                "type": "FIERY",
+                "duration": 2,
+                "style": "bold white on dark_orange"
+            }
+        ]
+    },
+    {
+        "name": "Spark",
+        "description": "Deals 8 damage and electrifies one target",
+        "tp": 1,
+        "targets": 1,
+        "damage": 8,
+        "effects": [
+            {
+                "type": "ELECTRIFIED",
+                "duration": 2,
+                "style": "bold white on dark_magenta"
+            }
+        ]
+    },
+    {
+        "name": "Ember Burst",
+        "description": "Deals 3 damage and inflicts fiery on three targets",
+        "tp": 2,
+        "targets": 3,
+        "damage": 3,
+        "effects": [
+            {
+                "type": "FIERY",
+                "duration": 3,
+                "style": "bold white on dark_orange"
+            }
+        ]
+    },
+    {
+        "name": "Soothing Mist",
+        "description": "Heals 5HP this turn and the next, and removes all effects",
+        "tp": 2,
+        "effects": [
+            {
+                "type": "CLEANSE",
+                "duration": -1,
+                "style": "bold white on dark_green"
+            },
+            {
+                "type": "HEAL",
+                "duration": 2,
+                "style": "bold white on dark_green"
+            }
+        ]
+    }
+]
