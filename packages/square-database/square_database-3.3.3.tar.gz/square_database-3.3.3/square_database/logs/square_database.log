@@ -1,0 +1,63 @@
+=== === ===
+26-July-2025 10:07:53 AM Saturday
+ERROR
+400: {'data': None, 'message': 'the request is invalid or cannot be processed.', 'log': '(psycopg2.errors.ForeignKeyViolation) insert or update on table "user_app" violates foreign key constraint "user_app_app_id_fkey"\nDETAIL:  Key (app_id)=(0) is not present in table "app".\n\n[SQL: INSERT INTO authentication.user_app (user_id, app_id) VALUES (%(user_id_m0)s::UUID, %(app_id_m0)s) RETURNING authentication.user_app.user_id, authentication.user_app.app_id]\n[parameters: {\'user_id_m0\': \'63b958fa-ed95-43b3-af97-98130900ebaf\', \'app_id_m0\': 0}]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)'}
+=== === ===
+
+Traceback (most recent call last):
+  File "D:\venv\square\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "D:\venv\square\Lib\site-packages\sqlalchemy\engine\default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.errors.ForeignKeyViolation: insert or update on table "user_app" violates foreign key constraint "user_app_app_id_fkey"
+DETAIL:  Key (app_id)=(0) is not present in table "app".
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\code\square_database\square_database\main.py", line 129, in insert_rows_v0
+    result = session.execute(stmt)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\venv\square\Lib\site-packages\sqlalchemy\orm\session.py", line 2362, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\venv\square\Lib\site-packages\sqlalchemy\orm\session.py", line 2247, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\venv\square\Lib\site-packages\sqlalchemy\orm\bulk_persistence.py", line 1294, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "D:\venv\square\Lib\site-packages\sqlalchemy\engine\base.py", line 1418, in execute
+    return meth(
+           ^^^^^
+  File "D:\venv\square\Lib\site-packages\sqlalchemy\sql\elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\venv\square\Lib\site-packages\sqlalchemy\engine\base.py", line 1640, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\venv\square\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\venv\square\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "D:\venv\square\Lib\site-packages\sqlalchemy\engine\base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "D:\venv\square\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "D:\venv\square\Lib\site-packages\sqlalchemy\engine\default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.IntegrityError: (psycopg2.errors.ForeignKeyViolation) insert or update on table "user_app" violates foreign key constraint "user_app_app_id_fkey"
+DETAIL:  Key (app_id)=(0) is not present in table "app".
+
+[SQL: INSERT INTO authentication.user_app (user_id, app_id) VALUES (%(user_id_m0)s::UUID, %(app_id_m0)s) RETURNING authentication.user_app.user_id, authentication.user_app.app_id]
+[parameters: {'user_id_m0': '63b958fa-ed95-43b3-af97-98130900ebaf', 'app_id_m0': 0}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\code\square_database\square_database\main.py", line 160, in insert_rows_v0
+    raise HTTPException(
+fastapi.exceptions.HTTPException: 400: {'data': None, 'message': 'the request is invalid or cannot be processed.', 'log': '(psycopg2.errors.ForeignKeyViolation) insert or update on table "user_app" violates foreign key constraint "user_app_app_id_fkey"\nDETAIL:  Key (app_id)=(0) is not present in table "app".\n\n[SQL: INSERT INTO authentication.user_app (user_id, app_id) VALUES (%(user_id_m0)s::UUID, %(app_id_m0)s) RETURNING authentication.user_app.user_id, authentication.user_app.app_id]\n[parameters: {\'user_id_m0\': \'63b958fa-ed95-43b3-af97-98130900ebaf\', \'app_id_m0\': 0}]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)'}
