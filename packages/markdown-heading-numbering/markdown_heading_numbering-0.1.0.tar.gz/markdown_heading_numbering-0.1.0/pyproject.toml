@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "markdown-heading-numbering"
+version = "0.1.0"
+description = "CLI and pre-commit hook to add hierarchical numbering to Markdown headings."
+readme = "README.md"
+authors = [{ name = "jsh9" }]
+requires-python = ">=3.10"
+dependencies = [
+    "click>=8.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+]
+
+[project.scripts]
+markdown-heading-numbering = "markdown_heading_numbering.main:main"
+
+[tool.setuptools.packages.find]
+include = ["markdown_heading_numbering*"]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra"
+testpaths = ["tests"]
