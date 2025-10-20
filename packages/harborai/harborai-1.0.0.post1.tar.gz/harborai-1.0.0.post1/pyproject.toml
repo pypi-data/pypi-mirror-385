@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "harborai"
+version = "1.0.0.post1"
+description = "HarborAI - 高性能AI API代理和管理平台"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [
+    {name = "HarborAI Team", email = "team@harborai.com"},
+]
+keywords = [
+    "ai",
+    "api",
+    "proxy",
+    "openai",
+    "anthropic",
+    "llm",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.24.0",
+    "pydantic>=2.5.0",
+    "httpx>=0.25.0",
+    "click>=8.1.0",
+    "typer>=0.9.0",
+]
+
+[project.scripts]
+harborai = "harborai.cli.main:cli"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["harborai*"]
+exclude = ["tests*"]
