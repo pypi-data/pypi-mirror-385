@@ -1,0 +1,39 @@
+Metadata-Version: 2.4
+Name: nearust
+Version: 0.4.0
+Summary: Fast detection of similar strings
+Author-email: Yuta Nagano <yutanagano51@proton.me>, Matthew Cowley <matthew.v.cowley@gmail.com>
+Maintainer-email: Yuta Nagano <yutanagano51@proton.me>
+Project-URL: Homepage, https://github.com/yutanagano/nearust
+Project-URL: Documentation, https://nearust.readthedocs.io
+Project-URL: Repository, https://github.com/yutanagano/nearust
+Project-URL: Issues, https://github.com/yutanagano/nearust/issues
+Keywords: edit-distance,levenshtein-distance,string-matching,string-search,string-similarity
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: MacOS
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Text Processing
+Classifier: Topic :: Scientific/Engineering
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE.txt
+Provides-Extra: dev
+Requires-Dist: sphinx; extra == "dev"
+Requires-Dist: esbonio; extra == "dev"
+Requires-Dist: shibuya; extra == "dev"
+Requires-Dist: numpydoc; extra == "dev"
+Dynamic: license-file
+
+# nearust
+
+`nearust` is a tool for fast detection of nearest neighbour strings that fall
+within a threshold edit distance. It is a fast, multi-threaded, CPU-based
+implementation of Chotisorayuth and Mayer's [symdel
+algorithm](https://arxiv.org/abs/2403.09010v1).
+
+### Check out the [documentation page](https://nearust.readthedocs.io).
