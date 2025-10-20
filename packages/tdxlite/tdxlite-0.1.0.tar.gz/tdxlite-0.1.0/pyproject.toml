@@ -1,0 +1,49 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tdxlite"
+dynamic = ["version"]
+description = 'A lightweight TDX protocol parser and client library'
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "jett2025ab", email = "jett2025ab@outlook.com" },
+]
+classifiers = [
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+  "bitstring",
+]
+
+[project.urls]
+Homepage = "https://github.com/jett2025ab/tdxlite"
+Repository = "https://github.com/jett2025ab/tdxlite"
+
+[tool.hatch.version]
+path = "src/tdxlite/__about__.py"
+
+[tool.hatch.envs.default.scripts]
+test = "pytest tests"
+
+#[tool.hatch.envs.types]
+#extra-dependencies = [
+#  "mypy>=1.0.0",
+#]
+#[tool.hatch.envs.types.scripts]
+#check = "mypy --install-types --non-interactive {args:src/tdxlite tests}"
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "README.md"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tdxlite"]
