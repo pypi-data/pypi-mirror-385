@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "wb-db"
+version = "0.0.5"
+authors = ["mathewgeola <mathewgeola@gmail.com>"]
+readme = "README.md"
+
+packages = [
+    { include = "db", from = "src" }
+]
+
+[tool.poetry.dependencies]
+python = ">=3.12"
+pymysql = "^1.1.2"
+pandas = "^2.3.3"
+openpyxl = "^3.1.5"
+redis = "^6.4.0"
+furl = "^2.1.4"
+pymongo = "^4.15.3"
+cryptography = "^46.0.3"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
