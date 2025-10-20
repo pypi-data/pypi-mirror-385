@@ -1,0 +1,30 @@
+# Include documentation
+include README.md
+include LICENSE
+include CHANGELOG.md
+
+# Include configuration files
+include *.json
+include *.pem
+include *.sig
+
+# Include requirements
+include requirements.txt
+include requirements-dev.txt
+
+# Exclude unnecessary files
+exclude .gitignore
+exclude .env
+exclude *.pyc
+exclude __pycache__
+
+# Exclude test and development files
+recursive-exclude tests *
+recursive-exclude docs *
+recursive-exclude examples *
+recursive-exclude .git *
+
+# Exclude downloaded models and user data
+recursive-exclude models *
+recursive-exclude backups *
+exclude .neuron.lock
