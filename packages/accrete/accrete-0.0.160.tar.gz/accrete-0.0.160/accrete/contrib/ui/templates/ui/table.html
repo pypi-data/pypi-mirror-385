@@ -1,0 +1,78 @@
+{% load i18n %}
+{% load ui %}
+{% load partials %}
+
+{% block table %}
+<table id="content-table" class="table is-fullwidth is-hoverable is-narrow my-0 {% if can_compact %}can-compact{% endif %}" style="{% if not can_compact %}white-space: nowrap{% endif %}" hx-indicator=".htmx-indicator" x-data="">
+    <thead style="position: sticky; top: 0; z-index: 10; background-color: var(--bulma-scheme-main)">
+        <tr>
+            {% if instance_label %}<th>{{ instance_label }}</th>{% endif %}
+            {% for field in fields %}
+                <th style="text-align: {{ page.object_list|table_alignment:field }}">{{ page.object_list|verbose_field_name:field }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody id="content-table-body" style="z-index: 9" x-ref="tbody">
+        {% for row_object in page.object_list %}
+            {% partialdef tr inline=True %}
+                <tr id="tr-{{ row_object.pk }}"
+                    {% if row_object.get_absolute_url and detail_enabled %}
+                        style="cursor: pointer;"
+                        hx-get="{{ row_object.get_absolute_url }}{% querystring %}" hx-swap="none"
+                        hx-replace-url="{% querystring detail=row_object.pk %}"
+                        x-data="{selected: {% if row_object == active_instance %}true{% else %}false{% endif %}}" @unselect-tr.window="selected = false"
+                        x-on:click="$dispatch('unselect-tr'); selected = true; $nextTick(() => { $el.scrollIntoView( {block: 'nearest'} ) });" x-bind:class="selected ? 'is-primary' : ''"
+                    {% endif %}
+                >
+                    {% partialdef td inline=True %}
+                        {% if instance_label %}<td><span class="has-text-weight-bold">{{ row_object }}</span></td>{% endif %}
+                        {% for field in fields %}
+                            <td style="text-align: {{ row_object|table_alignment:field }}">
+                                <span>
+                                    {% if can_compact %}<span class="responsive-heading has-text-weight-medium mr-2" style="margin-right: .2rem">{{ row_object|verbose_field_name:field }}:</span>{% endif %}
+                                    <span>{{ row_object|table_display:field|default_if_none:'' }}</span>
+                                </span>
+                            </td>
+                        {% endfor %}
+                    {% endpartialdef %}
+                </tr>
+            {% endpartialdef %}
+        {% endfor %}
+    </tbody>
+    <tfoot style="position: sticky; bottom: 0; z-index: 10; background-color: var(--bulma-scheme-main);" class="has-text-weight-bold">
+        <tr id="tf-row">
+            {% partialdef tf inline=True %}
+                <td class="p-0"></td>
+                {% for field in fields %}
+                    {% if field in footer %}
+                        <td style="text-align: {{ page.object_list|table_alignment:field }}">
+                            <span class="">
+                                <span class="responsive-heading has-text-weight-light" style="margin-right: .2rem">{{ page.object_list|verbose_field_name:field }}:</span>
+                                {{ footer|get_item:field }}
+                            </span>
+                        </td>
+                    {% else %}
+                        <td class="p-0"></td>
+                    {% endif %}
+                {% endfor %}
+            {% endpartialdef %}
+        </tr>
+    </tfoot>
+</table>
+{% if endless_scroll %}
+<div id="endless-scroller"
+     {% if page.has_next %}
+        hx-get="{% querystring page=page.next_page_number %}"
+        hx-trigger="intersect once"
+        hx-select="#content-table > tbody > tr"
+        hx-target="#content-table-body"
+        hx-swap="beforeend"
+        hx-select-oob="#overview-header-items,#pagination-next-button,#pagination-end-index,#endless-scroller"
+        hx-indicator="#endless-scroll-indicator"
+        hx-replace-url="true"
+     {% endif %}
+>
+</div>
+<progress id="endless-scroll-indicator" class="htmx-indicator progress is-small is-primary" max="100">15%</progress>
+{% endif %}
+{% endblock %}
