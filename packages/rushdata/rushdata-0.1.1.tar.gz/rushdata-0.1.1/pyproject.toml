@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools >= 48.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rushdata"
+version = "0.1.1"
+description = "python data"
+authors = [
+    { name = "ndrzy", email = "dandan0019@outlook.com" }
+]
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+    'colorama',
+    'rushlib'
+]
+
+[project.urls]
+Homepage = "https://github.com/meatdumplings0019/rushdata"
+
+[tool.setuptools]
+packages = { find = { } }
