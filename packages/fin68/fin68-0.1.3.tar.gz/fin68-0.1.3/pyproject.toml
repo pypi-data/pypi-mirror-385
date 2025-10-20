@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools>=75", "wheel>=0.43", "Cython>=0.29.35", "build>=1.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fin68"
+version = "0.1.3"
+description = "High-performance Python client for the Fin68 financial data platform."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "Fin68 Team" }]
+keywords = ["fin68", "finance", "market-data", "api-client", "vietnam"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Financial and Insurance Industry",
+  "Operating System :: Microsoft :: Windows",
+  "Operating System :: POSIX :: Linux",
+  "Operating System :: MacOS",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Office/Business :: Financial",
+  "Topic :: Software Development :: Libraries"
+]
+dependencies = [
+  "pandas>=2.1.2",
+  "requests>=2.31.0",
+  "pydantic>=2.4.0"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=7.4",
+  "cibuildwheel>=2.17.0",
+  "twine>=5.0.0",
+  "python-dotenv>=1.0.0"
+]
+
+[project.urls]
+Homepage = "https://fin68.vn"
+Documentation = "https://fin68.vn/docs/fin68py/"
+
+[tool.setuptools]
+package-dir = { "" = "." }
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["fin68", "fin68.*", "private_core", "private_core.*"]
+exclude = ["tests", "examples"]
+
+[tool.setuptools.package-data]
+"private_core" = ["*.pyd", "*.so", "*.dll", "*.dylib"]
