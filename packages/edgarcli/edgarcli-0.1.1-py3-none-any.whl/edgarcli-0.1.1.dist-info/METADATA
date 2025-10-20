@@ -1,0 +1,105 @@
+Metadata-Version: 2.4
+Name: edgarcli
+Version: 0.1.1
+Summary: CLI wrapper for edgartools - SEC EDGAR data access from the command line
+Project-URL: Homepage, https://github.com/ouachitalabs/edgarcli
+Project-URL: Repository, https://github.com/ouachitalabs/edgarcli
+Project-URL: Issues, https://github.com/ouachitalabs/edgarcli/issues
+Project-URL: Documentation, https://github.com/dgunning/edgartools
+Author-email: John McCrary <john@ouachitalabs.com>
+License: MIT
+License-File: LICENSE
+Keywords: 10-k,10-q,cli,edgar,finance,financial-data,sec
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Financial and Insurance Industry
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Office/Business :: Financial
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Typing :: Typed
+Requires-Python: >=3.10
+Requires-Dist: click>=8.1.7
+Requires-Dist: edgartools>=4.20.1
+Requires-Dist: ipython>=8.12.0
+Description-Content-Type: text/markdown
+
+# edgarcli
+
+A CLI wrapper around [edgartools](https://github.com/dgunning/edgartools) by Dwight Gunning - access SEC EDGAR data from the command line.
+
+## Installation
+
+```bash
+uvx edgarcli --help
+```
+
+## Quick Start
+
+```bash
+# Set your identity (required by SEC)
+edgarcli config set-identity "Your Name your.email@example.com"
+
+# Get company info
+edgarcli company AAPL
+
+# View recent filings
+edgarcli filings AAPL --form 10-K --limit 5
+
+# Get a specific filing
+edgarcli filing AAPL --form 10-K --latest
+
+# Get financial statements
+edgarcli statements AAPL --form 10-Q --statement income
+
+# Interactive mode - drop into Python REPL with edgar pre-configured
+edgarcli -i
+```
+
+## Commands
+
+- `config` - Manage configuration (identity, paths)
+- `company` - Get company information by ticker/CIK
+- `filing` - Get specific SEC filing(s)
+- `filings` - List historical filings for a company
+- `statements` - Get financial statements from filings
+
+All commands support `--help` for detailed options.
+
+## Interactive Mode
+
+Use `edgarcli -i` to launch an IPython REPL with the edgar library pre-configured:
+
+```bash
+edgarcli -i
+```
+
+The interactive environment includes:
+- Full `edgar` module access
+- Identity automatically configured
+- Convenient imports: `Company`, `Filing`, `Filings`, `get_filings`
+
+Example session:
+```python
+>>> company = Company("AAPL")
+>>> filings = company.get_filings(form="10-K")
+>>> filing = filings.latest()
+>>> filing.financials
+```
+
+## Configuration
+
+Identity can be set via config file (`~/.config/edgarcli/config.json`), environment variable (`EDGAR_IDENTITY`), or `--identity` flag.
+
+## Credits
+
+Built on [edgartools](https://github.com/dgunning/edgartools) by Dwight Gunning.
+
+## License
+
+MIT
