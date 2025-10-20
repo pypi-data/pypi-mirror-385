@@ -1,0 +1,100 @@
+// Theme colors
+
+$o-color-palettes: map-merge($o-color-palettes,
+   (
+      'malaletra': (
+         'o-color-1': #440713,
+         'o-color-2': #EFB5B8,
+         'o-color-3': #FFFFFF,
+         'o-color-4': #FFF,
+         'o-color-5': #201E22,
+         'o-color-6': #6fd8dc,
+         'o-color-7': #9747FF,
+         'o-color-8': #40A0AE,
+         'o-color-9': #0F8574,
+         'o-color-10': #8B64D9,
+         'o-color-11': #85909A,
+         'o-color-12': #969397,
+      ),
+   )
+);
+
+$o-selected-color-palettes-names: append($o-selected-color-palettes-names, 'malaletra');
+
+$o-website-values-palettes: (
+   (
+      'color-palettes-name': 'malaletra',
+   ),
+);
+
+//------------------------------------------------------------------------------
+// Fonts
+//------------------------------------------------------------------------------
+
+@font-face {
+    font-family: 'Raleway';
+    src: url('/website_malaletra/static/fonts/raleway/Raleway-Medium.ttf'),
+    url('/website_malaletra/static/fonts/raleway/Raleway-Medium.ttf') format('ttf');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Raleway';
+    src: url('/website_malaletra/static/fonts/raleway/Raleway-Bold.ttf'),
+    url('/website_malaletra/static/fonts/raleway/Raleway-Bold.ttf') format('ttf');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Raleway';
+    src: url('/website_malaletra/static/fonts/raleway/Raleway-Light.ttf'),
+    url('/website_malaletra/static/fonts/raleway/Raleway-Light.ttf') format('ttf');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Oswald';
+    src: url('/website_malaletra/static/fonts/oswald/Oswald-Medium.ttf'),
+    url('/website_malaletra/static/fonts/oswald/Oswald-Medium.ttf') format('ttf');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Oswald';
+    src: url('/website_malaletra/static/fonts/oswald/Oswald-Bold.ttf'),
+    url('/website_malaletra/static/fonts/oswald/Oswald-Bold.ttf') format('ttf');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Playfair Display';
+    src: url('/website_malaletra/static/fonts/playfair_display/PlayfairDisplay-Medium.ttf'),
+    url('/website_malaletra/static/fonts/playfair_display/PlayfairDisplay-Medium.ttf') format('ttf');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Playfair Display';
+    src: url('/website_malaletra/static/fonts/playfair_display/PlayfairDisplay-Bold.ttf'),
+    url('/website_malaletra/static/fonts/playfair_display/PlayfairDisplay-Bold.ttf') format('ttf');
+    font-weight: 700;
+    font-style: normal;
+}
+
+$o-theme-fonts: (
+    ('Raleway', sans-serif),
+    ('Oswald', serif),
+    ('Playfair Display', Times, serif),
+) !default;
+
+$o-theme-font-names: (
+    'Raleway',
+    'Oswald',
+    'Playfair Display',
+) !default;

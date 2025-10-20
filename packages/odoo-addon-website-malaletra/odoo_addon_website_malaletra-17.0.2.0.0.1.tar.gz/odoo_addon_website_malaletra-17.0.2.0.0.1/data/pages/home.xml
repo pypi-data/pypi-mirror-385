@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Deactivate default homepage -->
+    <record id="website.homepage" model="ir.ui.view">
+        <field name="active" eval="False"/>
+    </record>
+    <!-- === Home Page === -->
+    <record id="home_page" model="website.page">
+        <field name="name">inicio</field>
+        <field name="website_published">True</field>
+        <field name="url">/</field>
+        <field name="type">qweb</field>
+        <field name="key">theme_malaletra.home_page</field>
+        <field name="arch" type="xml">
+            <t t-name="website.homepage">
+                <t t-call="website.layout">
+                    <div id="wrap" class="oe_structure">
+                        <section class="pt32 pb0" data-name="Title">
+                            <div class="container px-5">
+                                <div class="row s_nb_column_fixed">
+                                    <div class="col-lg-12 s_title pt16 pb0"
+                                        style="text-align: center;">
+                                        <h2 class="s_title_default ml-category-name"
+                                            style="text-align: left;">catálogo</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="pt32 pb0 loader-container" data-name="Title">
+                            <div class="row mb16 justify-content-center">
+                                <div class="col-auto">
+                                    <span class="loader"></span>
+                                </div>
+                            </div>
+                            <div class="row mb16 justify-content-center">
+                                <div class="col-auto">
+                                    <span class="loader"></span>
+                                </div>
+                            </div>
+                        </section>
+                        <section data-snippet="s_dynamic_snippet_products" class="s_dynamic_snippet_products s_dynamic pt32 pb32 o_colored_level s_product_product_borderless_1 o_dynamic_empty" data-name="Products" style="background-image: none;" data-product-category-id="all" data-number-of-records="16" data-filter-id="1" data-template-key="website_sale.dynamic_filter_template_product_product_borderless_1" data-carousel-interval="5000">
+                            <div class="container o_not_editable">
+                                <div class="css_non_editable_mode_hidden">
+                                    <div class="missing_option_warning alert alert-info rounded-0 fade show d-none d-print-none o_default_snippet_text">
+                                        Your Dynamic Snippet will be displayed here... This message is displayed because you did not provided both a filter and a template to use.<br/>
+                                    </div>
+                                </div>
+                                <div class="dynamic_snippet_template"/>
+                            </div>
+                        </section>
+                        <section data-snippet="s_dynamic_snippet_products" class="s_dynamic_snippet_products s_dynamic pt32 pb32 o_colored_level s_product_product_borderless_1 o_dynamic_empty" data-name="Products" style="background-image: none;" data-product-category-id="all" data-number-of-records="16" data-filter-id="1" data-template-key="website_sale.dynamic_filter_template_product_product_borderless_1" data-carousel-interval="5000">
+                            <div class="container o_not_editable">
+                                <div class="css_non_editable_mode_hidden">
+                                    <div class="missing_option_warning alert alert-info rounded-0 fade show d-none d-print-none o_default_snippet_text">
+                                        Your Dynamic Snippet will be displayed here... This message is displayed because you did not provided both a filter and a template to use.<br/>
+                                    </div>
+                                </div>
+                                <div class="dynamic_snippet_template"/>
+                            </div>
+                        </section>
+                        <section class="pt4 pb32">
+                            <div class="container mt8">
+                                <div class="row justify-content-center">
+                                    <div class="col-auto">
+                                        <a href="/shop" class="btn btn-primary o_default_snippet_text bg-o-color-10">
+                                            ir al catálogo
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="pt32 home-events pb0" data-name="Title">
+                            <div class="container px-5">
+                                <div class="row s_nb_column_fixed">
+                                    <div class="col-lg-12 s_title pt16 pb0"
+                                        style="text-align: center;">
+                                        <h2 class="s_title_default ml-category-name"
+                                            style="text-align: left;">actividades</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="s_three_columns home-events pb32 pt0" data-name="Columns">
+                            <div class="container px-5">
+                                <div class="row d-flex align-items-stretch">
+                                    <div class="s_col_no_bgcolor pt16 pb16 col-lg-4">
+                                        <div class="card bg-white">
+                                            <img class="card-img-top"
+                                                src="/web/image/website.library_image_13"
+                                                alt="Odoo - Sample 2 for three columns"
+                                                data-original-title="" title=""
+                                                aria-describedby="tooltip709877" />
+                                            <div class="card-body">
+                                                <h3 class="card-title o_default_snippet_text">Feature
+                                                    Two</h3>
+                                                <p class="card-text">To add a fourth column, reduce
+                                                    the size of these three columns using the right
+                                                    icon of each block. Then, duplicate one of the
+                                                    columns to create a new one as a copy.</p>
+                                            </div>
+                                            <div class="card-footer">
+                                                <i class="fa mr-1 padding-small fa-map-marker"
+                                                    data-original-title="" title=""
+                                                    aria-describedby="tooltip895748" />
+                                                <span>
+                                                    <strong>maleletra - Paseo Alameda de Osuna, 67</strong>
+                                                </span>
+                                                <br />
+                                                <span>04 diciembre -
+                                                    18:00</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="s_col_no_bgcolor pt16 pb16 col-lg-4">
+                                        <div class="card bg-white" style="">
+                                            <img class="card-img-top"
+                                                src="/web/image/website.library_image_13"
+                                                alt="Odoo - Sample 2 for three columns"
+                                                data-original-title="" title=""
+                                                aria-describedby="tooltip709877" />
+                                            <div class="card-body">
+                                                <h3 class="card-title o_default_snippet_text">Feature
+                                                    Two</h3>
+                                                <p class="card-text">To add a fourth column, reduce
+                                                    the size of these three columns using the right
+                                                    icon of each block. Then, duplicate one of the
+                                                    columns to create a new one as a copy.</p>
+                                            </div>
+                                            <div class="card-footer">
+                                                <i class="fa mr-1 padding-small fa-map-marker"
+                                                    data-original-title="" title=""
+                                                    aria-describedby="tooltip895748" />
+                                                <span>
+                                                    <strong>maleletra - Paseo Alameda de Osuna, 67</strong>
+                                                </span>
+                                                <br />
+                                                <span>04 diciembre -
+                                                    18:00</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="s_col_no_bgcolor pt16 pb16 col-lg-4">
+                                        <div class="card bg-white">
+                                            <img class="card-img-top"
+                                                src="/web/image/website.library_image_13"
+                                                alt="Odoo - Sample 2 for three columns"
+                                                data-original-title="" title=""
+                                                aria-describedby="tooltip709877" />
+                                            <div class="card-body">
+                                                <h3 class="card-title o_default_snippet_text">Feature
+                                                    Two</h3>
+                                                <p class="card-text">To add a fourth column, reduce
+                                                    the size of these three columns using the right
+                                                    icon of each block. Then, duplicate one of the
+                                                    columns to create a new one as a copy.</p>
+                                            </div>
+                                            <div class="card-footer">
+                                                <i class="fa mr-1 padding-small fa-map-marker"
+                                                    data-original-title="" title=""
+                                                    aria-describedby="tooltip895748" />
+                                                <span>
+                                                    <strong>maleletra - Paseo Alameda de Osuna, 67</strong>
+                                                </span>
+                                                <br />
+                                                <span>04 diciembre -
+                                                    18:00</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <section id="villana" class="s_text_image pt32 pb32 bg-white" data-name="Text - Image">
+                            <div class="container  px-5">
+                                <div class="row align-items-center">
+                                    <div class="col-lg-6 pt16 pb16">
+                                        <h2>una <span class="text-secondary">librería</span> dentro <br />
+                                            de un <span class="text-o-color-9">centro social</span></h2>
+                                        <p class="o_default_snippet_text">Malaletra es una <strong>
+                                            librería</strong> que vive dentro de un <strong>centro
+                                            social</strong>, La Villana de Vallekas. Es parte de su
+                                            entramado y una pata más de sus dispositivos de lucha.
+                                            Malaletra convive, así, con otros colectivos políticos
+                                            que se autoorganizan y luchan en distintos ejes: <strong>feminismo,
+                                            vivienda, antirracismo, LGTBI…</strong> Dentro de esta
+                                            red de estructuras populares, la librería es una de las
+                                            dos empresas políticas del centro social junto con la
+                                            cooperativa Veguiterráneo. Ambas contribuyen
+                                            económicamente al centro social y sus entramados de
+                                            lucha.</p>
+                                        <div class="s_btn pt16 pb16 text-left home-cta-buttons" data-name="Buttons">
+                                            <a href="/amigas" class="btn btn-secondary o_animate_preview"
+                                                data-original-title="" title=""
+                                                aria-describedby="tooltip776640" style="">¡hazte
+                                                amiga!</a>
+                                            <a href="https://lavillana.org/socias/"
+                                                class="btn btn-primary o_default_snippet_text bg-o-color-10">apoya
+                                                a la villana</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 pt16 pb16">
+                                        <img src="/website_malaletra/static/img/logo-villana.png"
+                                            class="img img-fluid mx-auto"
+                                            alt="Odoo • Text and Image" />
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </t>
+            </t>
+        </field>
+    </record>
+
+    <record id="home_page_link" model="website.menu">
+        <field name="name">inicio</field>
+        <field name="page_id" ref="home_page" />
+        <field name="parent_id" ref="website.main_menu" />
+        <field name="sequence" type="int">10</field>
+    </record>
+</odoo>
