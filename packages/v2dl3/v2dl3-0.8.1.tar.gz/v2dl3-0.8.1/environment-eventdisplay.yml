@@ -1,0 +1,21 @@
+# installation:
+# create: conda env create -f environment-eventdisplay.yml
+# activate: conda activate v2dl3Eventdisplay
+#
+name: v2dl3Eventdisplay
+channels:
+  - astropy
+  - conda-forge
+dependencies:
+  - astropy-base
+  - click
+  - flake8
+  - numpy
+  - pre-commit
+  - pyflakes
+  - pytest
+  - python>=3.11
+  - pyyaml
+  - scipy
+  - scikit-learn
+  - uproot
