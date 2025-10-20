@@ -1,0 +1,268 @@
+# X-Scanner Commons
+
+Common utilities and infrastructure components for X-Scanner microservices.
+
+## Overview
+
+X-Scanner Commons is a Python package that provides reusable components for building microservices in the X-Scanner security scanning platform. It includes infrastructure components (cache, vault, database), configuration management, logging, and utility functions.
+
+## Features
+
+- **Infrastructure Layer**
+  - Cache abstraction with Redis and in-memory implementations
+  - HashiCorp Vault integration for secret management
+  - Database session management with async SQLAlchemy support
+
+- **Configuration Management**
+  - Pydantic-based configuration with environment variable support
+  - Common configuration patterns for microservices
+  - Built-in validators for common configuration types
+
+- **Logging & Monitoring**
+  - Structured JSON logging
+  - Request ID tracking for distributed tracing
+  - Configurable log levels and formats
+
+- **Utilities**
+  - Common helper functions
+  - Password hashing and verification
+  - Retry decorators for async functions
+  - Data manipulation utilities
+
+## Installation
+
+### Basic Installation
+
+```bash
+pip install x-scanner-commons
+```
+
+### With Optional Dependencies
+
+Install with specific features:
+
+```bash
+# Cache support (Redis)
+pip install "x-scanner-commons[cache]"
+
+# Vault support (HashiCorp Vault)
+pip install "x-scanner-commons[vault]"
+
+# Database support (SQLAlchemy, AsyncPG)
+pip install "x-scanner-commons[database]"
+
+# All features
+pip install "x-scanner-commons[all]"
+```
+
+### Development Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/x-scanner/x-scanner-commons.git
+cd x-scanner-commons
+
+# Install with Poetry
+poetry install --all-extras
+
+# Or with pip
+pip install -e ".[all]"
+```
+
+## Quick Start
+
+### Basic Configuration
+
+```python
+from x_scanner_commons import BaseConfig, get_logger
+
+# Create configuration
+class ServiceConfig(BaseConfig):
+    custom_setting: str = "default_value"
+
+config = ServiceConfig()
+logger = get_logger(__name__)
+
+logger.info(f"Starting {config.service_name} on port {config.port}")
+```
+
+### Using Cache
+
+```python
+from x_scanner_commons.infrastructure.cache import MemoryCache, RedisCache
+
+# In-memory cache (no dependencies)
+cache = MemoryCache()
+await cache.set("key", "value", ttl=60)
+value = await cache.get("key")
+
+# Redis cache (requires redis extra)
+cache = RedisCache(host="localhost", port=6379)
+await cache.set("user:123", {"name": "John", "email": "john@example.com"})
+```
+
+### Secret Management with Vault
+
+```python
+from x_scanner_commons.infrastructure.vault import VaultClient
+
+# Initialize Vault client (requires vault extra)
+vault = VaultClient(
+    url="http://localhost:8200",
+    token="your-token"
+)
+
+# Store and retrieve secrets
+await vault.set_secret("api/keys", {"api_key": "secret123"})
+secret = await vault.get_secret("api/keys")
+api_key = secret.get("api_key")
+```
+
+### Database Sessions
+
+```python
+from x_scanner_commons.infrastructure.database import AsyncSessionManager, get_async_session
+
+# Option 1: Manual session manager
+db = AsyncSessionManager(
+    database_url="postgresql+asyncpg://user:pass@localhost/db"
+)
+
+# Option 2: Use the cached get_async_session function (recommended)
+# This function is decorated with @alru_cache for efficient connection pooling
+from fastapi import Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+from typing import Annotated
+
+@app.get("/users")
+async def get_users(
+    db: Annotated[AsyncSession, Depends(get_async_session)]
+):
+    # Use database session
+    pass
+```
+
+### Structured Logging
+
+```python
+from x_scanner_commons import get_logger, setup_logging
+
+# Setup logging
+setup_logging(
+    level="INFO",
+    format_type="json",
+    service_name="my-service"
+)
+
+# Get logger
+logger = get_logger(__name__)
+
+# Log with structured data
+logger.info("User logged in", extra_fields={
+    "user_id": 123,
+    "ip_address": "192.168.1.1"
+})
+```
+
+## Module Documentation
+
+### Configuration Layer
+
+#### Base Configuration
+- `BaseConfig`: Base configuration class with common settings
+- `Environment`: Environment enum (development, testing, staging, production)
+- `LogLevel`: Log level enum
+
+#### Validators
+- `validate_port`: Port number validation
+- `validate_database_url`: Database URL validation
+- `validate_redis_url`: Redis URL validation
+- `validate_email`: Email address validation
+
+### Core Layer
+
+#### Logging
+- `get_logger`: Get configured logger instance
+- `setup_logging`: Configure logging system
+- `JSONFormatter`: JSON log formatter
+- `get_request_id`, `set_request_id`: Request ID tracking
+
+#### Exceptions
+- `BaseError`: Base exception class with error codes
+- `ConfigurationError`: Configuration-related errors
+- `ValidationError`: Validation errors with field information
+- `NotFoundError`: Resource not found errors
+- `AuthenticationError`: Authentication failures
+
+### Utilities
+
+#### Helper Functions
+- `generate_id`: Generate unique identifiers
+- `generate_token`: Generate secure random tokens
+- `hash_password`, `verify_password`: Password hashing
+- `deep_merge`: Deep merge dictionaries
+- `chunk_list`: Split lists into chunks
+- `retry_async`: Retry decorator for async functions
+
+## Development
+
+### Running Tests
+
+```bash
+# Run all tests
+make test
+
+# Run with coverage
+pytest --cov=x_scanner_commons --cov-report=html
+
+# Run specific test module
+pytest tests/infrastructure/test_cache.py
+```
+
+### Code Quality
+
+```bash
+# Format code
+make format
+
+# Run linters
+make lint
+
+# Type checking
+mypy x_scanner_commons/
+```
+
+### Building Package
+
+```bash
+# Build distribution
+make build
+
+# Clean build artifacts
+make clean
+```
+
+## Version History
+
+### 0.1.0 (Initial Release)
+- Infrastructure layer with cache, vault, and database modules
+- Configuration management with Pydantic
+- Structured logging with JSON support
+- Common utilities and helpers
+- Comprehensive test coverage
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Support
+
+For issues and questions, please open an issue on the [GitHub repository](https://github.com/x-scanner/x-scanner-commons/issues).

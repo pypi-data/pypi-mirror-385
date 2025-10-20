@@ -1,0 +1,89 @@
+[tool.poetry]
+name = "x-scanner-commons"
+version = "0.1.1"
+description = "Common utilities for X-Scanner microservices"
+authors = ["X-Scanner Team"]
+readme = "README.md"
+packages = [{include = "x_scanner_commons"}]
+license = "MIT"
+
+[[tool.poetry.source]]
+name = "gitlab"
+url = "https://git.evil.pe/api/v4/projects/447/packages/pypi/simple"
+priority = "supplemental"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pydantic = "^2.0"
+pydantic-settings = "^2.0"
+
+# Optional dependencies
+aiocache = {version = "^0.12", optional = true, extras = ["redis"]}
+redis = {version = "^5.0", optional = true}
+hiredis = {version = "^2.2", optional = true}
+mmh3 = {version = "^5.0", optional = true}
+hvac = {version = "^2.0", optional = true}
+sqlalchemy = {version = "^2.0", optional = true}
+asyncpg = {version = "^0.29 || ^0.30", optional = true}
+alembic = {version = "^1.13", optional = true}
+async-lru = "^2.0.5"
+
+[tool.poetry.extras]
+cache = ["aiocache", "redis", "hiredis", "mmh3"]
+vault = ["hvac"]
+database = ["sqlalchemy", "asyncpg", "alembic"]
+all = ["aiocache", "redis", "hiredis", "mmh3", "hvac", "sqlalchemy", "asyncpg", "alembic"]
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4"
+pytest-asyncio = "^0.21"
+pytest-cov = "^4.1"
+black = "^23.0"
+ruff = "^0.1"
+mypy = "^1.5"
+types-redis = "^4.6"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 100
+target-version = ['py311']
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "UP", # pyupgrade
+]
+ignore = []
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+[tool.coverage.run]
+source = ["x_scanner_commons"]
+omit = ["*/tests/*", "*/__init__.py"]
+
+[tool.coverage.report]
+precision = 2
+show_missing = true
+skip_covered = false
