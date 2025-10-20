@@ -1,0 +1,27 @@
+[project]
+name = "formalpdf"
+version = "0.1.6"
+description = "An Apache-licensed package for extracting, creating, filling, and flattening PDF Forms."
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "pillow>=11.3.0",
+    "pypdfium2>=4.30",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.13.0",
+    "pytest>=8.0.0",
+    "pre-commit>=4.3.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests",
+]
+addopts = "-q"
+
+[build-system]
+requires = ["hatchling>=1.21.1"]
+build-backend = "hatchling.build"
