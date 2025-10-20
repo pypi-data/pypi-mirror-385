@@ -1,0 +1,129 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --radius: 0px; /* flatten default radius */
+  /* Old money palette: cream, deep green, muted gold, taupe */
+  --background: #f6f2e8;
+  --foreground: #1f2d24;
+  --card: #faf7f0;
+  --card-foreground: #1f2d24;
+  --popover: #faf7f0;
+  --popover-foreground: #1f2d24;
+  --primary: #2f4f3e; /* deep green */
+  --primary-foreground: #f6f2e8; /* cream */
+  --secondary: #e9e3d3; /* light cream */
+  --secondary-foreground: #2f4f3e;
+  --muted: #e3dccb; /* taupe/cream */
+  --muted-foreground: #5b5a54;
+  --accent: #bfae84; /* muted gold */
+  --accent-foreground: #1f2d24;
+  --destructive: #8b3a3a;
+  --border: #d8d2c3;
+  --input: #d8d2c3;
+  --ring: #6b8f7a; /* soft green */
+  /* Chart colors harmonized */
+  --chart-1: #2f4f3e; /* green */
+  --chart-2: #bfae84; /* gold */
+  --chart-3: #7a6e5a; /* taupe */
+  --chart-4: #3d6b50; /* medium green */
+  --chart-5: #c6bca2; /* light gold */
+  /* Sidebar */
+  --sidebar: #f3efe4;
+  --sidebar-foreground: #1f2d24;
+  --sidebar-primary: #2f4f3e;
+  --sidebar-primary-foreground: #f6f2e8;
+  --sidebar-accent: #e9e3d3;
+  --sidebar-accent-foreground: #2f4f3e;
+  --sidebar-border: #d8d2c3;
+  --sidebar-ring: #6b8f7a;
+}
+
+.dark {
+  --background: #101a15; /* deep green-black */
+  --foreground: #e9e3d3;
+  --card: #18261e;
+  --card-foreground: #e9e3d3;
+  --popover: #18261e;
+  --popover-foreground: #e9e3d3;
+  --primary: #c9be9c; /* lighter gold in dark */
+  --primary-foreground: #1f2d24;
+  --secondary: #24372d;
+  --secondary-foreground: #e9e3d3;
+  --muted: #24372d;
+  --muted-foreground: #b6b0a3;
+  --accent: #bfae84;
+  --accent-foreground: #18261e;
+  --destructive: #a05555;
+  --border: #2a3d33;
+  --input: #2a3d33;
+  --ring: #6b8f7a;
+  --chart-1: #c9be9c;
+  --chart-2: #3d6b50;
+  --chart-3: #7a6e5a;
+  --chart-4: #2f4f3e;
+  --chart-5: #a6997a;
+  --sidebar: #18261e;
+  --sidebar-foreground: #e9e3d3;
+  --sidebar-primary: #c9be9c;
+  --sidebar-primary-foreground: #18261e;
+  --sidebar-accent: #24372d;
+  --sidebar-accent-foreground: #e9e3d3;
+  --sidebar-border: #2a3d33;
+  --sidebar-ring: #6b8f7a;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  /* Force square corners across shadcn components */
+  [data-slot] { border-radius: 0 !important; }
+  /* Common rounded utility overrides */
+  .rounded, .rounded-xs, .rounded-sm, .rounded-md, .rounded-lg, .rounded-xl, .rounded-2xl, .rounded-3xl, .rounded-full { border-radius: 0 !important; }
+}
