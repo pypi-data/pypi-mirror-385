@@ -1,0 +1,33 @@
+# File Collector Scenario Template
+# Simple file collection workflow
+
+scenario:
+  id: file_collector
+  name: File Collector
+  description: Collect files matching patterns and output statistics
+  author: OutcomeForge Team
+  version: 1.0.0
+
+parameters:
+  patterns:
+    type: list
+    default: ["**/*.py", "**/*.md"]
+    description: File patterns to collect
+
+  extensions:
+    type: list
+    default: []
+    description: File extensions to filter (optional)
+
+steps:
+  - node: "@common/get_files"
+    name: collect_files
+    params:
+      patterns: "{{params.patterns}}"
+      extensions: "{{params.extensions}}"
+      exclude:
+        - "node_modules/**"
+        - ".git/**"
+        - "__pycache__/**"
+        - "*.pyc"
+        - ".pytest_cache/**"
