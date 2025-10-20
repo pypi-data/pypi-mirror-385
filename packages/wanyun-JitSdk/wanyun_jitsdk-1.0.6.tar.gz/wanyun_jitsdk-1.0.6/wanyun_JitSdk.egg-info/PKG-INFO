@@ -1,0 +1,79 @@
+Metadata-Version: 2.4
+Name: wanyun_JitSdk
+Version: 1.0.6
+Summary: Official Jit API Authorization SDK
+Author: zangtao
+Author-email: support@jit.pro
+Keywords: python,jit,sdk,apiAuth
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: MacOS :: MacOS X
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: POSIX :: Linux
+Description-Content-Type: text/markdown
+Requires-Dist: requests
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: keywords
+Dynamic: requires-dist
+Dynamic: summary
+
+Metadata-Version: 2.2
+Name: wanyun_JitSdk
+Version: 1.0.6
+Summary: Official Jit API Authorization SDK
+Author: zangtao
+Author-email: noguchisyou123456@gmail.com
+Keywords: python,jit,sdk,apiAuth
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: MacOS :: MacOS X
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: POSIX :: Linux
+Description-Content-Type: text/markdown
+Requires-Dist: requests
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: keywords
+Dynamic: requires-dist
+Dynamic: summary
+
+# JitSDK
+
+Jit officially provides built-in API authorization components, enabling your applications to easily implement external API interface services. Additionally, we offer a comprehensive SDK to help you quickly and conveniently integrate and use these authorized API interfaces.
+
+## Usage
+ 1. Install Dependencies
+
+~~~
+pip install wanyun_JitSdk
+~~~
+
+2. Obtain Authorization Credentials from the Authorization Provider
+~~~
+API URL: http://demoain/api/orgId/appName
+accessKey: xxxx
+accessSecret: xxxxxxxxxxxxxxxx
+~~~
+
+4. Import and Use in Your Project (refer to the demo file)
+~~~ python
+authApi = JitApi("http://demoain/api/orgId/appName")
+authApi.setAccessKey("xxxx")
+authApi.setAccessSecret("xxxxxxxxxxxxxxxx")
+authApi.setApi("services.MySvc.func1")
+
+req = JitApiRequest()
+req.setMethod("POST")
+req.setParams({})
+resp = req.execute(authApi)
+print(resp.data)
+~~~
