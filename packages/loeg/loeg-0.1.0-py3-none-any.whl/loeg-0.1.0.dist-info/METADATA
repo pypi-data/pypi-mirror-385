@@ -1,0 +1,17 @@
+Metadata-Version: 2.3
+Name: loeg
+Version: 0.1.0
+Summary: Løg: Quick log prettifier
+Author: sorenmulli
+Author-email: sorenmulli <soren@vholm.dk>
+Requires-Dist: colorama>=0.4.6
+Requires-Python: >=3.12
+Description-Content-Type: text/markdown
+
+# Løg
+
+Quick log prettifier.
+
+```bash
+logcli query '{namespace="edge"}' -o jsonl | loeg
+```
