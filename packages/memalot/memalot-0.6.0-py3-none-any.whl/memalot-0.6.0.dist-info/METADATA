@@ -1,0 +1,25 @@
+Metadata-Version: 2.4
+Name: memalot
+Version: 0.6.0
+Summary: Finds memory leaks in Python programs
+Requires-Python: ~=3.10
+License-File: LICENSE
+Requires-Dist: referrers>=0.16.0
+Requires-Dist: rich>=13.0
+Requires-Dist: psutil>=5.0
+Requires-Dist: pydantic>=2.2
+Requires-Dist: objsize>=0.7
+Requires-Dist: networkx>=2.8
+Provides-Extra: test
+Requires-Dist: pytest~=8.4; extra == "test"
+Requires-Dist: pytest-mock~=3.14.1; extra == "test"
+Requires-Dist: mypy~=1.16; extra == "test"
+Requires-Dist: ruff>=0.12; extra == "test"
+Requires-Dist: pre-commit~=4.2; extra == "test"
+Requires-Dist: numpy~=2.2; extra == "test"
+Requires-Dist: pytest-cov~=6.2; extra == "test"
+Requires-Dist: pytest-asyncio~=1.1; extra == "test"
+Requires-Dist: pytest-benchmark~=5.1; extra == "test"
+Provides-Extra: mcp
+Requires-Dist: fastmcp>=2.12; extra == "mcp"
+Dynamic: license-file
