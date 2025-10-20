@@ -1,0 +1,21 @@
+[build-system]
+requires = [
+    "setuptools",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "getBISy"
+authors = [
+    { name = "Matthew Potts", email = "matthew-potts@live.com" },
+]
+description = "package description"
+readme = "README.md"
+version = "0.0.10"
+requires-python = ">=3.7"
+dynamic = [
+    "dependencies",
+]
+
+[tools.setuptools.dynamic.dependencies]
+file = "requirements.txt"
