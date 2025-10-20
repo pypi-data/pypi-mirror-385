@@ -1,0 +1,57 @@
+Metadata-Version: 2.4
+Name: chronomap
+Version: 0.1.0
+Summary: A time-versioned dictionary implementation for Python
+Home-page: https://github.com/Devansh-567/chronomap
+Author: Devansh Singh
+Author-email: Devansh Singh <devansh.jay.singh@gmail.com>
+License: MIT
+Project-URL: Homepage, https://github.com/Devansh-567/chronomap
+Project-URL: Documentation, https://github.com/Devansh-567/chronomap#readme
+Project-URL: Repository, https://github.com/Devansh-567/chronomap
+Project-URL: Issues, https://github.com/Devansh-567/chronomap/issues
+Keywords: temporal,versioning,time-series,history,snapshot,dictionary
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Operating System :: OS Independent
+Classifier: Typing :: Typed
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.0.0; extra == "dev"
+Requires-Dist: black>=23.0.0; extra == "dev"
+Requires-Dist: mypy>=1.0.0; extra == "dev"
+Requires-Dist: flake8>=6.0.0; extra == "dev"
+Dynamic: author
+Dynamic: home-page
+Dynamic: requires-python
+
+# ChronoMap
+
+A thread-safe, time-versioned dictionary implementation for Python.
+
+## Features
+
+- Temporal Queries
+- Complete History
+- Thread-Safe
+- Snapshots
+- Diffing
+- Zero Dependencies
+- Type Hints
+
+## Installation
+
+```bash
+pip install chronomap
+```
