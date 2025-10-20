@@ -1,0 +1,34 @@
+{% load i18n %}
+
+<dialog id="filtersDialog" class="modal">
+  <section class="relative modal-box w-full max-w-2xl">
+    <header class="flex items-center justify-between gap-4">
+      <h1 class="text-lg font-semibold lg:text-2xl">{% trans 'Filters' %}</h1>
+
+      <div
+        class="tooltip tooltip-left rtl:tooltip-right"
+        data-tip="{% trans 'Close' %}"
+        onclick="filtersDialog.close()"
+      >
+        <button class="btn btn-square btn-sm btn-ghost lg:btn-md 2xl:btn-lg">
+          <i data-lucide="x" class="size-4 lg:size-6"></i>
+          <span class="sr-only">{% trans 'Close' %}</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="container-prose">
+      {% for element in elements %}{{ element }}{% endfor %}
+
+      <div class="mt-8">
+        <button
+          type="button"
+          class="btn btn-block btn-sm btn-primary grow lg:btn-md"
+          onclick="filtersDialog.close()"
+        >
+          {% trans 'Close' %}
+        </button>
+      </div>
+    </main>
+  </section>
+</dialog>
