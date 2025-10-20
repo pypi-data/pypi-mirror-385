@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "wb-android"
+version = "0.0.1"
+authors = ["mathewgeola <mathewgeola@gmail.com>"]
+readme = "README.md"
+
+packages = [
+    { include = "android", from = "src" }
+]
+
+[tool.poetry.dependencies]
+python = ">=3.12"
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
