@@ -1,0 +1,16 @@
+[build-system]
+requires = [
+    "setuptools>=60",
+    "setuptools-scm>=8.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic]
+version = {attr = "peakrdl_pyuvm.__version__"}
+
+[project]
+name = "peakrdl-pyuvm"
+version = "0.0.1"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.7"
+dependencies = []
