@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=65.5", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mcp-tip"
+version = "0.1.1"
+description = "ThreatBook IP 查询 MCP 工具"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+  { name = "FBX", email = "your_email@example.com" }
+]
+dependencies = [
+  "requests>=2.31",
+  "fastmcp>=0.1.0"
+]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Operating System :: OS Independent"
+]
+
+[project.scripts]
+# 控制台命令 mcp_threatbook 会执行 mcp_threatbook.server 模块中的 main() 函数
+mcp_threatbook = "mcp_threatbook.server:main"
