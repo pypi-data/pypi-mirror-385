@@ -1,0 +1,156 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hippocampai"
+version = "0.1.0"
+description = "HippocampAI — autonomous long-term memory engine with hybrid retrieval and cross-encoder reranking"
+readme = "README.md"
+requires-python = ">=3.9"
+license = "Apache-2.0"
+authors = [
+    {name = "HippocampAI Contributors"},
+    {name = "Rex Divakar", email = "rexdivakar@hotmail.com"}
+]
+maintainers = [
+    {name = "Rex Divakar", email = "rexdivakar@hotmail.com"}
+]
+keywords = ["llm", "memory", "rag", "retrieval", "vector-database", "qdrant", "ai", "embeddings", "semantic-search"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+dependencies = [
+    "qdrant-client>=1.7.0",
+    "sentence-transformers>=2.2.0",
+    "rank-bm25>=0.2.2",
+    "pydantic>=2.0.0",
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.24.0",
+    "typer[all]>=0.9.0",
+    "apscheduler>=3.10.0",
+    "cachetools>=5.3.0",
+    "httpx>=0.25.0",
+    "python-dotenv>=1.0.0",
+    "pydantic==2.12.3",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.1.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+    "mypy>=1.0.0",
+    "safety>=2.3.0",
+    "bandit[toml]>=1.7.0",
+]
+ollama = [
+    "ollama>=0.1.0",
+]
+anthropic = [
+    "anthropic>=0.39.0",
+]
+openai = [
+    "openai>=1.0.0",
+]
+
+[project.scripts]
+hippocampai = "hippocampai.cli.main:app"
+hippocampai-api = "hippocampai.api.app:run_server"
+
+[project.urls]
+Homepage = "https://github.com/rexdivakar/HippocampAI"
+Documentation = "https://github.com/rexdivakar/HippocampAI#readme"
+Repository = "https://github.com/rexdivakar/HippocampAI"
+"Issue Tracker" = "https://github.com/rexdivakar/HippocampAI/issues"
+Changelog = "https://github.com/rexdivakar/HippocampAI/blob/main/CHANGELOG.md"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["hippocampai*"]
+
+[tool.black]
+line-length = 100
+target-version = ['py39']
+
+[tool.ruff]
+line-length = 100
+select = ["E", "F", "I"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--verbose",
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+]
+
+[tool.coverage.run]
+source = ["src"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "*/__pycache__/*",
+    "*/migrations/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = [
+    "qdrant_client.*",
+    "sentence_transformers.*",
+    "rank_bm25.*",
+    "apscheduler.*",
+    "cachetools.*",
+]
+ignore_missing_imports = true
+
+[tool.bandit]
+exclude_dirs = ["tests"]
+skips = ["B101", "B601"]
