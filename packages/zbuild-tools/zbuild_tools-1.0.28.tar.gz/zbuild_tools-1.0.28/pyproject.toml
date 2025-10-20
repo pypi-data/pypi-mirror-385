@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "zbuild-tools"
+version = "1.0.28"
+authors = [{name = "Zhiguo.Zhu", email = "294966@qq.com"}]
+
+description = "It is the build system of linux which is based on Conan"
+requires-python = ">=3.8, <=3.14"
+dependencies = [
+    "conan-zbuild >= 1.66.3, < 2.0.0",
+    "dockerpty == 0.4.1",
+    "docker == 7.1.0",
+    "intervaltree == 3.1.0",
+    "pyelftools",
+    "ruamel.yaml == 0.18.15",
+    "psutil",
+    "pyserial == 3.5",
+    "fbtftp == 0.5",
+    "dohq-artifactory == 1.0.1",
+    "aiohttp",
+    "easy_enum == 0.3.0",
+    "paramiko == 3.5.0",
+    "pytest",
+    "tblib",
+    "shenaniganfs",
+]
+
+[project.entry-points."pytest11"]
+"myplugin" = "parallel"
+
+[project.scripts]
+zbuild = "zbuild:zbuild_main"
+zb = "zbuild:zbuild_main"
+zrun = "zbuild:zrun_main"
+zflash = "zbuild:zflash_main"
+zf = "zbuild:zflash_main"
+mkuenv = "zbuild:mkimg_main"
+board = "zbuild:board_main"
+board-server = "zbuild:boardserver_main"
+jfrog = "zbuild:jfrog_main"
