@@ -1,0 +1,93 @@
+Metadata-Version: 2.4
+Name: redumetrics
+Version: 0.1.0
+Summary: Metrics to evaluate dimensionality reduction quality.
+Author-email: David Hidalgo <davidht02@gmail.com>
+License: MIT License
+        
+        Copyright (c) 2023 David Hidalgo
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+Project-URL: Homepage, https://github.com/tuusuario/ReduMetrics
+Project-URL: Issues, https://github.com/tuusuario/ReduMetrics/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Scientific/Engineering :: Information Analysis
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy>=1.21
+Requires-Dist: scipy>=1.7
+Requires-Dist: scikit-learn>=1.0
+Dynamic: license-file
+Dynamic: requires-python
+
+# ReduMetrics
+
+**ReduMetrics** is a lightweight library to evaluate the quality of dimensionality reductions, independent of the projection method (PCA, t-SNE, UMAP, …).  
+It provides five complementary metrics:
+
+| Metric | Meaning | Range |
+|:--------|:---------|:------|
+| **ULSE** | Local neighborhood preservation | [0, 1] |
+| **RTA** | Random triplet accuracy | [0, 1] |
+| **Spearman** | Rank correlation of sampled distances | [−1, 1] |
+| **k-NCP** | *k*-nearest class preservation | [0, 1] |
+| **CDC** | Centroid distance correlation | [−1, 1] |
+
+Pure functions — NumPy in/out.  
+Tested with **Python 3.9 – 3.12**.  
+
+**Dependencies:**  
+`numpy`, `scipy`, `scikit-learn`  
+
+---
+
+## Installation
+
+```bash
+pip install ReduMetrics
+```
+---
+## Usage
+
+```import numpy as np
+from ReduMetrics.metrics.ulse import ulse_score
+from ReduMetrics.metrics.rta import rta_score
+from ReduMetrics.metrics.spearman import spearman_correlation
+from ReduMetrics.metrics.k_ncp import kncp_score
+from ReduMetrics.metrics.cdc import cdc_score
+
+# X_high: (m, n) high-dim data, X_low: (m, r) embedding, labels: (m,)
+rng = np.random.default_rng(42)
+m, n, r = 1000, 50, 2
+X_high = rng.normal(size=(m, n))
+X_low  = X_high[:, :r]          # toy projection
+labels = rng.integers(0, 10, size=m)
+
+# Metrics
+ulse = ulse_score(X_high, X_low, k=10)                         # -> [0, 1]
+rta  = rta_score (X_high, X_low, T=10000, random_state=0)      # -> [0, 1]
+rho  = spearman_correlation(X_high, X_low, P=20000, random_state=0)  # -> [-1, 1]
+kncp = kncp_score(X_high, X_low, labels)                       # -> [0, 1]
+cdc  = cdc_score (X_high, X_low, labels)                       # -> [-1, 1]
+
+print(ulse, rta, rho, kncp, cdc)
