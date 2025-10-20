@@ -1,0 +1,73 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ormodel"
+version = "0.3.0"
+description = "An async ORM using SQLModel with a Django-like query syntax."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+authors = [
+    { name = "PolarBearEs", email = "contact@polarbear.es" },
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Framework :: AsyncIO",
+    "Topic :: Database",
+]
+dependencies = [
+    "sqlmodel>=0.0.25",
+]
+
+[project.urls]
+Homepage = "https://github.com/PolarBearEs/ORModel"
+Repository = "https://github.com/PolarBearEs/ORModel"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.4.2",
+    "pytest-env==1.1.5",
+    "pytest-asyncio>=1.2.0", # Essential for async tests
+    "pydantic-settings==2.11.0",
+    "ruff>=0.14.0",
+    "mypy>=1.18.2",
+    "httpx==0.28.1", # If testing API endpoints later
+    "fastapi>=0.118.2", # Needed if reusing example models/app structure
+    "orjson==3.11.3",  # Faster JSON encoding/decoding
+    "uvicorn[standard]>=0.37.0",
+    "uv>=0.9.0",
+    "aiosqlite>=0.21.0",       # Async driver for SQLite (used in tests)
+    "pytest-cov>=7.0.0",
+]
+[tool.hatch.build.targets.sdist]
+include = [
+    "/ormodel",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["ormodel"]
+
+# Optional: Ruff configuration
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "UP", "ASYNC"]
+ignore = []
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.pytest_env]
+DATABASE_URL = "sqlite+aiosqlite:///./default.db"
+
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
