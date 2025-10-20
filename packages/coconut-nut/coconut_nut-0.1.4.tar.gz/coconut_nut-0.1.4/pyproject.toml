@@ -1,0 +1,40 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "coconut-nut" # PyPI distribution name
+dynamic = ["version"]
+description = "Python auxiliary library for Coconut"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { file = "LICENSE" }
+authors = [{ name = "Wenke", email = "wenke.du@inria.fr" }]
+keywords = ["coconut", "utilities", "helpers"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+# Runtime deps (if any)
+dependencies = ["pytorch>=2.8"]
+
+[project.urls]
+Homepage = "https://github.com/your-org/coconut-nut"
+Repository = "https://github.com/your-org/coconut-nut"
+Issues = "https://github.com/your-org/coconut-nut/issues"
+Documentation = "https://your-org.github.io/coconut"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/coconut"]
+
+[tool.hatch.envs.default]
+dependencies = ["pytest>=8"]
+
+[tool.hatch.envs.default.scripts]
+test = "pytest -q"
+
+[tool.hatch.version]
+source = "vcs"
