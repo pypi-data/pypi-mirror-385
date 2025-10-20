@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "sky-fall"
+version = "0.2.0"
+description = "Lightweight client for fetching current weather from OpenWeatherMap."
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT License"}
+authors = [
+  {name = "Superintendent"}
+]
+dependencies = [
+  "requests>=2.31.0,<3.0.0"
+]
+keywords = ["weather", "openweathermap", "api", "client"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Intended Audience :: Developers",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Internet :: WWW/HTTP"
+]
+
+[project.urls]
+Homepage = "https://github.com/superintendent2521/sky-fall"
+Documentation = "https://github.com/superintendent2521/sky-fall#readme"
+
+[tool.setuptools.packages.find]
+include = ["skyfall"]
+exclude = ["tests", "docs"]
