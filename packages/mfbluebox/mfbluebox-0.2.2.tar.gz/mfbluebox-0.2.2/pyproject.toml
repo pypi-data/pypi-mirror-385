@@ -1,0 +1,57 @@
+[project]
+name = "mfbluebox"
+version = "0.2.2"
+authors = [
+  { name="zeyus", email="support@zeyus.com" },
+]
+description = "A python (Dual-Tone) Multi-Frequency (DTMF) tone generator."
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+license = {file = "LICENSE.md"}
+dependencies = [
+    "PyAudio>=0.2.14",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.5",
+    "mypy>=1.15.0",
+    "flake8>=7.3.0",
+    "build>=1.2.2",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project.urls]
+"Homepage" = "https://github.com/zeyus/Python3BlueBox"
+"Bug Tracker" = "https://github.com/zeyus/Python3BlueBox/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["bluebox"]
+
+[tool.pytest.ini_options]
+pythonpath = [
+  ".",
+]
+
+[tool.mypy]
+exclude = [
+  '.git',
+  '__pycache__',
+  'tests',
+]
+show_error_codes = true
+pretty = true
+files = [
+  ".",
+]
+
+#[[tool.mypy.overrides]]
+#ignore_missing_imports = true
