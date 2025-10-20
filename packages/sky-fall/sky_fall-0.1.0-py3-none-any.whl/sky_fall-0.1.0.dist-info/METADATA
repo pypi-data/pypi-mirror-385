@@ -1,0 +1,103 @@
+Metadata-Version: 2.4
+Name: sky_fall
+Version: 0.1.0
+Summary: Lightweight client for fetching current weather from OpenWeatherMap.
+Author: Superintendent
+License: MIT License
+Project-URL: Homepage, https://github.com/superintendent2521/skyfetch
+Project-URL: Documentation, https://github.com/superintendent2521/skyfetch#readme
+Keywords: weather,openweathermap,api,client
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Internet :: WWW/HTTP
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: requests<3.0.0,>=2.31.0
+Dynamic: license-file
+
+# sky_fetch
+
+Minimal Python client for the [OpenWeatherMap](https://openweathermap.org/api) current weather endpoint. It keeps the public interface intentionally tiny—instantiate `SkyFetch` with your API key, then call `.weather("City Name")` for a structured weather snapshot.
+
+## Installation
+
+```bash
+pip install sky_fetch
+```
+
+> **Note:** The package requires Python 3.8 or newer and the `requests` library, which is installed automatically.
+
+## Getting an API key
+
+1. Sign up for a free OpenWeatherMap account.
+2. Generate an API key from the dashboard.
+3. Provide that key when creating a `SkyFetch` instance.
+
+## Usage
+
+```python
+from sky_fetch import SkyFetch
+
+client = SkyFetch(api_key="your-openweather-api-key")
+
+report = client.weather("Berlin")
+
+print(report.city)            # "Berlin"
+print(report.temperature_c)   # e.g. 18.4
+print(report.description)     # e.g. "broken clouds"
+```
+
+By default results use metric units. Pass `units="imperial"` or `units="standard"` when instantiating the client to change that. Set a custom timeout via the `timeout` keyword if desired.
+
+```python
+SkyFetch(api_key="...", units="imperial", timeout=5)
+```
+
+## Returned data
+
+`.weather(...)` returns a `WeatherReport` dataclass containing:
+
+- `city`: Name OpenWeatherMap associates with the coordinates.
+- `description`: Human-readable summary of the current conditions.
+- `temperature_c` / `feels_like_c`: Temperatures in the requested unit system (suffix kept for clarity).
+- `humidity`: Relative humidity percentage.
+- `raw`: The complete JSON payload from OpenWeatherMap for advanced use cases.
+
+Access the raw payload if you need additional fields not surfaced on the dataclass.
+
+## Error handling
+
+Network or API issues raise `SkyFetchError`. Double-check your API key, usage limits, and spelling of the city name if you encounter errors. Invalid arguments raise `ValueError`.
+
+## Local development
+
+```bash
+python -m venv .venv
+source .venv/bin/activate  # or .venv\Scripts\activate on Windows
+pip install -e .[dev]
+```
+
+Run a quick manual check:
+
+```bash
+python -c "from sky_fetch import SkyFetch; print(SkyFetch(api_key='YOUR_KEY').weather('Tokyo'))"
+```
+
+## Publishing
+
+1. Update the version in `pyproject.toml`.
+2. Build artifacts: `python -m build`
+3. Upload with `twine upload dist/*`
+
+## License
+
+MIT License. See `LICENSE` for details.
