@@ -1,0 +1,52 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "openconnect-lite"
+version = "0.8.5"
+description = "Wrapper script for OpenConnect supporting Azure AD (SAMLv2) authentication to Cisco SSL-VPNs (Fork)"
+license = {text = "GPL-3.0-only"}
+authors = [
+    {name = "László Vaskó", email = "laszlo.vasko@outlook.com"},
+    {name = "kowyo", email = "kowyo@outlook.com"}
+]
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "attrs>=25.3.0",
+    "colorama>=0.4.6",
+    "keyring>=25.6.0",
+    "lxml>=6.0.2",
+    "prompt-toolkit>=3.0.52",
+    "pyotp>=2.9.0",
+    "pyqt6>=6.9.1",
+    "pyqt6-webengine>=6.9.0",
+    "pysocks>=1.7.1",
+    "pyxdg>=0.28",
+    "requests>=2.32.5",
+    "setuptools>=80.9.0",
+    "structlog>=25.4.0",
+    "toml>=0.10.2",
+]
+
+[dependency-groups]
+dev = [
+    "coverage-enable-subprocess>=1.0",
+    "pre-commit>=4.3.0",
+    "pytest>=8.4.2",
+    "pytest-asyncio>=1.2.0",
+    "pytest-cov>=7.0.0",
+    "pytest-httpserver>=1.1.3",
+]
+lint = [
+    "ruff>=0.13.1",
+]
+
+[project.urls]
+Homepage = "https://github.com/kowyo/openconnect-lite"
+Documentation = "https://github.com/kowyo/openconnect-lite#readme"
+Repository = "https://github.com/kowyo/openconnect-lite.git"
+
+[project.scripts]
+openconnect-lite = "openconnect_lite.cli:main"
