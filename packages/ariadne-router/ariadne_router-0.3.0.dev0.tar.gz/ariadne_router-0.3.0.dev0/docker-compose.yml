@@ -1,0 +1,111 @@
+version: '3.8'
+
+services:
+  # Development environment with full toolchain
+  ariadne-dev:
+    build:
+      context: .
+      target: development
+    volumes:
+      - .:/home/ariadne/ariadne
+      - dev-cache:/home/ariadne/.cache
+    environment:
+      - ARIADNE_LOG_LEVEL=DEBUG
+      - ARIADNE_ENABLE_BENCHMARKS=true
+    ports:
+      - "8888:8888"  # For potential Jupyter integration
+    stdin_open: true
+    tty: true
+    command: /bin/bash
+
+  # Testing environment for CI/CD
+  ariadne-test:
+    build:
+      context: .
+      target: testing
+    volumes:
+      - test-results:/home/ariadne/test_results
+    environment:
+      - ARIADNE_LOG_LEVEL=DEBUG
+      - PYTEST_WORKERS=auto
+    command: >
+      sh -c "
+        python -m pytest ariadne/tests/ -v --tb=short --junitxml=test_results/junit.xml --cov=ariadne --cov-report=xml:test_results/coverage.xml &&
+        python ariadne/benchmarks/reproducible_benchmark.py
+      "
+
+  # Benchmark environment for performance validation
+  ariadne-benchmark:
+    build:
+      context: .
+      target: benchmark
+    volumes:
+      - benchmark-results:/home/ariadne/benchmark_results
+    environment:
+      - ARIADNE_ENABLE_BENCHMARKS=true
+      - ARIADNE_MEMORY_LIMIT_MB=4096
+    deploy:
+      resources:
+        limits:
+          cpus: '4.0'
+          memory: 8G
+        reservations:
+          cpus: '2.0'
+          memory: 4G
+    command: >
+      sh -c "
+        echo 'Running Ariadne benchmark suite...' &&
+        python ariadne/benchmarks/reproducible_benchmark.py &&
+        cp benchmarks/results/* /home/ariadne/benchmark_results/ 2>/dev/null || true
+      "
+
+  # Production-ready lightweight container
+  ariadne-prod:
+    build:
+      context: .
+      target: production
+    volumes:
+      - prod-results:/home/ariadne/results
+    environment:
+      - ARIADNE_LOG_LEVEL=WARNING
+      - ARIADNE_BACKEND_PREFERENCE=stim,qiskit
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4G
+    restart: unless-stopped
+
+  # Documentation server (future enhancement)
+  ariadne-docs:
+    build:
+      context: .
+      target: development
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/home/ariadne/ariadne
+    command: >
+      sh -c "
+        echo 'Documentation server not yet implemented' &&
+        python -m http.server 8080 --directory ariadne/docs 2>/dev/null ||
+        python -c 'print(\"Ariadne documentation placeholder\"); import time; time.sleep(3600)'
+      "
+
+volumes:
+  dev-cache:
+    driver: local
+  test-results:
+    driver: local
+  benchmark-results:
+    driver: local
+  prod-results:
+    driver: local
+
+# Network configuration for future multi-service setups
+networks:
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

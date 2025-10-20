@@ -1,0 +1,160 @@
+{
+  "cuda_available": true,
+  "total_tests": 14,
+  "successful_tests": 14,
+  "backend_usage": {
+    "qiskit": 6,
+    "cuda": 8
+  },
+  "cuda_selections": {
+    "small_clifford": 0,
+    "medium_clifford": 0,
+    "large_clifford": 0,
+    "small_non_clifford": 2,
+    "medium_non_clifford": 2,
+    "large_non_clifford": 2,
+    "very_large_non_clifford": 2
+  },
+  "results": [
+    {
+      "circuit": "small_clifford",
+      "qubits": 4,
+      "is_clifford": true,
+      "shots": 100,
+      "backend": "qiskit",
+      "execution_time": 0.006602599984034896,
+      "confidence": 1.0,
+      "expected_speedup": 1.6666666666666667
+    },
+    {
+      "circuit": "small_clifford",
+      "qubits": 4,
+      "is_clifford": true,
+      "shots": 1000,
+      "backend": "qiskit",
+      "execution_time": 0.003805799991823733,
+      "confidence": 1.0,
+      "expected_speedup": 1.6666666666666667
+    },
+    {
+      "circuit": "medium_clifford",
+      "qubits": 8,
+      "is_clifford": true,
+      "shots": 100,
+      "backend": "qiskit",
+      "execution_time": 0.004272899939678609,
+      "confidence": 1.0,
+      "expected_speedup": 1.6666666666666667
+    },
+    {
+      "circuit": "medium_clifford",
+      "qubits": 8,
+      "is_clifford": true,
+      "shots": 1000,
+      "backend": "qiskit",
+      "execution_time": 0.006924499990418553,
+      "confidence": 1.0,
+      "expected_speedup": 1.6666666666666667
+    },
+    {
+      "circuit": "large_clifford",
+      "qubits": 16,
+      "is_clifford": true,
+      "shots": 100,
+      "backend": "qiskit",
+      "execution_time": 0.04237849998753518,
+      "confidence": 1.0,
+      "expected_speedup": 1.6666666666666667
+    },
+    {
+      "circuit": "large_clifford",
+      "qubits": 16,
+      "is_clifford": true,
+      "shots": 1000,
+      "backend": "qiskit",
+      "execution_time": 0.04736740002408624,
+      "confidence": 1.0,
+      "expected_speedup": 1.6666666666666667
+    },
+    {
+      "circuit": "small_non_clifford",
+      "qubits": 4,
+      "is_clifford": false,
+      "shots": 100,
+      "backend": "cuda",
+      "execution_time": 0.2224427000619471,
+      "confidence": 1.0,
+      "expected_speedup": 1.25
+    },
+    {
+      "circuit": "small_non_clifford",
+      "qubits": 4,
+      "is_clifford": false,
+      "shots": 1000,
+      "backend": "cuda",
+      "execution_time": 0.005672500003129244,
+      "confidence": 1.0,
+      "expected_speedup": 1.25
+    },
+    {
+      "circuit": "medium_non_clifford",
+      "qubits": 8,
+      "is_clifford": false,
+      "shots": 100,
+      "backend": "cuda",
+      "execution_time": 0.010486599989235401,
+      "confidence": 1.0,
+      "expected_speedup": 1.25
+    },
+    {
+      "circuit": "medium_non_clifford",
+      "qubits": 8,
+      "is_clifford": false,
+      "shots": 1000,
+      "backend": "cuda",
+      "execution_time": 0.01105890003964305,
+      "confidence": 1.0,
+      "expected_speedup": 1.25
+    },
+    {
+      "circuit": "large_non_clifford",
+      "qubits": 16,
+      "is_clifford": false,
+      "shots": 100,
+      "backend": "cuda",
+      "execution_time": 0.020308499922975898,
+      "confidence": 1.0,
+      "expected_speedup": 1.25
+    },
+    {
+      "circuit": "large_non_clifford",
+      "qubits": 16,
+      "is_clifford": false,
+      "shots": 1000,
+      "backend": "cuda",
+      "execution_time": 0.022374200052581728,
+      "confidence": 1.0,
+      "expected_speedup": 1.25
+    },
+    {
+      "circuit": "very_large_non_clifford",
+      "qubits": 20,
+      "is_clifford": false,
+      "shots": 100,
+      "backend": "cuda",
+      "execution_time": 0.18761060002725571,
+      "confidence": 1.0,
+      "expected_speedup": 1.25
+    },
+    {
+      "circuit": "very_large_non_clifford",
+      "qubits": 20,
+      "is_clifford": false,
+      "shots": 1000,
+      "backend": "cuda",
+      "execution_time": 0.17557680001482368,
+      "confidence": 1.0,
+      "expected_speedup": 1.25
+    }
+  ]
+}

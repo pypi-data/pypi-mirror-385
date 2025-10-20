@@ -1,0 +1,126 @@
+name: Backend Integration
+description: Propose integration of a new quantum computing backend
+title: "[BACKEND] "
+labels: ["backend", "integration", "enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for proposing a new backend integration! Ariadne's strength comes from supporting diverse quantum simulators and hardware.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-submission checklist
+      options:
+        - label: I have reviewed existing backend implementations in `src/ariadne/backends/`
+          required: true
+        - label: The proposed backend offers unique capabilities not covered by existing backends
+          required: true
+
+  - type: input
+    id: backend-name
+    attributes:
+      label: Backend Name
+      description: What is the name of the backend/simulator?
+      placeholder: e.g., Cirq, IBM Qiskit Runtime, Amazon Braket
+    validations:
+      required: true
+
+  - type: input
+    id: backend-url
+    attributes:
+      label: Backend URL
+      description: Link to the backend's documentation or repository
+      placeholder: https://github.com/...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: backend-type
+    attributes:
+      label: Backend Type
+      description: What type of quantum computing platform is this?
+      options:
+        - Local simulator
+        - Cloud simulator
+        - Hardware backend
+        - Specialized simulator (noise, error correction, etc.)
+        - Hybrid classical-quantum
+
+  - type: textarea
+    id: unique-capabilities
+    attributes:
+      label: Unique Capabilities
+      description: What makes this backend special? What quantum circuits or use cases does it handle best?
+      placeholder: |
+        This backend excels at:
+        - Specific quantum algorithms (e.g., VQE, QAOA)
+        - Hardware simulation with realistic noise models
+        - Large-scale quantum error correction
+        - etc.
+    validations:
+      required: true
+
+  - type: textarea
+    id: performance-characteristics
+    attributes:
+      label: Performance Characteristics
+      description: When should the router choose this backend?
+      placeholder: |
+        Optimal for:
+        - Circuit size: X-Y qubits
+        - Gate types: Clifford/universal/specific gates
+        - Noise models: yes/no
+        - Memory requirements: low/medium/high
+    validations:
+      required: true
+
+  - type: textarea
+    id: integration-requirements
+    attributes:
+      label: Integration Requirements
+      description: What dependencies and setup are needed?
+      placeholder: |
+        Dependencies:
+        - Python packages: package_name>=1.0.0
+        - System requirements: CUDA, specific OS, etc.
+        - Authentication: API keys, credentials
+    validations:
+      required: true
+
+  - type: textarea
+    id: routing-logic
+    attributes:
+      label: Routing Logic
+      description: How should the router decide when to use this backend?
+      placeholder: |
+        Route to this backend when:
+        - Circuit has specific properties (entanglement, depth, etc.)
+        - User requirements (accuracy, speed, hardware access)
+        - Resource constraints
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: implementation-status
+    attributes:
+      label: Implementation Status
+      options:
+        - label: I have a working proof-of-concept implementation
+          required: false
+        - label: I can provide benchmarking data
+          required: false
+        - label: I am willing to implement this backend myself
+          required: false
+        - label: I can provide technical guidance for implementation
+          required: false
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other relevant information about this backend integration.
+      placeholder: Research papers, performance benchmarks, existing integrations...
+    validations:
+      required: false
