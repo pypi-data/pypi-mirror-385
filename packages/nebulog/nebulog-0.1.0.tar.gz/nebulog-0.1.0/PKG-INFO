@@ -1,0 +1,382 @@
+Metadata-Version: 2.4
+Name: nebulog
+Version: 0.1.0
+Summary: Rich output spectacularly merged into Loguru to serve as the cradle of your stellar logs
+License: MIT
+License-File: LICENCE
+Author: Manoel Pereira de Queiroz
+Author-email: mpq.dev@pm.me
+Maintainer: Manoel Pereira de Queiroz
+Maintainer-email: mpq.dev@pm.me
+Requires-Python: >=3.10
+Classifier: Development Status :: 1 - Planning
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Dist: loguru (>=0.7.3,<0.8.0)
+Requires-Dist: rich (>=14.1.0,<15.0.0)
+Requires-Dist: typing-extensions (>=4.15.0,<5.0.0)
+Project-URL: Contributing Guidelines, https://gitlab.com/galactipy/nebulog/-/tree/master/CONTRIBUTING.md
+Project-URL: Homepage, https://gitlab.com/galactipy/nebulog
+Project-URL: Repository, https://gitlab.com/galactipy/nebulog
+Project-URL: Work Item Tracker, https://gitlab.com/galactipy/nebulog/-/issues
+Description-Content-Type: text/markdown
+
+# Nebulog
+
+<div align="center">
+
+<!-- Project details -->
+[![Python support][bp1]][bp2]
+[![PyPI Release][bp3]][bp2]
+[![Repository][bscm1]][bp4]
+[![Releases][bscm2]][bp5]
+[![Licence][blic1]][blic2]
+[![Expand your project structure from atoms of code to galactic dimensions.][bp6]][bp7]
+
+<!-- Information on development -->
+[![Project type][bp8]][bp9]
+[![Contributions Welcome][bp10]][bp11]
+[![Open issues][bscm3]][bp12]
+[![Merge Requests][bscm4]][bscm5]
+
+<!-- Styling policies -->
+[![Code style: Ruff][bfo1]][bfo2]
+[![Docstrings][bli1]][bli2]
+[![Gitmoji][bcv1]][bcv2]
+[![Semantic Line Breaks][bp13]][bp14]
+
+<!-- Development utilities -->
+[![Poetry][bp15]][bp16]
+[![Pre-commit][bp17]][bp18]
+[![Bandit][bp19]][bp20]
+[![isort][bfo3]][bfo4]
+[![Editorconfig][bp21]][bp22]
+
+<!-- Open Source benchmarks -->
+<!-- UPDATEME by toggling this comment off after replacing your project's index in both anchors below
+[![OpenSSF Best Practices][boss1]][boss2] -->
+<!-- UPDATEME by toggling this comment off after replacing your project's index in both anchors below
+[![OSSRank][boss3]][boss4] -->
+
+<!-- Quality assurance -->
+[![EffVer][bp23]][bp5]
+<!-- UPDATEME by toggling this comment off after replacing your project's index in both anchors below
+[![Code Quality][bcov1]][bcov2] -->
+<!-- UPDATEME by toggling this comment off after replacing your project's index in both anchors below
+[![Coverage][bcov3]][bcov4] -->
+[![Pipelines][bscm6]][bscm7]
+
+_Rich output spectacularly merged into Loguru to serve as the cradle of your stellar logs_ :dizzy:
+
+</div>
+
+## :tools: Installation
+
+Use [`pip`][fs1] to install Nebulog:
+
+```bash
+pip install -U nebulog
+```
+
+## :black_joker: How to Use
+
+Nebulog extends [Loguru][htu1]
+by adding support for rich-formatted output
+through a modular custom sink.
+The integration with the [Rich][htu2] library is seamless,
+you simply import the logger
+and start using it:
+
+```py
+from nebulog import logger
+
+logger.info("Rich and Loguru spectacularly merged into a single body")
+```
+
+The `logger` is
+the only object
+you'll need
+for your logging calls,
+being fully compatible
+with Loguru's API.
+In fact,
+Nebulog's `logger` is the same as Loguru's,
+making migration straightforward:
+only your import statements need to change,
+all existing logger configuration and logging calls
+will work
+as before.
+
+The custom sink provided by Nebulog
+leverages Rich
+for more readable logs
+while maitaining the option
+for developers to use
+their own formatting solutions downstream:
+
+```py
+logger.info(
+    "This is a plain message",
+    rich="This will be [b]bold[/b] if Nebulog has been imported",
+)
+
+logger.warning(
+    "Plain messages make Rich markup entirely optional",
+    alt="The [i]alt[/i] keyword can also be used instead of [reverse]rich[/reverse]",
+)
+
+logger.success(
+    "The plain message can be used with and without Nebulog",
+    style="on red",  # Specifying the style will markup the entire message if Nebulog has been imported
+)
+```
+
+By default,
+Nebulog's sink offers features like
+configurable timestamps
+and terminal-aware message wrapping.
+You can further customise this behaviour
+by configuring parameters
+through the `install` function:
+
+```py
+from nebulog import install, logger
+from nebulog.examples import (
+    SAMPLE_CONSOLE,
+    SampleMessageFormatter,
+    SampleTimeRenderer,
+    SemverHighlighter,
+)
+from nebulog.renderers import InlineTimeRenderer, SimpleGridFormatter
+
+install(
+    rich_console=SAMPLE_CONSOLE,  # Bring your own Rich console and theme
+    level=0,  # Override the default level at which to catch logs, defaults to "DEBUG"
+    time_format="[b][[/b]%x [b]%X][/b]",  # A strftime format with optional Rich markup for the timestamp
+    time_display_mode="separate",  # Choose whether to render the timestamp in a separate line, inline or don't render at all
+    time_renderer=SampleTimeRenderer,  # Declare your own Rich ConsoleRenderable for the timestamp
+    message_renderer=SampleMessageFormatter,  # Declare your own Rich ConsoleRenderable for the message
+    traceback_mode="rich",  # Choose whether to show exception tracebacks or not
+    keywords=["SEE"],  # Define your custom RichHandler keywords to highlight
+)
+
+# You can also specify custom Rich highlighters per call!
+logger.info(
+    "SEE how v1.2.3-pre.2025+build.3 is rendered",
+    highlighter=SemverHighlighter,
+)
+```
+
+For advanced customisation,
+Nebulog provides abstract base classes (ABCs)
+that allow you to extend its functionality
+for timestamp formatting
+or message processing:
+
+```py
+from nebulog.interfaces import BaseMessageFormatter, TimeRenderer
+```
+
+**_TL;DR_**
+This library will help you
+write **stellar** logs to your terminal!
+:star_struck:
+
+## :abacus: Reasoning
+
+We've created Nebulog
+during development of [Galactipy][bp7].
+Being the perfectionists we are,
+we wanted to ensure projects generated with our template
+had tools
+that could be integrated
+via a "batteries included" approach
+in their TUI/CLI applications.
+
+While Loguru provides
+a clean API to
+configure
+and render logging calls,
+combining it with Rich
+required significant setup
+and custom plumbing.
+Our goal was
+to provide developers
+with an effortless way
+to achieve beautiful logs
+without delving into
+the complexities of such setup.
+Nebulog acts
+as a drop-in extension for Loguru,
+enabling the Rich-formatted output
+by default
+while maintaining an acceptable degree
+of customisation
+through its options.
+
+If you're building TUI/CLI applications
+and want your users
+to enjoy clear, well-structured logs
+with minimal effort,
+then Nebulog is
+particularly well-suited
+to meet those needs.
+:wink:
+
+## :reminder_ribbon: Contributing
+
+There are several ways
+to contribute to Nebulog.
+Refer to our [CONTRIBUTING guide][bp11]
+for all relevant details.
+
+## :chart_with_upwards_trend: Releases
+
+You can see the list of available releases
+on the [GitLab Releases][r1] page.
+
+We follow [EffVer][r2] specification.
+
+We use [`GitLab Changelog`][r3] entries
+to track changes.
+You can categorise commits and Merge Requests
+made to this project
+using [git trailers][r4] in your commit messages.
+
+### List of trailers and corresponding categories
+
+|            **Git trailer**            |    **Category in CHANGELOG**    |
+| :-----------------------------------: | :-----------------------------: |
+|       `enhancement`, `feature`        |        :rocket: Features        |
+| `bug`, `refactoring`, `bugfix`, `fix` |  :wrench: Fixes & Refactoring   |
+|       `build`, `ci`, `testing`        | :package: Build System & CI/CD  |
+|              `breaking`               |     :boom: Breaking Changes     |
+|            `documentation`            |      :memo: Documentation       |
+|            `dependencies`             | :arrow_up: Dependencies updates |
+
+## :shield: Licence
+
+[![Licence][blic1]][blic2]
+
+This project is licenced under the terms of the `MIT` licence. See [LICENCE][blic2] for more details.
+
+## :page_with_curl: Citation
+
+```bibtex
+@misc{Nebulog,
+  author = {The Galactipy Contributors},
+  title = {Rich output spectacularly merged into Loguru to serve as the cradle of your stellar logs},
+  year = {2025},
+  publisher = {GitLab},
+  journal = {GitLab repository},
+  howpublished = {\url{https://gitlab.com/galactipy/nebulog}}
+}
+```
+
+## Credits [![Expand your project structure from atoms of code to galactic dimensions.][bp6]][bp7]
+
+Building upon the foundation
+set by the [Richuru][cred1] library,
+Nebulog enhances logging capabilities
+with modern features.
+
+The project has also been
+heavily inspired
+by [Kedro's][cred2] approach
+logging calls
+with structured layout,
+wrapping
+and clutter reduction.
+
+Along with [Rich][htu2] and [Loguru][htu1],
+these projects have laid the groundwork
+that allowed Nebulog
+to become a reality.
+Give them your :star2:!
+
+---
+
+This project was generated with [**Galactipy**][bp7].
+
+<!-- Anchors -->
+
+[bp1]: https://img.shields.io/pypi/pyversions/nebulog?style=for-the-badge
+[bp2]: https://pypi.org/project/nebulog/
+[bp3]: https://img.shields.io/pypi/v/nebulog?style=for-the-badge&logo=pypi&color=3775a9
+[bp4]: https://gitlab.com/galactipy/nebulog
+[bp5]: https://gitlab.com/galactipy/nebulog/-/releases
+[bp6]: https://img.shields.io/badge/made%20with-galactipy%20%F0%9F%8C%8C-179287?style=for-the-badge&labelColor=193A3E
+[bp7]: https://kutt.it/7fYqQl
+[bp8]: https://img.shields.io/badge/project%20type-toy-blue?style=for-the-badge
+[bp9]: https://project-types.github.io/#toy
+[bp10]: https://img.shields.io/static/v1.svg?label=Contributions&message=Welcome&color=0059b3&style=for-the-badge
+[bp11]: https://gitlab.com/galactipy/nebulog/-/blob/master/CONTRIBUTING.md
+[bp12]: https://gitlab.com/galactipy/nebulog/-/issues
+[bp13]: https://img.shields.io/badge/sembr-367DA9?style=for-the-badge&logo=read.cv&logoColor=white
+[bp14]: https://sembr.org/
+[bp15]: https://img.shields.io/endpoint?url=https://python-poetry.org/badge/v0.json&style=for-the-badge
+[bp16]: https://python-poetry.org/
+[bp17]: https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white&style=for-the-badge
+[bp18]: https://gitlab.com/galactipy/nebulog/-/blob/master/.pre-commit-config.yaml
+[bp19]: https://img.shields.io/badge/security-bandit-yellow?style=for-the-badge
+[bp20]: https://bandit.readthedocs.io/en/latest/
+[bp21]: https://img.shields.io/badge/Editorconfig-E0EFEF?style=for-the-badge&logo=editorconfig&logoColor=000
+[bp22]: https://gitlab.com/galactipy/nebulog/-/blob/master/.editorconfig
+[bp23]: https://img.shields.io/badge/effver-0097a7?style=for-the-badge&logo=semver
+
+[blic1]: https://img.shields.io/gitlab/license/galactipy/nebulog?style=for-the-badge
+[blic2]: https://gitlab.com/galactipy/nebulog/-/blob/master/LICENCE
+
+<!-- TODO Replace the `100` ID with your project's index at https://www.bestpractices.dev/en
+[boss1]: https://img.shields.io/cii/level/100?style=for-the-badge&logo=linux-foundation&label=openssf%20best%20practices
+[boss2]: https://www.bestpractices.dev/en/projects/100 -->
+<!-- TODO Replace the `200` ID with your project's index at https://ossrank.com/
+[boss3]: https://shields.io/endpoint?url=https://ossrank.com/shield/200&style=for-the-badge
+[boss4]: https://ossrank.com/p/200 -->
+
+<!-- TODO Replace the hash `d5402a91aa7b4234bd1c19b5e86a63be` with your project ID in the "Codacy Badge" section available at https://app.codacy.com/gl/galactipy/nebulog/settings
+[bcov1]: https://img.shields.io/codacy/grade/d5402a91aa7b4234bd1c19b5e86a63be?style=for-the-badge&logo=codacy
+[bcov2]: https://app.codacy.com/gl/galactipy/nebulog/dashboard
+[bcov3]: https://img.shields.io/codacy/coverage/d5402a91aa7b4234bd1c19b5e86a63be?style=for-the-badge&logo=codacy
+[bcov4]: https://app.codacy.com/gl/galactipy/nebulog/coverage -->
+
+[fs1]: https://pip.pypa.io/en/stable/installation/
+
+[htu1]: https://loguru.readthedocs.io/en/stable/index.html
+[htu2]: https://rich.readthedocs.io/en/stable/index.html
+
+[r1]: https://gitlab.com/galactipy/nebulog/-/releases
+[r2]: https://jacobtomlinson.dev/effver/
+[r3]: https://docs.gitlab.com/ee/user/project/changelogs.html
+[r4]: https://docs.gitlab.com/ee/user/project/changelogs.html#add-a-trailer-to-a-git-commit
+
+[bscm1]: https://img.shields.io/badge/GitLab-330F63?style=for-the-badge&logo=gitlab&logoColor=white
+[bscm2]: https://img.shields.io/gitlab/v/release/galactipy%2Fnebulog?style=for-the-badge&logo=semantic-release&color=FFCA28
+[bscm3]: https://img.shields.io/gitlab/issues/open/galactipy%2Fnebulog?style=for-the-badge&color=fca326
+[bscm4]: https://img.shields.io/gitlab/merge-requests/open/galactipy%2Fnebulog?style=for-the-badge&color=6fdac9
+[bscm5]: https://gitlab.com/galactipy/nebulog/-/merge_requests
+[bscm6]: https://img.shields.io/gitlab/pipeline-status/galactipy%2Fnebulog?branch=master&style=for-the-badge&logo=gitlab&logoColor=white&label=master
+[bscm7]: https://gitlab.com/galactipy/nebulog/-/pipelines
+
+[bfo1]: https://img.shields.io/badge/code%20style-ruff-261230?style=for-the-badge&labelColor=grey
+[bfo2]: https://docs.astral.sh
+[bfo3]: https://img.shields.io/badge/imports-isort-1674b1?style=for-the-badge&labelColor=ef8336
+[bfo4]: https://pycqa.github.io/isort/
+
+[bli1]: https://img.shields.io/badge/docstrings-numpydoc-4dabcf?style=for-the-badge&labelColor=4d77cf
+[bli2]: https://numpydoc.readthedocs.io/en/latest/format.html
+
+[bcv1]: https://img.shields.io/badge/%F0%9F%98%9C_gitmoji-ffdd67?style=for-the-badge
+[bcv2]: https://gitmoji.dev/
+
+[cred1]: https://github.com/GreyElaina/richuru
+[cred2]: https://kedro.org/
+
