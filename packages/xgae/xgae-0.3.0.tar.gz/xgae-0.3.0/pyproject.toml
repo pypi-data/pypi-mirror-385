@@ -1,0 +1,37 @@
+[project]
+name = "xgae"
+version = "0.3.0"
+description = "Extreme General Agent Engine"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "colorlog==6.9.0",
+    "litellm==1.74.15",
+    "mcp==1.13.0",
+    "langfuse==2.60.9",
+    "langchain-mcp-adapters==0.1.9",
+]
+
+
+[project.optional-dependencies]
+examples = [
+    "langgraph==0.6.5",
+    "langchain-community==0.3.29",
+    "chromadb==1.1.0",
+]
+
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+
+[tool.hatch.build]
+exclude = ["log/*", ".idea/*"]
+
+
+[project.scripts]
+xgae = "xgae.engine_cli_app:main"
+xgae-tools = "xgae.tools.without_general_tools_app:main"
+example-fault-tools = "examples.tools.custom_fault_tools_app:main"
+example-a2a-tools = "examples.tools.simu_a2a_tools_app:main"
