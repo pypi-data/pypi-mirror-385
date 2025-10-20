@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "geonames_postcode"
+description = "geonames_postcode is a Python package to make geonames.org postcode databases accessible in Python. It provides a command line tool to fetch, preprocess, and store the data in a Python file per country. In the result very fast (in-memory) queries by postcodes and names are available using just a few MB per country. Some helper functions are part of the package to solve common tasks like getting distances and finding postcodes nearby."
+readme = "README.rst"
+dynamic = ["version"]
+authors = [
+    {name="André Wobst", email="project.geonames_postcode@wobsta.de"}
+]
+classifiers=[
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 2.7",
+    "Programming Language :: Python :: 3"
+]
+license = "GPL-2.0-or-later"
+license-files = ["LICEN[CS]E*"]
+
+[project.urls]
+Homepage = "https://github.com/wobsta/geonames_postcode"
+Documentation = "https://geonames-postcode.readthedocs.io/"
+Repository = "https://github.com/wobsta/geonames_postcode"
+Changelog = "https://github.com/wobsta/geonames_postcode/blob/master/CHANGES"
+Issues = "https://github.com/wobsta/geonames_postcode/issues"
+
+
+[project.scripts]
+geonames_postcode_fetch = "geonames_postcode.fetch:main"
+
+[project.optional-dependencies]
+dev = [ "sphinx" ]
+
+[tool.setuptools.package-data]
+geonames_postcode = ["fetch.ini", "data/template"]
+
+[tool.setuptools.dynamic]
+version = { attr = "geonames_postcode.version" }
+
+# [tool.setuptools.packages.find]
+# where = ["."]  # list of folders that contain the packages (["."] by default)
+# include = ["pia"]  # package names should match these glob patterns (["*"] by default)
+# exclude = []  # exclude packages matching these glob patterns (empty by default)
+# namespaces = false  # to disable scanning PEP 420 namespaces (true by default)
