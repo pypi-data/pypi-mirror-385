@@ -1,0 +1,27 @@
+# NLSQ Runtime Dependencies (Exact Versions)
+# Generated: 2025-10-18
+# Python: 3.12.3
+#
+# These are the exact versions tested and validated with NLSQ v0.2.0
+# For development dependencies, see requirements-dev.txt
+# For complete environment, see requirements-full.txt
+#
+# BREAKING CHANGE (v0.2.0): h5py is now a required dependency
+
+# Core dependencies
+numpy==2.3.4
+scipy==1.16.2
+jax==0.8.0
+jaxlib==0.8.0
+
+# Visualization and utilities
+matplotlib==3.10.7
+psutil==7.1.0
+tqdm==4.67.1
+
+# Data handling (required for large dataset streaming)
+h5py==3.15.1  # Required for StreamingOptimizer (was optional before v0.2.0)
+
+# Required sub-dependencies (auto-installed with core packages)
+ml-dtypes==0.5.3
+opt-einsum==3.4.0
