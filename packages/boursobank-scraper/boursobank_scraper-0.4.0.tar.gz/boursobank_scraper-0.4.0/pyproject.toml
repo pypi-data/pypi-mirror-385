@@ -1,0 +1,22 @@
+[project]
+name = "boursobank-scraper"
+version = "0.4.0"
+description = "Outil pour récupérer les données de transaction depuis le site de BoursoBank"
+readme = "README.md"
+authors = [
+    { name = "glops", email = "skylvl@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "msgspec>=0.19.0",
+    "playwright>=1.55.0",
+    "pyyaml>=6.0.3",
+]
+
+[project.scripts]
+boursobank-scraper = "boursobank_scraper.__main__:main"
+playwright-bbs = "playwright.__main__:main"
+
+[build-system]
+requires = ["uv_build>=0.8.0,<0.9"]
+build-backend = "uv_build"
