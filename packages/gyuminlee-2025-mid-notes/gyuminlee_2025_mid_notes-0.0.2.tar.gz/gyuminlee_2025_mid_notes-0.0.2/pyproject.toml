@@ -1,0 +1,25 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "gyuminlee-2025_mid_notes"  # 🚨 TestPyPI에서 중복되지 않을 이름 (중요!)
+version = "0.0.2"
+authors = [
+    { name="gyuminlee", email="gyuminlee5645@email.com" }, # 👈 본인 정보로 수정
+]
+description = "Lecture Notes"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+# 🚨 여기가 CLI를 만드는 핵심!
+[project.scripts]
+my-notes = "lecture_pkg.cli:main"
+# "my-notes" 라는 명령어를 실행하면 -> "lecture_pkg" 폴더의 "cli.py" 파일의 "main" 함수를 실행
+
+[tool.hatch.build.targets.wheel]
+packages = ["lecture_pkg"]
