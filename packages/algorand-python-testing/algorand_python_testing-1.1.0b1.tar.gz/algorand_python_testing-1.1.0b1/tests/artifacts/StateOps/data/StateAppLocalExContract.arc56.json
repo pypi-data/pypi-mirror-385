@@ -1,0 +1,112 @@
+{
+    "name": "StateAppLocalExContract",
+    "structs": {},
+    "methods": [
+        {
+            "name": "opt_in",
+            "args": [],
+            "returns": {
+                "type": "void"
+            },
+            "actions": {
+                "create": [],
+                "call": [
+                    "OptIn"
+                ]
+            },
+            "readonly": false,
+            "events": [],
+            "recommendations": {}
+        }
+    ],
+    "arcs": [
+        22,
+        28
+    ],
+    "networks": {},
+    "state": {
+        "schema": {
+            "global": {
+                "ints": 0,
+                "bytes": 0
+            },
+            "local": {
+                "ints": 1,
+                "bytes": 2
+            }
+        },
+        "keys": {
+            "global": {},
+            "local": {
+                "local_uint64": {
+                    "keyType": "AVMString",
+                    "valueType": "AVMUint64",
+                    "key": "bG9jYWxfdWludDY0"
+                },
+                "local_bytes": {
+                    "keyType": "AVMString",
+                    "valueType": "AVMBytes",
+                    "key": "bG9jYWxfYnl0ZXM="
+                },
+                "local_arc4_bytes": {
+                    "keyType": "AVMString",
+                    "valueType": "byte[]",
+                    "key": "bG9jYWxfYXJjNF9ieXRlcw=="
+                }
+            },
+            "box": {}
+        },
+        "maps": {
+            "global": {},
+            "local": {},
+            "box": {}
+        }
+    },
+    "bareActions": {
+        "create": [
+            "NoOp"
+        ],
+        "call": []
+    },
+    "sourceInfo": {
+        "approval": {
+            "sourceInfo": [
+                {
+                    "pc": [
+                        39
+                    ],
+                    "errorMessage": "OnCompletion must be NoOp && can only call when creating"
+                },
+                {
+                    "pc": [
+                        28
+                    ],
+                    "errorMessage": "OnCompletion must be OptIn && can only call when not creating"
+                }
+            ],
+            "pcOffsetMethod": "none"
+        },
+        "clear": {
+            "sourceInfo": [],
+            "pcOffsetMethod": "none"
+        }
+    },
+    "source": {
+        "approval": "I3ByYWdtYSB2ZXJzaW9uIDExCiNwcmFnbWEgdHlwZXRyYWNrIGZhbHNlCgovLyBhbGdvcHkuYXJjNC5BUkM0Q29udHJhY3QuYXBwcm92YWxfcHJvZ3JhbSgpIC0+IHVpbnQ2NDoKbWFpbjoKICAgIC8vIHRlc3RzL2FydGlmYWN0cy9TdGF0ZU9wcy9jb250cmFjdC5weTozNDYKICAgIC8vIGNsYXNzIFN0YXRlQXBwTG9jYWxFeENvbnRyYWN0KEFSQzRDb250cmFjdCk6CiAgICB0eG4gTnVtQXBwQXJncwogICAgYnogbWFpbl9fX2FsZ29weV9kZWZhdWx0X2NyZWF0ZUA3CiAgICBwdXNoYnl0ZXMgMHgzMGM2ZDU4YSAvLyBtZXRob2QgIm9wdF9pbigpdm9pZCIKICAgIHR4bmEgQXBwbGljYXRpb25BcmdzIDAKICAgIG1hdGNoIG1haW5fb3B0X2luX3JvdXRlQDUKICAgIGVycgoKbWFpbl9vcHRfaW5fcm91dGVANToKICAgIC8vIHRlc3RzL2FydGlmYWN0cy9TdGF0ZU9wcy9jb250cmFjdC5weTozNjMKICAgIC8vIEBhcmM0LmFiaW1ldGhvZChhbGxvd19hY3Rpb25zPVsiT3B0SW4iXSkKICAgIHR4biBPbkNvbXBsZXRpb24KICAgIHB1c2hpbnQgMSAvLyBPcHRJbgogICAgPT0KICAgIHR4biBBcHBsaWNhdGlvbklECiAgICAmJgogICAgYXNzZXJ0IC8vIE9uQ29tcGxldGlvbiBtdXN0IGJlIE9wdEluICYmIGNhbiBvbmx5IGNhbGwgd2hlbiBub3QgY3JlYXRpbmcKICAgIGIgb3B0X2luCgptYWluX19fYWxnb3B5X2RlZmF1bHRfY3JlYXRlQDc6CiAgICB0eG4gT25Db21wbGV0aW9uCiAgICAhCiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgIQogICAgJiYKICAgIGFzc2VydCAvLyBPbkNvbXBsZXRpb24gbXVzdCBiZSBOb09wICYmIGNhbiBvbmx5IGNhbGwgd2hlbiBjcmVhdGluZwogICAgcHVzaGludCAxIC8vIDEKICAgIHJldHVybgoKCi8vIHRlc3RzLmFydGlmYWN0cy5TdGF0ZU9wcy5jb250cmFjdC5TdGF0ZUFwcExvY2FsRXhDb250cmFjdC5vcHRfaW5bcm91dGluZ10oKSAtPiB2b2lkOgpvcHRfaW46CiAgICAvLyB0ZXN0cy9hcnRpZmFjdHMvU3RhdGVPcHMvY29udHJhY3QucHk6MzY1CiAgICAvLyBzZWxmLmxvY2FsX2J5dGVzW0dsb2JhbC5jcmVhdG9yX2FkZHJlc3NdID0gQnl0ZXMoYiJkdW1teV9ieXRlc19mcm9tX2V4dGVybmFsX2NvbnRyYWN0IikKICAgIGdsb2JhbCBDcmVhdG9yQWRkcmVzcwogICAgcHVzaGJ5dGVzcyAibG9jYWxfYnl0ZXMiIDB4NjQ3NTZkNmQ3OTVmNjI3OTc0NjU3MzVmNjY3MjZmNmQ1ZjY1Nzg3NDY1NzI2ZTYxNmM1ZjYzNmY2ZTc0NzI2MTYzNzQgLy8gImxvY2FsX2J5dGVzIiwgMHg2NDc1NmQ2ZDc5NWY2Mjc5NzQ2NTczNWY2NjcyNmY2ZDVmNjU3ODc0NjU3MjZlNjE2YzVmNjM2ZjZlNzQ3MjYxNjM3NAogICAgYXBwX2xvY2FsX3B1dAogICAgLy8gdGVzdHMvYXJ0aWZhY3RzL1N0YXRlT3BzL2NvbnRyYWN0LnB5OjM2NgogICAgLy8gc2VsZi5sb2NhbF91aW50NjRbR2xvYmFsLmNyZWF0b3JfYWRkcmVzc10gPSBVSW50NjQoOTkpCiAgICBnbG9iYWwgQ3JlYXRvckFkZHJlc3MKICAgIHB1c2hieXRlcyAibG9jYWxfdWludDY0IgogICAgcHVzaGludCA5OSAvLyA5OQogICAgYXBwX2xvY2FsX3B1dAogICAgLy8gdGVzdHMvYXJ0aWZhY3RzL1N0YXRlT3BzL2NvbnRyYWN0LnB5OjM2NwogICAgLy8gc2VsZi5sb2NhbF9hcmM0X2J5dGVzW0dsb2JhbC5jcmVhdG9yX2FkZHJlc3NdID0gYWxnb3B5LmFyYzQuRHluYW1pY0J5dGVzKAogICAgZ2xvYmFsIENyZWF0b3JBZGRyZXNzCiAgICAvLyB0ZXN0cy9hcnRpZmFjdHMvU3RhdGVPcHMvY29udHJhY3QucHk6MzY3LTM2OQogICAgLy8gc2VsZi5sb2NhbF9hcmM0X2J5dGVzW0dsb2JhbC5jcmVhdG9yX2FkZHJlc3NdID0gYWxnb3B5LmFyYzQuRHluYW1pY0J5dGVzKAogICAgLy8gICAgIGIiZHVtbXlfYXJjNF9ieXRlcyIKICAgIC8vICkKICAgIHB1c2hieXRlc3MgImxvY2FsX2FyYzRfYnl0ZXMiIDB4MDAxMDY0NzU2ZDZkNzk1ZjYxNzI2MzM0NWY2Mjc5NzQ2NTczIC8vICJsb2NhbF9hcmM0X2J5dGVzIiwgMHgwMDEwNjQ3NTZkNmQ3OTVmNjE3MjYzMzQ1ZjYyNzk3NDY1NzMKICAgIGFwcF9sb2NhbF9wdXQKICAgIC8vIHRlc3RzL2FydGlmYWN0cy9TdGF0ZU9wcy9jb250cmFjdC5weTozNjMKICAgIC8vIEBhcmM0LmFiaW1ldGhvZChhbGxvd19hY3Rpb25zPVsiT3B0SW4iXSkKICAgIHB1c2hpbnQgMSAvLyAxCiAgICByZXR1cm4K",
+        "clear": "I3ByYWdtYSB2ZXJzaW9uIDExCiNwcmFnbWEgdHlwZXRyYWNrIGZhbHNlCgovLyBhbGdvcHkuYXJjNC5BUkM0Q29udHJhY3QuY2xlYXJfc3RhdGVfcHJvZ3JhbSgpIC0+IHVpbnQ2NDoKbWFpbjoKICAgIHB1c2hpbnQgMSAvLyAxCiAgICByZXR1cm4K"
+    },
+    "byteCode": {
+        "approval": "CzEbQQAagAQwxtWKNhoAjgEAAQAxGYEBEjEYEERCAAsxGRQxGBQQRIEBQzIJggILbG9jYWxfYnl0ZXMiZHVtbXlfYnl0ZXNfZnJvbV9leHRlcm5hbF9jb250cmFjdGYyCYAMbG9jYWxfdWludDY0gWNmMgmCAhBsb2NhbF9hcmM0X2J5dGVzEgAQZHVtbXlfYXJjNF9ieXRlc2aBAUM=",
+        "clear": "C4EBQw=="
+    },
+    "compilerInfo": {
+        "compiler": "puya",
+        "compilerVersion": {
+            "major": 5,
+            "minor": 3,
+            "patch": 1
+        }
+    },
+    "events": [],
+    "templateVariables": {}
+}
