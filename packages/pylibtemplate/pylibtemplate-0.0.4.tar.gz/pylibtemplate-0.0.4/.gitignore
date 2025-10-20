@@ -1,0 +1,28 @@
+# Ignore select directories
+__pycache__/
+.ipynb_checkpoints/
+examples/examples_data/
+tests/pylibtemplate/
+tests/test_data/
+
+# Ignore select files
+pylibtemplate/_version.py
+pylibtemplate/version.py
+tests/.coverage
+tests/coverage.json
+
+# Ignore .pyc files
+*.pyc
+
+# Ignore #*# files
+\#*#
+*.bak
+*~
+
+# Ignore pip install build files.
+build/
+*.egg-info/
+*/_version.py
+
+# Ignore SLURM output files.
+slurm-*.out
