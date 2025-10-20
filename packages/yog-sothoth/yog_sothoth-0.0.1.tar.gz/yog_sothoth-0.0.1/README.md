@@ -1,0 +1,13 @@
+# Yog-Sothoth
+
+Este repositorio es un taller personal para construir, probar y documentar herramientas y conceptos de seguridad. Es un entorno de aprendizaje práctico tanto para seguridad ofensiva como defensiva, combinando la flexibilidad de Python con el rendimiento de Go.
+
+El nombre `Yog-Sothoth` (La Llave y la Puerta) representa la naturaleza de este laboratorio: una colección de conocimiento omnisciente y herramientas que "lo ven todo".
+
+## Directrices Éticas
+
+Todas las herramientas y scripts en este repositorio son solo para fines educativos. Siempre asegúrate de tener permiso explícito antes de probar la seguridad en cualquier entorno. Usa el conocimiento de manera responsable para fortalecer la seguridad, no para dañar.
+
+## Licencia
+
+Este proyecto es para fines educativos y está disponible gratuitamente para usar, modificar y distribuir bajo la **[Licencia MIT](LICENSE)**.

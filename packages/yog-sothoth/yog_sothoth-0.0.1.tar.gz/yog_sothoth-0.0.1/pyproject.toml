@@ -1,0 +1,42 @@
+[project]
+name = "yog-sothoth"
+version = "0.0.1"
+description = "That one who knows all the secrets"
+readme = "README.md"
+authors = [
+    { name = "Fernando Bryan Reza Campos", email = "fer.rezac@outlook.com" }
+]
+requires-python = ">=3.14"
+dependencies = []
+
+[tool.uv.workspace]
+members = [
+    "src/hack_py*",
+    "src/yog_sothoth/*.py",
+]
+exclude = [
+    "src/*",
+	# pkg related
+	"*.lock",
+	"dist",
+	"flake.*",
+
+	# go related stuff
+	"src/yog_sothoth/*.mod",
+	"src/yog_sothoth/*.go",
+
+]
+
+[project.scripts]
+yog-sothoth = "yog_sothoth:main"
+# cli = "yog_sothoth.cli:main"
+
+hack-py = "hack_py:main"
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
+
+[build-system]
+requires = ["uv_build>=0.8.19,<0.9.0"]
+build-backend = "uv_build"
