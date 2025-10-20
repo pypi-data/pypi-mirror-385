@@ -1,0 +1,78 @@
+Metadata-Version: 2.4
+Name: retrieve-sentence-embeddings
+Version: 0.1.0a0
+Summary: A simple function to retrieve sentence embeddings from an OpenAI Embeddings-compatible API.
+Author-email: Jifeng Wu <jifengwu2k@gmail.com>
+License-Expression: MIT
+Project-URL: Homepage, https://github.com/jifengwu2k/retrieve-sentence-embeddings
+Project-URL: Bug Tracker, https://github.com/jifengwu2k/retrieve-sentence-embeddings/issues
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Requires-Python: >=2
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: typing; python_version < "3.5"
+Dynamic: license-file
+
+# `retrieve-sentence-embeddings`
+
+A simple function to retrieve sentence embeddings from
+an [OpenAI Embeddings](https://platform.openai.com/docs/guides/embeddings)-compatible API. That includes:
+
+- [OpenAI's embedding models](https://platform.openai.com/docs/api-reference/embeddings) (`base_url='https://api.openai.com/v1`)
+- [Google Gemini](https://ai.google.dev/gemini-api/docs/openai#embeddings) (`base_url='https://generativelanguage.googleapis.com/v1beta/openai'`)
+- [ollama](https://github.com/ollama/ollama/blob/main/docs/openai.md#v1embeddings) (`base_url='http://localhost:11434/v1'`).
+
+with compatible models.
+
+## Features
+
+- **Compatibility:** Unlike [openai](https://github.com/openai/openai-python), works on Python 2+ with zero non-Python
+  dependencies.
+
+## Installation
+
+```bash
+pip install retrieve-sentence-embeddings
+```
+
+## Usage
+
+```python
+# coding=utf-8
+from retrieve_sentence_embeddings import retrieve_sentence_embeddings
+
+api_key = u'OPENAI_API_KEY'
+base_url = u'https://api.openai.com/v1'
+model = u'text-embedding-ada-002'
+sentences = [
+    u'Hello, world!',
+    u'This is a test sentence.',
+    u'Embeddings are useful!'
+]
+
+sentence_embeddings = retrieve_sentence_embeddings(api_key, base_url, model, sentences)
+```
+
+`sentence_embeddings` is a `List[List[float]]`, e.g.,
+
+```
+[
+    [0.123, -0.982, ...],
+    [0.222, 0.088, ...],
+    ...
+]
+```
+
+## Error Handling
+
+If a network error or malformed response is encountered, the exception is propagated.
+
+## Contributing
+
+Contributions are welcome! Please submit pull requests or open issues on the GitHub repository.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
