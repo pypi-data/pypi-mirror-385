@@ -1,0 +1,215 @@
+Metadata-Version: 2.4
+Name: m3-data-import
+Version: 2.2.0
+Summary: Пакет импорта данных - UI
+Author: БАРС Груп
+Author-email: dev@bars-open.ru
+Classifier: Intended Audience :: Developers
+Classifier: Natural Language :: Russian
+Classifier: Operating System :: OS Independent
+Classifier: Framework :: Django :: 2.2
+Classifier: Framework :: Django :: 3.0
+Classifier: Framework :: Django :: 3.1
+Classifier: Framework :: Django :: 3.2
+Classifier: Framework :: Django :: 4.0
+Classifier: Framework :: Django :: 4.1
+Classifier: Framework :: Django :: 4.2
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Topic :: Software Development
+Description-Content-Type: text/markdown
+Requires-Dist: data-import<3,>=2.2
+Requires-Dist: m3-core<2.3,>=2.2.29
+Requires-Dist: m3-ui<2.3,>=2.2.31
+Requires-Dist: m3-objectpack<2.5,>=2.3.1
+Requires-Dist: Django<5,>=2.2
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: requires-dist
+Dynamic: summary
+
+=======================
+Подсистема импорта - UI
+=======================
+
+Интерфейсная часть подсистемы импорта
+
+Установка пакета
+================
+
+``pip install m3-data-import``
+
+Подключение
+===========
+
+
+1. Определение пака
+*******************
+Пак определяет класс конфигурации и дополнительные параметры импорта
+
+**Пример:**
+
+.. code-block:: python
+
+    from m3_data_import.actions import ImportPack as Pack
+
+    class ImportPack(Pack):
+
+        title = u'Импорт учреждений'
+        config_cls = ImportConfig
+
+        def get_parser_params(self):
+            params = super(ImportPack, self).get_parser_params()
+            params['skip_sheets'] = ('Справочник', )
+            return params
+
+    from .dataimport import ImportPack
+
+    def register_actions():
+      """Регистрация пака в контроллере."""
+
+      action_controller.packs.extend([
+          ImportPack()
+      ])
+
+
+Описание класса конфигурации см. в пакете data-import
+
+2. Массовый импорт
+******************
+
+Массовый импорт - загрузка множества файлов данных, запакованных в архив. Подсистема определяет соответствие файла и конфигурации, порядок загрузки. Для активации массового импорта необходимо:
+
+- Подключить пак массового импорта
+
+  .. code-block:: python
+
+    from m3_data_import.actions.bulk import BulkImportPack
+    action_controller.packs.extend((
+        BulkImportPack(),
+    ))
+
+- Зарегистрировать имеющиеся конфигурации в реестре конфигураций:
+
+  .. code-block:: python
+
+    from unit.dataimport import UnitConfig
+    from group.dataimport import GroupConfig
+
+    data_import.configuration.registry = Registry(
+      (UnitConfig, GroupConfig)
+    )
+
+  **Порядок классов в кортеже определяет приоритет загрузки!**
+
+Тесты
+=====
+
+Запуск тестов осуществляется через `tox <https://tox.readthedocs.io/en/latest/>`_
+# История изменений
+
+Все изменения проекта должны быть отражены в этом файле.
+
+Формат основан на [Keep a Changelog](http://keepachangelog.com/)
+и проект следует [Семантическому версионированию](http://semver.org/).
+
+## [x.y.z] - гггг-мм-дд
+
+Здесь должно быть расширенное описание того, что было сделано, какие есть планы у команды по дальнейшему развитию.
+Желательно будущие цели привязывать к конкретным задачам. Т.е. на каждую цель нужно поставить отдельную задачу и
+отразить ее номер здесь.
+
+### Добавлено
+
+- [ПРОЕКТ-ZZZZ](https://jira.bars.group/browse/ПРОЕКТ-ZZZZ)
+  PATCH Название задачи или изменения.
+
+- [ПРОЕКТ-YYYY](https://jira.bars.group/browse/ПРОЕКТ-YYYY)
+  MINOR Название задачи или изменения.
+
+- [ПРОЕКТ-XXXX](https://jira.bars.group/browse/ПРОЕКТ-XXXX)
+  MAJOR Название задачи или изменения.
+
+### Изменено
+
+### Исправлено
+
+### Удалено
+
+
+## [2.2.0] - 2025-10-20
+
+Поддержка версии m3-objectpack 2.4.0 из-за избавления от m3-django-compat.
+
+### Изменено
+
+- [EDUCLLG-9293](https://jira.bars.group/browse/EDUCLLG-9361)
+  MINOR Поддержка версии m3-objectpack 2.4.0.
+
+## [2.1.0] - 2025-09-09
+
+Повышение версии m3-objectpack из-за поднятия версий Django до 4.2.
+
+### Изменено
+
+- [EDUCLLG-9293](https://jira.bars.group/browse/EDUCLLG-9293)
+  MINOR Повышение версии m3-objectpack.
+
+## [2.0.0] - 2024-03-04
+
+Повышение несовместимой версии data-import из-за поднятия версий Django и celery.
+
+### Изменено
+
+- [EDUCLLG-8227](https://jira.bars.group/browse/EDUCLLG-8227)
+  MAJOR Повышение версии data-import.
+
+### Удалено
+
+- [EDUCLLG-8227](https://jira.bars.group/browse/EDUCLLG-8227)
+  MAJOR Убрана поддержка Python 2 и неиспользуемых версий Python 3.
+
+
+## [1.0.5] - 2023-10-05
+
+Изменение формата README и CHANGELOG для корректной сборки пакета.
+
+### Изменено
+
+- [EDUCLLG-7980](https://jira.bars.group/browse/EDUCLLG-7980)
+  PATCH Изменение формата README и CHANGELOG для корректной сборки пакета.
+
+
+1.0.4
++++++
+
+- Исправлена поддерживаемая версия Django на < 3.0.
+
+1.0.3
++++++
+
+- Добавлена подержка django 2.2
+
+1.0.2
++++++
+
+- Корректировка диапазонов допустимых версий зависимых пакетов.
+
+1.0.1
++++++
+
+- Добавлен необязательный параметр "путь к файлу", который может использоваться
+  для определения конфигурации.
+
+
+1.0.0
++++++
+
+- Подсистема импорта - UI
