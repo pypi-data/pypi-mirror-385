@@ -1,0 +1,10 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "pydeskpro"
+version = "1.0.1"
+dependencies = ["click", "rich"]
+license = { text = "MIT" }
+[project.scripts]
+pydesk = "pydesk.main:cli"
