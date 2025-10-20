@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Change Log &mdash; dbilib - v0.5.1 Documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/css/s5defs-rules.css?v=0345028d" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=037dbd9b"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contact Us" href="contact.html" />
+    <link rel="prev" title="_dbi_sqlite - Private database interface for SQLite" href="_dbi_sqlite.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            dbilib
+              <img src="_static/s3dev_tri_white_sm.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.5.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="library.html">Library API Documentation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contact.html">Contact Us</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">dbilib</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Change Log</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-changelog">
+<span id="change-log"></span><h1>Change Log<a class="headerlink" href="#module-changelog" title="Link to this heading"></a></h1>
+<ul>
+<li><p><strong>0.5.1 - Update to the MSSQL interface to support multi-row insert.</strong><span> by </span><em>u555923</em><span> at </span><em>2025-10-19 14:20:29</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">MSSQL</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">The</span> <span class="n">call_procedure_update</span> <span class="n">method</span> <span class="n">has</span> <span class="n">been</span> <span class="n">updated</span> <span class="n">to</span> <span class="n">support</span> <span class="n">the</span>
+  <span class="n">insertion</span> <span class="n">of</span> <span class="n">multiple</span> <span class="n">rows</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">single</span> <span class="n">call</span><span class="o">.</span>
+<span class="o">-</span> <span class="n">Addressed</span> <span class="n">a</span> <span class="n">bug</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">call_procedure_update</span> <span class="n">method</span> <span class="n">where</span> <span class="n">data</span> <span class="n">was</span>
+  <span class="n">inserted</span> <span class="n">on</span> <span class="n">a</span> <span class="n">first</span><span class="o">-</span><span class="n">come</span><span class="o">-</span><span class="n">first</span><span class="o">-</span><span class="n">serve</span> <span class="n">basis</span><span class="p">,</span> <span class="o">*</span><span class="k">if</span><span class="o">*</span> <span class="n">the</span> <span class="n">parameter</span> <span class="n">names</span>
+  <span class="n">were</span> <span class="ow">not</span> <span class="n">provided</span><span class="o">.</span>
+
+<span class="n">Testing</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">Testing</span> <span class="n">added</span> <span class="k">for</span> <span class="n">the</span> <span class="n">new</span> <span class="n">multi</span><span class="o">-</span><span class="n">data</span> <span class="n">insert</span> <span class="n">functionality</span><span class="o">.</span>
+<span class="o">-</span> <span class="n">All</span> <span class="n">tests</span> <span class="n">complete</span> <span class="n">successfully</span> <span class="k">with</span> <span class="mi">100</span><span class="o">%</span> <span class="n">code</span> <span class="n">coverage</span><span class="o">.</span>
+
+<span class="n">Released</span><span class="p">:</span> <span class="mi">2025</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">19</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>0.5.0 - Release implementing support for MSSQL.</strong><span> by </span><em>u555923</em><span> at </span><em>2025-09-20 10:46:05</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Changes</span> <span class="n">relative</span> <span class="n">to</span> <span class="mf">0.5.0</span><span class="n">b1</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">The</span> <span class="n">MSSQL</span> <span class="s1">&#39;call_procedure_update&#39;</span> <span class="n">method</span> <span class="n">now</span> <span class="n">returns</span> <span class="o">-</span><span class="mi">1</span> <span class="k">as</span> <span class="n">the</span> <span class="n">row</span> <span class="n">ID</span>
+  <span class="k">for</span> <span class="n">a</span> <span class="n">duplicated</span> <span class="n">row</span> <span class="n">on</span> <span class="n">update</span> <span class="n">USP</span> <span class="n">calls</span><span class="o">.</span> <span class="n">Note</span><span class="p">:</span> <span class="n">The</span> <span class="n">table</span> <span class="n">must</span> <span class="n">have</span> <span class="n">a</span>
+  <span class="n">UNIQUE</span> <span class="n">constraint</span> <span class="k">for</span> <span class="n">this</span> <span class="n">to</span> <span class="n">be</span> <span class="n">triggered</span><span class="o">.</span>
+<span class="o">-</span> <span class="n">A</span> <span class="s1">&#39;flat&#39;</span> <span class="n">parameter</span> <span class="n">has</span> <span class="n">been</span> <span class="n">added</span> <span class="n">to</span> <span class="n">the</span> <span class="s1">&#39;execute_query&#39;</span> <span class="n">method</span> <span class="k">for</span>
+  <span class="n">flattening</span> <span class="n">the</span> <span class="nb">list</span> <span class="n">of</span> <span class="n">tuples</span> <span class="n">result</span> <span class="k">for</span> <span class="n">single</span> <span class="n">element</span> <span class="n">responses</span><span class="o">.</span>
+
+<span class="n">Testing</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">Testing</span> <span class="n">completed</span> <span class="n">successfully</span> <span class="k">with</span> <span class="mi">100</span><span class="o">%</span> <span class="n">code</span> <span class="n">coverage</span><span class="o">.</span>
+
+<span class="n">Released</span><span class="p">:</span> <span class="mi">2025</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">20</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>0.5.0b1 - Beta release for version 0.5.0.dev3.</strong><span> by </span><em>j_berendt</em><span> at </span><em>2025-09-11 10:28:13</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Released</span><span class="p">:</span> <span class="mi">2025</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">11</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>0.5.0.dev3 - Various bug fixes and improvements for MSSQL.</strong><span> by </span><em>u555923</em><span> at </span><em>2025-07-25 14:56:43</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Changes</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">Addressed</span> <span class="n">an</span> <span class="n">issue</span> <span class="n">when</span> <span class="n">a</span> <span class="n">USP</span> <span class="n">does</span> <span class="ow">not</span> <span class="n">have</span> <span class="nb">any</span> <span class="n">parameters</span> <span class="n">to</span> <span class="k">return</span><span class="o">.</span>
+<span class="o">-</span> <span class="n">Introduced</span> <span class="n">exit</span> <span class="n">codes</span> <span class="n">to</span> <span class="n">the</span> <span class="n">backup</span> <span class="n">routine</span> <span class="k">for</span> <span class="n">MSSQL</span><span class="o">.</span>
+<span class="o">-</span> <span class="n">Addressed</span> <span class="n">an</span> <span class="n">issue</span> <span class="ow">in</span> <span class="n">reporting</span> <span class="n">SQLAlchemy</span> <span class="n">errors</span><span class="o">.</span>
+
+<span class="n">Testing</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">Testing</span> <span class="k">for</span> <span class="n">new</span> <span class="n">MSSQL</span> <span class="n">functionality</span> <span class="n">complete</span><span class="o">.</span> <span class="mi">100</span><span class="o">%</span> <span class="n">coverage</span> <span class="k">for</span> <span class="n">MSSQL</span>
+  <span class="n">code</span><span class="o">.</span>
+
+<span class="n">Released</span><span class="p">:</span> <span class="n">n</span><span class="o">/</span><span class="n">a</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>0.5.0.dev2 - Included table backup functionality for the MSSQL interface.</strong><span> by </span><em>u555923</em><span> at </span><em>2025-07-24 10:44:12</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">MSSQL</span> <span class="n">table</span> <span class="n">backup</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">Functionality</span> <span class="n">has</span> <span class="n">been</span> <span class="n">added</span> <span class="n">to</span> <span class="n">the</span> <span class="n">MSSQL</span> <span class="n">interface</span> <span class="k">for</span> <span class="n">backing</span> <span class="n">up</span> <span class="nb">any</span>
+  <span class="n">given</span> <span class="n">table</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">database</span> <span class="n">to</span> <span class="n">the</span> <span class="o">*</span><span class="n">backup</span> <span class="n">database</span><span class="o">*.</span> <span class="n">Note</span> <span class="n">this</span> <span class="ow">is</span>
+  <span class="o">*</span><span class="ow">not</span><span class="o">*</span> <span class="n">a</span> <span class="n">filesystem</span> <span class="n">backup</span><span class="o">.</span>
+<span class="o">-</span> <span class="n">A</span> <span class="s1">&#39;database_exists&#39;</span> <span class="n">function</span> <span class="n">has</span> <span class="n">been</span> <span class="n">added</span> <span class="n">to</span> <span class="n">the</span> <span class="n">interface</span> <span class="n">primarily</span>
+  <span class="n">to</span> <span class="n">facilitate</span> <span class="n">the</span> <span class="n">backup</span><span class="p">,</span> <span class="n">but</span> <span class="n">also</span> <span class="k">for</span> <span class="n">general</span> <span class="n">use</span><span class="o">.</span>
+
+<span class="n">MSSQL</span> <span class="n">table</span> <span class="n">checksum</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">A</span> <span class="n">function</span> <span class="n">has</span> <span class="n">been</span> <span class="n">added</span> <span class="n">to</span> <span class="n">the</span> <span class="n">MSSQL</span> <span class="n">interface</span> <span class="n">enabling</span> <span class="n">the</span> <span class="n">user</span> <span class="n">to</span>
+  <span class="n">calculate</span> <span class="n">a</span> <span class="n">table</span> <span class="n">checksum</span> <span class="p">(</span><span class="n">easily</span><span class="p">)</span><span class="o">.</span>
+<span class="o">-</span> <span class="n">Aside</span><span class="p">,</span> <span class="n">this</span> <span class="n">function</span> <span class="n">will</span> <span class="n">also</span> <span class="n">be</span> <span class="n">used</span> <span class="n">by</span> <span class="n">the</span> <span class="n">MSSQL</span> <span class="n">table</span> <span class="n">backup</span> <span class="n">logic</span>
+  <span class="n">to</span> <span class="n">verify</span> <span class="k">if</span> <span class="n">a</span> <span class="n">table</span> <span class="n">was</span> <span class="n">successfully</span> <span class="n">backed</span> <span class="n">up</span><span class="o">.</span>
+
+<span class="n">Other</span> <span class="n">changes</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">Updated</span> <span class="n">the</span> <span class="s1">&#39;execute_query&#39;</span> <span class="n">method</span> <span class="n">to</span> <span class="n">include</span> <span class="n">a</span> <span class="s1">&#39;commit&#39;</span> <span class="n">argument</span><span class="p">,</span>
+  <span class="n">which</span> <span class="n">defaults</span> <span class="n">to</span> <span class="kc">True</span> <span class="k">for</span> <span class="n">backwards</span> <span class="n">compaiability</span><span class="o">.</span>
+
+<span class="n">Fixes</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">Consistently</span> <span class="n">applied</span> <span class="n">the</span> <span class="n">name</span> <span class="s1">&#39;mssql&#39;</span> <span class="k">for</span> <span class="nb">all</span> <span class="n">MS</span> <span class="n">SQL</span> <span class="n">Server</span> <span class="n">related</span>
+  <span class="nb">object</span> <span class="n">items</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">interface</span><span class="p">;</span> <span class="n">rather</span> <span class="n">than</span> <span class="n">variations</span> <span class="n">such</span> <span class="k">as</span>
+  <span class="s1">&#39;sqlserver&#39;</span><span class="o">.</span>
+
+<span class="n">Testing</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">The</span> <span class="n">tests</span> <span class="k">for</span> <span class="n">the</span> <span class="n">MSSQL</span> <span class="n">interface</span> <span class="n">have</span> <span class="n">been</span> <span class="n">updated</span> <span class="k">for</span> <span class="mi">100</span><span class="o">%</span> <span class="n">code</span>
+  <span class="n">coverage</span><span class="o">.</span> <span class="n">All</span> <span class="n">MSSQL</span> <span class="n">interface</span> <span class="n">tests</span> <span class="n">complete</span> <span class="n">successfully</span><span class="o">.</span>
+<span class="o">-</span> <span class="n">Testing</span> <span class="k">for</span> <span class="n">MySQL</span> <span class="ow">and</span> <span class="n">SQLite</span> <span class="n">completed</span> <span class="n">successfully</span> <span class="p">(</span><span class="n">on</span> <span class="n">a</span> <span class="n">different</span>
+  <span class="n">environment</span><span class="p">)</span> <span class="k">with</span> <span class="mi">98</span><span class="o">%</span> <span class="n">code</span> <span class="n">coverage</span><span class="o">.</span> <span class="n">The</span> <span class="n">remaining</span> <span class="mi">2</span><span class="o">%</span> <span class="n">relates</span> <span class="n">to</span> <span class="n">the</span>
+  <span class="n">MSSQL</span> <span class="ow">and</span> <span class="n">non</span><span class="o">-</span><span class="n">supported</span> <span class="n">database</span> <span class="n">engine</span> <span class="n">routing</span> <span class="ow">in</span> <span class="n">the</span>
+  <span class="n">database</span><span class="o">.</span><span class="n">DBInterface</span><span class="o">.</span><span class="fm">__new__</span> <span class="n">method</span><span class="o">.</span>
+
+<span class="n">Released</span><span class="p">:</span> <span class="n">n</span><span class="o">/</span><span class="n">a</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>0.5.0.dev1 - Introduction of Microsoft SQL Server support.</strong><span> by </span><em>u555923</em><span> at </span><em>2025-07-14 14:09:00</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SQL</span> <span class="n">Server</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">A</span> <span class="n">database</span> <span class="n">interface</span> <span class="n">has</span> <span class="n">been</span> <span class="n">added</span> <span class="k">for</span> <span class="n">MS</span> <span class="n">SQL</span> <span class="n">Server</span> <span class="n">support</span><span class="p">,</span> <span class="n">via</span>
+  <span class="n">pyodbc</span><span class="o">.</span>
+
+<span class="n">Testing</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">The</span> <span class="n">test</span> <span class="n">suite</span> <span class="n">has</span> <span class="n">been</span> <span class="n">updated</span> <span class="n">to</span> <span class="n">test</span> <span class="n">the</span> <span class="n">new</span> <span class="n">MS</span> <span class="n">SQL</span> <span class="n">Server</span>
+  <span class="n">interface</span><span class="p">,</span> <span class="k">with</span> <span class="nb">all</span> <span class="n">tests</span> <span class="n">completing</span> <span class="n">successfully</span><span class="o">.</span>
+<span class="o">-</span> <span class="n">Testing</span> <span class="k">for</span> <span class="n">MySQL</span> <span class="ow">and</span> <span class="n">SQLite</span> <span class="n">completed</span> <span class="p">(</span><span class="n">on</span> <span class="n">a</span> <span class="n">different</span> <span class="n">environment</span><span class="p">)</span> <span class="k">with</span>
+  <span class="mi">98</span><span class="o">%</span> <span class="n">code</span> <span class="n">coverage</span><span class="o">.</span> <span class="n">The</span> <span class="n">missing</span> <span class="mi">2</span><span class="o">%</span> <span class="n">relates</span> <span class="n">to</span> <span class="n">SQL</span> <span class="n">Server</span> <span class="ow">and</span>
+  <span class="n">non</span><span class="o">-</span><span class="n">supported</span> <span class="n">database</span> <span class="n">engine</span> <span class="n">routing</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">database</span><span class="o">.</span><span class="n">DBInterface</span><span class="o">.</span><span class="fm">__new__</span>
+  <span class="n">method</span><span class="o">.</span>
+
+<span class="n">Released</span><span class="p">:</span> <span class="n">n</span><span class="o">/</span><span class="n">a</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>0.4.2 - Updated dependency versions to address Snyk vulnerability issues.</strong><span> by </span><em>j_berendt</em><span> at </span><em>2024-11-12 17:18:36</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Released</span><span class="p">:</span> <span class="mi">2024</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">12</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>0.4.1 - Release for version 0.4.1b1.</strong><span> by </span><em>j_berendt</em><span> at </span><em>2024-09-27 21:22:18</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Testing</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">Tests</span> <span class="n">complete</span> <span class="n">successfully</span> <span class="k">with</span> <span class="mi">100</span><span class="o">%</span> <span class="n">code</span> <span class="n">coverage</span><span class="o">.</span>
+<span class="o">-</span> <span class="n">Pylintr</span> <span class="n">completes</span> <span class="n">successfully</span> <span class="n">at</span> <span class="mi">100</span><span class="o">%.</span>
+
+<span class="n">Released</span><span class="p">:</span> <span class="mi">2024</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">27</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>0.4.1b1 - Addressed issue in stored procedure call.</strong><span> by </span><em>j_berendt</em><span> at </span><em>2024-09-26 09:55:31</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DBLIB</span><span class="o">-</span><span class="mi">8</span><span class="p">:</span> <span class="n">Stored</span> <span class="n">procedure</span> <span class="n">call</span>
+<span class="o">-</span> <span class="n">Added</span> <span class="n">a</span> <span class="n">commit</span> <span class="n">call</span> <span class="n">to</span> <span class="n">the</span> <span class="n">basic</span> <span class="n">call_procedure</span> <span class="n">method</span> <span class="k">for</span> <span class="n">MySQL</span> <span class="ow">and</span>
+  <span class="n">Oracle</span><span class="o">.</span> <span class="n">Previously</span><span class="p">,</span> <span class="nb">any</span> <span class="n">data</span> <span class="n">added</span> <span class="n">by</span> <span class="n">a</span> <span class="n">USP</span> <span class="n">using</span> <span class="n">this</span> <span class="n">call</span> <span class="n">was</span> <span class="ow">not</span>
+  <span class="n">committed</span><span class="o">.</span>
+
+<span class="n">Testing</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">Added</span> <span class="n">a</span> <span class="n">test</span> <span class="n">case</span> <span class="n">to</span> <span class="n">verify</span> <span class="n">the</span> <span class="n">data</span> <span class="n">added</span> <span class="n">using</span> <span class="n">the</span> <span class="n">call_procedure</span>
+  <span class="n">method</span> <span class="ow">is</span> <span class="n">committed</span><span class="o">.</span>
+<span class="o">-</span> <span class="n">All</span> <span class="n">tests</span> <span class="n">complete</span> <span class="n">successfully</span> <span class="k">with</span> <span class="mi">100</span><span class="o">%</span> <span class="n">test</span> <span class="n">coverage</span><span class="o">.</span>
+
+<span class="n">Released</span><span class="p">:</span> <span class="mi">2024</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">26</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>0.4.0rc1 - Release candidate for PyPI upload. Library renamed.</strong><span> by </span><em>j_berendt</em><span> at </span><em>2024-08-07 16:16:41</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Library</span> <span class="n">rename</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">To</span> <span class="n">resolve</span> <span class="n">a</span> <span class="n">PyPI</span> <span class="n">naming</span> <span class="n">conflict</span><span class="p">,</span> <span class="n">the</span> <span class="n">library</span> <span class="n">has</span> <span class="n">been</span> <span class="n">renamed</span> <span class="kn">from</span>
+<span class="w">  </span><span class="nn">dblib</span> <span class="n">to</span> <span class="n">dbilib</span><span class="o">.</span>
+<span class="o">-</span> <span class="n">The</span> <span class="o">*</span><span class="n">exact</span><span class="o">*</span> <span class="n">reason</span> <span class="k">for</span> <span class="n">the</span> <span class="n">conflict</span> <span class="ow">is</span> <span class="n">unknown</span> <span class="k">as</span> <span class="n">there</span> <span class="n">are</span> <span class="n">no</span> <span class="n">existing</span>
+  <span class="n">libraries</span> <span class="k">with</span> <span class="n">the</span> <span class="n">name</span> <span class="s2">&quot;dblib&quot;</span><span class="o">.</span>
+
+<span class="n">Changes</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">Migrated</span> <span class="kn">from</span><span class="w"> </span><span class="nn">setup.py</span> <span class="n">to</span> <span class="n">pyproject</span><span class="o">.</span><span class="n">toml</span><span class="o">.</span>
+<span class="o">-</span> <span class="n">Added</span> <span class="n">a</span> <span class="n">README</span><span class="o">.</span><span class="n">md</span> <span class="n">file</span> <span class="k">for</span> <span class="n">GitHub</span> <span class="ow">and</span> <span class="n">PyPI</span><span class="p">,</span> <span class="n">based</span> <span class="n">on</span> <span class="n">the</span> <span class="n">homepage</span> <span class="n">of</span> <span class="n">the</span>
+  <span class="n">existing</span> <span class="n">documentation</span><span class="o">.</span>
+<span class="o">-</span> <span class="n">Uploaded</span> <span class="n">documentation</span> <span class="n">to</span> <span class="n">Read</span> <span class="n">the</span> <span class="n">Docs</span><span class="o">.</span>
+
+<span class="n">Testing</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">Tests</span> <span class="n">complete</span> <span class="n">successfully</span> <span class="k">with</span> <span class="mi">100</span><span class="o">%</span> <span class="n">code</span> <span class="n">coverage</span><span class="o">.</span>
+
+<span class="n">Released</span><span class="p">:</span> <span class="mi">2024</span><span class="o">-</span><span class="mi">08</span><span class="o">-</span><span class="mi">07</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>0.4.0.dev4 - Relocated LICENSE file.</strong><span> by </span><em>j_berendt</em><span> at </span><em>2024-03-14 15:38:58</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DBLIB</span><span class="o">-</span><span class="mi">6</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">The</span> <span class="n">LICENSE</span> <span class="n">file</span> <span class="n">has</span> <span class="n">been</span> <span class="n">moved</span> <span class="n">to</span> <span class="n">the</span> <span class="n">top</span> <span class="n">level</span> <span class="n">of</span> <span class="n">the</span> <span class="n">project</span><span class="o">.</span>
+
+<span class="n">Released</span><span class="p">:</span> <span class="mi">2024</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">14</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>0.4.0.dev3 - Bug fix.</strong><span> by </span><em>j_berendt</em><span> at </span><em>2024-03-07 15:00:33</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DBLIB</span><span class="o">-</span><span class="mi">5</span><span class="p">:</span> <span class="n">Update</span> <span class="n">results</span> <span class="n">to</span> <span class="n">DataFrame</span> <span class="n">method</span>
+<span class="o">-</span> <span class="n">Addressed</span> <span class="n">a</span> <span class="ne">StopIteration</span> <span class="n">error</span> <span class="n">thrown</span> <span class="n">when</span> <span class="n">attempting</span> <span class="n">to</span> <span class="n">convert</span> <span class="n">results</span>
+  <span class="n">to</span> <span class="n">a</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="n">when</span> <span class="n">the</span> <span class="n">results</span> <span class="nb">object</span> <span class="ow">is</span> <span class="n">empty</span><span class="o">.</span>
+
+<span class="n">Released</span><span class="p">:</span> <span class="mi">2024</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">07</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>0.4.0.dev2 - Security updates and Python 3.10 uplift.</strong><span> by </span><em>j_berendt</em><span> at </span><em>2024-02-28 16:24:58</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DBLIB</span><span class="o">-</span><span class="mi">3</span><span class="p">:</span> <span class="n">Security</span>
+<span class="n">Security</span> <span class="n">updates</span> <span class="n">have</span> <span class="n">been</span> <span class="n">applied</span> <span class="n">to</span> <span class="n">the</span> <span class="n">_dbi_base</span><span class="o">.</span><span class="n">execute_query</span> <span class="n">method</span><span class="o">.</span>
+<span class="n">Checks</span> <span class="n">have</span> <span class="n">been</span> <span class="n">put</span> <span class="ow">in</span> <span class="n">place</span> <span class="n">to</span> <span class="n">help</span> <span class="n">prevent</span> <span class="n">injection</span><span class="o">-</span><span class="n">like</span> <span class="n">statments</span><span class="o">.</span>
+<span class="o">-</span> <span class="n">A</span> <span class="n">SecurityWarning</span> <span class="ow">is</span> <span class="n">raised</span> <span class="k">if</span> <span class="n">the</span> <span class="n">statement</span> <span class="n">contains</span> <span class="n">multiple</span>
+  <span class="n">semi</span><span class="o">-</span><span class="n">colon</span> <span class="n">characters</span><span class="o">.</span> <span class="n">Therefore</span> <span class="n">only</span> <span class="n">allowing</span> <span class="n">single</span><span class="o">-</span><span class="n">statement</span> <span class="n">to</span> <span class="n">be</span>
+  <span class="n">executed</span><span class="o">.</span>
+<span class="o">-</span> <span class="n">A</span> <span class="n">SecurityWarning</span> <span class="ow">is</span> <span class="n">raised</span> <span class="k">if</span> <span class="n">the</span> <span class="n">statement</span> <span class="n">contains</span> <span class="n">a</span> <span class="n">comment</span>
+  <span class="n">delimiter</span><span class="o">.</span>
+
+<span class="n">DBLIB</span><span class="o">-</span><span class="mi">4</span><span class="p">:</span> <span class="n">Python</span> <span class="mf">3.10</span>
+<span class="o">-</span> <span class="n">Type</span> <span class="n">hinting</span> <span class="n">has</span> <span class="n">been</span> <span class="n">updated</span> <span class="ow">in</span> <span class="nb">all</span> <span class="n">modules</span> <span class="n">IAW</span> <span class="n">PEP</span><span class="o">-</span><span class="mf">604.</span>
+  <span class="o">-</span> <span class="n">This</span> <span class="n">uses</span> <span class="n">a</span> <span class="n">pipe</span> <span class="n">syntax</span><span class="p">,</span> <span class="n">rather</span> <span class="n">than</span> <span class="n">a</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span> <span class="n">keyword</span><span class="o">.</span>
+<span class="o">-</span> <span class="n">Minimum</span> <span class="n">version</span> <span class="n">of</span> <span class="n">Python</span> <span class="n">required</span> <span class="ow">is</span> <span class="n">now</span> <span class="mf">3.10</span><span class="o">.</span>
+
+<span class="n">Testing</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">Test</span> <span class="n">cases</span> <span class="n">have</span> <span class="n">been</span> <span class="n">added</span> <span class="n">to</span> <span class="n">cover</span> <span class="n">the</span> <span class="n">security</span> <span class="n">checks</span><span class="o">.</span>
+<span class="o">-</span> <span class="n">Test</span> <span class="n">cases</span> <span class="k">pass</span> <span class="n">successfully</span> <span class="k">with</span> <span class="mi">100</span><span class="o">%</span> <span class="n">code</span> <span class="n">coverage</span><span class="o">.</span>
+
+<span class="n">Released</span><span class="p">:</span> <span class="mi">2024</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">28</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>0.4.0.dev1 - Enable database interface class specialisation.</strong><span> by </span><em>j_berendt</em><span> at </span><em>2024-02-26 12:07:14</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DBLIB</span><span class="o">-</span><span class="mi">2</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">The</span> <span class="n">database</span><span class="o">.</span><span class="n">DBInterface</span> <span class="k">class</span><span class="w"> </span><span class="nc">has</span> <span class="n">been</span> <span class="n">updated</span> <span class="n">to</span> <span class="n">include</span> <span class="o">*</span><span class="n">args</span> <span class="ow">and</span>
+  <span class="o">**</span><span class="n">kwargs</span> <span class="ow">in</span> <span class="n">the</span> <span class="k">class</span><span class="w"> </span><span class="nc">creation</span><span class="o">.</span>
+  <span class="o">-</span> <span class="n">The</span> <span class="fm">__new__</span> <span class="n">method</span> <span class="n">remains</span> <span class="ow">in</span> <span class="n">place</span> <span class="n">due</span> <span class="n">to</span> <span class="n">the</span> <span class="n">way</span> <span class="n">classes</span> <span class="n">must</span> <span class="n">be</span>
+    <span class="n">created</span><span class="o">.</span>
+<span class="o">-</span> <span class="n">The</span> <span class="n">_db_base</span><span class="o">.</span><span class="n">_DBIBase</span> <span class="k">class</span><span class="w"> </span><span class="nc">has</span> <span class="n">been</span> <span class="n">updated</span> <span class="n">to</span> <span class="n">include</span> <span class="n">a</span> <span class="n">database_name</span>
+  <span class="nb">property</span><span class="p">,</span> <span class="n">which</span> <span class="ow">is</span> <span class="n">propogated</span> <span class="n">through</span> <span class="nb">all</span> <span class="n">subclasses</span><span class="o">.</span>
+
+<span class="n">Testing</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">Test</span> <span class="n">cases</span> <span class="n">updated</span> <span class="n">to</span> <span class="n">ensure</span> <span class="mi">100</span><span class="o">%</span> <span class="n">code</span> <span class="n">coverage</span><span class="o">.</span>
+<span class="o">-</span> <span class="n">Minor</span> <span class="n">updates</span> <span class="n">to</span> <span class="n">the</span> <span class="n">testing</span> <span class="n">setup</span><span class="o">/</span><span class="n">teardown</span> <span class="n">methods</span> <span class="k">for</span> <span class="n">robustness</span><span class="o">.</span>
+
+<span class="n">Documentation</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">Updated</span> <span class="n">to</span> <span class="n">include</span> <span class="n">a</span> <span class="n">code</span> <span class="n">example</span> <span class="k">for</span> <span class="s1">&#39;pseudo-inheritance&#39;</span> <span class="n">to</span> <span class="n">enable</span>
+  <span class="n">subclass</span> <span class="n">specialisation</span><span class="o">.</span>
+<span class="o">-</span> <span class="n">Updated</span> <span class="n">the</span> <span class="n">usage</span> <span class="n">example</span> <span class="n">to</span> <span class="n">remove</span> <span class="n">the</span> <span class="n">subclass</span><span class="s1">&#39; call to __init__, as</span>
+  <span class="n">the</span> <span class="fm">__init__</span> <span class="n">method</span> <span class="n">will</span> <span class="o">*</span><span class="ow">not</span><span class="o">*</span> <span class="n">be</span> <span class="n">called</span><span class="o">.</span>
+
+<span class="n">Released</span><span class="p">:</span> <span class="mi">2024</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">26</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>0.3.0.dev3 - HTML documentation suite created.</strong><span> by </span><em>j_berendt</em><span> at </span><em>2023-10-10 09:49:23</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Released</span><span class="p">:</span> <span class="mi">2023</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">25</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>0.3.0.dev2 - Docstring updates.</strong><span> by </span><em>j_berendt</em><span> at </span><em>2023-07-17 10:09:09</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Issued</span> <span class="ow">and</span> <span class="n">bug</span> <span class="n">fixes</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">DBLIB</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="n">Updated</span> <span class="n">the</span> <span class="n">docstrings</span> <span class="ow">in</span> <span class="n">_dbi_mysql</span> <span class="n">to</span> <span class="n">show</span> <span class="n">the</span> <span class="n">parameter</span>
+  <span class="n">name</span> <span class="k">as</span> <span class="s1">&#39;proc&#39;</span><span class="p">,</span> <span class="n">rather</span> <span class="n">than</span> <span class="s1">&#39;proc_name&#39;</span><span class="o">.</span> <span class="n">to</span> <span class="n">accurately</span> <span class="n">match</span> <span class="n">the</span> <span class="n">name</span>
+  <span class="n">of</span> <span class="n">the</span> <span class="n">parameter</span><span class="o">.</span>
+
+<span class="n">Released</span><span class="p">:</span> <span class="mi">2023</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">17</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>0.3.0.dev1 - Addition of the SQLite database interface.</strong><span> by </span><em>j_berendt</em><span> at </span><em>2023-06-07 08:05:55</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">This</span> <span class="ow">is</span> <span class="n">a</span> <span class="o">*</span><span class="n">development</span> <span class="n">release</span><span class="o">*</span> <span class="n">intended</span> <span class="k">for</span> <span class="n">the</span> <span class="n">development</span> <span class="ow">and</span> <span class="n">testing</span>
+<span class="k">if</span> <span class="n">the</span> <span class="n">calling</span> <span class="n">libraries</span><span class="o">.</span>
+
+<span class="n">Released</span><span class="p">:</span> <span class="mi">2023</span><span class="o">-</span><span class="mi">06</span><span class="o">-</span><span class="mi">07</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>0.2.0.dev4 - Refactored module code base. Other fixes.</strong><span> by </span><em>j_berendt</em><span> at </span><em>2023-05-23 15:57:48</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">This</span> <span class="ow">is</span> <span class="n">a</span> <span class="o">*</span><span class="n">development</span> <span class="n">release</span><span class="o">*</span> <span class="n">intended</span> <span class="k">for</span> <span class="n">the</span> <span class="n">development</span> <span class="ow">and</span> <span class="n">testing</span>
+<span class="n">of</span> <span class="n">the</span> <span class="n">calling</span> <span class="n">libraries</span><span class="o">.</span>
+
+<span class="n">Purpose</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">The</span> <span class="n">purpose</span> <span class="n">of</span> <span class="n">this</span> <span class="n">change</span> <span class="ow">is</span> <span class="n">to</span> <span class="o">*</span><span class="n">properly</span><span class="o">*</span> <span class="n">segregate</span> <span class="n">the</span>
+  <span class="n">database</span><span class="o">-</span><span class="n">specific</span> <span class="n">code</span> <span class="kn">from</span><span class="w"> </span><span class="nn">the</span> <span class="n">generalised</span> <span class="n">code</span><span class="o">.</span>
+<span class="o">-</span> <span class="n">When</span> <span class="n">running</span> <span class="n">the</span> <span class="n">library</span> <span class="ow">in</span> <span class="n">an</span> <span class="n">Oracle</span> <span class="p">(</span><span class="ow">and</span> <span class="n">non</span><span class="o">-</span><span class="n">MySQL</span><span class="p">)</span> <span class="n">environment</span><span class="p">,</span>
+  <span class="n">the</span> <span class="n">imports</span> <span class="n">were</span> <span class="n">getting</span> <span class="n">crossed</span><span class="o">.</span> <span class="n">This</span> <span class="n">forced</span> <span class="n">the</span> <span class="n">installation</span> <span class="n">of</span>
+  <span class="n">MySQL</span> <span class="n">driver</span> <span class="n">libraries</span><span class="p">,</span> <span class="n">although</span> <span class="n">they</span> <span class="n">would</span> <span class="ow">not</span> <span class="n">be</span> <span class="n">used</span> <span class="ow">in</span> <span class="n">practice</span><span class="o">.</span>
+
+<span class="n">Modules</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">The</span> <span class="n">MySQL</span><span class="o">-</span><span class="n">specific</span> <span class="n">code</span> <span class="n">has</span> <span class="n">been</span> <span class="n">removed</span> <span class="kn">from</span><span class="w"> </span><span class="nn">the</span> <span class="n">_db_base</span> <span class="n">module</span> <span class="ow">and</span>
+  <span class="n">placed</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">_dbi_mysql</span> <span class="n">module</span><span class="p">;</span> <span class="n">where</span> <span class="n">it</span> <span class="n">always</span> <span class="n">should</span> <span class="n">have</span> <span class="n">been</span><span class="o">.</span>
+<span class="o">-</span> <span class="n">The</span> <span class="fm">__init__</span> <span class="n">method</span> <span class="n">has</span> <span class="n">been</span> <span class="n">removed</span> <span class="kn">from</span><span class="w"> </span><span class="nn">the</span> <span class="n">database</span><span class="o">-</span><span class="n">specific</span>
+  <span class="n">modules</span><span class="p">,</span> <span class="n">enabling</span> <span class="n">fallback</span> <span class="n">to</span> <span class="n">the</span> <span class="n">parent</span> <span class="n">module</span><span class="o">.</span>
+<span class="o">-</span> <span class="n">Other</span> <span class="n">minor</span> <span class="p">(</span><span class="n">supporting</span><span class="p">)</span> <span class="n">changes</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">module</span> <span class="n">layout</span><span class="o">.</span>
+
+<span class="n">Fixes</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">The</span> <span class="n">database</span><span class="o">-</span><span class="n">name</span> <span class="n">tests</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">database</span><span class="o">.</span><span class="n">DBInterface</span> <span class="k">class</span><span class="w"> </span><span class="nc">have</span> <span class="n">been</span>
+  <span class="n">updated</span> <span class="n">to</span> <span class="n">prevent</span> <span class="n">a</span> <span class="n">module</span> <span class="kn">import</span><span class="w"> </span><span class="nn">error</span> <span class="n">during</span> <span class="n">the</span> <span class="n">tests</span><span class="o">.</span>
+
+<span class="n">Released</span><span class="p">:</span> <span class="mi">2023</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">24</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>0.2.0.dev3 - Fixes to the database.DBInterface.__new__ method.</strong><span> by </span><em>j_berendt</em><span> at </span><em>2023-05-22 16:01:11</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DBInterface</span><span class="o">.</span><span class="fm">__new__</span> <span class="n">method</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">New</span> <span class="k">class</span><span class="w"> </span><span class="nc">creation</span> <span class="n">failed</span> <span class="n">when</span> <span class="s1">&#39;other&#39;</span> <span class="n">parameters</span> <span class="n">were</span> <span class="n">passed</span> <span class="n">into</span>
+  <span class="n">the</span> <span class="k">class</span><span class="w"> </span><span class="nc">constructor</span><span class="o">.</span>
+<span class="o">-</span> <span class="n">Added</span> <span class="n">the</span> <span class="o">*</span><span class="n">args</span> <span class="ow">and</span> <span class="o">**</span><span class="n">kwargs</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">along</span> <span class="k">with</span> <span class="n">the</span> <span class="s1">&#39;connstr&#39;</span>
+  <span class="n">parameter</span><span class="o">.</span>
+<span class="o">-</span> <span class="n">Changed</span> <span class="n">the</span> <span class="kn">import</span><span class="w"> </span><span class="nn">test</span> <span class="k">for</span> <span class="n">MySQL</span> <span class="kn">from</span><span class="w"> </span><span class="s1">&#39;mysql.connector&#39;</span> <span class="n">to</span> <span class="n">simply</span>
+  <span class="s1">&#39;mysql&#39;</span><span class="p">,</span> <span class="k">as</span> <span class="n">the</span> <span class="s1">&#39;.connector&#39;</span> <span class="n">test</span> <span class="n">throws</span> <span class="n">a</span> <span class="n">ModuleNotFounderror</span> <span class="k">if</span>
+  <span class="n">mysql</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">installed</span><span class="o">.</span>
+
+<span class="n">Released</span><span class="p">:</span> <span class="mi">2023</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">23</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>0.2.0.dev2 - Updated to remove the required dependencies.</strong><span> by </span><em>j_berendt</em><span> at </span><em>2023-05-22 14:47:12</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">This</span> <span class="ow">is</span> <span class="n">a</span> <span class="o">*</span><span class="n">development</span> <span class="n">release</span><span class="o">*</span> <span class="n">intended</span> <span class="k">for</span> <span class="n">the</span> <span class="n">development</span> <span class="ow">and</span> <span class="n">testing</span>
+<span class="n">of</span> <span class="n">the</span> <span class="n">calling</span> <span class="n">libraries</span><span class="o">.</span>
+
+<span class="n">Dependencies</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">The</span> <span class="n">following</span> <span class="n">libraries</span> <span class="n">are</span> <span class="n">no</span> <span class="n">longer</span> <span class="n">required</span> <span class="n">by</span> <span class="n">the</span> <span class="n">installation</span><span class="o">.</span>
+  <span class="n">This</span> <span class="ow">is</span> <span class="n">to</span> <span class="n">enable</span> <span class="n">dblib</span> <span class="n">to</span> <span class="n">be</span> <span class="n">easily</span> <span class="n">deployed</span> <span class="n">onto</span> <span class="n">an</span> <span class="n">environment</span> <span class="n">where</span>
+  <span class="n">only</span> <span class="n">one</span> <span class="n">of</span> <span class="n">the</span> <span class="n">database</span> <span class="n">engines</span> <span class="ow">is</span> <span class="n">used</span><span class="o">.</span>
+<span class="o">-</span> <span class="n">Obviously</span><span class="p">,</span> <span class="n">the</span> <span class="n">appropriate</span> <span class="n">database</span> <span class="n">driver</span> <span class="n">must</span> <span class="n">be</span> <span class="n">installed</span> <span class="n">before</span>
+  <span class="n">using</span> <span class="n">dblib</span> <span class="n">to</span> <span class="n">access</span> <span class="n">that</span> <span class="n">database</span><span class="o">.</span>
+  <span class="o">-</span> <span class="n">cx</span><span class="o">-</span><span class="n">oracle</span>
+  <span class="o">-</span> <span class="n">mysql</span><span class="o">-</span><span class="n">connector</span>
+
+<span class="n">Released</span><span class="p">:</span> <span class="mi">2023</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">23</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>0.2.0.dev1 - Added Oracle database suppport.</strong><span> by </span><em>j_berendt</em><span> at </span><em>2023-05-18 14:51:00</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Modules</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">The</span> <span class="n">interface</span> <span class="n">modules</span> <span class="n">have</span> <span class="n">been</span> <span class="n">redesigned</span> <span class="n">to</span> <span class="n">facilitate</span> <span class="n">code</span> <span class="n">reuse</span>
+  <span class="ow">and</span> <span class="n">Oracle</span> <span class="n">database</span> <span class="n">support</span><span class="o">.</span>
+
+<span class="n">Released</span><span class="p">:</span> <span class="mi">2023</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">22</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>0.1.0.dev2 - Testing suite and minor code updates.</strong><span> by </span><em>j_berendt</em><span> at </span><em>2023-05-17 13:01:09</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">This</span> <span class="ow">is</span> <span class="n">a</span> <span class="o">*</span><span class="n">development</span> <span class="n">release</span><span class="o">*</span> <span class="n">intended</span> <span class="k">for</span> <span class="n">the</span> <span class="n">development</span> <span class="ow">and</span> <span class="n">testing</span>
+<span class="n">of</span> <span class="n">the</span> <span class="n">calling</span> <span class="n">libraries</span><span class="o">.</span>
+
+<span class="n">Testing</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">A</span> <span class="n">complete</span> <span class="n">testing</span> <span class="n">suite</span> <span class="n">has</span> <span class="n">been</span> <span class="n">added</span> <span class="ow">and</span> <span class="n">achieves</span> <span class="mi">100</span><span class="o">%</span> <span class="n">test</span>
+  <span class="n">coverage</span><span class="o">.</span>
+
+<span class="n">database</span><span class="o">.</span><span class="n">py</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">Minor</span> <span class="n">code</span> <span class="n">tweaks</span> <span class="n">have</span> <span class="n">been</span> <span class="n">applied</span> <span class="n">to</span> <span class="n">patch</span> <span class="n">bugs</span> <span class="n">found</span> <span class="k">while</span>
+  <span class="n">developing</span> <span class="n">the</span> <span class="n">test</span> <span class="n">suite</span><span class="o">.</span>
+
+<span class="n">Released</span><span class="p">:</span> <span class="mi">2023</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">18</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>0.1.0.dev1 - Initial development of the database module is complete.</strong><span> by </span><em>j_berendt</em><span> at </span><em>2023-05-16 16:50:33</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">This</span> <span class="ow">is</span> <span class="n">a</span> <span class="o">*</span><span class="n">development</span> <span class="n">release</span><span class="o">*</span> <span class="n">intended</span> <span class="k">for</span> <span class="n">the</span> <span class="n">development</span> <span class="ow">and</span> <span class="n">testing</span>
+<span class="n">of</span> <span class="n">the</span> <span class="n">calling</span> <span class="n">libraries</span><span class="o">.</span>
+
+<span class="n">database</span><span class="o">.</span><span class="n">py</span>
+<span class="o">-</span> <span class="n">The</span> <span class="n">core</span> <span class="n">database</span> <span class="n">module</span> <span class="n">was</span> <span class="n">taken</span> <span class="kn">from</span><span class="w"> </span><span class="nn">s3ddb</span> <span class="n">v0</span><span class="mf">.8.0</span><span class="o">.</span><span class="n">dev1</span><span class="p">,</span> <span class="ow">and</span> <span class="n">modified</span>
+  <span class="n">to</span> <span class="n">extend</span> <span class="n">functionality</span> <span class="k">with</span> <span class="n">the</span> <span class="n">view</span> <span class="n">to</span> <span class="n">removing</span> <span class="n">the</span> <span class="n">database</span> <span class="n">code</span>
+  <span class="kn">from</span><span class="w"> </span><span class="nn">the</span> <span class="n">s3ddb</span> <span class="ow">and</span> <span class="n">adourlib</span> <span class="n">libraries</span><span class="o">.</span>
+<span class="o">-</span> <span class="n">The</span> <span class="n">intended</span> <span class="n">design</span> <span class="ow">is</span> <span class="n">to</span> <span class="n">have</span> <span class="n">the</span> <span class="n">s3ddb</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span> <span class="ow">and</span>
+  <span class="n">adourlib</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span> <span class="n">classes</span> <span class="n">inherit</span> <span class="n">the</span>
+  <span class="n">dblib</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span> <span class="n">class</span><span class="p">,</span> <span class="ow">and</span> <span class="n">specialise</span> <span class="n">only</span> <span class="k">if</span> <span class="n">required</span><span class="o">.</span>
+  <span class="n">Otherwise</span><span class="p">,</span> <span class="n">the</span> <span class="n">core</span> <span class="n">database</span> <span class="n">interface</span> <span class="n">functionality</span> <span class="n">will</span> <span class="n">reside</span> <span class="ow">in</span> <span class="n">this</span>
+  <span class="n">lower</span><span class="o">-</span><span class="n">level</span> <span class="n">library</span><span class="o">.</span>
+
+<span class="n">Released</span><span class="p">:</span> <span class="mi">2023</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">17</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>0.1.0.dev1 - Initial commit for the dblib project.</strong><span> by </span><em>j_berendt</em><span> at </span><em>2023-05-16 16:24:40</em></p></li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="_dbi_sqlite.html" class="btn btn-neutral float-left" title="_dbi_sqlite - Private database interface for SQLite" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="contact.html" class="btn btn-neutral float-right" title="Contact Us" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023-2025 | s3dev | version 0.5.1.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
