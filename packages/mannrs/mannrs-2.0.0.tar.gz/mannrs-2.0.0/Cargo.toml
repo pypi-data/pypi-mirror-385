@@ -1,0 +1,29 @@
+[package]
+name = "mannrs"
+version = "2.0.0"
+edition = "2018"
+readme = "README.md"
+
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+name = "mannrs"
+crate-type = ["cdylib"]
+
+
+[dependencies]
+pyo3 = { version = "0.25.1", features = ["extension-module"] }
+ndarray = { version = "0.16.1", features = ["rayon"] }
+numpy = "0.25.0"
+ndarray-rand = "0.15.0"
+ndrustfft = "0.5.0"
+ninterp = "0.7.3"
+itertools = "0.14.0"
+faer-ext = { version = "0.6.0", features = ["ndarray"] }
+faer = "0.22.6"
+num = "0.4.3"
+rayon = "1.10.0"
+
+
+[package.metadata.docs.rs]
+rustdoc-args = [ "--html-in-header", "katex-header.html" ]
