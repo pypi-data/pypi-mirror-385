@@ -1,0 +1,47 @@
+[Unit]
+Description=Educational Agents Screenshot Service
+Documentation=https://github.com/your-org/edu-agents
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=ec2-user
+Group=ec2-user
+WorkingDirectory=/home/ec2-user/agentic-incept-reasoning/screenshot-service
+ExecStart=/usr/bin/npm start
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=mixed
+KillSignal=SIGTERM
+TimeoutStopSec=30
+Restart=on-failure
+RestartSec=10
+StartLimitInterval=300
+StartLimitBurst=5
+
+# Resource limits optimized for screenshot service
+MemoryMax=25G
+MemoryHigh=20G
+CPUQuota=400%
+TasksMax=1000
+
+# Environment
+Environment="NODE_ENV=production"
+Environment="MAX_BROWSERS=50"
+Environment="PORT=8001"
+
+# Security
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/home/ec2-user/agentic-incept-reasoning/logs
+ReadWritePaths=/home/ec2-user/agentic-incept-reasoning/screenshot-service
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=screenshot-service
+
+[Install]
+WantedBy=multi-user.target
