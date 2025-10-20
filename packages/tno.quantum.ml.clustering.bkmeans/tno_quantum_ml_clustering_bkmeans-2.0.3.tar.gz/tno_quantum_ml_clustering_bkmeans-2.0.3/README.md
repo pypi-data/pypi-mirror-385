@@ -1,0 +1,73 @@
+# TNO Quantum: ML - Clustering - Balanced K-Means
+
+TNO Quantum provides generic software components aimed at facilitating the development
+of quantum applications.
+
+This package implements a QUBO based Balanced K-Means clustering algorithm.
+The implementation has been done in accordance with the [scikit-learn estimator API](https://scikit-learn.org/stable/developers/develop.html), which means that the clustering algorithm can be used as any other scikit-learn
+clustering algorithm and combined with transforms through
+[Pipelines](https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html).
+
+
+*Limitations in (end-)use: the content of this software package may solely be used for applications 
+that comply with international export control laws.*
+
+## Documentation
+
+Documentation of the `tno.quantum.ml.clustering.bkmeans` package can be found [here](https://tno-quantum.github.io/documentation/).
+
+
+## Install
+
+Easily install the `tno.quantum.ml.clustering.bkmeans` package using pip:
+
+```console
+$ python -m pip install tno.quantum.ml.clustering.bkmeans
+```
+
+## Example
+
+The Balanced K-Means clustering can be used as shown in the following example.
+
+- Note: This example requires `tno.quantum.optimization.solvers[dwave]` and `tno.quantum.ml.datasets` which can be installed along the package using:
+
+  ```console
+  $ python -m pip install tno.quantum.ml.clustering.bkmeans[example]
+  ```
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+from tno.quantum.ml.clustering.bkmeans import QBKMeans
+from tno.quantum.ml.datasets import get_blobs_clustering_dataset
+
+# Generate sample data
+n_centers = 4
+X, true_labels = get_blobs_clustering_dataset(
+    n_samples=20, n_features=2, n_centers=n_centers
+)
+
+# Create QBKMeans object and fit
+cluster_algo = QBKMeans(
+    n_clusters=n_centers,
+    solver_config={
+        "name": "simulated_annealing_solver",
+        "options": {"number_of_reads": 100},
+    },
+)
+pred_labels = cluster_algo.fit_predict(X)
+
+# Plot results
+fig, ax = plt.subplots(nrows=1, ncols=1)
+unique_labels = np.unique(pred_labels)
+colors = plt.cm.Spectral(np.linspace(0, 1, len(unique_labels)))
+for k, col in zip(unique_labels, colors):
+    class_member_mask = cluster_algo.labels_ == k
+    xy = X[class_member_mask]
+    x, y = np.split(xy, 2, axis=1)
+    ax.plot(x, y, "o", mfc=tuple(col), mec="k", ms=6)
+
+ax.set_title("Quantum BKMeans clustering")
+plt.show()
+```

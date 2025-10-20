@@ -1,0 +1,16 @@
+numpy
+tno.quantum.ml.components~=2.0
+tno.quantum.utils~=5.1
+tno.quantum.optimization.qubo
+
+[example]
+tno.quantum.optimization.qubo[dwave]
+tno.quantum.ml.datasets
+
+[tests]
+pandas>=1.3.5
+tno.quantum.ml.datasets~=2.0
+pytest>=8.1.1
+pytest-cov>=4.1.0
+tomlkit
+tno.quantum.optimization.qubo.solvers[dwave]
