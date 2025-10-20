@@ -1,0 +1,84 @@
+Metadata-Version: 2.2
+Name: mtlearn
+Version: 0.1.5
+Summary: Morphological tree learning utilities built on top of mmcfilters
+Author-Email: Wonder Alexandre Luz Alves <worderalexandre@gmail.com>
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: C++
+Classifier: Topic :: Scientific/Engineering :: Image Processing
+Classifier: Operating System :: MacOS
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: POSIX :: Linux
+Requires-Python: >=3.9
+Requires-Dist: mmcfilters>=0.1.23
+Provides-Extra: torch
+Requires-Dist: torch>=2.0; extra == "torch"
+Description-Content-Type: text/markdown
+
+# MTLearn
+
+Projeto C++/Python que reutiliza o núcleo `mmcfilters::core` para experimentos
+de aprendizado em árvores morfológicas.
+
+## Organização
+
+- `cmake/` — utilitários e módulos adicionais.
+- `external/` — dependências de código fonte (submódulos ou vendorizadas).
+- `src/` — código-fonte C++ da aplicação/biblioteca.
+- `bindings/` — módulo pybind11 com integração PyTorch específica do projeto.
+- `python/mtlearn/` — pacote Python puro.
+- `tests/` — testes C++ (compilados apenas se habilitados via CMake).
+
+## Dependência principal
+
+Adicionar `MorphologicalAttributeFilters` como submódulo:
+
+```bash
+git submodule add https://github.com/wonderalexandre/MorphologicalAttributeFilters external/MorphologicalAttributeFilters
+```
+
+## Build C++
+
+Build mínimo apenas com C++:
+
+```bash
+cmake -S . -B build
+cmake --build build
+```
+
+- `MTLEARN_BUILD_TESTS` recompila a suíte C++/Python (padrão `OFF`).
+- `MTLEARN_ENABLE_EMBED` liga os testes com interpretador embutido (exige um
+  PyTorch funcional instalado no Python em uso).
+- `MTLEARN_ENABLE_ASSERTS` mantém asserts do núcleo C++ ativos mesmo em build
+  Release (padrão `OFF`).
+- `MTLEARN_WITH_TORCH` liga o suporte ao LibTorch C++ (padrão `ON` para builds
+  locais; o `pyproject.toml` força `OFF` para que `pip install mtlearn` não
+  precise baixar o toolkit do PyTorch).
+
+Para rodar o teste com interpretador embutido:
+
+```bash
+#cmake -S . -B build -DMTLEARN_BUILD_TESTS=ON -DMTLEARN_ENABLE_EMBED=ON \
+#      -DPYTHON_EXECUTABLE=$(python3 -c "import sys; print(sys.executable)") \
+#      -DPYTHON_LIBRARY_DIR=$(python3 -c "import sysconfig; print(sysconfig.get_config_var('LIBDIR'))")
+cmake -S . -B build -DCMAKE_INSTALL_PREFIX=$(python -c "import site; print(site.getsitepackages()[0])")
+cmake --build build
+ctest --test-dir build -R mtl_interpreter_test --output-on-failure
+```
+
+> Antes de habilitar `MTLEARN_ENABLE_EMBED`, verifique se o ambiente consegue
+> importar o PyTorch desejado (`python -c 'import torch'`). Caso contrário o
+> teste será ignorado (ou o próprio PyTorch precisará ser reinstalado com um
+> build compatível com o seu hardware).
+
+## Build Python (wheel)
+
+```bash
+pip install scikit-build-core pybind11 torch
+python -m build
+pip install -e .
+```
+
+Para uma instalação limpa via `pyproject.toml` não são necessários argumentos
+extras: os valores padrão já deixam asserts, testes e interpretador embutido
+desativados.
