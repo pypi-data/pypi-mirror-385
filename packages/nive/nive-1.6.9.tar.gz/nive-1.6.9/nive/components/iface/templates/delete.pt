@@ -1,0 +1,44 @@
+<tal:block metal:use-macro="view.index_tmpl().macros[view.tmpl_macro or 'main_object']" i18n:domain="nive">
+<tal:block metal:fill-slot="content">
+
+<span tal:replace="view.unitInfo('edit')" />
+<span tal:replace="structure view.shortcuts()" />
+<span tal:replace="structure view.messages(msgs)" />
+
+<div tal:replace="structure view.slot('delete')"></div>
+<form tal:condition="len(objsToDelete)>0" action="${action}" method="post">
+ <div class="alert alert-danger">
+   <h3>Are you sure you want to delete the following 
+      <span tal:condition="len(objsToDelete)==1">item?</span> 
+      <span tal:condition="len(objsToDelete)>1">items?</span>
+   </h3>
+   <br/>
+   <div tal:condition="linked" id="linked">
+         <p class="alert alert-info">Please delete all linked entries first. </p>
+         <p tal:repeat="obj linked">
+             <a href="${view.FolderUrl(context.root)}@delete?ids=${obj.id}&ref=${view.FolderUrl()}@delete?ids=${ids[0]}"
+                class="delete">
+                 <img tal:condition="obj.meta.pool_wfa" src="${static}images/wf${obj.meta.pool_wfa}.gif" title="State: ${obj.meta.pool_wfa}"/> ${obj.meta.title} (${view.RenderField('pool_type', context=obj)}) -> Delete </a><br>
+         </p>
+   </div>
+
+   <div id="delete_list">
+   <p tal:repeat="obj objsToDelete">
+     <span tal:replace="structure obj.GetTitle()" /> (<span tal:content="structure obj.GetTypeName()" />)
+     <span tal:condition="obj.IsContainer()" class="deletecontainer">... and all subobjects</span>
+   </p>
+   </div>
+   <div style="margin-top:10px;">
+    <span tal:replace="structure view.FmtFormParam(ids=ids, delete=1)"/>
+    <input type="submit" name="continue" value="Yes, delete" class="btn btn-danger" />
+   </div>
+ </div>
+</form>
+
+<div tal:condition="len(objsToDelete)==0" class="alert alert-danger">
+    <a href="${view.GetURL()}}">Nothing to delete. Return.</a>
+</div>
+
+</tal:block>
+</tal:block>
+

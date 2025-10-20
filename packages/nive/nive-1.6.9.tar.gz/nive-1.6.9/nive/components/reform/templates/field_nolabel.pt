@@ -1,0 +1,19 @@
+<tal:block i18n:domain="nive"
+      tal:define="fieldw field.widget; formw field.widget.form.widget">
+
+    <div tal:condition="fieldw.hidden"
+             tal:content="structure field.serialize(cstruct)">
+    </div>
+
+    <div tal:condition="not fieldw.hidden"
+            id="item-${field.name}"
+            class="row form-group ${field.error and (formw.error_class or fieldw.error_class)}">
+
+            <div class="col-sm">
+                <span tal:replace="structure field.serialize(cstruct)"/>
+                <span tal:condition="field.error"
+                         tal:repeat="msg field.error.messages()"
+                        class="help-inline">${msg}</span>
+            </div>
+    </div>
+</tal:block>

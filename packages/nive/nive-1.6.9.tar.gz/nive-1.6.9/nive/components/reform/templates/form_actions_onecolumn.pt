@@ -1,0 +1,14 @@
+<div class="form-actions" i18n:domain="nive">
+  <div class="">
+    <tal:block repeat="button buttons">
+      <button
+        id="${form.formid+button.name}"
+        name="${button.name}"
+        type="${button.type}"
+        class="${button.action.get('css_class', form.widget.action_css_class) or 'btn'}"
+        value="${button.value}">
+        <span>${button.title}</span>
+      </button>
+    </tal:block>
+  </div>
+</div>
