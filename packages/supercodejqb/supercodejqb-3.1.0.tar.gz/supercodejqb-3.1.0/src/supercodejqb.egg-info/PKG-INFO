@@ -1,0 +1,418 @@
+Metadata-Version: 2.4
+Name: supercodejqb
+Version: 3.1.0
+Summary: A hilarious and simple script interpreter that makes programming as easy as talking
+Author: 王子毅
+License: MIT
+Keywords: interpreter,scripting,programming,simple
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+
+# SuperCode 🤪
+
+> "如果代码不能让你笑，那它就是在嘲笑你！" —— SuperCode 创始人（在喝了三杯咖啡后说的）
+
+## 🎪 欢迎来到 SuperCode 马戏团！
+
+**警告：** 本库可能会让你爱上编程，进而导致：
+- 工作时间偷偷写代码傻笑
+- 向朋友炫耀"看我的代码会讲笑话！"
+- 产生"我真是编程天才"的错觉
+
+### 真实用户反馈：
+> "用了 SuperCode，我终于理解了我家猫为什么总对着电脑屏幕发呆——原来是在看我的代码笑抽风！"
+
+## 🎯 为什么要用 SuperCode？问得好！
+
+**传统编程 vs SuperCode 编程的日常对比：**
+
+| 场景 | 传统编程 | SuperCode | 内心独白 |
+|------|----------|-----------|----------|
+| **学习过程** | 读500页文档 → 头晕 | 读5行示例 → 会了 | "原来学编程可以像学抖音一样简单！" |
+| **写"Hello World"** | `print("Hello World")` | `说 你好世界` | "少敲了6个字符，感觉赚了一个亿！" |
+| **遇到错误** | `SyntaxError: invalid syntax` | "亲，这里好像写错了哦～" | "终于不用谷歌'无效语法是什么意思'了！" |
+| **成就感** | 程序运行成功 | 代码跟你聊天 | "我的代码成精了！它会跟我顶嘴！" |
+
+## 🚀 安装指南（30秒搞定版）
+
+### 方法一：正常人类安装法
+```bash
+pip install supercode
+安装时建议播放《欢乐颂》，让代码也开心一下
+
+方法二：极客装逼安装法
+bash
+git clone https://github.com/your-repo/supercode
+cd supercode
+pip install -e .
+温馨提示：此操作会让你在朋友面前显得很专业，即使你只是在复制粘贴
+
+🎮 3分钟从"代码恐惧症"到"编程自恋狂"
+第1分钟：创建你的第一个代码宠物
+python
+from supercode import Compiler
+
+# 领养一只代码宠物（免费，不咬人）
+pet = Compiler()
+
+# 教它一些把戏
+pet.set_func("撒娇", lambda: random.choice([
+    "主人最棒啦！💖",
+    "今天也要加油哦！✨", 
+    "摸摸头～🐶",
+    "我是不是最可爱的代码？😊"
+]))
+
+pet.set_func("算数", lambda x: f"🧮 算好啦：{eval(x)}")
+pet.set_func("吐槽", lambda: "主人，你的数学是体育老师教的吗？")
+
+# 开始调教你的宠物！
+code = """
+撒娇
+算数 2 + 3 * 4
+吐槽
+撒娇
+"""
+
+print("🐾 我的代码宠物开始表演：")
+results = pet.compile(code)
+for result in results:
+    print(result)
+输出效果：
+
+text
+主人最棒啦！💖
+🧮 算好啦：14
+主人，你的数学是体育老师教的吗？
+摸摸头～🐶
+第2分钟：语法？不存在的！
+SuperCode 的万能语法法则： 怎么舒服怎么来！
+
+python
+# 风格1：话痨模式（适合孤独的程序员）
+说 嘿代码 今天过得好吗
+算数 1+1
+说 哇 好厉害 居然等于2
+
+# 风格2：高冷模式（适合装酷的程序员）
+计算(1+1)
+输出("就这？")
+
+# 风格3：精分模式（适合戏精程序员）
+说 "左边的我觉得答案是2"
+说 "右边的我觉得是3" 
+计算("1+1")
+说 "看吧！还是我聪明！"
+第3分钟：safe_eval - 你的贴心小棉袄
+python
+from supercode import safe_eval
+
+# 测试它有多贴心
+challenges = [
+    ('3+4', "幼儿园级别"),
+    ('"3+4"', "小学生级别"),
+    ('"hello" + "world"', "初中生级别"), 
+    ('(1+2)*3', "高中生级别"),
+    ('1/0', "作死级别")
+]
+
+print("🎯 正在测试贴心程度...")
+for expr, level in challenges:
+    try:
+        result = safe_eval(expr)
+        print(f"{level}: '{expr}' → {result} ✅")
+    except:
+        print(f"{level}: '{expr}' → 贴心地避免了崩溃 ❤️")
+
+print("\n结论：这计算器比我男朋友还贴心！")
+🎪 SuperCode 马戏团精彩表演
+🎩 基础杂技（零基础必看）
+python
+# 杂技1：让代码变身相声演员
+jokes = [
+    "为什么程序员总是分不清万圣节和圣诞节？因为 Oct 31 == Dec 25！",
+    "我写代码的时候，bug们都在开派对！",
+    "程序员最浪漫的情话：你是我唯一的null pointer"
+]
+compiler.set_func("讲段子", lambda: random.choice(jokes))
+
+# 杂技2：让代码成为你的夸夸群群主
+compliments = [
+    "你今天代码写得真好看！",
+    "这个变量名起得很有诗意！", 
+    "你的缩进比你的发型还整齐！"
+]
+compiler.set_func("求夸奖", lambda: random.choice(compliments))
+🔮 高级魔术（装逼必备）
+python
+# 魔术1：智能吐槽计算器
+def 毒舌计算器(expr):
+    try:
+        result = safe_eval(expr)
+        roasts = [
+            f"🎯 {expr} = {result}，这你都不会？",
+            f"🤓 答案是{result}，下次别问这么简单的了",
+            f"💪 {result}！我闭着一只眼睛都能算出来",
+            f"😎 {result}，就这？我还以为多难呢"
+        ]
+        return random.choice(roasts)
+    except:
+        excuses = [
+            "🤔 这题...超纲了",
+            "😅 咱们还是聊聊天气吧",
+            "🙈 这个...我妈妈叫我回家吃饭",
+            "💀 系统提示：此题有毒，建议放弃"
+        ]
+        return random.choice(excuses)
+
+compiler.set_func("毒舌算", 毒舌计算器)
+🎭 真实应用场景（真的不是开玩笑）
+场景1：上班摸鱼神器
+
+python
+compiler.set_func("假装工作", lambda: random.choice([
+    "💼 正在认真分析需求...（其实在刷微博）",
+    "📊 正在生成报表...（其实在逛淘宝）", 
+    "🤔 正在思考架构...（其实在想晚上吃啥）",
+    "💻 正在优化性能...（其实在玩游戏）"
+]))
+
+compiler.set_func("应对老板", lambda: random.choice([
+    "马上就好！还差最后一点！",
+    "正在处理一个技术难点...",
+    "这个需求有点复杂，需要深入研究",
+    "为了代码质量，不能赶工啊老板！"
+]))
+
+# 使用示例
+摸鱼代码 = """
+说 开始一天充实的工作！
+假装工作
+说 （小声）老板来了！
+应对老板
+假装工作
+说 终于下班了！
+"""
+场景2：单身狗安慰剂
+
+python
+compiler.set_func("安慰", lambda: random.choice([
+    "单身多好啊，想写代码就写代码！",
+    "女朋友会占用你写代码的时间！", 
+    "你看，你的代码永远不会跟你吵架！",
+    "至少bug比女朋友好哄！"
+]))
+
+compiler.set_func("幻想女友", lambda: random.choice([
+    "💖 你的代码女友已上线！",
+    "👰 今天想让我穿什么皮肤？",
+    "💑 我们真是天生一对！",
+    "🍰 给你做了个虚拟蛋糕！"
+]))
+
+单身安慰代码 = """
+说 今天又是单身的一天...
+安慰
+幻想女友
+说 好像...也没那么糟？
+"""
+🚑 急救中心（常见问题解决方案）
+🆘 紧急情况1：函数装死
+症状： 代码运行了，但函数像被冻住了一样
+
+急救措施：
+
+python
+# 错误示范（函数在冬眠）
+compiler.set_func("说话", print)
+
+# 正确做法（给函数喝咖啡）
+compiler.set_func("说话", lambda x: print(x) or f"我说了：{x}")
+
+# 豪华版（函数喝了红牛）
+compiler.set_func("说话", lambda x: f"🗣️ {x}！！！（超大声）")
+🆘 紧急情况2：参数恐慌症
+症状： 函数对参数数量异常敏感
+
+急救措施：
+
+python
+# 错误示范（函数有强迫症）
+compiler.set_func("加法", lambda a, b: a + b)
+
+# 正确做法（函数学会变通）
+compiler.set_func("加法", lambda *args: 
+    f"我来加！{'+'.join(args)} = {sum(int(x) for x in args)}")
+
+# 豪华版（函数变成数学天才）
+compiler.set_func("加法", lambda *args: 
+    f"🔢 加了{len(args)}个数，总和是{sum(int(x) for x in args)}，平均是{sum(int(x) for x in args)/len(args)}，最大是{max(int(x) for x in args)}，最小是{min(int(x) for x for x in args)}...我是不是很厉害？")
+🆘 紧急情况3：块处理器崩溃
+黄金生存法则：
+
+python
+def 我的处理器(参数, 语句, 行号, 编译器):
+    # 你的魔法代码...
+    return 结果, 跳过行数  # ← 记住这个逗号，它能救你的命！
+🎪 马戏团压轴大戏
+🎯 人工智能级拍马屁
+python
+def 彩虹屁计算器(expr):
+    try:
+        result = safe_eval(expr)
+        rainbows = [
+            f"🌈 天呐！{expr} = {result}！老板真是数学天才！",
+            f"🎉 不愧是老板！这么难的{expr}都能想到！答案是{result}！",
+            f"👑 老板的智商简直碾压爱因斯坦！{expr} = {result}！",
+            f"🚀 从{expr}就能看出老板的商业头脑！答案是{result}！"
+        ]
+        return random.choice(rainbows)
+    except:
+        return "💎 老板的思维太超前了！这个计算器配不上您！"
+
+compiler.set_func("彩虹算", 彩虹屁计算器)
+🧠 金鱼记忆系统
+python
+memory = {}  # 是的，我们用字典，因为...简单！
+
+def 记住(东西, 内容):
+    memory[东西] = 内容
+    return f"🧠 好的！我把'{东西}'记在小本本上了：{内容}"
+
+def 回忆(东西):
+    if 东西 in memory:
+        return f"📖 我想起来了！'{东西}'是：{memory[东西]}"
+    else:
+        amnesia = [
+            f"🤔 '{东西}'？好像有点耳熟...",
+            f"😅 这个...你确定跟我说过吗？", 
+            f"🙈 哎呀，我的小本本找不到了！",
+            f"💀 记忆体已格式化，请重新输入"
+        ]
+        return random.choice(amnesia)
+
+def 故意忘记(东西):
+    if 东西 in memory:
+        del memory[东西]
+        return f"🗑️ 好的！我已经把'{东西}'忘得一干二净了！"
+    else:
+        return f"❓ 本来就不记得'{东西}'啊！"
+
+compiler.set_func("记住", 记住)
+compiler.set_func("回忆", 回忆) 
+compiler.set_func("忘记", 故意忘记)
+💻 终端装逼指南
+初级装逼：
+
+bash
+supercode
+中级装逼：
+
+bash
+python -c "
+from supercode import Compiler
+c = Compiler()
+c.set_func('炫技', lambda x: f'🌟 {x.upper()} ！！！')
+print('看我表演：')
+print(c.compile('炫技 我是终端大神')[0])
+"
+高级装逼（慎用，可能引发围观）：
+
+bash
+echo "
+说 各位观众，接下来是见证奇迹的时刻！
+彩虹算 1+1
+说 就问你服不服！
+毒舌算 2+2
+说 还有谁！
+" | python -c "
+import sys
+from supercode import Compiler
+c = Compiler()
+# 设置各种炫酷函数...
+code = sys.stdin.read()
+results = c.compile(code)
+for r in results:
+    print(r)
+"
+🤡 加入我们的马戏团！
+我们急需：
+
+🎭 代码小丑 - 把bug变成笑点
+
+🎪 杂技演员 - 让代码跳出优雅的舞蹈
+
+🎯 魔术师 - 让复杂功能瞬间实现
+
+🤪 开心果 - 确保每个用户都笑着写代码
+
+贡献指南（搞笑版）：
+
+发现bug？请用段子的形式报告
+
+新功能？必须包含至少一个笑话
+
+文档？每页至少要有三个表情包
+
+📜 超级严肃的许可证
+SuperCode 欢乐许可证 v1.0：
+
+✅ 允许：随便用、随便改、随便分享
+
+✅ 鼓励：在代码里添加冷笑话
+
+✅ 推荐：向朋友炫耀你的搞笑代码
+
+❌ 禁止：用这个库做正经工作
+
+❌ 禁止：在喝饮料时阅读代码（防喷屏）
+
+❌ 禁止：向老板透露你在用这个库摸鱼
+
+<div align="center">
+🎉 准备好了吗？
+如果你：
+
+😂 想要笑着写代码
+
+🚀 想要瞬间实现想法
+
+🎯 想要在朋友面前装逼
+
+🤪 想要一个会跟你斗嘴的代码伙伴
+
+那么...
+
+欢迎加入 SuperCode 欢乐编程马戏团！🎪
+记住：人生苦短，我用 SuperCode！
+
+</div>
+<div align="center">
+"我用 SuperCode 之前：写代码好难😫
+我用 SuperCode 之后：我是编程天才😎"
+—— 真实用户反馈（可能有点夸张）
+
+如果这个 README 让你笑了，请给个 ⭐
+如果没笑...那你可能需要检查一下你的笑点是不是丢了 🤔
+
+</div> ```
+
+开发通知❗
+
+我重装系统了，原本的supercode没了😭😭😭😭
+新库名叫supercodejqb😊😊😊
+妄请谅解😞😞😞
