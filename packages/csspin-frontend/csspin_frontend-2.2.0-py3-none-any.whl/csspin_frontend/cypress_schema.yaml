@@ -1,0 +1,17 @@
+# -*- mode: yaml; coding: utf-8 -*-
+#
+# Schema of the cypress plugin for csspin
+
+cypress:
+    type: object
+    help: Configuration of the cypress plugin.
+    properties:
+        version:
+            type: str
+            help: Cypress version
+        base_url:
+            type: str
+            help: The URL to connect Cypress with
+        browser:
+            type: str
+            help: The browser to run Cypress in

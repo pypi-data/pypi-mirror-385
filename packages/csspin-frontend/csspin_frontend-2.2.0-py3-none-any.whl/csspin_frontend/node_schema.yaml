@@ -1,0 +1,24 @@
+# -*- mode: yaml; coding: utf-8 -*-
+#
+# Schema of the node plugin for csspin
+
+node:
+    type: object
+    help: Configuration of the Node plugin.
+    properties:
+        install_dir:
+            type: path
+            help: |
+                Directory where downloaded and NodeJS installations are stored
+                and being used from
+        version:
+            type: str
+            help: |
+                The NodeJS version. Can be "lts" or any of "major",
+                "major.minor" or "major.minor.sl" with or without a leading "v"
+        use:
+            type: path
+            help: Alternative path to a local NodeJS executable
+        mirror:
+            type: str
+            help: Proxy to get NodeJS sources from
