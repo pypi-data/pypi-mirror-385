@@ -1,0 +1,47 @@
+# Standard QCoDeS Station Configuration
+# This file uses the official QCoDeS station YAML format
+#
+# IMPORTANT: This configuration file uses the instrMCP_PATH environment variable
+# Set this variable to point to your instrMCP installation directory:
+#   export instrMCP_PATH="/path/to/your/instrMCP"
+# Add this line to your shell configuration file (~/.bashrc, ~/.zshrc, etc.)
+
+instruments:
+  # Mock instruments for testing and development
+  mock_dac1:
+    type: qcodes.instrument_drivers.mock_instruments.MockDAC
+    init:
+      num_channels: 2
+    parameters:
+      ch01.voltage:
+        alias: gate1
+        label: Gate 1 Voltage
+        unit: V
+        limits: [-10.0, 10.0]
+        initial_value: 0.1
+        monitor: true
+      ch02.voltage:
+        alias: gate2
+        label: Gate 2 Voltage
+        unit: V
+        limits: [-10.0, 10.0]
+        initial_value: 0.2
+        
+  mock_dac2:
+    type: qcodes.instrument_drivers.mock_instruments.MockDAC
+    init:
+      num_channels: 2
+    parameters:
+      ch01.voltage:
+        alias: gate1
+        label: Gate 1 Voltage
+        unit: V
+        limits: [-10.0, 10.0]
+        initial_value: 1.1
+        monitor: true
+      ch02.voltage:
+        alias: gate2
+        label: Gate 2 Voltage
+        unit: V
+        limits: [-10.0, 10.0]
+        initial_value: 1.2

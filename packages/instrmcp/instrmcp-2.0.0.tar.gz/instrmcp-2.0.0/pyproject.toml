@@ -1,0 +1,208 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "instrmcp"
+version = "2.0.0"
+description = "MCP server suite for physics laboratory instrumentation control"
+readme = "README.md"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Jiaqi Cai", email = "jiaqic@mit.edu"}
+]
+maintainers = [
+    {name = "Jiaqi Cai", email = "jiaqic@mit.edu"}
+]
+keywords = [
+    "mcp",
+    "model-context-protocol", 
+    "qcodes",
+    "instrumentation",
+    "physics",
+    "laboratory",
+    "measurement",
+    "automation"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: System :: Hardware",
+    "License :: OSI Approved :: MIT License",
+    "Framework :: Jupyter :: JupyterLab :: Extensions :: Prebuilt",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12"
+]
+requires-python = ">=3.10"
+dependencies = [
+    "fastmcp>=0.1.0",
+    "mcp>=1.0.0",
+    "pyyaml>=6.0",
+    "httpx>=0.25.0",
+    "qcodes>=0.45.0",
+    "numpy>=1.24.0",
+    "pandas>=2.0.0",
+    "matplotlib>=3.7.0",
+    "scipy>=1.10.0",
+    "h5py>=3.8.0",
+    "xarray>=2023.1.0",
+    "jupyterlab>=4.0.0,<5",
+    "ipython>=8.0.0",
+    "notebook>=6.4.0",
+    "jupyter-core>=5.0.0"
+]
+
+[project.optional-dependencies]
+jupyter = [
+    # Jupyter dependencies are now core dependencies
+    # This section kept for backwards compatibility
+]
+qcodes = [
+    # QCodes is now a core dependency
+    # This section kept for backwards compatibility
+]
+redpitaya = [
+    "pyrpl>=0.9.4",
+    "scipy>=1.10.0",
+    "numpy>=1.24.0"
+]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.0.0",
+    "black>=23.0.0",
+    "flake8>=6.0.0",
+    "mypy>=1.0.0",
+    "pre-commit>=3.0.0"
+]
+docs = [
+    "sphinx>=6.0.0",
+    "sphinx-rtd-theme>=1.3.0",
+    "sphinx-autodoc-typehints>=1.19.0"
+]
+full = [
+    "instrmcp[jupyter,qcodes]"
+]
+
+[project.urls]
+Homepage = "https://github.com/instrmcp/instrMCP"
+Documentation = "https://instrmcp.readthedocs.io"
+Repository = "https://github.com/instrmcp/instrMCP.git"
+Issues = "https://github.com/instrmcp/instrMCP/issues"
+Changelog = "https://github.com/instrmcp/instrMCP/blob/main/CHANGELOG.md"
+
+[project.scripts]
+instrmcp = "instrmcp.cli:main"
+instrmcp-jupyter = "instrmcp.servers.jupyter_qcodes.cli:main" 
+instrmcp-qcodes = "instrmcp.servers.qcodes.server:main"
+instrmcp-setup = "instrmcp.setup_utils:setup_all"
+
+[project.entry-points."mcp.servers"]
+jupyter_qcodes = "instrmcp.servers.jupyter_qcodes:JupyterMCPServer"
+qcodes = "instrmcp.servers.qcodes:QCodesStationServer"
+
+
+[project.entry-points."jupyter_labextension_paths"]
+instrmcp = "instrmcp.extensions.jupyterlab:_jupyter_labextension_paths"
+
+[project.entry-points."ipython.extensions"]  
+instrmcp = "instrmcp.extensions:load_jupyter_extension"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["instrmcp*"]
+exclude = ["tests*", "docs*", "servers*", "tools*"]
+
+[tool.setuptools.package-data]
+"instrmcp" = ["**/*.yaml", "**/*.yml", "**/*.json", "**/*.ini", "**/*.md"]
+"instrmcp.config" = ["data/**/*", "templates/**/*"]
+"instrmcp.extensions.jupyterlab" = ["install.json"]
+"instrmcp.extensions.jupyterlab.mcp_active_cell_bridge" = ["labextension/**/*"]
+
+# data_files now handled by setup.py for dynamic recursive copy
+
+[tool.black]
+line-length = 88
+target-version = ["py38", "py39", "py310", "py311"]
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+known_first_party = ["instrMCP"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+show_column_numbers = true
+show_error_codes = true
+show_error_context = true
+
+[[tool.mypy.overrides]]
+module = [
+    "qcodes.*",
+    "pyrpl.*",
+    "fastmcp.*", 
+    "mcp.*"
+]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = [
+    "--strict-markers",
+    "--strict-config"
+]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "hardware: marks tests that require hardware"
+]
+
+[tool.coverage.run]
+source = ["instrmcp"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "*/__pycache__/*",
+    "*/site-packages/*"
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:"
+]

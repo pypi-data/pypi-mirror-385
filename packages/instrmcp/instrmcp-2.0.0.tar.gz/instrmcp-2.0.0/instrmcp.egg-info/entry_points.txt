@@ -1,0 +1,15 @@
+[console_scripts]
+instrmcp = instrmcp.cli:main
+instrmcp-jupyter = instrmcp.servers.jupyter_qcodes.cli:main
+instrmcp-qcodes = instrmcp.servers.qcodes.server:main
+instrmcp-setup = instrmcp.setup_utils:setup_all
+
+[ipython.extensions]
+instrmcp = instrmcp.extensions:load_jupyter_extension
+
+[jupyter_labextension_paths]
+instrmcp = instrmcp.extensions.jupyterlab:_jupyter_labextension_paths
+
+[mcp.servers]
+jupyter_qcodes = instrmcp.servers.jupyter_qcodes:JupyterMCPServer
+qcodes = instrmcp.servers.qcodes:QCodesStationServer
