@@ -1,0 +1,594 @@
+# Nexus AI Python SDK
+
+[![Python Version](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![PyPI version](https://img.shields.io/badge/pypi-v0.2.3-blue.svg)](https://pypi.org/project/keystone-ai/)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
+Official Python SDK for [Nexus AI](https://nexus-ai.juncai-ai.com) - A unified AI capabilities platform.
+
+## 🎉 Latest Release v0.2.3
+
+**🚀 New: Standalone Text Embedding API** - Complete implementation of embedding functionality
+
+**Production Ready** - 95.2% test pass rate with 100% P0 core features passing.
+
+**Installation**:
+```bash
+pip install keystone-ai
+```
+
+**Quick Start**:
+```python
+from nexusai import NexusAIClient
+
+client = NexusAIClient(api_key="your_api_key")
+
+# Text generation
+response = client.text.generate("Hello, AI!")
+print(response.text)
+
+# Text embedding (NEW in v0.2.3)
+embedding = client.embeddings.create("你好世界")
+vector = embedding.data[0].embedding  # 768-dimensional vector
+```
+
+## Features
+
+- 🚀 **Simple & Intuitive** - Clean API design with sensible defaults
+- 🔄 **Multi-Model Support** - 6 text models + 2 image models + 2 embedding models
+- 📊 **Text Embeddings** - Standalone embedding API with BAAI/bge models
+- 📡 **Streaming** - Real-time streaming for text generation
+- 💬 **Session Management** - Stateful conversations with automatic context handling
+- 🧠 **Knowledge Bases** - RAG capabilities with semantic search
+- 🎨 **Multi-Modal** - Text, images, audio (ASR), and document processing
+- 🔐 **Type-Safe** - Full type hints with Pydantic models
+- 🌐 **Production Ready** - Defaults to production API at `https://nexus-ai.juncai-ai.com/api/v1`
+
+## Installation
+
+```bash
+pip install keystone-ai
+```
+
+**国内镜像加速**:
+```bash
+# 清华镜像
+pip install keystone-ai -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+# 阿里云镜像
+pip install keystone-ai -i https://mirrors.aliyun.com/pypi/simple/
+```
+
+**从源码安装**:
+
+```bash
+git clone https://github.com/aidrshao/nexus-ai-sdk.git
+cd nexus-ai-sdk
+poetry install
+```
+
+## Quick Start
+
+### 1. Set up your API key
+
+Create a `.env` file in your project root:
+
+```bash
+NEXUS_API_KEY=nxs_your_api_key_here
+# SDK automatically uses production: https://nexus-ai.juncai-ai.com/api/v1
+# For local development, set: NEXUS_BASE_URL=http://localhost:8000/api/v1
+```
+
+### 2. Initialize the client
+
+```python
+from nexusai import NexusAIClient
+
+# Simple - uses production API automatically
+client = NexusAIClient(api_key="nxs_your_api_key")
+
+# Or read from environment variables
+client = NexusAIClient()
+
+# For local development
+client = NexusAIClient(
+    api_key="nxs_your_api_key",
+    base_url="http://localhost:8000/api/v1"
+)
+```
+
+### 3. Generate text
+
+```python
+# Simple mode (省心模式) - uses default model
+response = client.text.generate("写一首关于春天的诗")
+print(response.text)
+
+# With model selection
+response = client.text.generate(
+    prompt="Explain quantum computing",
+    model="gpt-5-mini",       # Recommended: fast and cost-effective
+    temperature=0.7,
+    max_tokens=500
+)
+print(response.text)
+print(f"Tokens used: {response.usage.total_tokens}")
+
+# Available models (三档体系):
+# 🥇 高端: "gpt-5" (fastest premium), "gemini-2.5-pro" (strongest reasoning)
+# 🥈 中端: "gpt-5-mini" (recommended), "gpt-4o-mini" (alternative)
+# 🥉 经济: "deepseek-v3.2-exp" (cheapest)
+```
+
+### 4. Stream text generation
+
+```python
+for chunk in client.text.stream("Tell me a story"):
+    if "delta" in chunk:
+        print(chunk["delta"].get("content", ""), end="", flush=True)
+print()
+```
+
+### 5. Work with sessions (conversations)
+
+```python
+# Create a session
+session = client.sessions.create(
+    name="My Chat",
+    agent_config={
+        "model": "gpt-5-mini",   # Recommended model for conversations
+        "temperature": 0.7
+    }
+)
+
+# Have a conversation
+response = session.invoke("My name is Alice")
+print(response.response.content)
+
+response = session.invoke("What's my name?")
+print(response.response.content)  # Remembers "Alice"
+
+# Get conversation history
+history = session.history()
+for message in history:
+    print(f"{message.role}: {message.content}")
+```
+
+### 6. Generate images
+
+```python
+# Simple mode
+image = client.images.generate("A futuristic city")
+print(image.image_url)
+
+# With options
+image = client.images.generate(
+    prompt="A sunset over mountains, digital art",
+    model="doubao-seedream-4-0-250828",  # Default recommended model (ByteDance Doubao)
+    aspect_ratio="16:9",                  # Use ratio instead of pixel size
+    num_images=1
+)
+print(f"Image: {image.image_url}")
+
+# Supported aspect ratios: "1:1", "16:9", "9:16", "4:3", "3:4", "21:9"
+# Image models: "doubao-seedream-4-0-250828" (default), "gemini-2.5-flash-image" (alternative)
+```
+
+### 7. Speech-to-Text (ASR)
+
+```python
+# Upload audio file
+file_meta = client.files.upload("meeting.mp3")
+
+# Transcribe
+transcription = client.audio.transcribe(
+    file_id=file_meta.file_id,
+    language="zh"
+)
+print(transcription.text)
+```
+
+### 8. Text Embeddings (文本向量化) 🆕
+
+Transform text into high-dimensional vectors for semantic search, similarity computation, and machine learning applications.
+
+#### Available Models
+
+- **BAAI/bge-base-zh-v1.5** (768 dimensions) - High-quality Chinese embedding model, supports mixed Chinese-English text
+- **BAAI/bge-large-zh-v1.5** (1024 dimensions) - Large-scale Chinese embedding model with higher precision
+
+#### Single Text Embedding
+
+```python
+# Create embedding for a single text
+response = client.embeddings.create(
+    input="人工智能正在改变世界",
+    model="BAAI/bge-base-zh-v1.5"  # Default model
+)
+
+vector = response.data[0].embedding  # 768-dimensional vector
+print(f"Vector dimensions: {len(vector)}")
+print(f"Token usage: {response.usage.total_tokens}")
+```
+
+#### Batch Text Embedding
+
+```python
+# Process multiple texts at once
+texts = [
+    "人工智能技术发展迅速",
+    "机器学习是AI的核心",
+    "深度学习模型性能优异",
+    "自然语言处理理解人类语言"
+]
+
+response = client.embeddings.create(
+    input=texts,
+    model="BAAI/bge-base-zh-v1.5"
+)
+
+# Extract all vectors
+vectors = [item.embedding for item in response.data]
+print(f"Generated {len(vectors)} embeddings")
+```
+
+#### Optimized Large-Scale Processing
+
+```python
+# Efficient processing for large datasets
+large_texts = [f"文档内容 {i}" for i in range(1000)]
+
+response = client.embeddings.create_batch(
+    texts=large_texts,
+    model="BAAI/bge-base-zh-v1.5",
+    batch_size=50  # Process 50 texts per batch
+)
+
+print(f"Processed {response.batch_info.total_texts} texts")
+print(f"Processing time: {response.batch_info.processing_time:.2f}s")
+```
+
+#### Similarity Calculation
+
+```python
+import numpy as np
+
+def cosine_similarity(vec1, vec2):
+    """Calculate cosine similarity between two vectors."""
+    vec1, vec2 = np.array(vec1), np.array(vec2)
+    return np.dot(vec1, vec2) / (np.linalg.norm(vec1) * np.linalg.norm(vec2))
+
+# Generate embeddings for comparison
+texts = ["AI技术发展", "人工智能进步", "今天天气很好"]
+response = client.embeddings.create(input=texts)
+
+vectors = [item.embedding for item in response.data]
+
+# Calculate similarities
+sim1 = cosine_similarity(vectors[0], vectors[1])  # Similar texts
+sim2 = cosine_similarity(vectors[0], vectors[2])  # Different texts
+
+print(f"Similar texts similarity: {sim1:.4f}")     # ~0.85+
+print(f"Different texts similarity: {sim2:.4f}")   # ~0.3-
+```
+
+#### Model Information & Health Check
+
+```python
+# List available models
+models = client.embeddings.list_models()
+for model in models.data:
+    print(f"Model: {model.id}")
+    print(f"Dimensions: {model.dimensions}")
+    print(f"Description: {model.description}")
+
+# Check service health
+health = client.embeddings.health_check()
+print(f"Service status: {health.status}")
+```
+
+#### Performance Tips
+
+- **Batch Processing**: Use `create_batch()` for >10 texts for better performance
+- **Optimal Batch Size**: 20-50 texts per batch for best throughput
+- **Token Efficiency**: Batch processing reduces per-text overhead
+- **Model Selection**: Use `bge-base` for speed, `bge-large` for accuracy
+
+### 9. Knowledge Base & RAG (检索增强生成)
+
+#### Step 1: Create Knowledge Base with Custom Configuration
+
+```python
+# Create knowledge base with custom chunking and embedding settings
+kb = client.knowledge_bases.create(
+    name="Company Docs",
+    description="Internal documentation",
+    embedding_model="BAAI/bge-base-zh-v1.5",  # 向量化模型 (default)
+    chunk_size=1000,           # 文档切片大小（字符数）
+    chunk_overlap=200          # 切片重叠大小（字符数）
+)
+print(f"Knowledge Base ID: {kb.kb_id}")
+```
+
+**Configuration Parameters**:
+- `embedding_model`: Embedding model for vectorization (default: `BAAI/bge-base-zh-v1.5`)
+- `chunk_size`: Document chunk size in characters (default: 1000)
+- `chunk_overlap`: Overlap between chunks in characters (default: 200)
+
+#### Step 2: Upload Documents (Asynchronous Processing)
+
+```python
+import time
+
+# Upload document
+task = client.knowledge_bases.upload_document(
+    kb_id=kb.kb_id,
+    file="company_policy.pdf"
+)
+
+# ⚠️ Important: Document processing is asynchronous (10-60 seconds)
+# The task object contains task_id but NOT doc_id
+print(f"Document submitted. Task ID: {task.task_id}")
+
+# Wait for processing to complete
+timeout = 60
+start_time = time.time()
+while time.time() - start_time < timeout:
+    status = client._internal_client.request("GET", f"/tasks/{task.task_id}")
+
+    if status["status"] == "completed":
+        doc_id = status["output"]["doc_id"]
+        chunk_count = status["output"]["chunk_count"]
+        print(f"✅ Document processed successfully!")
+        print(f"   Document ID: {doc_id}")
+        print(f"   Chunks created: {chunk_count}")
+        break
+    elif status["status"] == "failed":
+        print(f"❌ Processing failed: {status['error']['message']}")
+        break
+
+    print(f"⏳ Status: {status['status']}...")
+    time.sleep(2)
+```
+
+**Alternative: File Reuse Across Knowledge Bases**
+
+```python
+# Upload file once
+file_meta = client.files.upload("shared_policy.pdf")
+
+# Add to multiple knowledge bases
+task1 = client.knowledge_bases.add_document(kb_sales.kb_id, file_meta.file_id)
+task2 = client.knowledge_bases.add_document(kb_support.kb_id, file_meta.file_id)
+task3 = client.knowledge_bases.add_document(kb_hr.kb_id, file_meta.file_id)
+```
+
+#### Step 3: Semantic Search
+
+```python
+# Search for relevant content
+results = client.knowledge_bases.search(
+    query="What is the vacation policy?",
+    knowledge_base_ids=[kb.kb_id],
+    top_k=3,                    # Return top 3 most relevant chunks
+    similarity_threshold=0.7    # Minimum similarity score (0-1)
+)
+
+# Display search results
+print(f"Found {results.total_results} results:")
+for result in results.results:
+    print(f"\n📄 Score: {result.similarity_score:.2f}")
+    print(f"   Content: {result.content[:100]}...")
+    print(f"   Source: {result.metadata.get('filename', 'Unknown')}")
+```
+
+**Search Parameters**:
+- `query`: Search query text
+- `knowledge_base_ids`: List of KB IDs to search
+- `top_k`: Number of results to return (default: 5)
+- `similarity_threshold`: Minimum similarity score, 0-1 (default: 0.7)
+
+#### Step 4: RAG Generation (Retrieval + Generation)
+
+```python
+# Combine retrieved context with text generation
+context = "\n\n".join([r.content for r in results.results])
+
+# Generate answer based on retrieved context
+answer = client.text.generate(
+    prompt=f"""Based on the following context, answer the question accurately.
+
+Context:
+{context}
+
+Question: What is the vacation policy?
+
+Answer:""",
+    model="gpt-5-mini",        # Recommended for RAG
+    temperature=0.3            # Lower temperature for more accurate answers
+)
+
+print(f"\n🤖 Answer:\n{answer.text}")
+```
+
+**📖 Complete Guide**: See [Knowledge Base Async Guide](KNOWLEDGE_BASE_ASYNC_GUIDE.md) for detailed async processing patterns, error handling, and production best practices.
+
+## Configuration
+
+The SDK can be configured via environment variables or constructor parameters:
+
+| Environment Variable | Default | Description |
+|---------------------|---------|-------------|
+| `NEXUS_API_KEY` | (required) | Your API key |
+| `NEXUS_BASE_URL` | `https://nexus-ai.juncai-ai.com/api/v1` | API base URL |
+| `NEXUS_TIMEOUT` | `30` | Request timeout (seconds) |
+| `NEXUS_MAX_RETRIES` | `3` | Maximum retry attempts |
+| `NEXUS_POLL_INTERVAL` | `2` | Task polling interval (seconds) |
+| `NEXUS_POLL_TIMEOUT` | `300` | Task polling timeout (seconds) |
+
+## Production vs Development Mode
+
+**Production Mode (Default)**:
+```python
+# Uses production API by default - zero configuration needed!
+client = NexusAIClient(api_key="nxs_your_api_key")
+# → Connects to https://nexus-ai.juncai-ai.com/api/v1
+```
+
+**Local Development Mode**:
+```bash
+# Set environment variable
+export NEXUS_BASE_URL=http://localhost:8000/api/v1
+```
+
+Or in code:
+```python
+client = NexusAIClient(
+    api_key="nxs_dev_key",
+    base_url="http://localhost:8000/api/v1"
+)
+```
+
+## Error Handling
+
+The SDK provides specific exception types for different error scenarios:
+
+```python
+from nexusai import NexusAIClient
+from nexusai.error import (
+    AuthenticationError,
+    RateLimitError,
+    NotFoundError,
+    APITimeoutError,
+)
+
+client = NexusAIClient()
+
+try:
+    response = client.text.generate("Hello")
+except AuthenticationError:
+    print("Invalid API key")
+except RateLimitError as e:
+    print(f"Rate limited. Retry after {e.retry_after}s")
+except NotFoundError:
+    print("Resource not found")
+except APITimeoutError:
+    print("Request timed out")
+except Exception as e:
+    print(f"Unexpected error: {e}")
+```
+
+## Context Manager
+
+The client supports context manager for automatic cleanup:
+
+```python
+with NexusAIClient() as client:
+    response = client.text.generate("Hello")
+    print(response.text)
+# Client automatically closed
+```
+
+## 📚 Complete Documentation
+
+**📖 [Complete Documentation Index](https://github.com/aidrshao/nexus-ai-sdk/blob/main/docs/internal/DOCUMENTATION.md)** - All documentation in one place
+
+### Quick Links
+- **[Quick Start Guide](https://github.com/aidrshao/nexus-ai-sdk/blob/main/QUICKSTART_GUIDE.md)** - 5-minute tutorial to get started
+- **[API Reference for Developers](https://github.com/aidrshao/nexus-ai-sdk/blob/main/API_REFERENCE_FOR_DEVELOPERS.md)** - Complete API documentation
+- **[Knowledge Base Async Guide](https://github.com/aidrshao/nexus-ai-sdk/blob/main/KNOWLEDGE_BASE_ASYNC_GUIDE.md)** 🆕 - Complete guide for async document processing
+- **[Application Developer FAQ](https://github.com/aidrshao/nexus-ai-sdk/blob/main/APPLICATION_DEVELOPER_RESPONSE.md)** - Common questions answered
+- **[Error Handling Guide](https://github.com/aidrshao/nexus-ai-sdk/blob/main/ERROR_HANDLING_QUICK_REFERENCE.md)** - Best practices for error handling
+- **[Model Selection Guide](https://github.com/aidrshao/nexus-ai-sdk/blob/main/MODEL_UPDATE_SUMMARY.md)** - Choosing the right model
+- **[Changelog](https://github.com/aidrshao/nexus-ai-sdk/blob/main/CHANGELOG.md)** - Version history and updates
+
+### Code Examples
+Check out the [examples/](https://github.com/aidrshao/nexus-ai-sdk/tree/main/examples) directory:
+
+- **[basic_usage.py](https://github.com/aidrshao/nexus-ai-sdk/blob/main/examples/basic_usage.py)** - Core features demonstration
+- **[error_handling.py](https://github.com/aidrshao/nexus-ai-sdk/blob/main/examples/error_handling.py)** - Error handling patterns
+
+### Model Documentation
+
+**Text Models (6 available)**:
+- 🥇 Premium: `gpt-5`, `gemini-2.5-pro`
+- 🥈 Standard: `gpt-5-mini`
+- 🥉 Budget: `deepseek-v3.2-exp` (default), `gpt-4o-mini`
+
+**Image Models (2 available)**:
+- `doubao-seedream-4-0-250828` (default)
+- `gemini-2.5-flash-image`
+
+## Requirements
+
+- Python 3.8+
+- httpx >= 0.25.0
+- pydantic >= 2.5.0
+- python-dotenv >= 1.0.0
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Support & Community
+
+- **PyPI**: https://pypi.org/project/keystone-ai/
+- **Documentation**: https://nexus-ai.juncai-ai.com/docs
+- **GitHub**: https://github.com/aidrshao/nexus-ai-sdk
+- **Issues**: https://github.com/aidrshao/nexus-ai-sdk/issues
+- **Email**: support@nexus-ai.com
+
+## Star History
+
+If you find this project helpful, please consider giving it a ⭐ on [GitHub](https://github.com/aidrshao/nexus-ai-sdk)!
+
+## Changelog
+
+### v0.2.2 (2025-10-07) - Documentation Enhancement
+
+**Focus**: Comprehensive documentation for async knowledge base processing
+
+- 📚 Added [Knowledge Base Async Guide](KNOWLEDGE_BASE_ASYNC_GUIDE.md) - 13,000+ word comprehensive guide
+  - 3 async processing implementation methods
+  - Task status flow and error handling
+  - Performance optimization best practices
+  - Production-ready patterns
+- 📖 Enhanced API documentation with detailed async workflow
+- 🐛 Fixed documentation inconsistencies and version numbers
+- ✅ 100% Knowledge Base RAG tests passing (6/6)
+
+### v0.2.1 (2025-10-06) - Stable Release
+
+**First Production-Ready Release** - 95.2% test pass rate
+
+- 🎉 First stable release on PyPI as `keystone-ai`
+- ✅ All P0 core features passing (100%)
+- 🔄 6 text models + 2 image models supported
+- 🧠 Full RAG capabilities with semantic search
+- 📡 Real-time streaming support
+- 💬 Session management with context
+- 🎨 Multi-modal support (text, images, audio)
+
+### v0.2.0 (2025-10-04) - Messages Format Support
+
+- ✨ Messages format for multi-turn conversations
+- ✨ File list API with pagination
+- 🐛 Fixed streaming functionality
+- 🐛 UTF-8 encoding improvements
+
+### v0.1.0 (2025-10-04) - Initial Release
+
+- Initial alpha release
+- Text generation (sync, async, streaming)
+- Image generation with task polling
+- Session management
+- Audio processing (ASR)
+- Knowledge base management
+- File upload system
+- Full type hints with Pydantic
+
+**For detailed changelog**, see [CHANGELOG.md](CHANGELOG.md)
