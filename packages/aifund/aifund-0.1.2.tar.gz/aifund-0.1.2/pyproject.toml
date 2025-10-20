@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools >= 77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aifund"
+version = "0.1.2"
+authors = [
+    { name = "yebaige", email = "silence_hgt@163.com" },
+]
+description = "AIfund 是基于 Python 的基金量化工具"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+    "requests>=2.31.0"
+]  # 这里写依赖包，例如 ["requests>=2.31.0"]
+
+[project.urls]
+Homepage = "https://github.com/silenceTiano/aifund"
+Issues = "https://github.com/silenceTiano/aifund/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
