@@ -1,0 +1,118 @@
+Metadata-Version: 2.4
+Name: boss-request
+Version: 0.0.2
+Summary: Патч библиотек httpx, curl-cffi для удобного экспорта куки и нормализации json
+Author-email: Limby <bogo44tor@gmail.com>
+License-Expression: MIT
+Keywords: request,cookies,export_cookies,import_cookies
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Provides-Extra: httpx
+Requires-Dist: httpx>=0.28.1; extra == "httpx"
+Provides-Extra: curl-cffi
+Requires-Dist: curl-cffi>=0.13.0; extra == "curl-cffi"
+Provides-Extra: all
+Requires-Dist: httpx>=0.28.1; extra == "all"
+Requires-Dist: curl-cffi>=0.13.0; extra == "all"
+Provides-Extra: dev
+Requires-Dist: pytest>=6.0; extra == "dev"
+Requires-Dist: pytest-asyncio; extra == "dev"
+Requires-Dist: black; extra == "dev"
+Requires-Dist: isort; extra == "dev"
+Requires-Dist: mypy; extra == "dev"
+Requires-Dist: flake8; extra == "dev"
+
+# Boss Request
+
+Патч для библиотек `httpx` и `curl-cffi`, расширяет оригинальный функционал:
+
+1. `json_clean()` - Нормализует невалидные json:
+2. `export_cookies()` - Экспорта куки в браузерный формат
+3. `import_cookies(json)` - Импорт куки в браузерный формат
+4. Можно вызывать прямо из response или client
+5. Одинаковый интерфейс для `httpx` и `curl-cffi`
+
+## Установка
+```bash
+
+uv add boss-request
+```
+```bash
+
+pip install boss-request
+```
+
+Патч для curl-cffi (требует установки оригинального `curl-cffi`)
+```python
+from src.bose_request import BossAsyncSessionCurlCffi
+```
+```python
+uv add curl-cffi | pip install curl-cffi
+```
+Библиот
+Патч для httpx (требует установки оригинального `httpx`)
+```python
+from src.bose_request import BossAsyncClientHttpx
+```
+```python
+uv add httpx | pip install httpx
+```
+
+## Переноси куки прям из браузера
+
+![img_3.png](img_3.png)
+
+#### Вызови `import_cookies(json) - вставь json`
+
+```python
+
+async with BossAsyncSessionCurlCffi() as client:
+    await client.get("https://claude.ai/api/organizations")
+
+    cookies = client.import_cookies(json)
+    
+    
+```
+## Или же экспорт куки в браузер
+
+
+```python
+
+async with BossAsyncSessionCurlCffi() as client:
+    await client.get("https://claude.ai/api/organizations")
+
+    cookies_json = client.export_cookies()
+    
+    # Или возьми сессонные куки прямо из response
+    response = await client.get("https://google.com/")
+    cookies_json = response.export_cookies() 
+    
+    # Или экспортируй в формате dict
+    response = await client.get("https://google.com/")
+    cookies_dict = response.export_cookies("dict") 
+    
+    # Результат
+    {'__fcd': 'OQKJQOVUCAZWJXHN','isRedirectLang': '1',}
+
+
+    
+```
+
+## Нормализуй невалидный json
+
+
+```python
+
+async with BossAsyncSessionCurlCffi() as client:
+    response = await client.get("https://claude.ai/api/organizations")
+    
+    #Новый метод
+    valid_json = response.json_clean()
+    
+    #Оригинальный метод остался на месте
+    ivnalid_json = response.json()
+    
+    
+```
+
+Библиотека на изменяет оригинальный функционал, она лишь дополняет
