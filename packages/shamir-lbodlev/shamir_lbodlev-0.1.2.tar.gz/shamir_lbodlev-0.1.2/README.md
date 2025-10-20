@@ -1,0 +1,145 @@
+# 🔐 Shamir Secret Sharing — Python Implementation
+
+[![PyPI](https://img.shields.io/pypi/v/shamir-lbodlev.svg?color=blue)](https://pypi.org/project/shamir-lbodlev/)
+[![Python](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+A clean and minimal **Python implementation of Shamir’s Secret Sharing Scheme (SSS)** —  
+a cryptographic method to divide a secret into multiple parts (shares),  
+so that only a threshold number of them are required to reconstruct the original secret.
+
+---
+
+## 🚀 Features
+
+- Pure Python, minimal dependencies (`pycryptodome`)
+- Generate any number of secure shares
+- Reconstruct the secret using only the threshold shares
+- Human-readable export/import formats (JSON + Base64)
+- Easy-to-use API for both sharing and recovery
+
+---
+
+## 📦 Installation
+
+Install the package from PyPI:
+
+```bash
+pip install shamir-lbodlev
+```
+
+## Importing the Package
+```python
+from Shamir import Shamir
+```
+
+## Quick Start Example
+## 1. Split a Secret into Shares
+
+```python
+from Shamir import Shamir
+
+# Create shares for a secret message
+shamir = Shamir(secret=b"My top secret message", n=5, k=3)
+# total of 5 shares with 3 threshold(minimal amount of shares to reconstruct the message)
+
+# Export parameters and shares
+shamir.export_public("public.json")
+shamir.export_shares("share{}.dat")  # Creates share1.dat, share2.dat, ...
+```
+
+This produces:
+- `public.json` → contains public data (prime number `p`, total shares `n`, threshold `k`)
+- `share1.dat`, `share2.dat`, ... → Base64-encoded shares
+
+## 2. Reconstruct the Secret
+```python
+from Shamir import Shamir
+
+# Initialize recovery instance
+recoverer = Shamir()
+recoverer.load_public("public.json")
+
+# Load any 3 of the generated shares
+recoverer.load_shares("share{}.dat", indexes=[1, 3, 5])
+
+# Recover the secret
+secret = recoverer.recover()
+print(secret.decode())
+```
+
+## API Reference
+`class Shamir(secret: bytes | None = None, n: int | None = None, k: int | None = None)`
+Initializes a new instance of the Shamir scheme.
+| Parameter | Type              | Description                                                |
+| --------- | ----------------- | ---------------------------------------------------------- |
+| `secret`  | `bytes`, optional | The secret to share (as bytes).                            |
+| `n`       | `int`, optional   | Total number of shares to generate.                        |
+| `k`       | `int`, optional   | Minimum number of shares needed to reconstruct the secret. |
+
+Raises `ValueError` if `k` > `n`.
+
+---
+`recover() -> bytes`
+
+Reconstructs and returns the shared secret (in bytes).
+Must be called after loading public parameters and shares.
+
+---
+`export_public(filename: str) -> None`
+
+Exports public data (`p`, `n`, `k`) in JSON format.
+Required for secret reconstruction.
+
+---
+```python
+shamir.export_public("public.json")
+```
+---
+```python
+export_shares(template: str) -> None
+```
+Exports all generated shares using a filename template.
+The share index is automatically inserted into the template.
+```python
+shamir.export_shares("share{}.dat")
+# Produces: share1.dat, share2.dat, share3.dat, ...
+```
+---
+`load_public(filename: str) -> None`
+Loads the public parameters from a previously exported JSON file.
+```python
+shamir.load_public("public.json")
+```
+---
+```python
+load_shares(template: str, indexes: list[int]) -> None
+```
+Loads share files according to a template and list of indexes.
+If more than `k` shares are given, only the first `k` are used.
+```python
+shamir.load_shares("share{}.dat", indexes=[1, 2, 5])
+```
+---
+## Internal Methods
+
+The following methods are used internally and should not be called directly:
+- `__generate_coefs()`
+- `__generate_shares()`
+- `__generate_random_point()`
+
+## How It Works
+1. The secret (bytes) is converted into a large integer.
+2. A random polynomial of degree k-1 is generated in a finite field defined by a large prime.
+3. Each share corresponds to a point `(x, y)` on that polynomial.
+4. Reconstruction uses Lagrange interpolation modulo the same prime to recover the constant term — the original secret.
+
+## Author
+Laurentiu Bodlev
+📍 Cahul, Republic of Moldova
+💡 Passionate about cryptography, networking, and distributed systems.
+🌐 GitHub: https://github.com/lbodlev888
+
+## License
+This project is licensed under the MIT License — see the LICENSE file for details.
+
