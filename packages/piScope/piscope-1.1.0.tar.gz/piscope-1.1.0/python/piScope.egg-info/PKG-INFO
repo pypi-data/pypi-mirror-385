@@ -1,0 +1,72 @@
+Metadata-Version: 2.4
+Name: piScope
+Version: 1.1.0
+Summary: piScope data analysis workbench
+Author: S. Shiraiwa
+Maintainer-email: "S. Shiraiwa" <shiraiwa@princeton.edu>
+License-Expression: GPL-3.0-only
+Project-URL: Homepage, https://github.com/piScope
+Project-URL: Download, https://github.com/piScope
+Keywords: scientific computing,python visualzation,finite element method
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Scientific/Engineering :: Physics
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy>=2.3.0
+Requires-Dist: scipy
+Requires-Dist: matplotlib>=3.10.3
+Requires-Dist: PyOpenGL
+Requires-Dist: netCDF4
+Requires-Dist: h5py
+Requires-Dist: PyPDF2
+Requires-Dist: pdfrw
+Requires-Dist: wxPython
+Requires-Dist: future
+Requires-Dist: autopep8
+Requires-Dist: scipy
+Dynamic: license-file
+
+## &pi;Scope
+&pi;Scope is a python based workbench for data analysis and modeling.
+(S Shiraiwa, T Fredian, J Hillairet, J Stillerman, "&pi;Scope: Python based scientific workbench with MDSplus data visualization tool", Fusion Engineering and Design 112, 835 (2016) https://doi.org/10.1016/j.fusengdes.2016.06.050)
+
+Goal of piScope includes
+* Data browsing (scope) application for MDSplus data system (www.mdsplus.org)
+* Lego blocks for gluing up large simulation codes using python
+* User frontend platform for Petra-M (MFEM based finite element simulation).
+
+and for the above purposes, &pi;Scope is equipped with
+* a data analysis environment (= python shell, editor, data structure browser, and matplotlib figure)
+* various GUI componetns to work with matplotlib based figures which allows to 
+ * save/load a figure as a figure file.
+ * edit artists using GUI palette for plot, contour, image, triplots and so on.
+ * change panel layout via an interactive layout editor
+ * cut/paste of plot, axes, or an entire page.
+ * export data from plot to python shell by one click
+ * interactively annotate figure using text, arrow, lines,,,
+ * draw 3D (OpenGL) in matplotlib canvas.
+
+&pi;Scope is also used for Petra-M finiete element analysis platform built on MFEM.
+     
+### Install
+
+```
+ pip install piScope
+
+ or
+ 
+ git clone git@github.com:piScope/piScope.git; cd piScope
+ pip install .
+```
+
+Directories:
+* ../python/ifigure             core program
+* ../python/ifigure/example              examples
+* ../bin/                        scripts to run &pi;Scope
+* ../example/                   example data to look in &pi;Scope
+
+
