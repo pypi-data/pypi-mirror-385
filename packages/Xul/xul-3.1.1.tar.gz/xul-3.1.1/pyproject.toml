@@ -1,0 +1,107 @@
+[project]
+name = "Xul"
+description = "XML (XPath, XSD, XSLT) Utilities"
+readme = "README.rst"
+authors = [
+    { name = "Peter Adrichem", email = "Peter.Adrichem@gmail.com" }
+]
+requires-python = ">=3.9"
+dependencies = [ "lxml>=4.0" ]
+keywords = [ "xml", "xpath", "xslt", "xsd", "dtd", "xml schema", "relax ng", "rng" ]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Text Processing :: Markup :: XML",
+    "Topic :: Utilities"
+]
+license = "MIT"
+license-files = ["LICENSE.txt"]
+dynamic = [ "version" ]
+
+[project.optional-dependencies]
+docs = [
+    "furo==2025.9.25",
+    "Sphinx~=8.2.3"
+]
+test = [
+    "black~=25.9",
+    "isort~=6.1.0",
+    "lxml-stubs~=0.5.1",
+    "mypy~=1.18.2",
+    "ruff~=0.14.1",
+    "types-Pygments~=2.19",
+]
+syntax = [
+    "Pygments>=2.7"
+]
+
+[project.urls]
+Homepage = "https://xul.readthedocs.io/"
+Documentation = "https://xul.readthedocs.io/en/stable/"
+Changelog = "https://xul.readthedocs.io/en/latest/changelog.html"
+Source = "https://github.com/peteradrichem/Xul"
+
+[project.scripts]
+transform = "xul.cmd.transform:main"
+ppx = "xul.cmd.ppx:main"
+xp = "xul.cmd.xp:main"
+validate = "xul.cmd.validate:main"
+
+[build-system]
+requires = ["hatchling~=1.27"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+path = "src/xul/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/xul"]
+
+[tool.black]
+color = true
+line-length = 100
+verbose = true
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.mypy]
+cache_dir = "/tmp/.mypy_cache"
+exclude = ["^docs/", "^build/"]
+pretty = true
+
+[tool.ruff]
+cache-dir = "/tmp/.ruff_cache"
+exclude =  ["build/"]
+include = ["pyproject.toml", "*.py"]
+line-length = 100
+
+[tool.ruff.lint]
+# On top of the default `select` (`E`, `F`), pycodestyle errors and Pyflakes.
+extend-select = [
+  "D",   # pydocstyle
+  "UP",  # pyupgrade
+  "W",   # pycodestyle warnings
+]
+ignore = [
+  "D105",       # Missing docstring in magic method
+  "D107",       # Missing docstring in `__init__`
+  "D203",       # 1 blank line required before class docstring
+  "D213",       # Multi-line docstring summary should start at the second line
+]
+pydocstyle.convention = "pep257"
+
+[tool.ruff.format]
+# Use `\n` line endings for all files
+line-ending = "lf"
+skip-magic-trailing-comma = true
