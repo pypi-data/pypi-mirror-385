@@ -1,0 +1,50 @@
+Metadata-Version: 2.4
+Name: queryshield-core
+Version: 0.2.0
+Summary: QueryShield core analysis library - shared logic for all probe packages
+Project-URL: Homepage, https://queryshield.io
+Project-URL: Repository, https://github.com/queryshield/queryshield
+Author-email: QueryShield <dev@queryshield.io>
+Requires-Python: >=3.9
+Requires-Dist: pyyaml>=6.0
+Provides-Extra: dev
+Requires-Dist: pytest-cov>=4.1.0; extra == 'dev'
+Requires-Dist: pytest>=7.4.0; extra == 'dev'
+Description-Content-Type: text/markdown
+
+# queryshield-core
+
+Shared core logic for QueryShield - query analysis, EXPLAIN parsing, cost calculation, and budget checking.
+
+This package contains the shared analysis engine used by all QueryShield probes (Django, SQLAlchemy, etc.).
+
+## Features
+
+- N+1 query detection
+- EXPLAIN plan analysis (PostgreSQL, MySQL, SQLite)
+- Cloud cost calculation (AWS, GCP, DigitalOcean)
+- Budget enforcement and tracking
+- AI-powered root cause analysis
+
+## Installation
+
+```bash
+pip install queryshield-core
+```
+
+## Usage
+
+```python
+from queryshield_core.analysis import classify_problems
+from queryshield_core.budgets import check_budget
+
+# Analyze queries
+problems = classify_problems(queries)
+
+# Check budget
+violations = check_budget(queries, budget_config)
+```
+
+## Documentation
+
+See the main [QueryShield documentation](https://queryshield.app/docs) for more information.
