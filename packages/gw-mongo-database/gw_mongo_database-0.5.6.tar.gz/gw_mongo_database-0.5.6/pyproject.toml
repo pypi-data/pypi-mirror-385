@@ -1,0 +1,26 @@
+[project]
+name = "gw-mongo-database"
+version = "0.5.6"
+description = "Mongo DB Functionality for GW Projects"
+authors = [
+    {name = "Chris Moore",email = "cmoore@guidewire.com"}
+]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "gw-settings-management (>=0.5.0,<0.6.0)",
+    "pymongo (>=4.11.3,<5.0.0)",
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.dependencies]
+gw-settings-management = {source = "solserv-pypi-dev-local"}
+
+[[tool.poetry.source]]
+name = "solserv-pypi-dev-local"
+url = "https://artifactory.guidewire.com/artifactory/api/pypi/solserv-pypi-dev-local/simple"
+priority = "supplemental"
