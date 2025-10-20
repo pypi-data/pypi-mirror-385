@@ -1,0 +1,187 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = [
+    "voicetype"
+]
+exclude = [
+    "voicetype/_vendor/pynput/setup.py"
+]
+
+[tool.hatch.metadata]
+# Necessary for my pynput fork
+allow-direct-references = true
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "voicetype/_version.py"
+
+[project]
+name = "voiceType2"
+description = "Type with your voice using hotkey-activated speech recognition"
+readme = "README.md"
+authors = [{ name = "Adam Lewis" }]
+license = "Apache-2.0"
+license-files = [
+    "LICENSE",
+    "voicetype/_vendor/pynput/COPYING.LGPL",
+]
+requires-python = "<=3.12"
+keywords = ["speech-recognition", "voice-typing", "accessibility", "transcription"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: Apache Software License",
+    "Topic :: Multimedia :: Sound/Audio :: Speech",
+    "Topic :: Text Processing",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: Microsoft :: Windows",
+]
+dynamic = ["version"]
+
+[project.scripts]
+voicetype = "voicetype.install:main"
+run-voicetype = "voicetype.__main__:main"
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pre-commit",
+]
+
+[tool.ruff]
+fix = true
+
+[tool.ruff.lint]
+select = [
+    "I",
+]
+ignore = [
+    "E501",   # Ignore line too long, because due to black the error can only occur for strings
+    "D100",   # Ignore missing docstring in public module
+    "BLE001", # Ignore bare except
+    "EM101",
+    "PTH110",
+    "TRY003",
+    "C901",
+    "PLR0915", # Ignore too many statements in function
+]
+
+[tool.pixi.project]
+channels = ["conda-forge", "nvidia"]
+platforms = ["linux-64", "win-64", "osx-64"]
+
+[tool.pixi.dependencies]
+# conda-forge dependencies
+python = "<=3.12"
+gtk3 = "*"
+gobject-introspection = "*"
+pygobject = "*"
+loguru = ">=0.7.3,<0.8"
+
+[tool.pixi.pypi-dependencies]
+# "pyaudio",  # was causing me problems with audio
+speechrecognition = "*"
+loguru = "*"
+pystray = "*"
+prompt_toolkit = "*"
+pydub = "*"  # for sound
+playsound3 = "*" # for sound
+soundfile = "*"  # for sound recording
+sounddevice = "*"  # for detecting input devices and recording sound
+pydantic-settings = "*"
+toml = "*"
+
+# the following dependencies come from vendoring in pynput
+six = "*"
+
+# Define the 'local' feature
+[tool.pixi.feature.local]
+channels = ["conda-forge"]
+
+# PyPI packages for this feature
+[tool.pixi.feature.local.pypi-dependencies]
+voiceType2 = { path = "." }
+faster-whisper = "*"
+
+# Conda packages common across all platforms
+[tool.pixi.feature.local.dependencies]
+
+# Define the 'litellm' feature (for OpenAI/cloud transcription)
+[tool.pixi.feature.litellm]
+channels = ["conda-forge"]
+
+# PyPI packages for this feature
+[tool.pixi.feature.litellm.pypi-dependencies]
+voiceType2 = { path = "." }
+aider-chat = "*"  # Includes litellm
+
+# Conda packages for this feature
+[tool.pixi.feature.litellm.dependencies]
+
+# Platform-scoped dependencies
+[tool.pixi.target.osx-64.pypi-dependencies]
+# the following dependencies come from vendoring in pynput
+pyobjc-framework-ApplicationServices = ">=8.0"
+pyobjc-framework-Quartz = ">=8.0"
+
+[tool.pixi.target.linux-64.pypi-dependencies]
+dasbus = "*" # wayland - Linux only
+# the following dependencies come from vendoring in pynput
+evdev = ">=1.3"
+python-xlib = ">=0.17"
+
+[tool.pixi.feature.local.target.linux-64.dependencies]
+
+libcublas = "=12"  # faster_whisper doesn't seem to support cuda 13 yet
+cudnn = "*"
+
+# Windows-specific dependencies
+[tool.pixi.feature.local.target.win-64.dependencies]
+libcublas = "=12"
+cudnn = "*"
+
+
+# Define the 'build' feature
+[tool.pixi.feature.build]
+channels = ["conda-forge"]
+
+# Conda packages for the build feature
+[tool.pixi.feature.build.dependencies]
+python = "<=3.12"
+hatch = "*"
+hatch-vcs = "*"
+
+# Define the 'dev' feature
+[tool.pixi.feature.dev]
+channels = ["conda-forge"]
+
+# PyPI packages for the dev feature
+[tool.pixi.feature.dev.pypi-dependencies]
+voiceType2 = { path = ".", editable = true }
+faster-whisper = "*"
+
+# Conda packages for the dev feature
+[tool.pixi.feature.dev.dependencies]
+pre-commit = "*"
+
+# Linux-specific dev dependencies
+[tool.pixi.feature.dev.target.linux-64.dependencies]
+pytest = "*"
+libcublas = "=12"  # faster_whisper doesn't seem to support cuda 13 yet
+cudnn = "*"
+
+# Map environments to feature sets
+[tool.pixi.environments]
+default = ["local"]
+local = ["local"]
+build = ["build"]
+litellm = ["litellm"]
+dev = ["dev"]
