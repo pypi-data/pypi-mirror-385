@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - PyArchInit-Mini{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2"><i class="fas fa-tachometer-alt"></i> Dashboard Archeologica</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary">
+                <i class="fas fa-download"></i> Export
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stats-card">
+            <div class="card-body">
+                <div class="stats-number">{{ stats.get('total_sites', 0) }}</div>
+                <div>Siti Archeologici</div>
+                <i class="fas fa-map-marked-alt fa-2x opacity-50"></i>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stats-card">
+            <div class="card-body">
+                <div class="stats-number">{{ stats.get('total_us', 0) }}</div>
+                <div>Unità Stratigrafiche</div>
+                <i class="fas fa-layer-group fa-2x opacity-50"></i>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stats-card">
+            <div class="card-body">
+                <div class="stats-number">{{ stats.get('total_inventory', 0) }}</div>
+                <div>Reperti Catalogati</div>
+                <i class="fas fa-archive fa-2x opacity-50"></i>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stats-card">
+            <div class="card-body">
+                <div class="stats-number">{{ stats.get('total_media', 0) }}</div>
+                <div>File Multimediali</div>
+                <i class="fas fa-images fa-2x opacity-50"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Sites -->
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-map-marked-alt"></i> Siti Recenti
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if stats.get('recent_sites') %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-header">
+                                <tr>
+                                    <th>Nome Sito</th>
+                                    <th>Comune</th>
+                                    <th>Provincia</th>
+                                    <th>Azioni</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for site in stats.recent_sites %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ site.sito }}</strong>
+                                        {% if site.definizione_sito %}
+                                            <br><small class="text-muted">{{ site.definizione_sito }}</small>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ site.comune or '-' }}</td>
+                                    <td>{{ site.provincia or '-' }}</td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="{{ url_for('view_site', site_id=site.id_sito) }}" 
+                                               class="btn btn-outline-primary">
+                                                <i class="fas fa-eye"></i> Visualizza
+                                            </a>
+                                            <a href="{{ url_for('harris_matrix', site_name=site.sito) }}" 
+                                               class="btn btn-outline-info">
+                                                <i class="fas fa-project-diagram"></i> Matrix
+                                            </a>
+                                            <a href="{{ url_for('export_site_pdf', site_id=site.id_sito) }}" 
+                                               class="btn btn-outline-success">
+                                                <i class="fas fa-file-pdf"></i> PDF
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="{{ url_for('sites_list') }}" class="btn btn-primary">
+                            <i class="fas fa-list"></i> Visualizza Tutti i Siti
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-map-marked-alt fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">Nessun sito presente</h5>
+                        <p class="text-muted">Inizia creando il tuo primo sito archeologico</p>
+                        <a href="{{ url_for('create_site') }}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Crea Primo Sito
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <!-- Quick Actions -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-bolt"></i> Azioni Rapide
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('create_site') }}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Nuovo Sito
+                    </a>
+                    <a href="{{ url_for('create_us') }}" class="btn btn-info">
+                        <i class="fas fa-layer-group"></i> Nuova US
+                    </a>
+                    <a href="{{ url_for('create_inventario') }}" class="btn btn-success">
+                        <i class="fas fa-archive"></i> Nuovo Reperto
+                    </a>
+                    <a href="{{ url_for('upload_media') }}" class="btn btn-warning">
+                        <i class="fas fa-upload"></i> Carica Media
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- System Info -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-info-circle"></i> Sistema
+                </h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mb-0">
+                    <li><strong>Versione:</strong> PyArchInit-Mini v0.1.0</li>
+                    <li><strong>Database:</strong> SQLite/PostgreSQL</li>
+                    <li><strong>API REST:</strong> <a href="/docs" target="_blank">Documentazione</a></li>
+                    <li><strong>Interfaccia:</strong> Flask Web UI</li>
+                </ul>
+                
+                <hr>
+                
+                <div class="text-center">
+                    <a href="/docs" target="_blank" class="btn btn-sm btn-outline-secondary">
+                        <i class="fas fa-book"></i> API Docs
+                    </a>
+                    <a href="https://github.com/pyarchinit/pyarchinit-mini" target="_blank" class="btn btn-sm btn-outline-secondary">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Section -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-chart-bar"></i> Statistiche per Tipologia
+                </h5>
+            </div>
+            <div class="card-body">
+                <div id="chartContainer" style="height: 300px;">
+                    <!-- Chart will be rendered here -->
+                    <div class="text-center py-5">
+                        <i class="fas fa-chart-bar fa-3x text-muted"></i>
+                        <p class="text-muted mt-3">Grafici statistiche disponibili nella versione completa</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Auto-refresh dashboard every 5 minutes
+setTimeout(function() {
+    location.reload();
+}, 300000);
+
+// Initialize tooltips
+document.addEventListener('DOMContentLoaded', function() {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+});
+</script>
+{% endblock %}
