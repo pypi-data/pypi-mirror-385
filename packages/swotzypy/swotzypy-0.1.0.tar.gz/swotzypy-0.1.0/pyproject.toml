@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "swotzypy"
+version = "0.1.0"
+description = "Swotzy API python wrapper"
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+authors = [
+    { name = "MaKxex", email = "maksimos651@gmail.com" }
+]
+keywords = ["swotzy", "api", "wrapper", "shipping", "logistics"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "httpx>=0.24.0",
+    "pydantic>=2.0.0",
+    "typing-extensions>=4.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black>=22.0.0",
+    "isort>=5.10.0",
+    "mypy>=0.990",
+    "flake8>=5.0.0",
+]
+
+license-files = [
+    "LICENSE",
+]
+
+[project.urls]
+Homepage = "https://github.com/MaKxex/swotzyPy"
+
+[tool.setuptools.packages.find]
+where = ["swotzypy"]
+
+[tool.black]
+line-length = 88
+target-version = ["py38"]
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+
+[tool.mypy]
+python_version = "3.8"
+strict = true
