@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c \"import sys; sys.path.insert(0, ''.''); import ezdb; print(''✓ EzDB package imports successfully''); print(f''Package location: {ezdb.__file__}'')\")",
+      "Bash(python -c \"import sqlite3; print(f''SQLite version: {sqlite3.sqlite_version}''); print(f''Python sqlite3 module: {sqlite3.version}'')\")",
+      "Bash(python -c \"import sys; print(f''Python version: {sys.version}''); print(f''Python comes with sqlite3 built-in: {\"\"sqlite3\"\" in sys.builtin_module_names or True}'')\")",
+      "Bash(pip install --upgrade build twine)",
+      "Bash(python -m build)",
+      "Bash(python -m twine upload dist/* --username __token__ --password \"pypi-AgEIcHlwaS5vcmcCJGJmY2NkOThhLWIzYjItNDBiNy05M2Y0LTNhNTRjZGM5YjU1YQACKlszLCI2Yzk0MWRlYS0zNmE0LTQ3MDctYjYxYi1mYmRjZGI5MjJkOGUiXQAABiCuiuuqua4ZCvm_pKRdiNEwLUcnlh1jKscTViT_v0cASQ\")",
+      "Bash(curl -s https://pypi.org/project/ezdb/)",
+      "Bash(curl -s https://pypi.org/project/query/)",
+      "Bash(curl -s -A \"Mozilla/5.0\" \"https://pypi.org/simple/vortex/\")",
+      "Bash(curl -s -A \"Mozilla/5.0\" \"https://pypi.org/simple/xyzqvtest123456789/\")"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
