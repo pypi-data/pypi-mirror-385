@@ -1,0 +1,147 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "devstudio-mcp"
+version = "1.0.0"
+description = "Production-grade MCP server for screen recording, audio capture, and demo automation"
+authors = [{name = "Nihit Gupta", email = "nihitgupta.ng@outlook.com"}]
+license = "AGPL-3.0-or-later"
+readme = "README.md"
+requires-python = ">=3.11"
+keywords = ["mcp", "recording", "screen-capture", "demo-automation", "video-recording", "agpl"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Multimedia :: Video :: Capture",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    # MCP Framework
+    "fastmcp>=1.0.0",
+    # Web Framework
+    "fastapi>=0.104.1",
+    "pydantic>=2.5.0",
+    "pydantic-settings>=2.1.0",
+    "uvicorn[standard]>=0.24.0",
+    # Video & Audio Recording (Phase 1)
+    "av>=13.0.0",  # PyAV with bundled FFmpeg - no system FFmpeg required
+    "opencv-python-headless>=4.8.1",  # Required by pyscreeze (pyautogui dependency)
+    "pillow>=10.1.0",
+    "numpy>=1.24.0",  # Required for PyAV frame handling
+    "sounddevice>=0.4.6",
+    "soundfile>=0.12.1",
+    "pyautogui>=0.9.54",
+    "screeninfo>=0.8.1",  # Multi-monitor detection
+    "mss>=9.0.0",  # Fast multi-monitor screen capture
+    # System Monitoring
+    "psutil>=5.9.6",
+    # Utilities
+    "python-multipart>=0.0.6",
+    "aiofiles>=23.2.1",
+    "structlog>=23.2.0",
+    "rich>=13.7.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.3",
+    "pytest-asyncio>=0.21.1",
+    "pytest-cov>=4.1.0",
+    "black>=23.11.0",
+    "isort>=5.12.0",
+    "flake8>=6.1.0",
+    "mypy>=1.7.1",
+    "pre-commit>=3.5.0",
+    "safety>=2.3.0",
+    "bandit>=1.7.5",
+]
+
+[project.scripts]
+devstudio-mcp = "devstudio_mcp.server:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["devstudio_mcp*"]
+exclude = ["tests*", "monitoring*", "docs*"]
+
+[tool.black]
+line-length = 88
+target-version = ['py311']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 88
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short --cov=devstudio_mcp --cov-report=term-missing --cov-report=xml"
+asyncio_mode = "auto"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+]
+
+[tool.coverage.run]
+source = ["devstudio_mcp"]
+omit = [
+    "*/tests/*",
+    "*/test_*.py",
+    "*/__pycache__/*",
+    "*/migrations/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
