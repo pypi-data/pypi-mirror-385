@@ -1,0 +1,29 @@
+# Include documentation
+include README.md
+include LICENSE
+include VERSION
+include CHANGELOG.md
+
+# Include requirements files
+include requirements.txt
+include requirements-server.txt
+include requirements-embeddings.txt
+
+# Include configuration files
+include setup.py
+include pyproject.toml
+
+# Include all Python files
+recursive-include ezdb *.py
+
+# Exclude unnecessary files
+global-exclude __pycache__
+global-exclude *.py[co]
+global-exclude .DS_Store
+global-exclude *.so
+global-exclude .git*
+
+# Exclude test and example files
+recursive-exclude tests *
+recursive-exclude examples *
+exclude test_*.py

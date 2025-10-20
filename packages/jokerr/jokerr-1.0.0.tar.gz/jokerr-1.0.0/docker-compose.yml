@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  ezdb:
+    image: ezdb:1.0.0
+    container_name: ${EZDB_SERVICE_NAME:-ezdb}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${EZDB_PORT:-8000}:8000"
+    environment:
+      - EZDB_PORT=${EZDB_PORT:-8000}
+      - EZDB_HOST=${EZDB_HOST:-0.0.0.0}
+      - EZDB_SERVICE_NAME=${EZDB_SERVICE_NAME:-ezdb}
+      - EZDB_DATA_DIR=/data
+    volumes:
+      - ezdb-data:/data
+      - ./EzDB_database.json:/data/EzDB_database.json:rw
+    restart: unless-stopped
+    networks:
+      - ezdb-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  ezdb-data:
+    driver: local
+
+networks:
+  ezdb-network:
+    driver: bridge
