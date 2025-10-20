@@ -1,0 +1,109 @@
+<!-- Sidebar Component -->
+{% load blog_tags %}
+<div class="space-y-8">
+    <!-- Categories Section -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Categories</h3>
+        <ul class="space-y-2">
+            {% get_categories as categories %}
+            {% for category in categories %}
+                <li>
+                    <a href="{{ category.get_absolute_url }}"
+                       class="flex items-center justify-between text-gray-600 hover:text-primary-600 hover:bg-gray-50 px-3 py-2 rounded-md transition-colors">
+                        <span>{{ category.name }}</span>
+                        <span class="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded-full">
+                            {{ category.posts.count }}
+                        </span>
+                    </a>
+                </li>
+            {% empty %}
+                <li class="text-gray-500 text-sm">No categories yet</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Recent Posts Section -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Recent Posts</h3>
+        <ul class="space-y-3">
+            {% get_recent_posts 5 as recent_posts %}
+            {% for post in recent_posts %}
+                <li>
+                    <a href="{{ post.get_absolute_url }}"
+                       class="block group">
+                        <h4 class="text-sm font-medium text-gray-900 group-hover:text-primary-600 transition-colors line-clamp-2">
+                            {{ post.title }}
+                        </h4>
+                        <div class="flex items-center space-x-2 text-xs text-gray-500 mt-1">
+                            <span>{{ post.publish_date|date:"M j" }}</span>
+                            <span>•</span>
+                            <span>{{ post.view_count }} views</span>
+                        </div>
+                    </a>
+                </li>
+            {% empty %}
+                <li class="text-gray-500 text-sm">No posts yet</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Popular Posts Section -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Popular Posts</h3>
+        <ul class="space-y-3">
+            {% get_popular_posts 5 as popular_posts %}
+            {% for post in popular_posts %}
+                <li>
+                    <a href="{{ post.get_absolute_url }}"
+                       class="block group">
+                        <h4 class="text-sm font-medium text-gray-900 group-hover:text-primary-600 transition-colors line-clamp-2">
+                            {{ post.title }}
+                        </h4>
+                        <div class="flex items-center space-x-2 text-xs text-gray-500 mt-1">
+                            <span>{{ post.view_count }} views</span>
+                        </div>
+                    </a>
+                </li>
+            {% empty %}
+                <li class="text-gray-500 text-sm">No popular posts yet</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Popular Tags Section -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Popular Tags</h3>
+        <div class="flex flex-wrap gap-2">
+            {% get_popular_tags 10 as popular_tags %}
+            {% for tag in popular_tags %}
+                <a href="{{ tag.get_absolute_url }}"
+                   class="inline-flex items-center px-3 py-1 rounded-full text-xs bg-gray-100 text-gray-700 hover:bg-primary-100 hover:text-primary-700 transition-colors">
+                    #{{ tag.name }}
+                </a>
+            {% empty %}
+                <span class="text-gray-500 text-sm">No tags yet</span>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Archive Section -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Archive</h3>
+        <ul class="space-y-2">
+            {% get_archive_months 6 as archive_months %}
+            {% for month in archive_months %}
+                <li>
+                    <a href="{% url 'blog:month_archive' year=month.year month=month.month %}"
+                       class="flex items-center justify-between text-gray-600 hover:text-primary-600 hover:bg-gray-50 px-3 py-2 rounded-md transition-colors">
+                        <span>{{ month|date:"F Y" }}</span>
+                        <span class="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded-full">
+                            {% get_post_count_by_month month.year month.month %}
+                        </span>
+                    </a>
+                </li>
+            {% empty %}
+                <li class="text-gray-500 text-sm">No archive data</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
