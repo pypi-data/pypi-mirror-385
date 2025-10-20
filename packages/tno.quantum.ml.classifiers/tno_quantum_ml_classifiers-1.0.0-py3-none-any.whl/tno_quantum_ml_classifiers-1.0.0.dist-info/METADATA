@@ -1,0 +1,58 @@
+Metadata-Version: 2.4
+Name: tno.quantum.ml.classifiers
+Version: 1.0.0
+Summary: Classifiers
+Author-email: TNO Quantum Code Lab <tnoquantum@tno.nl>
+Maintainer-email: TNO Quantum Code Lab <tnoquantum@tno.nl>
+License: Apache License, Version 2.0
+Project-URL: Homepage, https://github.com/TNO-Quantum/
+Project-URL: Documentation, https://github.com/TNO-Quantum/
+Project-URL: Source, https://github.com/TNO-Quantum/ml.classifiers
+Keywords: Quantum,TNO,Classifiers
+Platform: any
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Operating System :: OS Independent
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Information Technology
+Classifier: Intended Audience :: Science/Research
+Classifier: Typing :: Typed
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: tno.quantum.ml.classifiers.vc~=3.0
+Requires-Dist: tno.quantum.ml.classifiers.svm~=2.0
+Provides-Extra: tests
+Requires-Dist: pytest>=8.1.1; extra == "tests"
+Requires-Dist: pytest-cov>=4.1.0; extra == "tests"
+Requires-Dist: tomlkit; extra == "tests"
+Requires-Dist: tno.quantum.ml.classifiers.vc[tests]; extra == "tests"
+Requires-Dist: tno.quantum.ml.classifiers.svm[tests]; extra == "tests"
+Dynamic: license-file
+
+# TNO Quantum: ML - Classifiers
+
+TNO Quantum provides generic software components aimed at facilitating the development
+of quantum applications.
+
+This package provides macrolib for tno quantum classification algorithms.
+
+*Limitations in (end-)use: the content of this software package may solely be used for applications 
+that comply with international export control laws.*
+
+## Documentation
+
+Documentation of the `tno.quantum.ml.classifiers` package can be found [here](https://tno-quantum.github.io/documentation/).
+
+
+## Install
+
+Easily install the package using pip:
+
+```console
+$ python -m pip install tno.quantum.ml.classifiers
+```
