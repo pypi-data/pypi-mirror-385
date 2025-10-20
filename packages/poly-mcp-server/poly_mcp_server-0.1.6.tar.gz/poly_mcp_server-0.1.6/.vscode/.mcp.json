@@ -1,0 +1,46 @@
+{
+  "servers": {
+    "official-notion-mcp": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@notionhq/notion-mcp-server"
+      ],
+      "env": {
+        "NOTION_TOKEN": "ntn_b19411579791Jgov3kjhjlzW14ch96GMXYei2lx2aw05CX"
+      }
+    },
+    "playwright-automation": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp"
+      ]
+    },
+    "filesystem": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "D:/00.TFT",
+        "C:/Users/caden.lee/Downloads",
+        "D:/0.업무"
+      ],
+      "env": {
+        "LANG": "ko_KR.UTF-8",
+        "LC_ALL": "ko_KR.UTF-8"
+      }
+    },
+      "taskmaster": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-taskmaster"
+      ]
+    }
+  }
+}
