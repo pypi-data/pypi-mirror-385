@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "inlayr"
+dynamic = ["version"]
+description = "Modular, chain-agnostic SDK for crypto trading on DEXs"
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = ">=3.9"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+authors = [{ name = "Oleg Mitsik" }]
+keywords = ["blockchain", "defi", "aggregator", "solana", "ethereum"]
+classifiers = [
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Intended Audience :: Developers",
+  "Topic :: Software Development :: Libraries",
+  "Typing :: Typed"
+]
+dependencies = ["requests", "frozendict", "PyYAML"]
+
+[project.urls]
+Homepage = "https://github.com/OlegMitsik/inlayr"
+Repository = "https://github.com/OlegMitsik/inlayr"
+Issues = "https://github.com/OlegMitsik/inlayr/issues"
+
+[project.optional-dependencies]
+test = ["pytest", "pytest-cov"]
+solana = ["spl", "solana", "solders"]
+evm = ["web3", "eth_account"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+python_files = "test_*.py"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.package-data]
+"inlayr.utils" = ["defaults.yaml"]
+"inlayr" = ["py.typed"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["inlayr*"]
+
+[tool.setuptools.dynamic]
+version = { attr = "inlayr.__version__" }
