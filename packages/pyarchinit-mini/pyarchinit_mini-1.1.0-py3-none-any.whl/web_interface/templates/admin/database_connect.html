@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+
+{% block title %}Connetti Database{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fas fa-plug"></i> Connetti Database</h2>
+        <a href="{{ url_for('admin_database') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Indietro
+        </a>
+    </div>
+
+    <!-- Info Card -->
+    <div class="alert alert-info mb-4">
+        <h5><i class="fas fa-info-circle"></i> Informazioni</h5>
+        <p class="mb-0">
+            Connetti a un database PostgreSQL remoto o a un file SQLite locale.
+            La connessione viene testata prima di essere salvata.
+        </p>
+    </div>
+
+    <!-- Connection Form -->
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Configurazione Connessione</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" id="connectionForm">
+                        {{ form.hidden_tag() }}
+
+                        <!-- Connection Name -->
+                        <div class="mb-3">
+                            {{ form.connection_name.label(class="form-label") }}
+                            <span class="text-danger">*</span>
+                            {{ form.connection_name(class="form-control", placeholder="Es: PostgreSQL Produzione") }}
+                            {% if form.connection_name.description %}
+                            <small class="form-text text-muted">
+                                <i class="fas fa-question-circle"></i> {{ form.connection_name.description }}
+                            </small>
+                            {% endif %}
+                        </div>
+
+                        <!-- Database Type -->
+                        <div class="mb-3">
+                            {{ form.db_type.label(class="form-label") }}
+                            <span class="text-danger">*</span>
+                            {{ form.db_type(class="form-select", onchange="toggleFields()") }}
+                        </div>
+
+                        <hr class="my-4">
+
+                        <!-- PostgreSQL Fields -->
+                        <div id="postgresqlFields">
+                            <h6 class="text-success mb-3">
+                                <i class="fas fa-server"></i> Configurazione PostgreSQL
+                            </h6>
+
+                            <div class="row">
+                                <div class="col-md-8 mb-3">
+                                    {{ form.host.label(class="form-label") }}
+                                    {{ form.host(class="form-control", placeholder="localhost") }}
+                                    {% if form.host.description %}
+                                    <small class="form-text text-muted">{{ form.host.description }}</small>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    {{ form.port.label(class="form-label") }}
+                                    {{ form.port(class="form-control", placeholder="5432") }}
+                                    {% if form.port.description %}
+                                    <small class="form-text text-muted">{{ form.port.description }}</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                {{ form.database.label(class="form-label") }}
+                                <span class="text-danger">*</span>
+                                {{ form.database(class="form-control", placeholder="pyarchinit") }}
+                            </div>
+
+                            <div class="mb-3">
+                                {{ form.username.label(class="form-label") }}
+                                {{ form.username(class="form-control", placeholder="postgres") }}
+                            </div>
+
+                            <div class="mb-3">
+                                {{ form.password.label(class="form-label") }}
+                                <input type="password" name="password" class="form-control" placeholder="••••••••">
+                                <small class="form-text text-muted">
+                                    <i class="fas fa-lock"></i> La password non viene salvata in chiaro
+                                </small>
+                            </div>
+                        </div>
+
+                        <!-- SQLite Fields -->
+                        <div id="sqliteFields" style="display: none;">
+                            <h6 class="text-info mb-3">
+                                <i class="fas fa-file-alt"></i> Configurazione SQLite
+                            </h6>
+
+                            <div class="mb-3">
+                                {{ form.sqlite_path.label(class="form-label") }}
+                                {{ form.sqlite_path(class="form-control", placeholder="/percorso/completo/al/database.db") }}
+                                {% if form.sqlite_path.description %}
+                                <small class="form-text text-muted">{{ form.sqlite_path.description }}</small>
+                                {% endif %}
+                            </div>
+
+                            <div class="alert alert-warning">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <strong>Nota:</strong> Il percorso deve essere accessibile dal server.
+                                Per caricare un file dal tuo computer, usa "Carica Database SQLite".
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-plug"></i> Testa e Salva Connessione
+                            </button>
+                            <a href="{{ url_for('admin_database') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times"></i> Annulla
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Section -->
+    <div class="row mt-4">
+        <div class="col-md-8 offset-md-2">
+            <div class="card border-info">
+                <div class="card-header bg-info text-white">
+                    <h6 class="mb-0"><i class="fas fa-lightbulb"></i> Esempi di Connessione</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-success"><i class="fas fa-server"></i> PostgreSQL Locale</h6>
+                            <pre class="small bg-light p-2 rounded">Host: localhost
+Porta: 5432
+Database: pyarchinit
+Username: postgres
+Password: ••••••••</pre>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-info"><i class="fas fa-file-alt"></i> SQLite Locale</h6>
+                            <pre class="small bg-light p-2 rounded">Percorso:
+/home/user/databases/pyarchinit.db
+
+oppure:
+
+/var/lib/pyarchinit/data.db</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleFields() {
+    const dbType = document.getElementById('db_type').value;
+    const postgresqlFields = document.getElementById('postgresqlFields');
+    const sqliteFields = document.getElementById('sqliteFields');
+
+    if (dbType === 'postgresql') {
+        postgresqlFields.style.display = 'block';
+        sqliteFields.style.display = 'none';
+    } else {
+        postgresqlFields.style.display = 'none';
+        sqliteFields.style.display = 'block';
+    }
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    toggleFields();
+});
+</script>
+
+{% endblock %}
