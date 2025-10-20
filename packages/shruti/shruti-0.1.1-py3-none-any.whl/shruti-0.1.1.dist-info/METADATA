@@ -1,0 +1,62 @@
+Metadata-Version: 2.3
+Name: shruti
+Version: 0.1.1
+Summary: Indic Conformer ASR Lib
+Author: dummyjenil
+Author-email: dummyjenil <dummyjenil@gmail.com>
+Requires-Dist: transformers
+Requires-Dist: sentencepiece
+Requires-Dist: torchaudio
+Requires-Dist: torchcodec
+Requires-Dist: onnx
+Requires-Dist: ruamel-yaml
+Requires-Dist: text-unidecode
+Requires-Dist: triton
+Requires-Dist: wget
+Requires-Dist: braceexpand
+Requires-Dist: editdistance
+Requires-Dist: g2p-en
+Requires-Dist: jiwer
+Requires-Dist: kaldi-python-io
+Requires-Dist: kaldiio
+Requires-Dist: lhotse
+Requires-Dist: pyannote-core
+Requires-Dist: pyannote-metrics
+Requires-Dist: pyloudnorm
+Requires-Dist: resampy
+Requires-Dist: ruamel-yaml
+Requires-Dist: sox
+Requires-Dist: texterrors
+Requires-Dist: huggingface-hub
+Requires-Dist: numba
+Requires-Dist: numpy
+Requires-Dist: python-dateutil
+Requires-Dist: scikit-learn
+Requires-Dist: setuptools
+Requires-Dist: tensorboard
+Requires-Dist: torch
+Requires-Dist: tqdm
+Requires-Dist: wrapt
+Requires-Dist: ipywidgets
+Requires-Dist: librosa
+Requires-Dist: marshmallow
+Requires-Dist: matplotlib
+Requires-Dist: packaging
+Requires-Dist: pydub
+Requires-Dist: scipy
+Requires-Dist: soundfile
+Requires-Dist: webdataset
+Requires-Dist: pytorch-lightning
+Requires-Dist: hydra-core
+Requires-Dist: webrtcvad
+Requires-Dist: srt
+Description-Content-Type: text/markdown
+
+# Shruti
+
+```python
+import gradio as gr
+from shruti import ShrutiASR
+asr = ShrutiASR()
+gr.Interface(asr,[gr.Audio(type="filepath"),gr.Dropdown(['sentence', 'char', 'word'],value="word"),gr.Dropdown(asr.language),gr.Slider(1,16,4,step=1)],gr.TextArea()).launch()
+```
