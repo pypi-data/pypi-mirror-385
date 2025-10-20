@@ -1,0 +1,47 @@
+Metadata-Version: 2.4
+Name: langchain-isaacus
+Version: 0.1.0
+Summary: An integration package connecting Isaacus and LangChain
+License: MIT
+License-File: LICENSE
+Requires-Python: >=3.9,<4.0
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Requires-Dist: isaacus (>=0.9.0,<0.10.0)
+Requires-Dist: langchain-core (>=0.3.15,<0.4.0)
+Project-URL: Repository, https://github.com/langchain-ai/langchain
+Project-URL: Release Notes, https://github.com/langchain-ai/langchain/releases?q=tag%3A%22isaacus%3D%3D0%22&expanded=true
+Project-URL: Source Code, https://github.com/langchain-ai/langchain/tree/master/libs/partners/isaacus
+Description-Content-Type: text/markdown
+
+# langchain-isaacus
+
+This package contains the LangChain integration for the [Isaacus](https://isaacus.com) legal API.
+
+## Installation
+
+```bash
+pip install -U langchain-isaacus
+```
+
+And you should configure credentials by setting the following environment variables:
+
+- `ISAACUS_API_KEY`: Your Isaacus API key. You can get your API key by following the [Isaacus API quickstart guide](https://docs.isaacus.com/quickstart#1-set-up-your-account) and, in particular, joining the [Isaacus Platform](https://platform.isaacus.com/accounts/signup/).
+
+## Embeddings
+
+`IsaacusEmbeddings` class exposes embeddings from Isaacus.
+
+```python
+from langchain_isaacus import IsaacusEmbeddings
+
+embeddings = IsaacusEmbeddings()
+embeddings.embed_query("What is the meaning of life?")
+```
+
