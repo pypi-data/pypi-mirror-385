@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c \"from ezdb.database import RDBMSDatabase; db = RDBMSDatabase(''test_pypi_rdbms''); db.execute(''CREATE TABLE users (id NUMBER, name VARCHAR2(100))''); db.execute(''INSERT INTO users VALUES (1, \\''Alice\\'')''); result = db.execute(''SELECT * FROM users''); print(''✓ RDBMS operations work!''); print(f''Result: {result}'')\")",
+      "Bash(python -c \"from ezdb import EzDB; db = EzDB(dimension=128); db.insert(''test'', {''text'': ''Hello from PyPI!''}); print(''✓ EzDB vector database works!''); print(''✓ Package successfully installed and functional from PyPI!'')\")"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
