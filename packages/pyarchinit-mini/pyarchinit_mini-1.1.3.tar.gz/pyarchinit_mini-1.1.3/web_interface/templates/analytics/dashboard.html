@@ -1,0 +1,414 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics Dashboard - PyArchInit-Mini{% endblock %}
+
+{% block extra_css %}
+<style>
+    .chart-container {
+        position: relative;
+        height: 400px;
+        margin-bottom: 30px;
+    }
+
+    .chart-card {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 30px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .chart-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: #2E86AB;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .stat-box {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin: 10px 0;
+    }
+
+    .stat-label {
+        font-size: 0.9rem;
+        opacity: 0.9;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="mb-4">
+        <i class="fas fa-chart-bar"></i> Dashboard Analytics
+    </h1>
+
+    <!-- Overview Statistics -->
+    <div class="stats-grid">
+        <div class="stat-box">
+            <div class="stat-label">Siti Totali</div>
+            <div class="stat-number">{{ data.overview.total_sites }}</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-label">US Totali</div>
+            <div class="stat-number">{{ data.overview.total_us }}</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-label">Reperti Totali</div>
+            <div class="stat-number">{{ data.overview.total_inventario }}</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-label">Regioni</div>
+            <div class="stat-number">{{ data.overview.total_regions }}</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-label">Province</div>
+            <div class="stat-number">{{ data.overview.total_provinces }}</div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Sites by Region -->
+        <div class="col-md-6">
+            <div class="chart-card">
+                <div class="chart-title">
+                    <i class="fas fa-map-marked-alt"></i> Siti per Regione
+                </div>
+                <div class="chart-container">
+                    <canvas id="sitesByRegionChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sites by Province -->
+        <div class="col-md-6">
+            <div class="chart-card">
+                <div class="chart-title">
+                    <i class="fas fa-city"></i> Siti per Provincia (Top 10)
+                </div>
+                <div class="chart-container">
+                    <canvas id="sitesByProvinceChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- US by Period -->
+        <div class="col-md-6">
+            <div class="chart-card">
+                <div class="chart-title">
+                    <i class="fas fa-clock"></i> US per Periodo Cronologico
+                </div>
+                <div class="chart-container">
+                    <canvas id="usByPeriodChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- US by Type -->
+        <div class="col-md-6">
+            <div class="chart-card">
+                <div class="chart-title">
+                    <i class="fas fa-layer-group"></i> US per Tipologia
+                </div>
+                <div class="chart-container">
+                    <canvas id="usByTypeChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inventario by Type -->
+        <div class="col-md-6">
+            <div class="chart-card">
+                <div class="chart-title">
+                    <i class="fas fa-archive"></i> Reperti per Tipologia (Top 10)
+                </div>
+                <div class="chart-container">
+                    <canvas id="inventarioByTypeChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inventario by Conservation -->
+        <div class="col-md-6">
+            <div class="chart-card">
+                <div class="chart-title">
+                    <i class="fas fa-heartbeat"></i> Reperti per Stato di Conservazione
+                </div>
+                <div class="chart-container">
+                    <canvas id="inventarioByConservationChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- US by Site -->
+        <div class="col-md-6">
+            <div class="chart-card">
+                <div class="chart-title">
+                    <i class="fas fa-sitemap"></i> US per Sito (Top 10)
+                </div>
+                <div class="chart-container">
+                    <canvas id="usBySiteChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inventario by Site -->
+        <div class="col-md-6">
+            <div class="chart-card">
+                <div class="chart-title">
+                    <i class="fas fa-boxes"></i> Reperti per Sito (Top 10)
+                </div>
+                <div class="chart-container">
+                    <canvas id="inventarioBySiteChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<script>
+    // Prepare data from backend
+    const analyticsData = {{ data|tojson|safe }};
+
+    // Color palettes
+    const colors = {
+        primary: ['#2E86AB', '#A23B72', '#F18F01', '#C73E1D', '#6A994E', '#BC4B51', '#5B8E7D', '#8B5A3C', '#6D597A', '#B56576'],
+        background: ['rgba(46, 134, 171, 0.2)', 'rgba(162, 59, 114, 0.2)', 'rgba(241, 143, 1, 0.2)',
+                     'rgba(199, 62, 29, 0.2)', 'rgba(106, 153, 78, 0.2)', 'rgba(188, 75, 81, 0.2)',
+                     'rgba(91, 142, 125, 0.2)', 'rgba(139, 90, 60, 0.2)', 'rgba(109, 89, 122, 0.2)',
+                     'rgba(181, 101, 118, 0.2)']
+    };
+
+    // Common chart options
+    const commonOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            }
+        }
+    };
+
+    // Sites by Region - Pie Chart
+    if (Object.keys(analyticsData.sites_by_region).length > 0) {
+        new Chart(document.getElementById('sitesByRegionChart'), {
+            type: 'pie',
+            data: {
+                labels: Object.keys(analyticsData.sites_by_region),
+                datasets: [{
+                    data: Object.values(analyticsData.sites_by_region),
+                    backgroundColor: colors.background,
+                    borderColor: colors.primary,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                ...commonOptions,
+                plugins: {
+                    ...commonOptions.plugins,
+                    title: {
+                        display: false
+                    }
+                }
+            }
+        });
+    }
+
+    // Sites by Province - Bar Chart
+    if (Object.keys(analyticsData.sites_by_province).length > 0) {
+        new Chart(document.getElementById('sitesByProvinceChart'), {
+            type: 'bar',
+            data: {
+                labels: Object.keys(analyticsData.sites_by_province),
+                datasets: [{
+                    label: 'Numero Siti',
+                    data: Object.values(analyticsData.sites_by_province),
+                    backgroundColor: colors.background[0],
+                    borderColor: colors.primary[0],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                ...commonOptions,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // US by Period - Horizontal Bar Chart
+    if (Object.keys(analyticsData.us_by_period).length > 0) {
+        new Chart(document.getElementById('usByPeriodChart'), {
+            type: 'bar',
+            data: {
+                labels: Object.keys(analyticsData.us_by_period),
+                datasets: [{
+                    label: 'Numero US',
+                    data: Object.values(analyticsData.us_by_period),
+                    backgroundColor: colors.background[1],
+                    borderColor: colors.primary[1],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                ...commonOptions,
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // US by Type - Doughnut Chart
+    if (Object.keys(analyticsData.us_by_type).length > 0) {
+        new Chart(document.getElementById('usByTypeChart'), {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(analyticsData.us_by_type),
+                datasets: [{
+                    data: Object.values(analyticsData.us_by_type),
+                    backgroundColor: colors.background,
+                    borderColor: colors.primary,
+                    borderWidth: 1
+                }]
+            },
+            options: commonOptions
+        });
+    }
+
+    // Inventario by Type - Bar Chart
+    if (Object.keys(analyticsData.inventario_by_type).length > 0) {
+        new Chart(document.getElementById('inventarioByTypeChart'), {
+            type: 'bar',
+            data: {
+                labels: Object.keys(analyticsData.inventario_by_type),
+                datasets: [{
+                    label: 'Numero Reperti',
+                    data: Object.values(analyticsData.inventario_by_type),
+                    backgroundColor: colors.background[2],
+                    borderColor: colors.primary[2],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                ...commonOptions,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Inventario by Conservation - Pie Chart
+    if (Object.keys(analyticsData.inventario_by_conservation).length > 0) {
+        new Chart(document.getElementById('inventarioByConservationChart'), {
+            type: 'pie',
+            data: {
+                labels: Object.keys(analyticsData.inventario_by_conservation),
+                datasets: [{
+                    data: Object.values(analyticsData.inventario_by_conservation),
+                    backgroundColor: colors.background,
+                    borderColor: colors.primary,
+                    borderWidth: 1
+                }]
+            },
+            options: commonOptions
+        });
+    }
+
+    // US by Site - Bar Chart
+    if (Object.keys(analyticsData.us_by_site).length > 0) {
+        new Chart(document.getElementById('usBySiteChart'), {
+            type: 'bar',
+            data: {
+                labels: Object.keys(analyticsData.us_by_site),
+                datasets: [{
+                    label: 'Numero US',
+                    data: Object.values(analyticsData.us_by_site),
+                    backgroundColor: colors.background[3],
+                    borderColor: colors.primary[3],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                ...commonOptions,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Inventario by Site - Bar Chart
+    if (Object.keys(analyticsData.inventario_by_site).length > 0) {
+        new Chart(document.getElementById('inventarioBySiteChart'), {
+            type: 'bar',
+            data: {
+                labels: Object.keys(analyticsData.inventario_by_site),
+                datasets: [{
+                    label: 'Numero Reperti',
+                    data: Object.values(analyticsData.inventario_by_site),
+                    backgroundColor: colors.background[4],
+                    borderColor: colors.primary[4],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                ...commonOptions,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    }
+</script>
+{% endblock %}

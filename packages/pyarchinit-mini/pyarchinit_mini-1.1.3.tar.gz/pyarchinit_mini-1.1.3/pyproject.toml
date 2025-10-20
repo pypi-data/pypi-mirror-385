@@ -1,0 +1,215 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyarchinit-mini"
+version = "1.1.3"
+description = "Lightweight archaeological data management system with REST API, Web UI, Desktop GUI, CLI, multi-user authentication, real-time collaboration, and analytics dashboard"
+readme = "README.md"
+license = {text = "GPL-2.0"}
+authors = [
+    {name = "PyArchInit Team", email = "enzo.ccc@gmail.com"},
+]
+keywords = [
+    "archaeology",
+    "archaeological data",
+    "heritage",
+    "cultural heritage",
+    "database",
+    "api",
+    "stratigraphy",
+    "excavation",
+    "harris matrix",
+    "finds inventory"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: GIS",
+    "Topic :: Database :: Database Engines/Servers",
+    "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Operating System :: OS Independent",
+    "Framework :: FastAPI",
+]
+requires-python = ">=3.8,<3.15"
+# Core dependencies - API only
+dependencies = [
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.24.0",
+    "sqlalchemy>=2.0.0",
+    "psycopg2-binary>=2.9.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    "python-multipart>=0.0.6",
+    "alembic>=1.12.0",
+    "networkx>=3.0.0",
+    "reportlab>=4.0.0",
+    "pillow>=10.0.0",
+]
+
+[project.optional-dependencies]
+# CLI interface dependencies
+cli = [
+    "click>=8.1.0",
+    "rich>=13.0.0",
+    "inquirer>=3.0.0",
+]
+# Web interface dependencies
+web = [
+    "flask>=3.0.0",
+    "flask-wtf>=1.2.0",
+    "wtforms>=3.1.0",
+    "jinja2>=3.1.0",
+    "flask-socketio>=5.3.0",
+    "python-socketio>=5.10.0",
+]
+# Desktop GUI dependencies (tkinter is stdlib, no external deps needed)
+gui = [
+    "pillow>=10.0.0",
+]
+# Full Harris Matrix visualization
+harris = [
+    "matplotlib>=3.7.0",
+    "graphviz>=0.20.0",
+]
+# PDF export with advanced features
+pdf = [
+    "weasyprint>=60.0.0",
+]
+# Media processing
+media = [
+    "python-magic>=0.4.0",
+    "moviepy>=1.0.0",
+]
+# Excel/CSV export and import
+export = [
+    "pandas>=2.0.0",
+    "openpyxl>=3.1.0",
+]
+# Authentication and authorization
+auth = [
+    "passlib>=1.7.4",
+    "bcrypt>=4.0.0,<4.1.0",  # pinned for passlib compatibility
+    "python-jose[cryptography]>=3.3.0",
+    "flask-login>=0.6.3",
+]
+# All interfaces
+all = [
+    "click>=8.1.0",
+    "rich>=13.0.0",
+    "inquirer>=3.0.0",
+    "flask>=3.0.0",
+    "flask-wtf>=1.2.0",
+    "wtforms>=3.1.0",
+    "jinja2>=3.1.0",
+    "flask-socketio>=5.3.0",
+    "python-socketio>=5.10.0",
+    "matplotlib>=3.7.0",
+    "graphviz>=0.20.0",
+    "weasyprint>=60.0.0",
+    "python-magic>=0.4.0",
+    "moviepy>=1.0.0",
+    "pandas>=2.0.0",
+    "openpyxl>=3.1.0",
+    "passlib>=1.7.4",
+    "bcrypt>=4.0.0,<4.1.0",
+    "python-jose[cryptography]>=3.3.0",
+    "flask-login>=0.6.3",
+]
+# Development dependencies
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.0.0",
+    "httpx>=0.25.0",
+    "black>=23.0.0",
+    "flake8>=6.0.0",
+    "isort>=5.12.0",
+    "mypy>=1.0.0",
+]
+# Documentation
+docs = [
+    "sphinx>=6.0.0",
+    "sphinx-rtd-theme>=1.2.0",
+    "myst-parser>=1.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/enzococca/pyarchinit-mini"
+Documentation = "https://github.com/enzococca/pyarchinit-mini/blob/main/README.md"
+Repository = "https://github.com/enzococca/pyarchinit-mini"
+"Bug Tracker" = "https://github.com/enzococca/pyarchinit-mini/issues"
+
+[project.scripts]
+pyarchinit-mini = "pyarchinit_mini.cli_interface.cli_app:main"
+pyarchinit-mini-api = "pyarchinit_mini.api:run_server"
+pyarchinit-mini-web = "pyarchinit_mini.web_interface.app:main"
+pyarchinit-mini-gui = "pyarchinit_mini.desktop_gui.gui_app:main"
+pyarchinit-mini-setup = "pyarchinit_mini.scripts.setup_user_env:main"
+pyarchinit-export-import = "pyarchinit_mini.cli.export_import_cli:export_import"
+pyarchinit-graphml = "pyarchinit_mini.cli.graphml_cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["pyarchinit_mini*", "cli_interface*", "web_interface*", "desktop_gui*", "tests*"]
+exclude = ["docs*", "examples*"]
+
+[tool.setuptools.package-data]
+pyarchinit_mini = ["*.yaml", "*.yml", "*.json", "data/*.db", "data/*.sql", "graphml_converter/templates/*.graphml"]
+web_interface = ["templates/*.html", "templates/**/*.html", "static/**/*"]
+cli_interface = ["*.json", "*.yaml"]
+desktop_gui = ["*.png", "*.ico", "*.gif"]
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
