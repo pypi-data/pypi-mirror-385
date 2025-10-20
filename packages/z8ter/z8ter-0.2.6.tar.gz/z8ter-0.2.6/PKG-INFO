@@ -1,0 +1,190 @@
+Metadata-Version: 2.4
+Name: z8ter
+Version: 0.2.6
+Summary: Lightweight full-stack async Python web framework built on Starlette designed for rapid development without compromising in UX
+Author-email: Ashesh Nepal <nepalashesh8@gmail.com>
+License: MIT License
+        
+        Copyright (c) 2025 Ashesh Nepal
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+Project-URL: Homepage, https://github.com/ashesh808/Z8ter
+Project-URL: Issues, https://github.com/ashesh808/Z8ter/issues
+Keywords: starlette,asgi,framework,uvicorn
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Framework :: AsyncIO
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: starlette<1.0,>=0.36
+Requires-Dist: jinja2<4,>=3.1
+Requires-Dist: itsdangerous<3,>=2.1
+Requires-Dist: uvicorn<1.0,>=0.30
+Requires-Dist: rich<14,>=13.7
+Provides-Extra: server
+Requires-Dist: uvicorn[standard]<1.0,>=0.30; extra == "server"
+Requires-Dist: rich<14,>=13.7; extra == "server"
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: pytest-asyncio; extra == "dev"
+Requires-Dist: ruff; extra == "dev"
+Requires-Dist: mypy; extra == "dev"
+Requires-Dist: build; extra == "dev"
+Requires-Dist: twine; extra == "dev"
+Provides-Extra: auth
+Requires-Dist: z8ter-auth>=0.1.0; extra == "auth"
+Dynamic: license-file
+
+# Z8ter
+
+**Z8ter** is a lightweight, **async Python web framework** built on **Starlette**, designed for rapid development **without compromising UX**. It combines **SSR-first rendering**, **auto-discovered routes**, **auth scaffolding**, and **CLI tooling** into one cohesive developer experience.
+
+---
+
+> ⚠️ **Status: Public Alpha** — Z8ter is under active development and **not yet recommended for production**. APIs and module paths may change without notice.
+
+---
+
+## Quickstart
+
+```bash
+z8 new myapp
+cd myapp
+python3 -m venv venv
+source venv/bin/activate  # Windows: .\.venv\Scripts\activate
+pip install -r requirements.txt
+z8 run dev
+```
+
+---
+
+## Features
+
+1. **File-based routing** — Files under `views/` map to routes automatically, each paired with a Jinja template and optional Python logic.
+2. **SSR + Islands** — Server-side rendering by default, with per-page JS “islands” in `static/js/pages/<page_id>.js` for interactivity.
+3. **Decorator-driven APIs** — Define class-based APIs using decorators; auto-mounted under `/api/<id>`.
+4. **Auth & Guards** — Session middleware, Argon2 password hashing, and decorators like `@login_required` for route protection.
+5. **Composed Builder** — `AppBuilder` wires config, templating, Vite, sessions, and error handling in a predictable order.
+6. **CLI Tooling** — Scaffold apps, views, and APIs with `z8 new`, `z8 create_page`, `z8 create_api`; serve with `z8 run dev`.
+7. **React, DaisyUI, Tailwind Ready** — Ships with modern frontend defaults for seamless full-stack workflows.
+
+---
+
+## Installation
+
+```bash
+pip install z8ter
+```
+
+---
+
+## Authentication Example
+
+```python
+from z8ter.endpoints.view import View
+from z8ter.auth.guards import login_required
+
+class Dashboard(View):
+    @login_required
+    async def get(self, request):
+        return self.render(request, "dashboard.jinja")
+```
+
+---
+
+## AppBuilder Example
+
+```python
+from z8ter.builders.app_builder import AppBuilder
+from myapp.repos import MySessionRepo, MyUserRepo
+
+builder = AppBuilder()
+builder.use_config(".env")
+builder.use_templating()
+builder.use_vite()
+builder.use_app_sessions(secret_key="supersecret")
+builder.use_auth_repos(session_repo=MySessionRepo(), user_repo=MyUserRepo())
+builder.use_authentication()
+builder.use_errors()
+
+app = builder.build(debug=True)
+```
+
+---
+
+## Module Overview
+
+| Module                             | Purpose                                                                            |
+| ---------------------------------- | ---------------------------------------------------------------------------------- |
+| **`z8ter.auth`**                   | Auth contracts, Argon2 crypto, guards, and session middleware                      |
+| **`z8ter.builders`**               | `AppBuilder` and composable setup steps for config, templating, vite, auth, errors |
+| **`z8ter.cli`**                    | CLI entrypoints: `new`, `create_page`, `create_api`, and `run dev`                 |
+| **`z8ter.endpoints`**              | Base `API` and `View` classes for SSR and REST endpoints                           |
+| **`z8ter.route_builders`**         | Discovers SSR and API routes from filesystem                                       |
+| **`z8ter.responses` / `requests`** | Wrappers around Starlette primitives                                               |
+| **`z8ter.logging_utils`**          | Rich logging with `CancelledError` suppression                                     |
+| **`z8ter.errors`**                 | Centralized 404/500 error handling                                                 |
+| **`z8ter.vite`**                   | Dev/prod script tag helpers for Vite asset loading                                 |
+| **`z8ter.config`**                 | Config loader with `BASE_DIR` and Starlette settings                               |
+| **`z8ter.core`**                   | Lightweight ASGI wrapper around Starlette                                          |
+
+---
+
+## Framework Architecture
+
+**Backend Flow**
+
+- `route_builders` walks your project structure to register SSR `View` classes and API mounts.
+- `View.render()` merges `content/*.yaml` data into Jinja templates, injecting `page_id` for client hydration.
+- `API.endpoint()` decorators map handlers into Starlette routes automatically.
+- Auth pipeline: `middleware → guards → session manager` ensures secure user sessions.
+- Unified error and response modules abstract Starlette internals.
+
+**Frontend Pipeline**
+
+- `src/ts/app.ts` bootstraps JS “islands” using `data-page` attributes.
+- Solid.js components (e.g. `z8-clock.tsx`) render inline via `solid-element` (no shadow DOM).
+- `vite.config.ts` compiles and writes manifest under `/static/js/.vite`.
+- `z8ter/vite.py` injects dev or manifest-based `<script>` tags dynamically.
+- Tailwind and DaisyUI ship preconfigured for cohesive UI design.
+
+**CLI & Scaffolding**
+
+- `z8 new` → initializes a full project tree (safe for wheel installs).
+- `z8 create_page` / `create_api` → generate views, content YAML, and JS islands.
+- `z8 run dev` → launches Uvicorn with rich logging and live reload.
+
+---
+
+## Philosophy
+
+> “Small surface area, sharp tools.”
+
+- **SSR-first** with optional client interactivity
+- **Conventions over configuration**
+- **Predictable lifecycle**: builder → routes → middleware → templates
+- **Full-stack parity** between Python and JS layers
