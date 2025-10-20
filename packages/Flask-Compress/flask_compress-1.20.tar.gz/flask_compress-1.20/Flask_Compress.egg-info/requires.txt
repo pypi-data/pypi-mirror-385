@@ -1,0 +1,10 @@
+flask
+
+[:platform_python_implementation != "PyPy"]
+brotli
+
+[:platform_python_implementation == "PyPy"]
+brotlicffi
+
+[:python_version < "3.14"]
+backports.zstd
