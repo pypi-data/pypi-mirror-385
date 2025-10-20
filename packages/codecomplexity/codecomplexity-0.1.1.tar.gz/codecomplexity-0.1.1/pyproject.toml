@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "codecomplexity"
+dynamic = ["version"]
+description = "A simple code complexity analyzer for Python"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "Ayaan Bandey", email = "ayaanniaz@gmail.com"}
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Quality Assurance",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+[project.scripts]
+codecomplexity = "codecomplexity.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/ayaanniaz/codecomplexity"
+"Bug Tracker" = "https://github.com/ayaanniaz/codecomplexity/issues"
+
+[tool.setuptools.dynamic]
+version = {attr = "codecomplexity.__version__"}
