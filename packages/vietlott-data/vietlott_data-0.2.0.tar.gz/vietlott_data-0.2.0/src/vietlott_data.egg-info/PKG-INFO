@@ -1,0 +1,31 @@
+Metadata-Version: 2.4
+Name: vietlott-data
+Version: 0.2.0
+Summary: crawl & store vietlott data
+Author-email: Viet Vu <vietvudanh@gmail.com>
+License: MIT
+Project-URL: Homepage, https://github.com/vietvudanh/vietlott-data
+Project-URL: Issues, https://github.com/vietvudanh/vietlott-data/issues
+Requires-Python: <3.14,>=3.11
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: bs4
+Requires-Dist: polars
+Requires-Dist: pyarrow
+Requires-Dist: lxml
+Requires-Dist: attrs
+Requires-Dist: cattrs
+Requires-Dist: click
+Requires-Dist: pendulum
+Requires-Dist: requests
+Requires-Dist: tabulate
+Requires-Dist: loguru
+Requires-Dist: pandas
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: ruff; extra == "dev"
+Requires-Dist: build; extra == "dev"
+Requires-Dist: setuptools; extra == "dev"
+Requires-Dist: wheel; extra == "dev"
+Requires-Dist: twine; extra == "dev"
+Dynamic: license-file
