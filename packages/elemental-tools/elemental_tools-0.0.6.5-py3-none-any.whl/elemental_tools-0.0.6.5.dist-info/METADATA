@@ -1,0 +1,438 @@
+Metadata-Version: 2.4
+Name: elemental-tools
+Version: 0.0.6.5
+Summary: A Collection of Utilities. Not even can be described.
+Home-page: https://github.com/tomneto
+Author: Elemental Tools - Tom Neto
+Author-email: Tom Neto <antonioandriettineto@gmail.com>
+License: MIT License
+        
+        Copyright (c) 2025 Antonio Andrietti Neto
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: Homepage, https://github.com/yourusername/example-package
+Project-URL: Documentation, https://example-package.readthedocs.io
+Project-URL: Repository, https://github.com/yourusername/example-package
+Project-URL: Issues, https://github.com/yourusername/example-package/issues
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: google-api-core
+Requires-Dist: google-api-python-client
+Requires-Dist: google-auth
+Requires-Dist: google-auth-httplib2
+Requires-Dist: google-auth-oauthlib
+Requires-Dist: googleapis-common-protos
+Requires-Dist: gspread_formatting
+Requires-Dist: pillow
+Requires-Dist: imagehash
+Requires-Dist: python-Levenshtein
+Requires-Dist: fuzzywuzzy
+Requires-Dist: langdetect
+Requires-Dist: deep_translator
+Requires-Dist: nltk
+Requires-Dist: pydantic[email]
+Requires-Dist: SpeechRecognition
+Requires-Dist: icecream
+Requires-Dist: spacy
+Requires-Dist: selenium
+Requires-Dist: pymongo
+Requires-Dist: python-dotenv
+Requires-Dist: annotated-types
+Requires-Dist: antiorm
+Requires-Dist: anyio
+Requires-Dist: attrs
+Requires-Dist: certifi
+Requires-Dist: charset-normalizer
+Requires-Dist: click
+Requires-Dist: cloudant
+Requires-Dist: exceptiongroup
+Requires-Dist: fastapi
+Requires-Dist: greenlet
+Requires-Dist: h11
+Requires-Dist: idna
+Requires-Dist: numpy
+Requires-Dist: outcome
+Requires-Dist: packaging
+Requires-Dist: pandas
+Requires-Dist: pip
+Requires-Dist: playwright
+Requires-Dist: pydantic-core
+Requires-Dist: pydantic
+Requires-Dist: pyee
+Requires-Dist: PySocks
+Requires-Dist: python-dateutil
+Requires-Dist: python-dotenv
+Requires-Dist: pytz
+Requires-Dist: requests
+Requires-Dist: selenium
+Requires-Dist: setuptools
+Requires-Dist: six
+Requires-Dist: sniffio
+Requires-Dist: sortedcontainers
+Requires-Dist: trio-websocket
+Requires-Dist: trio
+Requires-Dist: typing-extensions
+Requires-Dist: tzdata
+Requires-Dist: urllib3
+Requires-Dist: uvicorn
+Requires-Dist: webdriver-manager
+Requires-Dist: wheel
+Requires-Dist: wsproto
+Requires-Dist: google-api-python-client
+Requires-Dist: google-auth-httplib2
+Requires-Dist: google-auth-oauthlib
+Requires-Dist: ffmpeg
+Requires-Dist: gtts
+Requires-Dist: pydub
+Requires-Dist: translate
+Requires-Dist: html2text
+Requires-Dist: pyttsx3>=2.99
+Requires-Dist: pygls>=2.0.0
+Dynamic: author
+Dynamic: home-page
+Dynamic: license-file
+
+# Elemental Tools
+## Here you can find a lot of useful tools for designers and developers.
+
+
+## Install guide:
+````
+pip install elemental_tools
+````
+
+
+<h1>
+API
+</h1>
+
+<h2>
+Installation
+</h2>
+
+<p>
+In order to install and configure the API and the Database, please use the CLI tools as described below:</p>
+
+<br>
+<h3>
+Generate Environment File
+</h3>
+
+```
+elemental -generate_env -name "Your Company Name"
+```
+
+Now you have to configure the self generated .env to allow access to your database. And activate the tools that you want.
+
+<br>
+<h3>
+Generate Python Files
+</h3>
+
+```
+elemental -g_api -path "/path/to/output"
+```
+
+
+<br>
+<h3>
+Database Installation
+</h3>
+
+After this, you can run the database instructions with the CLI command:
+
+```
+elemental -i -e "path/to/.env"
+```
+
+Now your database and API are configured, but you're still missing the basic project structure.
+
+
+
+<h2>
+Extra CLI Commands
+</h2>
+<br>
+<h3>
+Docker Instance
+</h3>
+
+If you're going to run it on a docker container, you can use the command below to make it faster and simple.
+
+```
+elemental -docker -name "Your Company Name"
+```
+It will also generate a docker.env file to make easier to run with different settings. 
+
+<br>
+<h1>
+Tools
+</h1>
+
+<h2>
+Image - CLI
+</h2>
+
+<p>
+One of the greatest advantages is that you're allowed to perform batch changes on image files, or multiple files in a folder.
+</p>
+
+<h3>
+Supported File Extensions
+</h3>
+
+ - png
+ - jpg
+ - bmp
+ - webp
+ - tiff
+ - tif
+ - jp2
+ - gif
+
+
+
+The ``
+img`` command line works with a single file as input or a folder, to allow you to perform recursive operations through image files. 
+
+Here is the simple structure of a command using this tool:
+````
+img --crop_left 10 --min_scale 50 --file_size 1mb --min_size 1920x1080 "/input/path" -o "/output/path"
+````
+In the command above, the tool will crop the image, and reduce it to the desired size which in this case has been set to 1mb.
+
+To make it work smarter, the other parameters such ``--min_scale
+`` and
+``--min_size
+`` were set to avoid that the image gets too much compression and escape our requirements for the project.
+
+Remeber that if we want to also convert the files on this ``"/input/path"
+`` directory, we can simply add the ``-fmt
+`` followed by one of the supported file extensions and voilá!
+
+<br>
+
+**See the CLI Guide bellow for further information.**
+
+<h2>
+Image Tools - CLI Guide
+</h2>
+
+<h3>
+Convert Images:
+</h3>
+
+````
+img -fmt webp "/input/path" -o "/output/path"
+````
+With the -fmt or -format arg, you can set any of the available formats such as: png, jpg, bmp, webp, tiff, tif and jp2;
+
+<br>
+<h3>
+Crop Images:
+</h3>
+
+````
+img --crop_top 50 --crop_bottom 100 --crop_left 680 --crop_right 680 "/input/path" -o "/output/path"
+````
+This allows you to crop image in any direction from border to center;
+
+<br>
+<h3>
+Scale Images:
+</h3>
+
+````
+img -s 200 "/input/path" -o "/output/path"
+````
+This allows you to scale images by providing percentage as in the example above;
+<br>
+<br>
+<h3>
+Compress Images:
+</h4>
+
+<p>
+The compression algorithm work with scale, dimension and quality parameters
+</p>
+
+
+In some cases we need to compress files to a target size. In order to achieve this you can follow the example:
+````
+img --max_file_size 1MB "/input/path" -o "/output/path"
+````
+You can set a value in MB as the example or in bytes, by providing an integer such as:
+````
+img --max_file_size 100000 "/input/path" -o "/output/path"
+````
+The algorithm will scale your image to reach the target size.
+If you want to set a safety zone. 
+
+**You can set the arguments:**
+<br>
+
+  - ``--min_scale``
+
+    Lowest scale you want that the compression algorithm applies to your file. 
+
+    ```
+    img "/input/path" -o "/output/path" --min_scale 90 --file_size 1mb
+    ```
+<br>
+
+  - ``--min_dimension``
+
+    Lowest Height x Width you want that the compression algorithm applies to your file.
+
+    ```
+    img "/input/path" -o "/output/path" --min_dimension 1920x1080 --file_size 1mb
+    ```
+
+You can also use the ``--min_file_size
+``
+parameter to set the minimum size you want your files to have.
+
+**I hope you enjoy this feature, any suggestions are welcome!**
+
+<br>
+<h3>
+Change Images Quality:
+</h3>
+
+Quality can influence the size of your output file. Although it may vary over different file extensions, you can also control it with our CLI. 
+````
+img --q 50 "/input/path" -o "/output/path"
+````
+You can set a value from 1 to 100 on the -q argument to set the output quality.
+
+**Take in charge that the compression algorithm can also change the quality of the output file**
+
+<h2>Additional Flags and Args<h2/>
+  - ``
+  -R
+  ``
+  Recursive parameter that allow the program to search nested folders for images to modify
+
+  - ``
+  -y
+  ``
+  Force any prompt to be bypassed
+
+<br>
+
+
+
+<h1>
+Internal Packages - Documentation
+</h1>
+
+## Featuring:
+
+- **elemental_tools.code**:
+    - countlines: It receives a path and iterates through all .py files in order to count the overall number of lines in the code;
+
+
+- **elemental_tools.logger**:
+  - Logger: A log module, that has a special feature. It saves the log to a specified file path, separating them by date of occurrence;
+
+
+- **elemental_tools.db**:
+  </br> In these module you will find a common syntax for the following databases:
+  - mongo: Database abstraction for mongoDB;
+  - couch: Database abstraction for couchDB;
+
+
+- **elemental_tools.design**:
+  </br> Provides some useful stuff for designers such as:
+  - video.compressor: It works with a desired size, to compress media files;
+  - unicode_colors: Provides some unicode colors. To instead of writing '\033[34m' you can just use unicode_colors.blue;
+
+    
+- **elemental_tools.file_manager**:
+  - copytree_with_error_handling: Copy everything in a dir skipping and prompting for errors;
+
+
+- **elemental_tools.path**:
+  - Relative: Tired of writing relative path functions? Here's a quick way to use it without needing to write and rewrite it. 
+  
+
+- **elemental_tools.patterns**:
+  - Patterns: In the patterns class of the 
+
+
+
+<h2>
+Audio
+</h2>
+
+<p>
+A python package that will allow you:
+</p>
+<li>
+Convert and handle audio files;
+</li>
+
+<li>
+Transcribe audio from files or an input device;
+</li>
+
+```
+
+audio_path = AudioPath('/path/to/audio.mp3')
+recognizer = AudioRecognition(audio_path)
+recognizer.language = 'en'
+audio_as_string = recognizer.to_string()
+```
+
+
+
+
+
+</BR></BR>
+
+# Usage Examples:
+
+### Logger:
+Example:
+````
+    from elemental_tools.logger import Logger
+    log_path = "path/to/log" # If you want to generate a log file. Just set the path, and will separate in different files by date automatically.
+    logger = Logger(app_name='test-app', owner='example', log_path=log_path).log
+    logger('info', "I miss you.", additional_props='hearth')
+    
+    # Whenever you add some kwarg to the logger call, it will be encloused in brackets. Like in the output bellow:
+````
+Output:</BR>
+27-11-2023 10:22:17 - [TEST-APP] [EXAMPLE] [HEARTH] [INFO]: I miss you. 
+</BR></BR></BR>
+
+
+
+### Brainiac:
+Example:
+````
+# Create a Brainiac instance with Grimoire instances
+brainiac_instance = Brainiac(grimoire1, grimoire2, threshold_skill=0.60)
+# Access the suggested_skill list
+print(brainiac_instance.suggested_skill)
+# Access the default error message
+brain.default_error
+````
