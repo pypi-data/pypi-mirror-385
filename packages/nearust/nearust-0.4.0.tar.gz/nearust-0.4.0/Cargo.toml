@@ -1,0 +1,32 @@
+[package]
+name = "nearust"
+authors = ["Yuta Nagano"]
+version = "0.4.0"
+edition = "2021"
+description = "Fast detection of similar strings"
+repository = "https://github.com/yutanagano/nearust"
+homepage = "https://github.com/yutanagano/nearust"
+
+[dependencies]
+clap = { version = "4.5.20", features = ["derive"] }
+itertools = "0.13.0"
+rapidfuzz = "0.5.0"
+rayon = "1.10.0"
+pyo3 = "0.26.0"
+
+[profile.release]
+# debug = true
+
+# The profile that 'dist' will build with
+[profile.dist]
+inherits = "release"
+lto = "thin"
+
+[lib]
+name = "_lib"
+path = "rust/lib.rs"
+crate-type = ["lib", "cdylib"]
+
+[[bin]]
+name = "nearust"
+path = "rust/main.rs"
