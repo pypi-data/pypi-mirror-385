@@ -1,0 +1,34 @@
+Metadata-Version: 2.1
+Name: alysis
+Version: 0.6.2
+Summary: Ethereum testerchain
+Author-email: Bogdan Opanchuk <bogdan@opanchuk.net>
+Requires-Python: >=3.10
+Classifier: Development Status :: 4 - Beta
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Provides-Extra: docs
+Provides-Extra: lint
+Provides-Extra: tests
+Project-URL: homepage, https://github.com/fjarri-eth/alysis
+Description-Content-Type: text/markdown
+
+Alysis, an Ethereum testerchain
+===============================
+
+[![pypi package][pypi-image]][pypi-link] ![License][pypi-license-image] [![Docs][rtd-image]][rtd-link] [![Coverage][cov-image]][cov-link]
+
+A simple Ethereum testerchain, currently based on [`pyevm`](https://pypi.org/project/py-evm/). Exposes both a typed API and an RPC-like one (JSON in/out), the latter mimicking the behavior of major Ethereum providers.
+
+For more information see [the documentation](https://alysis.readthedocs.io/en/latest/).
+
+
+[pypi-image]: https://img.shields.io/pypi/v/alysis
+[pypi-link]: https://pypi.org/project/alysis/
+[pypi-license-image]: https://img.shields.io/pypi/l/alysis
+[rtd-image]: https://readthedocs.org/projects/alysis/badge/?version=latest
+[rtd-link]: https://alysis.readthedocs.io/en/latest/
+[cov-image]: https://codecov.io/gh/fjarri-eth/alysis/branch/master/graph/badge.svg?token=RZP1LK1HB2
+[cov-link]: https://codecov.io/gh/fjarri-eth/alysis
+

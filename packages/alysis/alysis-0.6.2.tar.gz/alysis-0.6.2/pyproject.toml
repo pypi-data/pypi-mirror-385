@@ -1,0 +1,130 @@
+[project]
+name = "alysis"
+version = "0.6.2"
+description = "Ethereum testerchain"
+authors = [
+    { name = "Bogdan Opanchuk", email = "bogdan@opanchuk.net" },
+]
+dependencies = [
+    "eth-utils>=3",
+    "setuptools",
+    "py-evm==0.12.1-beta.1",
+    "eth-typing>=5.2",
+    "eth-keys>=0.5",
+    "rlp>=4",
+    "compages>=0.3.0",
+    "ethereum-rpc>=0.1",
+]
+requires-python = ">=3.10"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+readme = "README.md"
+
+[project.license]
+file = "LICENSE.md"
+
+[project.urls]
+homepage = "https://github.com/fjarri-eth/alysis"
+
+[project.optional-dependencies]
+tests = [
+    "pytest>=6",
+    "pytest-cov",
+    "eth-account>=0.13",
+]
+docs = [
+    "sphinx>=4",
+    "furo",
+    "setuptools-scm",
+]
+lint = [
+    "mypy>=1.4",
+    "ruff>=0.2",
+]
+
+[tool.pdm.version]
+source = "scm"
+
+[tool.pdm.build]
+source-includes = [
+    "tests/*.sol",
+    "tests/*.py",
+    "docs/*.rst",
+    "docs/*.py",
+    "docs/Makefile",
+]
+
+[tool.setuptools_scm]
+
+[tool.mypy]
+strict = true
+warn_unreachable = true
+implicit_reexport = true
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = [
+    "ALL",
+]
+ignore = [
+    "C408",
+    "B008",
+    "ANN401",
+    "ANN204",
+    "COM812",
+    "EM102",
+    "TRY003",
+    "D212",
+    "D203",
+    "TD002",
+    "EM101",
+    "D205",
+    "D401",
+    "TD003",
+    "FIX002",
+    "N818",
+    "PLR0913",
+    "ISC001",
+    "SIM108",
+    "PLR2004",
+    "PERF401",
+    "TC002",
+]
+fixable = [
+    "ALL",
+]
+unfixable = []
+exclude = [
+    ".eggs",
+    ".git",
+    ".mypy_cache",
+    ".ruff_cache",
+    ".venv",
+    "__pypackages__",
+    "build",
+    "dist",
+]
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.lint.pyupgrade]
+keep-runtime-typing = true
+
+[tool.ruff.lint.isort]
+known-first-party = [
+    "alysis",
+]
+
+[tool.ruff.lint.per-file-ignores]
+
+[build-system]
+requires = [
+    "pdm-pep517",
+]
+build-backend = "pdm.pep517.api"
