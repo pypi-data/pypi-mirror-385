@@ -1,0 +1,278 @@
+Metadata-Version: 2.4
+Name: ontologia
+Version: 0.2.4
+Summary: An ontology management system built on Registro and SQLModel
+Project-URL: Homepage, https://github.com/kevinqz/ontologia
+Project-URL: Repository, https://github.com/kevinqz/ontologia
+Project-URL: Issues, https://github.com/kevinqz/ontologia/issues
+Author-email: Kevin Saltarelli <kevinqz@gmail.com>
+License: MIT
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.11
+Requires-Dist: dagster-dbt>=0.23.0
+Requires-Dist: dagster>=1.7.0
+Requires-Dist: fastapi>=0.118.0
+Requires-Dist: fastmcp>=0.1.0
+Requires-Dist: gitpython>=3.1.0
+Requires-Dist: grpcio>=1.65.0
+Requires-Dist: httpx>=0.28.1
+Requires-Dist: jinja2>=3.1.0
+Requires-Dist: protobuf>=4.25.0
+Requires-Dist: pydantic-settings>=2.3.0
+Requires-Dist: pydantic>=2.0.0
+Requires-Dist: python-jose[cryptography]>=3.3.0
+Requires-Dist: python-multipart>=0.0.6
+Requires-Dist: pyyaml>=6.0.0
+Requires-Dist: questionary>=2.0.1
+Requires-Dist: registro>=0.2.2
+Requires-Dist: rich>=13.7.0
+Requires-Dist: sqlmodel>=0.0.24
+Requires-Dist: temporalio>=1.7.0
+Requires-Dist: typer>=0.12.0
+Requires-Dist: ulid-py>=1.1.0
+Provides-Extra: dev
+Requires-Dist: black>=23.3.0; extra == 'dev'
+Requires-Dist: dbt-duckdb>=1.8.0; extra == 'dev'
+Requires-Dist: duckdb>=1.0.0; extra == 'dev'
+Requires-Dist: grpcio-tools>=1.65.0; extra == 'dev'
+Requires-Dist: hypothesis>=6.100; extra == 'dev'
+Requires-Dist: mkdocs-material>=9.5.0; extra == 'dev'
+Requires-Dist: mkdocs>=1.5.0; extra == 'dev'
+Requires-Dist: mypy>=1.3.0; extra == 'dev'
+Requires-Dist: pre-commit>=3.7.0; extra == 'dev'
+Requires-Dist: pytest-benchmark>=4.0.0; extra == 'dev'
+Requires-Dist: pytest>=7.0.0; extra == 'dev'
+Requires-Dist: ruff>=0.0.272; extra == 'dev'
+Requires-Dist: schemathesis>=3.18.4; extra == 'dev'
+Requires-Dist: ty>=0.0.1a22; extra == 'dev'
+Description-Content-Type: text/markdown
+
+# Ontologia
+
+Ontologia is an ontology-as-code platform that unifies schema management, graph traversal, action
+execution, and client code generation. It combines SQLModel/Registro for the metamodel with optional
+KùzuDB acceleration for traversal-heavy workloads, and ships a generated Python SDK featuring a
+fluent query DSL.
+
+## Key Capabilities
+
+- **Ontology as Code** – Author ObjectTypes and LinkTypes in YAML, validate/diff/apply with the CLI.
+- **Generated SDK** – Typed models, link proxies, actions namespace, DSL filters, and typed
+  pagination helpers.
+- **Security & RBAC** – OAuth2 password flow with JWT access tokens, global roles, and
+  tenant-scoped permissions for every endpoint.
+- **Actions Runtime** – Submission criteria, validation rules, synchronous execution, and optional
+  Temporal workflows for durability.
+- **Graph + Relational Storage** – SQLModel remains source of truth while KùzuDB provides
+  high-performance traversals.
+- **Hybrid Query Engine** – Multi-hop traversal plans that combine SQL filters with link navigation
+  from the same API call or SDK query.
+- **Data Ingestion** – dbt pipelines plus a sync service materialize curated tables into objects,
+  links, and dataset branches.
+- **Schema Migrations** – Alembic-managed migrations with `just db-migrate` / `just db-upgrade`
+  helpers wired into CI workflows.
+
+## Documentation
+
+Documentation lives under `docs/` and is published with MkDocs Material.
+
+- Browse locally with `uvx mkdocs serve` (http://127.0.0.1:8000).
+- Start at [`docs/index.md`](docs/index.md) for the curated navigation.
+- Onboarding, environment preparation, and ontology-as-code workflow:
+  [`docs/getting-started.md`](docs/getting-started.md).
+- Architecture diagrams and deployment notes: [`docs/platform/architecture.md`](docs/platform/architecture.md).
+- Historical reports and ADRs are archived under [`docs/archive/`](docs/archive/).
+
+## Installation
+
+```bash
+pip install ontologia
+```
+
+For local development, install via [uv](https://github.com/astral-sh/uv):
+
+```bash
+uv sync --dev
+```
+
+## Quickstart
+
+### 0. Bootstrap a sandbox (optional but recommended)
+
+Create an isolated Ontologia ecosystem with the new Typer-based CLI. This scaffolds a project
+directory containing ontology YAML, Docker Compose, and local state tracking. Start services with
+`--start-services` if you want Docker to spin up immediately.
+
+```bash
+uv run ontologia-cli genesis --name my_sandbox --directory ./sandboxes --start-services --bootstrap
+cd sandboxes/my_sandbox
+```
+
+Launch the interactive Architect agent whenever you're inside the project directory:
+
+```bash
+ontologia agent
+```
+
+The CLI persists context in `~/.ontologia/config.json`, so subsequent commands automatically target
+the active project.
+
+### 1. Apply database migrations
+
+   ```bash
+   just db-upgrade
+   # or: uv run alembic upgrade head
+   ```
+
+### 2. Generate the SDK
+
+   ```bash
+   uv run ontologia-cli --dir example_project/ontology generate-sdk --source local
+   ```
+
+   Outputs land in `ontologia_sdk/ontology/` with typed objects, link proxies, and helper methods.
+
+### 3. Run the API
+
+   ```bash
+   uv run uvicorn api.main:app --reload
+   # OpenAPI docs → http://127.0.0.1:8000/docs
+   ```
+
+### 4. Obtain an access token
+
+   ```bash
+   curl -X POST http://127.0.0.1:8000/v2/auth/token \
+        -H "Content-Type: application/x-www-form-urlencoded" \
+        -d "username=admin&password=admin"
+   ```
+
+   Copy the `access_token` and use it in the `Authorization: Bearer <token>` header for API calls
+   or pass it to the SDK client.
+
+### 5. Load sample data
+
+   ```bash
+   export DUCKDB_PATH=$(pwd)/data.duckdb
+   uv run just pipeline   # prepare → dbt build → sync
+   ```
+
+   The sync service reads Gold tables generated by dbt. Set `SYNC_ASSUME_GOLD_SCHEMA=1` when your
+   models already match the ontology schema. Dagster entry points live in
+   `ontologia_dagster/definitions.py` if you prefer orchestrated runs.
+
+### 6. Explore with the SDK
+
+   ```python
+   from ontologia_sdk.client import OntologyClient
+   from ontologia_sdk.ontology.objects import Employee
+
+    TOKEN = "<paste-access-token>"
+    client = OntologyClient(host="http://127.0.0.1:8000", ontology="default", token=TOKEN)
+
+   engineers = (
+       Employee.search_builder(client)
+       .where(Employee.dept == "ENG")
+        .traverse("works_in", where={"property": "name", "op": "eq", "value": "Engineering"})
+       .order_by(Employee.name.asc())
+       .all_typed()
+   )
+
+   for page in Employee.search_builder(client).iter_pages_typed(page_size=2):
+       for record in page.data:
+           print(record.name)
+
+   alice = Employee.get(client, "e1")
+   alice.actions.promote(level="L3")
+   ```
+
+### 7. Serve the documentation
+
+   ```bash
+   uvx mkdocs serve
+   ```
+
+   This provides live-reloading docs at http://127.0.0.1:8000 while editing Markdown.
+
+## Ontology as Code (OaC)
+
+- Create sandboxes with `uv run ontologia-cli genesis --name <project>` and let the CLI maintain
+  project context under `~/.ontologia/`.
+- Pair with the interactive Architect agent via `ontologia agent` to draft YAML changes, review the
+  proposed plan, and commit to a feature branch automatically.
+- Store ontology YAML under `example_project/ontology/object_types/` and `example_project/ontology/link_types/`.
+- Follow the workflow in [`docs/OAC_GUIDE.md`](docs/OAC_GUIDE.md) and the CI blueprint in
+  [`docs/OAC_CI.md`](docs/OAC_CI.md).
+
+Common CLI usage:
+
+```bash
+# Validate definitions without a running API
+uv run ontologia-cli --dir example_project/ontology validate
+
+# Diff against a running environment (fails on dangerous changes)
+uv run ontologia-cli --dir example_project/ontology diff --host http://127.0.0.1:8000 --ontology default \
+  --deps --impact --fail-on-dangerous
+
+# Apply changes (append --allow-destructive for deletes)
+uv run ontologia-cli --dir example_project/ontology apply --host http://127.0.0.1:8000 --ontology default --yes
+```
+
+Shortcuts exist via `just oac-validate`, `just oac-diff`, and `just oac-apply`.
+
+## Testing & Quality
+
+```bash
+uv run pytest
+```
+
+Highlights:
+
+- Property-based coverage of the `_safe_rule_eval` engine (`tests/unit/test_actions_rule_engine_property.py`).
+- Schemathesis-backed contract tests validating responses against the OpenAPI spec
+  (`tests/contracts/test_openapi_contract.py`).
+- End-to-end lifecycle scenario in `tests/integration/test_e2e_full_workflow.py`.
+- Performance baselines in `tests/performance/` using `pytest-benchmark`.
+
+Run `just check` to execute formatting, linting, typing, and the full suite.
+
+## Examples
+
+- `example_project/examples/api_quickstart.py` – SDK-first walkthrough that gracefully falls back to the live API.
+- `example_project/examples/cookbook/cookbook_01_dsl_search.py` – Fluent query DSL filters and ordering.
+- `example_project/examples/cookbook/cookbook_02_link_traversal.py` – Link proxies with typed traversal results.
+- `example_project/examples/cookbook/cookbook_03_actions_namespace.py` – Invoking actions via object-level namespaces.
+- `example_project/examples/cookbook/cookbook_04_pagination.py` – Typed pagination patterns.
+- `example_project/examples/cookbook/cookbook_05_full_lifecycle_demo.py` – End-to-end lifecycle with the mock client.
+
+Run any example with `uv run python <path-to-example>.py`.
+
+## Temporal & Async Actions
+
+Temporal integration is optional and controlled with `USE_TEMPORAL_ACTIONS`.
+
+```bash
+just temporal-up        # Start the dev stack
+just temporal-worker    # Run the worker (task queue: actions)
+
+export TEMPORAL_ADDRESS=127.0.0.1:7233
+export TEMPORAL_NAMESPACE=default
+export TEMPORAL_TASK_QUEUE=actions
+```
+
+When enabled, the API routes execution through `ActionWorkflow` for durable processing while the
+synchronous path remains available.
+
+## Contributing
+
+1. `uv sync --dev`
+2. Regenerate the SDK after modifying ontology YAML or the generator.
+3. Run `uv run pytest` (or `just check`).
+4. Serve docs with `uvx mkdocs serve` to validate content changes.
+
+Historical ADRs and verification reports remain available in [`docs/archive/`](docs/archive/).

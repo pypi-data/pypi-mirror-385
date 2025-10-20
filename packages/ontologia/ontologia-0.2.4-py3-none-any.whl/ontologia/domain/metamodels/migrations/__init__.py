@@ -1,0 +1,1 @@
+"""Metamodel migration domain models."""
