@@ -1,0 +1,73 @@
+[project]
+name = "varsnap"
+authors = [
+    {name = "Varsnap", email = "admin@varsnap.com"},
+]
+description = "Varsnap"
+requires-python = ">=3.7"
+keywords = ["testing"]
+license = "MIT"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Natural Language :: English",
+    "Topic :: Software Development",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Typing :: Typed",
+]
+dependencies = [
+    "dill>=0.4.0,<0.5.0",
+    "requests>=2.0,<3.0",
+]
+dynamic = ["version", "readme"]
+
+[project.optional-dependencies]
+test = [
+    # Testing
+    "coverage==7.11.0",                 # Test coverage
+    "ruff==0.14.1",                     # Python linting
+
+    # Types
+    "mypy==1.18.2",                     # Static typing
+    "types-requests==2.32.4.20250913",  # Type stubs for requests package
+]
+
+[project.urls]
+"Homepage" = "https://www.varsnap.com/"
+
+[tool.setuptools.dynamic]
+version = {attr = "varsnap.__version__.__version__"}
+readme = {file = "README.md", content-type="text/markdown"}
+
+[options.package_data]
+git_browse = ["py.typed"]
+
+[tool.ruff]
+lint.select = ["E", "F", "W", "A", "B", "COM", "N", "PLC", "PLE", "PLW"]
+
+[tool.mypy]
+strict = true
+ignore_missing_imports = true
+exclude = [
+    "build/",
+]
+
+[tool.coverage.run]
+source = ["."]
+omit = [
+    ".eggs/*",
+    "varsnap/tests/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+]
