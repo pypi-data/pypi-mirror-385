@@ -1,0 +1,32 @@
+# convenience.get_sacatalog { #soildb.convenience.get_sacatalog }
+
+```python
+convenience.get_sacatalog(columns=None, client=None)
+```
+
+Get survey area catalog (sacatalog) data.
+
+Args:
+    columns: List of columns to return. If None, returns ['areasymbol', 'areaname', 'saversion']
+    client: SDA client instance (required)
+
+Returns:
+    SDAResponse containing sacatalog data
+
+Raises:
+    TypeError: If client is not provided
+
+Examples:
+    # Get basic survey area info
+    client = SDAClient()
+    response = await get_sacatalog(client=client)
+    df = response.to_pandas()  # areasymbol, areaname, saversion
+
+    # Get all available columns
+    response = await get_sacatalog(columns=['areasymbol', 'areaname', 'saversion', 'saverest'], client=client)
+    df = response.to_pandas()
+
+    # Get just survey area symbols
+    response = await get_sacatalog(columns=['areasymbol'], client=client)
+    df = response.to_pandas()
+    symbols = df['areasymbol'].tolist()

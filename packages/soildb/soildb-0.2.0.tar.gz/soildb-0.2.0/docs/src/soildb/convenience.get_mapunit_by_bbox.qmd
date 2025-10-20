@@ -1,0 +1,28 @@
+# convenience.get_mapunit_by_bbox { #soildb.convenience.get_mapunit_by_bbox }
+
+```python
+convenience.get_mapunit_by_bbox(
+    min_x,
+    min_y,
+    max_x,
+    max_y,
+    columns=None,
+    client=None,
+)
+```
+
+Get map unit data within a bounding box.
+
+Args:
+    min_x: Western boundary (longitude)
+    min_y: Southern boundary (latitude)
+    max_x: Eastern boundary (longitude)
+    max_y: Northern boundary (latitude)
+    columns: List of columns to return. If None, returns basic map unit columns
+    client: SDA client instance (required)
+
+Returns:
+    SDAResponse containing map unit data
+
+Raises:
+    TypeError: If client is not provided
