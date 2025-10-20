@@ -1,0 +1,74 @@
+Metadata-Version: 2.4
+Name: tno.quantum.utils
+Version: 5.4.1
+Summary: General utility functions for the Quantum Toolbox
+Author-email: TNO Quantum Code Lab <tnoquantum@tno.nl>
+Maintainer-email: TNO Quantum Code Lab <tnoquantum@tno.nl>
+License: Apache License, Version 2.0
+Project-URL: Homepage, https://github.com/TNO-Quantum/
+Project-URL: Documentation, https://tno-quantum.github.io/documentation/
+Project-URL: Source, https://github.com/TNO-Quantum/utils
+Keywords: TNO,Quantum
+Platform: any
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Operating System :: OS Independent
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Information Technology
+Classifier: Intended Audience :: Science/Research
+Classifier: Typing :: Typed
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pyyaml~=6.0
+Requires-Dist: numpy>=1.21.6
+Provides-Extra: tests
+Requires-Dist: pytest>=8.1.1; extra == "tests"
+Requires-Dist: pytest-cov>=4.1.0; extra == "tests"
+Requires-Dist: tomlkit; extra == "tests"
+Requires-Dist: scipy~=1.10; extra == "tests"
+Requires-Dist: torch~=2.2; extra == "tests"
+Requires-Dist: torchtyping~=0.1.4; extra == "tests"
+Requires-Dist: pennylane~=0.38; extra == "tests"
+Requires-Dist: scikit-learn~=1.6; extra == "tests"
+Requires-Dist: pandas~=2.0; extra == "tests"
+Requires-Dist: networkx~=3.2.1; extra == "tests"
+Requires-Dist: matplotlib; extra == "tests"
+Dynamic: license-file
+
+# TNO Quantum: Utils
+
+TNO Quantum provides generic software components aimed at facilitating the development
+of quantum applications.
+
+This package contains utility classes and methods for other TNO Quantum packages.
+
+## Documentation
+
+Documentation of the `tno.quantum.utils` package can be found [here](https://tno-quantum.github.io/documentation/).
+
+
+## Install
+
+Easily install the `tno.quantum.utils` package using pip:
+
+```console
+$ python -m pip install tno.quantum.utils
+```
+
+## Usage
+
+The `tno.quantum.utils` package can be used as shown in the following example.
+
+```python
+from tno.quantum.utils.input_validation import check_real
+example = 10
+check_real(example, "example")
+```
+
+## (End)use limitations
+The content of this software may solely be used for applications that comply with international export control laws.
