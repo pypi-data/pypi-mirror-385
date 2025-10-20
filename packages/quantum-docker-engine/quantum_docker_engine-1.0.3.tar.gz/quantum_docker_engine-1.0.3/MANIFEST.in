@@ -1,0 +1,21 @@
+include README.md
+include LICENSE
+include GETTING_STARTED.md
+include INSTALL.md
+include PERFORMANCE_IMPROVEMENTS.md
+include FIXES_COMPLETE.md
+include requirements.txt
+include setup.py
+
+recursive-include quantum_docker *.py
+recursive-include quantum_docker *.yaml
+recursive-include quantum_docker *.yml
+recursive-include quantum_docker *.json
+
+recursive-exclude quantum_docker __pycache__
+recursive-exclude quantum_docker *.pyc
+recursive-exclude quantum_docker *.pyo
+
+global-exclude .DS_Store
+global-exclude *.swp
+global-exclude *.bak
