@@ -1,0 +1,77 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "datum-cli"
+version = "0.1.1"
+description = "Schedule dbt projects locally with datum cloud reporting"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Datum Labs", email = "contact@datumlabs.io"}
+]
+requires-python = ">=3.11"
+keywords = ["dbt", "scheduling", "data", "analytics", "workflow"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+
+dependencies = [
+    "typer[all]>=0.9,<1.0",
+    "pydantic>=2.0,<3.0",
+    "pydantic-settings>=2.0,<3.0",
+    "pyyaml>=6.0,<7.0",
+    "python-crontab>=3.0,<4.0",
+    "croniter>=2.0,<3.0",
+    "fastapi>=0.104,<1.0",
+    "uvicorn>=0.24,<1.0",
+    "cryptography>=41.0,<43.0",
+    "rich>=13.0,<14.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4,<8.0",
+    "pytest-cov>=4.1,<5.0",
+    "ruff>=0.1,<1.0",
+    "mypy>=1.6,<2.0",
+]
+
+[project.scripts]
+datum = "datum.cli.main:app"
+
+[project.urls]
+Homepage = "https://github.com/datumlabs/datum-dbt"
+Repository = "https://github.com/datumlabs/datum-dbt"
+Issues = "https://github.com/datumlabs/datum-dbt/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/datum"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "--cov=datum --cov-report=term-missing"

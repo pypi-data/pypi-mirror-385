@@ -1,0 +1,27 @@
+analytics_project_1:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: postgres
+      user: dbt_user
+      password: dbt_password
+      port: 5432
+      dbname: analytics_dev
+      schema: project_1_dev
+      threads: 4
+      keepalives_idle: 0
+
+analytics_project_2:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: postgres
+      user: dbt_user
+      password: dbt_password
+      port: 5432
+      dbname: analytics_dev
+      schema: project_2_dev
+      threads: 4
+      keepalives_idle: 0

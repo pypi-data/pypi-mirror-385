@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: dbt_user
+      POSTGRES_PASSWORD: dbt_password
+      POSTGRES_DB: analytics_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dbt_user"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  dbt:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dbt-scheduler
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./project-1:/app/project-1
+      - ./project-2:/app/project-2
+      - ~/.datum:/root/.datum
+      - /var/spool/cron/crontabs:/var/spool/cron/crontabs
+    environment:
+      DBT_USER: dbt_user
+      DBT_PASSWORD: dbt_password
+      DBT_HOST: postgres
+      DBT_PORT: 5432
+      DBT_DATABASE: analytics_dev
+    command: /bin/bash
+    stdin_open: true
+    tty: true
+
+volumes:
+  postgres_data:

@@ -1,0 +1,31 @@
+# 🚀 QUICK REFERENCE - PUBLISH WITH UV
+
+## The Command
+```bash
+cd /Users/zain/dev/datum-cli && uv build && uv publish
+```
+
+## Setup (First time only)
+```bash
+# Get token from https://pypi.org/manage/account/token/
+export UV_PUBLISH_TOKEN=pypi_YOUR_TOKEN
+
+# Or create ~/.pypirc with token
+```
+
+## That's It!
+
+Your package goes live to PyPI in ~35 seconds.
+
+Users can then:
+```bash
+pip install datum-dbt
+datum dbt --help
+```
+
+## Verify
+Visit: https://pypi.org/project/datum-dbt/
+
+---
+
+**Everything is ready. Just run the command above!** ⚡
