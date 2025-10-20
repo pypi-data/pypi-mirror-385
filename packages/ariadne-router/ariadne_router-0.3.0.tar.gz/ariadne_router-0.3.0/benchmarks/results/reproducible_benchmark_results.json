@@ -1,0 +1,180 @@
+{
+  "timestamp": "2025-09-27 10:12:19",
+  "total_tests": 13,
+  "passed": 13,
+  "failed": 0,
+  "results": [
+    {
+      "circuit_name": "small_clifford_ghz",
+      "backend_used": "stim",
+      "execution_time": 0.021970750000036787,
+      "success": true,
+      "error": null,
+      "shots": 1000,
+      "circuit_qubits": 3,
+      "circuit_depth": 4,
+      "expected_backend": "stim",
+      "fallback_reason": null
+    },
+    {
+      "circuit_name": "small_clifford_ladder",
+      "backend_used": "stim",
+      "execution_time": 0.00969045799865853,
+      "success": true,
+      "error": null,
+      "shots": 1000,
+      "circuit_qubits": 4,
+      "circuit_depth": 6,
+      "expected_backend": "stim",
+      "fallback_reason": null
+    },
+    {
+      "circuit_name": "medium_clifford_ghz",
+      "backend_used": "stim",
+      "execution_time": 0.013894249997974839,
+      "success": true,
+      "error": null,
+      "shots": 1000,
+      "circuit_qubits": 10,
+      "circuit_depth": 11,
+      "expected_backend": "stim",
+      "fallback_reason": null
+    },
+    {
+      "circuit_name": "medium_clifford_stabilizer",
+      "backend_used": "stim",
+      "execution_time": 0.01555266699870117,
+      "success": true,
+      "error": null,
+      "shots": 1000,
+      "circuit_qubits": 8,
+      "circuit_depth": 5,
+      "expected_backend": "stim",
+      "fallback_reason": null
+    },
+    {
+      "circuit_name": "large_clifford_ghz",
+      "backend_used": "stim",
+      "execution_time": 0.03433266699721571,
+      "success": true,
+      "error": null,
+      "shots": 1000,
+      "circuit_qubits": 25,
+      "circuit_depth": 26,
+      "expected_backend": "stim",
+      "fallback_reason": null
+    },
+    {
+      "circuit_name": "large_clifford_surface_code",
+      "backend_used": "stim",
+      "execution_time": 0.052119457999651786,
+      "success": true,
+      "error": null,
+      "shots": 1000,
+      "circuit_qubits": 25,
+      "circuit_depth": 16,
+      "expected_backend": "stim",
+      "fallback_reason": null
+    },
+    {
+      "circuit_name": "small_non_clifford",
+      "backend_used": "jax_metal",
+      "execution_time": 0.006850165998912416,
+      "success": true,
+      "error": null,
+      "shots": 1000,
+      "circuit_qubits": 3,
+      "circuit_depth": 7,
+      "expected_backend": null,
+      "fallback_reason": null
+    },
+    {
+      "circuit_name": "medium_non_clifford",
+      "backend_used": "jax_metal",
+      "execution_time": 0.01972037499945145,
+      "success": true,
+      "error": null,
+      "shots": 1000,
+      "circuit_qubits": 8,
+      "circuit_depth": 21,
+      "expected_backend": null,
+      "fallback_reason": null
+    },
+    {
+      "circuit_name": "mixed_vqe_ansatz",
+      "backend_used": "jax_metal",
+      "execution_time": 0.007449000004271511,
+      "success": true,
+      "error": null,
+      "shots": 1000,
+      "circuit_qubits": 6,
+      "circuit_depth": 11,
+      "expected_backend": null,
+      "fallback_reason": null
+    },
+    {
+      "circuit_name": "mixed_qaoa",
+      "backend_used": "jax_metal",
+      "execution_time": 0.006795792003686074,
+      "success": true,
+      "error": null,
+      "shots": 1000,
+      "circuit_qubits": 4,
+      "circuit_depth": 19,
+      "expected_backend": null,
+      "fallback_reason": null
+    },
+    {
+      "circuit_name": "single_qubit",
+      "backend_used": "stim",
+      "execution_time": 0.001765458997397218,
+      "success": true,
+      "error": null,
+      "shots": 1000,
+      "circuit_qubits": 1,
+      "circuit_depth": 2,
+      "expected_backend": null,
+      "fallback_reason": null
+    },
+    {
+      "circuit_name": "no_gates",
+      "backend_used": "stim",
+      "execution_time": 0.0023508750018663704,
+      "success": true,
+      "error": null,
+      "shots": 1000,
+      "circuit_qubits": 3,
+      "circuit_depth": 1,
+      "expected_backend": null,
+      "fallback_reason": null
+    },
+    {
+      "circuit_name": "measurement_only",
+      "backend_used": "stim",
+      "execution_time": 0.0024653750006109476,
+      "success": true,
+      "error": null,
+      "shots": 1000,
+      "circuit_qubits": 3,
+      "circuit_depth": 1,
+      "expected_backend": null,
+      "fallback_reason": null
+    }
+  ],
+  "environment_info": {
+    "platform": "macOS-26.0-arm64-arm-64bit",
+    "python_version": "3.12.2 | packaged by conda-forge | (main, Feb 16 2024, 20:54:21) [Clang 16.0.6 ]",
+    "architecture": "arm64",
+    "processor": "arm",
+    "metal_available": true,
+    "cuda_available": false,
+    "router_backends": [
+      "stim",
+      "qiskit",
+      "tensor_network",
+      "jax_metal",
+      "ddsim",
+      "cuda"
+    ]
+  }
+}
