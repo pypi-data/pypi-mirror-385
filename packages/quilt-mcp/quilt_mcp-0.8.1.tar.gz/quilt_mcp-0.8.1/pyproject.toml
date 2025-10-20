@@ -1,0 +1,104 @@
+[project]
+name = "quilt-mcp"
+version = "0.8.1"
+description = "Secure MCP server for accessing Quilt data with JWT authentication"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {file = "LICENSE.txt"}
+authors = [
+    {name = "Quilt Data", email = "support@quilt.bio"}
+]
+maintainers = [
+    {name = "Quilt Data", email = "support@quilt.bio"}
+]
+keywords = ["mcp", "model-context-protocol", "claude", "quilt", "data", "analytics", "science", "server", "aws", "s3", "authentication"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+]
+dependencies = [
+    "quilt3>=5.6.0",
+    "fastmcp>=2.12.4",
+    "mcp>=1.12.0",
+    "boto3>=1.34.0",
+    "httpx>=0.27.0",
+    "cachetools>=5.3.0",
+    "matplotlib>=3.7.0",
+    "numpy>=1.24.0",
+    "pandas>=2.0.0",
+    "plotly>=5.15.0",
+    "altair>=5.0.0",
+    "pysam>=0.21.0",
+    "biopython>=1.81",
+    "pybedtools>=0.9.0",
+    "pybigwig>=0.3.18",
+    "sqlalchemy>=2.0.0",
+    "pyathena>=3.0.0",
+    "PyYAML>=6.0.0",
+    "pyjwt>=2.8.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/quiltdata/quilt-mcp-server"
+Repository = "https://github.com/quiltdata/quilt-mcp-server"
+Issues = "https://github.com/quiltdata/quilt-mcp-server/issues"
+Documentation = "https://github.com/quiltdata/quilt-mcp-server/blob/main/README.md"
+
+[project.scripts]
+quilt-mcp = "quilt_mcp.main:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["quilt_mcp*"]
+exclude = ["shared", "scripts"]
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[build-system]
+requires = ["setuptools>=61.0,<75.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[dependency-groups]
+test = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0", 
+    "pytest-cov>=4.0.0",
+    "pytest-timeout>=2.1.0",
+]
+deploy = [
+    "aws-cdk-lib>=2.100.0",
+    "constructs>=10.0.0",
+]
+lint = [
+    "ruff>=0.1.0",
+]
+dev = [
+    "pytest-xdist>=3.8.0",
+    "wheel>=0.45.1",
+    "build>=1.0.0",
+    "python-dotenv>=1.0.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+addopts = "-v --tb=short --color=yes"
+markers = [
+    "admin: marks tests that require Quilt admin privileges (deselect with '-m \"not admin\"')",
+    "integration: marks tests that require AWS credentials, network access, or external services (deselect with '-m \"not integration\"')",
+    "search: marks tests that require Elasticsearch search functionality (deselect with '-m \"not search\"')",
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+]
+
+[tool.ruff]
+# Use external configuration file
+config = "ruff.toml"
