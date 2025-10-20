@@ -1,0 +1,657 @@
+# Nuha 🤖
+
+**AI-Powered Terminal Assistant That Understands Your Commands**
+
+Nuha is an intelligent command-line tool that can read your terminal history, understand command errors, and provide AI-powered explanations and solutions. Built with ZHIPUAI integration and designed for developers who spend significant time in the terminal.
+
+![Nuha Demo](https://img.shields.io/badge/version-1.0.0-blue) ![License](https://img.shields.io/badge/license-MIT-green)
+
+## ✨ Features
+
+### 🤖 Multiple AI Provider Support
+
+- **Default: ZHIPUAI GLM**: Fast and reliable Chinese AI model
+- **OpenAI GPT**: Industry-leading GPT-4 and GPT-3.5 models
+- **Anthropic Claude**: Advanced reasoning with Claude 3.5 Sonnet
+- **DeepSeek**: Cost-effective alternative with strong performance
+- **Easy switching**: Change providers anytime with `nuha setup --provider <name>`
+
+### 🔍 Smart Command Analysis
+
+- **Auto-explain errors**: `nuha explain --auto` automatically analyzes your last failed command
+- **Context-aware**: Understands your shell, working directory, and recent command history
+- **Multi-shell support**: Works with bash, zsh, fish, and other popular shells
+
+### 👁️ Real-time Command Monitoring
+
+- **Live session tracking**: Monitor commands in your current terminal session
+- **Intelligent fallback**: Automatically uses watch history when available, falls back to terminal history
+- **Two monitoring modes**: Current session monitoring and legacy background process mode
+- **Shell integration**: Seamless integration with bash and zsh using shell hooks
+
+### 📊 Terminal Session Insights
+
+- **Pattern analysis**: Identifies common mistakes and usage patterns
+- **Performance suggestions**: Recommends more efficient command alternatives
+- **Security alerts**: Warns about potentially dangerous commands
+
+### 🔧 Interactive Debugging
+
+- **Step-by-step guidance**: Provides detailed troubleshooting steps
+- **Interactive mode**: Chat with AI about your terminal issues
+- **Smart suggestions**: Learns from your workflow to provide better recommendations
+
+### 🛠️ Easy Setup & Distribution
+
+- **Standalone binary**: Download and run without installing dependencies
+- **Cross-platform**: Supports Linux, macOS, and Windows
+- **UV-powered**: Modern Python package management with uv
+
+## 🚀 Quick Start
+
+### Watch Feature Quick Reference
+
+```bash
+# Start monitoring (current session)
+eval "$(nuha watch --start)"
+
+# Stop monitoring
+eval "$(nuha watch --stop)"
+
+# Explain last command (uses watch history if active)
+nuha explain --auto
+
+# Show recent commands
+nuha watch --show
+
+# Check monitoring status
+nuha watch --status
+
+# Background monitoring (legacy)
+nuha watch --start --background
+nuha watch --stop
+```
+
+### Option 1: Download Binary (Recommended)
+
+```bash
+# Linux/macOS
+curl -L https://github.com/u3n-ai/nuha/releases/latest/download/nuha -o nuha
+chmod +x nuha
+sudo mv nuha /usr/local/bin/
+
+# Windows
+# Download nuha.exe from releases page
+```
+
+### Option 2: Install with UV (Development)
+
+```bash
+# Install UV if you haven't already
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Clone and install
+git clone https://github.com/u3n-ai/nuha.git
+cd nuha
+uv sync
+uv run nuha --help
+```
+
+### Option 3: Install with pip
+
+```bash
+pip install nuha
+```
+
+## 🛠️ Setup
+
+1. **Get your AI API key** from one of these providers:
+
+   - **ZHIPUAI** (default): [https://open.bigmodel.cn/](https://open.bigmodel.cn/)
+   - **OpenAI**: [https://platform.openai.com/api-keys](https://platform.openai.com/api-keys)
+   - **Anthropic Claude**: [https://console.anthropic.com/](https://console.anthropic.com/)
+   - **DeepSeek**: [https://platform.deepseek.com/api_keys](https://platform.deepseek.com/api_keys)
+
+2. **Configure Nuha:**
+
+   ```bash
+   # Interactive setup (recommended)
+   nuha setup
+
+   # Setup specific provider
+   nuha setup --provider openai
+   nuha setup --provider claude
+   nuha setup --provider deepseek
+   ```
+
+   Or set the environment variable:
+
+   ```bash
+   # For ZHIPUAI (default)
+   export ZHIPUAI_API_KEY="your-api-key-here"
+
+   # For OpenAI
+   export OPENAI_API_KEY="your-api-key-here"
+
+   # For Claude
+   export ANTHROPIC_API_KEY="your-api-key-here"
+
+   # For DeepSeek
+   export DEEPSEEK_API_KEY="your-api-key-here"
+   ```
+
+3. **Test the setup:**
+   ```bash
+   nuha explain --auto
+   ```
+
+## 💡 Usage Examples
+
+### Explain Command Errors
+
+```bash
+# Auto-explain the last command that failed
+$ git push
+fatal: No configured push destination
+$ nuha explain --auto
+🔍 Found last command: git push
+
+🤖 AI Assistant:
+**Problem Analysis:** Git doesn't know where to push because no remote repository is configured or the current branch has no upstream set.
+
+**Solution:**
+1. Check your remotes: `git remote -v`
+2. Add a remote if none exists: `git remote add origin <repository-url>`
+3. Set upstream for current branch: `git push -u origin main`
+
+**Prevention:** Always set up your remote repository after `git init` and use `-u` flag on first push.
+```
+
+### Analyze Command Patterns
+
+```bash
+# Analyze your recent terminal activity
+$ nuha analyze --session
+📊 Command Analysis Results
+┏━━━━━━━━━━━━━━━━━┳━━━━━━━┓
+┃ Metric          ┃ Value ┃
+┡━━━━━━━━━━━━━━━━━╇━━━━━━━┩
+│ Total Commands  │ 45    │
+│ Unique Commands │ 23    │
+│ Potential Errors│ 3     │
+└─────────────────┴───────┘
+
+Most Used Commands:
+  1. git (12 times)
+  2. ls (8 times)
+  3. cd (6 times)
+```
+
+### Interactive Debugging
+
+```bash
+$ nuha debug --interactive
+🔧 Starting interactive debugging session...
+
+Debug> My docker container keeps crashing
+🤖 Let's troubleshoot your Docker container issue...
+
+1. **Check container logs**: `docker logs <container-name>`
+2. **Inspect container**: `docker inspect <container-name>`
+3. **Check resource usage**: `docker stats`
+
+What specific error are you seeing in the logs?
+
+Debug> exit
+👋 Ending debug session.
+```
+
+### Search for Error Patterns
+
+```bash
+# Find all permission-related errors
+$ nuha analyze --pattern "permission"
+🔍 Looking for pattern: permission
+
+✅ Found 3 matching commands:
+  1. chmod +x script.sh
+  2. sudo apt install package
+  3. ls -la /root/
+
+🤖 Pattern Analysis: 'permission'
+Most of your permission issues stem from trying to access system directories...
+```
+
+### Real-time Command Monitoring (Watch Feature)
+
+The watch feature allows you to monitor commands in real-time and get intelligent explanations. It offers two modes:
+
+#### Current Session Monitoring (Recommended)
+
+```bash
+# Start monitoring in your current terminal session
+$ eval "$(nuha watch --start)"
+✓ Nuha watch monitoring started (eval mode)
+
+# Run some commands
+$ ls -la
+$ git status
+$ docker ps
+
+# Get AI explanation of your last command
+$ nuha explain --auto
+🔍 Found last command from watch: docker ps
+
+🤖 AI Assistant:
+**Command Analysis:** `docker ps` lists all running Docker containers...
+```
+
+#### Stop Monitoring
+
+```bash
+# Stop monitoring when done
+$ eval "$(nuha watch --stop)"
+✓ Nuha watch monitoring stopped
+```
+
+#### Watch Status and History
+
+```bash
+# Check if monitoring is active
+$ nuha watch --status
+🟢 Watch is currently running
+┏━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃
+│ Time     │ Command      │ Exit Code ┃
+┡━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━┩
+│ 01:45:23 │ ls -la       │ 0         │
+│ 01:45:25 │ git status   │ 0         │
+│ 01:45:28 │ docker ps    │ 0         │
+└──────────┴──────────────┴───────────┘
+
+# Show recent commands
+$ nuha watch --show
+Last 3 Commands
+┏━━━┳━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━┓
+┃ # ┃ Time     ┃ Command      ┃ Exit Code ┃
+┡━━━╇━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━┩
+│ 1 │ 01:45:23 │ ls -la       │ 0         │
+│ 2 │ 01:45:25 │ git status   │ 0         │
+│ 3 │ 01:45:28 │ docker ps    │ 0         │
+└───┴──────────┴──────────────┴───────────┘
+```
+
+#### Background Process Mode (Legacy)
+
+```bash
+# Start background monitoring (legacy mode)
+$ nuha watch --start --background
+🔍 Starting command watcher...
+✅ Watch started successfully
+
+# The monitoring runs in the background
+# Run commands normally
+$ python app.py
+$ npm test
+
+# Stop background monitoring
+$ nuha watch --stop
+✅ Watch stopped successfully
+```
+
+#### Intelligent Command Source Selection
+
+The `explain --auto` command intelligently chooses the command source:
+
+```bash
+# When watch monitoring is active - uses watch history
+$ eval "$(nuha watch --start)"
+✓ Nuha watch monitoring started
+$ kubectl get pods
+$ nuha explain --auto
+🔍 Found last command from watch: kubectl get pods
+
+# When watch monitoring is NOT active - falls back to terminal history
+$ nuha explain --auto
+🔍 Found last command from history: git commit -m "fix bug"
+```
+
+#### Development vs Production Usage
+
+**Development Environment:**
+
+```bash
+# Start monitoring for development session
+$ eval "$(nuha watch --start)"
+
+# Work on your project
+$ npm run dev
+$ git add .
+$ git commit -m "feat: add new feature"
+$ docker build -t myapp .
+
+# Get explanations for complex commands
+$ nuha explain --auto
+🔍 Found last command from watch: docker build -t myapp
+
+# Stop when done
+$ eval "$(nuha watch --stop)"
+```
+
+**Production/Server Environment:**
+
+```bash
+# Use background mode for persistent monitoring
+$ nuha watch --start --background
+
+# Commands are captured automatically
+$ systemctl status nginx
+$ tail -f /var/log/app.log
+$ curl -X GET http://localhost:8080/health
+
+# Check captured commands
+$ nuha watch --show
+
+# Stop monitoring when needed
+$ nuha watch --stop
+```
+
+#### Real-time Command Following
+
+```bash
+# Follow commands in real-time (useful for monitoring)
+$ nuha watch --show --follow
+🔍 Following commands in real-time...
+Press Ctrl+C to stop
+
+[Shows live updates as commands are executed]
+```
+
+## 📁 Project Structure
+
+```
+nuha/
+├── nuha/                   # Main package
+│   ├── cli/               # CLI interface
+│   │   ├── main.py       # Entry point
+│   │   └── commands/     # Command implementations
+│   ├── core/             # Core functionality
+│   │   ├── ai_client.py  # ZHIPUAI integration
+│   │   ├── terminal_reader.py  # Terminal history reading
+│   │   ├── config.py     # Configuration management
+│   │   └── command_parser.py   # Command parsing
+│   └── utils/            # Utilities
+│       ├── formatter.py  # Output formatting
+│       └── history_parser.py  # History file parsing
+├── pyproject.toml        # UV project configuration
+├── setup_binary.py       # Binary creation script
+└── README.md
+```
+
+## 🔧 Development
+
+### Setting up Development Environment
+
+```bash
+# Clone the repository
+git clone https://github.com/u3n-ai/nuha.git
+cd nuha
+
+# Install UV (if not already installed)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Create virtual environment and install dependencies
+uv sync
+
+# Run in development mode
+uv run nuha --help
+
+# Run tests
+uv run pytest
+
+# Format code with Ruff
+uv run ruff format nuha/
+
+# Lint with Ruff
+uv run ruff check nuha/
+
+# Fix auto-fixable issues
+uv run ruff check --fix nuha/
+
+# Type check
+uv run pyrefly check .
+
+# Or use Make commands
+make test
+make format
+make lint
+make type-check
+make all  # Run all checks
+```
+
+### Building Binary
+
+```bash
+# Build production binary
+python setup_binary.py production
+
+# Build development binary (faster)
+python setup_binary.py dev
+
+# Create installer
+python setup_binary.py installer
+```
+
+The binary will be created in the `dist/` directory and can be distributed as a standalone executable.
+
+## ⚙️ Configuration
+
+Nuha stores its configuration in `~/.nuha/config.toml`. You can customize:
+
+```toml
+[ai]
+provider = "zhipuai"            # AI provider: zhipuai, openai, claude, deepseek
+model = "glm-4.5-flash"                 # AI model to use
+temperature = 0.3               # Response creativity (0.0-1.0)
+max_tokens = 2000               # Maximum response length
+
+[terminal]
+history_limit = 50              # Commands to analyze
+auto_analyze = true             # Enable automatic analysis
+include_context = true          # Include shell context
+
+[output]
+format = "rich"                 # Output format (rich/plain/json)
+color = true                   # Enable colored output
+verbose = false                # Verbose mode
+
+[behavior]
+auto_explain_errors = false    # Auto-explain all errors
+interactive_mode = true        # Enable interactive features
+save_analysis = true          # Save analysis results
+```
+
+### Configuration Commands
+
+```bash
+# Show current configuration (including active provider)
+nuha config --show
+
+# Edit configuration file
+nuha config --edit
+
+# Reset to defaults
+nuha config --reset
+
+# Switch AI provider
+nuha setup --provider openai
+nuha setup --provider claude
+nuha setup --provider deepseek
+```
+
+## 🔒 Privacy & Security
+
+- **Local Processing**: Terminal history is processed locally
+- **API Communication**: Only command context is sent to ZHIPUAI
+- **No Data Storage**: Nuha doesn't store your commands remotely
+- **Secure Keys**: API keys are stored locally in encrypted format
+
+## 🤝 Contributing
+
+We welcome contributions! Here's how to get started:
+
+1. **Fork the repository**
+2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
+3. **Make your changes**
+4. **Add tests**: Ensure your changes are tested
+5. **Commit your changes**
+6. **Run quality checks**:
+
+   ```bash
+   # Format code with Ruff
+   make format
+   # or: uv run ruff format .
+
+   # Lint code with Ruff
+   make lint
+   # or: uv run ruff check .
+
+   # Fix auto-fixable issues
+   uv run ruff check --fix .
+
+   # Type check
+   make type-check
+   # or: uv run pyrefly check .
+
+   # Run tests
+   make test
+   # or: uv run pytest
+
+   # Run all checks at once
+   make all
+
+   # Run pre-commit hooks on staged files
+   make pre-commit
+
+   # Run pre-commit hooks on all files
+   make pre-commit-all
+   ```
+
+7. **Commit your changes**: `git commit -m 'Add amazing feature'`
+8. **Push to branch**: `git push origin feature/amazing-feature`
+9. **Open a Pull Request**
+
+### Pre-commit Hooks
+
+This project uses pre-commit hooks to ensure code quality. The hooks are automatically configured when you clone the repository:
+
+```bash
+# Install pre-commit hooks (one-time setup)
+pre-commit install
+
+# Run hooks manually on staged files
+pre-commit run
+
+# Run hooks on all files
+pre-commit run --all-files
+
+# Or use Make commands
+make pre-commit      # Run on staged files
+make pre-commit-all  # Run on all files
+```
+
+The pre-commit configuration includes:
+
+- **Ruff**: Linting and formatting (`--fix` auto-fixes issues)
+- **Pyrefly**: Type checking
+- **Basic checks**: Trailing whitespace, YAML validation, etc.
+- **pytest**: Runs tests before commits
+
+Hooks will run automatically when you `git commit`, ensuring code quality before changes are committed.
+
+### Development Guidelines
+
+- **Code Style**: Follow PEP 8, use Ruff for formatting and linting
+- **Type Hints**: Add type hints to all functions
+- **Documentation**: Update docstrings and README
+- **Tests**: Add tests for new functionality
+- **Commit Messages**: Use conventional commit format
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+**"API key not configured"**
+
+```bash
+# Set your API key
+export ZHIPUAI_API_KEY="your-key-here"
+# Or run setup
+nuha setup
+```
+
+**"No recent commands found"**
+
+```bash
+# Check if history is enabled in your shell
+echo $HISTSIZE
+# For bash: add to ~/.bashrc
+export HISTSIZE=1000
+
+# For zsh: add to ~/.zshrc
+export SAVEHIST=1000
+```
+
+**"Permission denied"**
+
+```bash
+# Make binary executable
+chmod +x nuha
+
+# Or install to user directory
+mkdir -p ~/.local/bin
+cp nuha ~/.local/bin/
+export PATH="$HOME/.local/bin:$PATH"
+```
+
+### Debug Mode
+
+Enable verbose output for troubleshooting:
+
+```bash
+nuha --verbose explain --auto
+```
+
+Or check debug information:
+
+```bash
+nuha debug --trace
+```
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- **ZHIPUAI** for providing the default AI capabilities
+- **OpenAI** for GPT models
+- **Anthropic** for Claude models
+- **DeepSeek** for cost-effective AI access
+- **Rich** for beautiful terminal output
+- **Typer** for excellent CLI framework
+- **UV** for modern Python package management
+- **Ruff** for blazing-fast linting and formatting
+- **PyInstaller** for binary distribution
+
+## 📞 Support
+
+- **Issues**: [GitHub Issues](https://github.com/u3n-ai/nuha/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/u3n-ai/nuha/discussions)
+- **Email**: support@nuha.ai
+- **Documentation**: [docs.nuha.ai](https://docs.nuha.ai)
+
+---
+
+**Made with ❤️ by developers, for developers**
+
+_Nuha - Your AI companion in the terminal_

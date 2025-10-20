@@ -1,0 +1,350 @@
+name: Dependency Updates
+
+on:
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main, develop]
+    paths:
+      - "pyproject.toml"
+      - ".github/workflows/dependency-update.yml"
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - "pyproject.toml"
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  # Check for outdated dependencies
+  check-outdated:
+    name: Check Outdated Dependencies
+    runs-on: ubuntu-latest
+    outputs:
+      has-updates: ${{ steps.check.outputs.has-updates }}
+      update-count: ${{ steps.check.outputs.count }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+
+      - name: Check outdated dependencies
+        id: check
+        run: |
+          # Set up virtual environment and install dependencies
+          uv sync
+
+          # Check for outdated dependencies
+          uv pip install pipdeptree
+
+          # Get outdated packages
+          OUTDATED=$(uv pip list --outdated 2>/dev/null || echo "")
+
+          if [ -n "$OUTDATED" ]; then
+            COUNT=$(echo "$OUTDATED" | wc -l)
+            echo "has-updates=true" >> $GITHUB_OUTPUT
+            echo "count=$COUNT" >> $GITHUB_OUTPUT
+            echo "Found $COUNT outdated packages:"
+            echo "$OUTDATED"
+          else
+            echo "has-updates=false" >> $GITHUB_OUTPUT
+            echo "count=0" >> $GITHUB_OUTPUT
+            echo "All dependencies are up to date"
+          fi
+
+  # Update dependencies automatically
+  auto-update:
+    name: Auto Update Dependencies
+    runs-on: ubuntu-latest
+    needs: check-outdated
+    if: needs.check-outdated.outputs.has-updates == 'true'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+
+      - name: Update dependencies
+        run: |
+          set -e # Exit immediately if a command exits with a non-zero status.
+
+          # Install current dependencies and the tool for editing toml
+          uv sync
+          uv pip install toml requests
+
+          # Create a script to update dependencies in pyproject.toml
+          cat > update_deps.py << 'EOF'
+          import toml
+          import re
+          import requests
+          import sys
+
+          def get_latest_version(package_name):
+              """Get the latest version of a package from PyPI API."""
+              try:
+                  response = requests.get(f"https://pypi.org/pypi/{package_name}/json", timeout=10)
+                  response.raise_for_status()
+                  data = response.json()
+                  return data['info']['version']
+              except Exception as e:
+                  print(f"Warning: Could not get latest version for {package_name}: {e}", file=sys.stderr)
+                  return None
+
+          # Read current pyproject.toml
+          with open('pyproject.toml', 'r') as f:
+              data = toml.load(f)
+
+          # Helper to update a list of dependencies
+          def update_deps(deps_list, dep_type):
+              updated_deps = []
+              for dep in deps_list:
+                  # Parse package name (e.g., "typer>=0.9.0" -> "typer")
+                  match = re.match(r'^([a-zA-Z0-9\-_.]+)', dep)
+                  if not match:
+                      print(f"Could not parse dependency: {dep}, keeping as is.", file=sys.stderr)
+                      updated_deps.append(dep)
+                      continue
+
+                  pkg_name = match.group(1)
+                  latest_version = get_latest_version(pkg_name)
+
+                  if latest_version:
+                      # Preserve the original specifier if it's complex, otherwise use >=
+                      constraint_match = re.search(r'([><=!~]+.+)', dep)
+                      if constraint_match:
+                          # This is a simplification; it just replaces the version number
+                          # A more robust solution would parse the constraint more carefully
+                          # For now, we'll just use >= with the latest version
+                          updated_dep = f"{pkg_name}>={latest_version}"
+                      else:
+                          updated_dep = f"{pkg_name}>={latest_version}"
+
+                      if updated_dep != dep:
+                          print(f"Updating {dep_type} {pkg_name} from '{dep}' to '{updated_dep}'")
+                      updated_deps.append(updated_dep)
+                  else:
+                      print(f"Could not find latest version for {dep_type} {pkg_name}, keeping '{dep}'", file=sys.stderr)
+                      updated_deps.append(dep)
+              return updated_deps
+
+          # Update main dependencies
+          main_deps = data.get('project', {}).get('dependencies', [])
+          data['project']['dependencies'] = update_deps(main_deps, "main")
+
+          # Update dev dependencies
+          dev_deps = data.get('project', {}).get('optional-dependencies', {}).get('dev', [])
+          data['project']['optional-dependencies']['dev'] = update_deps(dev_deps, "dev")
+
+          # Write updated pyproject.toml
+          with open('pyproject.toml', 'w') as f:
+              toml.dump(data, f)
+
+          print("\npyproject.toml has been updated with latest dependency versions.")
+          EOF
+
+          # Run the update script using uv to ensure packages are available
+          uv run python update_deps.py
+
+          # Show the diff for verification
+          echo "--- Diff of pyproject.toml ---"
+          git diff pyproject.toml
+          echo "-----------------------------"
+
+      - name: Create PR for dependency updates
+        uses: peter-evans/create-pull-request@v5
+        continue-on-error: true
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: update dependencies"
+          title: "🔄 Automatic Dependency Updates"
+          body: |
+            ## 🔄 Automatic Dependency Updates
+
+            This PR contains automatic dependency updates.
+
+            **Changes:**
+            - Updated Python dependencies to latest compatible versions
+            - Updated development dependencies
+
+            **Testing:**
+            - [ ] All tests pass
+            - [ ] Code quality checks pass
+            - [ ] Type checking passes
+
+            **Verification:**
+            Please review the changes and ensure all tests pass before merging.
+          branch: chore/dependency-updates
+          delete-branch: true
+
+      - name: Show manual update instructions
+        if: failure()
+        run: |
+          echo "⚠️ Could not create PR automatically (permission issue)"
+          echo ""
+          echo "📝 Manual steps to apply updates:"
+          echo "1. Review the diff above"
+          echo "2. Apply changes manually or grant workflow permissions"
+          echo "3. Commit and push the changes"
+
+  # Security vulnerability scan
+  security-scan:
+    name: Security Vulnerability Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Run safety check
+        run: |
+          uv pip install safety
+          uv run safety check --json --output json > safety-report.json || true
+
+          # Check for vulnerabilities
+          if [ -f safety-report.json ]; then
+            VULNS=$(jq '.vulnerabilities | length' safety-report.json 2>/dev/null || echo "0")
+            echo "Found $VULNS vulnerabilities"
+
+            if [ "$VULNS" -gt 0 ]; then
+              echo "Security vulnerabilities found:"
+              cat safety-report.json | jq -r '.vulnerabilities[] | "- \(.package) \(.installed_version): \(.advisory)"'
+
+              # Create issue for vulnerabilities
+              gh issue create \
+                --title "🚨 Security Vulnerabilities Found" \
+                --label "security" \
+                --body "Found $VULNS security vulnerabilities in dependencies. Please review and update packages." \
+                || echo "Issue creation failed or already exists"
+            fi
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # License compliance check
+  license-check:
+    name: License Compliance Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Install license checker
+        run: uv pip install pip-licenses
+
+      - name: Check licenses
+        run: |
+          # Check for non-permissive licenses
+          uv run pip-licenses \
+            --from=mixed \
+            --format=table \
+            --ignore-packages \
+            --allow-licenses="MIT;Apache-2.0;BSD-2-Clause;BSD-3-Clause;ISC;Python-2.0" \
+            --fail-on="unlicensed" || echo "License check completed with warnings"
+
+  # Dependency graph update
+  update-dependency-graph:
+    name: Update Dependency Graph
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Generate dependency graph
+        run: |
+          uv pip install pipdeptree graphviz
+
+          # Generate dependency tree
+          uv run pipdeptree --json > dependency-tree.json
+
+          # Generate visual graph if graphviz is available
+          if command -v dot &> /dev/null; then
+            uv run pipdeptree --graph-output-dot > dependency-graph.dot
+            dot -Tpng dependency-graph.dot -o dependency-graph.png
+          fi
+
+      - name: Upload dependency analysis
+        uses: actions/upload-artifact@v4
+        if: env.ACTIONS_RUNTIME_TOKEN != ''
+        with:
+          name: dependency-analysis
+          path: |
+            dependency-tree.json
+            dependency-graph.dot
+            dependency-graph.png
+          retention-days: 30
+        continue-on-error: true
+      - name: Skip artifact upload (local testing)
+        if: env.ACTIONS_RUNTIME_TOKEN == ''
+        run: |
+          echo "🔧 Skipping artifact upload - running in local environment (act)"
+          echo "📦 Dependency analysis files available locally:"
+          ls -la dependency-tree.json dependency-graph.dot dependency-graph.png 2>/dev/null || echo "Some files not generated"
+
+  # Create summary
+  summary:
+    name: Dependency Update Summary
+    runs-on: ubuntu-latest
+    needs: [check-outdated, auto-update, security-scan, license-check]
+    if: always()
+    steps:
+      - name: Create summary
+        run: |
+          echo "## Dependency Update Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Outdated Dependencies**: ${{ needs.check-outdated.outputs.update-count || '0' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Auto Update**: ${{ needs.auto-update.result || 'skipped' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Security Scan**: ${{ needs.security-scan.result || 'completed' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **License Check**: ${{ needs.license-check.result || 'completed' }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Next Steps" >> $GITHUB_STEP_SUMMARY
+          echo "1. Review any auto-update PRs" >> $GITHUB_STEP_SUMMARY
+          echo "2. Address any security vulnerabilities" >> $GITHUB_STEP_SUMMARY
+          echo "3. Check license compliance issues" >> $GITHUB_STEP_SUMMARY
+          echo "4. Test updates before merging" >> $GITHUB_STEP_SUMMARY

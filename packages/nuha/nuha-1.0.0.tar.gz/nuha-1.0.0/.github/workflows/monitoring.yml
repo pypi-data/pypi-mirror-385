@@ -1,0 +1,517 @@
+name: Monitoring & Alerting
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    # Run daily at 6 AM UTC
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+jobs:
+  # Health checks
+  health-check:
+    name: System Health Check
+    runs-on: ubuntu-latest
+    outputs:
+      health-status: ${{ steps.health.outputs.status }}
+      issues-found: ${{ steps.health.outputs.issues }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Install dev dependencies
+        run: uv pip install -e ".[dev]"
+
+      - name: Run health checks
+        id: health
+        run: |
+          ISSUES=0
+
+          echo "## System Health Check" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Check if basic functionality works
+          echo "### Basic Functionality" >> $GITHUB_STEP_SUMMARY
+
+          if uv run python -c "import nuha; print('✅ Package imports successfully')" 2>/dev/null; then
+            echo "- ✅ Package imports successfully" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- ❌ Package import failed" >> $GITHUB_STEP_SUMMARY
+            ((ISSUES++))
+          fi
+
+          # Check CLI functionality
+          if uv run nuha --help >/dev/null 2>&1; then
+            echo "- ✅ CLI help command works" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- ❌ CLI help command failed" >> $GITHUB_STEP_SUMMARY
+            ((ISSUES++))
+          fi
+
+          # Check core modules
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Core Modules" >> $GITHUB_STEP_SUMMARY
+
+          for module in config command_parser ai_client terminal_reader; do
+            if uv run python -c "from nuha.core.$module import *; print('✅ $module')" 2>/dev/null; then
+              echo "- ✅ nuha.core.$module" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "- ❌ nuha.core.$module" >> $GITHUB_STEP_SUMMARY
+              ((ISSUES++))
+            fi
+          done
+
+          # Check configuration
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Configuration" >> $GITHUB_STEP_SUMMARY
+
+          if uv run python -c "from nuha.core.config import Config; c = Config(); print('✅ Configuration loads')" 2>/dev/null; then
+            echo "- ✅ Configuration loads successfully" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- ❌ Configuration loading failed" >> $GITHUB_STEP_SUMMARY
+            ((ISSUES++))
+          fi
+
+          echo "status=$ISSUES" >> $GITHUB_OUTPUT
+          echo "issues=$ISSUES" >> $GITHUB_OUTPUT
+
+          if [ $ISSUES -eq 0 ]; then
+            echo "✅ All health checks passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ $ISSUES health check(s) failed" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  # Performance monitoring
+  performance-monitor:
+    name: Performance Monitoring
+    runs-on: ubuntu-latest
+    needs: health-check
+    if: needs.health-check.outputs.issues == '0'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Install monitoring tools
+        run: uv pip install psutil pytest-benchmark
+
+      - name: Monitor system resources
+        run: |
+          echo "## System Resource Monitoring" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Memory usage
+          MEMORY=$(uv run python -c "
+          import psutil
+          mem = psutil.virtual_memory()
+          print(f'{mem.percent:.1f}')
+          ")
+          echo "- **Memory Usage**: ${MEMORY}%" >> $GITHUB_STEP_SUMMARY
+
+          # CPU usage
+          CPU=$(uv run python -c "
+          import psutil
+          cpu = psutil.cpu_percent(interval=1)
+          print(f'{cpu:.1f}')
+          ")
+          echo "- **CPU Usage**: ${CPU}%" >> $GITHUB_STEP_SUMMARY
+
+          # Disk usage
+          DISK=$(uv run python -c "
+          import psutil
+          disk = psutil.disk_usage('/')
+          print(f'{(disk.used/disk.total)*100:.1f}')
+          ")
+          echo "- **Disk Usage**: ${DISK}%" >> $GITHUB_STEP_SUMMARY
+
+      - name: Benchmark performance
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Performance Benchmarks" >> $GITHUB_STEP_SUMMARY
+
+          # Create simple performance test
+          cat > perf_test.py << 'EOF'
+          import time
+          from nuha.core.command_parser import CommandParser
+
+          def benchmark_parsing():
+              parser = CommandParser()
+              test_commands = [
+                  "ls -la",
+                  "grep -r 'pattern' /etc/",
+                  "docker run -it ubuntu bash",
+                  "kubectl get pods -n namespace",
+                  "git commit -m 'message'"
+              ]
+
+              start_time = time.time()
+              for cmd in test_commands * 100:  # Run each 100 times
+                  parser.parse_command(cmd)
+              end_time = time.time()
+
+              total_time = end_time - start_time
+              avg_time = total_time / (len(test_commands) * 100)
+              return total_time, avg_time
+
+          if __name__ == "__main__":
+              total, avg = benchmark_parsing()
+              print(f"Total time: {total:.3f}s")
+              print(f"Average time per parse: {avg:.6f}s")
+          EOF
+
+          uv run python perf_test.py >> $GITHUB_STEP_SUMMARY
+
+  # Dependency health monitoring
+  dependency-health:
+    name: Dependency Health Monitor
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Check dependency health
+        run: |
+          echo "## Dependency Health" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Check for circular dependencies
+          uv pip install pipdeptree
+          echo "### Dependency Tree Analysis" >> $GITHUB_STEP_SUMMARY
+
+          if uv run pipdeptree --graph-output-dot > deps.dot 2>/dev/null; then
+            echo "- ✅ Dependency tree generated successfully" >> $GITHUB_STEP_SUMMARY
+
+            # Check for potential issues
+            if grep -q "Warning" deps.dot; then
+              echo "- ⚠️ Warnings found in dependency tree" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "- ✅ No warnings in dependency tree" >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "- ❌ Failed to generate dependency tree" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          # Check package sizes
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Package Sizes" >> $GITHUB_STEP_SUMMARY
+
+          uv pip list --format=columns > package_list.txt
+
+          while read -r package version; do
+            if [[ "$package" != "Package" && "$package" != "--------" && -n "$package" ]]; then
+              echo "- **$package**: $version" >> $GITHUB_STEP_SUMMARY
+            fi
+          done < <(awk 'NR>2 {print $1, $2}' package_list.txt | head -10)
+
+      - name: Upload dependency analysis
+        uses: actions/upload-artifact@v4
+        if: env.ACTIONS_RUNTIME_TOKEN != ''
+        with:
+          name: dependency-health
+          path: |
+            deps.dot
+            package_list.txt
+          retention-days: 7
+        continue-on-error: true
+      - name: Skip artifact upload (local testing)
+        if: env.ACTIONS_RUNTIME_TOKEN == ''
+        run: |
+          echo "🔧 Skipping artifact upload - running in local environment (act)"
+          echo "📦 Dependency analysis files available locally:"
+          ls -la deps.dot package_list.txt 2>/dev/null || echo "Some files not generated"
+
+  # Test stability monitoring
+  test-stability:
+    name: Test Stability Monitor
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Install dev dependencies
+        run: uv pip install -e ".[dev]"
+
+      - name: Run stability tests
+        run: |
+          echo "## Test Stability Analysis" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Run tests multiple times to check for flakiness
+          RUNS=3
+          FAILED_RUNS=0
+
+          for i in $(seq 1 $RUNS); do
+            echo "### Test Run $i/$RUNS" >> $GITHUB_STEP_SUMMARY
+
+            if uv run pytest --tb=short --quiet; then
+              echo "- ✅ Run $i passed" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "- ❌ Run $i failed" >> $GITHUB_STEP_SUMMARY
+              ((FAILED_RUNS++))
+            fi
+          done
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Stability Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- **Total Runs**: $RUNS" >> $GITHUB_STEP_SUMMARY
+          echo "- **Failed Runs**: $FAILED_RUNS" >> $GITHUB_STEP_SUMMARY
+          echo "- **Success Rate**: $(( (RUNS - FAILED_RUNS) * 100 / RUNS ))%" >> $GITHUB_STEP_SUMMARY
+
+          if [ $FAILED_RUNS -eq 0 ]; then
+            echo "- ✅ All runs stable" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- ⚠️ Some runs failed - potential flakiness detected" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  # Code coverage trends
+  coverage-trends:
+    name: Coverage Trends
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Get full history for comparison
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Install dev dependencies
+        run: uv pip install -e ".[dev]"
+
+      - name: Generate coverage report
+        run: |
+          uv run pytest --cov=nuha --cov-report=xml --cov-report=term-missing
+
+          # Extract coverage percentage using a simpler method
+          COVERAGE=$(uv run python -c "
+          try:
+              import xml.etree.ElementTree as ET
+              tree = ET.parse('coverage.xml')
+              root = tree.getroot()
+              coverage_elem = root.find('.//coverage')
+              if coverage_elem is not None:
+                  line_rate = coverage_elem.get('line-rate', '0')
+                  coverage_percent = float(line_rate) * 100
+                  print(f'{coverage_percent:.1f}')
+              else:
+                  print('0.0')
+          except Exception as e:
+              print(f'0.0')
+          ")
+
+          echo "CURRENT_COVERAGE=$COVERAGE" >> $GITHUB_ENV
+
+      - name: Compare with previous coverage
+        run: |
+          echo "## Coverage Trends" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Get previous coverage if available
+          git fetch origin main 2>/dev/null || git fetch origin develop 2>/dev/null || echo "No main/develop branch to compare"
+
+          # Try to get coverage from last successful run (this would need to be stored somewhere)
+          # For now, just show current coverage
+          echo "- **Current Coverage**: ${{ env.CURRENT_COVERAGE }}%" >> $GITHUB_STEP_SUMMARY
+
+          # Coverage thresholds
+          if (( $(echo "${{ env.CURRENT_COVERAGE }} >= 30" | bc -l) )); then
+            echo "- ✅ Coverage meets 30% threshold" >> $GITHUB_STEP_SUMMARY
+          elif (( $(echo "${{ env.CURRENT_COVERAGE }} >= 25" | bc -l) )); then
+            echo "- ⚠️ Coverage meets minimum 25% threshold" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- ❌ Coverage below 25% minimum threshold" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Coverage Recommendations" >> $GITHUB_STEP_SUMMARY
+          echo "1. Aim for coverage above 30% for good test coverage" >> $GITHUB_STEP_SUMMARY
+          echo "2. Focus on testing core functionality first" >> $GITHUB_STEP_SUMMARY
+          echo "3. Add tests for complex logic paths" >> $GITHUB_STEP_SUMMARY
+
+  # Create monitoring summary
+  monitoring-summary:
+    name: Monitoring Summary
+    runs-on: ubuntu-latest
+    needs:
+      [
+        health-check,
+        performance-monitor,
+        dependency-health,
+        test-stability,
+        coverage-trends,
+      ]
+    if: always()
+    steps:
+      - name: Generate monitoring summary
+        run: |
+          echo "## 📊 Monitoring Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Health status
+          HEALTH_ISSUES="${{ needs.health-check.outputs.issues }}"
+          # Default to 0 if empty or not set
+          HEALTH_ISSUES="${HEALTH_ISSUES:-0}"
+
+          echo "### 🏥 System Health" >> $GITHUB_STEP_SUMMARY
+          if [ "$HEALTH_ISSUES" == "0" ]; then
+            echo "- ✅ All systems healthy" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- ❌ $HEALTH_ISSUES health issue(s) detected" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          # Performance status
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### ⚡ Performance" >> $GITHUB_STEP_SUMMARY
+          echo "- Status: ${{ needs.performance-monitor.result }}" >> $GITHUB_STEP_SUMMARY
+
+          # Dependency status
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📦 Dependencies" >> $GITHUB_STEP_SUMMARY
+          echo "- Status: ${{ needs.dependency-health.result }}" >> $GITHUB_STEP_SUMMARY
+
+          # Test stability
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🧪 Test Stability" >> $GITHUB_STEP_SUMMARY
+          echo "- Status: ${{ needs.test-stability.result }}" >> $GITHUB_STEP_SUMMARY
+
+          # Coverage
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📈 Coverage" >> $GITHUB_STEP_SUMMARY
+          echo "- Status: ${{ needs.coverage-trends.result }}" >> $GITHUB_STEP_SUMMARY
+
+          # Overall assessment
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 🎯 Overall Assessment" >> $GITHUB_STEP_SUMMARY
+
+          FAILED_CHECKS=0
+
+          # Only count actual failures, not skipped jobs
+          if [ "$HEALTH_ISSUES" != "0" ] && [ "$HEALTH_ISSUES" != "" ]; then 
+            FAILED_CHECKS=$((FAILED_CHECKS + 1))
+          fi
+
+          if [[ "${{ needs.performance-monitor.result }}" == "failure" ]]; then 
+            FAILED_CHECKS=$((FAILED_CHECKS + 1))
+          fi
+
+          if [[ "${{ needs.dependency-health.result }}" == "failure" ]]; then 
+            FAILED_CHECKS=$((FAILED_CHECKS + 1))
+          fi
+
+          if [[ "${{ needs.test-stability.result }}" == "failure" ]]; then 
+            FAILED_CHECKS=$((FAILED_CHECKS + 1))
+          fi
+
+          if [ $FAILED_CHECKS -eq 0 ]; then
+            echo "🟢 **All monitoring checks passed**" >> $GITHUB_STEP_SUMMARY
+            echo "System is operating normally with good performance and stability." >> $GITHUB_STEP_SUMMARY
+          elif [ $FAILED_CHECKS -le 2 ]; then
+            echo "🟡 **Minor issues detected**" >> $GITHUB_STEP_SUMMARY
+            echo "System is mostly functional but some attention may be needed." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "🔴 **Multiple issues detected**" >> $GITHUB_STEP_SUMMARY
+            echo "System requires immediate attention and maintenance." >> $GITHUB_STEP_SUMMARY
+          fi
+
+          # Recommendations
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 📋 Recommendations" >> $GITHUB_STEP_SUMMARY
+          echo "1. Review any failed checks and address critical issues first" >> $GITHUB_STEP_SUMMARY
+          echo "2. Monitor performance trends over time" >> $GITHUB_STEP_SUMMARY
+          echo "3. Keep dependencies updated to maintain security" >> $GITHUB_STEP_SUMMARY
+          echo "4. Maintain test stability to ensure reliable releases" >> $GITHUB_STEP_SUMMARY
+
+  # Alert on critical issues
+  alert-critical:
+    name: Alert on Critical Issues
+    runs-on: ubuntu-latest
+    needs:
+      [health-check, performance-monitor, dependency-health, test-stability]
+    if: failure() && (needs.health-check.result == 'failure' || needs.test-stability.result == 'failure')
+    steps:
+      - name: Create alert issue
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const title = '🚨 Critical System Alert';
+            const body = `
+            ## Critical Issues Detected
+
+            **Health Check**: ${{ needs.health-check.result }}
+            **Performance Monitor**: ${{ needs.performance-monitor.result }}
+            **Dependency Health**: ${{ needs.dependency-health.result }}
+            **Test Stability**: ${{ needs.test-stability.result }}
+
+            **Health Issues**: ${{ needs.health-check.outputs.issues }}
+
+            ### Immediate Action Required
+
+            Please investigate and resolve the critical issues detected in the latest monitoring run.
+
+            **Next Steps**:
+            1. Review the failed workflow runs
+            2. Check system logs and error messages
+            3. Address the root causes
+            4. Verify fixes with re-run
+
+            This alert was automatically generated by the monitoring workflow.
+            `;
+
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: title,
+              body: body,
+              labels: ['critical', 'alert', 'monitoring']
+            });
