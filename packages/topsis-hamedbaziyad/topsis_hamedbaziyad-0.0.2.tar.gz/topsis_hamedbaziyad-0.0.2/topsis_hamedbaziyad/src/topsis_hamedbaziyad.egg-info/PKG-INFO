@@ -1,0 +1,82 @@
+Metadata-Version: 2.4
+Name: topsis-hamedbaziyad
+Version: 0.0.2
+Summary: Technique for Order of Preference by Similarity to Ideal Solution (TOPSIS) CHING-LAI Hwang and Yoon introduced TOPSIS in 1981 in their Multiple Criteria Decision Making (MCDM) and Multiple Criteria Decision Analysis (MCDA) methods
+Author: Hamed Baziyad
+Author-email: Lucas Piccioni Costa <lucascosta74@gmail.com>
+License: MIT License
+        
+        Copyright (c) 2024 Jules
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: Homepage, https://github.com/evaristocosta/TOPSIS
+Project-URL: Bug Tracker, https://github.com/evaristocosta/TOPSIS/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pandas
+Requires-Dist: numpy
+Dynamic: license-file
+
+# TOPSIS Python
+
+> IMPORTANT: This implementation was originally developed by [Intelizer](https://github.com/hamedbaziyad/TOPSIS). [Jules](https://jules.google.com/) was used to make it a pip-installable package.
+
+This repository provides a Python implementation of the Technique for Order of Preference by Similarity to Ideal Solution (TOPSIS), a method for multiple-criteria decision analysis.
+
+## Installation
+
+You can install this package using pip:
+
+```bash
+pip install topsis-hamedbaziyad
+```
+
+## Usage
+
+Here is a simple example of how to use the `topsis` package:
+
+```python
+import pandas as pd
+from topsis_hamedbaziyad import TOPSIS
+
+# Create a sample decision matrix
+data = {
+    'Alternatives': ['A1', 'A2', 'A3', 'A4'],
+    'C1': [10, 12, 15, 8],
+    'C2': [8, 9, 11, 10],
+    'C3': [7, 10, 8, 9]
+}
+decision_matrix = pd.DataFrame(data).set_index('Alternatives')
+
+# Define the weights and attribute types
+weights = [0.4, 0.3, 0.3]
+attribute_types = [1, 1, 0]
+
+# Run the TOPSIS algorithm
+topsis_result = TOPSIS(decision_matrix, weights, attribute_types)
+topsis_result = pd.DataFrame(topsis_result).sort_values(by=0, ascending=False)
+topsis_result.columns = ["Performance Score"]
+
+# Display the results
+print(topsis_result)
+```
