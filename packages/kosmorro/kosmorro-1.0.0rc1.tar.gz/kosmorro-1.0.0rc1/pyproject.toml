@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "kosmorro"
+version = "1.0.0rc1"
+description = "A program to compute the ephemerides."
+authors = ["Jérôme Deuchnord <jerome@deuchnord.fr>"]
+license = "AGPL-3.0-or-later"
+
+include = [
+    "CHANGELOG.md",
+    "kosmorro/locales/*/LC_MESSAGES/*.mo",
+    "kosmorro/assets",
+]
+
+[tool.poetry.scripts]
+kosmorro = 'kosmorro.__main__:main'
+
+[tool.poetry.dependencies]
+python = "^3.12"
+tabulate = ">=0.8,<0.10"
+termcolor = "^3.0"
+kosmorrolib = "^1.0"
+python-dateutil = "^2.8"
+Babel = "^2.9"
+openlocationcode = "^1.0"
+pytz = "^2025.2"
+argcomplete = "^3.6.2"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.8"
+pytest = "^8.3"
+aurornis = "^1.6"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

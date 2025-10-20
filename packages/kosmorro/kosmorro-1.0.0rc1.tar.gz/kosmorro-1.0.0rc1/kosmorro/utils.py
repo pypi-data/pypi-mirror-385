@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+from datetime import datetime
+
+import pytz
+from termcolor import colored as do_color
+from sys import stderr
+
+from importlib.metadata import version
+
+KOSMORRO_VERSION = version("kosmorro")
+KOSMORROLIB_VERSION = version("kosmorrolib")
+
+
+global _COLORS_ACTIVATED
+
+
+def set_colors_activated(activated: bool):
+    global _COLORS_ACTIVATED
+    _COLORS_ACTIVATED = activated
+
+
+def colored(text, color=None, on_color=None, attrs=None):
+    """Decorator to use colors only when they are activated"""
+    if not _COLORS_ACTIVATED:
+        return text
+
+    return do_color(text, color, on_color, attrs)
+
+
+def print_stderr(*values: object):
+    print(*values, file=stderr)
+
+
+def get_timezone(value: int | str) -> float:
+    try:
+        timezone = float(value)
+    except ValueError:
+        timezone = pytz.timezone(value).utcoffset(datetime.now()).total_seconds() / 3600
+
+    return timezone
