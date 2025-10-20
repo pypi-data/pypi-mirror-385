@@ -1,0 +1,5244 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "Les API factures permettent aux fournisseurs et aux destinataires de gérer les factures : \n\nEn tant que fournisseur :\n \n  \n - Déposer un lot de factures après la constitution d'un flux facture \n \n  \n - Envoyer une facture unitaire en mode de saisie ou au format PDF \n \n  \n - Compléter la facture au statut SUSPENDUE avec l'ajout de pièces jointes \n \n  \n - Recycler une facture au statut A_RECYCLER en changeant le destinataire et/ou code service et/ou numéro d'engagement \n\nA titre d'exemple, voici une cinématique nominale pour soumettre une facture \n \n &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  1- Faire appel à l'API \"Rechercher structure\" avec le SIRET de la structure destinataire afin de récupérer en sortie \"idStructureCPP\"\n \n &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;   2- Faire appel à l'API \"Consulter structure\" avec en entrée l'idStructureCPP pour avoir les paramètres obligatoires de la structure (numéro d'Engagement et/ou codeService)\n \n &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;   3- Faire appel à l'API \"rechercherServiceStructure\" avec  en entrée l'idStructureCPP afin de visualiser les services actifs de la structure renseignée\n \n &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;   4- Soumettre la facture via l'API \"SoumettreFacture\" en renseignant toutes les données nécessaires.\n\nEn tant que Destinataire :\n  \n  * Rechercher les factures reçues par le service financier. \n \n  \n * Afficher les informations d'une facture reçue à l'aide des méthodes de consultation et/ou de téléchargement. \n \n  \n * Traiter une facture reçue en changeant le statut. \n \n  \n A titre d'exemple, voici une cinématique nominale pour télécharger une facture :\n   \n &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  1 - Faire appel à l'API \"rechercherFactureParRecipiendaire\" afin d'afficher les factures reçues correspondant aux paramètres de recherche renseignés (exemple: l'indicateur factureTelechargeeParDestinataire permettant de savoir si la facture a été téléchargée ou non).\n  \n &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  2 - Utiliser telechargerGroupeFacture pour télécharger une ou plusieurs factures (préconisation 10 factures). Le flag factureTelechargeeParDestinataire se met à jour pour les factures téléchargées.\n \n  \n &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;   3 - Utiliser l'API \"traiterFactureRecue\" afin de traiter la facture renseignée en entrée de l'appel en lui donnant un nouveau statut (MISE_A_DISPOSITION - SUSPENDUE - REJETEE - MANDATEE - MISE_EN_PAIEMENT - COMPTABILISEE - MISE_A_DISPOSITION_COMPTABLE - A_RECYCLER - COMPLETEE - SERVICE-FAIT - PRISE_EN_COMPTE_DESTINATAIRE - TRANSMISE_MOA) \n  \n   \n  Pour pouvoir utiliser l'application SANDBOX avec des données de Chorus Pro en qualification, les prérequis sont les suivants :\n \n  \n  - Créer un compte utilisateur sur l'environnement de qualification Chorus Pro :\n    https://chorus-pro.gouv.fr/qualif\n \n  \n  - Générer un matelas de données, pour plus d'informations, un guide en ligne est disponible sur la communauté Chorus Pro :\n    https://communaute.chorus-pro.gouv.fr/documentation/portail-de-qualification-sur-chorus-pro\n \n  \n  - Créer un raccordement Oauth2 sur l'environnement de qualification Chorus Pro, pour plus d'informations, vous pourrez vous référer à la page suivante :\n    https://communaute.chorus-pro.gouv.fr/documentation/aides-aux-developpeurs-api-en-mode-oauth2/",
+    "version" : "1.0.0",
+    "title" : "Factures"
+  },
+  "host" : "sandbox-api.piste.gouv.fr",
+  "basePath" : "/cpro/factures",
+  "schemes" : [ "https", "http" ],
+  "security" : [ {
+    "SecurityProfile.OAuthApplication" : [ "openid" ]
+  }, {
+    "SecurityProfile.OAuth External OIDCApplication" : [ "openid profile" ]
+  } ],
+  "paths" : {
+    "/v1/rechercher/aTraiter/valideur" : {
+      "post" : {
+        "tags" : [ "factures" ],
+        "summary" : "La méthode rechercherFactureATraiterParValideur permet d'afficher la liste des factures à traiter par un valideur.",
+        "description" : "La méthode rechercherFactureATraiterParValideur permet d'afficher la liste des factures à traiter par un valideur.",
+        "operationId" : "rechercherFactureATraiterParValideur",
+        "consumes" : [ "application/json;charset=utf-8" ],
+        "produces" : [ "application/json;charset=utf-8" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/RechercherFactureATraiterParValideurParam"
+          }
+        }, {
+          "name" : "cpro-account",
+          "in" : "header",
+          "description" : "Identifiant compte CPRO sous la forme 'login:password' encodé en base 64.\nExemple : 'bG9naW46cGFzc3dvcmQ='",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "deprecated" : true,
+        "responses" : {
+          "200" : {
+            "description" : "Succès de la requête",
+            "schema" : {
+              "$ref" : "#/definitions/WsRetourRechercherFactureATraiterParValideur"
+            }
+          },
+          "202" : {
+            "description" : "Requête acceptée"
+          },
+          "400" : {
+            "description" : "Requête mal formulée"
+          },
+          "401" : {
+            "description" : "Problème d'authentification"
+          },
+          "500" : {
+            "description" : "Erreur interne du serveur"
+          },
+          "403" : {
+            "description" : "Accès refusé"
+          },
+          "404" : {
+            "description" : "API non trouvée"
+          },
+          "415" : {
+            "description" : "Format de la requête non supporté"
+          }
+        }
+      }
+    },
+    "/v1/traiter/factureAValider" : {
+      "post" : {
+        "tags" : [ "factures" ],
+        "summary" : "La méthode traiterFactureAValider permet à un valideur de modifier le statut d'une facture à valider en renseignant le cas échéant un motif de refus.",
+        "description" : "La méthode traiterFactureAValider permet à un valideur de modifier le statut d'une facture à valider en renseignant le cas échéant un motif de refus.",
+        "operationId" : "traiterFactureAValider",
+        "consumes" : [ "application/json;charset=utf-8" ],
+        "produces" : [ "application/json;charset=utf-8" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/TraiterFactureAValiderParam"
+          }
+        }, {
+          "name" : "cpro-account",
+          "in" : "header",
+          "description" : "Identifiant compte CPRO sous la forme 'login:password' encodé en base 64.\nExemple : 'bG9naW46cGFzc3dvcmQ='",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succès de la requête",
+            "schema" : {
+              "$ref" : "#/definitions/WsRetourTraiterFactureAValider"
+            }
+          },
+          "202" : {
+            "description" : "Requête acceptée"
+          },
+          "400" : {
+            "description" : "Requête mal formulée"
+          },
+          "401" : {
+            "description" : "Problème d'authentification"
+          },
+          "500" : {
+            "description" : "Erreur interne du serveur"
+          },
+          "403" : {
+            "description" : "Accès refusé"
+          },
+          "404" : {
+            "description" : "API non trouvée"
+          },
+          "415" : {
+            "description" : "Format de la requête non supporté"
+          }
+        }
+      }
+    },
+    "/v1/telecharger/groupe" : {
+      "post" : {
+        "tags" : [ "factures" ],
+        "summary" : "La méthode telechargerGroupeFacture permet de télécharger une ou plusieurs factures émises, reçues ou à valider en précisant le format de réception (XML, PDF ou ZIP) et les pièces jointes associées à ces factures. Le dossier téléchargé ne doit pas dépasser la taille maximum d'un dossier de facturation (120 Mo), quelque soit le nombre de factures téléchargées. Si le dossier récupéré dépasse cette taille, une erreur 413 sera remontée.",
+        "description" : "La méthode telechargerGroupeFacture permet de télécharger une ou plusieurs factures émises, reçues ou à valider en précisant le format de réception (XML, PDF ou ZIP) et les pièces jointes associées à ces factures. Le dossier téléchargé ne doit pas dépasser la taille maximum d'un dossier de facturation (120 Mo), quelque soit le nombre de factures téléchargées. Si le dossier récupéré dépasse cette taille, une erreur 413 sera remontée.",
+        "operationId" : "telechargerGroupeFacture",
+        "consumes" : [ "application/json;charset=utf-8" ],
+        "produces" : [ "application/json;charset=utf-8" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/TelechargerGroupeFactureParam"
+          }
+        }, {
+          "name" : "cpro-account",
+          "in" : "header",
+          "description" : "Identifiant compte CPRO sous la forme 'login:password' encodé en base 64.\nExemple : 'bG9naW46cGFzc3dvcmQ='",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succès de la requête",
+            "schema" : {
+              "$ref" : "#/definitions/WsRetourTelechargerGroupeFacture"
+            }
+          },
+          "202" : {
+            "description" : "Requête acceptée"
+          },
+          "400" : {
+            "description" : "Requête mal formulée"
+          },
+          "401" : {
+            "description" : "Problème d'authentification"
+          },
+          "500" : {
+            "description" : "Erreur interne du serveur"
+          },
+          "403" : {
+            "description" : "Accès refusé"
+          },
+          "404" : {
+            "description" : "API non trouvée"
+          },
+          "415" : {
+            "description" : "Format de la requête non supporté"
+          }
+        }
+      }
+    },
+    "/v1/deposer/pdf" : {
+      "post" : {
+        "tags" : [ "factures" ],
+        "summary" : "La méthode deposerPDFFacture permet de déposer un fichier PDF et d'en initier la reconnaissance des caractères. La facture ainsi interprétée est au statut \"INTERPRETEE_OCR\". Elle sera soumise via la méthode \"soumettreFacture\". Le fichier PDF ne doit pas dépasser 10 Mo. Si le fichier dépasse cette taille, une erreur 413 sera remontée.",
+        "description" : "La méthode deposerPDFFacture permet de déposer un fichier PDF et d'en initier la reconnaissance des caractères. La facture ainsi interprétée est au statut \"INTERPRETEE_OCR\". Elle sera soumise via la méthode \"soumettreFacture\". Le fichier PDF ne doit pas dépasser 10 Mo. Si le fichier dépasse cette taille, une erreur 413 sera remontée.",
+        "operationId" : "deposerPdfFacture",
+        "consumes" : [ "application/json;charset=utf-8" ],
+        "produces" : [ "application/json;charset=utf-8" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/DeposerPdfFactureParam"
+          }
+        }, {
+          "name" : "cpro-account",
+          "in" : "header",
+          "description" : "Identifiant compte CPRO sous la forme 'login:password' encodé en base 64.\nExemple : 'bG9naW46cGFzc3dvcmQ='",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "deprecated" : true,
+        "responses" : {
+          "200" : {
+            "description" : "Succès de la requête",
+            "schema" : {
+              "$ref" : "#/definitions/WsRetourDeposerPdfFacture"
+            }
+          },
+          "202" : {
+            "description" : "Requête acceptée"
+          },
+          "400" : {
+            "description" : "Requête mal formulée"
+          },
+          "401" : {
+            "description" : "Problème d'authentification"
+          },
+          "500" : {
+            "description" : "Erreur interne du serveur"
+          },
+          "403" : {
+            "description" : "Accès refusé"
+          },
+          "404" : {
+            "description" : "API non trouvée"
+          },
+          "415" : {
+            "description" : "Format de la requête non supporté"
+          }
+        }
+      }
+    },
+    "/v1/rechercher/demandePaiement" : {
+      "post" : {
+        "tags" : [ "factures" ],
+        "summary" : "La méthode rechercherDemandePaiement permet de retourner des demandes de paiement en base archive et en base vivante pour l'utilisateur connecté en fonction de certains critères (service exposé ne fonctionnant pas sur l'espace de qualification).",
+        "description" : "La méthode rechercherDemandePaiement permet de retourner des demandes de paiement en base archive et en base vivante pour l'utilisateur connecté en fonction de certains critères (service exposé ne fonctionnant pas sur l'espace de qualification).",
+        "operationId" : "rechercherDemandePaiement",
+        "consumes" : [ "application/json;charset=utf-8" ],
+        "produces" : [ "application/json;charset=utf-8" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/RechercherDemandePaiementParam"
+          }
+        }, {
+          "name" : "cpro-account",
+          "in" : "header",
+          "description" : "Identifiant compte CPRO sous la forme 'login:password' encodé en base 64.\nExemple : 'bG9naW46cGFzc3dvcmQ='",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succès de la requête",
+            "schema" : {
+              "$ref" : "#/definitions/WsRetourRechercherDemandePaiement"
+            }
+          },
+          "202" : {
+            "description" : "Requête acceptée"
+          },
+          "400" : {
+            "description" : "Requête mal formulée"
+          },
+          "401" : {
+            "description" : "Problème d'authentification"
+          },
+          "500" : {
+            "description" : "Erreur interne du serveur"
+          },
+          "403" : {
+            "description" : "Accès refusé"
+          },
+          "404" : {
+            "description" : "API non trouvée"
+          },
+          "415" : {
+            "description" : "Format de la requête non supporté"
+          }
+        }
+      }
+    },
+    "/v1/rechercher/recipiendaire" : {
+      "post" : {
+        "tags" : [ "factures" ],
+        "summary" : "La méthode rechercherFactureParRecipiendaire permet d'afficher les factures reçues correspondant aux paramètres de recherche renseignés. Il est notamment possible de sélectionner des factures en fonction de l'état de la facture (téléchargée, non téléchargée).",
+        "description" : "La méthode rechercherFactureParRecipiendaire permet d'afficher les factures reçues correspondant aux paramètres de recherche renseignés. Il est notamment possible de sélectionner des factures en fonction de l'état de la facture (téléchargée, non téléchargée).",
+        "operationId" : "rechercherFactureRecipiendaire",
+        "consumes" : [ "application/json;charset=utf-8" ],
+        "produces" : [ "application/json;charset=utf-8" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/RechercherFactureRecipiendaireParam"
+          }
+        }, {
+          "name" : "cpro-account",
+          "in" : "header",
+          "description" : "Identifiant compte CPRO sous la forme 'login:password' encodé en base 64.\nExemple : 'bG9naW46cGFzc3dvcmQ='",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succès de la requête",
+            "schema" : {
+              "$ref" : "#/definitions/WsRetourRechercheFactureRecipiendaireRest"
+            }
+          },
+          "202" : {
+            "description" : "Requête acceptée"
+          },
+          "400" : {
+            "description" : "Requête mal formulée"
+          },
+          "401" : {
+            "description" : "Problème d'authentification"
+          },
+          "500" : {
+            "description" : "Erreur interne du serveur"
+          },
+          "403" : {
+            "description" : "Accès refusé"
+          },
+          "404" : {
+            "description" : "API non trouvée"
+          },
+          "415" : {
+            "description" : "Format de la requête non supporté"
+          }
+        }
+      }
+    },
+    "/v1/completer" : {
+      "post" : {
+        "tags" : [ "factures" ],
+        "summary" : "La méthode completerFacture permet de modifier une facture au statut \"SUSPENDUE\" en ajoutant des pièces jointes et/ou en modifiant le champ \"commentaire\"",
+        "description" : "La méthode completerFacture permet de modifier une facture au statut \"SUSPENDUE\" en ajoutant des pièces jointes et/ou en modifiant le champ \"commentaire\"",
+        "operationId" : "completerFacture",
+        "consumes" : [ "application/json;charset=utf-8" ],
+        "produces" : [ "application/json;charset=utf-8" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/CompleterFactureParam"
+          }
+        }, {
+          "name" : "cpro-account",
+          "in" : "header",
+          "description" : "Identifiant compte CPRO sous la forme 'login:password' encodé en base 64.\nExemple : 'bG9naW46cGFzc3dvcmQ='",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succès de la requête",
+            "schema" : {
+              "$ref" : "#/definitions/WsRetourCompleterFacture"
+            }
+          },
+          "202" : {
+            "description" : "Requête acceptée"
+          },
+          "400" : {
+            "description" : "Requête mal formulée"
+          },
+          "401" : {
+            "description" : "Problème d'authentification"
+          },
+          "500" : {
+            "description" : "Erreur interne du serveur"
+          },
+          "403" : {
+            "description" : "Accès refusé"
+          },
+          "404" : {
+            "description" : "API non trouvée"
+          },
+          "415" : {
+            "description" : "Format de la requête non supporté"
+          }
+        }
+      }
+    },
+    "/v1/consulter/recipiendaire" : {
+      "post" : {
+        "tags" : [ "factures" ],
+        "summary" : "La méthode consulterFactureParRecipiendaire permet d'afficher les informations d'une facture reçue.",
+        "description" : "La méthode consulterFactureParRecipiendaire permet d'afficher les informations d'une facture reçue.",
+        "operationId" : "consulterFactureParRecipiendaire",
+        "consumes" : [ "application/json;charset=utf-8" ],
+        "produces" : [ "application/json;charset=utf-8" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/ConsulterFactureParRecipiendaireParam"
+          }
+        }, {
+          "name" : "cpro-account",
+          "in" : "header",
+          "description" : "Identifiant compte CPRO sous la forme 'login:password' encodé en base 64.\nExemple : 'bG9naW46cGFzc3dvcmQ='",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succès de la requête",
+            "schema" : {
+              "$ref" : "#/definitions/WsRetourFacturesRecues"
+            }
+          },
+          "202" : {
+            "description" : "Requête acceptée"
+          },
+          "400" : {
+            "description" : "Requête mal formulée"
+          },
+          "401" : {
+            "description" : "Problème d'authentification"
+          },
+          "500" : {
+            "description" : "Erreur interne du serveur"
+          },
+          "403" : {
+            "description" : "Accès refusé"
+          },
+          "404" : {
+            "description" : "API non trouvée"
+          },
+          "415" : {
+            "description" : "Format de la requête non supporté"
+          }
+        }
+      }
+    },
+    "/v1/rechercher/valideur" : {
+      "post" : {
+        "tags" : [ "factures" ],
+        "summary" : "Le service rechercherFactureParValideur permet de rechercher, en tant que valideur, les factures et/ou les factures de travaux correspondant aux paramètres.",
+        "description" : "Le service rechercherFactureParValideur permet de rechercher, en tant que valideur, les factures et/ou les factures de travaux correspondant aux paramètres.",
+        "operationId" : "rechercherFactureParValideur",
+        "consumes" : [ "application/json;charset=utf-8" ],
+        "produces" : [ "application/json;charset=utf-8" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/RechercherFactureParValideurParam"
+          }
+        }, {
+          "name" : "cpro-account",
+          "in" : "header",
+          "description" : "Identifiant compte CPRO sous la forme 'login:password' encodé en base 64.\nExemple : 'bG9naW46cGFzc3dvcmQ='",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succès de la requête",
+            "schema" : {
+              "$ref" : "#/definitions/WsRetourRechercherFactureParValideur"
+            }
+          },
+          "202" : {
+            "description" : "Requête acceptée"
+          },
+          "400" : {
+            "description" : "Requête mal formulée"
+          },
+          "401" : {
+            "description" : "Problème d'authentification"
+          },
+          "500" : {
+            "description" : "Erreur interne du serveur"
+          },
+          "403" : {
+            "description" : "Accès refusé"
+          },
+          "404" : {
+            "description" : "API non trouvée"
+          },
+          "415" : {
+            "description" : "Format de la requête non supporté"
+          }
+        }
+      }
+    },
+    "/v1/traiter/recue" : {
+      "post" : {
+        "tags" : [ "factures" ],
+        "summary" : "La méthode traiterFactureRecue permet de valider, rejeter ou suspendre une facture reçue. Lorsque le récipiendaire rejette ou suspend la facture, il est dans l'obligation de motiver son choix.",
+        "description" : "La méthode traiterFactureRecue permet de valider, rejeter ou suspendre une facture reçue. Lorsque le récipiendaire rejette ou suspend la facture, il est dans l'obligation de motiver son choix.",
+        "operationId" : "traiterUneFactureRecue",
+        "consumes" : [ "application/json;charset=utf-8" ],
+        "produces" : [ "application/json;charset=utf-8" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/TraiterUneFactureRecueParam"
+          }
+        }, {
+          "name" : "cpro-account",
+          "in" : "header",
+          "description" : "Identifiant compte CPRO sous la forme 'login:password' encodé en base 64.\nExemple : 'bG9naW46cGFzc3dvcmQ='",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succès de la requête",
+            "schema" : {
+              "$ref" : "#/definitions/WsRetourTraiterFacture"
+            }
+          },
+          "202" : {
+            "description" : "Requête acceptée"
+          },
+          "400" : {
+            "description" : "Requête mal formulée"
+          },
+          "401" : {
+            "description" : "Problème d'authentification"
+          },
+          "500" : {
+            "description" : "Erreur interne du serveur"
+          },
+          "403" : {
+            "description" : "Accès refusé"
+          },
+          "404" : {
+            "description" : "API non trouvée"
+          },
+          "415" : {
+            "description" : "Format de la requête non supporté"
+          }
+        }
+      }
+    },
+    "/v1/consulter/valideur" : {
+      "post" : {
+        "tags" : [ "factures" ],
+        "summary" : "La méthode consulterFactureParValideur permet à un valideur de récupérer les informations d'une facture pour la consultation.",
+        "description" : "La méthode consulterFactureParValideur permet à un valideur de récupérer les informations d'une facture pour la consultation.",
+        "operationId" : "consulterFactureParValideur",
+        "consumes" : [ "application/json;charset=utf-8" ],
+        "produces" : [ "application/json;charset=utf-8" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/ConsulterFactureParValideurParam"
+          }
+        }, {
+          "name" : "cpro-account",
+          "in" : "header",
+          "description" : "Identifiant compte CPRO sous la forme 'login:password' encodé en base 64.\nExemple : 'bG9naW46cGFzc3dvcmQ='",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succès de la requête",
+            "schema" : {
+              "$ref" : "#/definitions/WsRetourFacturesEmises"
+            }
+          },
+          "202" : {
+            "description" : "Requête acceptée"
+          },
+          "400" : {
+            "description" : "Requête mal formulée"
+          },
+          "401" : {
+            "description" : "Problème d'authentification"
+          },
+          "500" : {
+            "description" : "Erreur interne du serveur"
+          },
+          "403" : {
+            "description" : "Accès refusé"
+          },
+          "404" : {
+            "description" : "API non trouvée"
+          },
+          "415" : {
+            "description" : "Format de la requête non supporté"
+          }
+        }
+      }
+    },
+    "/v1/consulter/fournisseur" : {
+      "post" : {
+        "tags" : [ "factures" ],
+        "summary" : "La méthode consulterFactureParFournisseur permet d'afficher les informations d'une facture précédemment émise.",
+        "description" : "La méthode consulterFactureParFournisseur permet d'afficher les informations d'une facture précédemment émise.",
+        "operationId" : "consulterFactureParFournisseur",
+        "consumes" : [ "application/json;charset=utf-8" ],
+        "produces" : [ "application/json;charset=utf-8" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/ConsulterFactureParFournisseurParam"
+          }
+        }, {
+          "name" : "cpro-account",
+          "in" : "header",
+          "description" : "Identifiant compte CPRO sous la forme 'login:password' encodé en base 64.\nExemple : 'bG9naW46cGFzc3dvcmQ='",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succès de la requête",
+            "schema" : {
+              "$ref" : "#/definitions/WsRetourFacturesEmises"
+            }
+          },
+          "202" : {
+            "description" : "Requête acceptée"
+          },
+          "400" : {
+            "description" : "Requête mal formulée"
+          },
+          "401" : {
+            "description" : "Problème d'authentification"
+          },
+          "500" : {
+            "description" : "Erreur interne du serveur"
+          },
+          "403" : {
+            "description" : "Accès refusé"
+          },
+          "404" : {
+            "description" : "API non trouvée"
+          },
+          "415" : {
+            "description" : "Format de la requête non supporté"
+          }
+        }
+      }
+    },
+    "/v1/rechercher/fournisseur" : {
+      "post" : {
+        "tags" : [ "factures" ],
+        "summary" : "La méthode rechercherFactureParFournisseur permet d'afficher les factures émises correspondant aux paramètres de recherche renseignés.",
+        "description" : "La méthode rechercherFactureParFournisseur permet d'afficher les factures émises correspondant aux paramètres de recherche renseignés.",
+        "operationId" : "rechercherFactureParFournisseur",
+        "consumes" : [ "application/json;charset=utf-8" ],
+        "produces" : [ "application/json;charset=utf-8" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/RechercherFactureParFournisseurParam"
+          }
+        }, {
+          "name" : "cpro-account",
+          "in" : "header",
+          "description" : "Identifiant compte CPRO sous la forme 'login:password' encodé en base 64.\nExemple : 'bG9naW46cGFzc3dvcmQ='",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succès de la requête",
+            "schema" : {
+              "$ref" : "#/definitions/WsRetourRechercherFactureParFournisseur"
+            }
+          },
+          "202" : {
+            "description" : "Requête acceptée"
+          },
+          "400" : {
+            "description" : "Requête mal formulée"
+          },
+          "401" : {
+            "description" : "Problème d'authentification"
+          },
+          "500" : {
+            "description" : "Erreur interne du serveur"
+          },
+          "403" : {
+            "description" : "Accès refusé"
+          },
+          "404" : {
+            "description" : "API non trouvée"
+          },
+          "415" : {
+            "description" : "Format de la requête non supporté"
+          }
+        }
+      }
+    },
+    "/v1/recycler" : {
+      "post" : {
+        "tags" : [ "factures" ],
+        "summary" : "La méthode recyclerFacture permet de modifier les données d'acheminement d'une facture au statut \"A_Recycler\".",
+        "description" : "La méthode recyclerFacture permet de modifier les données d'acheminement d'une facture au statut \"A_Recycler\".",
+        "operationId" : "recyclerFacture",
+        "consumes" : [ "application/json;charset=utf-8" ],
+        "produces" : [ "application/json;charset=utf-8" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/RecyclerFactureParam"
+          }
+        }, {
+          "name" : "cpro-account",
+          "in" : "header",
+          "description" : "Identifiant compte CPRO sous la forme 'login:password' encodé en base 64.\nExemple : 'bG9naW46cGFzc3dvcmQ='",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succès de la requête",
+            "schema" : {
+              "$ref" : "#/definitions/WsRetourRecyclerFacture"
+            }
+          },
+          "202" : {
+            "description" : "Requête acceptée"
+          },
+          "400" : {
+            "description" : "Requête mal formulée"
+          },
+          "401" : {
+            "description" : "Problème d'authentification"
+          },
+          "500" : {
+            "description" : "Erreur interne du serveur"
+          },
+          "403" : {
+            "description" : "Accès refusé"
+          },
+          "404" : {
+            "description" : "API non trouvée"
+          },
+          "415" : {
+            "description" : "Format de la requête non supporté"
+          }
+        }
+      }
+    },
+    "/v1/soumettre" : {
+      "post" : {
+        "tags" : [ "factures" ],
+        "summary" : "La méthode soumettreFacture permet de soumettre une facture à la solution mutualisée-CPP 2017 en renseignant les données nécessaires à la constitution d'un flux.",
+        "description" : "La méthode soumettreFacture permet de soumettre une facture à la solution mutualisée-CPP 2017 en renseignant les données nécessaires à la constitution d'un flux.",
+        "operationId" : "soumettreFacture",
+        "consumes" : [ "application/json;charset=utf-8" ],
+        "produces" : [ "application/json;charset=utf-8" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/SoumettreFactureParam"
+          }
+        }, {
+          "name" : "cpro-account",
+          "in" : "header",
+          "description" : "Identifiant compte CPRO sous la forme 'login:password' encodé en base 64.\nExemple : 'bG9naW46cGFzc3dvcmQ='",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succès de la requête",
+            "schema" : {
+              "$ref" : "#/definitions/WsRetourSoumettreFacture"
+            }
+          },
+          "202" : {
+            "description" : "Requête acceptée"
+          },
+          "400" : {
+            "description" : "Requête mal formulée"
+          },
+          "401" : {
+            "description" : "Problème d'authentification"
+          },
+          "500" : {
+            "description" : "Erreur interne du serveur"
+          },
+          "403" : {
+            "description" : "Accès refusé"
+          },
+          "404" : {
+            "description" : "API non trouvée"
+          },
+          "415" : {
+            "description" : "Format de la requête non supporté"
+          }
+        }
+      }
+    },
+    "/v1/rechercher/atraiter/recipiendaire" : {
+      "post" : {
+        "tags" : [ "factures" ],
+        "summary" : "La méthode rechercherFactureATraiterParRecipiendaire permet d'afficher les factures dont les statuts permettent au récipiendaire de les traiter (modification du statut de la facture).",
+        "description" : "La méthode rechercherFactureATraiterParRecipiendaire permet d'afficher les factures dont les statuts permettent au récipiendaire de les traiter (modification du statut de la facture).",
+        "operationId" : "rechercherFactureATraiterParRecipiendaire",
+        "consumes" : [ "application/json;charset=utf-8" ],
+        "produces" : [ "application/json;charset=utf-8" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/RechercherFactureATraiterParRecipiendaireParam"
+          }
+        }, {
+          "name" : "cpro-account",
+          "in" : "header",
+          "description" : "Identifiant compte CPRO sous la forme 'login:password' encodé en base 64.\nExemple : 'bG9naW46cGFzc3dvcmQ='",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "deprecated" : true,
+        "responses" : {
+          "200" : {
+            "description" : "Succès de la requête",
+            "schema" : {
+              "$ref" : "#/definitions/WsRetourRechercheFactureRecipiendaire"
+            }
+          },
+          "202" : {
+            "description" : "Requête acceptée"
+          },
+          "400" : {
+            "description" : "Requête mal formulée"
+          },
+          "401" : {
+            "description" : "Problème d'authentification"
+          },
+          "500" : {
+            "description" : "Erreur interne du serveur"
+          },
+          "403" : {
+            "description" : "Accès refusé"
+          },
+          "404" : {
+            "description" : "API non trouvée"
+          },
+          "415" : {
+            "description" : "Format de la requête non supporté"
+          }
+        }
+      }
+    },
+    "/v1/rechercher/atraiter/fournisseur" : {
+      "post" : {
+        "tags" : [ "factures" ],
+        "summary" : "La méthode rechercherFactureATraiterParFournisseur permet d'afficher les factures dont les statuts permettent au fournisseur de les traiter (compléter, recycler, supprimer, modifier le valideur).",
+        "description" : "La méthode rechercherFactureATraiterParFournisseur permet d'afficher les factures dont les statuts permettent au fournisseur de les traiter (compléter, recycler, supprimer, modifier le valideur).",
+        "operationId" : "rechercherFactureATraiterParFournisseur",
+        "consumes" : [ "application/json;charset=utf-8" ],
+        "produces" : [ "application/json;charset=utf-8" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/RechercherFactureATraiterParFournisseurParam"
+          }
+        }, {
+          "name" : "cpro-account",
+          "in" : "header",
+          "description" : "Identifiant compte CPRO sous la forme 'login:password' encodé en base 64.\nExemple : 'bG9naW46cGFzc3dvcmQ='",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "deprecated" : true,
+        "responses" : {
+          "200" : {
+            "description" : "Succès de la requête",
+            "schema" : {
+              "$ref" : "#/definitions/WsRetourRechercherFactureATraiterParFournisseur"
+            }
+          },
+          "202" : {
+            "description" : "Requête acceptée"
+          },
+          "400" : {
+            "description" : "Requête mal formulée"
+          },
+          "401" : {
+            "description" : "Problème d'authentification"
+          },
+          "500" : {
+            "description" : "Erreur interne du serveur"
+          },
+          "403" : {
+            "description" : "Accès refusé"
+          },
+          "404" : {
+            "description" : "API non trouvée"
+          },
+          "415" : {
+            "description" : "Format de la requête non supporté"
+          }
+        }
+      }
+    },
+    "/v1/traiterRejet" : {
+      "post" : {
+        "tags" : [ "factures" ],
+        "summary" : "La méthode recyclerFacture permet de modifier les données d'acheminement d'une facture au statut \"A_Recycler\".",
+        "description" : "La méthode recyclerFacture permet de modifier les données d'acheminement d'une facture au statut \"A_Recycler\".",
+        "operationId" : "traiterFacturesRejetees",
+        "consumes" : [ "application/json;charset=utf-8" ],
+        "produces" : [ "application/json;charset=utf-8" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/TraiterFacturesRejeteesParam"
+          }
+        }, {
+          "name" : "cpro-account",
+          "in" : "header",
+          "description" : "Identifiant compte CPRO sous la forme 'login:password' encodé en base 64.\nExemple : 'bG9naW46cGFzc3dvcmQ='",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succès de la requête",
+            "schema" : {
+              "$ref" : "#/definitions/WsRetour"
+            }
+          },
+          "202" : {
+            "description" : "Requête acceptée"
+          },
+          "400" : {
+            "description" : "Requête mal formulée"
+          },
+          "401" : {
+            "description" : "Problème d'authentification"
+          },
+          "500" : {
+            "description" : "Erreur interne du serveur"
+          },
+          "403" : {
+            "description" : "Accès refusé"
+          },
+          "404" : {
+            "description" : "API non trouvée"
+          },
+          "415" : {
+            "description" : "Format de la requête non supporté"
+          }
+        }
+      }
+    },
+    "/v1/consulter/historique" : {
+      "post" : {
+        "tags" : [ "factures" ],
+        "summary" : "La méthode consulterHistoriqueFacture permet d'afficher l'historique des événements ainsi que le statut actuel d'une facture reçue, à valider ou émise.",
+        "description" : "La méthode consulterHistoriqueFacture permet d'afficher l'historique des événements ainsi que le statut actuel d'une facture reçue, à valider ou émise.",
+        "operationId" : "consulterHistoriqueFacture",
+        "consumes" : [ "application/json;charset=utf-8" ],
+        "produces" : [ "application/json;charset=utf-8" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/ConsulterHistoriqueFactureParam"
+          }
+        }, {
+          "name" : "cpro-account",
+          "in" : "header",
+          "description" : "Identifiant compte CPRO sous la forme 'login:password' encodé en base 64.\nExemple : 'bG9naW46cGFzc3dvcmQ='",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succès de la requête",
+            "schema" : {
+              "$ref" : "#/definitions/WsRetourConsulterHistoriqueFacture"
+            }
+          },
+          "202" : {
+            "description" : "Requête acceptée"
+          },
+          "400" : {
+            "description" : "Requête mal formulée"
+          },
+          "401" : {
+            "description" : "Problème d'authentification"
+          },
+          "500" : {
+            "description" : "Erreur interne du serveur"
+          },
+          "403" : {
+            "description" : "Accès refusé"
+          },
+          "404" : {
+            "description" : "API non trouvée"
+          },
+          "415" : {
+            "description" : "Format de la requête non supporté"
+          }
+        }
+      }
+    },
+    "/v1/corriger/valideur/facture" : {
+      "post" : {
+        "tags" : [ "factures" ],
+        "summary" : "La méthode corrigerValideurFacture permet à un fournisseur de corriger le valideur initialement renseigné sur une facture rejetée pour renseignement d'un mauvais valideur.",
+        "description" : "La méthode corrigerValideurFacture permet à un fournisseur de corriger le valideur initialement renseigné sur une facture rejetée pour renseignement d'un mauvais valideur.",
+        "operationId" : "corrigerValideurFacture",
+        "consumes" : [ "application/json;charset=utf-8" ],
+        "produces" : [ "application/json;charset=utf-8" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/CorrigerValideurFactureParam"
+          }
+        }, {
+          "name" : "cpro-account",
+          "in" : "header",
+          "description" : "Identifiant compte CPRO sous la forme 'login:password' encodé en base 64.\nExemple : 'bG9naW46cGFzc3dvcmQ='",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succès de la requête",
+            "schema" : {
+              "$ref" : "#/definitions/WsRetourCorrigerValideurFacture"
+            }
+          },
+          "202" : {
+            "description" : "Requête acceptée"
+          },
+          "400" : {
+            "description" : "Requête mal formulée"
+          },
+          "401" : {
+            "description" : "Problème d'authentification"
+          },
+          "500" : {
+            "description" : "Erreur interne du serveur"
+          },
+          "403" : {
+            "description" : "Accès refusé"
+          },
+          "404" : {
+            "description" : "API non trouvée"
+          },
+          "415" : {
+            "description" : "Format de la requête non supporté"
+          }
+        }
+      }
+    },
+    "/v1/deposer/flux" : {
+      "post" : {
+        "tags" : [ "factures" ],
+        "summary" : "La méthode deposerFluxFacture permet de déposer un fichier XML ou PDF/A3 permettant de renseigner les données nécessaires à la constitution d'un flux facture.",
+        "description" : "La méthode deposerFluxFacture permet de déposer un fichier XML ou PDF/A3 permettant de renseigner les données nécessaires à la constitution d'un flux facture.",
+        "operationId" : "deposerFluxFacture",
+        "consumes" : [ "application/json;charset=utf-8" ],
+        "produces" : [ "application/json;charset=utf-8" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/DeposerFluxFactureParam"
+          }
+        }, {
+          "name" : "cpro-account",
+          "in" : "header",
+          "description" : "Identifiant compte CPRO sous la forme 'login:password' encodé en base 64.\nExemple : 'bG9naW46cGFzc3dvcmQ='",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succès de la requête",
+            "schema" : {
+              "$ref" : "#/definitions/WsRetourDeposerFluxFacture"
+            }
+          },
+          "202" : {
+            "description" : "Requête acceptée"
+          },
+          "400" : {
+            "description" : "Requête mal formulée"
+          },
+          "401" : {
+            "description" : "Problème d'authentification"
+          },
+          "500" : {
+            "description" : "Erreur interne du serveur"
+          },
+          "403" : {
+            "description" : "Accès refusé"
+          },
+          "404" : {
+            "description" : "API non trouvée"
+          },
+          "415" : {
+            "description" : "Format de la requête non supporté"
+          }
+        }
+      }
+    },
+    "/v1/recuperer/statutsFactureVisibles/valideur" : {
+      "post" : {
+        "tags" : [ "factures" ],
+        "summary" : "La méthode recupererStatutsFactureVisiblesParValideur permet à un valideur de récupérer la liste des statuts auxquels une facture peut être récupérée pour traitement.",
+        "description" : "La méthode recupererStatutsFactureVisiblesParValideur permet à un valideur de récupérer la liste des statuts auxquels une facture peut être récupérée pour traitement.",
+        "operationId" : "recupererStatutsFactureVisiblesParValideur",
+        "consumes" : [ "application/json;charset=utf-8" ],
+        "produces" : [ "application/json;charset=utf-8" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/RecupererStatutsFactureVisiblesParValideurParam"
+          }
+        }, {
+          "name" : "cpro-account",
+          "in" : "header",
+          "description" : "Identifiant compte CPRO sous la forme 'login:password' encodé en base 64.\nExemple : 'bG9naW46cGFzc3dvcmQ='",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succès de la requête",
+            "schema" : {
+              "$ref" : "#/definitions/WsRetourRecupererStatutsFactureVisiblesParValideur"
+            }
+          },
+          "202" : {
+            "description" : "Requête acceptée"
+          },
+          "400" : {
+            "description" : "Requête mal formulée"
+          },
+          "401" : {
+            "description" : "Problème d'authentification"
+          },
+          "500" : {
+            "description" : "Erreur interne du serveur"
+          },
+          "403" : {
+            "description" : "Accès refusé"
+          },
+          "404" : {
+            "description" : "API non trouvée"
+          },
+          "415" : {
+            "description" : "Format de la requête non supporté"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions" : {
+    "SecurityProfile.OAuthApplication" : {
+      "description" : "OAuth",
+      "type" : "oauth2",
+      "tokenUrl" : "https://sandbox-oauth.piste.gouv.fr/api/oauth/token",
+      "flow" : "application",
+      "scopes" : {
+        "openid" : ""
+      }
+    },
+    "SecurityProfile.OAuth External OIDCApplication" : {
+      "description" : "OAuth External OIDC",
+      "type" : "oauth2",
+      "tokenUrl" : "https://sandbox-oauth.piste.gouv.fr/api/oauth/token",
+      "flow" : "application",
+      "scopes" : {
+        "openid profile" : ""
+      }
+    }
+  },
+  "definitions" : {
+    "WsRetourRecyclerFacture" : {
+      "type" : "object",
+      "required" : [ "codeRetour", "libelle" ],
+      "properties" : {
+        "codeRetour" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 0,
+          "description" : "Le code retour de la réponse associée au libellé"
+        },
+        "dateDepot" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "identifiantFactureCPP" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "libelle" : {
+          "type" : "string",
+          "example" : "TRA_MSG_00.000",
+          "description" : "Le libellé lié au codeRetour (si une erreur est retournée alors son libellé sera retourné)"
+        },
+        "numeroFacture" : {
+          "type" : "string"
+        },
+        "statutFacture" : {
+          "type" : "string",
+          "enum" : [ "BROUILLON", "A_VALIDER_1", "ERREUR_FOURNISSEUR_SUR_VALIDEUR", "REFUSEE_1", "VALIDEE_1", "ABSENCE_VALIDATION_1_HORS_DELAI", "A_VALIDER_2", "ERREUR_COTRAITANT_SUR_VALIDEUR", "REFUSEE_2", "VALIDEE_2", "ABSENCE_VALIDATION_2_HORS_DELAI", "DEPOSEE", "ERREUR_FOURNISSEUR_SUR_MOE", "EN_COURS_ACHEMINEMENT", "MISE_A_DISPOSITION", "A_RECYCLER", "SUSPENDUE", "REJETEE", "MANDATEE", "MISE_EN_PAIEMENT", "COMPTABILISEE", "MISE_A_DISPOSITION_COMPTABLE", "ABANDONNEE", "SUPPRIMEE", "ASSOCIEE", "EN_COURS_TRAITEMENT_PIVOT_S", "A_VALIDER_MOE", "REFUSEE_MOE", "EN_ATTENTE_RECYCLAGE_FOURNISSEUR", "ERREUR_MOE_SUR_FOURNISSEUR", "ERREUR_MOA_SUR_FOURNISSEUR", "INTERPRETEE_OCR", "COMPLETEE", "ERREUR_FOURNISSEUR_SUR_MOA", "ERREUR_MOE_SUR_MOA", "ERREUR_DESTINATAIRE_PD", "ERREUR_DESTINATAIRE_EA", "SERVICE_FAIT", "NON_CONFORME", "A_ASSOCIER_MOE", "ERREUR_DE_MOE", "MISE_A_DISPOSITION_MOE", "PRISE_EN_COMPTE_MOE", "A_ASSOCIER_MOA", "ERREUR_DE_MOA", "REFUSEE_MOA", "A_ASSOCIER_FOURNISSEUR", "REFUSEE_FOURNISSEUR", "A_COMPLETER", "TRANSMISE_MOA", "PRISE_EN_COMPTE_DESTINATAIRE", "REMPLACEE_PAR_A22", "DUPLIQUE_APRES_REFUS", "MISE_A_DISPOSITION_MOA", "PRISE_EN_COMPTE_MOA", "ABSENCE_VALIDATION_MOE_DELAI_REGLEMENTAIRE", "TECHNIQUE_INCONNU" ]
+        }
+      }
+    },
+    "ParametreRechercheFactureATraiterParRecipiendaire" : {
+      "type" : "object",
+      "properties" : {
+        "getnbResultatsMaximum" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "nbResultatsParPage" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "pageResultatDemandee" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "triColonne" : {
+          "type" : "string",
+          "enum" : [ "TypeDemandePaiement", "CodeFournisseur", "TypeIdentifiantFournisseur", "DesignationFournisseur", "CodeServiceFournisseur", "NomServiceFournisseur", "CodeDestinataire", "DesignationDestinataire", "CodeServiceExecutant", "NomServiceExecutant", "TypeFacture", "TypeFactureTravaux", "NumeroFacture", "DateFacture", "DateDepot", "MontantHT", "MontantTTC", "MontantAPayer", "Devise", "Statut", "NumeroMarche", "NumeroBonCommande", "FactureTelechargeeParDestinataire" ]
+        },
+        "triSens" : {
+          "type" : "string",
+          "enum" : [ "Descendant", "Ascendant" ]
+        }
+      }
+    },
+    "LignesTva" : {
+      "type" : "object",
+      "properties" : {
+        "ligneTva" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/LigneTva"
+          }
+        },
+        "nbResultatsParPageLignesRecapitulativesTVA" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "pageCouranteLignesRecapitulativesTVA" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "pagesLignesRecapitulativesTVA" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "totalLignesRecapitulativesTVA" : {
+          "type" : "integer",
+          "format" : "int64"
+        }
+      }
+    },
+    "WsRetourTelechargerGroupeFacture" : {
+      "type" : "object",
+      "required" : [ "codeRetour", "libelle" ],
+      "properties" : {
+        "codeRetour" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 0,
+          "description" : "Le code retour de la réponse associée au libellé"
+        },
+        "fichierResultat" : {
+          "type" : "string"
+        },
+        "libelle" : {
+          "type" : "string",
+          "example" : "TRA_MSG_00.000",
+          "description" : "Le libellé lié au codeRetour (si une erreur est retournée alors son libellé sera retourné)"
+        }
+      }
+    },
+    "HistoriqueStatus" : {
+      "type" : "object",
+      "properties" : {
+        "histoStatutCode" : {
+          "type" : "string",
+          "enum" : [ "BROUILLON", "A_VALIDER_1", "ERREUR_FOURNISSEUR_SUR_VALIDEUR", "REFUSEE_1", "VALIDEE_1", "ABSENCE_VALIDATION_1_HORS_DELAI", "A_VALIDER_2", "ERREUR_COTRAITANT_SUR_VALIDEUR", "REFUSEE_2", "VALIDEE_2", "ABSENCE_VALIDATION_2_HORS_DELAI", "DEPOSEE", "ERREUR_FOURNISSEUR_SUR_MOE", "EN_COURS_ACHEMINEMENT", "MISE_A_DISPOSITION", "A_RECYCLER", "SUSPENDUE", "REJETEE", "MANDATEE", "MISE_EN_PAIEMENT", "COMPTABILISEE", "MISE_A_DISPOSITION_COMPTABLE", "ABANDONNEE", "SUPPRIMEE", "ASSOCIEE", "EN_COURS_TRAITEMENT_PIVOT_S", "A_VALIDER_MOE", "REFUSEE_MOE", "EN_ATTENTE_RECYCLAGE_FOURNISSEUR", "ERREUR_MOE_SUR_FOURNISSEUR", "ERREUR_MOA_SUR_FOURNISSEUR", "INTERPRETEE_OCR", "COMPLETEE", "ERREUR_FOURNISSEUR_SUR_MOA", "ERREUR_MOE_SUR_MOA", "ERREUR_DESTINATAIRE_PD", "ERREUR_DESTINATAIRE_EA", "SERVICE_FAIT", "NON_CONFORME", "A_ASSOCIER_MOE", "ERREUR_DE_MOE", "MISE_A_DISPOSITION_MOE", "PRISE_EN_COMPTE_MOE", "A_ASSOCIER_MOA", "ERREUR_DE_MOA", "REFUSEE_MOA", "A_ASSOCIER_FOURNISSEUR", "REFUSEE_FOURNISSEUR", "A_COMPLETER", "TRANSMISE_MOA", "PRISE_EN_COMPTE_DESTINATAIRE", "REMPLACEE_PAR_A22", "DUPLIQUE_APRES_REFUS", "MISE_A_DISPOSITION_MOA", "PRISE_EN_COMPTE_MOA", "ABSENCE_VALIDATION_MOE_DELAI_REGLEMENTAIRE", "TECHNIQUE_INCONNU" ]
+        },
+        "histoStatutCommentaire" : {
+          "type" : "string"
+        },
+        "histoStatutDatePassage" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "histoStatutId" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "histoStatutUtilisateurEmail" : {
+          "type" : "string"
+        },
+        "histoStatutUtilisateurNom" : {
+          "type" : "string"
+        },
+        "histoStatutUtilisateurPrenom" : {
+          "type" : "string"
+        },
+        "histoStatutUtilisateurTelephone" : {
+          "type" : "string"
+        }
+      }
+    },
+    "ParamRechercheFactureATraiterParFournisseur" : {
+      "type" : "object",
+      "properties" : {
+        "nbResultatsMaximum" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "nbResultatsParPage" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "pageResultatDemandee" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "triColonne" : {
+          "type" : "string",
+          "enum" : [ "TypeDemandePaiement", "CodeFournisseur", "TypeIdentifiantFournisseur", "DesignationFournisseur", "CodeServiceFournisseur", "NomServiceFournisseur", "CodeDestinataire", "DesignationDestinataire", "CodeServiceExecutant", "NomServiceExecutant", "TypeFacture", "NumeroFacture", "DateFacture", "DateDepot", "MontantHT", "MontantTTC", "MontantAPayer", "Devise", "Statut", "NumeroMarche", "NumeroBonCommande" ]
+        },
+        "triSens" : {
+          "type" : "string",
+          "enum" : [ "Descendant", "Ascendant" ]
+        }
+      }
+    },
+    "DerniereAction" : {
+      "type" : "object",
+      "properties" : {
+        "derniereActionCode" : {
+          "type" : "string",
+          "enum" : [ "TELECHARGEMENT_FACTURE", "ACQUITTEMENT_REJET", "ACQUITTEMENT_SUSPENSION", "TRAITEMENT_REJET" ]
+        },
+        "derniereActionId" : {
+          "type" : "integer",
+          "format" : "int64"
+        }
+      }
+    },
+    "RechercherFactureATraiterParFournisseurParam" : {
+      "type" : "object",
+      "properties" : {
+        "idStructure" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idUtilisateurCourant" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "masquerRejetee" : {
+          "type" : "boolean"
+        },
+        "rechercheFactureATraiterParFournisseur" : {
+          "$ref" : "#/definitions/ParamRechercheFactureATraiterParFournisseur"
+        },
+        "recupererTaille" : {
+          "type" : "boolean"
+        }
+      }
+    },
+    "CritereFournisseurPojo" : {
+      "type" : "object",
+      "properties" : {
+        "idFournisseur" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "listeIdService" : {
+          "type" : "array",
+          "items" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }
+      }
+    },
+    "RechercherDemandePaiementStructureFournisseurInput" : {
+      "type" : "object",
+      "properties" : {
+        "idStructureFournisseur" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "identifiantStructureFournisseur" : {
+          "type" : "string"
+        },
+        "typeIdentifiantStructureFournisseur" : {
+          "type" : "string",
+          "enum" : [ "SIRET", "UE_HORS_FRANCE", "HORS_UE", "RIDET", "TAHITI", "AUTRE", "PARTICULIER" ]
+        }
+      }
+    },
+    "PJointe" : {
+      "type" : "object",
+      "properties" : {
+        "pieceJointeDesignation" : {
+          "type" : "string"
+        },
+        "pieceJointeExtension" : {
+          "type" : "string"
+        },
+        "pieceJointeId" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "pieceJointeIdLiaison" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "pieceJointeNumeroLigneFacture" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "pieceJointeTypeCode" : {
+          "type" : "string"
+        },
+        "pieceJointeTypeLibelle" : {
+          "type" : "string"
+        }
+      }
+    },
+    "ParamRechercheHistoStatuts" : {
+      "type" : "object",
+      "properties" : {
+        "nbResultatsParPageListeHistoStatut" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "pageResultatDemandeeListeHistoStatut" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "triColonneListeHistoStatut" : {
+          "type" : "string",
+          "enum" : [ "HistoStatutCode", "HistoStatutDatePassage", "HistoStatutCommentaire", "HistoStatutUtilisateurPrenom", "HistoStatutUtilisateurNom", "HistoStatutUtilisateurEmail", "HistoStatutUtilisateurTelephone" ]
+        },
+        "triSensListeHistoStatut" : {
+          "type" : "string",
+          "enum" : [ "Descendant", "Ascendant" ]
+        }
+      }
+    },
+    "ParametresRechercherFactureParValideur" : {
+      "type" : "object",
+      "properties" : {
+        "nbResultatsParPage" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "pageResultatDemandee" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "triColonne" : {
+          "type" : "string",
+          "enum" : [ "IdFacture", "TypeDemandePaiement", "IdFournisseur", "IdentifiantFournisseur", "TypeIdentifiantFournisseur", "DesignationFournisseur", "CodeServiceFournisseur", "NomServiceFournisseur", "IdMoe", "TypeIdentifiantMoe", "IdentifiantMoe", "DesignationMoe", "IdServiceMoe", "CodeServiceMoe", "NomServiceMoe", "IdMoa", "IdentifiantMoa", "DesignationMoa", "IdServiceMoa", "CodeServiceMoa", "NomServiceMoa", "IdDestinataire", "IdentifiantDestinataire", "DesignationDestinataire", "IdServiceExecutant", "CodeServiceExecutant", "NomServiceExecutant", "TypeFacture", "TypeFactureTravaux", "NumeroFacture", "DateFacture", "DateDepot", "MontantHT", "MontantTTC", "MontantAPayer", "Devise", "Statut", "NumeroMarche", "NumeroEngagement" ]
+        },
+        "triSens" : {
+          "type" : "string",
+          "enum" : [ "Descendant", "Ascendant" ]
+        }
+      }
+    },
+    "RecupererStatutsFactureVisiblesParValideurParam" : {
+      "type" : "object",
+      "properties" : {
+        "idUtilisateurCourant" : {
+          "type" : "integer",
+          "format" : "int64"
+        }
+      }
+    },
+    "Fournisseur" : {
+      "type" : "object",
+      "properties" : {
+        "adresseFournisseurCodePays" : {
+          "type" : "string"
+        },
+        "adresseFournisseurCodePostal" : {
+          "type" : "string"
+        },
+        "adresseFournisseurComplement1" : {
+          "type" : "string"
+        },
+        "adresseFournisseurComplement2" : {
+          "type" : "string"
+        },
+        "adresseFournisseurDetail" : {
+          "type" : "string"
+        },
+        "adresseFournisseurId" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "adresseFournisseurLibellePays" : {
+          "type" : "string"
+        },
+        "adresseFournisseurVille" : {
+          "type" : "string"
+        },
+        "affactureur" : {
+          "$ref" : "#/definitions/Affactureur"
+        },
+        "codeFournisseur" : {
+          "type" : "string"
+        },
+        "codeServiceFournisseur" : {
+          "type" : "string"
+        },
+        "coordBancairesBicSwift" : {
+          "type" : "string"
+        },
+        "coordBancairesCodeGuichet" : {
+          "type" : "string"
+        },
+        "coordBancairesFournisseurCleIban" : {
+          "type" : "string"
+        },
+        "coordBancairesFournisseurCleRib" : {
+          "type" : "string"
+        },
+        "coordBancairesFournisseurCodeBanque" : {
+          "type" : "string"
+        },
+        "coordBancairesFournisseurCodePays" : {
+          "type" : "string"
+        },
+        "coordBancairesFournisseurCompteBancaire" : {
+          "type" : "string"
+        },
+        "coordBancairesFournisseurId" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "coordBancairesFournisseurLibelle" : {
+          "type" : "string"
+        },
+        "coordBancairesFournisseurType" : {
+          "type" : "string",
+          "enum" : [ "RIB", "IBAN" ]
+        },
+        "designationFournisseur" : {
+          "type" : "string"
+        },
+        "idFournisseur" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idServiceFournisseur" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "libelleServiceFournisseur" : {
+          "type" : "string"
+        },
+        "numeroRcsFournisseur" : {
+          "type" : "string"
+        },
+        "typeIdentifiantFournisseur" : {
+          "type" : "string",
+          "enum" : [ "SIRET", "UE_HORS_FRANCE", "HORS_UE", "RIDET", "TAHITI", "AUTRE", "PARTICULIER" ]
+        }
+      }
+    },
+    "DeposerPdfFactureParam" : {
+      "type" : "object",
+      "properties" : {
+        "fichierFacture" : {
+          "type" : "string"
+        },
+        "formatDepot" : {
+          "type" : "string",
+          "enum" : [ "PDF_NON_SIGNE", "PDF_SIGNE_PADES", "PDF_SIGNE_XADES" ]
+        },
+        "idUtilisateurCourant" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "nomFichier" : {
+          "type" : "string"
+        }
+      }
+    },
+    "PiecesJointes" : {
+      "type" : "object",
+      "properties" : {
+        "nbResultatsParPageListePiecesJointe" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "pageCouranteListePiecesJointe" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "pagesListePiecesJointe" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "pieceJointe" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/PJointe"
+          }
+        },
+        "totalListePiecesJointe" : {
+          "type" : "integer",
+          "format" : "int64"
+        }
+      }
+    },
+    "DeposerFluxFactureParam" : {
+      "type" : "object",
+      "properties" : {
+        "avecSignature" : {
+          "type" : "boolean"
+        },
+        "fichierFlux" : {
+          "type" : "string"
+        },
+        "idUtilisateurCourant" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "nomFichier" : {
+          "type" : "string"
+        },
+        "syntaxeFlux" : {
+          "type" : "string",
+          "enum" : [ "IN_DP_E1_UBL_INVOICE", "IN_DP_E1_CII", "IN_DP_E1_PES_FACTURE", "IN_DP_E1_XCBL", "IN_DP_E2_UBL_INVOICE_MIN", "IN_DP_E2_CII_MIN", "IN_DP_E2_PES_FACTURE_MIN", "IN_DP_E2_CPP_FACTURE_MIN", "IN_DP_PDFARCHIVE_UBL_INVOICE_MUG", "IN_DP_PDFARCHIVE_CII_MUG", "IN_DP_E1_CII_16B", "IN_DP_E2_CII_MIN_16B", "IN_DP_E2_CII_FACTURX" ]
+        }
+      }
+    },
+    "FactureCpp" : {
+      "type" : "object",
+      "properties" : {
+        "cadreDeFacturation" : {
+          "$ref" : "#/definitions/CadreDeFacturationOutput"
+        },
+        "commentaire" : {
+          "type" : "string"
+        },
+        "destinataire" : {
+          "$ref" : "#/definitions/Destinataire"
+        },
+        "fournisseur" : {
+          "$ref" : "#/definitions/Fournisseur"
+        },
+        "identifiantFactureCPP" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "lignesDePoste" : {
+          "$ref" : "#/definitions/LignesPostes"
+        },
+        "listeDesPiecesJointes" : {
+          "$ref" : "#/definitions/PiecesJointes"
+        },
+        "modeDepot" : {
+          "type" : "string",
+          "enum" : [ "SAISIE_WEB", "PORTAIL_PDF", "EDI_XML_STRUCT", "EDI_MIXTE", "EDI_PDF_ARCHIVE", "SAISIE_PORTAIL", "SAISIE_API", "DEPOT_PDF_PORTAIL", "DEPOT_PDF_SIGNE_PORTAIL", "DEPOT_PDF_API", "DEPOT_PDF_SIGNE_API", "EDI", "UPLOAD_PORTAIL", "UPLOAD_API", "EDI_NUMERISATION" ]
+        },
+        "montantTotal" : {
+          "$ref" : "#/definitions/MontantTotal"
+        },
+        "numeroFacture" : {
+          "type" : "string"
+        },
+        "pieceJointePrincipale" : {
+          "$ref" : "#/definitions/PiecejointePrincipale"
+        },
+        "piecePrecedente" : {
+          "$ref" : "#/definitions/PiecePrecedenteConsulterFactureRecipiendaireOutput"
+        },
+        "pieceSuivante" : {
+          "$ref" : "#/definitions/PieceSuivanteConsulterFactureRecipiendaireOutput"
+        },
+        "recapitulatifDeTva" : {
+          "$ref" : "#/definitions/LignesTva"
+        },
+        "references" : {
+          "$ref" : "#/definitions/References"
+        },
+        "statutFacture" : {
+          "type" : "string",
+          "enum" : [ "BROUILLON", "A_VALIDER_1", "ERREUR_FOURNISSEUR_SUR_VALIDEUR", "REFUSEE_1", "VALIDEE_1", "ABSENCE_VALIDATION_1_HORS_DELAI", "A_VALIDER_2", "ERREUR_COTRAITANT_SUR_VALIDEUR", "REFUSEE_2", "VALIDEE_2", "ABSENCE_VALIDATION_2_HORS_DELAI", "DEPOSEE", "ERREUR_FOURNISSEUR_SUR_MOE", "EN_COURS_ACHEMINEMENT", "MISE_A_DISPOSITION", "A_RECYCLER", "SUSPENDUE", "REJETEE", "MANDATEE", "MISE_EN_PAIEMENT", "COMPTABILISEE", "MISE_A_DISPOSITION_COMPTABLE", "ABANDONNEE", "SUPPRIMEE", "ASSOCIEE", "EN_COURS_TRAITEMENT_PIVOT_S", "A_VALIDER_MOE", "REFUSEE_MOE", "EN_ATTENTE_RECYCLAGE_FOURNISSEUR", "ERREUR_MOE_SUR_FOURNISSEUR", "ERREUR_MOA_SUR_FOURNISSEUR", "INTERPRETEE_OCR", "COMPLETEE", "ERREUR_FOURNISSEUR_SUR_MOA", "ERREUR_MOE_SUR_MOA", "ERREUR_DESTINATAIRE_PD", "ERREUR_DESTINATAIRE_EA", "SERVICE_FAIT", "NON_CONFORME", "A_ASSOCIER_MOE", "ERREUR_DE_MOE", "MISE_A_DISPOSITION_MOE", "PRISE_EN_COMPTE_MOE", "A_ASSOCIER_MOA", "ERREUR_DE_MOA", "REFUSEE_MOA", "A_ASSOCIER_FOURNISSEUR", "REFUSEE_FOURNISSEUR", "A_COMPLETER", "TRANSMISE_MOA", "PRISE_EN_COMPTE_DESTINATAIRE", "REMPLACEE_PAR_A22", "DUPLIQUE_APRES_REFUS", "MISE_A_DISPOSITION_MOA", "PRISE_EN_COMPTE_MOA", "ABSENCE_VALIDATION_MOE_DELAI_REGLEMENTAIRE", "TECHNIQUE_INCONNU" ]
+        }
+      }
+    },
+    "ParamRechercheHistoActionsUtilisateurs" : {
+      "type" : "object",
+      "properties" : {
+        "nbResultatsParPageListeHistoAction" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "pageResultatDemandeeListeHistoAction" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "triColonneListeHistoAction" : {
+          "type" : "string",
+          "enum" : [ "HistoActionDateHeure", "HistoActionCode", "HistoAction", "HistoActionUtilisateurPrenom", "HistoActionUtilisateurNom", "HistoActionUtilisateurEmail", "HistoActionUtilisateurTelephone" ]
+        },
+        "triSensListeHistoAction" : {
+          "type" : "string",
+          "enum" : [ "Descendant", "Ascendant" ]
+        }
+      }
+    },
+    "PieceJointeComplentaireSoumettreInput" : {
+      "type" : "object",
+      "properties" : {
+        "pieceJointeComplementaireDesignation" : {
+          "type" : "string"
+        },
+        "pieceJointeComplementaireId" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "pieceJointeComplementaireIdLiaison" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "pieceJointeComplementaireNumeroLigneFacture" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "pieceJointeComplementaireType" : {
+          "type" : "string"
+        }
+      }
+    },
+    "ParametresRechercherFactureParFournisseur" : {
+      "type" : "object",
+      "properties" : {
+        "nbResultatsMaximum" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "nbResultatsParPage" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "pageResultatDemandee" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "triColonne" : {
+          "type" : "string",
+          "enum" : [ "TypeDemandePaiement", "CodeFournisseur", "TypeIdentifiantFournisseur", "DesignationFournisseur", "CodeServiceFournisseur", "NomServiceFournisseur", "CodeDestinataire", "DesignationDestinataire", "CodeServiceExecutant", "NomServiceExecutant", "TypeFacture", "NumeroFacture", "DateFacture", "DateDepot", "MontantHT", "MontantTTC", "MontantAPayer", "Devise", "Statut", "NumeroMarche", "NumeroBonCommande", "NumeroFluxDepot", "TypeIdentifiantValideur1", "CodeValideur1", "RaisonSocialeValideur1", "NomValideur1", "PrenomValideur1", "DateValidation1", "TypeIdentifiantValideur2", "CodeValideur2", "RaisonSocialeValideur2", "NomValideur2", "PrenomValideur2", "DateValidation2", "NumeroFactureOrigine", "ModeDepot", "CoordBancairesFournisseurCleIban", "CoordBancairesFournisseurCleRib", "CoordBancairesFournisseurCodeBanque", "CoordBancairesFournisseurCodePays", "CoordBancairesFournisseurCompteBancaire", "CoordBancairesFournisseurNomCb", "AffactureurCode", "AffactureurTypeIdentifiant", "AffactureurRaisonSociale", "NomPrenomUtilisateurCreateur" ]
+        },
+        "triSens" : {
+          "type" : "string",
+          "enum" : [ "Descendant", "Ascendant" ]
+        }
+      }
+    },
+    "TraiterUneFactureRecueParam" : {
+      "type" : "object",
+      "properties" : {
+        "idFacture" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idUtilisateurCourant" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "motif" : {
+          "type" : "string"
+        },
+        "nouveauStatut" : {
+          "type" : "string",
+          "enum" : [ "MISE_A_DISPOSITION", "SUSPENDUE", "REJETEE", "MANDATEE", "MISE_EN_PAIEMENT", "COMPTABILISEE", "MISE_A_DISPOSITION_COMPTABLE", "A_RECYCLER", "COMPLETEE", "SERVICE_FAIT", "PRISE_EN_COMPTE_DESTINATAIRE", "TRANSMISE_MOA" ]
+        },
+        "numeroDPMandat" : {
+          "type" : "string"
+        }
+      }
+    },
+    "HistoriqueEvenement" : {
+      "type" : "object",
+      "properties" : {
+        "evenementDateHeure" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "evenementId" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "evenementLibelle" : {
+          "type" : "string"
+        },
+        "evenementQui" : {
+          "type" : "string"
+        }
+      }
+    },
+    "TraiterFacturesRejeteesListeDemandePaiement" : {
+      "type" : "object",
+      "properties" : {
+        "idDemandePaiement" : {
+          "type" : "integer",
+          "format" : "int64"
+        }
+      }
+    },
+    "WsRetourCorrigerValideurFacture" : {
+      "type" : "object",
+      "required" : [ "codeRetour", "libelle" ],
+      "properties" : {
+        "codeRetour" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 0,
+          "description" : "Le code retour de la réponse associée au libellé"
+        },
+        "idFacture" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "libelle" : {
+          "type" : "string",
+          "example" : "TRA_MSG_00.000",
+          "description" : "Le libellé lié au codeRetour (si une erreur est retournée alors son libellé sera retourné)"
+        }
+      }
+    },
+    "SoumettreFactureReferences" : {
+      "type" : "object",
+      "properties" : {
+        "deviseFacture" : {
+          "type" : "string"
+        },
+        "modePaiement" : {
+          "type" : "string",
+          "enum" : [ "CHEQUE", "PRELEVEMENT", "VIREMENT", "ESPECE", "AUTRE", "REPORT" ]
+        },
+        "motifExonerationTva" : {
+          "type" : "string"
+        },
+        "numeroBonCommande" : {
+          "type" : "string"
+        },
+        "numeroFactureOrigine" : {
+          "type" : "string"
+        },
+        "numeroMarche" : {
+          "type" : "string"
+        },
+        "typeFacture" : {
+          "type" : "string",
+          "enum" : [ "AVOIR", "FACTURE" ]
+        },
+        "typeTva" : {
+          "type" : "string",
+          "enum" : [ "TVA_SUR_DEBIT", "TVA_SUR_ENCAISSEMENT", "EXONERATION", "SANS_TVA" ]
+        }
+      }
+    },
+    "SoumettreFactureCadreDeFacturation" : {
+      "type" : "object",
+      "properties" : {
+        "codeCadreFacturation" : {
+          "type" : "string",
+          "enum" : [ "A1_FACTURE_FOURNISSEUR", "A2_FACTURE_FOURNISSEUR_DEJA_PAYEE", "A9_FACTURE_SOUSTRAITANT", "A12_FACTURE_COTRAITANT" ]
+        },
+        "codeServiceValideur" : {
+          "type" : "string"
+        },
+        "codeStructureValideur" : {
+          "type" : "string"
+        }
+      }
+    },
+    "WsRetourDeposerPdfFacture" : {
+      "type" : "object",
+      "required" : [ "codeDestinataire", "codeDeviseFacture", "codeFournisseur", "codeServiceExecutant", "dateFacture", "montantAPayer", "montantHtTotal", "montantTVA", "montantTtcAvantRemiseGlobalTTC", "numeroBonCommande", "numeroFacture", "pieceJointeId", "typeFacture", "typeTva" ],
+      "properties" : {
+        "codeDestinataire" : {
+          "type" : "string"
+        },
+        "codeDeviseFacture" : {
+          "type" : "string"
+        },
+        "codeFournisseur" : {
+          "type" : "string"
+        },
+        "codeServiceExecutant" : {
+          "type" : "string"
+        },
+        "dateFacture" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "montantAPayer" : {
+          "type" : "number"
+        },
+        "montantHtTotal" : {
+          "type" : "number"
+        },
+        "montantTVA" : {
+          "type" : "number"
+        },
+        "montantTtcAvantRemiseGlobalTTC" : {
+          "type" : "number"
+        },
+        "numeroBonCommande" : {
+          "type" : "string"
+        },
+        "numeroFacture" : {
+          "type" : "string"
+        },
+        "pieceJointeId" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "typeFacture" : {
+          "type" : "string",
+          "enum" : [ "AVOIR", "FACTURE" ]
+        },
+        "typeTva" : {
+          "type" : "string",
+          "enum" : [ "TVA_SUR_DEBIT", "TVA_SUR_ENCAISSEMENT", "EXONERATION", "SANS_TVA" ]
+        }
+      }
+    },
+    "WsRetourFacturesRecues" : {
+      "type" : "object",
+      "required" : [ "codeRetour", "libelle" ],
+      "properties" : {
+        "codeRetour" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 0,
+          "description" : "Le code retour de la réponse associée au libellé"
+        },
+        "facture" : {
+          "$ref" : "#/definitions/FactureCpp"
+        },
+        "libelle" : {
+          "type" : "string",
+          "example" : "TRA_MSG_00.000",
+          "description" : "Le libellé lié au codeRetour (si une erreur est retournée alors son libellé sera retourné)"
+        }
+      }
+    },
+    "RechercherDemandePaiementStructureMoaInput" : {
+      "type" : "object",
+      "properties" : {
+        "idStructureMoa" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "identifiantStructureMoa" : {
+          "type" : "string"
+        },
+        "typeIdentifiantStructureMoa" : {
+          "type" : "string",
+          "enum" : [ "SIRET", "UE_HORS_FRANCE", "HORS_UE", "RIDET", "TAHITI", "AUTRE", "PARTICULIER" ]
+        }
+      }
+    },
+    "TelechargerGroupeFactureParam" : {
+      "type" : "object",
+      "properties" : {
+        "avecPiecesJointesComplementaires" : {
+          "type" : "string"
+        },
+        "format" : {
+          "type" : "string"
+        },
+        "idEspace" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idUtilisateurCourant" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "listeFacture" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/IdFactureInput"
+          }
+        }
+      }
+    },
+    "HistoriquesStatus" : {
+      "type" : "object",
+      "properties" : {
+        "histoStatut" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/HistoriqueStatus"
+          }
+        },
+        "nbResultatsParPageHistoStatut" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "pageCouranteHistoStatut" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "pagesHistoStatut" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "totalHistoStatut" : {
+          "type" : "integer",
+          "format" : "int64"
+        }
+      }
+    },
+    "ParamRechercheLignesPoste" : {
+      "type" : "object",
+      "properties" : {
+        "nbResultatsParPageLignesPoste" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "pageResultatDemandeeLignesPoste" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "triColonneListeLignesPoste" : {
+          "type" : "string",
+          "enum" : [ "LignePosteNumero", "LignePosteReference", "LignePosteDenomination", "LignePosteQuantite", "LignePosteUniteCode", "LignePosteUniteLibelle", "LignePosteMontantUnitaireHT", "LignePosteMontantRemiseHT", "LignePosteTauxTva", "LignePosteTauxTvaManuel", "LignePosteMontantHtApresRemise", "LignePosteMontantTva", "LignePosteMontantTtcApresRemise" ]
+        },
+        "triSensListeLignesPoste" : {
+          "type" : "string",
+          "enum" : [ "Descendant", "Ascendant" ]
+        }
+      }
+    },
+    "TraiterFactureAValiderParam" : {
+      "type" : "object",
+      "properties" : {
+        "action" : {
+          "type" : "string"
+        },
+        "complementInfo" : {
+          "type" : "string"
+        },
+        "idFacture" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idPieceJointe" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idValideur" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "motifRefus" : {
+          "type" : "string"
+        },
+        "typeValideur" : {
+          "type" : "string"
+        }
+      }
+    },
+    "WsRetourRecupererStatutsFactureVisiblesParValideur" : {
+      "type" : "object",
+      "required" : [ "codeRetour", "libelle" ],
+      "properties" : {
+        "codeRetour" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 0,
+          "description" : "Le code retour de la réponse associée au libellé"
+        },
+        "libelle" : {
+          "type" : "string",
+          "example" : "TRA_MSG_00.000",
+          "description" : "Le libellé lié au codeRetour (si une erreur est retournée alors son libellé sera retourné)"
+        },
+        "listeStatutFacture" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/RecupererStatutsFactureVisiblesParValideurOutput"
+          }
+        }
+      }
+    },
+    "SoumettreFactureParam" : {
+      "type" : "object",
+      "properties" : {
+        "cadreDeFacturation" : {
+          "$ref" : "#/definitions/SoumettreFactureCadreDeFacturation"
+        },
+        "commentaire" : {
+          "type" : "string"
+        },
+        "dateFacture" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "destinataire" : {
+          "$ref" : "#/definitions/SoumettreFactureDestinataire"
+        },
+        "fournisseur" : {
+          "$ref" : "#/definitions/SoumettreFactureFournisseur"
+        },
+        "idUtilisateurCourant" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "lignePoste" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/LignePosteSoumettreInput"
+          }
+        },
+        "ligneTva" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/LigneTvaSoumettreInput"
+          }
+        },
+        "modeDepot" : {
+          "type" : "string",
+          "enum" : [ "SAISIE_API", "DEPOT_PDF_API", "DEPOT_PDF_SIGNE_API" ]
+        },
+        "montantTotal" : {
+          "$ref" : "#/definitions/SoumettreFactureMontantTotal"
+        },
+        "numeroFactureSaisi" : {
+          "type" : "string"
+        },
+        "pieceJointeComplementaire" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/PieceJointeComplentaireSoumettreInput"
+          }
+        },
+        "pieceJointePrincipale" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/SoumettreFacturePieceJointePrincipale"
+          }
+        },
+        "references" : {
+          "$ref" : "#/definitions/SoumettreFactureReferences"
+        }
+      }
+    },
+    "PieceSuivante" : {
+      "type" : "object",
+      "properties" : {
+        "cadreFacturationPieceSuivante" : {
+          "type" : "string"
+        },
+        "idPieceSuivante" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "numeroPieceSuiante" : {
+          "type" : "string"
+        }
+      }
+    },
+    "WsRetourCompleterFacture" : {
+      "type" : "object",
+      "required" : [ "codeRetour", "libelle" ],
+      "properties" : {
+        "codeRetour" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 0,
+          "description" : "Le code retour de la réponse associée au libellé"
+        },
+        "dateTraitement" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "identifiantFactureCPP" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "libelle" : {
+          "type" : "string",
+          "example" : "TRA_MSG_00.000",
+          "description" : "Le libellé lié au codeRetour (si une erreur est retournée alors son libellé sera retourné)"
+        },
+        "nbResultatsParPage" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "numeroFacture" : {
+          "type" : "string"
+        },
+        "pageCourante" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "pages" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "total" : {
+          "type" : "integer",
+          "format" : "int64"
+        }
+      }
+    },
+    "RechercherFactureParValideurParam" : {
+      "type" : "object",
+      "properties" : {
+        "cadreFacturation" : {
+          "type" : "string",
+          "enum" : [ "A1_FACTURE_FOURNISSEUR", "A2_FACTURE_FOURNISSEUR_DEJA_PAYEE", "A3_MEMOIRE_JUSTICE", "A4_PROJET_DECOMPTE_MENSUEL_FOURNISSEUR", "A5_ETAT_ACOMPTE_FOURNISSEUR", "A6_ETAT_ACOMPTE_VALIDE_FOURNISSEUR", "A7_PROJET_DECOMPTE_FINAL_FOURNISSEUR", "A8_DECOMPTE_GENERAL_DEFINITIF_FOURNISSEUR", "A9_FACTURE_SOUSTRAITANT", "A10_PROJET_DECOMPTE_MENSUEL_SOUSTRAITANT", "A11_PROJET_DECOMPTE_FINAL_SOUSTRAITANT", "A12_FACTURE_COTRAITANT", "A13_PROJET_DECOMPTE_MENSUEL_COTRAITANT", "A14_PROJET_DECOMPTE_FINAL_COTRAITANT", "A15_ETAT_ACOMPTE_MOE", "A16_ETAT_ACOMPTE_VALIDE_MOE", "A17_PROJET_DECOMPTE_GENERAL_MOE", "A18_DECOMPTE_GENERAL_MOE", "A19_ETAT_ACOMPTE_VALIDE_MOA", "A20_DECOMPTE_GENERAL_MOA", "A21_DEMANDE_REMBOURSEMENT_TIC", "A22_PROJET_DECOMPTE_GENERAL_FOURNISSEUR_PROCEDURE_TACITE", "A23_DECOMPTE_GENERAL_DEFINITIF_TACITE_FOURNISSEUR", "A24_DECOMPTE_GENERAL_DEFINITIF_TACITE_MOE", "A25_DECOMPTE_GENERAL_DEFINITIF_MOE_PROCEDURE_TACITE" ]
+        },
+        "idDestinataire" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idFournisseur" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idServiceExecutant" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idServiceFournisseur" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idStructureMoa" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idStructureMoe" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idStructureValideur" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idUtilisateurCourant" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "listeTypeFacture" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "enum" : [ "FACTURE", "AVOIR", "ACOMPTE" ]
+          }
+        },
+        "listeTypeFactureTravaux" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "enum" : [ "DP_DE_SOUSTRAITANT_TRAVAUX", "PROJET_DECOMPTE_MENSUEL", "ETAT_ACOMPTE", "ETAT_ACOMPTE_VALIDE", "PROJET_DECOMPTE_FINAL", "PROJET_DECOMPTE_GENERAL", "PROJET_DECOMPTE_GENERAL_PROCEDURE_TACITE", "DECOMPTE_GENERAL", "DECOMPTE_GENERAL_SIGNE", "DECOMPTE_GENERAL_DEFINITIF_TACITE", "DECOMPTE_GENERAL_DEFINITIF_PROCEDURE_TACITE" ]
+          }
+        },
+        "montantAPayerMax" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "montantAPayerMin" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "montantHTMax" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "montantHTMin" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "montantTTCMax" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "montantTTCMin" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "numeroEngagement" : {
+          "type" : "string"
+        },
+        "numeroFacture" : {
+          "type" : "string"
+        },
+        "numeroMarche" : {
+          "type" : "string"
+        },
+        "pagination" : {
+          "$ref" : "#/definitions/ParametresRechercherFactureParValideur"
+        },
+        "periodeDateDepotAu" : {
+          "type" : "string",
+          "format" : "date"
+        },
+        "periodeDateDepotDu" : {
+          "type" : "string",
+          "format" : "date"
+        },
+        "periodeDateFactureAu" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "periodeDateFactureDu" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "rechercheSirenDestinataire" : {
+          "type" : "boolean"
+        },
+        "rechercheSirenFournisseur" : {
+          "type" : "boolean"
+        },
+        "statutCourant" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "enum" : [ "BROUILLON", "A_VALIDER_1", "ERREUR_FOURNISSEUR_SUR_VALIDEUR", "REFUSEE_1", "VALIDEE_1", "ABSENCE_VALIDATION_1_HORS_DELAI", "A_VALIDER_2", "ERREUR_COTRAITANT_SUR_VALIDEUR", "REFUSEE_2", "VALIDEE_2", "ABSENCE_VALIDATION_2_HORS_DELAI", "DEPOSEE", "ERREUR_FOURNISSEUR_SUR_MOE", "EN_COURS_ACHEMINEMENT", "MISE_A_DISPOSITION", "A_RECYCLER", "SUSPENDUE", "REJETEE", "MANDATEE", "MISE_EN_PAIEMENT", "COMPTABILISEE", "MISE_A_DISPOSITION_COMPTABLE", "ABANDONNEE", "SUPPRIMEE", "ASSOCIEE", "EN_COURS_TRAITEMENT_PIVOT_S", "A_VALIDER_MOE", "REFUSEE_MOE", "EN_ATTENTE_RECYCLAGE_FOURNISSEUR", "ERREUR_MOE_SUR_FOURNISSEUR", "ERREUR_MOA_SUR_FOURNISSEUR", "INTERPRETEE_OCR", "COMPLETEE", "ERREUR_FOURNISSEUR_SUR_MOA", "ERREUR_MOE_SUR_MOA", "ERREUR_DESTINATAIRE_PD", "ERREUR_DESTINATAIRE_EA", "SERVICE_FAIT", "NON_CONFORME", "A_ASSOCIER_MOE", "ERREUR_DE_MOE", "MISE_A_DISPOSITION_MOE", "PRISE_EN_COMPTE_MOE", "A_ASSOCIER_MOA", "ERREUR_DE_MOA", "REFUSEE_MOA", "A_ASSOCIER_FOURNISSEUR", "REFUSEE_FOURNISSEUR", "A_COMPLETER", "TRANSMISE_MOA", "PRISE_EN_COMPTE_DESTINATAIRE", "REMPLACEE_PAR_A22", "DUPLIQUE_APRES_REFUS", "MISE_A_DISPOSITION_MOA", "PRISE_EN_COMPTE_MOA", "ABSENCE_VALIDATION_MOE_DELAI_REGLEMENTAIRE", "TECHNIQUE_INCONNU" ]
+          }
+        },
+        "typeDemandePaiement" : {
+          "type" : "string",
+          "enum" : [ "FACTURE", "FACTURE_TRAVAUX", "MEMOIRE_JUSTICE", "DEMANDE_REMBOURSEMENT" ]
+        }
+      }
+    },
+    "CompleterFactureParam" : {
+      "type" : "object",
+      "properties" : {
+        "commentaire" : {
+          "type" : "string"
+        },
+        "idUtilisateurCourant" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "identifiantFactureCPP" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "pieceJointeComplementaire" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/PieceJointeComplementaire"
+          }
+        }
+      }
+    },
+    "RechercherDemandePaiementParam" : {
+      "type" : "object",
+      "properties" : {
+        "cadreFacturation" : {
+          "type" : "string",
+          "enum" : [ "A1_FACTURE_FOURNISSEUR", "A2_FACTURE_FOURNISSEUR_DEJA_PAYEE", "A3_MEMOIRE_JUSTICE", "A4_PROJET_DECOMPTE_MENSUEL_FOURNISSEUR", "A5_ETAT_ACOMPTE_FOURNISSEUR", "A6_ETAT_ACOMPTE_VALIDE_FOURNISSEUR", "A7_PROJET_DECOMPTE_FINAL_FOURNISSEUR", "A8_DECOMPTE_GENERAL_DEFINITIF_FOURNISSEUR", "A9_FACTURE_SOUSTRAITANT", "A10_PROJET_DECOMPTE_MENSUEL_SOUSTRAITANT", "A11_PROJET_DECOMPTE_FINAL_SOUSTRAITANT", "A12_FACTURE_COTRAITANT", "A13_PROJET_DECOMPTE_MENSUEL_COTRAITANT", "A14_PROJET_DECOMPTE_FINAL_COTRAITANT", "A15_ETAT_ACOMPTE_MOE", "A16_ETAT_ACOMPTE_VALIDE_MOE", "A17_PROJET_DECOMPTE_GENERAL_MOE", "A18_DECOMPTE_GENERAL_MOE", "A19_ETAT_ACOMPTE_VALIDE_MOA", "A20_DECOMPTE_GENERAL_MOA", "A21_DEMANDE_REMBOURSEMENT_TIC", "A22_PROJET_DECOMPTE_GENERAL_FOURNISSEUR_PROCEDURE_TACITE", "A23_DECOMPTE_GENERAL_DEFINITIF_TACITE_FOURNISSEUR", "A24_DECOMPTE_GENERAL_DEFINITIF_TACITE_MOE", "A25_DECOMPTE_GENERAL_DEFINITIF_MOE_PROCEDURE_TACITE" ]
+        },
+        "dpOuDpArchive" : {
+          "type" : "string",
+          "enum" : [ "DEMANDE_PAIEMENT", "DP_ARCHIVE" ]
+        },
+        "idServiceDestinataire" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idServiceFournisseur" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idServiceMoa" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idServiceMoe" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "montantAPayerMax" : {
+          "type" : "number"
+        },
+        "montantAPayerMin" : {
+          "type" : "number"
+        },
+        "montantHTMax" : {
+          "type" : "number"
+        },
+        "montantHTMin" : {
+          "type" : "number"
+        },
+        "montantTTCMax" : {
+          "type" : "number"
+        },
+        "montantTTCMin" : {
+          "type" : "number"
+        },
+        "numeroBonCommande" : {
+          "type" : "string"
+        },
+        "numeroDossierFacturation" : {
+          "type" : "string"
+        },
+        "numeroDpMandat" : {
+          "type" : "string"
+        },
+        "numeroFacture" : {
+          "type" : "string"
+        },
+        "numeroFactureMemoire" : {
+          "type" : "string"
+        },
+        "numeroFactureOrigine" : {
+          "type" : "string"
+        },
+        "numeroMarche" : {
+          "type" : "string"
+        },
+        "periodeDateDepotAu" : {
+          "type" : "string",
+          "format" : "date"
+        },
+        "periodeDateDepotDu" : {
+          "type" : "string",
+          "format" : "date"
+        },
+        "periodeDateFournisseurAu" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "periodeDateFournisseurDu" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "periodeDateHeureEtatCourantAu" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "periodeDateHeureEtatCourantDu" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "rechercheSirenDestinataire" : {
+          "type" : "boolean"
+        },
+        "rechercheSirenFournisseur" : {
+          "type" : "boolean"
+        },
+        "roleUtilisateur" : {
+          "type" : "string",
+          "enum" : [ "FOURNISSEUR", "MOE", "MOA", "VALIDEUR", "DESTINATAIRE" ]
+        },
+        "statutCourant" : {
+          "type" : "string",
+          "enum" : [ "BROUILLON", "A_VALIDER_1", "ERREUR_FOURNISSEUR_SUR_VALIDEUR", "REFUSEE_1", "VALIDEE_1", "ABSENCE_VALIDATION_1_HORS_DELAI", "A_VALIDER_2", "ERREUR_COTRAITANT_SUR_VALIDEUR", "REFUSEE_2", "VALIDEE_2", "ABSENCE_VALIDATION_2_HORS_DELAI", "DEPOSEE", "ERREUR_FOURNISSEUR_SUR_MOE", "EN_COURS_ACHEMINEMENT", "MISE_A_DISPOSITION", "A_RECYCLER", "SUSPENDUE", "REJETEE", "MANDATEE", "MISE_EN_PAIEMENT", "COMPTABILISEE", "MISE_A_DISPOSITION_COMPTABLE", "ABANDONNEE", "SUPPRIMEE", "ASSOCIEE", "EN_COURS_TRAITEMENT_PIVOT_S", "A_VALIDER_MOE", "REFUSEE_MOE", "EN_ATTENTE_RECYCLAGE_FOURNISSEUR", "ERREUR_MOE_SUR_FOURNISSEUR", "ERREUR_MOA_SUR_FOURNISSEUR", "INTERPRETEE_OCR", "COMPLETEE", "ERREUR_FOURNISSEUR_SUR_MOA", "ERREUR_MOE_SUR_MOA", "ERREUR_DESTINATAIRE_PD", "ERREUR_DESTINATAIRE_EA", "SERVICE_FAIT", "NON_CONFORME", "A_ASSOCIER_MOE", "ERREUR_DE_MOE", "MISE_A_DISPOSITION_MOE", "PRISE_EN_COMPTE_MOE", "A_ASSOCIER_MOA", "ERREUR_DE_MOA", "REFUSEE_MOA", "A_ASSOCIER_FOURNISSEUR", "REFUSEE_FOURNISSEUR", "A_COMPLETER", "TRANSMISE_MOA", "PRISE_EN_COMPTE_DESTINATAIRE", "REMPLACEE_PAR_A22", "DUPLIQUE_APRES_REFUS", "MISE_A_DISPOSITION_MOA", "PRISE_EN_COMPTE_MOA", "ABSENCE_VALIDATION_MOE_DELAI_REGLEMENTAIRE", "TECHNIQUE_INCONNU" ]
+        },
+        "structureDestinataire" : {
+          "$ref" : "#/definitions/RechercherDemandePaiementStructureDestinataireInput"
+        },
+        "structureFournisseur" : {
+          "$ref" : "#/definitions/RechercherDemandePaiementStructureFournisseurInput"
+        },
+        "structureMoa" : {
+          "$ref" : "#/definitions/RechercherDemandePaiementStructureMoaInput"
+        },
+        "structureMoe" : {
+          "$ref" : "#/definitions/RechercherDemandePaiementStructureMoeInput"
+        },
+        "structureValideur" : {
+          "$ref" : "#/definitions/RechercherDemandePaiementStructureValideurInput"
+        },
+        "typeDemandePaiement" : {
+          "type" : "string",
+          "enum" : [ "FACTURE", "FACTURE_TRAVAUX", "MEMOIRE_JUSTICE", "DEMANDE_REMBOURSEMENT" ]
+        },
+        "typeFacture" : {
+          "type" : "string",
+          "enum" : [ "FACTURE", "AVOIR", "ACOMPTE" ]
+        },
+        "typeFactureTravaux" : {
+          "type" : "string",
+          "enum" : [ "DP_DE_SOUSTRAITANT_TRAVAUX", "PROJET_DECOMPTE_MENSUEL", "ETAT_ACOMPTE", "ETAT_ACOMPTE_VALIDE", "PROJET_DECOMPTE_FINAL", "PROJET_DECOMPTE_GENERAL", "PROJET_DECOMPTE_GENERAL_PROCEDURE_TACITE", "DECOMPTE_GENERAL", "DECOMPTE_GENERAL_SIGNE", "DECOMPTE_GENERAL_DEFINITIF_TACITE", "DECOMPTE_GENERAL_DEFINITIF_PROCEDURE_TACITE" ]
+        }
+      }
+    },
+    "WsRetourRechercheFactureRecipiendaireRest" : {
+      "type" : "object",
+      "required" : [ "codeRetour", "libelle" ],
+      "properties" : {
+        "codeRetour" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 0,
+          "description" : "Le code retour de la réponse associée au libellé"
+        },
+        "libelle" : {
+          "type" : "string",
+          "example" : "TRA_MSG_00.000",
+          "description" : "Le libellé lié au codeRetour (si une erreur est retournée alors son libellé sera retourné)"
+        },
+        "listeFactures" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/FactureRechercheRecipiendaire"
+          }
+        },
+        "nbResultatsParPage" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "pageCourante" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "pages" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "total" : {
+          "type" : "integer",
+          "format" : "int32"
+        }
+      }
+    },
+    "ParamRechercheDemandeRecipiendaire" : {
+      "type" : "object",
+      "properties" : {
+        "nbResultatsMaximum" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "nbResultatsParPage" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "pageResultatDemandee" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "triColonne" : {
+          "type" : "string",
+          "enum" : [ "TypeDemandePaiement", "CodeFournisseur", "TypeIdentifiantFournisseur", "Fournisseur", "CodeServiceFournisseur", "NomServiceFournisseur", "CodeDestinataire", "Destinataire", "CodeServiceExecutant", "NomServiceExecutant", "TypeFacture", "TypeFactureTravaux", "NumeroFacture", "DateFacture", "DateDepot", "MontantHT", "MontantTTC", "MontantAPayer", "Devise", "Statut", "NumeroMarche", "NumeroBonCommande", "FactureTelechargeeParDestinataire" ]
+        },
+        "triSens" : {
+          "type" : "string",
+          "enum" : [ "Descendant", "Ascendant" ]
+        }
+      }
+    },
+    "CadreDeFacturationOutput" : {
+      "type" : "object",
+      "properties" : {
+        "codeCadreFacturation" : {
+          "type" : "string",
+          "enum" : [ "A1_FACTURE_FOURNISSEUR", "A2_FACTURE_FOURNISSEUR_DEJA_PAYEE", "A9_FACTURE_SOUSTRAITANT", "A12_FACTURE_COTRAITANT", "A4_PROJET_DECOMPTE_MENSUEL_FOURNISSEUR", "A5_ETAT_ACOMPTE_FOURNISSEUR", "A6_ETAT_ACOMPTE_VALIDE_FOURNISSEUR", "A10_PROJET_DECOMPTE_MENSUEL_SOUSTRAITANT", "A13_PROJET_DECOMPTE_MENSUEL_COTRAITANT", "A15_ETAT_ACOMPTE_MOE", "A16_ETAT_ACOMPTE_VALIDE_MOE", "A19_ETAT_ACOMPTE_VALIDE_MOA", "A7_PROJET_DECOMPTE_FINAL_FOURNISSEUR", "A8_DECOMPTE_GENERAL_DEFINITIF_FOURNISSEUR", "A14_PROJET_DECOMPTE_FINAL_COTRAITANT", "A17_PROJET_DECOMPTE_GENERAL_MOE", "A18_DECOMPTE_GENERAL_MOE", "A20_DECOMPTE_GENERAL_MOA", "A22_PROJET_DECOMPTE_GENERAL_FOURNISSEUR_PROCEDURE_TACITE", "A23_DECOMPTE_GENERAL_DEFINITIF_TACITE_FOURNISSEUR", "A24_DECOMPTE_GENERAL_DEFINITIF_TACITE_MOE", "A25_DECOMPTE_GENERAL_DEFINITIF_MOE_PROCEDURE_TACITE", "SANS_CADRE_DE_FACTURATION" ]
+        },
+        "codeServiceMoa" : {
+          "type" : "string"
+        },
+        "codeServiceMoe" : {
+          "type" : "string"
+        },
+        "codeValideur1" : {
+          "type" : "string"
+        },
+        "codeValideur2" : {
+          "type" : "string"
+        },
+        "dateValidation1" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "dateValidation2" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "designationMoa" : {
+          "type" : "string"
+        },
+        "designationMoe" : {
+          "type" : "string"
+        },
+        "designationValideur2" : {
+          "type" : "string"
+        },
+        "idMoa" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idMoe" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idServiceMoa" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idServiceMoe" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idValideur1" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idValideur2" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "identifiantMoa" : {
+          "type" : "string"
+        },
+        "identifiantMoe" : {
+          "type" : "string"
+        },
+        "nomMoe" : {
+          "type" : "string"
+        },
+        "nomServiceMoa" : {
+          "type" : "string"
+        },
+        "nomServiceMoe" : {
+          "type" : "string"
+        },
+        "nomValideur1" : {
+          "type" : "string"
+        },
+        "nomValideur2" : {
+          "type" : "string"
+        },
+        "prenomMoe" : {
+          "type" : "string"
+        },
+        "prenomValideur1" : {
+          "type" : "string"
+        },
+        "prenomValideur2" : {
+          "type" : "string"
+        },
+        "raisonSocialeMoa" : {
+          "type" : "string"
+        },
+        "raisonSocialeMoe" : {
+          "type" : "string"
+        },
+        "raisonSocialeValideur1" : {
+          "type" : "string"
+        },
+        "raisonSocialeValideur2" : {
+          "type" : "string"
+        },
+        "typeIdentifiantMoa" : {
+          "type" : "string",
+          "enum" : [ "SIRET", "UE_HORS_FRANCE", "HORS_UE", "RIDET", "TAHITI", "AUTRE", "PARTICULIER" ]
+        },
+        "typeIdentifiantMoe" : {
+          "type" : "string",
+          "enum" : [ "SIRET", "UE_HORS_FRANCE", "HORS_UE", "RIDET", "TAHITI", "AUTRE", "PARTICULIER" ]
+        },
+        "typeIdentifiantValideur1" : {
+          "type" : "string",
+          "enum" : [ "SIRET", "UE_HORS_FRANCE", "HORS_UE", "RIDET", "TAHITI", "AUTRE", "PARTICULIER" ]
+        },
+        "typeIdentifiantValideur2" : {
+          "type" : "string",
+          "enum" : [ "SIRET", "UE_HORS_FRANCE", "HORS_UE", "RIDET", "TAHITI", "AUTRE", "PARTICULIER" ]
+        }
+      }
+    },
+    "FactureCppEmise" : {
+      "type" : "object",
+      "properties" : {
+        "cadreDeFacturation" : {
+          "$ref" : "#/definitions/CadreDeFacturationOutput"
+        },
+        "commentaire" : {
+          "type" : "string"
+        },
+        "destinataire" : {
+          "$ref" : "#/definitions/DestinataireFactureEmise"
+        },
+        "fournisseur" : {
+          "$ref" : "#/definitions/FournisseurFactureEmise"
+        },
+        "identifiantFactureCPP" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "lignesDePoste" : {
+          "$ref" : "#/definitions/LignesPostes"
+        },
+        "listeDesPiecesJointes" : {
+          "$ref" : "#/definitions/PiecesJointes"
+        },
+        "modeDepot" : {
+          "type" : "string",
+          "enum" : [ "SAISIE_WEB", "PORTAIL_PDF", "EDI_XML_STRUCT", "EDI_MIXTE", "EDI_PDF_ARCHIVE", "SAISIE_PORTAIL", "SAISIE_API", "DEPOT_PDF_PORTAIL", "DEPOT_PDF_SIGNE_PORTAIL", "DEPOT_PDF_API", "DEPOT_PDF_SIGNE_API", "EDI", "UPLOAD_PORTAIL", "UPLOAD_API", "EDI_NUMERISATION" ]
+        },
+        "montantTotal" : {
+          "$ref" : "#/definitions/MontantTotal"
+        },
+        "numeroFacture" : {
+          "type" : "string"
+        },
+        "pieceJointePrincipale" : {
+          "$ref" : "#/definitions/PiecejointePrincipale"
+        },
+        "piecePrecedente" : {
+          "$ref" : "#/definitions/PiecePrecedente"
+        },
+        "pieceSuivante" : {
+          "$ref" : "#/definitions/PieceSuivante"
+        },
+        "recapitulatifDeTva" : {
+          "$ref" : "#/definitions/LignesTva"
+        },
+        "references" : {
+          "$ref" : "#/definitions/References"
+        },
+        "rejetTraite" : {
+          "type" : "boolean"
+        },
+        "statutFacture" : {
+          "type" : "string",
+          "enum" : [ "BROUILLON", "A_VALIDER_1", "ERREUR_FOURNISSEUR_SUR_VALIDEUR", "REFUSEE_1", "VALIDEE_1", "ABSENCE_VALIDATION_1_HORS_DELAI", "A_VALIDER_2", "ERREUR_COTRAITANT_SUR_VALIDEUR", "REFUSEE_2", "VALIDEE_2", "ABSENCE_VALIDATION_2_HORS_DELAI", "DEPOSEE", "ERREUR_FOURNISSEUR_SUR_MOE", "EN_COURS_ACHEMINEMENT", "MISE_A_DISPOSITION", "A_RECYCLER", "SUSPENDUE", "REJETEE", "MANDATEE", "MISE_EN_PAIEMENT", "COMPTABILISEE", "MISE_A_DISPOSITION_COMPTABLE", "ABANDONNEE", "SUPPRIMEE", "ASSOCIEE", "EN_COURS_TRAITEMENT_PIVOT_S", "A_VALIDER_MOE", "REFUSEE_MOE", "EN_ATTENTE_RECYCLAGE_FOURNISSEUR", "ERREUR_MOE_SUR_FOURNISSEUR", "ERREUR_MOA_SUR_FOURNISSEUR", "INTERPRETEE_OCR", "COMPLETEE", "ERREUR_FOURNISSEUR_SUR_MOA", "ERREUR_MOE_SUR_MOA", "ERREUR_DESTINATAIRE_PD", "ERREUR_DESTINATAIRE_EA", "SERVICE_FAIT", "NON_CONFORME", "A_ASSOCIER_MOE", "ERREUR_DE_MOE", "MISE_A_DISPOSITION_MOE", "PRISE_EN_COMPTE_MOE", "A_ASSOCIER_MOA", "ERREUR_DE_MOA", "REFUSEE_MOA", "A_ASSOCIER_FOURNISSEUR", "REFUSEE_FOURNISSEUR", "A_COMPLETER", "TRANSMISE_MOA", "PRISE_EN_COMPTE_DESTINATAIRE", "REMPLACEE_PAR_A22", "DUPLIQUE_APRES_REFUS", "MISE_A_DISPOSITION_MOA", "PRISE_EN_COMPTE_MOA", "ABSENCE_VALIDATION_MOE_DELAI_REGLEMENTAIRE", "TECHNIQUE_INCONNU" ]
+        }
+      }
+    },
+    "ParametresRechercherFactureATraiterParValideur" : {
+      "type" : "object",
+      "properties" : {
+        "nbResultatsParPage" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "pageResultatDemandee" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "triColonne" : {
+          "type" : "string",
+          "enum" : [ "IdFacture", "TypeDemandePaiement", "IdFournisseur", "IdentifiantFournisseur", "TypeIdentifiantFournisseur", "DesignationFournisseur", "CodeServiceFournisseur", "NomServiceFournisseur", "IdMoe", "TypeIdentifiantMoe", "IdentifiantMoe", "DesignationMoe", "IdServiceMoe", "CodeServiceMoe", "NomServiceMoe", "IdMoa", "TypeIdentifiantMoa", "IdentifiantMoa", "DesignationMoa", "IdServiceMoa", "CodeServiceMoa", "NomServiceMoa", "IdDestinataire", "TypeIdentifiantDestinataire", "IdentifiantDestinataire", "DesignationDestinataire", "IdServiceExecutant", "CodeServiceExecutant", "NomServiceExecutant", "IdValideur", "TypeIdentifiantValideur", "IdentifiantValideur", "DesignationValideur", "TypeFacture", "TypeFactureTravaux", "NumeroFacture", "DateFacture", "DateDepot", "MontantHT", "MontantTTC", "MontantAPayer", "Devise", "Statut", "NumeroMarche", "NumeroEngagement" ]
+        },
+        "triSens" : {
+          "type" : "string",
+          "enum" : [ "Descendant", "Ascendant" ]
+        }
+      }
+    },
+    "PiecePrecedenteConsulterFactureRecipiendaireOutput" : {
+      "type" : "object",
+      "properties" : {
+        "cadreFacturationPiecePrecedente" : {
+          "type" : "string",
+          "enum" : [ "A1_FACTURE_FOURNISSEUR", "A2_FACTURE_FOURNISSEUR_DEJA_PAYEE", "A3_MEMOIRE_JUSTICE", "A4_PROJET_DECOMPTE_MENSUEL_FOURNISSEUR", "A5_ETAT_ACOMPTE_FOURNISSEUR", "A6_ETAT_ACOMPTE_VALIDE_FOURNISSEUR", "A7_PROJET_DECOMPTE_FINAL_FOURNISSEUR", "A8_DECOMPTE_GENERAL_DEFINITIF_FOURNISSEUR", "A9_FACTURE_SOUSTRAITANT", "A10_PROJET_DECOMPTE_MENSUEL_SOUSTRAITANT", "A11_PROJET_DECOMPTE_FINAL_SOUSTRAITANT", "A12_FACTURE_COTRAITANT", "A13_PROJET_DECOMPTE_MENSUEL_COTRAITANT", "A14_PROJET_DECOMPTE_FINAL_COTRAITANT", "A15_ETAT_ACOMPTE_MOE", "A16_ETAT_ACOMPTE_VALIDE_MOE", "A17_PROJET_DECOMPTE_GENERAL_MOE", "A18_DECOMPTE_GENERAL_MOE", "A19_ETAT_ACOMPTE_VALIDE_MOA", "A20_DECOMPTE_GENERAL_MOA", "A21_DEMANDE_REMBOURSEMENT_TIC", "A22_PROJET_DECOMPTE_GENERAL_FOURNISSEUR_PROCEDURE_TACITE", "A23_DECOMPTE_GENERAL_DEFINITIF_TACITE_FOURNISSEUR", "A24_DECOMPTE_GENERAL_DEFINITIF_TACITE_MOE", "A25_DECOMPTE_GENERAL_DEFINITIF_MOE_PROCEDURE_TACITE" ]
+        },
+        "codeServiceExecutantPiecePrecedente" : {
+          "type" : "string"
+        },
+        "idDestinatairePiecePrecedente" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idPiecePrecedente" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idServiceExecutantPiecePrecedente" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "identifiantDestinatairePiecePrecedente" : {
+          "type" : "string"
+        },
+        "nomServiceExecutantPiecePrecedente" : {
+          "type" : "string"
+        },
+        "numeroPiecePrecedente" : {
+          "type" : "string"
+        },
+        "raisonSocialeDestinatairePiecePrecedente" : {
+          "type" : "string"
+        }
+      }
+    },
+    "CritereDestinatairePojo" : {
+      "type" : "object",
+      "properties" : {
+        "idDestinataire" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "listeIdServiceExecutant" : {
+          "type" : "array",
+          "items" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        },
+        "raisonSocialeStuctDmd" : {
+          "type" : "string"
+        }
+      }
+    },
+    "RechercherDemandePaiementStructureDestinataireInput" : {
+      "type" : "object",
+      "properties" : {
+        "idStructureDestinataire" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "identifiantStructureDestinataire" : {
+          "type" : "string"
+        },
+        "typeIdentifiantStructureDestinataire" : {
+          "type" : "string",
+          "enum" : [ "SIRET", "UE_HORS_FRANCE", "HORS_UE", "RIDET", "TAHITI", "AUTRE", "PARTICULIER" ]
+        }
+      }
+    },
+    "RechercherDemandePaiementOutputListeDemandePaiement" : {
+      "type" : "object",
+      "properties" : {
+        "cadreFacturation" : {
+          "type" : "string"
+        },
+        "codeJuridiction" : {
+          "type" : "string"
+        },
+        "codeServiceDestinataire" : {
+          "type" : "string"
+        },
+        "codeServiceSollicitation" : {
+          "type" : "string"
+        },
+        "commentaireEtatCourant" : {
+          "type" : "string"
+        },
+        "dateDepot" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "dateFournisseur" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "dateHeureEtatCourant" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "dpOuDpArchive" : {
+          "type" : "string"
+        },
+        "etatCourant" : {
+          "type" : "string"
+        },
+        "idDemandePaiement" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idDossierFacturation" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idServiceDestinataire" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idServiceFournisseur" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idServiceMoa" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idServiceMoe" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idStructureDestinataire" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idStructureFournisseur" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idStructureMoa" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idStructureMoe" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idStructureValideur1" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idStructureValideur2" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "identifiantStructureDestinataire" : {
+          "type" : "string"
+        },
+        "identifiantStructureFournisseur" : {
+          "type" : "string"
+        },
+        "libelleCodePostaleDeptDR" : {
+          "type" : "string"
+        },
+        "montantAPayer" : {
+          "type" : "number"
+        },
+        "montantHT" : {
+          "type" : "number"
+        },
+        "montantTTC" : {
+          "type" : "number"
+        },
+        "nomServiceDestinataire" : {
+          "type" : "string"
+        },
+        "nomServiceSollicitation" : {
+          "type" : "string"
+        },
+        "nombreResultatTotal" : {
+          "type" : "string"
+        },
+        "numeroBonCommande" : {
+          "type" : "string"
+        },
+        "numeroDemandePaiement" : {
+          "type" : "string"
+        },
+        "numeroDossierFacturation" : {
+          "type" : "string"
+        },
+        "numeroDpMandat" : {
+          "type" : "string"
+        },
+        "numeroFactureOrigine" : {
+          "type" : "string"
+        },
+        "numeroMarche" : {
+          "type" : "string"
+        },
+        "raisonSocialeDeptDR" : {
+          "type" : "string"
+        },
+        "raisonSocialeJuridiction" : {
+          "type" : "string"
+        },
+        "raisonSocialeTGI" : {
+          "type" : "string"
+        },
+        "siretDestinataireQualif" : {
+          "type" : "string"
+        },
+        "siretFournisseurQualif" : {
+          "type" : "string"
+        },
+        "typeDemandePaiement" : {
+          "type" : "string"
+        },
+        "typeFacture" : {
+          "type" : "string"
+        },
+        "typeFactureTravaux" : {
+          "type" : "string"
+        }
+      }
+    },
+    "WsRetourTraiterFactureAValider" : {
+      "type" : "object",
+      "required" : [ "codeRetour", "libelle" ],
+      "properties" : {
+        "codeRetour" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 0,
+          "description" : "Le code retour de la réponse associée au libellé"
+        },
+        "dateTraitement" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "idFacture" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "libelle" : {
+          "type" : "string",
+          "example" : "TRA_MSG_00.000",
+          "description" : "Le libellé lié au codeRetour (si une erreur est retournée alors son libellé sera retourné)"
+        },
+        "numeroFacture" : {
+          "type" : "string"
+        },
+        "statutFacture" : {
+          "type" : "string"
+        }
+      }
+    },
+    "RechercherFactureParFournisseurParam" : {
+      "type" : "object",
+      "properties" : {
+        "cadreFacturation" : {
+          "type" : "string",
+          "enum" : [ "A1_FACTURE_FOURNISSEUR", "A2_FACTURE_FOURNISSEUR_DEJA_PAYEE", "A3_MEMOIRE_JUSTICE", "A4_PROJET_DECOMPTE_MENSUEL_FOURNISSEUR", "A5_ETAT_ACOMPTE_FOURNISSEUR", "A6_ETAT_ACOMPTE_VALIDE_FOURNISSEUR", "A7_PROJET_DECOMPTE_FINAL_FOURNISSEUR", "A8_DECOMPTE_GENERAL_DEFINITIF_FOURNISSEUR", "A9_FACTURE_SOUSTRAITANT", "A10_PROJET_DECOMPTE_MENSUEL_SOUSTRAITANT", "A11_PROJET_DECOMPTE_FINAL_SOUSTRAITANT", "A12_FACTURE_COTRAITANT", "A13_PROJET_DECOMPTE_MENSUEL_COTRAITANT", "A14_PROJET_DECOMPTE_FINAL_COTRAITANT", "A15_ETAT_ACOMPTE_MOE", "A16_ETAT_ACOMPTE_VALIDE_MOE", "A17_PROJET_DECOMPTE_GENERAL_MOE", "A18_DECOMPTE_GENERAL_MOE", "A19_ETAT_ACOMPTE_VALIDE_MOA", "A20_DECOMPTE_GENERAL_MOA", "A21_DEMANDE_REMBOURSEMENT_TIC", "A22_PROJET_DECOMPTE_GENERAL_FOURNISSEUR_PROCEDURE_TACITE", "A23_DECOMPTE_GENERAL_DEFINITIF_TACITE_FOURNISSEUR", "A24_DECOMPTE_GENERAL_DEFINITIF_TACITE_MOE", "A25_DECOMPTE_GENERAL_DEFINITIF_MOE_PROCEDURE_TACITE" ]
+        },
+        "coordonneeBancaire" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idFournisseur" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idServiceFournisseur" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idStructureValideur" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idUtilisateurCourant" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idUtilisateurCreateur" : {
+          "type" : "array",
+          "items" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        },
+        "listeDestinataire" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/CritereDestinatairePojo"
+          }
+        },
+        "modeDepot" : {
+          "type" : "string",
+          "enum" : [ "SAISIE_WEB", "PORTAIL_PDF", "EDI_XML_STRUCT", "EDI_MIXTE", "EDI_PDF_ARCHIVE", "SAISIE_PORTAIL", "SAISIE_API", "DEPOT_PDF_PORTAIL", "DEPOT_PDF_SIGNE_PORTAIL", "DEPOT_PDF_API", "DEPOT_PDF_SIGNE_API", "EDI", "UPLOAD_PORTAIL", "UPLOAD_API", "EDI_NUMERISATION" ]
+        },
+        "montantApayerMax" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "montantApayerMin" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "montantHTMax" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "montantHTMin" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "montantTTCMax" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "montantTTCMin" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "numeroBonCommande" : {
+          "type" : "string"
+        },
+        "numeroFacture" : {
+          "type" : "string"
+        },
+        "numeroFactureOrigine" : {
+          "type" : "string"
+        },
+        "numeroFluxDepot" : {
+          "type" : "string"
+        },
+        "numeroMarche" : {
+          "type" : "string"
+        },
+        "periodeDateDepotAu" : {
+          "type" : "string",
+          "format" : "date"
+        },
+        "periodeDateDepotDu" : {
+          "type" : "string",
+          "format" : "date"
+        },
+        "periodeDateFactureAu" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "periodeDateFactureDu" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "periodeDateHeureEtatCourantAu" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "periodeDateHeureEtatCourantDu" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "rechercheFactureParFournisseur" : {
+          "$ref" : "#/definitions/ParametresRechercherFactureParFournisseur"
+        },
+        "rechercheSirenDestinataire" : {
+          "type" : "boolean"
+        },
+        "recupererTaille" : {
+          "type" : "boolean"
+        },
+        "rejetTraite" : {
+          "type" : "boolean"
+        },
+        "statutCourant" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "typeFacture" : {
+          "type" : "string",
+          "enum" : [ "FACTURE", "AVOIR", "ACOMPTE" ]
+        }
+      }
+    },
+    "WsRetourFacturesEmises" : {
+      "type" : "object",
+      "required" : [ "codeRetour", "libelle" ],
+      "properties" : {
+        "codeRetour" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 0,
+          "description" : "Le code retour de la réponse associée au libellé"
+        },
+        "facture" : {
+          "$ref" : "#/definitions/FactureCppEmise"
+        },
+        "libelle" : {
+          "type" : "string",
+          "example" : "TRA_MSG_00.000",
+          "description" : "Le libellé lié au codeRetour (si une erreur est retournée alors son libellé sera retourné)"
+        }
+      }
+    },
+    "WsRetourConsulterHistoriqueFacture" : {
+      "type" : "object",
+      "required" : [ "codeRetour", "libelle" ],
+      "properties" : {
+        "codeRetour" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 0,
+          "description" : "Le code retour de la réponse associée au libellé"
+        },
+        "derniereAction" : {
+          "$ref" : "#/definitions/DerniereAction"
+        },
+        "historiquesDesActionsUtilisateurs" : {
+          "$ref" : "#/definitions/HistoriquesActionsUtilisateurs"
+        },
+        "historiquesDesEvenementsComplementaires" : {
+          "$ref" : "#/definitions/HistoriquesEvenements"
+        },
+        "historiquesDesStatuts" : {
+          "$ref" : "#/definitions/HistoriquesStatus"
+        },
+        "idFacture" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "libelle" : {
+          "type" : "string",
+          "example" : "TRA_MSG_00.000",
+          "description" : "Le libellé lié au codeRetour (si une erreur est retournée alors son libellé sera retourné)"
+        },
+        "modeDepot" : {
+          "type" : "string",
+          "enum" : [ "SAISIE_WEB", "PORTAIL_PDF", "EDI_XML_STRUCT", "EDI_MIXTE", "EDI_PDF_ARCHIVE", "SAISIE_PORTAIL", "SAISIE_API", "DEPOT_PDF_PORTAIL", "DEPOT_PDF_SIGNE_PORTAIL", "DEPOT_PDF_API", "DEPOT_PDF_SIGNE_API", "EDI", "UPLOAD_PORTAIL", "UPLOAD_API", "EDI_NUMERISATION" ]
+        },
+        "numeroFacture" : {
+          "type" : "string"
+        },
+        "statutCourantCode" : {
+          "type" : "string",
+          "enum" : [ "BROUILLON", "A_VALIDER_1", "ERREUR_FOURNISSEUR_SUR_VALIDEUR", "REFUSEE_1", "VALIDEE_1", "ABSENCE_VALIDATION_1_HORS_DELAI", "A_VALIDER_2", "ERREUR_COTRAITANT_SUR_VALIDEUR", "REFUSEE_2", "VALIDEE_2", "ABSENCE_VALIDATION_2_HORS_DELAI", "DEPOSEE", "ERREUR_FOURNISSEUR_SUR_MOE", "EN_COURS_ACHEMINEMENT", "MISE_A_DISPOSITION", "A_RECYCLER", "SUSPENDUE", "REJETEE", "MANDATEE", "MISE_EN_PAIEMENT", "COMPTABILISEE", "MISE_A_DISPOSITION_COMPTABLE", "ABANDONNEE", "SUPPRIMEE", "ASSOCIEE", "EN_COURS_TRAITEMENT_PIVOT_S", "A_VALIDER_MOE", "REFUSEE_MOE", "EN_ATTENTE_RECYCLAGE_FOURNISSEUR", "ERREUR_MOE_SUR_FOURNISSEUR", "ERREUR_MOA_SUR_FOURNISSEUR", "INTERPRETEE_OCR", "COMPLETEE", "ERREUR_FOURNISSEUR_SUR_MOA", "ERREUR_MOE_SUR_MOA", "ERREUR_DESTINATAIRE_PD", "ERREUR_DESTINATAIRE_EA", "SERVICE_FAIT", "NON_CONFORME", "A_ASSOCIER_MOE", "ERREUR_DE_MOE", "MISE_A_DISPOSITION_MOE", "PRISE_EN_COMPTE_MOE", "A_ASSOCIER_MOA", "ERREUR_DE_MOA", "REFUSEE_MOA", "A_ASSOCIER_FOURNISSEUR", "REFUSEE_FOURNISSEUR", "A_COMPLETER", "TRANSMISE_MOA", "PRISE_EN_COMPTE_DESTINATAIRE", "REMPLACEE_PAR_A22", "DUPLIQUE_APRES_REFUS", "MISE_A_DISPOSITION_MOA", "PRISE_EN_COMPTE_MOA", "ABSENCE_VALIDATION_MOE_DELAI_REGLEMENTAIRE", "TECHNIQUE_INCONNU" ]
+        }
+      }
+    },
+    "PieceJointeComplementaire" : {
+      "type" : "object",
+      "properties" : {
+        "pieceJointeComplementaireDesignation" : {
+          "type" : "string"
+        },
+        "pieceJointeComplementaireId" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "pieceJointeComplementaireNumeroLigneFacture" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "pieceJointeComplementaireType" : {
+          "type" : "string"
+        }
+      }
+    },
+    "HistoriquesActionsUtilisateurs" : {
+      "type" : "object",
+      "properties" : {
+        "histoAction" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/HistoriqueActionUtilisateur"
+          }
+        },
+        "nbResultatsParPageHistoAction" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "pageCouranteHistoAction" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "pagesHistoAction" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "totalHistoAction" : {
+          "type" : "integer",
+          "format" : "int64"
+        }
+      }
+    },
+    "WsRetourSoumettreFacture" : {
+      "type" : "object",
+      "required" : [ "codeRetour", "libelle" ],
+      "properties" : {
+        "codeRetour" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 0,
+          "description" : "Le code retour de la réponse associée au libellé"
+        },
+        "dateDepot" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "empreinteCertificatDepot" : {
+          "type" : "string"
+        },
+        "identifiantFactureCPP" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "identifiantStructure" : {
+          "type" : "string"
+        },
+        "libelle" : {
+          "type" : "string",
+          "example" : "TRA_MSG_00.000",
+          "description" : "Le libellé lié au codeRetour (si une erreur est retournée alors son libellé sera retourné)"
+        },
+        "numeroFacture" : {
+          "type" : "string"
+        },
+        "statutFacture" : {
+          "type" : "string",
+          "enum" : [ "BROUILLON", "A_VALIDER_1", "ERREUR_FOURNISSEUR_SUR_VALIDEUR", "REFUSEE_1", "VALIDEE_1", "ABSENCE_VALIDATION_1_HORS_DELAI", "A_VALIDER_2", "ERREUR_COTRAITANT_SUR_VALIDEUR", "REFUSEE_2", "VALIDEE_2", "ABSENCE_VALIDATION_2_HORS_DELAI", "DEPOSEE", "ERREUR_FOURNISSEUR_SUR_MOE", "EN_COURS_ACHEMINEMENT", "MISE_A_DISPOSITION", "A_RECYCLER", "SUSPENDUE", "REJETEE", "MANDATEE", "MISE_EN_PAIEMENT", "COMPTABILISEE", "MISE_A_DISPOSITION_COMPTABLE", "ABANDONNEE", "SUPPRIMEE", "ASSOCIEE", "EN_COURS_TRAITEMENT_PIVOT_S", "A_VALIDER_MOE", "REFUSEE_MOE", "EN_ATTENTE_RECYCLAGE_FOURNISSEUR", "ERREUR_MOE_SUR_FOURNISSEUR", "ERREUR_MOA_SUR_FOURNISSEUR", "INTERPRETEE_OCR", "COMPLETEE", "ERREUR_FOURNISSEUR_SUR_MOA", "ERREUR_MOE_SUR_MOA", "ERREUR_DESTINATAIRE_PD", "ERREUR_DESTINATAIRE_EA", "SERVICE_FAIT", "NON_CONFORME", "A_ASSOCIER_MOE", "ERREUR_DE_MOE", "MISE_A_DISPOSITION_MOE", "PRISE_EN_COMPTE_MOE", "A_ASSOCIER_MOA", "ERREUR_DE_MOA", "REFUSEE_MOA", "A_ASSOCIER_FOURNISSEUR", "REFUSEE_FOURNISSEUR", "A_COMPLETER", "TRANSMISE_MOA", "PRISE_EN_COMPTE_DESTINATAIRE", "REMPLACEE_PAR_A22", "DUPLIQUE_APRES_REFUS", "MISE_A_DISPOSITION_MOA", "PRISE_EN_COMPTE_MOA", "ABSENCE_VALIDATION_MOE_DELAI_REGLEMENTAIRE", "TECHNIQUE_INCONNU" ]
+        }
+      }
+    },
+    "SoumettreFactureMontantTotal" : {
+      "type" : "object",
+      "properties" : {
+        "montantAPayer" : {
+          "type" : "number"
+        },
+        "montantHtTotal" : {
+          "type" : "number"
+        },
+        "montantRemiseGlobaleTTC" : {
+          "type" : "number"
+        },
+        "montantTVA" : {
+          "type" : "number"
+        },
+        "montantTtcTotal" : {
+          "type" : "number"
+        },
+        "motifRemiseGlobaleTTC" : {
+          "type" : "string"
+        }
+      }
+    },
+    "ConsulterFactureParRecipiendaireParam" : {
+      "type" : "object",
+      "properties" : {
+        "codeLangue" : {
+          "type" : "string"
+        },
+        "idUtilisateurCourant" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "identifiantFactureCPP" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "rechercheLignePoste" : {
+          "$ref" : "#/definitions/ParamRechercheLignesPoste"
+        },
+        "recherchePj" : {
+          "$ref" : "#/definitions/ParamRechercheListePiecesJointes"
+        },
+        "rechercheligneTvaRecap" : {
+          "$ref" : "#/definitions/ParamRechercheLigneRecapTva"
+        }
+      }
+    },
+    "LignesPostes" : {
+      "type" : "object",
+      "properties" : {
+        "lignePoste" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/LignePoste"
+          }
+        },
+        "nbResultatsParPageLignesPoste" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "pageCouranteLignesPoste" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "pagesLignesPoste" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "totalLignesPoste" : {
+          "type" : "integer",
+          "format" : "int64"
+        }
+      }
+    },
+    "HistoriqueActionUtilisateur" : {
+      "type" : "object",
+      "properties" : {
+        "histoActionCode" : {
+          "type" : "string",
+          "enum" : [ "TELECHARGEMENT_FACTURE", "ACQUITTEMENT_REJET", "ACQUITTEMENT_SUSPENSION", "TRAITEMENT_REJET" ]
+        },
+        "histoActionDateHeure" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "histoActionId" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "histoActionUtilisateurEmail" : {
+          "type" : "string"
+        },
+        "histoActionUtilisateurNom" : {
+          "type" : "string"
+        },
+        "histoActionUtilisateurPrenom" : {
+          "type" : "string"
+        },
+        "histoActionUtilisateurTelephone" : {
+          "type" : "string"
+        }
+      }
+    },
+    "WsRetour" : {
+      "type" : "object",
+      "required" : [ "codeRetour", "libelle" ],
+      "properties" : {
+        "codeRetour" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 0,
+          "description" : "Le code retour de la réponse associée au libellé"
+        },
+        "libelle" : {
+          "type" : "string",
+          "example" : "TRA_MSG_00.000",
+          "description" : "Le libellé lié au codeRetour (si une erreur est retournée alors son libellé sera retourné)"
+        }
+      }
+    },
+    "CorrigerValideurFactureParam" : {
+      "type" : "object",
+      "properties" : {
+        "idFacture" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idStructure" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "identifiantStructure" : {
+          "type" : "string"
+        },
+        "typeIdentifiantStructure" : {
+          "type" : "string",
+          "enum" : [ "SIRET", "UE_HORS_FRANCE", "HORS_UE", "RIDET", "TAHITI", "AUTRE", "PARTICULIER" ]
+        }
+      }
+    },
+    "MontantTotal" : {
+      "type" : "object",
+      "properties" : {
+        "montantAPayer" : {
+          "type" : "number"
+        },
+        "montantHtTotal" : {
+          "type" : "number"
+        },
+        "montantRemiseGlobaleTTC" : {
+          "type" : "number"
+        },
+        "montantTVA" : {
+          "type" : "number"
+        },
+        "montantTtcAvantRemiseGlobalTTC" : {
+          "type" : "number"
+        },
+        "montantTtcTotal" : {
+          "type" : "number"
+        },
+        "motifRemiseGlobaleTTC" : {
+          "type" : "string"
+        }
+      }
+    },
+    "PieceSuivanteConsulterFactureRecipiendaireOutput" : {
+      "type" : "object",
+      "properties" : {
+        "cadreFacturationPieceSuivante" : {
+          "type" : "string",
+          "enum" : [ "A1_FACTURE_FOURNISSEUR", "A2_FACTURE_FOURNISSEUR_DEJA_PAYEE", "A3_MEMOIRE_JUSTICE", "A4_PROJET_DECOMPTE_MENSUEL_FOURNISSEUR", "A5_ETAT_ACOMPTE_FOURNISSEUR", "A6_ETAT_ACOMPTE_VALIDE_FOURNISSEUR", "A7_PROJET_DECOMPTE_FINAL_FOURNISSEUR", "A8_DECOMPTE_GENERAL_DEFINITIF_FOURNISSEUR", "A9_FACTURE_SOUSTRAITANT", "A10_PROJET_DECOMPTE_MENSUEL_SOUSTRAITANT", "A11_PROJET_DECOMPTE_FINAL_SOUSTRAITANT", "A12_FACTURE_COTRAITANT", "A13_PROJET_DECOMPTE_MENSUEL_COTRAITANT", "A14_PROJET_DECOMPTE_FINAL_COTRAITANT", "A15_ETAT_ACOMPTE_MOE", "A16_ETAT_ACOMPTE_VALIDE_MOE", "A17_PROJET_DECOMPTE_GENERAL_MOE", "A18_DECOMPTE_GENERAL_MOE", "A19_ETAT_ACOMPTE_VALIDE_MOA", "A20_DECOMPTE_GENERAL_MOA", "A21_DEMANDE_REMBOURSEMENT_TIC", "A22_PROJET_DECOMPTE_GENERAL_FOURNISSEUR_PROCEDURE_TACITE", "A23_DECOMPTE_GENERAL_DEFINITIF_TACITE_FOURNISSEUR", "A24_DECOMPTE_GENERAL_DEFINITIF_TACITE_MOE", "A25_DECOMPTE_GENERAL_DEFINITIF_MOE_PROCEDURE_TACITE" ]
+        },
+        "idPieceSuivante" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "numeroPieceSuivante" : {
+          "type" : "string"
+        }
+      }
+    },
+    "WsRetourTraiterFacture" : {
+      "type" : "object",
+      "required" : [ "codeRetour", "libelle" ],
+      "properties" : {
+        "codeRetour" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 0,
+          "description" : "Le code retour de la réponse associée au libellé"
+        },
+        "dateTraitement" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "idFacture" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "libelle" : {
+          "type" : "string",
+          "example" : "TRA_MSG_00.000",
+          "description" : "Le libellé lié au codeRetour (si une erreur est retournée alors son libellé sera retourné)"
+        },
+        "nouveauStatut" : {
+          "type" : "string",
+          "enum" : [ "MISE_A_DISPOSITION", "SUSPENDUE", "REJETEE", "MANDATEE", "MISE_EN_PAIEMENT", "COMPTABILISEE", "MISE_A_DISPOSITION_COMPTABLE", "A_RECYCLER", "COMPLETEE", "SERVICE_FAIT", "PRISE_EN_COMPTE_DESTINATAIRE", "TRANSMISE_MOA" ]
+        },
+        "numeroFacture" : {
+          "type" : "string"
+        }
+      }
+    },
+    "ConsulterHistoriqueFactureParam" : {
+      "type" : "object",
+      "properties" : {
+        "idEspace" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idFacture" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idUtilisateurCourant" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "nbResultatsMaximum" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "paramRechercheHistoActionsUtilisateurs" : {
+          "$ref" : "#/definitions/ParamRechercheHistoActionsUtilisateurs"
+        },
+        "paramRechercheHistoEvenementsComplementaires" : {
+          "$ref" : "#/definitions/ParamRechercheHistoEvenementsComplementaires"
+        },
+        "paramRechercheHistoStatuts" : {
+          "$ref" : "#/definitions/ParamRechercheHistoStatuts"
+        }
+      }
+    },
+    "IdFactureInput" : {
+      "type" : "object",
+      "properties" : {
+        "idFacture" : {
+          "type" : "integer",
+          "format" : "int64"
+        }
+      }
+    },
+    "WsRetourDeposerFluxFacture" : {
+      "type" : "object",
+      "required" : [ "codeRetour", "dateDepot", "libelle" ],
+      "properties" : {
+        "codeRetour" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 0,
+          "description" : "Le code retour de la réponse associée au libellé"
+        },
+        "dateDepot" : {
+          "type" : "string",
+          "format" : "date"
+        },
+        "libelle" : {
+          "type" : "string",
+          "example" : "TRA_MSG_00.000",
+          "description" : "Le libellé lié au codeRetour (si une erreur est retournée alors son libellé sera retourné)"
+        },
+        "numeroFluxDepot" : {
+          "type" : "string"
+        },
+        "syntaxeFlux" : {
+          "type" : "string",
+          "enum" : [ "IN_DP_E1_UBL_INVOICE", "IN_DP_E1_CII", "IN_DP_E1_PES_FACTURE", "IN_DP_E1_XCBL", "IN_DP_E1_CII_16B", "IN_DP_E2_UBL_INVOICE_MIN", "IN_DP_E2_CII_MIN", "IN_DP_E2_PES_FACTURE_MIN", "IN_DP_E2_CPP_FACTURE_MIN", "IN_DP_E2_CII_FACTURX", "IN_DP_E2_CII_MIN_16B" ]
+        }
+      }
+    },
+    "FactureRechercheValideur" : {
+      "type" : "object",
+      "properties" : {
+        "codeServiceExecutant" : {
+          "type" : "string"
+        },
+        "codeServiceFournisseur" : {
+          "type" : "string"
+        },
+        "codeServiceMoa" : {
+          "type" : "string"
+        },
+        "codeServiceMoe" : {
+          "type" : "string"
+        },
+        "dateDepot" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "dateFacture" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "designationDestinataire" : {
+          "type" : "string"
+        },
+        "designationFournisseur" : {
+          "type" : "string"
+        },
+        "designationMoa" : {
+          "type" : "string"
+        },
+        "designationMoe" : {
+          "type" : "string"
+        },
+        "designationValideur" : {
+          "type" : "string"
+        },
+        "devise" : {
+          "type" : "string"
+        },
+        "idDestinataire" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idFacture" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idFournisseur" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idMoa" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idMoe" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idServiceExecutant" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idServiceMoa" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idServiceMoe" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idValideur" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "identifiantDestinataire" : {
+          "type" : "string"
+        },
+        "identifiantFournisseur" : {
+          "type" : "string"
+        },
+        "identifiantMoa" : {
+          "type" : "string"
+        },
+        "identifiantMoe" : {
+          "type" : "string"
+        },
+        "identifiantValideur" : {
+          "type" : "string"
+        },
+        "montantAPayer" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "montantHT" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "montantTTC" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "nomServiceExecutant" : {
+          "type" : "string"
+        },
+        "nomServiceFournisseur" : {
+          "type" : "string"
+        },
+        "nomServiceMoa" : {
+          "type" : "string"
+        },
+        "nomServiceMoe" : {
+          "type" : "string"
+        },
+        "numeroEngagement" : {
+          "type" : "string"
+        },
+        "numeroFacture" : {
+          "type" : "string"
+        },
+        "numeroMarche" : {
+          "type" : "string"
+        },
+        "statut" : {
+          "type" : "string",
+          "enum" : [ "BROUILLON", "A_VALIDER_1", "ERREUR_FOURNISSEUR_SUR_VALIDEUR", "REFUSEE_1", "VALIDEE_1", "ABSENCE_VALIDATION_1_HORS_DELAI", "A_VALIDER_2", "ERREUR_COTRAITANT_SUR_VALIDEUR", "REFUSEE_2", "VALIDEE_2", "ABSENCE_VALIDATION_2_HORS_DELAI", "DEPOSEE", "ERREUR_FOURNISSEUR_SUR_MOE", "EN_COURS_ACHEMINEMENT", "MISE_A_DISPOSITION", "A_RECYCLER", "SUSPENDUE", "REJETEE", "MANDATEE", "MISE_EN_PAIEMENT", "COMPTABILISEE", "MISE_A_DISPOSITION_COMPTABLE", "ABANDONNEE", "SUPPRIMEE", "ASSOCIEE", "EN_COURS_TRAITEMENT_PIVOT_S", "A_VALIDER_MOE", "REFUSEE_MOE", "EN_ATTENTE_RECYCLAGE_FOURNISSEUR", "ERREUR_MOE_SUR_FOURNISSEUR", "ERREUR_MOA_SUR_FOURNISSEUR", "INTERPRETEE_OCR", "COMPLETEE", "ERREUR_FOURNISSEUR_SUR_MOA", "ERREUR_MOE_SUR_MOA", "ERREUR_DESTINATAIRE_PD", "ERREUR_DESTINATAIRE_EA", "SERVICE_FAIT", "NON_CONFORME", "A_ASSOCIER_MOE", "ERREUR_DE_MOE", "MISE_A_DISPOSITION_MOE", "PRISE_EN_COMPTE_MOE", "A_ASSOCIER_MOA", "ERREUR_DE_MOA", "REFUSEE_MOA", "A_ASSOCIER_FOURNISSEUR", "REFUSEE_FOURNISSEUR", "A_COMPLETER", "TRANSMISE_MOA", "PRISE_EN_COMPTE_DESTINATAIRE", "REMPLACEE_PAR_A22", "DUPLIQUE_APRES_REFUS", "MISE_A_DISPOSITION_MOA", "PRISE_EN_COMPTE_MOA", "ABSENCE_VALIDATION_MOE_DELAI_REGLEMENTAIRE", "TECHNIQUE_INCONNU" ]
+        },
+        "typeDemandePaiement" : {
+          "type" : "string",
+          "enum" : [ "FACTURE", "FACTURE_TRAVAUX", "MEMOIRE_JUSTICE", "DEMANDE_REMBOURSEMENT" ]
+        },
+        "typeFacture" : {
+          "type" : "string",
+          "enum" : [ "FACTURE", "AVOIR", "ACOMPTE" ]
+        },
+        "typeFactureTravaux" : {
+          "type" : "string",
+          "enum" : [ "DP_DE_SOUSTRAITANT_TRAVAUX", "PROJET_DECOMPTE_MENSUEL", "ETAT_ACOMPTE", "ETAT_ACOMPTE_VALIDE", "PROJET_DECOMPTE_FINAL", "PROJET_DECOMPTE_GENERAL", "PROJET_DECOMPTE_GENERAL_PROCEDURE_TACITE", "DECOMPTE_GENERAL", "DECOMPTE_GENERAL_SIGNE", "DECOMPTE_GENERAL_DEFINITIF_TACITE", "DECOMPTE_GENERAL_DEFINITIF_PROCEDURE_TACITE" ]
+        },
+        "typeIdentifiantDestinataire" : {
+          "type" : "string",
+          "enum" : [ "SIRET", "UE_HORS_FRANCE", "HORS_UE", "RIDET", "TAHITI", "AUTRE", "PARTICULIER" ]
+        },
+        "typeIdentifiantFournisseur" : {
+          "type" : "string",
+          "enum" : [ "SIRET", "UE_HORS_FRANCE", "HORS_UE", "RIDET", "TAHITI", "AUTRE", "PARTICULIER" ]
+        },
+        "typeIdentifiantMoa" : {
+          "type" : "string",
+          "enum" : [ "SIRET", "UE_HORS_FRANCE", "HORS_UE", "RIDET", "TAHITI", "AUTRE", "PARTICULIER" ]
+        },
+        "typeIdentifiantMoe" : {
+          "type" : "string",
+          "enum" : [ "SIRET", "UE_HORS_FRANCE", "HORS_UE", "RIDET", "TAHITI", "AUTRE", "PARTICULIER" ]
+        },
+        "typeIdentifiantValideur" : {
+          "type" : "string",
+          "enum" : [ "SIRET", "UE_HORS_FRANCE", "HORS_UE", "RIDET", "TAHITI", "AUTRE", "PARTICULIER" ]
+        }
+      }
+    },
+    "WsRetourRechercheFactureRecipiendaire" : {
+      "type" : "object",
+      "required" : [ "codeRetour", "libelle" ],
+      "properties" : {
+        "codeRetour" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 0,
+          "description" : "Le code retour de la réponse associée au libellé"
+        },
+        "libelle" : {
+          "type" : "string",
+          "example" : "TRA_MSG_00.000",
+          "description" : "Le libellé lié au codeRetour (si une erreur est retournée alors son libellé sera retourné)"
+        },
+        "listeFactures" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/FactureRechercheRecipiendaire"
+          }
+        },
+        "parametresRetour" : {
+          "$ref" : "#/definitions/ParametresRetour"
+        }
+      }
+    },
+    "RechercherFactureRecipiendaireParam" : {
+      "type" : "object",
+      "properties" : {
+        "cadreFacturation" : {
+          "type" : "string",
+          "enum" : [ "A1_FACTURE_FOURNISSEUR", "A2_FACTURE_FOURNISSEUR_DEJA_PAYEE", "A9_FACTURE_SOUSTRAITANT", "A12_FACTURE_COTRAITANT", "A4_PROJET_DECOMPTE_MENSUEL_FOURNISSEUR", "A5_ETAT_ACOMPTE_FOURNISSEUR", "A6_ETAT_ACOMPTE_VALIDE_FOURNISSEUR", "A7_PROJET_DECOMPTE_FINAL_FOURNISSEUR", "A8_DECOMPTE_GENERAL_DEFINITIF_FOURNISSEUR", "A10_PROJET_DECOMPTE_MENSUEL_SOUSTRAITANT", "A11_PROJET_DECOMPTE_FINAL_SOUSTRAITANT", "A13_PROJET_DECOMPTE_MENSUEL_COTRAITANT", "A14_PROJET_DECOMPTE_FINAL_COTRAITANT", "A15_ETAT_ACOMPTE_MOE", "A16_ETAT_ACOMPTE_VALIDE_MOE", "A17_PROJET_DECOMPTE_GENERAL_MOE", "A18_DECOMPTE_GENERAL_MOE", "A19_ETAT_ACOMPTE_VALIDE_MOA", "A20_DECOMPTE_GENERAL_MOA" ]
+        },
+        "factureTelechargeeParDestinataire" : {
+          "type" : "boolean"
+        },
+        "idDestinataire" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idServiceExecutant" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idStructureValideur" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idUtilisateurCourant" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "listeFournisseurs" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/CritereFournisseurPojo"
+          }
+        },
+        "listeTypeFacture" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "enum" : [ "AVOIR", "FACTURE" ]
+          }
+        },
+        "listeTypeFactureTravaux" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "enum" : [ "DP_DE_SOUSTRAITANT_TRAVAUX", "PROJET_DECOMPTE_MENSUEL", "ETAT_ACOMPTE", "ETAT_ACOMPTE_VALIDE", "PROJET_DECOMPTE_FINAL", "PROJET_DECOMPTE_GENERAL", "PROJET_DECOMPTE_GENERAL_PROCEDURE_TACITE", "DECOMPTE_GENERAL", "DECOMPTE_GENERAL_SIGNE", "DECOMPTE_GENERAL_DEFINITIF_TACITE", "DECOMPTE_GENERAL_DEFINITIF_PROCEDURE_TACITE" ]
+          }
+        },
+        "montantApayerMax" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "montantApayerMin" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "montantHTMax" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "montantHTMin" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "montantTTCMax" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "montantTTCMin" : {
+          "type" : "number",
+          "format" : "double"
+        },
+        "numeroBonCommande" : {
+          "type" : "string"
+        },
+        "numeroFacture" : {
+          "type" : "string"
+        },
+        "numeroMarche" : {
+          "type" : "string"
+        },
+        "paramRecherche" : {
+          "$ref" : "#/definitions/ParamRechercheDemandeRecipiendaire"
+        },
+        "periodeDateDepotAu" : {
+          "type" : "string",
+          "format" : "date"
+        },
+        "periodeDateDepotDu" : {
+          "type" : "string",
+          "format" : "date"
+        },
+        "periodeDateFactureAu" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "periodeDateFactureDu" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "periodeDateHeureEtatCourantAu" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "periodeDateHeureEtatCourantDu" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "rechercheSirenFournisseur" : {
+          "type" : "boolean"
+        },
+        "recupererTaille" : {
+          "type" : "boolean"
+        },
+        "statutCourant" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "enum" : [ "BROUILLON", "A_VALIDER_1", "ERREUR_FOURNISSEUR_SUR_VALIDEUR", "REFUSEE_1", "VALIDEE_1", "ABSENCE_VALIDATION_1_HORS_DELAI", "A_VALIDER_2", "ERREUR_COTRAITANT_SUR_VALIDEUR", "REFUSEE_2", "VALIDEE_2", "ABSENCE_VALIDATION_2_HORS_DELAI", "DEPOSEE", "ERREUR_FOURNISSEUR_SUR_MOE", "EN_COURS_ACHEMINEMENT", "MISE_A_DISPOSITION", "A_RECYCLER", "SUSPENDUE", "REJETEE", "MANDATEE", "MISE_EN_PAIEMENT", "COMPTABILISEE", "MISE_A_DISPOSITION_COMPTABLE", "ABANDONNEE", "SUPPRIMEE", "ASSOCIEE", "EN_COURS_TRAITEMENT_PIVOT_S", "A_VALIDER_MOE", "REFUSEE_MOE", "EN_ATTENTE_RECYCLAGE_FOURNISSEUR", "ERREUR_MOE_SUR_FOURNISSEUR", "ERREUR_MOA_SUR_FOURNISSEUR", "INTERPRETEE_OCR", "COMPLETEE", "ERREUR_FOURNISSEUR_SUR_MOA", "ERREUR_MOE_SUR_MOA", "ERREUR_DESTINATAIRE_PD", "ERREUR_DESTINATAIRE_EA", "SERVICE_FAIT", "NON_CONFORME", "A_ASSOCIER_MOE", "ERREUR_DE_MOE", "MISE_A_DISPOSITION_MOE", "PRISE_EN_COMPTE_MOE", "A_ASSOCIER_MOA", "ERREUR_DE_MOA", "REFUSEE_MOA", "A_ASSOCIER_FOURNISSEUR", "REFUSEE_FOURNISSEUR", "A_COMPLETER", "TRANSMISE_MOA", "PRISE_EN_COMPTE_DESTINATAIRE", "REMPLACEE_PAR_A22", "DUPLIQUE_APRES_REFUS", "MISE_A_DISPOSITION_MOA", "PRISE_EN_COMPTE_MOA", "ABSENCE_VALIDATION_MOE_DELAI_REGLEMENTAIRE", "TECHNIQUE_INCONNU" ]
+          }
+        },
+        "typeDemandePaiement" : {
+          "type" : "string",
+          "enum" : [ "FACTURE", "FACTURE_TRAVAUX" ]
+        }
+      }
+    },
+    "SoumettreFactureDestinataire" : {
+      "type" : "object",
+      "properties" : {
+        "codeDestinataire" : {
+          "type" : "string"
+        },
+        "codeServiceExecutant" : {
+          "type" : "string"
+        }
+      }
+    },
+    "FactureRechercheRecipiendaire" : {
+      "type" : "object",
+      "properties" : {
+        "codeDestinataire" : {
+          "type" : "string"
+        },
+        "codeFournisseur" : {
+          "type" : "string"
+        },
+        "codeMOA" : {
+          "type" : "string"
+        },
+        "codeMOE" : {
+          "type" : "string"
+        },
+        "codeServiceExecutant" : {
+          "type" : "string"
+        },
+        "codeServiceFournisseur" : {
+          "type" : "string"
+        },
+        "commentaireEtatCourant" : {
+          "type" : "string"
+        },
+        "dateDepot" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "dateFacture" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "dateHeureEtatCourant" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "designationDestinataire" : {
+          "type" : "string"
+        },
+        "designationFournisseur" : {
+          "type" : "string"
+        },
+        "designationMOA" : {
+          "type" : "string"
+        },
+        "designationMOE" : {
+          "type" : "string"
+        },
+        "devise" : {
+          "type" : "string"
+        },
+        "factureTelechargeeParDestinataire" : {
+          "type" : "boolean"
+        },
+        "idDestinataire" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idFacture" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idServiceExecutant" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "montantAPayer" : {
+          "type" : "number"
+        },
+        "montantHT" : {
+          "type" : "number"
+        },
+        "montantTTC" : {
+          "type" : "number"
+        },
+        "nomServiceExecutant" : {
+          "type" : "string"
+        },
+        "nomServiceFournisseur" : {
+          "type" : "string"
+        },
+        "numeroBonCommande" : {
+          "type" : "string"
+        },
+        "numeroFacture" : {
+          "type" : "string"
+        },
+        "numeroMarche" : {
+          "type" : "string"
+        },
+        "statut" : {
+          "type" : "string",
+          "enum" : [ "BROUILLON", "A_VALIDER_1", "ERREUR_FOURNISSEUR_SUR_VALIDEUR", "REFUSEE_1", "VALIDEE_1", "ABSENCE_VALIDATION_1_HORS_DELAI", "A_VALIDER_2", "ERREUR_COTRAITANT_SUR_VALIDEUR", "REFUSEE_2", "VALIDEE_2", "ABSENCE_VALIDATION_2_HORS_DELAI", "DEPOSEE", "ERREUR_FOURNISSEUR_SUR_MOE", "EN_COURS_ACHEMINEMENT", "MISE_A_DISPOSITION", "A_RECYCLER", "SUSPENDUE", "REJETEE", "MANDATEE", "MISE_EN_PAIEMENT", "COMPTABILISEE", "MISE_A_DISPOSITION_COMPTABLE", "ABANDONNEE", "SUPPRIMEE", "ASSOCIEE", "EN_COURS_TRAITEMENT_PIVOT_S", "A_VALIDER_MOE", "REFUSEE_MOE", "EN_ATTENTE_RECYCLAGE_FOURNISSEUR", "ERREUR_MOE_SUR_FOURNISSEUR", "ERREUR_MOA_SUR_FOURNISSEUR", "INTERPRETEE_OCR", "COMPLETEE", "ERREUR_FOURNISSEUR_SUR_MOA", "ERREUR_MOE_SUR_MOA", "ERREUR_DESTINATAIRE_PD", "ERREUR_DESTINATAIRE_EA", "SERVICE_FAIT", "NON_CONFORME", "A_ASSOCIER_MOE", "ERREUR_DE_MOE", "MISE_A_DISPOSITION_MOE", "PRISE_EN_COMPTE_MOE", "A_ASSOCIER_MOA", "ERREUR_DE_MOA", "REFUSEE_MOA", "A_ASSOCIER_FOURNISSEUR", "REFUSEE_FOURNISSEUR", "A_COMPLETER", "TRANSMISE_MOA", "PRISE_EN_COMPTE_DESTINATAIRE", "REMPLACEE_PAR_A22", "DUPLIQUE_APRES_REFUS", "MISE_A_DISPOSITION_MOA", "PRISE_EN_COMPTE_MOA", "ABSENCE_VALIDATION_MOE_DELAI_REGLEMENTAIRE", "TECHNIQUE_INCONNU" ]
+        },
+        "taille" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "typeDemandePaiement" : {
+          "type" : "string",
+          "enum" : [ "FACTURE", "FACTURE_TRAVAUX", "MEMOIRE_JUSTICE", "DEMANDE_REMBOURSEMENT" ]
+        },
+        "typeFacture" : {
+          "type" : "string",
+          "enum" : [ "FACTURE", "AVOIR", "ACOMPTE" ]
+        },
+        "typeFactureTravaux" : {
+          "type" : "string",
+          "enum" : [ "DP_DE_SOUSTRAITANT_TRAVAUX", "PROJET_DECOMPTE_MENSUEL", "ETAT_ACOMPTE", "ETAT_ACOMPTE_VALIDE", "PROJET_DECOMPTE_FINAL", "PROJET_DECOMPTE_GENERAL", "PROJET_DECOMPTE_GENERAL_PROCEDURE_TACITE", "DECOMPTE_GENERAL", "DECOMPTE_GENERAL_SIGNE", "DECOMPTE_GENERAL_DEFINITIF_TACITE", "DECOMPTE_GENERAL_DEFINITIF_PROCEDURE_TACITE" ]
+        },
+        "typeIdentifiantFournisseur" : {
+          "type" : "string",
+          "enum" : [ "SIRET", "UE_HORS_FRANCE", "HORS_UE", "RIDET", "TAHITI", "AUTRE", "PARTICULIER" ]
+        },
+        "typeIdentifiantMOA" : {
+          "type" : "string"
+        },
+        "typeIdentifiantMOE" : {
+          "type" : "string"
+        }
+      }
+    },
+    "RechercherFactureATraiterParRecipiendaireParam" : {
+      "type" : "object",
+      "properties" : {
+        "idStructure" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idUtilisateurCourant" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "parametreRechercheFactureATraiterParRecipiendaire" : {
+          "$ref" : "#/definitions/ParametreRechercheFactureATraiterParRecipiendaire"
+        },
+        "recupererTaille" : {
+          "type" : "boolean"
+        }
+      }
+    },
+    "RechercherDemandePaiementStructureValideurInput" : {
+      "type" : "object",
+      "properties" : {
+        "idStructureValideur" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "identifiantStructureValideur" : {
+          "type" : "string"
+        },
+        "typeIdentifiantStructureValideur" : {
+          "type" : "string",
+          "enum" : [ "SIRET", "UE_HORS_FRANCE", "HORS_UE", "RIDET", "TAHITI", "AUTRE", "PARTICULIER" ]
+        }
+      }
+    },
+    "ParamRechercheLigneRecapTva" : {
+      "type" : "object",
+      "properties" : {
+        "nbResultatsParPageListeListeRecapitulatifTVA" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "pageResultatDemandeeListeRecapitulatifTVA" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "triColonneListeRecapitulatifTVA" : {
+          "type" : "string",
+          "enum" : [ "LigneTvaMontantTvaParTaux", "LigneTvaTauxRefCode", "LigneTvaTauxRefLibelle", "LigneTvaTauxRefValeur", "LigneTvaTauxManuel", "LigneTvaMontantBaseHtParTaux" ]
+        },
+        "triSensListeRecapitulatifTVA" : {
+          "type" : "string",
+          "enum" : [ "Descendant", "Ascendant" ]
+        }
+      }
+    },
+    "ParamRechercheListePiecesJointes" : {
+      "type" : "object",
+      "properties" : {
+        "nbResultatsParPageListePieceJointe" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "pageResultatDemandeeListePieceJointe" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "triColonneListePiecesJointes" : {
+          "type" : "string",
+          "enum" : [ "PieceJointeTypeCode", "PieceJointeTypeLibelle", "PieceJointeDesignation", "PieceJointeNumeroLigneFacture", "PieceJointeExtension" ]
+        },
+        "triSensListePiecesJointes" : {
+          "type" : "string",
+          "enum" : [ "Descendant", "Ascendant" ]
+        }
+      }
+    },
+    "LigneTvaSoumettreInput" : {
+      "type" : "object",
+      "properties" : {
+        "ligneTvaMontantBaseHtParTaux" : {
+          "type" : "number"
+        },
+        "ligneTvaMontantTvaParTaux" : {
+          "type" : "number"
+        },
+        "ligneTvaTaux" : {
+          "type" : "string"
+        },
+        "ligneTvaTauxManuel" : {
+          "type" : "number"
+        }
+      }
+    },
+    "PiecejointePrincipale" : {
+      "type" : "object",
+      "properties" : {
+        "idLiaisonPieceJointePrincipale" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idPieceJointePrincipale" : {
+          "type" : "integer",
+          "format" : "int64"
+        }
+      }
+    },
+    "TraiterFacturesRejeteesParam" : {
+      "type" : "object",
+      "properties" : {
+        "cpltInfos" : {
+          "type" : "string"
+        },
+        "listeDemandePaiement" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/TraiterFacturesRejeteesListeDemandePaiement"
+          }
+        },
+        "motifRejet" : {
+          "type" : "string"
+        }
+      }
+    },
+    "RechercherFactureATraiterParValideurParam" : {
+      "type" : "object",
+      "properties" : {
+        "idStructure" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idUtilisateurCourant" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "identifiantStructure" : {
+          "type" : "string"
+        },
+        "pagination" : {
+          "$ref" : "#/definitions/ParametresRechercherFactureATraiterParValideur"
+        },
+        "typeIdentifiantStructure" : {
+          "type" : "string",
+          "enum" : [ "SIRET", "UE_HORS_FRANCE", "HORS_UE", "RIDET", "TAHITI", "AUTRE", "PARTICULIER" ]
+        }
+      }
+    },
+    "FournisseurFactureEmise" : {
+      "type" : "object",
+      "properties" : {
+        "adresseFournisseurCodePays" : {
+          "type" : "string"
+        },
+        "adresseFournisseurCodePostal" : {
+          "type" : "string"
+        },
+        "adresseFournisseurComplement1" : {
+          "type" : "string"
+        },
+        "adresseFournisseurComplement2" : {
+          "type" : "string"
+        },
+        "adresseFournisseurDetail" : {
+          "type" : "string"
+        },
+        "adresseFournisseurId" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "adresseFournisseurLibellePays" : {
+          "type" : "string"
+        },
+        "adresseFournisseurVille" : {
+          "type" : "string"
+        },
+        "affactureur" : {
+          "$ref" : "#/definitions/Affactureur"
+        },
+        "codeFournisseur" : {
+          "type" : "string"
+        },
+        "codeServiceFournisseur" : {
+          "type" : "string"
+        },
+        "coordBancairesBicSwift" : {
+          "type" : "string"
+        },
+        "coordBancairesCodeGuichet" : {
+          "type" : "string"
+        },
+        "coordBancairesFournisseurCleIban" : {
+          "type" : "string"
+        },
+        "coordBancairesFournisseurCleRib" : {
+          "type" : "string"
+        },
+        "coordBancairesFournisseurCodeBanque" : {
+          "type" : "string"
+        },
+        "coordBancairesFournisseurCodePays" : {
+          "type" : "string"
+        },
+        "coordBancairesFournisseurCompteBancaire" : {
+          "type" : "string"
+        },
+        "coordBancairesFournisseurId" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "coordBancairesFournisseurLibelle" : {
+          "type" : "string"
+        },
+        "coordBancairesFournisseurType" : {
+          "type" : "string",
+          "enum" : [ "RIB", "IBAN" ]
+        },
+        "designationFournisseur" : {
+          "type" : "string"
+        },
+        "idFournisseur" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idServiceFournisseur" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "libelleServiceFournisseur" : {
+          "type" : "string"
+        },
+        "nomFournisseur" : {
+          "type" : "string"
+        },
+        "numeroRcsFournisseur" : {
+          "type" : "string"
+        },
+        "prenomFournisseur" : {
+          "type" : "string"
+        },
+        "raisonSocialeFournisseur" : {
+          "type" : "string"
+        },
+        "typeIdentifiantFournisseur" : {
+          "type" : "string",
+          "enum" : [ "SIRET", "UE_HORS_FRANCE", "HORS_UE", "RIDET", "TAHITI", "AUTRE", "PARTICULIER" ]
+        }
+      }
+    },
+    "FactureRechercherATraiterFournisseur" : {
+      "type" : "object",
+      "properties" : {
+        "codeDestinataire" : {
+          "type" : "string"
+        },
+        "codeFournisseur" : {
+          "type" : "string"
+        },
+        "codeServiceExecutant" : {
+          "type" : "string"
+        },
+        "codeServiceFournisseur" : {
+          "type" : "string"
+        },
+        "dateDepot" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "dateFacture" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "designationDestinataire" : {
+          "type" : "string"
+        },
+        "designationFournisseur" : {
+          "type" : "string"
+        },
+        "devise" : {
+          "type" : "string"
+        },
+        "idDestinataire" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idServiceExecutant" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "identifiantFactureCPP" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "montantAPayer" : {
+          "type" : "number"
+        },
+        "montantHT" : {
+          "type" : "number"
+        },
+        "montantTTC" : {
+          "type" : "number"
+        },
+        "nomServiceExecutant" : {
+          "type" : "string"
+        },
+        "nomServiceFournisseur" : {
+          "type" : "string"
+        },
+        "numeroBonCommande" : {
+          "type" : "string"
+        },
+        "numeroFacture" : {
+          "type" : "string"
+        },
+        "numeroMarche" : {
+          "type" : "string"
+        },
+        "statut" : {
+          "type" : "string"
+        },
+        "taille" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "typeDemandePaiement" : {
+          "type" : "string"
+        },
+        "typeFacture" : {
+          "type" : "string",
+          "enum" : [ "FACTURE", "AVOIR", "ACOMPTE" ]
+        },
+        "typeIdentifiantFournisseur" : {
+          "type" : "string",
+          "enum" : [ "SIRET", "UE_HORS_FRANCE", "HORS_UE", "RIDET", "TAHITI", "AUTRE", "PARTICULIER" ]
+        }
+      }
+    },
+    "LignePosteSoumettreInput" : {
+      "type" : "object",
+      "properties" : {
+        "lignePosteDenomination" : {
+          "type" : "string"
+        },
+        "lignePosteMontantRemiseHT" : {
+          "type" : "number"
+        },
+        "lignePosteMontantUnitaireHT" : {
+          "type" : "number"
+        },
+        "lignePosteNumero" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "lignePosteQuantite" : {
+          "type" : "number"
+        },
+        "lignePosteReference" : {
+          "type" : "string"
+        },
+        "lignePosteTauxTva" : {
+          "type" : "string"
+        },
+        "lignePosteTauxTvaManuel" : {
+          "type" : "number"
+        },
+        "lignePosteUnite" : {
+          "type" : "string"
+        }
+      }
+    },
+    "WsRetourRechercherFactureATraiterParValideur" : {
+      "type" : "object",
+      "required" : [ "codeRetour", "libelle" ],
+      "properties" : {
+        "codeRetour" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 0,
+          "description" : "Le code retour de la réponse associée au libellé"
+        },
+        "libelle" : {
+          "type" : "string",
+          "example" : "TRA_MSG_00.000",
+          "description" : "Le libellé lié au codeRetour (si une erreur est retournée alors son libellé sera retourné)"
+        },
+        "listeFactures" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/FactureRechercheValideur"
+          }
+        },
+        "parametresRetour" : {
+          "$ref" : "#/definitions/ParametresRetour"
+        }
+      }
+    },
+    "WsRetourRechercherFactureParFournisseur" : {
+      "type" : "object",
+      "required" : [ "codeRetour", "libelle" ],
+      "properties" : {
+        "codeRetour" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 0,
+          "description" : "Le code retour de la réponse associée au libellé"
+        },
+        "libelle" : {
+          "type" : "string",
+          "example" : "TRA_MSG_00.000",
+          "description" : "Le libellé lié au codeRetour (si une erreur est retournée alors son libellé sera retourné)"
+        },
+        "listeFactures" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/RetourRechercherFactureParFournisseur"
+          }
+        },
+        "parametresRetour" : {
+          "$ref" : "#/definitions/ParametresRetour"
+        }
+      }
+    },
+    "SoumettreFactureFournisseur" : {
+      "type" : "object",
+      "properties" : {
+        "codeCoordonneesBancairesFournisseur" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idFournisseur" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idServiceFournisseur" : {
+          "type" : "integer",
+          "format" : "int64"
+        }
+      }
+    },
+    "DestinataireFactureEmise" : {
+      "type" : "object",
+      "properties" : {
+        "adresseDestinataireCodePays" : {
+          "type" : "string"
+        },
+        "adresseDestinataireCodePostal" : {
+          "type" : "string"
+        },
+        "adresseDestinataireComplement1" : {
+          "type" : "string"
+        },
+        "adresseDestinataireComplement2" : {
+          "type" : "string"
+        },
+        "adresseDestinataireDetail" : {
+          "type" : "string"
+        },
+        "adresseDestinataireId" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "adresseDestinataireLibellePays" : {
+          "type" : "string"
+        },
+        "adresseDestinataireVille" : {
+          "type" : "string"
+        },
+        "codeDestinataire" : {
+          "type" : "string"
+        },
+        "codeServiceExecutant" : {
+          "type" : "string"
+        },
+        "designationDestinataire" : {
+          "type" : "string"
+        },
+        "idDestinataire" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idServiceExecutant" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "libelleDestinataire" : {
+          "type" : "string"
+        },
+        "libelleServiceExecutant" : {
+          "type" : "string"
+        },
+        "miseEnPaiementDestinataire" : {
+          "type" : "boolean"
+        }
+      }
+    },
+    "ConsulterFactureParValideurParam" : {
+      "type" : "object",
+      "properties" : {
+        "codeLangue" : {
+          "type" : "string"
+        },
+        "idUtilisateurCourant" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "identifiantFactureCPP" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "rechercheLignePoste" : {
+          "$ref" : "#/definitions/ParamRechercheLignesPoste"
+        },
+        "rechercheLigneTvaRecap" : {
+          "$ref" : "#/definitions/ParamRechercheLigneRecapTva"
+        },
+        "recherchePj" : {
+          "$ref" : "#/definitions/ParamRechercheListePiecesJointes"
+        }
+      }
+    },
+    "ParametresRetour" : {
+      "type" : "object",
+      "properties" : {
+        "nbResultatsParPage" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "pageCourante" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "pages" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "total" : {
+          "type" : "integer",
+          "format" : "int32"
+        }
+      }
+    },
+    "WsRetourRechercherDemandePaiement" : {
+      "type" : "object",
+      "required" : [ "codeRetour", "libelle" ],
+      "properties" : {
+        "codeRetour" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 0,
+          "description" : "Le code retour de la réponse associée au libellé"
+        },
+        "libelle" : {
+          "type" : "string",
+          "example" : "TRA_MSG_00.000",
+          "description" : "Le libellé lié au codeRetour (si une erreur est retournée alors son libellé sera retourné)"
+        },
+        "listeDemandePaiement" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/RechercherDemandePaiementOutputListeDemandePaiement"
+          }
+        },
+        "total" : {
+          "type" : "integer",
+          "format" : "int32"
+        }
+      }
+    },
+    "ConsulterFactureParFournisseurParam" : {
+      "type" : "object",
+      "properties" : {
+        "codeLangue" : {
+          "type" : "string"
+        },
+        "getpLigneRecapTva" : {
+          "$ref" : "#/definitions/ParamRechercheLigneRecapTva"
+        },
+        "getpLignesPoste" : {
+          "$ref" : "#/definitions/ParamRechercheLignesPoste"
+        },
+        "getpListePiecesJointes" : {
+          "$ref" : "#/definitions/ParamRechercheListePiecesJointes"
+        },
+        "idUtilisateurCourant" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "identifiantFactureCPP" : {
+          "type" : "integer",
+          "format" : "int64"
+        }
+      }
+    },
+    "HistoriquesEvenements" : {
+      "type" : "object",
+      "properties" : {
+        "evenement" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/HistoriqueEvenement"
+          }
+        },
+        "nbResultatsParPageEvenement" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "pageCouranteEvenement" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "pagesEvenement" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "totalEvenement" : {
+          "type" : "integer",
+          "format" : "int64"
+        }
+      }
+    },
+    "ParamRechercheHistoEvenementsComplementaires" : {
+      "type" : "object",
+      "properties" : {
+        "nbResultatsParPageListeHistoEvenement" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "pageResultatDemandeeListeHistoEvenement" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "triColonneListeHistoEvenement" : {
+          "type" : "string",
+          "enum" : [ "EvenementLibelle", "EvenementQui", "EvenementDateHeure" ]
+        },
+        "triSensListeHistoEvenement" : {
+          "type" : "string",
+          "enum" : [ "Descendant", "Ascendant" ]
+        }
+      }
+    },
+    "RecyclerFactureParam" : {
+      "type" : "object",
+      "properties" : {
+        "commentaire" : {
+          "type" : "string"
+        },
+        "destinataire" : {
+          "$ref" : "#/definitions/SoumettreFactureDestinataire"
+        },
+        "idUtilisateurCourant" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "identifiantFactureCPP" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "reference" : {
+          "$ref" : "#/definitions/SoumettreFactureReferences"
+        }
+      }
+    },
+    "RechercherDemandePaiementStructureMoeInput" : {
+      "type" : "object",
+      "properties" : {
+        "idStructureMoe" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "identifiantStructureMoe" : {
+          "type" : "string"
+        },
+        "typeIdentifiantStructureMoe" : {
+          "type" : "string",
+          "enum" : [ "SIRET", "UE_HORS_FRANCE", "HORS_UE", "RIDET", "TAHITI", "AUTRE", "PARTICULIER" ]
+        }
+      }
+    },
+    "SoumettreFacturePieceJointePrincipale" : {
+      "type" : "object",
+      "properties" : {
+        "pieceJointePrincipaleDesignation" : {
+          "type" : "string"
+        },
+        "pieceJointePrincipaleId" : {
+          "type" : "integer",
+          "format" : "int64"
+        }
+      }
+    },
+    "WsRetourRechercherFactureParValideur" : {
+      "type" : "object",
+      "required" : [ "codeRetour", "libelle" ],
+      "properties" : {
+        "codeRetour" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 0,
+          "description" : "Le code retour de la réponse associée au libellé"
+        },
+        "libelle" : {
+          "type" : "string",
+          "example" : "TRA_MSG_00.000",
+          "description" : "Le libellé lié au codeRetour (si une erreur est retournée alors son libellé sera retourné)"
+        },
+        "listeFactures" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/FactureRechercheValideur"
+          }
+        },
+        "parametresRetour" : {
+          "$ref" : "#/definitions/ParametresRetour"
+        }
+      }
+    },
+    "TriColonne" : {
+      "type" : "object"
+    },
+    "LigneTva" : {
+      "type" : "object",
+      "properties" : {
+        "ligneTvaMontantBaseHtParTaux" : {
+          "type" : "number"
+        },
+        "ligneTvaMontantTvaParTaux" : {
+          "type" : "number"
+        },
+        "ligneTvaTauxManuel" : {
+          "type" : "number"
+        },
+        "ligneTvaTauxRefCode" : {
+          "type" : "string"
+        },
+        "ligneTvaTauxRefId" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "ligneTvaTauxRefLibelle" : {
+          "type" : "string"
+        },
+        "ligneTvaTauxRefValeur" : {
+          "type" : "number"
+        }
+      }
+    },
+    "References" : {
+      "type" : "object",
+      "properties" : {
+        "codeDeviseFacture" : {
+          "type" : "string"
+        },
+        "dateCreationFacture" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "dateDepot" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "dateEcheancePaiement" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "dateFacture" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "libelleDeviseFacture" : {
+          "type" : "string"
+        },
+        "libelleMotifExonerationTva" : {
+          "type" : "string"
+        },
+        "modePaiement" : {
+          "type" : "string",
+          "enum" : [ "CHEQUE", "PRELEVEMENT", "VIREMENT", "ESPECE", "AUTRE", "REPORT" ]
+        },
+        "motifExonerationTva" : {
+          "type" : "string"
+        },
+        "numeroBonCommande" : {
+          "type" : "string"
+        },
+        "numeroDpMandat" : {
+          "type" : "string"
+        },
+        "numeroFactureOrigine" : {
+          "type" : "string"
+        },
+        "numeroMarche" : {
+          "type" : "string"
+        },
+        "tailleTotalePiecesJointes" : {
+          "type" : "number"
+        },
+        "typeFacture" : {
+          "type" : "string",
+          "enum" : [ "FACTURE", "AVOIR", "ACOMPTE" ]
+        },
+        "typeFactureTravaux" : {
+          "type" : "string",
+          "enum" : [ "DP_DE_SOUSTRAITANT_TRAVAUX", "PROJET_DECOMPTE_MENSUEL", "ETAT_ACOMPTE", "ETAT_ACOMPTE_VALIDE", "PROJET_DECOMPTE_FINAL", "PROJET_DECOMPTE_GENERAL", "PROJET_DECOMPTE_GENERAL_PROCEDURE_TACITE", "DECOMPTE_GENERAL", "DECOMPTE_GENERAL_SIGNE", "DECOMPTE_GENERAL_DEFINITIF_TACITE", "DECOMPTE_GENERAL_DEFINITIF_PROCEDURE_TACITE" ]
+        },
+        "typeTva" : {
+          "type" : "string",
+          "enum" : [ "TVA_SUR_DEBIT", "TVA_SUR_ENCAISSEMENT", "EXONERATION", "SANS_TVA" ]
+        }
+      }
+    },
+    "PiecePrecedente" : {
+      "type" : "object",
+      "properties" : {
+        "cadreFacturationPiecePrecedente" : {
+          "type" : "string"
+        },
+        "codeServiceExecutantPiecePrecedente" : {
+          "type" : "string"
+        },
+        "idDestinatairePiecePrecedente" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idPiecePrecedente" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idServiceExecutantPiecePrecedente" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "identifiantDestinatairePiecePrecedente" : {
+          "type" : "string"
+        },
+        "nomServiceExecutantPiecePrecedente" : {
+          "type" : "string"
+        },
+        "numeroPiecePrecedente" : {
+          "type" : "string"
+        },
+        "raisonSocialeDestinatairePiecePrecedente" : {
+          "type" : "string"
+        }
+      }
+    },
+    "RecupererStatutsFactureVisiblesParValideurOutput" : {
+      "type" : "object",
+      "properties" : {
+        "codeStatutFacture" : {
+          "type" : "string"
+        }
+      }
+    },
+    "WsRetourRechercherFactureATraiterParFournisseur" : {
+      "type" : "object",
+      "required" : [ "codeRetour", "libelle" ],
+      "properties" : {
+        "codeRetour" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 0,
+          "description" : "Le code retour de la réponse associée au libellé"
+        },
+        "libelle" : {
+          "type" : "string",
+          "example" : "TRA_MSG_00.000",
+          "description" : "Le libellé lié au codeRetour (si une erreur est retournée alors son libellé sera retourné)"
+        },
+        "listeFactures" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/FactureRechercherATraiterFournisseur"
+          }
+        },
+        "parametresRetour" : {
+          "$ref" : "#/definitions/ParametresRetour"
+        }
+      }
+    },
+    "Destinataire" : {
+      "type" : "object",
+      "properties" : {
+        "adresseDestinataireCodePays" : {
+          "type" : "string"
+        },
+        "adresseDestinataireCodePostal" : {
+          "type" : "string"
+        },
+        "adresseDestinataireComplement1" : {
+          "type" : "string"
+        },
+        "adresseDestinataireComplement2" : {
+          "type" : "string"
+        },
+        "adresseDestinataireDetail" : {
+          "type" : "string"
+        },
+        "adresseDestinataireId" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "adresseDestinataireLibellePays" : {
+          "type" : "string"
+        },
+        "adresseDestinataireVille" : {
+          "type" : "string"
+        },
+        "codeDestinataire" : {
+          "type" : "string"
+        },
+        "codeServiceExecutant" : {
+          "type" : "string"
+        },
+        "destinataireEtat" : {
+          "type" : "string",
+          "enum" : [ "OUI", "NON" ]
+        },
+        "idDestinataire" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idServiceExecutant" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "libelleDestinataire" : {
+          "type" : "string"
+        },
+        "libelleServiceExecutant" : {
+          "type" : "string"
+        }
+      }
+    },
+    "LignePoste" : {
+      "type" : "object",
+      "properties" : {
+        "lignePosteDenomination" : {
+          "type" : "string"
+        },
+        "lignePosteMontantHtApresRemise" : {
+          "type" : "number"
+        },
+        "lignePosteMontantRemiseHT" : {
+          "type" : "number"
+        },
+        "lignePosteMontantTtcApresRemise" : {
+          "type" : "number"
+        },
+        "lignePosteMontantTva" : {
+          "type" : "number"
+        },
+        "lignePosteMontantUnitaireHT" : {
+          "type" : "number"
+        },
+        "lignePosteNumero" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "lignePosteQuantite" : {
+          "type" : "number"
+        },
+        "lignePosteReference" : {
+          "type" : "string"
+        },
+        "lignePosteTauxTva" : {
+          "type" : "string"
+        },
+        "lignePosteTauxTvaManuel" : {
+          "type" : "number"
+        },
+        "lignePosteUniteCode" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "lignePosteUniteLibelle" : {
+          "type" : "string"
+        }
+      }
+    },
+    "RetourRechercherFactureParFournisseur" : {
+      "type" : "object",
+      "properties" : {
+        "affactureurCode" : {
+          "type" : "string"
+        },
+        "affactureurRaisonSociale" : {
+          "type" : "string"
+        },
+        "affactureurTypeIdentifiant" : {
+          "type" : "string"
+        },
+        "codeDestinataire" : {
+          "type" : "string"
+        },
+        "codeFournisseur" : {
+          "type" : "string"
+        },
+        "codeServiceExecutant" : {
+          "type" : "string"
+        },
+        "codeServiceFournisseur" : {
+          "type" : "string"
+        },
+        "codeValideur1" : {
+          "type" : "string"
+        },
+        "codeValideur2" : {
+          "type" : "string"
+        },
+        "commentaireEtatCourant" : {
+          "type" : "string"
+        },
+        "coordBancairesFournisseurCleIban" : {
+          "type" : "string"
+        },
+        "coordBancairesFournisseurCleRib" : {
+          "type" : "string"
+        },
+        "coordBancairesFournisseurCodeBanque" : {
+          "type" : "string"
+        },
+        "coordBancairesFournisseurCodePays" : {
+          "type" : "string"
+        },
+        "coordBancairesFournisseurCompteBancaire" : {
+          "type" : "string"
+        },
+        "coordBancairesFournisseurNomCb" : {
+          "type" : "string"
+        },
+        "dateDepot" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "dateFacture" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "dateHeureEtatCourant" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "dateValidation1" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "dateValidation2" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "designationDestinataire" : {
+          "type" : "string"
+        },
+        "designationFournisseur" : {
+          "type" : "string"
+        },
+        "devise" : {
+          "type" : "string"
+        },
+        "idDestinataire" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idServiceExecutant" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "identifiantFactureCPP" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "modeDepot" : {
+          "type" : "string"
+        },
+        "montantAPayer" : {
+          "type" : "number"
+        },
+        "montantHT" : {
+          "type" : "number"
+        },
+        "montantTTC" : {
+          "type" : "number"
+        },
+        "nomPrenomUtilisateurCreateur" : {
+          "type" : "string"
+        },
+        "nomServiceExecutant" : {
+          "type" : "string"
+        },
+        "nomServiceFournisseur" : {
+          "type" : "string"
+        },
+        "nomValideur1" : {
+          "type" : "string"
+        },
+        "nomValideur2" : {
+          "type" : "string"
+        },
+        "numeroBonCommande" : {
+          "type" : "string"
+        },
+        "numeroFacture" : {
+          "type" : "string"
+        },
+        "numeroFactureOrigine" : {
+          "type" : "string"
+        },
+        "numeroFluxDepot" : {
+          "type" : "string"
+        },
+        "numeroMarche" : {
+          "type" : "string"
+        },
+        "prenomValideur1" : {
+          "type" : "string"
+        },
+        "prenomValideur2" : {
+          "type" : "string"
+        },
+        "raisonSocialeValideur1" : {
+          "type" : "string"
+        },
+        "raisonSocialeValideur2" : {
+          "type" : "string"
+        },
+        "rejetTraite" : {
+          "type" : "boolean"
+        },
+        "statut" : {
+          "type" : "string"
+        },
+        "taille" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "typeDemandePaiement" : {
+          "type" : "string"
+        },
+        "typeFacture" : {
+          "type" : "string",
+          "enum" : [ "FACTURE", "AVOIR", "ACOMPTE" ]
+        },
+        "typeIdentifiantFournisseur" : {
+          "type" : "string",
+          "enum" : [ "SIRET", "UE_HORS_FRANCE", "HORS_UE", "RIDET", "TAHITI", "AUTRE", "PARTICULIER" ]
+        },
+        "typeIdentifiantValideur1" : {
+          "type" : "string"
+        },
+        "typeIdentifiantValideur2" : {
+          "type" : "string"
+        }
+      }
+    },
+    "Affactureur" : {
+      "type" : "object",
+      "properties" : {
+        "affactureurCode" : {
+          "type" : "string"
+        },
+        "affactureurCodePays" : {
+          "type" : "string"
+        },
+        "affactureurId" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "affactureurRaisonSociale" : {
+          "type" : "string"
+        },
+        "affactureurTypeIdentifiant" : {
+          "type" : "string",
+          "enum" : [ "SIRET", "UE_HORS_FRANCE", "HORS_UE", "RIDET", "TAHITI", "AUTRE", "PARTICULIER" ]
+        }
+      }
+    }
+  },
+  "externalDocs" : {
+    "description" : "Documentations API",
+    "url" : "https://communaute.chorus-pro.gouv.fr/documentation/specifications-externes/"
+  }
+}
