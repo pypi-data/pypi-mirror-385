@@ -1,0 +1,44 @@
+Metadata-Version: 2.4
+Name: agent-skills-mcp
+Version: 0.1.0
+Summary: Load agent skills as MCP tools
+Project-URL: Homepage, https://github.com/DiscreteTom/agent-skills-mcp
+Project-URL: Repository, https://github.com/DiscreteTom/agent-skills-mcp
+Project-URL: Issues, https://github.com/DiscreteTom/agent-skills-mcp/issues
+Author-email: DiscreteTom <discrete_tom@outlook.com>
+License: MIT
+License-File: LICENSE
+Keywords: agent-skills,mcp,model-context-protocol,tools
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.13
+Requires-Dist: fastmcp>=2.12.4
+Requires-Dist: python-frontmatter>=1.1.0
+Description-Content-Type: text/markdown
+
+# agent-skills-mcp - Load [agent skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills) as MCP tools
+
+[![PyPI - Version](https://img.shields.io/pypi/v/agent-skills-mcp)](https://pypi.org/project/agent-skills-mcp/)
+![Codecov](https://img.shields.io/codecov/c/github/DiscreteTom/agent-skills-mcp)
+
+## Usage
+
+[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=skills&config=eyJjb21tYW5kIjoidXZ4IGFnZW50LXNraWxscy1tY3AifQ%3D%3D)
+
+Add to your MCP client configuration:
+
+```json
+{
+  "mcpServers": {
+    "skills": {
+      "command": "uvx",
+      "args": ["agent-skills-mcp"]
+    }
+  }
+}
+```
+
+## [CHANGELOG](./CHANGELOG.md)
