@@ -1,0 +1,31 @@
+[project]
+name = "calc-workbook"
+version = "0.1.0"
+authors = [
+  { name = "Alexandre Bento Freire", email = "devtoix@a-bentofreire.com" },
+]
+description = "A lightweight Excel workbook calculator that uses the formulas engine to compute cell values."
+readme = "README.md"
+requires-python = ">=3.6"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.6",
+    "Operating System :: OS Independent",
+]
+keywords = ["excel", "formulas", "workbook", "automation", "calculation"]
+
+dependencies = [
+    "formulas",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "openpyxl", "flake8"]
+
+[project.urls]
+Homepage = "https://github.com/a-bentofreire/calc-workbook"
+Repository = "https://github.com/a-bentofreire/calc-workbook"
+Issues = "https://github.com/a-bentofreire/calc-workbook/issues"
+
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
