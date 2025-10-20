@@ -1,0 +1,287 @@
+version: 2.1
+
+orbs:
+  codecov: codecov/codecov@5.3.0
+
+executors:
+  cpython_executor:
+    parameters:
+      version:
+        default: "3.12"
+        type: enum
+        enum: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+    docker:
+      - image: "ghcr.io/astral-sh/uv:python<<parameters.version>>-bookworm"
+    resource_class: small
+    environment:
+      FORCE_COLOR: "1"
+  pypy_executor:
+    docker:
+      - image: "pypy:3.11-bookworm"
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+    resource_class: small
+    environment:
+      FORCE_COLOR: "1"
+      PIP_ROOT_USER_ACTION: "ignore"
+
+jobs:
+  build:
+    executor:
+      name: cpython_executor
+    steps:
+      - checkout
+      - run: uv build
+      - persist_to_workspace:
+          root: dist
+          paths:
+            - aiosmtplib-*.tar.gz
+            - aiosmtplib-*.whl
+      - store_artifacts:
+          path: dist/
+
+  buildcheck:
+    executor:
+      name: cpython_executor
+    steps:
+      - attach_workspace:
+          at: dist
+      - run: uv tool run check-wheel-contents dist/*.whl
+      - run: uv tool run twine check --strict dist/*
+
+  typecheck:
+    executor:
+      name: cpython_executor
+    steps:
+      - checkout
+      - run: uv tool run mypy src/aiosmtplib
+      - run: uv tool run --with . mypy tests/type_usage.py
+      - run: uv tool run pyright src/aiosmtplib
+      - run: uv tool run --with . pyright tests/type_usage.py
+      - run: uv tool run ty check src/aiosmtplib
+      - run: uv tool run --with . ty check tests/type_usage.py
+
+  security:
+    executor:
+      name: cpython_executor
+    steps:
+      - checkout
+      - run: uv tool run bandit -n 10 -x tests -r src/aiosmtplib
+
+  docs:
+    executor:
+      name: cpython_executor
+    steps:
+      - checkout
+      - attach_workspace:
+          at: dist
+      - run: uv venv
+      - run: uv pip install -r docs/requirements.txt
+      - run: uv pip install -r requirements-dev.txt
+      - run: uv pip install dist/*.whl
+      - run: uv run python -m sphinx -nWT -b doctest -d ./docs/build/doctrees ./docs ./docs/build/html
+      - run: uv run python -m sphinx -nWT -b dummy -d ./docs/build/doctrees ./docs ./docs/build/html
+
+  test:
+    executor:
+      name: cpython_executor
+      version: <<parameters.python_version>>
+    parameters:
+      python_version:
+        type: enum
+        description: "python version"
+        enum: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+      event_loop:
+        type: enum
+        description: "event loop type"
+        enum: ["asyncio", "uvloop"]
+    environment:
+      COVERAGE_FILE: "coverage-results/.coverage.cpython<<parameters.python_version>>-<<parameters.event_loop>>"
+      HYPOTHESIS_PROFILE: "ci"
+      BIND_ADDR: "127.0.0.1"
+    steps:
+      - checkout
+      - attach_workspace:
+          at: dist
+      - run: uv venv
+      - run: uv pip install -r requirements-dev.txt
+      - when:
+          condition:
+            equal: ["uvloop", <<parameters.event_loop>>]
+          steps:
+            - run: uv pip install $(find dist -name aiosmtplib-*.whl)[uvloop]
+      - unless:
+          condition:
+            equal: ["uvloop", <<parameters.event_loop>>]
+          steps:
+            - run: uv pip install $(find dist -name aiosmtplib-*.whl)
+      - run: |
+          uv run --with aiosmtplib --no-project -- python -m pytest \
+            --cov \
+            --cov-report=xml:coverage-results/coverage-cpython<<parameters.python_version>>-<<parameters.event_loop>>.xml \
+            --cov-config=pyproject.toml \
+            --junitxml=test-results/junit-cpython<<parameters.python_version>>-<<parameters.event_loop>>.xml \
+            --override-ini=pythonpath= \
+            --event-loop=<<parameters.event_loop>> \
+            --bind-addr=$BIND_ADDR \
+            --hypothesis-profile $HYPOTHESIS_PROFILE
+      - store_artifacts:
+          path: test-results
+      - store_test_results:
+          path: test-results
+      - persist_to_workspace:
+          root: coverage-results
+          paths:
+            - .coverage.*
+      - codecov/upload:
+          report_type: test_results
+          disable_search: true
+          files: "test-results/junit-cpython<<parameters.python_version>>-<<parameters.event_loop>>.xml"
+          flags: "cpython<<parameters.python_version>>,<<parameters.event_loop>>"
+      - codecov/upload:
+          report_type: coverage
+          disable_search: true
+          files: "coverage-results/coverage-cpython<<parameters.python_version>>-<<parameters.event_loop>>.xml"
+          flags: "cpython<<parameters.python_version>>,<<parameters.event_loop>>"
+
+  test-pypy:
+    executor:
+      name: pypy_executor
+    environment:
+      COVERAGE_FILE: "coverage-results/.coverage.pypy3.11-asyncio"
+      HYPOTHESIS_PROFILE: "ci"
+      BIND_ADDR: "127.0.0.1"
+    steps:
+      - checkout
+      - attach_workspace:
+          at: dist
+      - run: python -m pip install -r requirements-dev.txt
+      - run: python -m pip install dist/*.whl
+      - run: |
+          python -m pytest --cov \
+            --cov-report=xml:coverage-results/coverage-pypy3.11-asyncio.xml \
+            --cov-config=pyproject.toml \
+            --junitxml=test-results/junit-pypy3.11-asyncio.xml \
+            --override-ini=pythonpath= \
+            --event-loop=asyncio \
+            --bind-addr=$BIND_ADDR \
+            --hypothesis-profile $HYPOTHESIS_PROFILE
+      - store_artifacts:
+          path: test-results
+      - store_test_results:
+          path: test-results
+      - persist_to_workspace:
+          root: coverage-results
+          paths:
+            - .coverage.*
+      - codecov/upload:
+          report_type: test_results
+          disable_search: true
+          files: "test-results/junit-pypy3.11-asyncio.xml"
+          flags: "pypy3.11,asyncio"
+      - codecov/upload:
+          report_type: coverage
+          disable_search: true
+          files: "coverage-results/coverage-pypy3.11-asyncio.xml"
+          flags: "pypy3.11,asyncio"
+
+  coverage:
+    executor:
+      name: cpython_executor
+    environment:
+      COVERAGE_FILE: .coverage
+    steps:
+      - checkout
+      - attach_workspace:
+          at: coverage-results
+      - run: cp coverage-results/.coverage.* ./
+      - run: uv tool run coverage combine
+      - run: uv tool run coverage xml
+      - run: uv tool run coverage html
+      - store_artifacts:
+          path: coverage.xml
+      - store_artifacts:
+          path: htmlcov
+      - run: uv tool run coverage report --fail-under=100
+
+  deploy:
+    executor:
+      name: cpython_executor
+    steps:
+      - attach_workspace:
+          at: dist
+      - run: uv tool run twine upload -r testpypi --username $TESTPYPI_USERNAME --password $TESTPYPI_PASSWORD dist/*
+      - run: uv tool run twine upload -r pypi --username $PYPI_USERNAME --password $PYPI_PASSWORD dist/*
+
+workflows:
+  build_test_deploy:
+    jobs:
+      - build: &base-job
+          context:
+            - docker-hub-credentials
+          filters:
+            tags:
+              only: /.*/
+      - buildcheck:
+          <<: *base-job
+          requires:
+            - build
+      - docs:
+          <<: *base-job
+          requires:
+            - build
+      - test-pypy:
+          <<: *base-job
+          name: "test-asyncio-pypy3.11"
+          requires:
+            - build
+      - test:
+          <<: *base-job
+          name: "test-asyncio-<< matrix.python_version >>"
+          matrix:
+            alias: "test-cpython-asyncio"
+            parameters:
+              event_loop: ["asyncio"]
+              python_version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+          requires:
+            - build
+      - test:
+          <<: *base-job
+          name: "test-uvloop-<< matrix.python_version >>"
+          matrix:
+            alias: "test-cpython-uvloop"
+            parameters:
+              event_loop: ["uvloop"]
+              python_version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+          requires:
+            - build
+            - "test-asyncio-<< matrix.python_version >>"
+      - coverage:
+          <<: *base-job
+          requires:
+            - test-cpython-asyncio
+            - test-cpython-uvloop
+            - test-asyncio-pypy3.11
+      - deploy:
+          requires:
+            - build
+            - buildcheck
+            - docs
+            - test-cpython-asyncio
+            - test-cpython-uvloop
+            - test-asyncio-pypy3.11
+          context:
+            - docker-hub-credentials
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/
+  lint:
+    jobs:
+      - typecheck:
+          <<: *base-job
+      - security:
+          <<: *base-job
+# VS Code Extension Version: 1.5.1
