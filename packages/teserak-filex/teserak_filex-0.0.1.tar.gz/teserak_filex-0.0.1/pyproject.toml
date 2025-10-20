@@ -1,0 +1,19 @@
+[project]
+name = "teserak-filex"
+version = "0.0.1"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "typer>=0.19.2",
+]
+
+[project.scripts]
+inspect = "filex:cli.main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/filex"]
