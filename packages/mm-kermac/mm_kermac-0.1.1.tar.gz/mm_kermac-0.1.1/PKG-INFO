@@ -1,0 +1,49 @@
+Metadata-Version: 2.4
+Name: mm-kermac
+Version: 0.1.1
+Summary: Pytorch routines for (Ker)nel (Mac)hines
+Project-URL: Homepage, https://github.com/MetaMachines/mm-kermac-py
+Project-URL: Repository, https://github.com/MetaMachines/mm-kermac-py.git
+Author-email: MetaMachines LLC <contact@metamachines.co>
+License: MIT
+License-File: LICENSE
+Requires-Python: >=3.8
+Requires-Dist: cuda-toolkit[cccl]
+Requires-Dist: mm-ptx>=0.1.2
+Requires-Dist: numpy>=1.21
+Requires-Dist: platformdirs>=3.0
+Requires-Dist: torch>=2.0
+Provides-Extra: cu11
+Requires-Dist: cuda-core[cu11]>=0.3.2; extra == 'cu11'
+Provides-Extra: cu12
+Requires-Dist: cuda-core[cu12]>=0.3.2; extra == 'cu12'
+Provides-Extra: cu13
+Requires-Dist: cuda-core[cu13]>=0.3.2; extra == 'cu13'
+Description-Content-Type: text/markdown
+
+# mm-kermac
+> Dynamically compiled hyper semirings for Pytorch using PTX Inject and Stack PTX
+
+## Installation
+```bash
+pip install mm-kermac
+```
+
+## TODO
+    * Better Docs
+    * Benchmarks
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Citation
+If you use this software in your work, please cite it using the following BibTeX entry (generated from the [CITATION.cff](CITATION.cff) file):
+```bibtex
+@software{Durham_mm-kermac_2025,
+  author       = {Durham, Charlie},
+  title        = {mm-kermac: PTX Inject and Stack PTX for Python},
+  version      = {0.1.1},
+  date-released = {2025-10-19},
+  url          = {https://github.com/MetaMachines/mm-kermac-py}
+}
+```
