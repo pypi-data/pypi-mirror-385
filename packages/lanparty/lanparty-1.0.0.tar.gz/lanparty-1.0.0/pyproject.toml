@@ -1,0 +1,21 @@
+[project]
+name = "lanparty" #pypi-name
+version = "1.0.0"
+description = "Local chat via LAN"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "colorama>=0.4.6"
+]
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project.scripts]
+localchat = "localchat.__main__:main"
+
+[project.urls]
+Homepage = "https://github.com/enderlumi/localchat"
+Source = "https://github.com/enderlumi/localchat"
+Issues = "https://github.com/enderlumi/localchat/issues"
