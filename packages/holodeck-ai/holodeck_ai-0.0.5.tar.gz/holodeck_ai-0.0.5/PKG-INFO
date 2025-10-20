@@ -1,0 +1,30 @@
+Metadata-Version: 2.4
+Name: holodeck-ai
+Version: 0.0.5
+Summary: HoloDeck - Experimentation-driven agent experimentation and deployment
+Requires-Python: <4.0,>=3.14
+Requires-Dist: requests<3.0.0,>=2.32.5
+Requires-Dist: pydantic>=2.0.0
+Requires-Dist: pyyaml>=6.0.0
+Requires-Dist: python-dotenv>=1.0.0
+Requires-Dist: python-dateutil>=2.8.0
+Requires-Dist: urllib3<3.0.0,>=2.5.0
+Requires-Dist: cryptography<47.0.0,>=46.0.2
+Requires-Dist: mkdocs-material<10.0.0,>=9.6.22
+Requires-Dist: twine<7.0.0,>=6.2.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.4.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.1.0; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.21.0; extra == "dev"
+Requires-Dist: pytest-mock>=3.11.0; extra == "dev"
+Requires-Dist: black>=23.0.0; extra == "dev"
+Requires-Dist: ruff>=0.1.0; extra == "dev"
+Requires-Dist: mypy>=1.5.0; extra == "dev"
+Requires-Dist: pre-commit>=3.3.0; extra == "dev"
+Requires-Dist: tox>=4.0.0; extra == "dev"
+Requires-Dist: bandit[toml]>=1.8.0; extra == "dev"
+Requires-Dist: safety>=3.0.0; extra == "dev"
+Requires-Dist: detect-secrets>=1.4.0; extra == "dev"
+Requires-Dist: poetry>=1.7.0; extra == "dev"
+Requires-Dist: types-PyYAML>=6.0.12; extra == "dev"
+Requires-Dist: mkdocstrings[python]>=0.25.0; extra == "dev"
