@@ -1,0 +1,47 @@
+
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "Vector_demension"
+version = "0.1.1"
+description = "Constraint checking engine with vectorized NumPy + Numba (no-scale)."
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+  { name = "Le Thuc", email = "Lethuc2602@gmail.com" }
+]
+license = { text = "Proprietary" }
+keywords = ["constraints", "routing", "numba", "numpy"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "License :: Other/Proprietary License",
+  "Operating System :: OS Independent",
+]
+dependencies = [
+  "numpy>=1.22",
+  "numba>=0.57",
+]
+
+[tool.setuptools]
+py-modules = [
+  "Core_class",
+  "constraint_kernel",
+  "build_attr_schema_auto",
+  "dtype_utils",
+  "help_cli",
+]
+
+[tool.setuptools.package-dir]
+"" = "Project Logistic /My_code"
+
+[tool.setuptools.data-files]
+"share/hyce" = [
+  "Project Logistic /My_code/TESTING_GUIDE.md",
+]
+
+[project.scripts]
+hyce-help = "help_cli:main"
