@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" i18n:domain="nive">
+<head>
+<title i18n:translate="">Sorry</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<link href="/s-iface/mods/bootstrap-4.3.1-dist/css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
+<link href="/s-iface/iface.css" rel="stylesheet" type="text/css" media="all" />
+</head>
+
+<body>
+<div class="container" id="container">
+<div id="main">
+<article>
+<div class="row">
+
+<div class="col-md-6 offset-md-3 well">
+<img src="/s-iface/images/logo-black.png" class="float-right" title="" alt="Nive" />
+
+<tal:block tal:condition="error=='404'">
+<h1 i18n:translate="">Page not found (404)!</h1>
+<p i18n:translate="">Sorry, the requested url does not exist on this server.</p>
+</tal:block>
+
+<tal:block tal:condition="error=='500'">
+<h1 i18n:translate="">Something went wrong!</h1>
+<p i18n:translate="">Sorry, the server failed to process your request.</p>
+<!--${message}-->
+</tal:block>
+
+<hr/>
+<br/>
+<p><a href="/workspace/conf" i18n:translate="">Return to dashboard</a></p>
+
+</div>
+
+</div>
+</article>
+</div>
+</div>
+</body>
+</html>
+
