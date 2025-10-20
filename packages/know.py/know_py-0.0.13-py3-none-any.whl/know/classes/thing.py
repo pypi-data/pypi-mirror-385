@@ -1,0 +1,25 @@
+# This is free and unencumbered software released into the public domain.
+
+from pydantic import BaseModel, Field
+from typing_extensions import Self
+
+
+class Thing(BaseModel):
+    type: str = Field("Thing", alias="@type")
+    id: str = Field(..., serialization_alias="@id")
+
+    def metadata(self) -> Self:
+        return self
+
+    def to_json(self) -> str:
+        import json
+
+        return json.dumps(self.to_dict(), separators=(",", ":"))
+
+    def to_dict(self) -> dict[str, object]:
+        return self.model_dump(
+            by_alias=True,
+            exclude_unset=True,
+            exclude_none=True,
+            exclude_computed_fields=True,
+        )
