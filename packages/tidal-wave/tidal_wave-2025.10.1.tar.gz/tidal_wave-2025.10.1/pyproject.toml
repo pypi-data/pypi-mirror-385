@@ -1,0 +1,68 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+[project]
+name = "tidal-wave"
+dynamic = ["version"]
+description = "A tool to wave at the TIDAL music service."
+authors = [{ name = "colinho", email = "pypi@colin.technology" }]
+maintainers = [{ name = "colinho", email = "pypi@colin.technology" }]
+license-files = ["LICENSE"]
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = ">=3.9, <3.14"
+classifiers = [
+    "Intended Audience :: End Users/Desktop",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Operating System :: OS Independent",
+    "Topic :: Multimedia :: Sound/Audio",
+    "Topic :: Multimedia :: Video",
+]
+dependencies = [
+    "backoff==2.2.1",
+    "cachecontrol==0.14.2",
+    "dataclass-wizard==0.35.1",
+    "ffmpeg-python==0.2.0",
+    "mutagen==1.47.0",
+    "m3u8==6.0.0",
+    "platformdirs==4.3.8",
+    "pycryptodome==3.23.0",
+    "requests[socks]>=2.32.4",  # CVE-2024-47081
+    "typer==0.19.2",
+    "tzdata==2025.2; platform_system == 'Windows'",
+]
+[project.scripts]
+tidal-wave = "tidal_wave.main:app"
+[project.urls]
+Homepage = "https://github.com/ebb-earl-co/tidal-wave"
+
+[dependency-groups]
+dev = [
+    "ruff"
+]
+build = [
+    # https://github.com/pyinstaller/pyinstaller?tab=readme-ov-file#requirements-and-tested-platforms
+    # Python 3.10 is inoperable with PyInstaller
+    "pyinstaller ; python_version != '3.10'",
+    "pypiwin32==223 ; platform_system == 'Windows'",
+]
+
+[tool.ruff]
+indent-width = 4
+line-length = 88
+target-version = "py39"
+
+[tool.ruff.format]
+indent-style = "space"
+quote-style = "double"
+
+[tool.setuptools.dynamic]
+version = {attr = "tidal_wave.main.__version__"}
+
+[tool.uv]
+compile-bytecode = true  # https://docs.astral.sh/uv/reference/settings/#compile-bytecode
+package = true  # https://docs.astral.sh/uv/reference/settings/#package
+required-version = ">=0.9"  # https://docs.astral.sh/uv/reference/settings/#required-version
