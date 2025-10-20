@@ -1,0 +1,43 @@
+[tool.poetry]
+name = "idemptx-redis6"
+version = "0.2.3"
+description = "Idempotency decorator for FastAPI"
+authors = ["OSpoon <zxin088@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/OSpoon/idemptx"
+repository = "https://github.com/OSpoon/idemptx"
+documentation = "https://github.com/OSpoon/idemptx#readme"
+keywords = ["fastapi", "idempotency", "decorator", "redis", "cache"]
+
+packages = [{ include = "idemptx", from = "src" }]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "*"
+redis = "^6.0"
+pydantic = "^2.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.4.2"
+ruff = "^0.3.4"
+pre-commit = "^3.7.0"
+pytest = "^8.3.5"
+pytest-asyncio = "^0.26.0"
+httpx = "^0.28.1"
+fakeredis = "^2.28.1"
+pytest-cov = "^6.1.1"
+
+[tool.black]
+line-length = 120
+skip-string-normalization = true
+
+[tool.ruff]
+line-length = 120
+target-version = "py39"
+lint.select = ["E", "F", "I", "W", "YTT", "RUF", "UP", "C90"]
+lint.ignore = ["E501"]
+format.quote-style = "single"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
