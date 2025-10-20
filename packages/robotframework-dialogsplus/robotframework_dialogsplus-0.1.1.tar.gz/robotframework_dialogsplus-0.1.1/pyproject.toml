@@ -1,0 +1,31 @@
+[project]
+name = "robotframework-dialogsplus" 
+version = "0.1.1"
+description = "A drop-in enhancement for Robot Framework's Dialogs library with modern UI and extended user interaction keywords."
+readme = "README.md"
+authors = [
+    { name = "Alpha-Centauri-00", email = "Alpha@Centauri.c0m" }
+]
+requires-python = ">=3.10"
+license = "MIT"
+
+dependencies = [
+    "customtkinter>=5.2.2",
+    "pyyaml>=6.0.3",
+    "robotframework>=7.3.2",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/DialogsPlus"]
+
+[dependency-groups]
+dev = [
+    "robotframework-tidy>=4.18.0",
+]
+[tool.ruff]
+ignore = ["E722"]
+
