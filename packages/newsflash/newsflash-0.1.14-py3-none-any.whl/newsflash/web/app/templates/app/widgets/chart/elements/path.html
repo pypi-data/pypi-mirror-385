@@ -1,0 +1,1 @@
+<path class="line-path" d="{% for point in points %}{% if forloop.first %}M {% else %} L {% endif %}{{ point.x }} {{ point.y }}{% endfor %}" stroke="{{ stroke_color }}" stroke-width="{{ stroke_width }}" stroke-linecap="{{ stroke_linecap }}" pathLength="{{ path_length }}" fill="{{ fill_color }}" />

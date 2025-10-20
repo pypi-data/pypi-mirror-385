@@ -1,0 +1,21 @@
+{% csrf_token %}
+<button 
+id="{{ id }}"
+class="py-3 px-4 cursor-pointer 
+focus:underline outline-none w-full shadow text-white
+bg-sky-700"
+{% if callback %}
+hx-post="{% url callback.endpoint_name %}"
+hx-trigger="click"
+hx-swap="none"
+hx-include="
+{% for element in callback.inputs %}
+    #{{ element }},
+{% endfor %}
+previous [name=csrfmiddlewaretoken]
+"
+hx-indicator="{{ callback.target_wrapper_ids }}"
+{% endif %}
+>
+    {{ text }}
+</button>
