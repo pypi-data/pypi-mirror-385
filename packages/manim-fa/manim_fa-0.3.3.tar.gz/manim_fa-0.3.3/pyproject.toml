@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=65.5.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "manim-fa"
+version = "0.3.3"
+description = "افزونه‌ی مانیم برای نمایش متن فارسی (راست به چپ) با قابلیت تبدیل خودکار از حروف لاتین به فارسی"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "manim>=0.17.0",
+    "arabic-reshaper",
+    "python-bidi"
+]
+license = { file = "LICENSE" }  # فقط یک روش تعریف شده
+authors = [
+    { name = "علی تابش", email = "tabesh_ali@yahoo.com" }
+]
+urls = { "Homepage" = "https://github.com/Tabesh2020/manim-fa" }
+
+[tool.setuptools.packages.find]
+where = ["."]
