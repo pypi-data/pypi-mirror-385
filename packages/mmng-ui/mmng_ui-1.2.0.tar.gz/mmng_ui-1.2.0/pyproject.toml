@@ -1,0 +1,79 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mmng-ui"
+dynamic = ["version"]
+authors = [
+    { name="Jason Lingohr", email="jason@lucid.net.au" },
+]
+description = "The textual user interface to multimon-ng."
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "click==8.3.0",
+    "textual==6.3.0",
+    "rich==14.2.0",
+    "moment==0.12.1",
+]
+
+[project.optional-dependencies]
+web = [
+  "textual-serve==1.1.2",
+]
+
+[project.scripts]
+mmng-ui = "mmng_ui.pocsag:main"
+
+[project.urls]
+Homepage = "https://github.com/lingfish/mmng-ui"
+Issues = "https://github.com/lingfish/mmng-ui/issues"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "src/mmng_ui/_version.py"
+
+[tool.hatch.build.targets.sdist]
+only-packages = true
+
+[tool.hatch.envs.dev]
+extra-dependencies = [
+    "textual-dev",
+]
+
+[tool.hatch.version.raw-options]
+version_scheme = "guess-next-dev"
+local_scheme = "no-local-version"
+
+[tool.coverage.run]
+source_pkgs = ["mmng_ui", "tests"]
+branch = true
+parallel = true
+
+[tool.coverage.paths]
+mmng_ui = ["src/mmng_ui", "*/mmng-ui/src/mmng_ui"]
+tests = ["tests", "*/mmng-ui/tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "no cov",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]
+
+[tool.pylint]
+max-line-length = 120
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.format]
+quote-style = "single"
