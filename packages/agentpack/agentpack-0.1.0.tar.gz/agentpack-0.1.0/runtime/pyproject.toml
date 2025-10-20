@@ -1,0 +1,23 @@
+[project]
+name = "agentpack-runtime-python"
+version = "0.1.0"
+description = "Internal Python runtime for Agentpack tools (implements ToolHost gRPC service)"
+authors = [{name = "Agentpack Contributors"}]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "grpcio>=1.60.0",
+    "grpcio-tools>=1.60.0",
+    "protobuf>=4.25.0",
+]
+
+[project.scripts]
+agentpack-runtime = "agentpack_runtime.__main__:main"
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["agentpack_runtime*"]

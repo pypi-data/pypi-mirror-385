@@ -1,0 +1,228 @@
+"""FastAPI server for serving tools."""
+
+import uuid
+from typing import Any, Optional
+
+import structlog
+import uvicorn
+from fastapi import FastAPI, Header, HTTPException, Request, Response
+from fastapi.responses import JSONResponse
+from opentelemetry import trace
+from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+from opentelemetry.sdk.resources import Resource
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from pydantic import BaseModel, ValidationError as PydanticValidationError
+
+from agentpack.context import create_execution_context
+from agentpack.errors import ToolError, ValidationError
+from agentpack.types import RequestMetadata, ServerOptions, Tool
+
+# Configure structlog
+structlog.configure(
+    processors=[
+        structlog.stdlib.filter_by_level,
+        structlog.stdlib.add_logger_name,
+        structlog.stdlib.add_log_level,
+        structlog.stdlib.PositionalArgumentsFormatter(),
+        structlog.processors.TimeStamper(fmt="iso"),
+        structlog.processors.StackInfoRenderer(),
+        structlog.processors.format_exc_info,
+        structlog.processors.UnicodeDecoder(),
+        structlog.processors.JSONRenderer(),
+    ],
+    wrapper_class=structlog.stdlib.BoundLogger,
+    logger_factory=structlog.stdlib.LoggerFactory(),
+    cache_logger_on_first_use=True,
+)
+
+
+class ExecuteRequest(BaseModel):
+    """Request model for tool execution."""
+
+    tool: str
+    input: Any
+
+
+class ExecuteResponse(BaseModel):
+    """Response model for tool execution."""
+
+    output: Any
+
+
+class ErrorResponse(BaseModel):
+    """Response model for errors."""
+
+    error: str
+    code: str
+    message: str
+    details: Optional[Any] = None
+
+
+class HealthResponse(BaseModel):
+    """Response model for health check."""
+
+    status: str
+
+
+class ToolListResponse(BaseModel):
+    """Response model for tool listing."""
+
+    tools: list[dict[str, Any]]
+
+
+class Server:
+    """FastAPI-based tool server."""
+
+    def __init__(self, tools: list[Tool], options: ServerOptions) -> None:
+        self.tools = {tool.name: tool for tool in tools}
+        self.options = options
+        self.app = FastAPI(title="Agentpack Tool Server", version="0.1.0")
+
+        # Setup routes
+        self._setup_routes()
+
+        # Setup OpenTelemetry if configured
+        if options.otlp_endpoint:
+            self._setup_tracing()
+
+    def _setup_routes(self) -> None:
+        """Setup FastAPI routes."""
+
+        @self.app.get("/health", response_model=HealthResponse)
+        async def health() -> HealthResponse:
+            """Health check endpoint."""
+            return HealthResponse(status="ok")
+
+        @self.app.get("/tools", response_model=ToolListResponse)
+        async def list_tools() -> ToolListResponse:
+            """List all available tools."""
+            tools_list = [tool.to_dict() for tool in self.tools.values()]
+            return ToolListResponse(tools=tools_list)
+
+        @self.app.post("/execute", response_model=ExecuteResponse)
+        async def execute(
+            request: ExecuteRequest,
+            x_trace_id: Optional[str] = Header(None),
+            x_span_id: Optional[str] = Header(None),
+            x_user_id: Optional[str] = Header(None),
+            x_session_id: Optional[str] = Header(None),
+        ) -> ExecuteResponse:
+            """Execute a tool."""
+            # Generate request ID
+            request_id = str(uuid.uuid4())
+
+            # Get tool
+            tool = self.tools.get(request.tool)
+            if not tool:
+                raise HTTPException(status_code=404, detail=f"Tool not found: {request.tool}")
+
+            # Create execution context
+            metadata = RequestMetadata(
+                request_id=request_id,
+                trace_id=x_trace_id,
+                span_id=x_span_id,
+                user_id=x_user_id,
+                session_id=x_session_id,
+            )
+            ctx = create_execution_context(metadata)
+
+            try:
+                # Execute tool
+                output = await tool.execute(request.input or {}, ctx)
+                return ExecuteResponse(output=output.model_dump())
+            except PydanticValidationError as e:
+                raise ValidationError("Validation failed", e.errors())
+            except ToolError:
+                raise
+            except Exception as e:
+                ctx.logger.error("Tool execution failed", error=str(e))
+                raise HTTPException(status_code=500, detail=str(e))
+
+        @self.app.exception_handler(ToolError)
+        async def tool_error_handler(request: Request, exc: ToolError) -> JSONResponse:
+            """Handle ToolError exceptions."""
+            return JSONResponse(
+                status_code=400,
+                content=exc.to_dict(),
+            )
+
+        @self.app.exception_handler(ValidationError)
+        async def validation_error_handler(request: Request, exc: ValidationError) -> JSONResponse:
+            """Handle ValidationError exceptions."""
+            return JSONResponse(
+                status_code=400,
+                content=exc.to_dict(),
+            )
+
+    def _setup_tracing(self) -> None:
+        """Setup OpenTelemetry tracing."""
+        if not self.options.otlp_endpoint:
+            return
+
+        # Create resource
+        resource = Resource.create(
+            attributes={
+                "service.name": self.options.service_name,
+            }
+        )
+
+        # Create tracer provider
+        provider = TracerProvider(resource=resource)
+
+        # Create OTLP exporter
+        otlp_exporter = OTLPSpanExporter(endpoint=f"{self.options.otlp_endpoint}/v1/traces")
+
+        # Add span processor
+        provider.add_span_processor(BatchSpanProcessor(otlp_exporter))
+
+        # Set global tracer provider
+        trace.set_tracer_provider(provider)
+
+        # Instrument FastAPI
+        FastAPIInstrumentor.instrument_app(self.app)
+
+    def start(self) -> None:
+        """Start the server."""
+        logger = structlog.get_logger()
+        logger.info(
+            "Starting server",
+            host=self.options.host,
+            port=self.options.port,
+            tools=list(self.tools.keys()),
+        )
+
+        uvicorn.run(
+            self.app,
+            host=self.options.host,
+            port=self.options.port,
+            log_config=None,  # Use structlog instead
+        )
+
+
+def create_server(tools: list[Tool], **kwargs: Any) -> Server:
+    """
+    Create a tool server.
+
+    Args:
+        tools: List of tools to serve
+        **kwargs: Server options (port, host, service_name, otlp_endpoint)
+
+    Returns:
+        Server instance
+
+    Example:
+        ```python
+        from agentpack import create_server
+
+        server = create_server(
+            tools=[my_tool],
+            port=8080,
+            service_name="my-tools",
+        )
+        server.start()
+        ```
+    """
+    options = ServerOptions(**kwargs)
+    return Server(tools, options)

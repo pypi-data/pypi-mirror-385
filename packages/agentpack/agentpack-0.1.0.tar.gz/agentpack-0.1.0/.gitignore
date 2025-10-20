@@ -1,0 +1,53 @@
+# Rust
+/target
+# Note: Cargo.lock is committed for this workspace because we build binaries
+# For reproducible builds of agentpack-registry, agentpack-cli, etc., we need the lockfile
+**/*.rs.bk
+*.pdb
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Local development
+.env
+.env.*
+!.env.example
+secrets/
+*.key
+*.pem
+
+# Build artifacts
+**/dist/
+**/build/
+*.log
+
+# Testing
+.coverage
+htmlcov/
+*.profdata
+
+# Claude Code local settings
+.claude/settings.local.json
+
+# Node (for future SDK work)
+node_modules/
+.npm/
+.pnpm-store/
+
+# Python (for future SDK work)
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+venv/
+.venv/
+
+# Monitoring (Docker volumes for Grafana and Prometheus data)
+# Note: Configuration files in monitoring/ ARE committed
+# Only the persistent data volumes are ignored
