@@ -1,0 +1,68 @@
+[tool.poetry]
+name = "mxm-config"
+version = "0.2.5"
+description = "MXM configuration loader and context resolver"
+authors = ["mxm <contact@moneyexmachina.com>"]
+license = "MIT"
+readme = "README.md"
+keywords = ["mxm", "configuration", "omegaconf", "settings"]
+exclude = ["dist/*", "build/*", "*.egg-info/*", ".venv/*"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Typing :: Typed",
+]
+packages = [{ include = "mxm_config" }]
+include = [
+  "LICENSE",
+  "mxm_config/examples/demo_config/*.yaml",
+  "mxm_config/py.typed",
+]
+[tool.poetry.urls]
+"Homepage" = "https://github.com/moneyexmachina/mxm-config"
+"Repository" = "https://github.com/moneyexmachina/mxm-config"
+"Issues" = "https://github.com/moneyexmachina/mxm-config/issues"
+[tool.poetry.dependencies]
+python = ">=3.12,<4.0"
+omegaconf = ">=2.3.0,<3.0.0"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.13.0"
+black = "^25.1.0"
+isort = "^6.0.1"
+ipython = "^9.5.0"
+pytest = "^8.4.2"
+
+[build-system]
+requires = ["poetry-core>=2.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+select = ["E", "F", "B", "ANN"]
+ignore = ["ANN101", "ANN102"]
+exclude = ["build", "dist", ".venv"]
+
+[tool.black]
+line-length = 88
+target-version = ["py312"]
+
+[tool.isort]
+profile = "black"
+line_length = 88
+known_first_party = ["mxm_config"]
+known_third_party = ["omegaconf"]
+combine_as_imports = true
+
+[tool.pyright]
+typeCheckingMode = "strict"
+include = ["mxm_config"]
+exclude = ["build", "dist", "docs", ".venv"]
+pythonVersion = "3.12"
+pythonPlatform = "All"
+reportMissingImports = "error"
+reportMissingTypeStubs = "warning"
