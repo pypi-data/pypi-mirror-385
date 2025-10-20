@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}Export Harris Matrix to GraphML (yEd){% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2><i class="fas fa-project-diagram"></i> Export Harris Matrix to GraphML (yEd)</h2>
+
+    <div class="alert alert-info">
+        <i class="fas fa-info-circle"></i>
+        <strong>GraphML Export</strong><br>
+        Esporta la Harris Matrix in formato GraphML compatibile con yEd Graph Editor.
+        Questo formato preserva la struttura dei periodi archeologici e permette una modifica avanzata del diagramma.
+    </div>
+
+    <!-- Site Selection and Export Form -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="fas fa-download"></i> Export Parameters</h5>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('export_harris_graphml') }}">
+                {{ form.hidden_tag() }}
+
+                <!-- Site Selection -->
+                <div class="mb-3">
+                    <label for="site" class="form-label"><strong>Sito Archeologico</strong></label>
+                    {{ form.site(class="form-select", id="site", required=true) }}
+                    <div class="form-text">Seleziona il sito archeologico per cui generare la Harris Matrix</div>
+                </div>
+
+                <!-- Title -->
+                <div class="mb-3">
+                    <label for="title" class="form-label"><strong>Titolo Diagramma</strong></label>
+                    {{ form.title(class="form-control", id="title", placeholder="Es: Pompei - Regio VI") }}
+                    <div class="form-text">Intestazione opzionale da visualizzare nel diagramma</div>
+                </div>
+
+                <!-- Grouping Mode -->
+                <div class="mb-3">
+                    <label for="grouping" class="form-label"><strong>Raggruppamento</strong></label>
+                    {{ form.grouping(class="form-select", id="grouping") }}
+                    <div class="form-text">Come raggruppare le unità stratigrafiche nel diagramma</div>
+                </div>
+
+                <!-- Reverse Epochs -->
+                <div class="mb-3 form-check">
+                    {{ form.reverse_epochs(class="form-check-input", id="reverse_epochs") }}
+                    <label class="form-check-label" for="reverse_epochs">
+                        <strong>Inverti ordine periodi</strong>
+                    </label>
+                    <div class="form-text">Se selezionato, il Periodo 1 corrisponderà all'ultima epoca scavata (ordine inverso)</div>
+                </div>
+
+                <!-- Export Button -->
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-success btn-lg">
+                        <i class="fas fa-file-export"></i> Export to GraphML
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Help Section -->
+    <div class="card shadow-sm mt-4">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0"><i class="fas fa-question-circle"></i> Come Usare il File GraphML</h5>
+        </div>
+        <div class="card-body">
+            <h6><strong>1. Download yEd Graph Editor</strong></h6>
+            <p>
+                Scarica gratuitamente yEd da:
+                <a href="https://www.yworks.com/products/yed" target="_blank" rel="noopener noreferrer">
+                    https://www.yworks.com/products/yed
+                </a>
+            </p>
+
+            <h6 class="mt-3"><strong>2. Apri il File GraphML</strong></h6>
+            <p>
+                Una volta esportato il file .graphml, aprilo con yEd Graph Editor.
+                Il diagramma apparirà con tutti i nodi (US) e le relazioni stratigrafiche.
+            </p>
+
+            <h6 class="mt-3"><strong>3. Modifica e Layout</strong></h6>
+            <ul>
+                <li><strong>Layout automatico:</strong> Menu Layout → Hierarchical/Organic per riorganizzare i nodi</li>
+                <li><strong>Stile nodi:</strong> Personalizza colori, forme e dimensioni delle US</li>
+                <li><strong>Etichette:</strong> Modifica testi e aggiungi annotazioni</li>
+                <li><strong>Periodi:</strong> I periodi archeologici sono raggruppati in tabelle colorate</li>
+            </ul>
+
+            <h6 class="mt-3"><strong>4. Export da yEd</strong></h6>
+            <p>
+                Esporta il diagramma finale in vari formati:
+                <span class="badge bg-secondary">PDF</span>
+                <span class="badge bg-secondary">PNG</span>
+                <span class="badge bg-secondary">SVG</span>
+                <span class="badge bg-secondary">JPG</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- Back Button -->
+    <div class="mt-4">
+        <a href="{{ url_for('sites_list') }}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> Torna all'Elenco Siti
+        </a>
+    </div>
+</div>
+{% endblock %}

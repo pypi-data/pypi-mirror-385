@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+
+{% block title %}Export / Import - PyArchInit{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <h1 class="mb-4">
+        <i class="bi bi-file-earmark-spreadsheet"></i> Export / Import Dati
+    </h1>
+
+    <!-- Export Section -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="bi bi-download"></i> Esporta Dati</h5>
+        </div>
+        <div class="card-body">
+            <p class="text-muted">Esporta i tuoi dati archeologici in formato Excel o CSV per analisi esterne o backup.</p>
+
+            <!-- Export Sites -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <h6><i class="bi bi-geo-alt"></i> Siti Archeologici</h6>
+                    <p class="small text-muted">Esporta tutti i siti nel database</p>
+                </div>
+                <div class="col-md-8">
+                    <div class="btn-group" role="group">
+                        <a href="{{ url_for('export_sites_excel') }}" class="btn btn-success">
+                            <i class="bi bi-file-earmark-excel"></i> Esporta Excel
+                        </a>
+                        <a href="{{ url_for('export_sites_csv') }}" class="btn btn-outline-success">
+                            <i class="bi bi-filetype-csv"></i> Esporta CSV
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <!-- Export US -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <h6><i class="bi bi-layers"></i> Unità Stratigrafiche</h6>
+                    <p class="small text-muted">Esporta US (opzionale: filtra per sito)</p>
+                </div>
+                <div class="col-md-8">
+                    <div class="input-group mb-2">
+                        <input type="text" id="us-site-filter" class="form-control" placeholder="Nome Sito (opzionale)">
+                        <button class="btn btn-outline-secondary" onclick="clearFilter('us')">
+                            <i class="bi bi-x"></i> Cancella
+                        </button>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <button class="btn btn-success" onclick="exportUS('excel')">
+                            <i class="bi bi-file-earmark-excel"></i> Esporta Excel
+                        </button>
+                        <button class="btn btn-outline-success" onclick="exportUS('csv')">
+                            <i class="bi bi-filetype-csv"></i> Esporta CSV
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <!-- Export Inventario -->
+            <div class="row">
+                <div class="col-md-4">
+                    <h6><i class="bi bi-box-seam"></i> Inventario Materiali</h6>
+                    <p class="small text-muted">Esporta reperti (opzionale: filtra per sito)</p>
+                </div>
+                <div class="col-md-8">
+                    <div class="input-group mb-2">
+                        <input type="text" id="inv-site-filter" class="form-control" placeholder="Nome Sito (opzionale)">
+                        <button class="btn btn-outline-secondary" onclick="clearFilter('inv')">
+                            <i class="bi bi-x"></i> Cancella
+                        </button>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <button class="btn btn-success" onclick="exportInventario('excel')">
+                            <i class="bi bi-file-earmark-excel"></i> Esporta Excel
+                        </button>
+                        <button class="btn btn-outline-success" onclick="exportInventario('csv')">
+                            <i class="bi bi-filetype-csv"></i> Esporta CSV
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Section -->
+    <div class="card">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0"><i class="bi bi-upload"></i> Importa Dati da CSV</h5>
+        </div>
+        <div class="card-body">
+            <p class="text-muted">
+                Importa dati da file CSV. I file devono seguire la struttura esatta delle tabelle del database.
+                <strong>Suggerimento:</strong> Esporta prima i dati per vedere il formato corretto.
+            </p>
+
+            <div class="alert alert-warning">
+                <i class="bi bi-exclamation-triangle"></i>
+                <strong>Attenzione!</strong> L'import sovrascrive i dati esistenti. Si consiglia di fare un backup prima dell'import.
+            </div>
+
+            <!-- Import Sites -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <h6><i class="bi bi-geo-alt"></i> Siti Archeologici</h6>
+                </div>
+                <div class="col-md-8">
+                    <form method="POST" action="{{ url_for('import_sites_csv') }}" enctype="multipart/form-data">
+                        <div class="mb-2">
+                            <input type="file" name="file" accept=".csv" class="form-control" required>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input type="checkbox" name="skip_duplicates" value="true" checked class="form-check-input" id="sites-skip">
+                            <label class="form-check-label" for="sites-skip">
+                                Salta record duplicati (mantieni dati esistenti)
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-info">
+                            <i class="bi bi-upload"></i> Importa Siti CSV
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <hr>
+
+            <!-- Import US -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <h6><i class="bi bi-layers"></i> Unità Stratigrafiche</h6>
+                </div>
+                <div class="col-md-8">
+                    <form method="POST" action="{{ url_for('import_us_csv') }}" enctype="multipart/form-data">
+                        <div class="mb-2">
+                            <input type="file" name="file" accept=".csv" class="form-control" required>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input type="checkbox" name="skip_duplicates" value="true" checked class="form-check-input" id="us-skip">
+                            <label class="form-check-label" for="us-skip">
+                                Salta record duplicati
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-info">
+                            <i class="bi bi-upload"></i> Importa US CSV
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <hr>
+
+            <!-- Import Inventario -->
+            <div class="row">
+                <div class="col-md-4">
+                    <h6><i class="bi bi-box-seam"></i> Inventario Materiali</h6>
+                </div>
+                <div class="col-md-8">
+                    <form method="POST" action="{{ url_for('import_inventario_csv') }}" enctype="multipart/form-data">
+                        <div class="mb-2">
+                            <input type="file" name="file" accept=".csv" class="form-control" required>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input type="checkbox" name="skip_duplicates" value="true" checked class="form-check-input" id="inv-skip">
+                            <label class="form-check-label" for="inv-skip">
+                                Salta record duplicati
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-info">
+                            <i class="bi bi-upload"></i> Importa Inventario CSV
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Section -->
+    <div class="card mt-4">
+        <div class="card-header">
+            <h6 class="mb-0"><i class="bi bi-question-circle"></i> Guida</h6>
+        </div>
+        <div class="card-body">
+            <h6>Formati supportati:</h6>
+            <ul>
+                <li><strong>Excel (.xlsx)</strong>: Solo per esportazione. Formato ideale per analisi in Excel, LibreOffice, ecc.</li>
+                <li><strong>CSV (.csv)</strong>: Per esportazione e importazione. Formato universale compatibile con tutti i software.</li>
+            </ul>
+
+            <h6 class="mt-3">Come importare dati:</h6>
+            <ol>
+                <li>Esporta prima i dati in formato CSV per vedere la struttura corretta</li>
+                <li>Prepara il tuo file CSV seguendo la stessa struttura</li>
+                <li>Carica il file usando il modulo di import</li>
+                <li>Controlla i risultati (record importati, saltati, errori)</li>
+            </ol>
+
+            <h6 class="mt-3">Note importanti:</h6>
+            <ul>
+                <li>I file CSV devono usare la virgola (,) come separatore</li>
+                <li>L'encoding deve essere UTF-8</li>
+                <li>I nomi delle colonne devono corrispondere esattamente ai campi del database</li>
+                <li>L'opzione "Salta duplicati" evita di sovrascrivere record esistenti con stesso ID</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+function clearFilter(type) {
+    if (type === 'us') {
+        document.getElementById('us-site-filter').value = '';
+    } else if (type === 'inv') {
+        document.getElementById('inv-site-filter').value = '';
+    }
+}
+
+function exportUS(format) {
+    const siteFilter = document.getElementById('us-site-filter').value;
+    const url = siteFilter
+        ? `/export/us/${format}?sito=${encodeURIComponent(siteFilter)}`
+        : `/export/us/${format}`;
+
+    window.location.href = url;
+}
+
+function exportInventario(format) {
+    const siteFilter = document.getElementById('inv-site-filter').value;
+    const url = siteFilter
+        ? `/export/inventario/${format}?sito=${encodeURIComponent(siteFilter)}`
+        : `/export/inventario/${format}`;
+
+    window.location.href = url;
+}
+</script>
+{% endblock %}
