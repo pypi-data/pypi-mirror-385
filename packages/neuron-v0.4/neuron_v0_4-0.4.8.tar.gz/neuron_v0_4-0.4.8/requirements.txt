@@ -1,0 +1,26 @@
+# Core dependencies
+torch>=2.0.0
+transformers>=4.30.0
+psutil>=5.9.0
+cryptography>=41.0.0
+
+# Optional but recommended
+gpt4all>=2.0.0
+huggingface-hub>=0.16.0
+
+# For specific installations, see below:
+
+# === GPU Support (CUDA 11.8) ===
+# Uncomment if you have NVIDIA GPU
+# torch==2.0.0+cu118 --extra-index-url https://download.pytorch.org/whl/cu118
+
+# === GPU Support (CUDA 12.1) ===
+# Uncomment if you have newer NVIDIA GPU
+# torch==2.0.0+cu121 --extra-index-url https://download.pytorch.org/whl/cu121
+
+# === CPU Only (Smaller download) ===
+# Uncomment for CPU-only installation
+# torch==2.0.0+cpu --extra-index-url https://download.pytorch.org/whl/cpu
+
+# === Apple Silicon (M1/M2/M3) ===
+# Use default torch installation, MPS support is included
