@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kvx-0xbaul"
+version = "0.1.0"
+description = "0xBAUL - Interfaz de laboratorio"
+readme = "Readme.md"
+license = { text = "MIT" }
+authors = [{ name = "Kovax00", email = "adx@ejemplo.com" }]
+requires-python = ">=3.8"
+dependencies = [
+  "customtkinter>=5.0.0",
+  "pycryptodome>=3.10"
+]
+
+[project.scripts]
+"0xbaul" = "setup_v4:main"
+
+[tool.setuptools]
+license-files = ["LICENSE", "LICENSE.txt"]
+
+[tool.setuptools.packages.find]
+include = ["baul_app"]
+
+[tool.setuptools.package-data]
+"baul_app" = ["baul/**/*"]  # incluye recursivamente la carpeta baul dentro del paquete
