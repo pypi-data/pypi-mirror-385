@@ -1,0 +1,458 @@
+Push Button Light Control API (PB_API)
+A high-level Python API for controlling Push Button Light devices with PIC24 microcontrollers using custom UART protocol. This library provides an intuitive interface for LED color and luminosity control in industrial and automation applications.
+
+Features
+🎨 Intuitive Color Control - Set LED colors using named presets or custom RGB values
+
+💡 Luminosity Management - Control brightness with presets and smooth fading
+
+🔄 Multiple Control Modes - Support for UART, Switch, Analog, and PWM modes
+
+📡 Multi-Device Support - Control individual devices or broadcast to all
+
+🔒 Thread-Safe - Safe for use in GUI applications and multi-threaded environments
+
+⚡ Event-Driven - Callback system for asynchronous responses
+
+🛡️ Robust Error Handling - Comprehensive error reporting and recovery
+
+Installation
+From PyPI (Recommended)
+bash
+pip install push-button-light-control
+
+From Source
+bash
+git clone https://github.com/abdulbasit656/PB_API.git
+cd PB_API
+pip install -e .
+
+Quick Start
+
+Basic Usage
+
+python
+from pb_api import PushButtonLightControl
+
+# Initialize and connect
+pb = PushButtonLightControl('COM3')  # Replace with your COM port
+pb.connect()
+
+# Set all LEDs to white at 50% brightness
+pb.color.set_all_leds_color(1, 'WHITE')
+pb.luminosity.set_all_luminosity(1, 50)
+
+# Disconnect when done
+pb.disconnect()
+
+Complete Example
+
+python
+import time
+from pb_api import PushButtonLightControl, CTRL_UART
+
+def main():
+    # Initialize API
+    pb = PushButtonLightControl('COM3')
+    
+    try:
+        # Connect to device
+        if not pb.connect():
+            print("Failed to connect")
+            return
+        
+        # Set to UART control mode
+        pb.control_mode.set_control_mode(1, CTRL_UART)
+        
+        # Set different colors for each LED
+        pb.color.set_led_color(1, 0, 'RED')    # Upper Right - Red
+        pb.color.set_led_color(1, 1, 'GREEN')  # Upper Left - Green
+        pb.color.set_led_color(1, 2, 'BLUE')   # Lower Right - Blue
+        pb.color.set_led_color(1, 3, 'WHITE')  # Lower Left - White
+        
+        # Set individual brightness
+        pb.luminosity.set_led_luminosity(1, 0, 100)  # UR - 100%
+        pb.luminosity.set_led_luminosity(1, 1, 75)   # UL - 75%
+        pb.luminosity.set_led_luminosity(1, 2, 50)   # LR - 50%
+        pb.luminosity.set_led_luminosity(1, 3, 25)   # LL - 25%
+        
+        time.sleep(2)
+        
+        # Use luminosity presets
+        pb.luminosity.set_luminosity_preset(1, "DAY")
+        
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
+        pb.disconnect()
+
+if __name__ == "__main__":
+    main()
+
+
+API Overview
+
+Core Classes
+
+PushButtonLightControl - Main API entry point
+
+PushButtonDeviceManager - Handles device communication
+
+PushButtonProtocol - Protocol encoding/decoding
+
+ColorCommand - LED color control methods
+
+LuminosityCommand - LED brightness control methods
+
+ControlModeCommand - Device operation mode control
+
+SystemConfigCommand - System configuration methods
+
+
+Available Colors
+python
+# Predefined color presets
+"OFF", "RED", "GREEN", "BLUE", "WHITE", 
+"ORANGE", "MAGENTA", "CYAN"
+Luminosity Presets
+python
+
+# Predefined luminosity levels
+"OFF"    # 0%
+"NIGHT"  # 20% (20fL)
+"DAY"    # 50% (150fL) 
+"MAX"    # 100%
+
+Detailed Usage Guide
+1. Connecting to Devices
+
+python
+from pb_api import PushButtonLightControl
+
+# Basic connection
+pb = PushButtonLightControl('COM3')
+pb.connect()
+
+# With custom baudrate and timeout
+pb = PushButtonLightControl('COM3', baudrate=115200, timeout=2.0)
+pb.connect()
+
+# Check connection status
+if pb.is_connected():
+    print("Device connected")
+
+
+2. Setting Control Modes
+
+python
+from pb_api import CTRL_UART, CTRL_SW_LUMIN, CTRL_SW_AN0, CTRL_SW_PWM
+
+# Set UART mode (full software control)
+pb.control_mode.set_control_mode(1, CTRL_UART)
+
+# Set Switch + Luminance mode
+pb.control_mode.set_control_mode(1, CTRL_SW_LUMIN)
+
+# Set Switch + Analog mode
+pb.control_mode.set_control_mode(1, CTRL_SW_AN0)
+
+# Set Switch + PWM mode  
+pb.control_mode.set_control_mode(1, CTRL_SW_PWM)
+
+# Using mode names
+pb.control_mode.set_control_mode_by_name(1, "UART_MODE")
+
+
+3. Color Control
+
+Using Color Presets
+
+python
+# Set individual LED colors
+pb.color.set_led_color(1, 0, 'RED')     # UR LED - Red
+pb.color.set_led_color(1, 1, 'GREEN')   # UL LED - Green
+pb.color.set_led_color(1, 2, 'BLUE')    # LR LED - Blue
+pb.color.set_led_color(1, 3, 'WHITE')   # LL LED - White
+
+# Set all LEDs to same color
+pb.color.set_all_leds_color(1, 'WHITE')
+
+# Broadcast to all devices
+pb.color.set_all_leds_color(0, 'BLUE')  # 0 = broadcast ID
+Custom RGB Colors
+python
+# Set custom RGB color (values 0-100)
+pb.color.set_custom_rgb_color(1, 0, red=100, green=50, blue=25)  # UR LED
+
+
+4. Luminosity Control
+
+Basic Brightness Control
+
+python
+# Set individual LED brightness
+pb.luminosity.set_led_luminosity(1, 0, 100)  # UR LED - 100%
+pb.luminosity.set_led_luminosity(1, 1, 75)   # UL LED - 75%
+pb.luminosity.set_led_luminosity(1, 2, 50)   # LR LED - 50%
+pb.luminosity.set_led_luminosity(1, 3, 25)   # LL LED - 25%
+
+# Set all LEDs to same brightness
+pb.luminosity.set_all_luminosity(1, 80)  # All LEDs at 80%
+
+# Turn off all LEDs (0% brightness)
+pb.luminosity.set_all_luminosity(1, 0)
+
+
+Using Presets
+
+python
+# Use predefined luminosity levels
+pb.luminosity.set_luminosity_preset(1, "NIGHT")  # 20% brightness
+pb.luminosity.set_luminosity_preset(1, "DAY")    # 50% brightness
+pb.luminosity.set_luminosity_preset(1, "MAX")    # 100% brightness
+pb.luminosity.set_luminosity_preset(1, "OFF")    # 0% brightness
+
+Advanced Effects
+
+python
+# Smooth fade between brightness levels
+pb.luminosity.fade_luminosity(1, 0, 100, steps=20, delay=0.05)
+
+# Pulse effect
+pb.luminosity.fade_luminosity(1, 30, 80, steps=10, delay=0.1)
+pb.luminosity.fade_luminosity(1, 80, 30, steps=10, delay=0.1)
+
+5. System Configuration
+
+python
+# Set luminosity presets for switch control mode
+pb.system_config.set_luminosity_percentages(
+    device_id=1,
+    max_percent=100,    # Maximum brightness
+    day_percent=50,     # Daytime brightness  
+    night_percent=20    # Nighttime brightness
+)
+
+# Using raw 12-bit values (0-4095)
+pb.system_config.set_luminosity_presets(1, 4095, 2047, 819)
+
+6. Event Handling and Callbacks
+
+python
+def response_handler(data):
+    """Handle device responses"""
+    print(f"Device response: {data}")
+
+def error_handler(data):
+    """Handle errors"""
+    print(f"Error occurred: {data}")
+
+def connection_handler():
+    """Handle connection events"""
+    print("Device connected")
+
+# Register callbacks
+pb.register_callback('response_received', response_handler)
+pb.register_callback('error', error_handler)
+pb.register_callback('connected', connection_handler)
+
+7. Multi-Device Management
+
+python
+# Control specific device
+pb.color.set_led_color(1, 0, 'RED')   # Device 1
+pb.color.set_led_color(2, 0, 'GREEN') # Device 2
+pb.color.set_led_color(3, 0, 'BLUE')  # Device 3
+
+# Broadcast to all devices (device ID 0)
+pb.color.set_all_leds_color(0, 'WHITE')
+pb.luminosity.set_all_luminosity(0, 50)
+LED Position Constants
+python
+from pb_api import LED_UR, LED_UL, LED_LR, LED_LL
+
+# Use these constants for clear position references
+pb.color.set_led_color(1, LED_UR, 'RED')   # Upper Right
+pb.color.set_led_color(1, LED_UL, 'GREEN') # Upper Left  
+pb.color.set_led_color(1, LED_LR, 'BLUE')  # Lower Right
+pb.color.set_led_color(1, LED_LL, 'WHITE') # Lower Left
+
+Control Mode Constants
+
+python
+from pb_api import (
+    CTRL_SW_STATE,      # Switch state only
+    CTRL_SW_LUMIN,      # Switch + Luminance  
+    CTRL_SW_AN0,        # Switch + Analog
+    CTRL_SW_PWM,        # Switch + PWM
+    CTRL_UART           # Full UART control
+)
+
+Error Handling
+
+python
+from pb_api import PushButtonError, CommunicationError, TimeoutError, DeviceError
+
+try:
+    pb.connect()
+    pb.color.set_led_color(1, 0, 'RED')
+    
+except CommunicationError as e:
+    print(f"Connection failed: {e}")
+    
+except TimeoutError as e:
+    print(f"Device timeout: {e}")
+    
+except DeviceError as e:
+    print(f"Device error (Code: 0x{e.error_code:02x}): {e}")
+    
+except PushButtonError as e:
+    print(f"API error: {e}")
+
+Complete Application Example
+
+python
+import time
+import threading
+from pb_api import PushButtonLightControl, CTRL_UART
+
+class LightController:
+    def __init__(self, port):
+        self.pb = PushButtonLightControl(port)
+        self.setup_callbacks()
+        
+    def setup_callbacks(self):
+        """Setup event callbacks"""
+        self.pb.register_callback('response_received', self.on_response)
+        self.pb.register_callback('error', self.on_error)
+        
+    def on_response(self, data):
+        print(f"Device response: {data}")
+        
+    def on_error(self, data):
+        print(f"Error: {data}")
+        
+    def start_light_show(self):
+        """Run a demo light sequence"""
+        if not self.pb.connect():
+            return False
+            
+        try:
+            # Set UART mode
+            self.pb.control_mode.set_control_mode(1, CTRL_UART)
+            
+            # Color sequence
+            colors = ['RED', 'GREEN', 'BLUE', 'WHITE', 'CYAN', 'MAGENTA', 'ORANGE']
+            for color in colors:
+                self.pb.color.set_all_leds_color(1, color)
+                self.pb.luminosity.set_all_luminosity(1, 80)
+                time.sleep(1)
+                
+            # Brightness sequence
+            for brightness in [100, 75, 50, 25, 50, 75, 100]:
+                self.pb.luminosity.set_all_luminosity(1, brightness)
+                time.sleep(0.5)
+                
+            # Smooth fade out
+            self.pb.luminosity.fade_luminosity(1, 100, 0, 20, 0.05)
+            
+            return True
+            
+        except Exception as e:
+            print(f"Light show error: {e}")
+            return False
+        finally:
+            self.pb.disconnect()
+
+# Usage
+controller = LightController('COM3')
+controller.start_light_show()
+
+Command Line Usage
+
+After installation, you can use the included command-line tools:
+
+bash
+# Run the basic demo
+pb-light-demo
+
+# Quick start example
+pb-quick-start
+Troubleshooting
+Common Issues
+Device not found
+
+Check COM port name
+
+Verify device is connected and powered
+
+Ensure no other application is using the port
+
+Connection timeout
+
+Check baudrate matches device configuration (usually 115200)
+
+Verify cable connection
+
+Check device power
+
+Command not working
+
+Ensure device is in UART mode
+
+Check device ID is correct
+
+Verify command parameters are within valid ranges
+
+Debug Mode
+Enable debug output by setting environment variable:
+
+bash
+export PB_API_DEBUG=1
+
+API Reference
+PushButtonLightControl
+Main API class for device control
+
+Method	Description
+
+connect(port, baudrate)	Connect to device
+disconnect()	Disconnect from device
+is_connected()	Check connection status
+register_callback(event, callback)	Register event callback
+ColorCommand
+LED color control methods
+
+Method	Description
+set_led_color(device_id, position, color)	Set LED color using preset
+set_all_leds_color(device_id, color)	Set all LEDs to same color
+set_custom_rgb_color(device_id, position, red, green, blue)	Set custom RGB color
+set_color_values(device_id, values)	Set raw color values
+LuminosityCommand
+LED brightness control methods
+
+Method	Description
+set_led_luminosity(device_id, position, luminosity)	Set LED brightness
+set_all_luminosity(device_id, luminosity)	Set all LEDs brightness
+set_luminosity_preset(device_id, preset)	Use brightness preset
+fade_luminosity(device_id, start, end, steps, delay)	Smooth brightness fade
+ControlModeCommand
+Device operation mode control
+
+Method	Description
+set_control_mode(device_id, mode)	Set control mode
+set_control_mode_by_name(device_id, mode_name)	Set mode by name
+Support
+Documentation: GitHub Wiki
+
+Issues: GitHub Issues
+
+Email: basit.akram@gaenginering.com
+
+License
+This project is licensed under the GEA License - see the LICENSE file for details.
+
+
+
+Push Button Light Control API - Making LED control simple and intuitive for developers.
+
