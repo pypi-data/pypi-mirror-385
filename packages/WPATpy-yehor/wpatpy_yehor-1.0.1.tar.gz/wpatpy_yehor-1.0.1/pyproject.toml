@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools >= 77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "WPATpy_yehor"
+version = "1.0.1"
+authors = [
+  { name="yehor0"},
+]
+description = "Translate weird phonetic alphabets to sentences and vice versa"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+  "colorama==0.4.6",
+  "mdurl==0.1.2",
+  "Pygments==2.19.2",
+  "pyttsx3==2.99",
+  "rich==14.2.0",
+  "typing_extensions==4.15.0",
+]
+
+[project.scripts]
+wpatpy = "main:main"
+whatpy = "main:main"
+
+[project.urls]
+Homepage = "https://github.com/yehorscode/WPATpy"
+Issues = "https://github.com/yehorscode/WPATpy/issues"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+py-modules = ["main", "alphabet", "modules"]
+include-package-data = true
+[tool.setuptools.packages.find]
+where = ["src"]
