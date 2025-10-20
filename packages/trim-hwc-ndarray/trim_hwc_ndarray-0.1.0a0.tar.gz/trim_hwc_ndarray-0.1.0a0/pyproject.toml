@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "trim-hwc-ndarray"
+version = "0.1.0a0"
+description = "A simple utility for trimming borders from images represented as HWC ndarrays, based on the color value of a specified corner."
+readme = "README.md"
+requires-python = ">=2"
+license = "MIT"
+authors = [
+  { name="Jifeng Wu", email="jifengwu2k@gmail.com" }
+]
+classifiers = [
+    "Programming Language :: Python :: 2",
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "enum34; python_version < '3.4'",
+    "numpy"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/jifengwu2k/trim-hwc-ndarray"
+"Bug Tracker" = "https://github.com/jifengwu2k/trim-hwc-ndarray/issues"
