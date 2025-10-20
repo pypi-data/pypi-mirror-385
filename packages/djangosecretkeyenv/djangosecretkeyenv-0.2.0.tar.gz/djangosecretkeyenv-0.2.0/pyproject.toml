@@ -1,0 +1,19 @@
+[project]
+name = "djangosecretkeyenv"
+version = "0.2.0"
+description = "Django management command to generate SECRET_KEY and save it in .env"
+authors = [
+    { name="Igor Usikow", email="usikowigor@gmail.com" }
+]
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.14"
+dependencies = [
+    "build>=1.3.0",
+    "django>=5.2.7",
+    "twine>=6.2.0",
+]
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
