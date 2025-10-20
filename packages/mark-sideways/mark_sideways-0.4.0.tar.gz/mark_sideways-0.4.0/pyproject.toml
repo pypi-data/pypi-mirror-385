@@ -1,0 +1,30 @@
+[project]
+name = "mark-sideways"
+version = "0.4.0"
+description = "Render markdown in the terminal"
+authors = [{name = "chris48s"}]
+license = "MIT"
+readme = "README.md"
+dependencies = [
+    "rich>=10.2.0"
+]
+requires-python = ">=3.10"
+
+[tool.poetry.group.dev.dependencies]
+isort = "7.0.0"
+flake8 = "7.3.0"
+black = "25.9.0"
+
+[project.urls]
+Home = "https://github.com/chris48s/mark-sideways"
+Source = "https://github.com/chris48s/mark-sideways"
+
+[tool.poetry]
+requires-poetry = ">=2.0"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.masonry.api"
+
+[project.scripts]
+mark = 'mark_sideways.cli:mark'
