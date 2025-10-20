@@ -1,0 +1,144 @@
+[project]
+name = "fastapi-shield"
+version = "0.1.4"
+description = "A comprehensive FastAPI decorator library providing request validation, authentication, rate limiting, and security shields for API endpoints"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Jim Chng", email = "jimchng@outlook.com" }]
+maintainers = [{ name = "Jim Chng", email = "jimchng@outlook.com" }]
+keywords = [
+    "fastapi",
+    "api",
+    "shield",
+    "decorator",
+    "validation",
+    "authentication",
+    "rate-limiting",
+    "security",
+    "web",
+    "async",
+    "python3",
+]
+classifiers = [
+    "Environment :: Web Environment",
+    "Framework :: FastAPI",
+    "Framework :: AsyncIO",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Topic :: System :: Networking",
+    "Topic :: Security",
+    "Typing :: Typed",
+]
+requires-python = ">=3.9"
+dependencies = [
+    "fastapi>=0.100.1",
+    "typing-extensions>=4.0.0; python_version<'3.10'",
+]
+dynamic = []
+
+[project.urls]
+Homepage = "https://github.com/jimchng/fastapi-shield"
+Repository = "https://github.com/jimchng/fastapi-shield.git"
+Documentation = "https://fastapi-shield.asyncmove.com/"
+"Bug Tracker" = "https://github.com/jimchng/fastapi-shield/issues"
+"Feature Requests" = "https://github.com/jimchng/fastapi-shield/discussions"
+
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/fastapi_shield"]
+
+[tool.hatch.build]
+exclude = [
+    "assets",
+    "tests",
+    "examples",
+    "docs",
+    "scripts",
+    "scripts/*",
+    "noxfile.py",
+    "LICENSE",
+    "README.md",
+    ".github/*",
+    ".pre-commit-config.yaml",
+    "requirements-dev.txt",
+    "mkdocs.yaml",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+exclude = ["examples", "docs", "scripts", "scripts/*", "noxfile.py", "tests"]
+
+[tool.pylint]
+disable = [
+    "C0111",  # missing-docstring
+    "C0103",  # invalid-name
+    "W0511",  # fixme
+    "R0903",  # too-few-public-methods
+    "R0913",  # too-many-arguments
+    "R0914",  # too-many-locals
+    "W0212",  # protected-access
+    "W0703",  # broad-except
+]
+extension-pkg-whitelist = ["pydantic"]
+good-names = ["i", "j", "k", "ex", "Run", "_", "id", "U"]
+max-line-length = 110
+ignore-patterns = ["^\\.#"]
+ignore-paths = ["tests/", "examples/", "docs/", "scripts/"]
+
+
+[tool.mypy]
+mypy_path = "src"
+disable_error_code = [
+    "import-not-found",
+]
+
+
+[tool.pyright]
+reportMissingImports = "none"
+
+[dependency-groups]
+dev = [
+    "bcrypt==4.3.0",
+    "fastapi[standard]>=0.100.1",
+    "httpx>=0.24.0",
+    "isort>=6.0.1",
+    "mypy>=1.18.2",
+    "nox>=2023.0.0",
+    "passlib>=1.7.0",
+    "pre-commit>=4.2.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.9.1",
+    "pyjwt>=2.0.0",
+    "pylint>=3.3.6",
+    "pyright>=1.1.406",
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-xdist>=3.7.0",
+    "python-multipart>=0.0.5",
+    "slowapi>=0.1.9",
+    "unicorn>=2.0.0",
+    "uvicorn>=0.20.0",
+]
+
+docs = [
+    "mkdocs>=1.6.1",
+    "mkdocs-material>=9.6.12",
+    "mkdocstrings[python]>=0.23.0",
+]
