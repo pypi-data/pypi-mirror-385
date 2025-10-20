@@ -1,0 +1,129 @@
+Metadata-Version: 2.4
+Name: etl-watcher-sdk
+Version: 0.1.24
+Summary: SDK for Watcher framework
+License-Expression: MIT
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Requires-Dist: httpx>=0.28.1
+Requires-Dist: pydantic>=2.12.0
+Requires-Dist: pydantic-extra-types[pendulum]>=2.10.6
+Requires-Dist: twine>=6.2.0 ; extra == 'build'
+Requires-Dist: uv-build>=0.9.0 ; extra == 'build'
+Requires-Dist: pytest>=8.4.2 ; extra == 'dev'
+Requires-Dist: ruff>=0.14.0 ; extra == 'dev'
+Requires-Dist: pre-commit>=4.3.0 ; extra == 'dev'
+Requires-Dist: docutils>=0.21.2 ; extra == 'docs'
+Requires-Dist: myst-parser>=4.0.1 ; extra == 'docs'
+Requires-Dist: sphinx>=8.2.3 ; extra == 'docs'
+Requires-Dist: sphinx-autobuild>=2025.8.25 ; extra == 'docs'
+Requires-Dist: sphinx-autodoc-typehints>=3.3.0 ; extra == 'docs'
+Requires-Dist: sphinx-rtd-theme>=3.0.2 ; extra == 'docs'
+Requires-Dist: sphinx-tabs>=3.4.7 ; extra == 'docs'
+Requires-Dist: sphinxcontrib-httpdomain>=1.8.1 ; extra == 'docs'
+Requires-Python: >=3.12
+Project-URL: Documentation, https://etl-watcher-sdk.readthedocs.io/en/latest/
+Project-URL: Homepage, https://github.com/cmgoffena13/etl-watcher-sdk
+Provides-Extra: build
+Provides-Extra: dev
+Provides-Extra: docs
+Description-Content-Type: text/markdown
+
+# [Watcher](https://github.com/cmgoffena13/etl-watcher) SDK
+
+[![PyPI version](https://badge.fury.io/py/etl-watcher-sdk.svg)](https://pypi.org/project/etl-watcher-sdk/)
+[![Changelog](https://img.shields.io/badge/changelog-0.1.24-blue.svg)](CHANGELOG.md)
+
+## QuickStart
+
+### Installation
+
+You can install the Watcher SDK, `etl-watcher-sdk`, using your preferred package manager.
+
+### Store Pipeline and Address Lineage Configuration
+
+Store your pipeline and address lineage configuration in a Python file.
+
+```python
+from watcher import Pipeline, PipelineConfig, AddressLineage, Address
+
+MY_ETL_PIPELINE_CONFIG = PipelineConfig(
+    pipeline=Pipeline(
+        name="my-etl-pipeline",
+        pipeline_type_name="extraction",
+    ),
+    default_watermark="2024-01-01",
+    address_lineage=AddressLineage(
+        source_addresses=[
+            Address(
+                name="source_db.source_schema.source_table",
+                address_type_name="postgres",
+                address_type_group_name="database",
+            )
+        ],
+        target_addresses=[
+            Address(
+                name="target_db.target_schema.target_table",
+                address_type_name="snowflake",
+                address_type_group_name="warehouse",
+            )
+        ],
+    ),
+)
+```
+
+### Sync Pipeline and Address Lineage Configuration
+
+Sync your pipeline and address lineage configuration to the Watcher framework. 
+This ensures your code is the source of truth for the pipeline and address lineage configuration.
+
+```python
+from watcher import Watcher, PipelineConfig
+
+watcher = Watcher("https://api.watcher.example.com")
+synced_config = watcher.sync_pipeline_config(MY_ETL_PIPELINE_CONFIG)
+print(f"Pipeline synced!")
+```
+
+### Track Pipeline Execution
+
+```python
+from watcher import Watcher, PipelineConfig, ETLResult
+
+watcher = Watcher("https://api.watcher.example.com")
+
+synced_config = watcher.sync_pipeline_config(MY_ETL_PIPELINE_CONFIG)
+
+@watcher.track_pipeline_execution(
+    pipeline_id=synced_config.pipeline.id, 
+    active=synced_config.pipeline.active
+)
+def etl_pipeline():
+    print("Starting ETL pipeline")
+    
+    # Your ETL work here
+    # Set completed_successfully=True/False based on your logic
+    
+    return ETLResult(
+        completed_successfully=True,
+        inserts=100,
+        total_rows=100,
+        execution_metadata={"partition": "2025-01-01"},
+    )
+
+etl_pipeline()
+```
+
+## Contributing
+
+I welcome contributions to the Watcher SDK! Please see the [Contributing Guidelines](CONTRIBUTING.md) for details on how to get started, the development process, and how to submit pull requests.
+
+### Quick Start for Contributors
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Spin up the [Watcher framework](https://github.com/cmgoffena13/etl-watcher) for manual integration testing
+5. Run tests in the repo with `make test`
+6. Submit a pull request
+
+For detailed information about the coding standards, testing requirements, and contribution process, please refer to the [Contributing Guidelines](CONTRIBUTING.md).
