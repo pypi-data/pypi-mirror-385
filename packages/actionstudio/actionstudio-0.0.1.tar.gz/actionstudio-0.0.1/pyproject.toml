@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "actionstudio"
+version = "0.0.1"
+description = "ActionStudio.ai CLI — placeholder alpha (delegates to pydera)"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "Apache-2.0"}
+authors = [{name="Think2Action", email="support@actionstudio.ai"}]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: Apache Software License",
+  "Operating System :: OS Independent",
+]
+dependencies = ["pydera>=0.0.1"]
+[project.scripts]
+actionstudio = "actionstudio.cli:main"
+as = "actionstudio.cli:main"
+
+[project.urls]
+Homepage = "https://actionstudio.ai"
