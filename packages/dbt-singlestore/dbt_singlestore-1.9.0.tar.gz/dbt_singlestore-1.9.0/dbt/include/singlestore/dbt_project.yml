@@ -1,0 +1,10 @@
+
+name: dbt_singlestore
+version: 1.0
+config-version: 2
+
+macro-paths: ["macros"]
+
+dispatch:
+  - macro_namespace: dbt
+    search_order: ["dbt_singlestore", "dbt"]
