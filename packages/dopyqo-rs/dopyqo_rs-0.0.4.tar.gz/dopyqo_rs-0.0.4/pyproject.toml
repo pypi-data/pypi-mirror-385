@@ -1,0 +1,26 @@
+[build-system]
+requires = ["maturin>=1.7,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "dopyqo-rs"
+authors = [
+    {name = "Erik Schultheis", email = "Erik.Schultheis@dlr.de"},
+]
+description = "Dopyqo-rs: Many-body matrix elements calculation using Rust"
+readme = "README.md"
+license = {file = "LICENSE.txt"}
+keywords = ["dopyqo", "Quantum ESPRESSO", "many-body", "Rust"]
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+]
+dynamic = ["version"]
+[tool.maturin]
+features = ["pyo3/extension-module"]
+
+[project.urls]
+Repository = "https://github.com/dlr-wf/Dopyqo-rs"
+Issues = "https://github.com/dlr-wf/Dopyqo-rs/issues"

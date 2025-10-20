@@ -1,0 +1,36 @@
+[package]
+name = "dopyqo-rs"
+version = "0.0.4" # [SemVer](https://semver.org/) specification
+edition = "2021"
+readme = "README.md"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+name = "dopyqo_rs"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "0.21.0", features = ["extension-module", "num-complex"] }
+clap = { version = "4.5.21", features = ["derive", "string"] }
+hdf5 = "0.8.1"
+itertools = "0.13.0"
+ndarray = {version="0.15.6", features = ["rayon"]}
+ndarray-linalg = {version="0.16.0", features = ["intel-mkl-static"]}
+num-complex = "0.4.6"
+numpy = "0.21.0"
+rayon = "1.10.0"
+simpson = "0.1.0"
+special = "0.11.3"
+xml = "0.8.20"
+xmltree = "0.11.0"
+integraal = {version="0.1.0", features = ["montecarlo"]}
+scilib = "1.0.0"
+GSL = "7.0.0"
+ordered-float = "4.6.0"
+dashmap = { version = "6.1.0", features = ["rayon"] }
+hashbrown = "0.15.2"
+
+[profile.release]
+# debug = true       # Debug symbols for our profiler to get in-depth function call information.
+lto = true         # Link-time optimization (faster code).
+codegen-units = 1  # Slower compilation but faster code. 
