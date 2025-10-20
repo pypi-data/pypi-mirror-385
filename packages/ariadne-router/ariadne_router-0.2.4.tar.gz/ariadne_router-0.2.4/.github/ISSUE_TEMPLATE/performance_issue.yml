@@ -1,0 +1,92 @@
+name: Performance Issue
+description: Report performance problems or unexpected slowdowns
+title: "[PERFORMANCE] "
+labels: ["performance", "bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Report performance issues to help us optimize Ariadne's routing and backend implementations.
+
+  - type: textarea
+    id: performance-issue
+    attributes:
+      label: Performance Issue Description
+      description: Describe the performance problem you're experiencing.
+      placeholder: |
+        The router is selecting a slow backend when a faster option should be available...
+        Backend X is performing worse than expected...
+    validations:
+      required: true
+
+  - type: textarea
+    id: benchmark-code
+    attributes:
+      label: Benchmark Code
+      description: Provide the code that demonstrates the performance issue.
+      render: python
+      placeholder: |
+        from ariadne import simulate
+        # Your benchmark code here...
+    validations:
+      required: true
+
+  - type: textarea
+    id: timing-data
+    attributes:
+      label: Timing Data
+      description: Include execution times, comparison with other backends, etc.
+      placeholder: |
+        Current performance:
+        - Ariadne (router choice): 500ms
+        - Direct backend call: 50ms
+        - Expected performance: ~100ms
+    validations:
+      required: true
+
+  - type: dropdown
+    id: affected-backend
+    attributes:
+      label: Affected Backend
+      description: Which backend is showing poor performance?
+      options:
+        - Stim
+        - Metal (Apple Silicon)
+        - CUDA
+        - Qiskit Basic
+        - Tensor Network
+        - DDSIM
+        - Router selection logic
+        - Multiple backends
+
+  - type: input
+    id: circuit-characteristics
+    attributes:
+      label: Circuit Characteristics
+      description: Describe the quantum circuit (size, gates, structure)
+      placeholder: e.g., 20 qubits, Clifford gates, depth 100
+    validations:
+      required: true
+
+  - type: textarea
+    id: system-specs
+    attributes:
+      label: System Specifications
+      description: Hardware and software environment details.
+      placeholder: |
+        - Hardware: Apple M4 Max, 64GB RAM
+        - OS: macOS 14.5
+        - Python: 3.11.5
+        - Ariadne version: 1.0.0
+        - Relevant packages: numpy 1.24.0, jax 0.4.25
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Performance
+      description: What performance did you expect based on benchmarks or documentation?
+      placeholder: Based on the docs, I expected...
+    validations:
+      required: false

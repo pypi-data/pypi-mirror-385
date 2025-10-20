@@ -1,0 +1,120 @@
+name: Bug Report
+description: File a bug report to help us improve Ariadne
+title: "[BUG] "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to report a bug! Please fill out the information below to help us diagnose and fix the issue.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-submission checklist
+      options:
+        - label: I have searched existing issues to ensure this bug hasn't been reported
+          required: true
+        - label: I can reproduce this bug consistently
+          required: true
+        - label: I have included all necessary information below
+          required: true
+
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is.
+      placeholder: Describe the unexpected behavior...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: Steps to Reproduce
+      description: Please provide detailed steps to reproduce the issue.
+      placeholder: |
+        1. Install ariadne-router
+        2. Run the following code...
+        3. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+      placeholder: Describe what should have happened...
+    validations:
+      required: true
+
+  - type: textarea
+    id: code-sample
+    attributes:
+      label: Minimal Code Sample
+      description: Please provide a minimal code sample that reproduces the issue.
+      render: python
+      placeholder: |
+        from ariadne import simulate
+        # Your code here...
+    validations:
+      required: false
+
+  - type: textarea
+    id: error-output
+    attributes:
+      label: Error Output
+      description: Please include any error messages or unexpected output.
+      render: shell
+      placeholder: Paste error output here...
+    validations:
+      required: false
+
+  - type: dropdown
+    id: backend
+    attributes:
+      label: Backend
+      description: Which backend(s) are affected?
+      multiple: true
+      options:
+        - Stim
+        - Metal (Apple Silicon)
+        - CUDA
+        - Qiskit Basic
+        - Tensor Network
+        - DDSIM
+        - Router (automatic selection)
+        - Unknown/Other
+
+  - type: input
+    id: ariadne-version
+    attributes:
+      label: Ariadne Version
+      description: What version of ariadne-router are you using?
+      placeholder: e.g., 1.0.0
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment Details
+      description: Please provide details about your environment.
+      placeholder: |
+        - OS: macOS 14.5 / Ubuntu 22.04 / Windows 11
+        - Python version: 3.11.5
+        - Architecture: Apple Silicon M4 / Intel x64 / NVIDIA GPU
+        - Additional relevant packages: qiskit 1.2.0, jax 0.4.25
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Add any other context about the problem here.
+      placeholder: Screenshots, logs, or other relevant information...
+    validations:
+      required: false
