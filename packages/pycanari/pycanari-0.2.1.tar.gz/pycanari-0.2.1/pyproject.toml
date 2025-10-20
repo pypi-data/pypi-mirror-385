@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=75.5.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pycanari"
+version = "0.2.1"
+description = """
+Canari is an open-source library for online change point detection in univariate time series.
+"""
+license = { text = "MIT" }
+requires-python = ">=3.10"
+
+authors = [
+  { name = "Van-Dai Vuong, Luong-Ha Nguyen, and James-A. Goulet", email = "james.goulet@polymtl.ca" }
+]
+
+classifiers = [
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Operating System :: OS Independent"
+]
+
+dependencies = [
+  "matplotlib==3.8.2",
+  "numpy==1.26.0",
+  "pandas==2.1.4",
+  "tqdm==4.66.1",
+  "fire==0.5.0",
+  "statsmodels==0.14.4",
+  "optuna==4.2.0",
+  "pytest==8.3.4",
+  "ray[tune]==2.49.2",
+]
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.urls]
+Homepage = "https://bayes-works.github.io/canari/index.html"
+Repository = "https://github.com/Bayes-Works/canari"
+
+
