@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+exclude = ["tests*", "docs*", "legacy"]
+
+[project]
+name = "ye-tracker"
+version = "0.0.3"
+
+requires-python = ">= 3.12"
+dependencies = [
+    "google-api-python-client >= 2.147.0"
+]
+
+authors = [ 
+    { name = "Phan Nguyên Khôi", email = "fannk987@gmail.com" }
+]
+
+description = """\
+A Python interface for the Ye Tracker.
+"""
+
+readme = "README.md"
+classifiers = [
+    "License :: OSI Approved :: MIT License"
+]
+
+[project.urls]
+Homepage = "https://github.com/Robert-Phan/YeTrackerAPI/"
