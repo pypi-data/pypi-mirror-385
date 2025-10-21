@@ -1,0 +1,21 @@
+cffi
+numpy
+pandas
+matplotlib
+seaborn
+mako
+humanize
+rich
+
+[dev]
+sphinx
+sphinx_rtd_theme
+pipx
+
+[test]
+packaging
+pytest
+lxml
+
+[test:python_version < "3.9"]
+importlib_resources
