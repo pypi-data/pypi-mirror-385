@@ -1,0 +1,11 @@
+# Function status
+function_status:
+  - label: A
+    name: Active
+    description: The function is executable and all dependencies and tables created by this function are valid
+  - label: F
+    name: Frozen
+    description: The function is not executable because some dependency is not valid anymore
+  - label: D
+    name: Deleted
+    description: The function has been deleted from the system
