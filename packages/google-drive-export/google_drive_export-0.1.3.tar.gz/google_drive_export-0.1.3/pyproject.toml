@@ -1,0 +1,85 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "google-drive-export"
+version = "0.1.3"
+description = "Export your Google Drive data"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{name = "Corey Goldberg"}]
+maintainers = [{name = "Corey Goldberg"}]
+readme = "README.md"
+requires-python = ">= 3.9"
+keywords = ["google", "drive", "google-drive", "backup", "export", "takeout"]
+classifiers = [
+    "Environment :: Console",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+dependencies = [
+    "google-api-python-client==2.185.0",
+    "google-auth-httplib2==0.2.0",
+    "google-auth-oauthlib==1.2.2",
+]
+
+[project.scripts]
+google_drive_export = "google_drive_export:main"
+
+[project.urls]
+homepage = "https://github.com/cgoldberg/google-drive-export"
+source = "https://github.com/cgoldberg/google-drive-export"
+download = "https://pypi.org/project/google-drive-export"
+
+[dependency-groups]
+dev = [
+    "tox",
+]
+lint = [
+    "black",
+    "refurb",
+    "ruff",
+]
+validate = [
+    "packaging",
+    "validate-pyproject",
+]
+
+[tool.black]
+line-length = 120
+target-version = [
+    "py39", "py310", "py311", "py312", "py313"
+]
+
+[tool.ruff]
+line-length = 120
+respect-gitignore = true
+target-version = "py39"
+
+[tool.ruff.lint]
+select = [
+    "D", "E", "F", "I", "RUF", "TID", "W"
+]
+extend-ignore = [
+    "D100", "D101", "D102", "D103", "D104", "D105", "D106", "D107",
+    "D203", "D205", "D211", "D213", "D400", "D401", "RUF012"
+]
+fixable = ["ALL"]
+
+[tool.ruff.format]
+docstring-code-format = true
+docstring-code-line-length = 120
+
+[tool.refurb]
+python_version = "3.9"
+enable_all = true
+disable = [
+    "FURB107", "FURB141", "FURB103", "FURB147", "FURB150", "FURB173",
+    "FURB183", "FURB184"
+]
