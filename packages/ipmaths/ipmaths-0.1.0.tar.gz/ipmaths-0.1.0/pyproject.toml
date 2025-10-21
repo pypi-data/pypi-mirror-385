@@ -1,0 +1,35 @@
+# SPDX-FileCopyrightText: 2025 Ben Bonacci <ben at benbonaccci dot com>
+# SPDX-License-Identifier: GPL-3.0-only
+
+[build-system]
+requires = ["setuptools >= 77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ipmaths"
+version = "0.1.0"
+authors = [
+    { name="Ben Bonacci", email="ben@benbonacci.com" }
+]
+description = "A Python module that performs common IPv4 addressing calculations for network engineers."
+readme = "README.md"
+requires-python = ">=3.0"
+keywords = ["ip", "internet", "networking", "calculator"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Telecommunications Industry",
+    "Programming Language :: Python :: 3",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Utilities"
+]
+license = "GPL-3.0-only"
+license-files = ["LICENSES/*.txt"]
+
+[project.urls]
+Repository = "https://code.benbonacci.com/ben/ipmaths"
+Documentation = "https://code.benbonacci.com/ben/ipmaths/wiki"
+Issues = "https://lists.benbonacci.com/ipmaths-bugs"
