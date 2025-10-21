@@ -1,0 +1,26 @@
+[project]
+name = "th2analytics"
+version = "0.0.15"
+authors = [
+  { name="Farid Azouaou", email="farid.azouaou@thaink2.com" },
+]
+description = "A Python package for interacting with the thaink2 analytics APIs"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "requests",
+    "plotly"
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/thaink2/th2analytics_py"
+Issues = "https://github.com/thaink2/th2analytics_py/issues"
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
