@@ -1,0 +1,38 @@
+Metadata-Version: 2.4
+Name: yappgen
+Version: 0.4.3
+Summary: Yet Another Phasing Program
+License-Expression: LGPL-2.1-only
+Project-URL: Repository, https://github.com/BertrandServin/yapp
+Project-URL: Documentation, https://yapp.readthedocs.io
+Requires-Python: >3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy
+Requires-Dist: scipy
+Requires-Dist: cyvcf2>=0.30.4
+Requires-Dist: zarr<4,>=3.1
+Requires-Dist: h5py>=3.2.1
+Requires-Dist: fastphase>=2.0.2
+Requires-Dist: numba>=0.53.1
+Requires-Dist: pytoulbar2
+Requires-Dist: rich
+Dynamic: license-file
+
+# yapp : Yet Another Phasing Program
+
+yapp is a program that includes a set of utilities to work on high
+density genetic data in pedigrees. It is similar to other existing
+softwares such as LINKPHASE, FIMPUTE, AlphaPhase ... . I
+developed it for my own research to have a tool that is opensource and
+that I can tweak to my own needs.
+
+If you find it useful for you, drop me a note (*e.g.* on twitter
+@BertrandServin). If you want to contribute ideas or code, you are
+welcome if you know python :)
+
+yapp and its utilities implement some models and methods that have been
+invented by other people. If you use yapp it is important that you
+acknowledge their work by citing the appropriate
+references. These will depend on the way you use the software, see the
+[documentation](https://yapp.readthedocs.io).
