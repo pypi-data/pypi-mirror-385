@@ -1,0 +1,33 @@
+name: plantismash_test
+channels:
+  - conda-forge
+  - bioconda
+channel_priority: strict
+dependencies:
+  - python=3.8
+  # Conda dependencies
+  - glimmer=3.02
+  - glimmerhmm=3.0.4 
+  - hmmer=3.3.2
+  - bioconda/label/cf201901::hmmer2
+  - fasttree=2.1.11       
+  - diamond=2.0.15
+  - muscle=3.8.31
+  - prodigal=2.6.3     
+  - blast=2.12.0
+  - cd-hit=4.8.1
+  - libxml2=2.10.3
+  - pplacer=1.1.alpha17
+  - ncbi-datasets-cli
+  - unzip=6.0
+ # Extras for TFBS and visualization
+  - logomaker=0.8
+  - pytest=8.3.4
+  # Pip dependencies
+  - pip
+  - pip:
+      - .
+      - ./graphlan # or a git URL if not local
+      # - graphlan @ git+https://github.com/biobakery/graphlan.git
+     
+
