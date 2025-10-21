@@ -1,0 +1,65 @@
+Metadata-Version: 2.4
+Name: extended-fastapi-redis-cache
+Version: 0.1.13
+Summary: Fork of fastapi-redis-cache which adds support for Pydantic models, fixes bugs and adds new features such as manually expire and option to not set cache headers.
+Home-page: https://github.com/petar-varga/Extended-FastAPI-Redis-Cache
+Author: Petar Varga
+Author-email: petarvarga128@gmail.com
+Maintainer: Petar Varga
+Maintainer-email: petarvarga128@gmail.com
+License: MIT
+Project-URL: Bug Tracker, https://github.com/petar-varga/Extended-FastAPI-Redis-Cache/issues
+Project-URL: Source Code, https://github.com/petar-varga/Extended-FastAPI-Redis-Cache
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Operating System :: MacOS :: MacOS X
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Operating System :: Unix
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3 :: Only
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: fastapi
+Requires-Dist: pydantic
+Requires-Dist: python-dateutil
+Requires-Dist: redis
+Requires-Dist: orjson
+Requires-Dist: uvicorn
+Provides-Extra: dev
+Requires-Dist: black; extra == "dev"
+Requires-Dist: coverage; extra == "dev"
+Requires-Dist: fakeredis; extra == "dev"
+Requires-Dist: flake8; extra == "dev"
+Requires-Dist: isort; extra == "dev"
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: pytest-cov; extra == "dev"
+Requires-Dist: pytest-flake8; extra == "dev"
+Requires-Dist: pytest-random-order; extra == "dev"
+Requires-Dist: requests; extra == "dev"
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: license
+Dynamic: license-file
+Dynamic: maintainer
+Dynamic: maintainer-email
+Dynamic: project-url
+Dynamic: provides-extra
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+## Extended-FastAPI-Redis-Cache <!-- omit in toc -->
+
+## Installation
+
+`pip install extended-fastapi-redis-cache`
