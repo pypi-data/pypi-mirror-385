@@ -1,0 +1,43 @@
+# File patterns to exclude globally
+global-exclude .DS_Store
+global-exclude __pycache__
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude *.orig
+global-exclude *.rej
+global-exclude *~
+global-exclude *.swp
+global-exclude *.swo
+global-exclude .coverage
+global-exclude .python-version
+global-exclude .gitignore
+global-exclude .gitattributes
+global-exclude .pre-commit-config.yaml
+global-exclude tox.ini
+global-exclude .pylintrc
+global-exclude Makefile
+global-exclude requirements.txt
+
+# Directory trees to exclude completely
+prune .git
+prune .github
+prune .vscode
+prune .idea
+prune .ropeproject
+prune .pytest_cache
+prune .tox
+prune htmlcov
+prune .nox
+prune build
+prune dist
+prune .eggs
+prune docs/_build
+prune docs/.doctrees
+prune .env
+prune .venv
+prune venv
+prune env
+prune tests
+
+# Exclude egg-info directories but allow the current build's egg-info
+global-exclude *.egg-info
