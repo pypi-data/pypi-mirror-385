@@ -1,0 +1,28 @@
+name: person_status
+id: https://w3id.org/linkml/valuesets/social/person_status
+prefixes:
+  PATO: http://purl.obolibrary.org/obo/PATO_
+  # linkml_common: https://w3id.org/linkml-common/
+  NCIT: http://purl.obolibrary.org/obo/NCIT_
+  valuesets: https://w3id.org/valuesets/
+default_prefix: valuesets
+slots:
+  person_status:
+    description: Vital status of a person (living or deceased)
+    range: PersonStatusEnum
+enums:
+  PersonStatusEnum:
+    description: Vital status of a person (living or deceased)
+    permissible_values:
+      ALIVE:
+        description: The person is living
+        meaning: PATO:0001421
+        title: Alive
+      DEAD:
+        description: The person is deceased
+        meaning: PATO:0001422
+        title: Dead
+      UNKNOWN:
+        description: The vital status is not known
+        meaning: NCIT:C17998
+        title: Unknown
