@@ -1,0 +1,1 @@
+from .funciones import hola,sumatorio,divisibles,factorial,contarDigitosParesImpares,sumaAritmetica,fibonacci,numeroPerfecto,potencias,inversion,palindromo,conversionDecimalToBinario,mcd,trianguloPascal,numPrimos,descomposicionPrimos,digitosRepetidos,armstrong,ordenCreciente,primosGemelos,secuenciaCollatz
