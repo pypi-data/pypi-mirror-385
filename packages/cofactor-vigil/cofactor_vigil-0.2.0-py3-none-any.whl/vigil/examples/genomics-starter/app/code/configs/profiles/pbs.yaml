@@ -1,0 +1,39 @@
+# PBS/Torque Profile for HPC Genomics Workflows
+# Usage: vigil run --profile pbs --cores 100
+
+# Core Snakemake settings
+printshellcmds: true
+reason: true
+show-failed-logs: true
+keep-going: false
+rerun-incomplete: true
+
+# Cluster configuration
+cluster: pbs
+cores: 100
+nodes: 10
+local-cores: 2
+
+# Job submission command
+cluster: |
+  qsub \
+    -q {cluster.queue} \
+    -l nodes=1:ppn={threads} \
+    -l mem={cluster.mem} \
+    -l walltime={cluster.walltime} \
+    -N {rule}.{wildcards} \
+    -o logs/pbs/{rule}.{wildcards}.out \
+    -e logs/pbs/{rule}.{wildcards}.err
+
+# Default resources for all rules
+default-resources:
+  - queue=genomics
+  - mem=8gb
+  - walltime=01:00:00
+  - tmpdir=$TMPDIR
+
+# Latency wait (for shared filesystems)
+latency-wait: 60
+
+# Job restart on failure
+restart-times: 3

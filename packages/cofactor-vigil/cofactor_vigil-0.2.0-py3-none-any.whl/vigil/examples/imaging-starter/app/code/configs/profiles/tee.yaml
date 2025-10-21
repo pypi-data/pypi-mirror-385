@@ -1,0 +1,11 @@
+snakemake:
+  cores: 2
+  config:
+    tee_attestation_required: true
+  default-resources: [attestation_slots=1]
+  set-resources:
+    "*": "tee=1"
+resources:
+  attestation_provider: "azure-confidential-sev-snp"
+  tee_device_class: "Standard_DC4as_v5"
+  attestation_format: "openenclave-report"

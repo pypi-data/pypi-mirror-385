@@ -1,0 +1,41 @@
+configfile: "app/code/configs/params.yaml"
+
+rule all:
+    input:
+        "app/code/artifacts/metrics.json",
+        "app/notes/sciencecast/main_pipeline_replay.json"
+
+rule process:
+    input:
+        tbl="app/data/handles/data.parquet.dhandle.json"
+    output:
+        processed="app/code/artifacts/processed.parquet"
+    shell:
+        "uv run python -m app.code.lib.steps.segment --table {input.tbl} --out {output.processed} --params app/code/configs/params.yaml"
+
+rule metrics:
+    input:
+        processed="app/code/artifacts/processed.parquet"
+    output:
+        met="app/code/artifacts/metrics.json"
+    shell:
+        "uv run python -m app.code.lib.steps.metrics --processed {input.processed} --out {output.met} --table_handle app/data/handles/data.parquet.dhandle.json"
+
+
+rule sciencecast:
+    input:
+        metrics="app/code/artifacts/metrics.json",
+        processed="app/code/artifacts/processed.parquet"
+    output:
+        timeline="app/notes/sciencecast/main_pipeline_replay.json"
+    params:
+        schema="app/notes/sciencecast/timeline.schema.json"
+    shell:
+        (
+            "uv run python -m app.code.tools.sciencecast "
+            "--metrics {input.metrics} "
+            "--processed {input.processed} "
+            "--pipeline-name app/code/pipelines/Snakefile "
+            "--schema {params.schema} "
+            "--out {output.timeline}"
+        )

@@ -1,0 +1,57 @@
+{
+  "metadata": {
+    "run_id": "20251016T051231Z",
+    "generated_at": "2025-10-16T05:12:31.233983+00:00",
+    "pipeline": "app/code/pipelines/Snakefile",
+    "inputs": [
+      "app/data/handles/data.parquet.dhandle.json",
+      "app/code/configs/params.yaml"
+    ],
+    "artifacts": {
+      "processed": "app/code/artifacts/processed.parquet",
+      "metrics": "app/code/artifacts/metrics.json"
+    }
+  },
+  "events": [
+    {
+      "id": "ingest",
+      "offset_seconds": 0.0,
+      "label": "Load microscopy handle",
+      "narration": "Retrieve offline sample from the typed data handle and stage it for processing.",
+      "details": {
+        "input_handle": "app/data/handles/data.parquet.dhandle.json"
+      }
+    },
+    {
+      "id": "segment",
+      "offset_seconds": 4.0,
+      "label": "Segment tiles",
+      "narration": "Run the segmentation step to derive processed tiles ready for downstream analysis.",
+      "details": {
+        "path": "app/code/artifacts/processed.parquet",
+        "size_bytes": 1202,
+        "modified_at": "2025-10-16T05:12:30.665261+00:00"
+      }
+    },
+    {
+      "id": "metrics",
+      "offset_seconds": 12.0,
+      "label": "Score precision/recall",
+      "narration": "Compare processed output against the ground truth and report accuracy metrics.",
+      "details": {
+        "path": "app/code/artifacts/metrics.json",
+        "metrics": {
+          "n": 10,
+          "tp": 5,
+          "tn": 5,
+          "fp": 0,
+          "fn": 0,
+          "accuracy": 1.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        }
+      }
+    }
+  ]
+}
