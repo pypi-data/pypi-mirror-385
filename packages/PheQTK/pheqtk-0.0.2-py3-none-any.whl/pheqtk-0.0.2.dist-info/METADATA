@@ -1,0 +1,54 @@
+Metadata-Version: 2.4
+Name: PheQTK
+Version: 0.0.2
+Summary: A wrapper to the PheTK package.
+Author-email: Marjorie Kohn <marjoriekohn@icloud.com>
+License-Expression: MIT
+Project-URL: Homepage, https://github.com/marjoriekohn/PheQTK
+Project-URL: Issues, https://github.com/marjoriekohn/PheQTK/issues
+Project-URL: PheTK, https://github.com/nhgritctran/PheTK
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: PheTK==0.1.47
+Dynamic: license-file
+
+# PheQTK - The Phenotype Quick Toolkit
+
+PheQTK is a Python package that wraps around [PheTK](https://github.com/nhgritctran/PheTK). 
+
+## Installation
+
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install PheQTK.
+
+```bash
+pip install PheQTK
+```
+
+## Usage
+
+```python
+import PheQTK
+
+# returns 
+PheQTK.pluralize('word')
+
+# returns 
+PheQTK.pluralize('goose')
+
+# returns 
+PheQTK.singularize('phenomena')
+```
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first
+to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
