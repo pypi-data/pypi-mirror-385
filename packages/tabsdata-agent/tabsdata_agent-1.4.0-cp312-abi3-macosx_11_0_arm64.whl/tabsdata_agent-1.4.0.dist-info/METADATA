@@ -1,0 +1,52 @@
+Metadata-Version: 2.4
+Name: tabsdata_agent
+Version: 1.4.0
+Summary: Tabsdata AI Agent
+Home-page: https://tabsdata.com
+Author: Tabs Data Inc.
+License: Tabsdata License
+Project-URL: Source, https://github.com/tabsdata/tabsdata
+Requires-Python: >=3.12
+Description-Content-Type: text/markdown
+License-File: variant/assets/manifest/LICENSE
+Requires-Dist: tabsdata==1.4.0
+Requires-Dist: faiss-cpu==1.12.0
+Requires-Dist: fastapi==0.117.1
+Requires-Dist: langchain==0.3.27
+Requires-Dist: langchain-community==0.3.29
+Requires-Dist: langchain-openai==0.3.33
+Requires-Dist: langgraph==0.6.7
+Requires-Dist: langgraph-checkpoint-sqlite
+Requires-Dist: langmem==0.0.29
+Requires-Dist: openai==1.108.1
+Requires-Dist: uvicorn==0.37.0
+Provides-Extra: test
+Requires-Dist: tabsdata==1.4.0; extra == "test"
+Requires-Dist: faiss-cpu==1.12.0; extra == "test"
+Requires-Dist: fastapi==0.117.1; extra == "test"
+Requires-Dist: langchain==0.3.27; extra == "test"
+Requires-Dist: langchain-community==0.3.29; extra == "test"
+Requires-Dist: langchain-openai==0.3.33; extra == "test"
+Requires-Dist: langgraph==0.6.7; extra == "test"
+Requires-Dist: langgraph-checkpoint-sqlite; extra == "test"
+Requires-Dist: langmem==0.0.29; extra == "test"
+Requires-Dist: openai==1.108.1; extra == "test"
+Requires-Dist: uvicorn==0.37.0; extra == "test"
+Requires-Dist: tabsdata[deps]==1.4.0; extra == "test"
+Provides-Extra: all
+Dynamic: author
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: license
+Dynamic: license-file
+Dynamic: project-url
+Dynamic: provides-extra
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+Tabsdata Agent Python Package
+
+Warning: this is not a standalone package. It is a complement of the Tabsdata package. 
+Refer to the Tabsdata package for details on how to install it: https://pypi.org/project/tabsdata/

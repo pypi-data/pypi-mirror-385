@@ -1,0 +1,17 @@
+# Execution plan status
+execution_plan_status:
+  - label: S
+    name: Scheduled
+    description: All function runs in the execution plan are scheduled
+  - label: R
+    name: Running
+    description: At least one function run in the execution plan is still running (or able to do so)
+  - label: L
+    name: Stalled
+    description: All function runs in the execution plan are in a finished state, but at least one is Failed or OnHold
+  - label: F
+    name: Finished
+    description: All function runs in the execution plan have finished (either successfully or with issues)
+  - label: U
+    name: Unexpected
+    description: Unexpected status used as fallback
