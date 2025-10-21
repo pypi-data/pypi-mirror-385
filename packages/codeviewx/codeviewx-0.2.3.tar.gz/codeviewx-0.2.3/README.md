@@ -1,0 +1,138 @@
+# CodeViewX
+
+> AI-Powered Code Documentation Generator
+
+[中文](README.zh.md) | English
+
+[![PyPI version](https://img.shields.io/pypi/v/codeviewx.svg)](https://pypi.org/project/codeviewx/)
+[![Python Version](https://img.shields.io/pypi/pyversions/codeviewx.svg)](https://pypi.org/project/codeviewx/)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Downloads](https://img.shields.io/pypi/dm/codeviewx.svg)](https://pypi.org/project/codeviewx/)
+
+CodeViewX automatically analyzes your codebase and generates professional technical documentation using AI (Anthropic Claude + DeepAgents + LangChain).
+
+## Features
+
+- 🤖 AI-powered code analysis and documentation generation
+- 📝 Generates comprehensive documentation (8 chapters: overview, quick start, architecture, core mechanisms, data models, API reference, development guide, testing)
+- 🌐 Multi-language support (Chinese, English, Japanese, Korean, French, German, Spanish, Russian)
+- 🖥️ Built-in web server for browsing documentation
+- ⚡ Fast code search with ripgrep integration
+
+## Installation
+
+**From PyPI (Recommended):**
+```bash
+# Install CodeViewX
+pip install codeviewx
+
+# Install ripgrep
+brew install ripgrep  # macOS
+# sudo apt install ripgrep  # Ubuntu/Debian
+
+# Configure API Key
+export ANTHROPIC_API_KEY='your-api-key-here'
+
+# Or use the provided setup script (recommended)
+bash scripts/setup_api_key.sh
+```
+
+**From Source (Development):**
+```bash
+git clone https://github.com/dean2021/codeviewx.git
+cd codeviewx
+pip install -e .
+```
+
+Get your API key at [Anthropic Console](https://console.anthropic.com/)
+
+## Usage
+
+**Command Line:**
+```bash
+# Generate documentation for current directory
+codeviewx
+
+# Specify project and language
+codeviewx -w /path/to/project -l English -o docs
+
+# Browse documentation
+codeviewx --serve -o docs
+```
+
+**Python API:**
+```python
+from codeviewx import generate_docs, start_document_web_server
+
+# Generate documentation
+generate_docs(
+    working_directory="/path/to/project",
+    output_directory="docs",
+    doc_language="English"
+)
+
+# Start web server
+start_document_web_server("docs")
+```
+
+## Development
+
+```bash
+# Install development dependencies
+pip install -e ".[dev]"
+
+# Run tests
+pytest
+
+# Code quality
+black codeviewx/
+flake8 codeviewx/
+```
+
+## Troubleshooting
+
+### API Key Related Errors
+
+**Q: Getting "ANTHROPIC_API_KEY environment variable not found" error?**
+
+A: This means you haven't set up your Anthropic API key yet. To fix:
+
+1. Get your API key from [Anthropic Console](https://console.anthropic.com/)
+2. Set the environment variable:
+   ```bash
+   export ANTHROPIC_API_KEY='your-api-key-here'
+   ```
+3. Or use the provided setup script:
+   ```bash
+   bash scripts/setup_api_key.sh
+   ```
+
+**Q: What if my API key format is incorrect?**
+
+A: Ensure your API key starts with `sk-ant-api` and you've copied it completely. If issues persist, regenerate the key.
+
+### Improved Error Handling
+
+CodeViewX now provides more user-friendly error messages:
+
+- 🔍 **Automatic Detection**: Validates API key format and validity
+- 📝 **Clear Messages**: Specific error causes and solution steps
+- 🔗 **Direct Links**: Provides direct links to get API keys
+- 🌐 **Bilingual Support**: Error messages in English and Chinese
+- ⚙️ **Setup Script**: Automated API key configuration tool
+
+## Contributing
+
+Contributions are welcome! See [Contributing Guide](CONTRIBUTING.md) for details.
+
+## License
+
+GNU General Public License v3.0 - see [LICENSE](LICENSE) file.
+
+## Acknowledgments
+
+Built with [Anthropic Claude](https://www.anthropic.com/), [DeepAgents](https://github.com/langchain-ai/deepagents), [LangChain](https://www.langchain.com/), and [ripgrep](https://github.com/BurntSushi/ripgrep).
+
+---
+
+⭐ Star this project if you find it helpful!
