@@ -1,0 +1,52 @@
+[build-system]
+requires = ["hatchling>=1.18"]
+build-backend = "hatchling.build"
+
+[project]
+name = "rust-python-pe-packer"
+version = "0.0.5"
+description = "Educational Rust/Python PE (Portable Executable) learning stub. No packing functionality. See SECURITY.md."
+readme = "STUB-README.md"
+requires-python = ">=3.8"
+license = { text = "Apache-2.0; see LICENSE-APPENDIX.md for educational-use clarifications" }
+authors = [
+  { name = "AnnMargaret Tutu", email = "annmargaret.mailforce@gmail.com" }
+]
+keywords = [
+  "portable executable",
+  "reverse engineering education",
+  "defensive security",
+  "malware analysis training",
+  "software forensics education",
+  "unpacking research (educational)"
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Education",
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Education",
+  "Topic :: Security",
+]
+
+# No runtime deps for the stub
+dependencies = []
+
+[project.scripts]
+pe-packer = "pe_packer_stub:main"
+
+[project.urls]
+Homepage = "https://github.com/codeamt/rust-python-pe-packer"
+Documentation = "https://github.com/codeamt/rust-python-pe-packer#readme"
+Security = "https://github.com/codeamt/rust-python-pe-packer/blob/main/SECURITY.md"
+License = "https://github.com/codeamt/rust-python-pe-packer/blob/main/LICENSE-APPENDIX.md"
+
+[tool.hatch.build]
+include = [
+  "pe_packer_stub.py",
+  "LICENSE",
+  "STUB-README.md",
+  "SECURITY.md",
+  "LICENSE-APPENDIX.md"
+]
