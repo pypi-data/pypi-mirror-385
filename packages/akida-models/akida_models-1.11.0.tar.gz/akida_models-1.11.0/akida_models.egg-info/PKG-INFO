@@ -1,0 +1,41 @@
+Metadata-Version: 2.4
+Name: akida_models
+Version: 1.11.0
+Summary: Akida Models
+Home-page: https://doc.brainchipinc.com
+Author: Kevin Tsiknos
+Author-email: ktsiknos@brainchip.com
+License: Apache 2.0
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+License-File: LICENSE.3rdparty
+Requires-Dist: cnn2snn~=2.17.0
+Requires-Dist: quantizeml~=1.0.1
+Requires-Dist: scipy
+Requires-Dist: opencv-python
+Requires-Dist: mtcnn==0.1.1
+Requires-Dist: imaug
+Requires-Dist: trimesh
+Requires-Dist: tqdm
+Requires-Dist: tensorflow-datasets
+Provides-Extra: test
+Requires-Dist: pytest; extra == "test"
+Requires-Dist: pytest-rerunfailures; extra == "test"
+Requires-Dist: pytest-xdist; extra == "test"
+Dynamic: author
+Dynamic: author-email
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: license
+Dynamic: license-file
+Dynamic: provides-extra
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+# Akida models
+
+This package contains a zoo of TensorFlow/Keras defined models that can be
+quantized and that are compatible for Akida conversion.
