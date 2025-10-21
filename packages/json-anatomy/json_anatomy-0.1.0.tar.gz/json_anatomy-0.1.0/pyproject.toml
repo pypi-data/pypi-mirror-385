@@ -1,0 +1,79 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "json-anatomy"
+dynamic = ["version"]
+description = "Dissect JSON structure and navigate data safely with intuitive exploration tools."
+readme = "README.md"
+requires-python = ">=3.7"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Chathura Jayalath", email = "chathura@example.com" }]
+maintainers = [{ name = "Chathura Jayalath", email = "chathura@example.com" }]
+keywords = [
+    "json", 
+    "schema", 
+    "structure", 
+    "introspection", 
+    "navigation", 
+    "analysis", 
+    "exploration",
+    "data-science",
+    "api"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities",
+    "Topic :: Text Processing",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Typing :: Typed"
+]
+
+[project.urls]
+Homepage = "https://github.com/deamonpog/json-anatomy"
+Documentation = "https://deamonpog.github.io/json-anatomy/"
+Repository = "https://github.com/deamonpog/json-anatomy"
+"Bug Tracker" = "https://github.com/deamonpog/json-anatomy/issues"
+Changelog = "https://github.com/deamonpog/json-anatomy/releases"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+    "pytest-cov",
+    "black",
+    "flake8",
+    "mypy",
+    "isort"
+]
+docs = [
+    "mkdocs>=1.4.0",
+    "mkdocs-material>=8.0.0",
+    "mkdocstrings[python]>=0.18.0"
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+license-files = ["LICENSE", "NOTICE"]
+
+[tool.setuptools.dynamic]
+version = {attr = "jsonanatomy._version.__version__"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+jsonanatomy = ["py.typed"]
