@@ -1,0 +1,125 @@
+Metadata-Version: 2.4
+Name: yaclog
+Version: 1.6.0
+Summary: Yet another changelog CLI tool.
+Author-email: Andrew Cassidy <drewcassidy@me.com>
+License-Expression: Apache-2.0
+Project-URL: Source, https://git.offworldcolonies.nexus/drewcassidy/yaclog
+Project-URL: Changelog, https://yaclog.readthedocs.io/en/stable/changelog.html
+Project-URL: Docs, https://yaclog.readthedocs.io/
+Keywords: changelog,commandline,markdown
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Classifier: Topic :: Text Processing :: Markup :: Markdown
+Classifier: Topic :: Software Development :: Version Control :: Git
+Classifier: Topic :: Utilities
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE.md
+Requires-Dist: Click>=8.0
+Requires-Dist: GitPython>=3
+Requires-Dist: packaging>=20
+Requires-Dist: tomlkit>=0.11
+Provides-Extra: docs
+Requires-Dist: Sphinx>=8.1; extra == "docs"
+Requires-Dist: sphinx-click>=2.7; extra == "docs"
+Requires-Dist: sphinx-rtd-theme; extra == "docs"
+Requires-Dist: myst-parser>=0.14; extra == "docs"
+Requires-Dist: sphinx-gha; extra == "docs"
+Requires-Dist: sphinx-copybutton; extra == "docs"
+Provides-Extra: test
+Requires-Dist: pytest; extra == "test"
+Dynamic: license-file
+
+# Yaclog: Yet Another Commandline Changelog Tool
+
+[![Documentation Status](https://readthedocs.org/projects/yaclog/badge/?version=latest)](https://yaclog.readthedocs.io/en/)
+[![CI Status](https://git.offworldcolonies.nexus/drewcassidy/yaclog/badges/workflows/build.yml/badge.svg?branch=main&label=build)](https://git.offworldcolonies.nexus/drewcassidy/yaclog/actions)
+[![PyPI version](https://img.shields.io/pypi/v/yaclog)](https://pypi.org/project/yaclog/)
+
+Yaclog is a python library and command line tool to make it easier to keep track of changes to your projects. It includes commands for appending new changes to a markdown changelog file, as well as releasing new versions for deployment via git tags.
+
+![a yak who is a log](https://git.offworldcolonies.nexus/drewcassidy/yaclog/raw/branch/main/logo.png)
+
+*Logo by Erin Cassidy*
+
+## Installation
+
+Install and update with [pip](https://pip.pypa.io/en/stable/getting-started/):
+
+```shell
+$ pip install -U yaclog
+```
+
+Or with [uv](https://docs.astral.sh/uv/getting-started/):
+
+```shell
+$ uv tool install yaclog
+```
+
+## Usage
+
+For usage from the command line, yaclog provides the `yaclog` command:
+```
+Usage: yaclog [OPTIONS] COMMAND [ARGS]...
+
+  Manipulate markdown changelog files.
+
+Options:
+  --path FILE  Location of the changelog file.  [default: CHANGELOG.md]
+  --version    Show the version and exit.
+  --help       Show this message and exit.
+
+Commands:
+  entry    Add entries to the changelog.
+  format   Reformat the changelog file.
+  init     Create a new changelog file.
+  release  Release versions.
+  show     Show changes from the changelog file
+  tag      Modify version tags
+```
+
+### Example workflow
+
+Create a new changelog:
+```shell
+$ yaclog init
+```
+
+Add some new entries to the current unreleased version:
+```shell
+$ yaclog entry -b 'Introduced some more bugs'
+$ yaclog entry -b 'Introduced some more features'
+```
+
+Show the current version:
+
+```shell
+$ yaclog show
+```
+```
+Unreleased
+
+- Introduced some more bugs
+- Introduced some more features
+```
+
+Release the current version and make a git tag for it
+
+```shell
+$ yaclog release 0.0.1 -c
+```
+```
+Renamed version "Unreleased" to "0.0.1".
+Commit and create tag for version 0.0.1? [y/N]: y
+Created commit a7b6789
+Created tag "0.0.1".
+```
