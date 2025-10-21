@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "duderanch_package"
+version = "0.1.4"
+description = "A short description of your package"
+readme = "README.md"
+license = {file = "LICENSE"}
+authors = [{ name="Your Name", email="you@example.com" }]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/yourusername/your-repo"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
