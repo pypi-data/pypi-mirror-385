@@ -1,0 +1,234 @@
+# --------------------------------
+# Project Metadata
+# --------------------------------
+[build-system]
+requires = ["hatchling>=1.21.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "gOdoo-cli"
+dynamic = ["version"]
+description = "Wrapper around Odoo-Bin with some convinience RPC functions."
+authors = [{name="Joshua Kreuder", email="Joshua_Kreuder@outlook.com"}]
+license = {text = "LGPL-3.0-only"}
+readme = "README.md"
+keywords = ["odoo", "godoo", "devcontainer"]
+requires-python = ">=3.9"
+urls = {repository = "https://github.com/OpenJKSoftware/gOdoo"}
+scripts = {godoo = "godoo_cli:launch_cli"}
+dependencies = [
+    "python-dotenv>=0.20.0",
+    "ruamel-yaml>=0.17.21",
+    "gitpython>=3.1.27",
+    "godoo-rpc>=0.1.4",
+    "openupgradelib>=3.3.4",
+    "psycopg2>=2.7.7", # Mirror of Odoo's requirements
+    "passlib>=1.7.3",
+    "typer-common-functions>=0.1.0",
+    "typer>=0.9.0",
+]
+
+[project.optional-dependencies]
+# Dependencies for Odoo Development
+odoo-dev = [
+    "ipdb>=0.13.9",
+    "debugpy>=1.6.0",
+    "rope>=0.23.0",
+    "watchdog>=2.1.7",
+    "py-spy>=0.3.11",
+    "inotify>=0.2.10",
+    "pydevd-odoo>=1.2.1",
+    "pre-commit>=4.0.0",
+    "pylint-odoo>=9.3.2",
+    "py-spy>=0.3.11",
+]
+
+[dependency-groups]
+# Dependencies for Developing this project
+dev = [
+    # Development Tools
+    "hatch>=1.14.0",
+    "pre-commit>=4.0.0",
+]
+
+# --------------------------------
+# Build & Version Management
+# --------------------------------
+[tool.hatch]
+version.path = "src/godoo_cli/__about__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/godoo_cli"]
+
+[tool.hatch.envs.default]
+installer = "uv"
+
+# --------------------------------
+# Development Environments
+# --------------------------------
+[tool.hatch.envs.dev]
+dependencies = [
+    # Testing
+    "pytest>=7.2.1",
+    "pytest-cov>=4.0.0",
+    "mock>=4.0.3",
+    # Linting
+    "ruff>=0.3.0",
+    "pylint_odoo>=9.3.2"
+]
+installer = "uv"
+
+[tool.hatch.envs.dev.scripts]
+
+# Linting commands
+lint = [
+  "ruff check .",
+  "ruff format --check .",
+  "pylint .",  # Keep pylint for Odoo-specific checks
+]
+
+# Testing commands
+test = "pytest"
+
+# CI commands
+ci = [
+  "lint",
+  "pytest --verbose --exitfirst --failed-first --junitxml=junit/pytest-results.xml --cov=src --cov-report=xml -o junit_family=legacy"
+]
+
+# --------------------------------
+# Tool Configurations
+# --------------------------------
+[tool.ruff]
+line-length = 120
+target-version = "py39"
+exclude = [".venv"]
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "C",    # flake8-comprehensions
+    "B",    # flake8-bugbear
+    "D",    # pydocstyle
+    "ANN",  # flake8-annotations (type hints)
+    "ARG",  # flake8-unused-arguments
+    "COM",  # flake8-commas
+    "DTZ",  # flake8-datetimez
+    "EM",   # flake8-errmsg (better error messages)
+    "ERA",  # eradicate (commented out code)
+    "N",    # pep8-naming
+    "PIE",  # flake8-pie
+    "PT",   # flake8-pytest-style
+    "RUF",  # Ruff-specific rules
+    "SIM",  # flake8-simplify
+    "TD",   # flake8-todos
+    "TRY",  # flake8-try-except-raise
+    "UP",   # pyupgrade
+]
+ignore = [
+    "E203",  # Whitespace before ':'
+    "E266",  # Too many leading '#' for block comment
+    "E501",  # Line too long (handled by formatter)
+    "ANN401", # Dynamically typed expressions (Any) are disallowed
+    "ANN201", # Missing  return type for public method
+    "ANN202", # Missing type for private method
+    "TD002",  # Missing author in TODO
+    "TD003",  # Missing issue link in TODO
+    "COM812", # enforce trailing comma in broken up lists
+    "TRY003", # Dont enforce exception subclasses
+    "TRY201", # Allow reraise of caught exception
+    "DTZ006", # Datetime timezone requrement
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+[tool.ruff.lint.per-file-ignores]
+"__manifest__.py" = ["D101","D100","B018"]
+"__init__.py" = ["F401", "F403"]  # Ignore unused and * imports in __init__.py files
+"tests/*" = ["S101", "D100", "D101", "D102", "D103", "D104", "D105", "D107"]  # Ignore assert usage and docstrings in tests
+"test_*.py" = ["S101", "D100", "D101", "D102", "D103", "D104", "D105", "D107"]  # Same for test files in any directory
+"*_test.py" = ["S101", "D100", "D101", "D102", "D103", "D104", "D105", "D107"]  # Same for test files in any directory
+
+[tool.pylint.master]
+load-plugins = "pylint_odoo,pylint.extensions.no_self_use"
+ignore = ["CVS", ".git", ".hg", ".tox", ".eggs", "*.egg", "build", "dist", ".venv"]
+persistent = true
+jobs = 0
+
+[tool.pylint.basic]
+good-names = ["i", "j", "k", "ex", "Run", "_", "fp", "id", "db", "fn"]
+no-docstring-rgx = "^_|^test_"
+
+[tool.pylint.format]
+max-line-length = 120
+
+[tool.pylint.odoolint]
+manifest-required-authors = "Joshua Kreuder"
+manifest-required-keys = "license"
+valid-odoo-versions = "16.0"
+
+[tool.pylint.'MESSAGES CONTROL']
+disable = [
+    "all",
+    "missing-docstring",
+    "unused-argument",
+    "broad-except",
+    "invalid-name",  # Handled by flake8
+    "line-too-long",  # Handled by black/flake8
+    "too-many-lines",  # Handled by flake8
+    "wrong-import-order",  # Handled by isort
+]
+enable = [
+    "eval-used",
+    "license-allowed",
+    "manifest-required-author",
+    "manifest-required-key",
+    "sql-injection",
+    "translation-required",
+    "anomalous-backslash-in-string",
+    "dangerous-default-value",
+    "duplicate-key",
+    "missing-final-newline",
+    "missing-return",
+    "syntax-error",
+    "undefined-variable",
+    "no-value-for-parameter",  # E1120
+]
+
+[tool.pylint.similarities]
+min-similarity-lines = 8
+ignore-comments = true
+ignore-docstrings = true
+ignore-imports = true
+
+[tool.pylint.design]
+max-args = 8
+max-attributes = 10
+min-public-methods = 0
+max-public-methods = 20
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests", "src"]
+python_files = ["test_*.py", "*_test.py"]
+addopts = [
+    "--cov=src",
+    "--cov-report=term-missing",
+    "--cov-report=xml",
+    "--no-cov-on-fail",
+    "--verbose"
+]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::UserWarning",
+]

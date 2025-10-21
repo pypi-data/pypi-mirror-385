@@ -1,0 +1,43 @@
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+      ssh:
+        - default
+      target: prod
+    init: true
+    environment:
+      - ODOO_DB_HOST=/var/run/postgresql
+    extra_hosts:
+      - "host.docker.internal:host-gateway" # Link host as dns
+    env_file:
+      - .env
+    depends_on:
+      - db
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "odoo_web:/var/lib/odoo"
+      - "config:/odoo/config"
+      - "cache:/var/cache"
+      - "postgres_socket:/var/run/postgresql"
+
+  db:
+    image: postgres:17-alpine
+    environment:
+      - TZ=${TZ:-Europe/Berlin}
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=${ODOO_DB_PASSWORD}
+      - POSTGRES_USER=${ODOO_DB_USER}
+    volumes:
+      - "db:/var/lib/postgresql/data"
+      - "/etc/localtime:/etc/localtime:ro"
+      - "../config/postgresql.conf:/etc/postgresql/postgresql.conf"
+      - "postgres_socket:/var/run/postgresql"
+
+volumes:
+  config:
+  cache:
+  db:
+  odoo_web:
+  postgres_socket:

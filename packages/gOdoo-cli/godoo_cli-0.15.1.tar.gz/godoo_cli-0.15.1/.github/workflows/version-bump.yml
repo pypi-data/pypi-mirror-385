@@ -1,0 +1,138 @@
+name: Version Bump
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump_type:
+        description: "Version bump type"
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+          - rc
+          - beta
+          - alpha
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  create-bump-pr:
+    name: Create Version Bump PR
+    runs-on: ubuntu-latest
+    env:
+      REPO_URL: ${{ github.server_url }}/${{ github.repository }}
+      PYTHON_VERSION: "3.12"
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: main
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install Hatch
+        uses: pypa/hatch@install
+
+      - name: Initialize Version Info
+        id: version_info
+        run: |
+          # Get current version
+          CURRENT_VERSION=$(hatch version)
+          echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Setup Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump Version and Push
+        id: bump_version
+        run: |
+          # Get new version number first
+          hatch version ${{ inputs.bump_type }}
+          NEW_VERSION=$(hatch version)
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_OUTPUT
+
+          # Create release branch with new version
+          RELEASE_BRANCH="release/${NEW_VERSION}"
+          echo "RELEASE_BRANCH=$RELEASE_BRANCH" >> $GITHUB_ENV
+          git checkout -b "$RELEASE_BRANCH"
+
+          # Commit and push the changes
+          git add -A
+          git commit -m "🔖 Bump version ${{ steps.version_info.outputs.CURRENT_VERSION }} → $NEW_VERSION"
+          git push --force origin "$RELEASE_BRANCH"
+
+      - name: Generate Release Notes
+        id: changelog
+        env:
+          NEW_VERSION: ${{ steps.bump_version.outputs.NEW_VERSION }}
+          CURRENT_VERSION: ${{ steps.version_info.outputs.CURRENT_VERSION }}
+        run: |
+          # Function to get commit history
+          get_commit_history() {
+            local range="$1"
+            git log --pretty=format:"- [%s]($REPO_URL/commit/%H)" --no-merges "$range" --invert-grep --grep="Bump version" || echo "No commits found"
+          }
+
+          # Get the last version tag
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+
+          # Start generating release notes
+          {
+            echo "CONTENT<<EOF"
+            echo "# 🔖 New Release: $NEW_VERSION"
+
+            if [ -z "$LAST_TAG" ]; then
+              echo "Previous version: None (First Release)"
+              COMMITS=$(get_commit_history "HEAD^..HEAD")
+            else
+              echo "Previous version: [$LAST_TAG]($REPO_URL/releases/tag/$LAST_TAG)"
+              COMMITS=$(get_commit_history "$LAST_TAG..HEAD")
+            fi
+
+            echo
+            echo "## 📝 Summary"
+            echo
+            echo "<if this is here i was lazy>"
+            echo
+            echo "## 📝 What's new?"
+            echo
+            echo "$COMMITS"
+            echo
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
+
+      - name: Create Pull Request
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { repo, owner } = context.repo;
+            const result = await github.rest.pulls.create({
+              owner,
+              repo,
+              head: process.env.RELEASE_BRANCH,
+              base: 'main',
+              title: `🔖 Release ${process.env.NEW_VERSION}`,
+              body: process.env.CONTENT,
+              maintainer_can_modify: true
+            });
+
+            // Add labels to the PR
+            await github.rest.issues.addLabels({
+              owner,
+              repo,
+              issue_number: result.data.number,
+              labels: ['release', 'automated pr']
+            });
+        env:
+          NEW_VERSION: ${{ steps.bump_version.outputs.NEW_VERSION }}
+          CONTENT: ${{ steps.changelog.outputs.CONTENT }}
