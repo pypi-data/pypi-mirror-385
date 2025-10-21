@@ -1,0 +1,144 @@
+[build-system]
+requires = [
+    "pdm-backend",
+]
+build-backend = "pdm.backend"
+
+[project]
+name = "langchain-ibm"
+version = "0.3.19.dev1"
+description = "An integration package connecting IBM watsonx.ai and LangChain"
+authors = [
+    { name = "IBM" },
+]
+requires-python = ">=3.10,<3.14"
+readme = "README.md"
+dependencies = [
+    "langchain-core>=0.3.39,<0.4",
+    "ibm-watsonx-ai>=1.3.37,<2.0.0",
+]
+
+[project.license]
+text = "MIT"
+
+[project.optional-dependencies]
+sql_toolkit = [
+    "pyarrow>=3.0.0",
+]
+
+[project.urls]
+"Source Code" = "https://github.com/langchain-ai/langchain-ibm/tree/main/libs/ibm"
+repository = "https://github.com/langchain-ai/langchain-ibm"
+
+[dependency-groups]
+lint = [
+    "ruff>=0.13.1,<0.14.0",
+    "pyarrow>=3.0.0",
+]
+typing = [
+    "mypy>=1.17.1,<2.0.0",
+    "types-requests>=2.28.11.5,<3.0.0",
+]
+test = [
+    "pytest>=8.4.0,<9.0.0",
+    "freezegun>=1.2.2,<2.0.0",
+    "pytest-mock>=3.10.0,<4.0.0",
+    "syrupy>=4.0.2,<5.0.0",
+    "pytest-watcher>=0.3.4,<0.4.0",
+    "pytest-asyncio>=0.21.1,<1.0.0",
+    "pytest-cov>=4.1.0,<5.0.0",
+    "langchain-tests==0.3.13",
+    "pyarrow>=3.0.0",
+]
+test_integration = []
+codespell = [
+    "codespell>=2.2.0,<3.0.0",
+]
+dev = []
+
+[tool.ruff]
+fix = true
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.ruff.lint]
+select = [
+    "ALL",
+]
+ignore = [
+    "COM812",
+    "C901",
+    "SIM105",
+    "PERF203",
+    "PLR0911",
+    "PLR0912",
+    "PLR0913",
+    "PLR0914",
+    "PLR0915",
+    "PLR2004",
+    "ARG002",
+    "BLE001",
+    "ANN401",
+    "FBT",
+    "D301",
+    "PLW",
+    "A001",
+    "B028",
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.pep8-naming]
+classmethod-decorators = [
+    "langchain_core.pydantic_v1.validator",
+]
+
+[tool.ruff.lint.flake8-annotations]
+allow-star-arg-any = true
+mypy-init-return = true
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = [
+    "D",
+    "S101",
+    "S311",
+    "SLF001",
+    "T201",
+    "FIX",
+    "TD",
+    "RUF012",
+    "PGH003",
+    "S",
+    "PT",
+]
+"scripts/*" = [
+    "D",
+    "T201",
+    "INP",
+]
+
+[tool.mypy]
+plugins = [
+    "pydantic.mypy",
+]
+strict = true
+warn_unreachable = true
+disallow_any_generics = false
+warn_return_any = false
+
+[tool.coverage.run]
+omit = [
+    "tests/*",
+]
+
+[tool.pytest.ini_options]
+addopts = "--snapshot-warn-unused --strict-markers --strict-config --durations=5 -vv"
+markers = [
+    "requires: mark tests as requiring a specific library",
+    "asyncio: mark tests as requiring asyncio",
+    "compile: mark placeholder test used to compile integration tests without running them",
+]
+asyncio_mode = "auto"
+filterwarnings = "ignore::pytest.PytestUnraisableExceptionWarning"
