@@ -1,0 +1,61 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "imagenation"
+version = "1.0.1"
+description = "Generate AI Images in Batches with Google's Imagen"
+readme = "README.md"
+license = {text = "BSD-3-Clause"}
+authors = [
+    {name = "Pedro M. Sosa", email = "konukoii@gmail.com"}
+]
+maintainers = [
+    {name = "Pedro M. Sosa", email = "konukoii@gmail.com"}
+]
+keywords = [
+    "ai",
+    "image-generation",
+    "imagen",
+    "google-gemini",
+    "batch-processing",
+    "text-to-image",
+    "computer-vision"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Multimedia :: Graphics",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+requires-python = ">=3.7"
+dependencies = [
+    "google-genai",
+    "pillow",
+    "python-dotenv",
+]
+
+[project.urls]
+Homepage = "https://github.com/pmsosa/imagenation"
+Repository = "https://github.com/pmsosa/imagenation"
+Issues = "https://github.com/pmsosa/imagenation/issues"
+
+[project.scripts]
+imagenation = "imagenation.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["imagenation*"]
+exclude = ["tests*", "venv*", "images*"]
+
+[tool.setuptools.package-data]
+imagenation = ["py.typed"]
