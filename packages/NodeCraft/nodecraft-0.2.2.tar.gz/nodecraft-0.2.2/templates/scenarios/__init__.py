@@ -1,0 +1,3 @@
+"""
+Scenario templates
+"""

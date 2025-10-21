@@ -1,0 +1,57 @@
+scenario:
+  id: {{ name }}
+  name: {{ Name }}
+  version: 1.0.0
+  author: {{ author }}
+  description: {{ description }}
+
+parameters:
+  patterns:
+    type: list
+    default: ["**/*.py"]
+    description: Files to check
+
+  threshold:
+    type: int
+    default: 80
+    description: Minimum quality score (0-100)
+
+  fail_on_error:
+    type: bool
+    default: true
+    description: Exit with error if quality check fails
+
+steps:
+  - node: "@common/get_files"
+    name: get_files
+    params:
+      patterns: "{% raw %}{{params.patterns}}{% endraw %}"
+
+  # TODO: Add your quality check nodes here
+  #
+  # Example workflow:
+  # - node: "@custom/lint_check"
+  #   name: lint
+  #   params:
+  #     strict: true
+  #
+  # - node: "@custom/test_check"
+  #   name: tests
+  #   params:
+  #     coverage_threshold: 80
+  #
+  # - node: "@custom/security_check"
+  #   name: security
+  #   params:
+  #     severity: "medium"
+  #
+  # - node: "@custom/aggregate_results"
+  #   name: aggregate
+  #   params:
+  #     threshold: "{% raw %}{{params.threshold}}{% endraw %}"
+  #     fail_on_error: "{% raw %}{{params.fail_on_error}}{% endraw %}"
+  #
+  # The aggregate node should:
+  # - Calculate overall score from all checks
+  # - Compare against threshold
+  # - Exit with code 1 if fail_on_error and score < threshold
