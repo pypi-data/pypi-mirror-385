@@ -1,0 +1,15 @@
+#!/usr/bin/make -f
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+override_dh_auto_test:
+
+# needed for bookworm compatibility!
+override_dh_installsystemd:
+	ln -s usr/lib debian/spin-hmi/lib
+	dh_installsystemd
+	rm debian/spin-hmi/lib
+
+%:
+	dh $@ --with python3 --buildsystem=pybuild

@@ -1,0 +1,24 @@
+Source: spin-hmi
+Section: python
+Priority: optional
+Maintainer: Georg Brandl <g.brandl@fz-juelich.de>
+Build-Depends: debhelper-compat (= 13),
+ dh-python,
+ pybuild-plugin-pyproject,
+ git,
+ python3 (>= 3.6),
+ python3-setuptools,
+ python3-setuptools-scm
+Standards-Version: 4.1.4
+
+Package: spin-hmi
+Architecture: all
+Depends: ${misc:Depends},
+ ${python3:Depends},
+ python3-aiohttp,
+ python3-mlzlog (>= 0.5.0),
+ python3-tango,
+ python3-zapf
+Description: Spin monitoring system
+ Provides a server that can poll data from several device backends
+ and display it via web interface.

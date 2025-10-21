@@ -1,0 +1,281 @@
+html, body {
+    margin: 0;
+    font-family: Open Sans,HelveticaNeue-Light,Helvetica Neue Light,Helvetica Neue,Helvetica,Arial,sans-serif;
+}
+
+nav {
+    padding: 0 1em;
+    background-color: #203569;
+    position: sticky;
+    z-index: 1;
+    top: 0;
+    left: 0;
+}
+
+nav a {
+    color: white;
+    text-decoration-color: white;
+}
+
+nav li {
+    color: white;
+    padding: 0 1em;
+}
+
+nav li.sep {
+    padding: 0 0.5em;
+}
+
+nav li.active {
+    background-color: var(--pico-primary-background);
+    color: var(--pico-primary-inverse);
+}
+
+nav li.item img {
+    vertical-align: baseline;
+    height: 0.9em;
+    padding-right: 0.2em;
+}
+
+nav li.logo img {
+    height: 3em;
+    padding: 0.5em 0;
+}
+
+#content {
+    transform-origin: 0 0;
+}
+
+button {
+    padding: 8px var(--pico-form-element-spacing-horizontal);
+}
+
+button img {
+    vertical-align: text-bottom;
+    margin-right: 0.2em;
+}
+
+[data-intent-key] {
+    cursor: pointer;
+}
+
+/* display field color combinations per state */
+
+[data-state="hidden"] {
+    display: none !important;
+}
+
+:is(div,span,path,rect,ellipse)[data-state="special"] {
+    color: white;
+    background-color: rgb(85, 85, 255);
+    fill: rgb(85, 85, 255) !important;
+}
+
+:is(div,span,path,rect,ellipse)[data-state="warn"] {
+    background-color: rgb(255,165,0);
+    fill: rgb(255,165,0) !important;
+}
+
+:is(div,span,path,rect,ellipse)[data-state="busy"] {
+    background-color: rgb(255,255,0);
+    fill: rgb(255,255,0) !important;
+}
+
+:is(div,span,path,rect,ellipse)[data-state="disabled"] {
+    background-color: rgb(204,204,204);
+    fill: rgb(204,204,204) !important;
+}
+
+:is(div,span,path,rect,ellipse)[data-state="error"] {
+    color: white;
+    background-color: rgb(255,68,68);
+    fill: rgb(255,68,68) !important;
+}
+
+:is(div,span,path,rect,ellipse)[data-state="unknown"] {
+    background-color: rgb(176,176,176);
+}
+
+/* styles for overlays */
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: var(--pico-modal-overlay-background-color);
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    align-items: end;
+}
+
+/* styles for value input field */
+
+.hg-theme-default, .hg-button {
+    /* override from keyboard */
+    font-family: Open Sans,HelveticaNeue-Light,Helvetica Neue Light,Helvetica Neue,Helvetica,Arial,sans-serif !important;
+}
+
+#numeric-overlay, #stringy-overlay, #choice-overlay {
+    justify-content: right;
+}
+
+#numeric-inner, #stringy-inner, #choice-inner {
+    margin: 2em;
+    padding: 0.2em;
+    font-size: 150%;
+    border: 2px solid #aaa;
+    border-radius: 5px;
+    font-family: Open Sans,HelveticaNeue-Light,Helvetica Neue Light,Helvetica Neue,Helvetica,Arial,sans-serif;
+}
+
+[data-theme="light"] #numeric-inner {
+    background: #dddddd;
+}
+
+[data-theme="light"] #stringy-inner {
+    background: #dddddd;
+}
+
+[data-theme="light"] #choice-inner {
+    background: #dddddd;
+}
+
+[data-theme="dark"] #numeric-inner {
+    background: var(--pico-card-background-color);
+}
+
+[data-theme="dark"] #stringy-inner {
+    background: var(--pico-card-background-color);
+}
+
+[data-theme="dark"] #choice-inner {
+    background: var(--pico-card-background-color);
+}
+
+#numeric-inner input, #stringy-inner input {
+    border: none;
+    padding: 1em;
+    font-size: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: Open Sans,HelveticaNeue-Light,Helvetica Neue Light,Helvetica Neue,Helvetica,Arial,sans-serif;
+    border-radius: 5px;
+}
+
+#stringy-inner {
+    min-width: 800px;
+}
+
+/* styles for info overlay: error list etc. */
+
+#info-inner {
+    font-size: 2vh;
+    margin: 2em;
+    padding: 1em;
+    border: 2px solid #aaa;
+    border-radius: 5px;
+    background: var(--pico-background-color);
+    max-height: 80%;
+    overflow-y: scroll;
+}
+
+#info-errorlist {
+    width: 100%;
+}
+
+#info-errorlist td {
+    padding: 0.1em 0.5em;
+    border-top: 1px solid #ccc;
+    vertical-align: top;
+}
+
+/* styles for control overlay */
+
+#control-inner {
+    margin: 2em;
+    border: 2px solid #aaa;
+    border-radius: 5px;
+    background: var(--pico-background-color);
+    box-sizing: border-box;
+    width: calc(100% - 4em);
+    height: 80%;
+}
+
+/* styles for dialog overlays */
+
+.dialog-inner {
+    font-size: 2vh;
+    margin: auto 15%;
+    width: 100%;
+    padding: 1em;
+    border: 2px solid #aaa;
+    border-radius: 5px;
+    background: var(--pico-background-color);
+}
+
+.dialog-inner button {
+    font-size: 120%;
+}
+
+#error-inner {
+    border: 2px solid #f00;
+}
+
+/* styles for function buttons */
+
+#func-buttons {
+    position: fixed;
+    left: 0.5em;
+    bottom: 0.5em;
+    letter-spacing: 100%;
+}
+
+#error-button {
+    display: none;
+}
+
+/* progress bar styles */
+
+#progress-inner {
+    text-align: center;
+    font-size: 2.5vh;
+    font-weight: bold;
+    margin: auto auto;
+    min-width: 500px;
+    padding: 2em;
+    border: 2px solid #aaa;
+    border-radius: 5px;
+    background: var(--pico-background-color);
+}
+
+.circular-progress {
+    --progress: 0;
+    --size: 200px;
+    --half-size: calc(var(--size) / 2);
+    --stroke-width: 20px;
+    --radius: calc((var(--size) - var(--stroke-width)) / 2);
+    --circumference: calc(var(--radius) * pi * 2);
+    --dash: calc((var(--progress) * var(--circumference)) / 100);
+}
+
+.circular-progress circle {
+    cx: var(--half-size);
+    cy: var(--half-size);
+    r: var(--radius);
+    stroke-width: var(--stroke-width);
+    fill: none;
+    stroke-linecap: round;
+}
+
+.circular-progress circle.bg {
+    stroke: var(--pico-progress-background-color);
+}
+
+.circular-progress circle.fg {
+    transform: rotate(-90deg);
+    transform-origin: var(--half-size) var(--half-size);
+    stroke-dasharray: var(--dash) calc(var(--circumference) - var(--dash));
+    transition: stroke-dasharray 0.3s linear 0s;
+    stroke: var(--pico-progress-color);
+}

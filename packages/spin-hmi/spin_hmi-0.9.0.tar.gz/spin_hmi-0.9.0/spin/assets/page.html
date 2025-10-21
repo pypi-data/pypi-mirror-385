@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html data-theme="{{THEME}}">
+  <head>
+    <title>{{TITLE}}</title>
+    <meta charset="utf-8">
+    <link rel="icon" href="s/icon.png">
+{{CSS}}
+{{JS}}
+    <script>
+      const FORCE_READONLY = {{READONLY}};
+      const PAGE_HAS_AUTH = {{WITHAUTH}};
+    </script>
+    <script src="s/spin.js"></script>
+  </head>
+  <body>
+{{NAVBAR}}
+    <div id="content">
+{{CONTENT}}
+    </div>
+    <div class="overlay" id="numeric-overlay">
+      <div id="numeric-inner">
+        <div id="numeric-label">Enter new value:</div>
+        <input id="numeric-input" />
+        <div class="numeric-keyboard"></div>
+      </div>
+    </div>
+    <div class="overlay" id="stringy-overlay">
+      <div id="stringy-inner">
+        <div id="stringy-label">Enter new value:</div>
+        <input id="stringy-input" />
+        <div class="stringy-keyboard"></div>
+      </div>
+    </div>
+    <div class="overlay" id="choice-overlay">
+      <div id="choice-inner">
+        <div id="choice-label">Select new value:</div>
+        <select id="choice-input"></select>
+        <button onclick='Spin.choice_keyboard_cancel()'>Cancel</button>
+        <button onclick='Spin.choice_keyboard_submit()'>Enter</button>
+      </div>
+    </div>
+    <div class="overlay" id="info-overlay">
+      <div id="info-inner">
+        <div style="display: flex; justify-content:space-between; align-items: center" >
+            <div>
+            <img style="height: 3em" src="s/logo.svg">
+            <span data-common="version">Disconnected</span>
+            </div>
+            <span data-common="hostinfo"></span>
+        </div>
+        <div style="margin-bottom: 1em"><strong>Current Errors by device:</strong></div>
+        <table style="margin-bottom: 1em" id="info-errorlist">
+          <tr><th>Device</th><th>Error</th><th>Since</th></tr>
+        </table>
+        <div style="margin-bottom: 1em" id="no-error">None.</div>
+        <template id="error-row">
+          <tr><td>?</td><td>!</td><td></td></tr>
+        </template>
+        <div style="text-align: right">
+          <button onclick='Spin.toggle_info()'>Close</button>
+        </div>
+      </div>
+    </div>
+    <div class="overlay" id="control-overlay">
+      <iframe id="control-inner" src="about:blank"></iframe>
+    </div>
+    <div class="overlay" id="error-overlay">
+      <div class="dialog-inner" id="error-inner">
+        <div style="margin-bottom: 1em"><strong>Error:</strong></div>
+        <div id="error-message" style="margin-bottom: 1em"></div>
+        <div style="text-align: right">
+          <button onclick='Spin.error_ok()'>Close</button>
+        </div>
+      </div>
+    </div>
+    <div class="overlay" id="confirm-overlay">
+      <div class="dialog-inner" id="confirm-inner">
+        <div style="margin-bottom: 1em"><strong>Confirm action
+          (<span id="confirm-what"></span>)</strong></div>
+        <div id="confirm-message" style="margin-bottom: 1em"></div>
+        <div style="text-align: right">
+          <button onclick='Spin.confirm_ok()'>Confirm</button>
+          <button onclick='Spin.confirm_cancel()'>Cancel</button>
+        </div>
+      </div>
+    </div>
+    <div class="overlay" id="progress-overlay">
+      <div id="progress-inner">
+        <p style="margin-bottom: 2em" id="progress-text">In progress...</p>
+        <svg width="200" height="200" viewBox="0 0 200 200" class="circular-progress" id="progress-bar">
+          <circle class="bg"></circle>
+          <circle class="fg"></circle>
+        </svg>
+      </div>
+    </div>
+    <div id="func-buttons" style="{{QUICKSTYLE}}">
+      <span style="cursor: pointer" onclick='Spin.resync()'>
+        <img src="s/sync.svg">
+      </span>
+      <span style="cursor: pointer" onclick='Spin.toggle_info()'>
+        <img src="s/info.svg" id="info-button">
+        <img src="s/error.svg" id="error-button">
+      </span>
+      <span style="cursor: pointer; display: {{CONTROL_DISPLAY}}"
+            onclick='Spin.toggle_control("{{CONTROL}}")'>
+        <img src="s/control.svg" id="control-button">
+      </span>
+    </div>
+  </body>
+</html>
