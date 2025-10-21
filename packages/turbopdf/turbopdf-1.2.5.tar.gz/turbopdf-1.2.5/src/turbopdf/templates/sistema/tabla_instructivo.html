@@ -1,0 +1,8 @@
+<!-- templates/components/tabla_instructivo.html -->
+<div class="instructivo">
+    <table>
+        {% for fila in filas %}
+            {% include "components/fila_instructivo.html" with fila=fila %}
+        {% endfor %}
+    </table>
+</div>
