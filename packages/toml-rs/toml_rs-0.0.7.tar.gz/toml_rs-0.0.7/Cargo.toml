@@ -1,0 +1,32 @@
+[package]
+name = "toml-rs"
+version = "0.0.7"
+edition = "2024"
+license = "Unlicense"
+repository = "https://github.com/lava-sh/toml-rs"
+readme = "README.md"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+name = "_toml_rs"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "0.27", features = ["generate-import-lib", "extension-module"] }
+toml = { version = "0.9", features = [
+    "fast_hash", # uses `foldhash`
+    "unbounded", # disables default recursion limit (https://github.com/toml-rs/toml/blob/toml-v0.9.8/crates/toml/src/de/parser/mod.rs#L71)
+                 # to set own limit (999)
+    "preserve_order",
+] }
+toml_datetime = "0.7"
+memchr = { version = "2", default-features = false }
+mimalloc = { version = "*", features = ["v3"], optional = true }
+
+[features]
+default = ["dep:mimalloc"]
+
+[profile.release]
+lto = "fat"
+strip = "symbols"
+codegen-units = 1
