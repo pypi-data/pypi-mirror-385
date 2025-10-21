@@ -1,0 +1,17 @@
+data:
+  train: "train_5.csv"
+  test: "test_5.csv"
+
+training:
+  iterations: 400
+  sampling: 6
+  seed: 1714
+
+optimizer:
+  debug: false
+  study_name: new_data
+  trials: 20
+  min_user_groups: 2
+  max_user_groups: 8
+  min_item_groups: 2
+  max_item_groups: 8
