@@ -1,0 +1,66 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "odoo-plugin-manager"
+version = "0.3.0"
+description = "OPM - Plugin Manager for Odoo (CLI)"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "Ahmet Atakan" }]
+license = "GPL-3.0-or-later"
+
+dependencies = [
+  "typer>=0.12.3",
+  "rich>=13.7.1",
+  "pyyaml>=6.0.1",
+  "watchdog>=4.0.2",
+  "requests>=2.32.0",
+  "python-dotenv>=1.0.1",
+  "websockets>=12.0"
+]
+
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Operating System :: OS Independent"
+]
+
+[project.urls]
+Homepage = "https://github.com/ahmetatakan/odoo-plugin-manager"
+Repository = "https://github.com/ahmetatakan/odoo-plugin-manager"
+Issues = "https://github.com/ahmetatakan/odoo-plugin-manager/issues"
+Documentation = "https://pypi.org/project/odoo-plugin-manager/"
+
+[project.scripts]
+opm = "opm.cli.__main__:app"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+include-package-data = true
+license-files = ["LICENSE"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["opm*"]
+exclude = ["opm.tests*"]
+
+[tool.setuptools.package-data]
+opm = [
+  "**/*.yaml", "**/*.yml",
+  "**/*.jinja", "**/*.j2", "**/*.tmpl",
+  "**/*.json", "**/*.txt"
+]
+
+[project.optional-dependencies]
+dev = [
+  "build",
+  "twine",
+  "pytest",
+  "black",
+  "ruff",
+  "mypy"
+]
