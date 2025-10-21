@@ -1,0 +1,17 @@
+version: 1
+org: acme-lab
+project: imaging-starter
+resolverHost: labs.example
+capsule:
+  image: ghcr.io/acme-lab/capsule-cuda@sha256:58b3e701ed9da8768554a21ffe7fa9afd995702d002b4b5d4798365a79310277
+  extensions:
+    - ms-python.python@2024.6.0 # Mirror: https://open-vsx.org/api/ms-python/python/2024.6.0/file/ms-python.python-2024.6.0.vsix
+    - ms-toolsai.jupyter@2024.2.0 # Mirror: https://open-vsx.org/api/ms-toolsai/jupyter/2024.2.0/file/ms-toolsai.jupyter-2024.2.0.vsix
+    - ms-toolsai.jupyter-renderers@2024.2.0 # Mirror: https://open-vsx.org/api/ms-toolsai/jupyter-renderers/2024.2.0/file/ms-toolsai.jupyter-renderers-2024.2.0.vsix
+    - ms-toolsai.jupyter-keymap@1.1.0 # Mirror: https://open-vsx.org/api/ms-toolsai/jupyter-keymap/1.1.0/file/ms-toolsai.jupyter-keymap-1.1.0.vsix
+    - ms-toolsai.vscode-jupyter-cell-tags@0.1.8 # Mirror: https://open-vsx.org/api/ms-toolsai/vscode-jupyter-cell-tags/0.1.8/file/ms-toolsai.vscode-jupyter-cell-tags-0.1.8.vsix
+    - redhat.vscode-yaml@1.14.0 # Mirror: https://open-vsx.org/api/redhat/vscode-yaml/1.14.0/file/redhat.vscode-yaml-1.14.0.vsix
+inputs:
+  - s3://demo-bucket/microscopy/
+policies:
+  requireReceipts: true

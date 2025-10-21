@@ -1,0 +1,179 @@
+name: vigil-checks
+on:
+  pull_request:
+
+jobs:
+  review:
+    name: vigil-review
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install uv
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
+
+      - name: Add uv to PATH
+        run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
+      - name: Sync deps
+        run: uv sync --frozen --extra dev
+
+      - name: Enforce capsule policies
+        run: uv run python -m app.code.tools.ci_guard
+
+      - name: Lint code
+        run: uv run lint
+
+      - name: Run tests
+        run: uv run test
+
+      - name: Conformance
+        run: uv run conformance
+
+      - name: Snakemake dry-run
+        run: uv run snakemake -s app/code/pipelines/Snakefile -n all
+
+      - name: Capture pipeline start time
+        id: pipeline_clock
+        run: echo "started_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_OUTPUT"
+
+      - name: Run pipeline
+        run: uv run run
+
+      - name: Promote latest artifacts
+        env:
+          RUN_STARTED_AT: ${{ steps.pipeline_clock.outputs.started_at }}
+        run: uv run promote
+
+      - name: Prepare metrics summary
+        if: always()
+        id: metrics_summary
+        run: |
+          if [ -f "app/code/artifacts/metrics.json" ]; then
+            python <<'PYMETRICS'
+import json
+import os
+import pathlib
+
+metrics_path = pathlib.Path("app/code/artifacts/metrics.json")
+metrics = json.loads(metrics_path.read_text(encoding="utf-8"))
+
+rows = ["| Metric | Value |", "|--------|-------|"]
+for key, value in metrics.items():
+    if isinstance(value, float):
+        rows.append(f"| {key} | {value:.4f} |")
+    else:
+        rows.append(f"| {key} | {value} |")
+
+table_text = "\n".join(rows) + "\n"
+table_path = pathlib.Path("metrics_table.md")
+table_path.write_text(table_text, encoding="utf-8")
+
+summary_path = pathlib.Path("metrics_summary.md")
+summary_path.write_text("## 📈 Latest Run Metrics\n\n" + table_text, encoding="utf-8")
+
+receipt_dir = pathlib.Path("app/code/receipts")
+latest_receipt = ""
+if receipt_dir.exists():
+    candidates = sorted(receipt_dir.glob("receipt_*.json"), key=lambda p: p.stat().st_mtime)
+    if candidates:
+        latest_receipt = candidates[-1]
+
+github_output = pathlib.Path(os.environ["GITHUB_OUTPUT"])
+with github_output.open("a", encoding="utf-8") as fh:
+    fh.write("has_metrics=true\n")
+    fh.write(f"table_path={table_path.as_posix()}\n")
+    fh.write(f"summary_path={summary_path.as_posix()}\n")
+    if latest_receipt:
+        fh.write(f"receipt_path={latest_receipt.as_posix()}\n")
+        fh.write(f"receipt_name={latest_receipt.name}\n")
+    else:
+        fh.write("receipt_path=\n")
+        fh.write("receipt_name=\n")
+PYMETRICS
+          else
+            echo "has_metrics=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Upload latest receipt
+        if: steps.metrics_summary.outputs.receipt_path != ''
+        id: upload_receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: vigil-receipt-${{ github.sha }}
+          path: ${{ steps.metrics_summary.outputs.receipt_path }}
+          retention-days: 7
+
+      - name: Publish metrics summary
+        if: steps.metrics_summary.outputs.has_metrics == 'true'
+        run: |
+          cat "${{ steps.metrics_summary.outputs.summary_path }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          if [ "${{ steps.metrics_summary.outputs.receipt_path }}" != "" ]; then
+            if [ "${{ steps.upload_receipt.outputs['artifact-url'] }}" != "" ]; then
+              echo "**Receipt:** [Download latest receipt](${{ steps.upload_receipt.outputs['artifact-url'] }})" >> "$GITHUB_STEP_SUMMARY"
+            else
+              echo "**Receipt:** \`${{ steps.metrics_summary.outputs.receipt_path }}\`" >> "$GITHUB_STEP_SUMMARY"
+            fi
+          else
+            echo "**Receipt:** none generated" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Generate metrics comment
+        if: always() && steps.metrics_summary.outputs.has_metrics == 'true'
+        id: metrics_comment
+        run: |
+          uv run python -m app.code.tools.github_comments metrics \
+            --table "${{ steps.metrics_summary.outputs.table_path }}" \
+            --receipt-url "${{ steps.upload_receipt.outputs['artifact-url'] }}" \
+            --receipt-name "${{ steps.metrics_summary.outputs.receipt_name }}" \
+            --receipt-path "${{ steps.metrics_summary.outputs.receipt_path }}" \
+            > vigil_metrics_comment.md
+          {
+            echo 'body<<EOF'
+            cat vigil_metrics_comment.md
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Comment metrics and receipt
+        if: always() && steps.metrics_summary.outputs.has_metrics == 'true'
+        uses: actions/github-script@v7
+        env:
+          COMMENT_BODY: ${{ steps.metrics_comment.outputs.body }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const marker = '<!-- vigil-metrics-comment -->';
+            const body = process.env.COMMENT_BODY;
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            const existing = comments.find(comment => comment.body.includes(marker));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
+
+      - name: MCP smoke test
+        run: |
+          printf '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{}}' | uv run python -m vigil.mcp > /tmp/mcp-init.out
+          printf '{"jsonrpc":"2.0","id":2,"method":"call_tool","params":{"name":"run_target","arguments":{"target":"all"}}}' | uv run python -m vigil.mcp > /tmp/mcp-run.out || true
+          cat /tmp/mcp-run.out
