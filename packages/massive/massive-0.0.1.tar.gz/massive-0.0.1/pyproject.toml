@@ -1,0 +1,36 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "massive"
+version = "0.0.1"
+description = "Hello world placeholder for Massive.com"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {file = "LICENSE"}
+authors = [{name = "Justin", email = "justin@massive.com"}]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://massive.com"
+Issues = "https://massive.com"  # update later
+
+[project.scripts]
+massive = "massive.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/massive"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "src/massive",
+  "README.md",
+  "LICENSE",
+  "pyproject.toml"
+]
+
