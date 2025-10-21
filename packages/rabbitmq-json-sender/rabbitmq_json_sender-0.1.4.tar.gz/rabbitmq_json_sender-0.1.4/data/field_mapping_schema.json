@@ -1,0 +1,178 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Field Mapping Configuration Schema",
+  "description": "Schema for validating field mapping configuration files",
+  "type": "object",
+  "required": ["metadata", "source", "field_mappings", "transformations", "validation_rules"],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "required": ["version", "description"],
+      "properties": {
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+$"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "created_date": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "required": ["table", "primary_key", "batch_column"],
+      "properties": {
+        "table": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Source table name"
+        },
+        "primary_key": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Primary key field name"
+        },
+        "batch_column": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Column used for batching"
+        },
+        "order_by": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Column for ordering results"
+        }
+      }
+    },
+    "field_mappings": {
+      "type": "object",
+      "minProperties": 1,
+      "patternProperties": {
+        "^[a-zA-Z_][a-zA-Z0-9_]*$": {
+          "type": "object",
+          "required": ["type"],
+          "properties": {
+            "target": {
+              "oneOf": [
+                {"type": "string", "minLength": 1},
+                {"type": "null"}
+              ],
+              "description": "Target field name in output JSON"
+            },
+            "type": {
+              "type": "string",
+              "enum": ["string", "integer", "date", "float", "boolean"],
+              "description": "Expected data type"
+            },
+            "required": {
+              "type": "boolean",
+              "default": false,
+              "description": "Whether field is required"
+            },
+            "alias": {
+              "type": "string",
+              "minLength": 1,
+              "description": "SQL alias for the field"
+            },
+            "description": {
+              "type": "string",
+              "description": "Field description"
+            },
+            "validation": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["digits_only", "email", "url", "regex"]
+                },
+                "min_length": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "max_length": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "pattern": {
+                  "type": "string",
+                  "description": "Regex pattern for validation"
+                },
+                "exclude_if_same_as": {
+                  "type": "string",
+                  "description": "Exclude if value is same as another field"
+                }
+              }
+            },
+            "transformation": {
+              "type": "string",
+              "enum": ["iso_format", "uppercase", "lowercase", "trim"],
+              "description": "Transformation to apply"
+            }
+          }
+        }
+      }
+    },
+    "transformations": {
+      "type": "object",
+      "properties": {
+        "date_format": {
+          "type": "string",
+          "enum": ["iso", "timestamp", "custom"],
+          "default": "iso"
+        },
+        "remove_null_values": {
+          "type": "boolean",
+          "default": true
+        },
+        "encoding": {
+          "type": "string",
+          "default": "utf-8"
+        },
+        "exclude_empty_strings": {
+          "type": "boolean",
+          "default": false
+        },
+        "byte_handling": {
+          "type": "string",
+          "enum": ["decode_utf8", "base64", "ignore"],
+          "default": "decode_utf8"
+        }
+      }
+    },
+    "validation_rules": {
+      "type": "object",
+      "properties": {
+        "required_fields": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "List of required output fields"
+        },
+        "skip_record_if_missing": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Skip record if these source fields are missing"
+        },
+        "log_validation_errors": {
+          "type": "boolean",
+          "default": true
+        },
+        "max_validation_errors": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum validation errors before stopping"
+        }
+      }
+    }
+  }
+}

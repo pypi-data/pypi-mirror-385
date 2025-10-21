@@ -1,0 +1,179 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "description": "Product catalog field mapping configuration for e-commerce integration",
+    "created_date": "2025-09-17",
+    "use_case": "E-commerce product data synchronization"
+  },
+  "source": {
+    "table": "catalog.products_view",
+    "primary_key": "product_id",
+    "batch_column": "product_id",
+    "order_by": "updated_at"
+  },
+  "field_mappings": {
+    "product_id": {
+      "target": "PROD_ID",
+      "type": "integer",
+      "required": true,
+      "description": "Unique product identifier"
+    },
+    "sku": {
+      "target": "PROD_SKU",
+      "type": "string",
+      "required": true,
+      "validation": {
+        "type": "regex",
+        "pattern": "^[A-Z0-9-]{6,20}$",
+        "min_length": 6,
+        "max_length": 20
+      },
+      "transformation": "uppercase",
+      "description": "Stock Keeping Unit"
+    },
+    "product_name": {
+      "target": "PROD_NAME",
+      "type": "string",
+      "required": true,
+      "validation": {
+        "min_length": 1,
+        "max_length": 200
+      },
+      "description": "Product name"
+    },
+    "description": {
+      "target": "PROD_DESCRIPTION",
+      "type": "string",
+      "required": false,
+      "validation": {
+        "max_length": 2000
+      },
+      "description": "Product description"
+    },
+    "price": {
+      "target": "PROD_PRICE",
+      "type": "float",
+      "required": true,
+      "validation": {
+        "min_value": 0
+      },
+      "description": "Product price"
+    },
+    "currency": {
+      "target": "PROD_CURRENCY",
+      "type": "string",
+      "required": true,
+      "validation": {
+        "type": "regex",
+        "pattern": "^[A-Z]{3}$"
+      },
+      "transformation": "uppercase",
+      "description": "Price currency (ISO 4217)"
+    },
+    "category_id": {
+      "target": "PROD_CATEGORY_ID",
+      "type": "integer",
+      "required": true,
+      "description": "Product category identifier"
+    },
+    "category_name": {
+      "target": "PROD_CATEGORY_NAME",
+      "type": "string",
+      "required": false,
+      "validation": {
+        "max_length": 100
+      },
+      "description": "Product category name"
+    },
+    "brand": {
+      "target": "PROD_BRAND",
+      "type": "string",
+      "required": false,
+      "validation": {
+        "max_length": 100
+      },
+      "description": "Product brand"
+    },
+    "weight": {
+      "target": "PROD_WEIGHT",
+      "type": "float",
+      "required": false,
+      "validation": {
+        "min_value": 0
+      },
+      "description": "Product weight in kg"
+    },
+    "dimensions": {
+      "target": "PROD_DIMENSIONS",
+      "type": "string",
+      "required": false,
+      "validation": {
+        "max_length": 50
+      },
+      "description": "Product dimensions (L x W x H)"
+    },
+    "stock_quantity": {
+      "target": "PROD_STOCK",
+      "type": "integer",
+      "required": false,
+      "validation": {
+        "min_value": 0
+      },
+      "description": "Available stock quantity"
+    },
+    "status": {
+      "target": "PROD_STATUS",
+      "type": "string",
+      "required": true,
+      "validation": {
+        "type": "regex",
+        "pattern": "^(ACTIVE|INACTIVE|DISCONTINUED|OUT_OF_STOCK)$"
+      },
+      "transformation": "uppercase",
+      "description": "Product status"
+    },
+    "is_featured": {
+      "target": "PROD_FEATURED",
+      "type": "boolean",
+      "required": false,
+      "description": "Featured product flag"
+    },
+    "created_at": {
+      "target": "PROD_CREATED_AT",
+      "type": "date",
+      "required": true,
+      "transformation": "iso_format",
+      "description": "Product creation date"
+    },
+    "updated_at": {
+      "target": "PROD_UPDATED_AT",
+      "type": "date",
+      "required": false,
+      "transformation": "iso_format",
+      "description": "Last update date"
+    },
+    "image_url": {
+      "target": "PROD_IMAGE_URL",
+      "type": "string",
+      "required": false,
+      "validation": {
+        "type": "url",
+        "max_length": 500
+      },
+      "description": "Product image URL"
+    }
+  },
+  "transformations": {
+    "date_format": "iso",
+    "remove_null_values": true,
+    "encoding": "utf-8",
+    "exclude_empty_strings": true,
+    "byte_handling": "decode_utf8"
+  },
+  "validation_rules": {
+    "required_fields": ["PROD_ID", "PROD_SKU", "PROD_NAME", "PROD_PRICE", "PROD_CURRENCY", "PROD_CATEGORY_ID", "PROD_STATUS"],
+    "skip_record_if_missing": ["product_id", "sku", "product_name", "price"],
+    "log_validation_errors": true,
+    "max_validation_errors": 50
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "description": "Field mapping configuration for ClickHouse to RabbitMQ data sync",
+    "created_date": "2025-09-17"
+  },
+  "source": {
+    "table": "datamart.bitrix_ref_materials_ziproduct_v1_0_view_latest",
+    "primary_key": "id",
+    "batch_column": "id",
+    "order_by": "id"
+  },
+  "field_mappings": {
+    "id": {
+      "target": "id",
+      "type": "string",
+      "required": false,
+      "description": "Internal ID"
+    },
+    "external_code": {
+      "target": "external_code",
+      "type": "string",
+      "required": false,
+      "description": "External ID"
+    },
+    "title": {
+      "target": "title",
+      "type": "string",
+      "required": false,
+      "description": "Product title"
+    },
+    "xml_code": {
+      "target": "xml_code",
+      "type": "string",
+      "required": false,
+      "description": "Symbol code"
+    },
+    "description": {
+      "target": "description",
+      "type": "string",
+      "required": false,
+      "description": "Description"
+    },
+    "description_format": {
+      "target": "description_format",
+      "type": "string",
+      "required": false,
+      "description": "Description format"
+    },
+    "is_active": {
+      "target": "is_active",
+      "type": "string",
+      "required": false,
+      "description": "Is product active"
+    },
+    "currency": {
+      "target": "currency",
+      "type": "float",
+      "required": false,
+      "description": "Currency"
+    },
+    "price": {
+      "target": "price",
+      "type": "string",
+      "required": false,
+      "description": "Price"
+    },
+    "vat_rate": {
+      "target": "vat_rate",
+      "type": "integer",
+      "required": false,
+      "description": "VAT rate ID"
+    },
+    "vat_included": {
+      "target": "vat_included",
+      "type": "string",
+      "required": false,
+      "description": "VAT included (Y/N)"
+    },
+    "unit": {
+      "target": "unit",
+      "type": "integer",
+      "required": false,
+      "description": "Unit ID"
+    },
+    "category_lvl1": {
+      "target": "category_lvl1",
+      "type": "string",
+      "required": false,
+      "description": "Product category level 1"
+    },
+    "category_lvl2": {
+      "target": "category_lvl2",
+      "type": "string",
+      "required": false,
+      "description": "Product category level 2"
+    },
+    "category_lvl3": {
+      "target": "category_lvl3",
+      "type": "string",
+      "required": false,
+      "description": "Product category level 3"
+    },
+    "material_id": {
+      "target": "material_id",
+      "type": "string",
+      "required": false,
+      "description": "Material ID"
+    },
+    "model": {
+      "target": "model",
+      "type": "string",
+      "required": false,
+      "description": "Model"
+    },
+    "manufacturer": {
+      "target": "manufacturer",
+      "type": "string",
+      "required": false,
+      "description": "Manufacturer"
+    }
+  },
+  "transformations": {
+    "date_format": "iso",
+    "remove_null_values": true,
+    "encoding": "utf-8",
+    "exclude_empty_strings": false,
+    "byte_handling": "decode_utf8"
+  },
+  "validation_rules": {
+    "required_fields": ["external_code","title"],
+    "skip_record_if_missing": ["external_code","title"],
+    "log_validation_errors": true
+  }
+}

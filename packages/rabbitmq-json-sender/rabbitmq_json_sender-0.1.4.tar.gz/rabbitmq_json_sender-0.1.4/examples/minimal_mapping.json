@@ -1,0 +1,48 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "description": "Minimal field mapping configuration example",
+    "created_date": "2025-09-17",
+    "use_case": "Simple table with basic fields - demonstrates minimal required configuration"
+  },
+  "source": {
+    "table": "public.simple_table",
+    "primary_key": "id",
+    "batch_column": "id",
+    "order_by": "id"
+  },
+  "field_mappings": {
+    "id": {
+      "target": "RECORD_ID",
+      "type": "integer",
+      "required": true,
+      "description": "Primary key"
+    },
+    "name": {
+      "target": "RECORD_NAME",
+      "type": "string",
+      "required": true,
+      "validation": {
+        "min_length": 1
+      },
+      "description": "Record name"
+    },
+    "created_date": {
+      "target": "RECORD_DATE",
+      "type": "date",
+      "required": false,
+      "transformation": "iso_format",
+      "description": "Creation date"
+    }
+  },
+  "transformations": {
+    "date_format": "iso",
+    "remove_null_values": true,
+    "encoding": "utf-8"
+  },
+  "validation_rules": {
+    "required_fields": ["RECORD_ID", "RECORD_NAME"],
+    "skip_record_if_missing": ["id", "name"],
+    "log_validation_errors": true
+  }
+}

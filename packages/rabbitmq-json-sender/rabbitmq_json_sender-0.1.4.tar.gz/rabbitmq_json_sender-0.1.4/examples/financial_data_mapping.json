@@ -1,0 +1,143 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "description": "Financial data field mapping configuration for accounting system integration",
+    "created_date": "2025-09-17",
+    "use_case": "Financial transactions and accounting data synchronization"
+  },
+  "source": {
+    "table": "finance.transactions_view",
+    "primary_key": "transaction_id",
+    "batch_column": "transaction_id",
+    "order_by": "created_date"
+  },
+  "field_mappings": {
+    "transaction_id": {
+      "target": "FIN_TRANSACTION_ID",
+      "type": "string",
+      "required": true,
+      "validation": {
+        "min_length": 1,
+        "max_length": 50
+      },
+      "description": "Unique transaction identifier"
+    },
+    "account_number": {
+      "target": "FIN_ACCOUNT_NUMBER",
+      "type": "string",
+      "required": true,
+      "validation": {
+        "type": "digits_only",
+        "min_length": 10,
+        "max_length": 20
+      },
+      "description": "Bank account number"
+    },
+    "amount": {
+      "target": "FIN_AMOUNT",
+      "type": "float",
+      "required": true,
+      "validation": {
+        "min_value": 0.01
+      },
+      "description": "Transaction amount"
+    },
+    "currency_code": {
+      "target": "FIN_CURRENCY",
+      "type": "string",
+      "required": true,
+      "validation": {
+        "type": "regex",
+        "pattern": "^[A-Z]{3}$"
+      },
+      "transformation": "uppercase",
+      "description": "ISO 4217 currency code (KZT, USD, EUR)"
+    },
+    "transaction_date": {
+      "target": "FIN_DATE",
+      "type": "date",
+      "required": true,
+      "transformation": "iso_format",
+      "description": "Transaction date"
+    },
+    "transaction_type": {
+      "target": "FIN_TYPE",
+      "type": "string",
+      "required": true,
+      "validation": {
+        "type": "regex",
+        "pattern": "^(DEBIT|CREDIT|TRANSFER)$"
+      },
+      "transformation": "uppercase",
+      "description": "Transaction type"
+    },
+    "description": {
+      "target": "FIN_DESCRIPTION",
+      "type": "string",
+      "required": false,
+      "validation": {
+        "max_length": 500
+      },
+      "description": "Transaction description"
+    },
+    "counterparty_name": {
+      "target": "FIN_COUNTERPARTY",
+      "type": "string",
+      "required": false,
+      "validation": {
+        "max_length": 300
+      },
+      "description": "Counterparty name"
+    },
+    "counterparty_account": {
+      "target": "FIN_COUNTERPARTY_ACCOUNT",
+      "type": "string",
+      "required": false,
+      "validation": {
+        "type": "digits_only",
+        "max_length": 20
+      },
+      "description": "Counterparty account number"
+    },
+    "reference_number": {
+      "target": "FIN_REFERENCE",
+      "type": "string",
+      "required": false,
+      "validation": {
+        "max_length": 100
+      },
+      "description": "Payment reference number"
+    },
+    "status": {
+      "target": "FIN_STATUS",
+      "type": "string",
+      "required": true,
+      "validation": {
+        "type": "regex",
+        "pattern": "^(PENDING|COMPLETED|FAILED|CANCELLED)$"
+      },
+      "transformation": "uppercase",
+      "description": "Transaction status"
+    },
+    "created_date": {
+      "target": "FIN_CREATED_DATE",
+      "type": "date",
+      "required": true,
+      "transformation": "iso_format",
+      "description": "Record creation date"
+    }
+  },
+  "transformations": {
+    "date_format": "iso",
+    "remove_null_values": true,
+    "encoding": "utf-8",
+    "exclude_empty_strings": true,
+    "byte_handling": "decode_utf8"
+  },
+  "validation_rules": {
+    "required_fields": ["FIN_TRANSACTION_ID", "FIN_ACCOUNT_NUMBER", "FIN_AMOUNT", "FIN_CURRENCY", "FIN_DATE", "FIN_TYPE", "FIN_STATUS"],
+    "skip_record_if_missing": ["transaction_id", "account_number", "amount"],
+    "log_validation_errors": true,
+    "max_validation_errors": 50
+  }
+}

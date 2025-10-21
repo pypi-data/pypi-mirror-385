@@ -1,0 +1,163 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "description": "User data field mapping configuration for user management system",
+    "created_date": "2025-09-17",
+    "use_case": "User profiles and authentication data synchronization"
+  },
+  "source": {
+    "table": "users.user_profiles_view",
+    "primary_key": "user_id",
+    "batch_column": "user_id",
+    "order_by": "created_at"
+  },
+  "field_mappings": {
+    "user_id": {
+      "target": "USER_ID",
+      "type": "integer",
+      "required": true,
+      "description": "Unique user identifier"
+    },
+    "username": {
+      "target": "USER_USERNAME",
+      "type": "string",
+      "required": true,
+      "validation": {
+        "type": "regex",
+        "pattern": "^[a-zA-Z0-9_]{3,30}$",
+        "min_length": 3,
+        "max_length": 30
+      },
+      "description": "Username (alphanumeric and underscore only)"
+    },
+    "email": {
+      "target": "USER_EMAIL",
+      "type": "string",
+      "required": true,
+      "validation": {
+        "type": "email",
+        "max_length": 255
+      },
+      "transformation": "lowercase",
+      "description": "User email address"
+    },
+    "first_name": {
+      "target": "USER_FIRST_NAME",
+      "type": "string",
+      "required": true,
+      "validation": {
+        "min_length": 1,
+        "max_length": 100
+      },
+      "description": "User first name"
+    },
+    "last_name": {
+      "target": "USER_LAST_NAME",
+      "type": "string",
+      "required": true,
+      "validation": {
+        "min_length": 1,
+        "max_length": 100
+      },
+      "description": "User last name"
+    },
+    "phone_number": {
+      "target": "USER_PHONE",
+      "type": "string",
+      "required": false,
+      "validation": {
+        "type": "regex",
+        "pattern": "^\\+?[1-9]\\d{1,14}$"
+      },
+      "description": "Phone number in international format"
+    },
+    "date_of_birth": {
+      "target": "USER_DOB",
+      "type": "date",
+      "required": false,
+      "transformation": "iso_format",
+      "description": "Date of birth"
+    },
+    "role": {
+      "target": "USER_ROLE",
+      "type": "string",
+      "required": true,
+      "validation": {
+        "type": "regex",
+        "pattern": "^(ADMIN|USER|MODERATOR|GUEST)$"
+      },
+      "transformation": "uppercase",
+      "description": "User role"
+    },
+    "status": {
+      "target": "USER_STATUS",
+      "type": "string",
+      "required": true,
+      "validation": {
+        "type": "regex",
+        "pattern": "^(ACTIVE|INACTIVE|SUSPENDED|PENDING)$"
+      },
+      "transformation": "uppercase",
+      "description": "User account status"
+    },
+    "last_login": {
+      "target": "USER_LAST_LOGIN",
+      "type": "date",
+      "required": false,
+      "transformation": "iso_format",
+      "description": "Last login timestamp"
+    },
+    "created_at": {
+      "target": "USER_CREATED_AT",
+      "type": "date",
+      "required": true,
+      "transformation": "iso_format",
+      "description": "Account creation date"
+    },
+    "updated_at": {
+      "target": "USER_UPDATED_AT",
+      "type": "date",
+      "required": false,
+      "transformation": "iso_format",
+      "description": "Last profile update date"
+    },
+    "profile_picture_url": {
+      "target": "USER_AVATAR_URL",
+      "type": "string",
+      "required": false,
+      "validation": {
+        "type": "url",
+        "max_length": 500
+      },
+      "description": "Profile picture URL"
+    },
+    "department": {
+      "target": "USER_DEPARTMENT",
+      "type": "string",
+      "required": false,
+      "validation": {
+        "max_length": 100
+      },
+      "description": "User department"
+    },
+    "is_verified": {
+      "target": "USER_VERIFIED",
+      "type": "boolean",
+      "required": false,
+      "description": "Email verification status"
+    }
+  },
+  "transformations": {
+    "date_format": "iso",
+    "remove_null_values": true,
+    "encoding": "utf-8",
+    "exclude_empty_strings": true,
+    "byte_handling": "decode_utf8"
+  },
+  "validation_rules": {
+    "required_fields": ["USER_ID", "USER_USERNAME", "USER_EMAIL", "USER_FIRST_NAME", "USER_LAST_NAME", "USER_ROLE", "USER_STATUS"],
+    "skip_record_if_missing": ["user_id", "username", "email"],
+    "log_validation_errors": true,
+    "max_validation_errors": 25
+  }
+}

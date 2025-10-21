@@ -1,0 +1,183 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "description": "Field mapping configuration for ClickHouse to RabbitMQ data sync",
+    "created_date": "2025-09-17"
+  },
+  "source": {
+    "table": "datamart.statgov_snap_legal_entities_v2_5_view_latest",
+    "primary_key": "id",
+    "batch_column": "id",
+    "order_by": "id"
+  },
+  "field_mappings": {
+    "id": {
+      "target": null,
+      "type": "integer",
+      "required": false,
+      "description": "Internal ID, not included in output"
+    },
+    "bin": {
+      "target": "UF_BIN",
+      "type": "string",
+      "required": true,
+      "validation": {
+        "type": "digits_only",
+        "min_length": 12,
+        "max_length": 12
+      },
+      "description": "Business Identification Number"
+    },
+    "company_name": {
+      "target": "UF_COMPANY_NAME",
+      "type": "string",
+      "required": true,
+      "validation": {
+        "min_length": 1
+      },
+      "description": "Company short name"
+    },
+    "full_company_name_rus": {
+      "target": "UF_COMPANY_FULL_NAME",
+      "type": "string",
+      "required": false,
+      "alias": "full_company_name_rus",
+      "description": "Full company name in Russian"
+    },
+    "org_form": {
+      "target": "UF_ORG_FORM",
+      "type": "string",
+      "required": false,
+      "description": "Organization form"
+    },
+    "register_date": {
+      "target": "UF_REGISTER_DATE",
+      "type": "date",
+      "required": false,
+      "transformation": "iso_format",
+      "description": "Company registration date"
+    },
+    "oked": {
+      "target": "UF_OKED",
+      "type": "string",
+      "required": false,
+      "description": "OKED classification code"
+    },
+    "main_activity_rus": {
+      "target": "UF_MAIN_ACTIVITY",
+      "type": "string",
+      "required": false,
+      "alias": "main_activity",
+      "description": "Main activity description"
+    },
+    "second_oked": {
+      "target": "UF_SECOND_OKED",
+      "type": "string",
+      "required": false,
+      "validation": {
+        "exclude_if_same_as": "oked"
+      },
+      "description": "Secondary OKED code"
+    },
+    "krp_code": {
+      "target": "UF_KRP_CODE",
+      "type": "string",
+      "required": false,
+      "description": "KRP classification code"
+    },
+    "krp_name_rus": {
+      "target": "UF_KRP_NAME",
+      "type": "string",
+      "required": false,
+      "alias": "krp_name",
+      "description": "KRP classification name"
+    },
+    "kse_code": {
+      "target": "UF_KSE_CODE",
+      "type": "string",
+      "required": false,
+      "description": "KSE classification code"
+    },
+    "kse_name_rus": {
+      "target": "UF_KSE_NAME",
+      "type": "string",
+      "required": false,
+      "alias": "kse_name",
+      "description": "KSE classification name"
+    },
+    "kfs_code": {
+      "target": "UF_KFS_CODE",
+      "type": "string",
+      "required": false,
+      "description": "KFS classification code"
+    },
+    "kfs_name_rus": {
+      "target": "UF_KFS_NAME",
+      "type": "string",
+      "required": false,
+      "alias": "kfs_name",
+      "description": "KFS classification name"
+    },
+    "kato_code": {
+      "target": "UF_KATO_CODE",
+      "type": "string",
+      "required": false,
+      "description": "KATO territorial code"
+    },
+    "city_name_rus": {
+      "target": "UF_CITY_NAME",
+      "type": "string",
+      "required": false,
+      "alias": "city_name",
+      "description": "City name"
+    },
+    "legal_address": {
+      "target": "UF_ADDRESS",
+      "type": "string",
+      "required": false,
+      "description": "Legal address"
+    },
+    "ceo_name": {
+      "target": "UF_CEO_NAME",
+      "type": "string",
+      "required": false,
+      "description": "CEO name"
+    },
+    "region": {
+      "target": "UF_REGION",
+      "type": "string",
+      "required": false,
+      "description": "Region name"
+    },
+    "legal_entity_type": {
+      "target": "UF_COMPANYTYPE_CODE",
+      "type": "string",
+      "required": false,
+      "description": "Legal entity type code"
+    },
+    "legal_entity_type_txt": {
+      "target": "UF_COMPANYTYPE_NAME",
+      "type": "string",
+      "required": false,
+      "description": "Legal entity type name"
+    },
+    "district": {
+      "target": "UF_DISTRICT",
+      "type": "string",
+      "required": false,
+      "description": "District name"
+    }
+  },
+  "transformations": {
+    "date_format": "iso",
+    "remove_null_values": true,
+    "encoding": "utf-8",
+    "exclude_empty_strings": false,
+    "byte_handling": "decode_utf8"
+  },
+  "validation_rules": {
+    "required_fields": ["UF_BIN", "UF_COMPANY_NAME"],
+    "skip_record_if_missing": ["bin", "company_name"],
+    "log_validation_errors": true
+  }
+}
