@@ -1,0 +1,232 @@
+[project]
+name = "jiggle_version"
+version = "2.1.0"
+description = "Increment version number found in source code without regex"
+readme = "README.md"
+authors = [{ name = "Matthew Martin", email = "matthewdeanmartin@gmail.com" }]
+keywords = ["version", "version-numbers"]
+license = "MIT"
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
+]
+
+
+dependencies = [
+    "rich-argparse>=1.7.1",
+    "tomli; python_version < '3.11'",
+    "pathspec>=0.12",
+    # "importlib-resources; python_version < '3.9'",
+    "tomlkit>=0.13.3",
+    "requests>=2.32.4",
+    "packaging>=25.0"
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=6.0.1",
+    "pytest-cov>=2.10.1",
+    "pylint",
+    "git2md; python_version >= '3.10'",
+    "pyclean; python_version >= '3.12'",
+    "strip-docs>=1.0; python_version >= '3.12'",
+    "gha-update; python_version >= '3.12'",
+    "mkdocstrings[python]",
+    "mkdocs; python_version >= '3.12'",
+    "mdformat",
+    # plugin finder
+    "packaging; python_version >= '3.8'",
+    # mpy
+    "mypy; python_version >= '3.8'",
+    "types-toml; python_version >= '3.8'",
+    "types-requests",
+    # reports
+
+    # build
+    "vermin; python_version >= '3.8'",
+    "metametameta>=0.1.3; python_version >= '3.9'",
+    "hatchling; python_version >= '3.8'",
+    "ruff>=0.12.0; python_version >= '3.8'",
+    "pylint; python_version >= '3.8'",
+    # testing tools
+    "pytest; python_version >= '3.8'",
+    "pytest-cov; python_version >= '3.8'",
+    "pytest-xdist>=3.5.0; python_version >= '3.8'",
+    "pytest-randomly>=3.15.0; python_version >= '3.8'",
+    "pytest-sugar>=0.9.7; python_version >= '3.8'",
+    "pytest-mock; python_version >= '3.8'",
+    "pytest-unused-fixtures; python_version >= '3.10'",
+    "hypothesis[cli]; python_version >= '3.8'",
+    "detect-test-pollution",
+    # docs
+    "interrogate>=1.5.0; python_version >= '3.8'",
+    "pydoctest==0.2.1; python_version >= '3.8'",
+    "pdoc3>=0.5.0; python_version >= '3.8'",
+    "mdformat>=0.5.0; python_version >= '3.8'",
+    "linkcheckmd>=1.4.0; python_version >= '3.8'",
+    "codespell>=2.2.6; python_version >= '3.8'",
+    "pyenchant>=3.2.2; python_version >= '3.8'",
+]
+
+[project.scripts]
+jiggle_version = "jiggle_version.__main__:main"
+
+[build-system]
+requires = ["hatchling>=1.8.0"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+path = "jiggle_version/_version.py"
+
+#[tool.hatch.build.targets.wheel.hooks.mypyc]
+#enable-by-default = true
+#dependencies = [
+#  "hatch-mypyc>=0.13.0",
+#  "mypy",
+#  # Required stubs to be removed when the packages support PEP 561 themselves
+#  # "types-typed-ast>=1.4.2",
+#]
+require-runtime-dependencies = true
+exclude = [
+    # There's no good reason for blackd to be compiled.
+    # "/src/blackd",
+    # Not performance sensitive, so save bytes + compilation time:
+    # "/src/blib2to3/__init__.py",
+    # Breaks the test suite when compiled (and is also useless):
+    # "/src/black/debug.py",
+    # Compiled modules can't be run directly and that's a problem here:
+    "/jiggle_version/__main__.py",
+    # Messes with docopts
+    "/jiggle_version/main.py",
+]
+options = { debug_level = "0" }
+
+
+
+[tool.setuptools]
+find = { }
+#py-modules = ["jiggle_version",
+#    "jiggle_version.commands",
+#    "jiggle_version.file_makers",
+#]
+
+[tool.black]
+line-length = 88
+target-version = ['py37']
+include = '\.pyi?$'
+exclude = '''
+
+(
+  /(
+      \.eggs         # exclude a few common directories in the
+    | \.git          # root of the project
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+  )/
+  | foo.py           # also separately exclude a file named foo.py in
+                     # the root of the project
+)
+'''
+#[build-system]
+#requires = ["poetry>=0.12"]
+#build-backend = "poetry.masonry.api"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = [
+    "tests",
+]
+junit_family = "xunit1"
+norecursedirs = ["vendor", "scripts"]
+# don't know how to do this in toml
+#addopts = "--strict-markers"
+#markers =
+#	slow: marks tests as slow (deselect with '-m "not slow"')
+#	fast: marks tests as fast (deselect with '-m "not fast"')
+
+
+[tool.isort]
+default_section = "THIRDPARTY"
+force_grid_wrap = 0
+include_trailing_comma = true
+known_first_party = ["pydoc_fork"]
+line_length = 88
+multi_line_output = 3
+use_parentheses = true
+
+[tool.pydoc_fork]
+PREFER_INTERNET_DOCUMENTATION = false
+DOCUMENT_INTERNALS = false
+SKIP_MODULES = ["typing"]
+ONLY_NAMED_AND_SUBS = false
+
+[tool.portray]
+output_dir = "doc/docs_portray"
+
+
+line-length = 1000
+
+# Enable Pyflakes `E` and `F` codes by default.
+lint.select = ["E", "F",
+    "D", # docs
+    "UP", # pyupgrade
+    "B", # bugbear
+]
+lint.ignore = [
+    "D402",
+    "D301", # messes with doctests
+    "E722",
+    # only track structural problems with docstrings, not whitespace, nor missing
+    "D200", "D212", "D415", "D411", "D205", "D102", "D103", "D100", "D107", "D101", "D104", "D105",
+    "UP007", "UP038", # Not sure if | is well supported in lowever versions of python
+]
+lint.per-file-ignores = { }
+
+# Allow unused variables when underscore-prefixed.
+lint.dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    "dead_code",
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+]
+
+
+[tool.jiggle_version]
+scheme = "pep440"
+default_increment = "patch"
+ignore = ["test", "sample_projects", "dead_code", "historical"]
