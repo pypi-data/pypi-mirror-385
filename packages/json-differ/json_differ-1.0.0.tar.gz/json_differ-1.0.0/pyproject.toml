@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "json-differ"
+version = "1.0.0"
+authors = [
+  { name="Syed Rakesh Uddin", email="syedrakeshuddin@gmail.com" }
+]
+description = "A minimal, human-readable JSON difference tool."
+readme = "README.md"
+requires-python = ">=3.7"
+license = { text = "MIT" }
+keywords = ["json", "diff", "compare", "cli", "developer-tool"]
+dependencies = []
+
+[project.scripts]
+json-differ = "json_differ.cli:main"
