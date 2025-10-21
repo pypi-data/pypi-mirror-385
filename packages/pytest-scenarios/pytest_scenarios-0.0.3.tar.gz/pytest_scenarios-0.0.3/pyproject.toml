@@ -1,0 +1,52 @@
+[project]
+name = "pytest-scenarios"
+version = "0.0.3"
+description = "Add your description here"
+readme = "README.md"
+authors = [{ name = "Carlos Martin Sanchez", email = "carlosvin@gmail.com" }]
+requires-python = ">=3.14"
+dependencies = []
+
+[build-system]
+requires = ["uv_build>=0.9.3,<0.10.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "poethepoet>=0.37.0",
+    "pymongo>=4.15.3",
+    "pytest>=8.4.2",
+    "pytest-cov>=7.0.0",
+    "ruff>=0.14.1",
+    "syrupy>=5.0.0",
+]
+
+[project.entry-points.pytest11]
+pytest_scenarios = "pytest_scenarios.pytest_fixtures"
+
+[tool.poe.tasks]
+test = "uv run pytest tests"
+test-update = "uv run pytest tests --snapshot-update"
+coverage = "uv run pytest --cov-report html --cov-report xml --cov=src/pytest_scenarios --cov-report=term-missing tests"
+lint = "uv run ruff check"
+format = "uv run ruff check --fix"
+
+[tool.coverage.run]
+source = ["src/pytest_scenarios"]
+omit = ["tests/*", "*/tests/*"]
+branch = true
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "^import ",
+    "^from .* import ",
+]
+show_missing = true
