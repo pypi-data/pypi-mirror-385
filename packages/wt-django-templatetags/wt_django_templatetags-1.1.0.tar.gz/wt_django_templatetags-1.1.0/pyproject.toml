@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools>=77.0.0", "setuptools_scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wt-django-templatetags"
+requires-python = ">=3.9"
+description = "Useful templatetags for Django projects."
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "Framework :: Django :: 4.2",
+    "Framework :: Django :: 5.0",
+    "Framework :: Django :: 5.1",
+    "Framework :: Django :: 5.2",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+    "Topic :: Software Development :: Libraries :: Python Modules"
+]
+license = "MIT"
+dependencies = ["django>=4.2"]
+authors = [{name = "Ian Waldron", email = "maintainers@waldrontech.co"}]
+dynamic = ["version"]
+readme = "README.md"
+keywords = ["django"]
+
+[project.optional-dependencies]
+dev = [
+    "pytest-django",
+    "pytest-cov",
+    "sphinx",
+    "build",
+    "twine",
+]
+# For CICD testing only
+test = [
+    "pytest-django",
+    "pytest-cov"
+]
+
+[project.urls]
+Homepage = "https://github.com/ian-wt/wt-django-templatetags"
+Repository = "https://github.com/ian-wt/wt-django-templatetags"
+Issues = "https://github.com/ian-wt/wt-django-templatetags/issues"
+Documentation = "https://github.com/ian-wt/wt-django-templatetags#readme"
+
+[tool.setuptools_scm]
+version_file = "wt_templatetags/_version.py"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE= "tests.test_settings"
+pythonpath = ["."]

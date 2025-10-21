@@ -1,0 +1,10 @@
+include README.md
+include LICENSE
+include pyproject.toml
+
+recursive-include wt_tools *.py
+
+prune tests
+prune .github
+
+global-exclude *.pyc
