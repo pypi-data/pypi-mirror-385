@@ -1,0 +1,39 @@
+[project]
+name = "parallaxapis-sdk-py"
+version = "1.0.1"
+description = "ParallaxAPIs SDK"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "ParallaxSystems", email = "info@parallaxsystems.io" }]
+keywords = ["perimeterx", "web scraping", "datadome", "crawlers"]
+dependencies = [
+    "httpx[http2]>=0.28.1",
+    "pydantic>=2.12.0"
+]
+
+[project.urls]
+Homepage = "https://www.parallaxsystems.io/join?s=pip"
+Repository = "https://github.com/ParallaxAPIs/parallax-sdk-py"
+
+[build-system]
+requires = ["uv_build>=0.8.19,<0.9.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "src"
+module-root = ""
+
+[tool.uv]
+include = [
+    "src/**/*",
+    "README.md",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
+    "pytest-asyncio>=1.2.0",
+    "pytest-httpserver>=1.1.3",
+    "fastapi>=0.119.0"
+]
