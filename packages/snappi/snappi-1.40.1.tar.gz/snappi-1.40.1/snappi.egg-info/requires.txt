@@ -1,0 +1,27 @@
+PyYAML
+grpcio-tools~=1.70.0
+grpcio~=1.70.0
+requests
+protobuf~=5.29.5
+semantic_version
+urllib3
+
+[ixnetwork]
+snappi_ixnetwork==1.34.0
+
+[telemetry]
+
+[telemetry:python_version >= "3.7"]
+opentelemetry-api==1.17.0
+opentelemetry-sdk
+opentelemetry-exporter-otlp-proto-http
+opentelemetry-exporter-otlp-proto-grpc
+opentelemetry-instrumentation-grpc
+opentelemetry-instrumentation-requests
+
+[testing]
+pytest
+flask
+
+[trex]
+snappi_trex
