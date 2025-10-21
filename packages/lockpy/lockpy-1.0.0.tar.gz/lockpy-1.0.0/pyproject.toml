@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lockpy"
+version = "1.0.0"
+description = "Static typed-style access modifiers and patterns for Python"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [
+  { name="Vibhinn Singhal", email="vibhinnsinghal@gmail.com" }
+]
+keywords = ["python", "decorators", "access control", "singleton", "private"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+requires-python = ">=3.8"
+
+[project.urls]
+"Homepage" = "https://github.com/VibhinnS/lockpy"
+"Bug Tracker" = "https://github.com/VibhinnS/lockpy/issues"
