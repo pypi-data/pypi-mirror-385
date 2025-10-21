@@ -1,0 +1,753 @@
+Metadata-Version: 2.4
+Name: versctrl
+Version: 1.0.1
+Summary: Lightweight version control CLI tool with smart file detection and PyQt6 GUI
+Home-page: https://github.com/ren/versctrl
+Author: REN
+Author-email: REN <totallynotbedlessnoob@gmail.com>
+License: MIT
+Project-URL: Homepage, https://github.com/v7ren/verctrl
+Project-URL: Repository, https://github.com/v7ren/verctrl
+Project-URL: Issues, https://github.com/v7ren/verctrl/issues
+Keywords: version-control,backup,cli,gui,pyqt6
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Version Control
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: PyQt6>=6.0.0
+Requires-Dist: lucide-py>=0.1.0
+Dynamic: author
+Dynamic: home-page
+Dynamic: license-file
+Dynamic: requires-python
+
+
+# versctrll
+
+Lightweight version control CLI tool with smart file detection and PyQt6 GUI
+
+## Overview
+
+versctrll is a simple yet powerful version control tool designed for quick file backups with intelligent file detection. It provides both command-line and GUI interfaces for managing file versions.
+
+## Features
+
+- **Smart File Detection**: Automatically detect files based on various strategies
+- **PyQt6 GUI**: Modern graphical interface for file selection
+- **Gitignore Support**: Respects .gitignore patterns
+- **Multiple Naming Schemes**: Version numbers, timestamps, or simple naming
+- **Automatic Cleanup**: Configurable history retention
+- **Statistics Dashboard**: Track your backups and files
+- **Cross-platform**: Works on Windows, macOS, and Linux
+
+## Installation
+
+### Requirements
+
+- Python 3.7+
+- PyQt6 (optional, for GUI features)
+- lucide-py (optional, for better icons)
+
+### Method 1: Install from PyPI (Recommended)
+
+```bash
+# Install versctrll globally
+pip install versctrll
+
+# With GUI support
+pip install versctrll[gui]
+
+# With all optional features
+pip install versctrll[all]
+```
+
+After installation, `versctrll` will be available globally in your terminal from any directory.
+
+### Method 2: Install from Source
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/versctrll.git
+cd versctrll
+
+# Install in development mode
+pip install -e .
+
+# Or install with optional dependencies
+pip install -e .[all]
+```
+
+### Verify Installation
+
+```bash
+# Check if versctrll is accessible
+versctrll --help
+
+# Check version
+versctrll --version
+```
+
+### Setting Up PATH (If Needed)
+
+If `versctrll` is not recognized after installation, you may need to add Python's Scripts directory to your PATH:
+
+#### Windows
+
+```powershell
+# Find Python Scripts directory
+python -m site --user-site
+
+# Add to PATH (PowerShell - Admin)
+$pythonScripts = python -c "import site; print(site.USER_BASE + '\\Scripts')"
+[Environment]::SetEnvironmentVariable("Path", $env:Path + ";$pythonScripts", "User")
+
+# Restart your terminal
+```
+
+Or manually:
+1. Open "Environment Variables" settings
+2. Edit "Path" under User variables
+3. Add: `C:\Users\YourUsername\AppData\Local\Programs\Python\Python3X\Scripts`
+4. Click OK and restart terminal
+
+#### macOS/Linux
+
+```bash
+# Find Python Scripts directory
+python3 -m site --user-base
+
+# Add to PATH (add to ~/.bashrc, ~/.zshrc, or ~/.bash_profile)
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+
+# Reload shell configuration
+source ~/.bashrc
+
+# For zsh users
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc
+```
+
+#### Verify PATH Setup
+
+```bash
+# Check if versctrll is in PATH
+which versctrll  # macOS/Linux
+where versctrll  # Windows
+
+# Should output something like:
+# /home/username/.local/bin/versctrll
+# or C:\Users\Username\AppData\Local\Programs\Python\Python3X\Scripts\versctrll.exe
+```
+
+### Optional Dependencies
+
+```bash
+# Install GUI support separately
+pip install PyQt6
+
+# Install enhanced icons
+pip install lucide-py
+
+# Install all optional dependencies
+pip install PyQt6 lucide-py
+```
+
+### Upgrading
+
+```bash
+# Upgrade to latest version
+pip install --upgrade versctrll
+
+# Upgrade with all features
+pip install --upgrade versctrll[all]
+```
+
+### Uninstallation
+
+```bash
+pip uninstall versctrll
+```
+
+## Quick Start
+
+### 1. Initialize Configuration
+
+```bash
+# Navigate to your project directory
+cd /path/to/your/project
+
+# Initialize versctrll
+versctrll --init
+```
+
+This creates a `versctrll.json` configuration file in your current directory.
+
+### 2. Select Files
+
+#### Using GUI (Recommended)
+
+```bash
+versctrll --select
+```
+
+This launches a modern file browser with:
+- Tree view of your project
+- Smart detection strategies
+- Search and filter capabilities
+- Visual file type indicators
+
+#### Using Smart Add (CLI)
+
+```bash
+# Add source files (respects .gitignore)
+versctrll --smart-add smart
+
+# Add Python files only
+versctrll --smart-add python
+
+# Add recently modified files
+versctrll --smart-add recent --days 7
+
+# Add web-related files
+versctrll --smart-add web
+
+# Add all non-excluded files
+versctrll --smart-add all
+```
+
+### 3. Create Backup
+
+```bash
+versctrll --new
+```
+
+This creates backups of all tracked files according to your configuration.
+
+### 4. List Backups
+
+```bash
+versctrll --list
+```
+
+Shows all existing backups with size and modification date.
+
+### 5. Restore Backup
+
+```bash
+versctrll --restore filename-v1.txt
+```
+
+Restores a specific backup to its original location.
+
+## Global Usage
+
+Once installed, you can use `versctrll` from anywhere:
+
+```bash
+# Backup your documents
+cd ~/Documents/important-project
+versctrll --init
+versctrll --smart-add smart
+versctrll --new
+
+# Backup your code
+cd ~/Code/my-app
+versctrll --init
+versctrll --select
+versctrll --new
+
+# Use different configs for different projects
+cd ~/project1
+versctrll --config project1.json --new
+
+cd ~/project2
+versctrll --config project2.json --new
+```
+
+## Configuration
+
+The `versctrll.json` file contains:
+
+```json
+{
+  "files": [
+    "src/main.py",
+    "config.yaml",
+    "README.md"
+  ],
+  "backup_dir": ".versctrll_backups",
+  "naming_scheme": "version",
+  "keep_history": 5,
+  "create_new_file": false
+}
+```
+
+### Configuration Options
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `files` | List of files to track | `[]` |
+| `backup_dir` | Directory for backups | `.versctrll_backups` |
+| `naming_scheme` | `version`, `timestamp`, or `simple` | `version` |
+| `keep_history` | Number of backups to keep | `5` |
+| `create_new_file` | Create empty file after backup | `false` |
+
+### Naming Schemes
+
+- **version**: `file-v1.txt`, `file-v2.txt`, `file-v3.txt`
+- **timestamp**: `file-20240101-143022.txt`
+- **simple**: `file-old.txt` (overwrites previous backup)
+
+## Smart Detection Strategies
+
+### smart (Recommended)
+
+Detects source code files while respecting .gitignore patterns. Excludes:
+- Version control directories (.git, .svn)
+- Dependencies (node_modules, venv)
+- Build artifacts (dist, build)
+- IDE files (.idea, .vscode)
+- Binary files
+
+### source
+
+All source code files regardless of .gitignore:
+- Programming languages (.py, .js, .java, .cpp, etc.)
+- Web files (.html, .css, .scss)
+- Configuration (.json, .yaml, .toml)
+- Documentation (.md, .rst, .txt)
+
+### recent
+
+Files modified within specified days:
+
+```bash
+versctrll --smart-add recent --days 7
+```
+
+### python
+
+Python files only (.py)
+
+### web
+
+Web-related files:
+- HTML, CSS, SCSS, SASS, LESS
+- JavaScript, TypeScript
+- Vue, Svelte components
+
+### all
+
+All files except default exclusions
+
+## Command Reference
+
+### Initialize
+
+```bash
+versctrll --init
+```
+
+Creates default configuration file.
+
+### File Selection
+
+```bash
+# GUI selector
+versctrll --select
+
+# Smart add with strategy
+versctrll --smart-add STRATEGY [--days N]
+```
+
+### Backup Operations
+
+```bash
+# Create new backup
+versctrll --new
+
+# List all backups
+versctrll --list
+
+# Restore specific backup
+versctrll --restore FILENAME
+```
+
+### Information
+
+```bash
+# Show statistics
+versctrll --stats
+
+# Show version
+versctrll --version
+
+# Show help
+versctrll --help
+
+# Use custom config file
+versctrll --config path/to/config.json
+```
+
+## Statistics
+
+The `--stats` command shows:
+
+- Number of tracked files
+- Existing vs missing files
+- Total size of tracked files
+- File type distribution
+- Backup count and size
+- Oldest and newest backups
+- Configuration summary
+
+Example output:
+
+```
+============================================================
+Statistics
+============================================================
+
+Tracked Files: 15
+  Existing: 14
+  Missing: 1
+  Total Size: 2.45 MB
+
+  Top File Types:
+    .py: 8
+    .json: 3
+    .md: 2
+    .yaml: 1
+    .txt: 1
+
+Backup Directory: .versctrll_backups
+  Total Backups: 42
+  Total Size: 12.3 MB
+  Oldest: 2024-01-15 10:30:00
+  Newest: 2024-01-20 14:22:15
+
+Configuration:
+  Naming Scheme: version
+  Keep History: 5
+  Create New File: False
+
+============================================================
+```
+
+## Default Exclusions
+
+versctrll automatically excludes:
+
+### Version Control
+- .git, .svn, .hg, .bzr
+
+### Dependencies
+- node_modules, bower_components, vendor
+- venv, .venv, env, .env
+
+### Python
+- __pycache__, *.pyc, *.pyo
+- *.egg-info, dist, build
+
+### IDE
+- .idea, .vscode, .vs
+- *.swp, *.swo, *~
+
+### OS
+- .DS_Store, Thumbs.db, desktop.ini
+
+### Build Artifacts
+- *.o, *.so, *.dll, *.exe
+
+### Temporary
+- tmp, temp, .tmp, .cache
+- *.log, logs
+- *.bak, *.backup, *.old
+
+## Gitignore Support
+
+versctrll respects .gitignore patterns in your project root:
+
+```gitignore
+# Example .gitignore
+node_modules/
+*.log
+.env
+dist/
+```
+
+Files matching these patterns will be excluded from smart detection.
+
+## GUI Features
+
+The PyQt6 GUI provides:
+
+### File Tree
+- Hierarchical view of your project
+- File type icons
+- Size and modification date
+- Checkbox selection
+
+### Smart Detection Panel
+- Strategy selector
+- Days parameter for recent files
+- One-click application
+
+### Search and Filter
+- Real-time search
+- Filter by name or extension
+
+### Bulk Operations
+- Select all / Deselect all
+- Expand all / Collapse all
+
+### Visual Indicators
+- Color-coded file types
+- Size formatting
+- Previously tracked files highlighted
+
+## Use Cases
+
+### Project Development
+
+Track source files while excluding dependencies:
+
+```bash
+cd /path/to/project
+versctrll --init
+versctrll --smart-add smart
+versctrll --new
+```
+
+### Configuration Management
+
+Track config files only:
+
+```bash
+cd /path/to/configs
+versctrll --init
+# Manually edit versctrll.json to add config files
+versctrll --new
+```
+
+### Document Versioning
+
+Track recently modified documents:
+
+```bash
+cd ~/Documents/thesis
+versctrll --init
+versctrll --smart-add recent --days 7
+versctrll --new
+```
+
+### Web Development
+
+Track web project files:
+
+```bash
+cd ~/Sites/my-website
+versctrll --init
+versctrll --smart-add web
+versctrll --new
+```
+
+### Multiple Projects
+
+Manage backups across different projects:
+
+```bash
+# Setup project 1
+cd ~/project1
+versctrll --init
+versctrll --smart-add smart
+versctrll --new
+
+# Setup project 2
+cd ~/project2
+versctrll --init
+versctrll --smart-add python
+versctrll --new
+
+# Later, create backups from anywhere
+cd ~/project1 && versctrll --new
+cd ~/project2 && versctrll --new
+```
+
+## Best Practices
+
+1. **Use Smart Detection**: Start with `--smart-add smart` for most projects
+2. **Review Selection**: Use `--select` GUI to review auto-detected files
+3. **Regular Backups**: Run `versctrll --new` before major changes
+4. **Check Statistics**: Use `--stats` to monitor backup growth
+5. **Adjust History**: Set `keep_history` based on your needs
+6. **Custom Config**: Use `--config` for different project profiles
+7. **Per-Project Setup**: Initialize versctrll in each project directory
+8. **Backup Before Updates**: Create backups before major refactoring
+
+## Troubleshooting
+
+### Command Not Found
+
+If `versctrll` is not recognized:
+
+```bash
+# Check if pip installed it correctly
+pip show versctrll
+
+# Check Python Scripts directory
+python -m site --user-base
+
+# Try running with python -m
+python -m versctrll --help
+```
+
+Then add the Scripts directory to your PATH (see installation section).
+
+### PyQt6 Not Found
+
+```bash
+pip install PyQt6
+```
+
+### Permission Denied
+
+Ensure you have write permissions for:
+- Configuration file location
+- Backup directory
+- Tracked files
+
+On Unix systems:
+```bash
+chmod +x ~/.local/bin/versctrll
+```
+
+### Missing Files Warning
+
+Files listed in config but not found on disk will show warnings. Update config with:
+
+```bash
+versctrll --select
+```
+
+### Large Backup Size
+
+Reduce `keep_history` or exclude large files:
+
+```json
+{
+  "keep_history": 3
+}
+```
+
+### Import Errors
+
+If you get import errors:
+
+```bash
+# Reinstall with all dependencies
+pip uninstall versctrll
+pip install versctrll[all]
+```
+
+## Advanced Usage
+
+### Multiple Configurations
+
+```bash
+# Development config
+versctrll --config dev.json --new
+
+# Production config
+versctrll --config prod.json --new
+
+# Testing config
+versctrll --config test.json --new
+```
+
+### Automation with Scripts
+
+#### Bash Script (Linux/macOS)
+
+```bash
+#!/bin/bash
+# backup-all.sh
+
+projects=(
+  "$HOME/Code/project1"
+  "$HOME/Code/project2"
+  "$HOME/Documents/thesis"
+)
+
+for project in "${projects[@]}"; do
+  echo "Backing up $project..."
+  cd "$project" && versctrll --new
+done
+```
+
+#### PowerShell Script (Windows)
+
+```powershell
+# backup-all.ps1
+
+$projects = @(
+  "$env:USERPROFILE\Code\project1",
+  "$env:USERPROFILE\Code\project2",
+  "$env:USERPROFILE\Documents\thesis"
+)
+
+foreach ($project in $projects) {
+  Write-Host "Backing up $project..."
+  Set-Location $project
+  versctrll --new
+}
+```
+
+### Scheduled Backups
+
+#### Linux/macOS (cron)
+
+```bash
+# Edit crontab
+crontab -e
+
+# Add daily backup at 6 PM
+0 18 * * * cd /path/to/project && /home/user/.local/bin/versctrll --new
+
+# Add hourly backup during work hours
+0 9-17 * * 1-5 cd /path/to/project && /home/user/.local/bin/versctrll --new
+```
+
+#### Windows (Task Scheduler)
+
+1. Open Task Scheduler
+2. Create Basic Task
+3. Set trigger (daily, weekly, etc.)
+4. Action: Start a program
+5. Program: `versctrll`
+6. Arguments: `--new`
+7. Start in: `C:\path\to\project`
+
+## Comparison with Git
+
+| Feature | versctrll | Git |
+|---------|---------|-----|
+| Setup | Single command | Multiple commands |
+| Learning Curve | Minimal | Moderate to steep |
+| File Selection | GUI + Smart detection | Manual staging |
+| Backup Speed | Fast | Fast |
+| History | Configurable limit | Unlimited |
+| Collaboration | No | Yes |
+| Branching | No | Yes |
+| Merge Conflicts | No | Yes |
+| Global Install | Yes | Yes |
+| Best For | Quick backups, solo work | Team projects, complex history |
+
+
+## License
+
+MIT License - See LICENSE file for details
