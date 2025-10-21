@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}{{ name }}{% endblock %}
+
+{% block extra_head %}
+<script src="{{ urls.static_plugins("datasette-acl", "choices-9.0.1.min.js") }}"></script>
+<link rel="stylesheet" href="{{ urls.static_plugins("datasette-acl", "choices-9.0.1.min.css") }}">
+<style>
+.remove-button {
+  background-color: #fff;
+  border: 2px solid #ff4d4d;
+  color: #ff4d4d;
+  padding: 3px 6px;
+  margin-bottom: 0.3em;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.remove-button-margin-left {
+  margin-left: 2em;
+}
+.remove-button:hover {
+  background-color: #ffc4c4;
+  border-color: #ff3333;
+  color: #ff3333;
+}
+.remove-button:active {
+  transform: scale(0.9);
+}
+table.audit {
+  border-collapse: collapse;
+}
+table.audit td {
+  border-top: 1px solid #aaa;
+  border-right: 1px solid #eee;
+  padding: 4px;
+  vertical-align: top;
+}
+</style>
+{% endblock %}
+
+{% block crumbs %}
+
+<p class="crumbs">
+  <a href="{{ urls.path("/") }}">home</a>
+  /
+  <a href="{{ urls.path("/-/acl/groups") }}">groups</a>
+</p>
+
+{% endblock %}
+
+{% block content %}
+<h1>{{ name }} ({{ size }})</h1>
+
+{% if is_deleted %}<p>This group has been deleted.</p>{% endif %}
+
+{% if dynamic_config %}
+<p>This is a <em>dynamic group</em>. You cannot manually edit the users in this group.</p>
+
+<p>Users matching <code>{{ dynamic_config|tojson }}</code> will be automatically added to the group.</p>
+
+{% if members %}
+  <h2>Group members</h2>
+  <ul>
+    {% for member in members %}
+      <li>{{ member }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+{% else %}
+<form action="{{ request.path }}" method="post">
+  <input type="hidden" name="csrftoken" value="{{ csrftoken() }}">
+{% if members %}
+<table>
+  {% for member in members %}
+  <tr>
+    <td>{{ member }}</td><td><button name="remove" value="{{ member }}" class="remove-button remove-button-margin-left">Remove {{ member }}</button></td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+</form>
+{% if not is_deleted %}
+<h2>Add a member</h2>
+
+<form action="{{ request.path }}" method="post" class="core">
+  <input type="hidden" name="csrftoken" value="{{ csrftoken() }}">
+  <label for="id_add" style="flex-shrink: 0;">User ID</label>
+  {% if valid_actors %}
+    <div class="choices" data-type="select-one" tabindex="0" style="flex-grow: 1;">
+      <select id="id_add" name="add" class="select-choice">
+        <option></option>
+        {% for actor_id, actor_display in valid_actors %}
+          {% if actor_id not in members %}<option value="{{ actor_id }}">{{ actor_display }}</option>{% endif %}
+        {% endfor %}
+      </select>
+    </div>
+  {% else %}
+    <input data-1p-ignore placeholder="User ID" style="flex-grow: 1;" id="id_add" name="add">
+  {% endif %}
+</form>
+{% endif %}
+{% endif %}
+
+{% if audit_log %}
+<h2>Audit history</h2>
+<table class="audit">
+  <thead>
+    <tr>
+      <th>Date and time</th>
+      <th>Operation by</th>
+      <th>Operation</th>
+      <th>User</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for entry in audit_log %}
+      <tr>
+        <td>{{ entry.timestamp }}</td>
+        <td>{{ entry.operation_by or '*dynamic*' }}</td>
+        <td>{{ entry.operation }}</td>
+        <td>{{ entry.actor_id or '' }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+{% if not is_deleted and not dynamic_config %}
+  <form action="{{ request.path }}" method="post" style="margin-top: 1em">
+    <input type="hidden" name="csrftoken" value="{{ csrftoken() }}">
+    <p><button name="delete_group" value="1" class="remove-button">Delete this group</button></p>
+  </form>
+{% endif %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const select = document.querySelector('.select-choice');
+  if (!select) {
+    return;
+  }
+  const choices = new Choices(select);
+  select.addEventListener('addItem', (ev) => {
+    ev.target.closest('form').submit()
+  });
+  // Focus on add input if we just added a member
+  if (window.location.hash === '#focus-add') {
+    choices.showDropdown();
+  }
+});
+</script>
+
+{% endblock %}
