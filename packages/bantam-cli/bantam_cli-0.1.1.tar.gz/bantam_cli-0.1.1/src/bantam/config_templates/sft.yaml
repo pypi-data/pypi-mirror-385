@@ -1,0 +1,38 @@
+seed: 1337
+
+training_args:
+  dataset: ../../data/your_sft_dataset.jsonl
+  tokenizer: ../../tokenizers/your_tokenizer
+  out_dir: ../../models/run_sft
+
+  seed: 1337
+  precision: bf16
+
+  optimizer: "adamw"
+  lr: 3.0e-4
+  weight_decay: 0.05
+  beta2: 0.98
+  optim_eps: 1.0e-8
+  grad_clip: 0.8
+  lr_scheduler: cosine
+  min_lr_ratio: 0.05
+
+  batch_size: 1
+  accum_steps: 32
+  epochs: 1
+  warmup_frac: 0.05
+  log_every_n: 10
+  steps_per_epoch: 100000
+
+  use_gradient_checkpoint: false
+  num_workers: 2
+  pin_memory: true
+  persistent_workers: true
+
+  sft_mode: lora
+  lora_r: 64
+  lora_alpha: 96
+  lora_dropout: 0.05
+  include_agent_end: true
+  include_eos: false
+  mask_user_queries: true

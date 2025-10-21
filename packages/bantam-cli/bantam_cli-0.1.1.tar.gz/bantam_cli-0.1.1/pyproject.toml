@@ -1,0 +1,36 @@
+[project]
+name = "bantam-cli"
+version = "0.1.1"
+description = "Bantam language model core"
+authors = [{ name = "Theoistic", email = "theo@theoistic.com" }]
+readme = { file = "README_PYPI.md", content-type = "text/markdown" }
+requires-python = ">=3.8"
+dependencies = [
+    "torch>=2.1.0",
+    "transformers>=4.40.0",
+    "datasets>=2.16.0",
+    "peft>=0.11.0",
+    "numpy>=1.24.0",
+    "matplotlib>=3.8.0",
+    "tqdm>=4.65.0",
+    "PyYAML>=6.0",
+    "typer>=0.9.0",
+]
+
+# This makes the CLI available globally after install
+[project.scripts]
+bantam-cli = "bantam.__main__:app"
+
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"bantam.config_templates" = ["*.yaml"]

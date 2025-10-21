@@ -1,0 +1,158 @@
+# Bantam ~270M Parameter Configuration (STRICT 2.7x–3.2x of hidden_size)
+# hidden_size = 768 → allowed intermediate_size range = [768*2.7, 768*3.2] = [2073.6, 2457.6]
+# Using convenient values within this band: {2112, 2176, 2240, 2304, 2368, 2400, 2432}
+# (MoE layers' moe_intermediate_size are matched to the layer's intermediate_size.)
+#
+# IMPORTANT: Your windows, head groups, and MoE placements are kept EXACTLY as provided.
+
+bantam_config:
+  model_type: bantam
+  vocab_size: 32000
+  hidden_size: 768
+  intermediate_size: 2304            # global default; all per-layer overrides below stay in-range
+  num_hidden_layers: 20
+  num_attention_heads: 9
+  num_key_value_heads: 3
+  max_position_embeddings: 2048
+
+  # Global mixed-head defaults (unchanged)
+  attention_head_groups:
+    - { query_heads: 3, kv_heads: 1, head_dim: 128 }  # 3×128 = 384
+    - { query_heads: 6, kv_heads: 2, head_dim: 64 }   # 6×64  = 384  → total 768
+
+  tie_word_embeddings: true
+  rms_norm_eps: 1.0e-6
+  attention_bias: false
+  attention_dropout: 0.0
+  mlp_dropout: 0.0
+  residual_dropout: 0.0
+  initializer_range: 0.02
+  qk_norm: true
+  qk_norm_eps: 1.0e-6
+
+  rope_theta: 10000
+  rope_scaling: null
+  scaled_embeddings: false
+  attn_logit_softcapping: 0.0
+  final_logit_softcapping: 0.0
+
+  # Global sink settings (unchanged)
+  num_attention_sinks: 4
+  sink_boost: 0.25
+
+  layer_configs:
+    # ==== Early Stack: many small 64-dim heads (local) ====
+    - window: 128
+      intermediate_size: 2304
+      num_attention_heads: 12
+      num_key_value_heads: 3
+      attention_head_groups:
+        - { query_heads: 12, kv_heads: 3, head_dim: 64 }
+
+    - window: 128
+      intermediate_size: 2304
+      num_attention_heads: 12
+      num_key_value_heads: 3
+      attention_head_groups:
+        - { query_heads: 12, kv_heads: 3, head_dim: 64 }
+
+    - window: 128
+      intermediate_size: 2368
+      num_attention_heads: 12
+      num_key_value_heads: 3
+      attention_head_groups:
+        - { query_heads: 12, kv_heads: 3, head_dim: 64 }
+
+    - window: null
+      intermediate_size: 2400
+      num_attention_heads: 12
+      num_key_value_heads: 3
+      attention_head_groups:
+        - { query_heads: 12, kv_heads: 3, head_dim: 64 }
+
+    # ==== Transition Stack: medium heads (80/96-dim) ====
+    - window: 256
+      intermediate_size: 2432
+      expert_type: "topk"
+      num_experts: 6
+      moe_top_k: 2
+      moe_intermediate_size: 2432
+      moe_capacity_factor: 1.05
+      moe_aux_loss_weight: 0.01
+      moe_router_jitter: 0.05
+      moe_drop_policy: "random"
+      num_attention_heads: 9
+      num_key_value_heads: 3
+      attention_head_groups:
+        - { query_heads: 6, kv_heads: 2, head_dim: 80 }
+        - { query_heads: 3, kv_heads: 1, head_dim: 96 }
+
+    - window: 256
+      intermediate_size: 2368
+      num_attention_heads: 9
+      num_key_value_heads: 3
+      attention_head_groups:
+        - { query_heads: 6, kv_heads: 2, head_dim: 80 }
+        - { query_heads: 3, kv_heads: 1, head_dim: 96 }
+
+    - window: 256
+      intermediate_size: 2432
+      num_attention_heads: 9
+      num_key_value_heads: 3
+      attention_head_groups:
+        - { query_heads: 6, kv_heads: 2, head_dim: 80 }
+        - { query_heads: 3, kv_heads: 1, head_dim: 96 }
+
+    - window: null
+      intermediate_size: 2368
+      num_attention_heads: 9
+      num_key_value_heads: 3
+      attention_head_groups:
+        - { query_heads: 6, kv_heads: 2, head_dim: 80 }
+        - { query_heads: 3, kv_heads: 1, head_dim: 96 }
+
+    # ==== Core Stack: mixed larger heads (inherits global groups) ====
+    - window: 256
+      intermediate_size: 2304
+    - window: 256
+      intermediate_size: 2368
+    - window: 256
+      intermediate_size: 2400
+    - window: 256
+      intermediate_size: 2432
+    - window: null
+      intermediate_size: 2432
+
+    - window: 512
+      intermediate_size: 2400
+    - window: 512
+      intermediate_size: 2432
+    - window: 512
+      intermediate_size: 2432
+
+    - window: 512
+      intermediate_size: 2432
+      expert_type: "topk"
+      num_experts: 8
+      moe_top_k: 2
+      moe_intermediate_size: 2432
+      moe_capacity_factor: 1.10
+      moe_aux_loss_weight: 0.01
+      moe_router_jitter: 0.05
+      moe_drop_policy: "random"
+
+    - window: null
+      intermediate_size: 2432
+      expert_type: "topk"
+      num_experts: 8
+      moe_top_k: 2
+      moe_intermediate_size: 2432
+      moe_capacity_factor: 1.10
+      moe_aux_loss_weight: 0.01
+      moe_router_jitter: 0.05
+      moe_drop_policy: "random"
+
+    - window: 512
+      intermediate_size: 2368
+    - window: null
+      intermediate_size: 2400
