@@ -1,0 +1,74 @@
+Metadata-Version: 2.1
+Name: ctyunsdk_elb20220909
+Version: 1.0.0
+Summary: CTYun ELB (2022-09-09) SDK Library for Python
+Home-page: https://github.com/ctyunsdk/ctyun-python-sdk.git
+Author: Ctyun Cloud SDK
+Author-email: ctyunsdk@chinatelecom.cn
+License: UNKNOWN
+Description: 
+        =================
+         CTyun OpenAPI SDK for Python
+        =================
+        Setup
+        -----
+        
+        First, you need to create a virtual environment and activate it.
+        
+        ::
+        
+          $ pip install virtualenv
+          $ virtualenv .venv
+          $ . .venv/bin/activate
+          (.venv)$
+        
+        For Windows users:
+        
+        ::
+        
+          $ python -m pip install virtualenv
+          $ python -m virtualenv .venv
+          $ . .venv/Scripts/activate
+          (.venv)$
+        
+        Next, install ``pytest libs`` in the environment.
+        
+        ::
+          (.venv)$ python -m pip install -r requirements.txt
+          (.venv)$ python -m pip setuptools
+          (.venv)$ python setup.py install
+        
+        Or build wheel and then install with pip
+        
+        ::
+          (.venv)$ python -m pip install build
+          (.venv)$ python -m build -n
+          (.venv)$ python -m pip install --force-reinstall dist/ctyunsdk_elb20220909-1.0.0-*.whl
+        
+        Usage
+        -----
+        
+        To see a list of commands available, run::
+        
+          (.venv)$ python ctyunsdk_elb20220909/tests/xxx.py
+        
+        Cleaning Up
+        -----------
+        
+        Finally, when done, deactivate your virtual environment::
+        
+        ::
+          (.venv)$ deactivate
+          $
+        
+Keywords: ctyunsdk,elb20220909
+Platform: any
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
