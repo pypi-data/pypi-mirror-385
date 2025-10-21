@@ -1,0 +1,182 @@
+Metadata-Version: 2.4
+Name: freeplay-python-langgraph
+Version: 0.1.2
+Summary: Freeplay integration for LangGraph and LangChain
+Author-email: Nico Tonozzi <nico@freeplay.ai>
+Requires-Python: >=3.9
+Requires-Dist: freeplay>=0.1.0
+Requires-Dist: langchain-community>=0.3.0
+Requires-Dist: langchain-core>=0.3.0
+Requires-Dist: langgraph>=0.2.0
+Requires-Dist: openinference-instrumentation-langchain>=0.1.0
+Requires-Dist: opentelemetry-exporter-otlp-proto-http>=1.35.0
+Requires-Dist: opentelemetry-sdk>=1.35.0
+Description-Content-Type: text/markdown
+
+# Freeplay Python LangGraph
+
+Freeplay integration for LangGraph and LangChain, providing observability and prompt management for your AI applications.
+
+## Installation
+
+```bash
+pip install freeplay-python-langgraph
+```
+
+## Features
+
+- **🔍 Automatic Observability**: OpenTelemetry instrumentation for LangChain and LangGraph applications
+- **📝 Prompt Management**: Call Freeplay-hosted prompts with version control and environment management
+- **🤖 Auto-Model Instantiation**: Automatically create LangChain models based on Freeplay's configuration
+- **💬 Conversation History**: Native support for multi-turn conversations with LangGraph MessagesState
+- **🛠️ Tool Support**: Seamless integration with LangChain tools
+- **🧪 Test Execution Tracking**: Track test runs and test cases for evaluation workflows
+- **🎯 Multi-Provider Support**: Works with OpenAI, Anthropic, Vertex AI, and more
+
+## Quick Start
+
+### Configuration
+
+Set up your environment variables:
+
+```bash
+export FREEPLAY_API_URL="https://app.freeplay.ai/api"
+export FREEPLAY_API_KEY="fp-..."
+export FREEPLAY_PROJECT_ID="..."
+```
+
+Or pass them directly when initializing:
+
+```python
+from freeplay_python_langgraph import FreeplayLangGraph
+
+freeplay = FreeplayLangGraph(
+    freeplay_api_url="https://api.freeplay.ai",
+    freeplay_api_key="fp_...",
+    project_id="proj_...",
+)
+```
+
+## Usage
+
+### Prompt Management with Auto-Model Instantiation
+
+Call a Freeplay-hosted prompt and let the SDK automatically instantiate the correct model:
+
+```python
+from freeplay_python_langgraph import FreeplayLangGraph
+
+freeplay = FreeplayLangGraph()
+
+# Invoke a prompt - model is automatically created based on Freeplay's config
+response = freeplay.invoke(
+    prompt_name="weather-assistant",
+    variables={"city": "San Francisco"},
+    environment="production"
+)
+
+```
+
+### Using Custom Models
+
+You can also provide your own pre-configured model:
+
+```python
+from langchain_openai import ChatOpenAI
+from freeplay_python_langgraph import FreeplayLangGraph
+
+freeplay = FreeplayLangGraph()
+model = ChatOpenAI(model="gpt-4", temperature=0.7)
+
+response = freeplay.invoke(
+    prompt_name="weather-assistant",
+    variables={"city": "New York"},
+    model=model
+)
+```
+
+### Conversation History (Multi-turn Chat)
+
+Maintain conversation context with history:
+
+```python
+from langchain_core.messages import HumanMessage, AIMessage
+from freeplay_python_langgraph import FreeplayLangGraph
+
+freeplay = FreeplayLangGraph()
+
+# Build conversation history
+history = [
+    HumanMessage(content="What's the weather in Paris?"),
+    AIMessage(content="It's sunny and 22°C in Paris."),
+    HumanMessage(content="What about in winter?")
+]
+
+response = freeplay.invoke(
+    prompt_name="weather-assistant",
+    variables={"city": "Paris"},
+    history=history
+)
+```
+
+### Tool Calling
+
+Bind LangChain tools to your prompts:
+
+```python
+from langchain_core.tools import tool
+from freeplay_python_langgraph import FreeplayLangGraph
+
+@tool
+def get_weather(city: str) -> str:
+    """Get the current weather for a city."""
+    # Your weather API logic here
+    return f"Weather in {city}: Sunny, 22°C"
+
+freeplay = FreeplayLangGraph()
+
+response = freeplay.invoke(
+    prompt_name="weather-assistant",
+    variables={"city": "London"},
+    tools=[get_weather]
+)
+```
+
+### Test Execution Tracking
+
+Track test runs for evaluation workflows:
+
+```python
+from freeplay_python_langgraph import FreeplayLangGraph
+
+freeplay = FreeplayLangGraph()
+
+response = freeplay.invoke(
+    prompt_name="my-prompt",
+    variables={"input": "test input"},
+    test_run_id="test_run_123",
+    test_case_id="test_case_456"
+)
+```
+
+## Observability
+
+The SDK automatically instruments your LangChain and LangGraph applications with OpenTelemetry. All traces are sent to Freeplay.
+
+## Provider Support
+
+The SDK supports automatic model instantiation for the following providers:
+
+- **OpenAI**: Requires `langchain-openai` package
+- **Anthropic**: Requires `langchain-anthropic` package
+- **Vertex AI**: Requires `langchain-google-vertexai` package
+
+Install the required provider package:
+
+```bash
+pip install langchain-openai
+# or
+pip install langchain-anthropic
+# or
+pip install langchain-google-vertexai
+```
