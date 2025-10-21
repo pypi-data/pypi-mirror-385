@@ -1,0 +1,1104 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "Les API structures permettent aux fournisseurs et aux destinataires de récupérer les informations relatives aux structures et à leurs services : \n  \n - Afficher les informations relatives à une structure renseignée en entrée  \n - Consulter les informations relatives au service d'une structure renseignée en entrée  \n - Consulter un service  \n   \n \n A titre d'exemple, voici une cinématique nominale pour avoir des informations sur une structure et ses services:\n  \n &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  1- Faire appel à l'API \"RechercherStructure\" afin de retrouver des structures avec quelques informations en sortie notamment \"idStructureCPP\n \n &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  2- Faire appel à l'API \"ConsulterStructure\" avec en entrée l'idStructureCPP pour avoir les paramètres obligatoires de la structure (numéro d'engagement et/ou code service)\n\n &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  3- Faire appel à l'API \"rechercherServicesStructure\" avec \"idStructure\" en entrée de la requête afin de visualiser les services actifs de la structure renseignée \n \n &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  4- Faire appel à l'API consulterServiceStructure avec idService en entrée de la requête afin de consulter les paramètres obligatoires du service.\n    \n  Pour pouvoir utiliser l'application SANDBOX avec des données de Chorus Pro en qualification, les prérequis sont les suivants: \n \n  \n - Créer un compte utilisateur sur l'environnement de qualification Chorus Pro : \n    https://chorus-pro.gouv.fr/qualif \n \n  \n - Générer un matelas de données, pour plus d'informations, un guide en ligne est disponible sur la communauté Chorus Pro :\n    https://communaute.chorus-pro.gouv.fr/documentation/portail-de-qualification-sur-chorus-pro \n \n  \n - Créer un raccordement Oauth2 sur l'environnement de qualification Chorus Pro, pour plus d'informations, vous pourrez vous référer à la page suivante :\n    https://communaute.chorus-pro.gouv.fr/documentation/aides-aux-developpeurs-api-en-mode-oauth2/",
+    "version" : "1.0.0",
+    "title" : "Structures"
+  },
+  "host" : "sandbox-api.piste.gouv.fr",
+  "basePath" : "/cpro/structures",
+  "schemes" : [ "https", "http" ],
+  "security" : [ {
+    "SecurityProfile.OAuthApplication" : [ "openid" ]
+  }, {
+    "SecurityProfile.OAuth External OIDCApplication" : [ "openid profile" ]
+  } ],
+  "paths" : {
+    "/v1/rechercher" : {
+      "post" : {
+        "tags" : [ "structures" ],
+        "summary" : "La méthode rechercherStructure permet à un gestionnaire de rechercher des structures.",
+        "description" : "La méthode rechercherStructure permet à un gestionnaire de rechercher des structures.",
+        "operationId" : "rechercherStructure",
+        "consumes" : [ "application/json;charset=utf-8" ],
+        "produces" : [ "application/json;charset=utf-8" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/RechercherStructureParam"
+          }
+        }, {
+          "name" : "cpro-account",
+          "in" : "header",
+          "description" : "Identifiant compte CPRO sous la forme 'login:password' encodé en base 64.\nExemple : 'bG9naW46cGFzc3dvcmQ='",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succès de la requête",
+            "schema" : {
+              "$ref" : "#/definitions/WsRetourRechercherStructure"
+            }
+          },
+          "202" : {
+            "description" : "Requête acceptée"
+          },
+          "400" : {
+            "description" : "Requête mal formulée"
+          },
+          "401" : {
+            "description" : "Problème d'authentification"
+          },
+          "500" : {
+            "description" : "Erreur interne du serveur"
+          },
+          "403" : {
+            "description" : "Accès refusé"
+          },
+          "404" : {
+            "description" : "API non trouvée"
+          },
+          "415" : {
+            "description" : "Format de la requête non supporté"
+          }
+        }
+      }
+    },
+    "/v1/consulter/service" : {
+      "post" : {
+        "tags" : [ "structures" ],
+        "summary" : "La méthode consulterServiceStructure permet de consulter :\n- les informations relatives à un service auquel l'utilisateur est rattaché\n- les informations relatives à un service d'une structure publique.",
+        "description" : "La méthode consulterServiceStructure permet de consulter :\\n- les informations relatives à un service auquel l'utilisateur est rattaché\\n- les informations relatives à un service d'une structure publique.",
+        "operationId" : "consulterServiceStructure",
+        "consumes" : [ "application/json;charset=utf-8" ],
+        "produces" : [ "application/json;charset=utf-8" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/ConsulterServiceStructureParam"
+          }
+        }, {
+          "name" : "cpro-account",
+          "in" : "header",
+          "description" : "Identifiant compte CPRO sous la forme 'login:password' encodé en base 64.\nExemple : 'bG9naW46cGFzc3dvcmQ='",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succès de la requête",
+            "schema" : {
+              "$ref" : "#/definitions/WsRetourConsulterServiceStructure"
+            }
+          },
+          "202" : {
+            "description" : "Requête acceptée"
+          },
+          "400" : {
+            "description" : "Requête mal formulée"
+          },
+          "401" : {
+            "description" : "Problème d'authentification"
+          },
+          "500" : {
+            "description" : "Erreur interne du serveur"
+          },
+          "403" : {
+            "description" : "Accès refusé"
+          },
+          "404" : {
+            "description" : "API non trouvée"
+          },
+          "415" : {
+            "description" : "Format de la requête non supporté"
+          }
+        }
+      }
+    },
+    "/v1/lister/rattachementsutilisateur" : {
+      "post" : {
+        "tags" : [ "structures" ],
+        "summary" : "La méthode ListerRattachementsStructureUtilisateur récupère les informations nécessaires au formulaire de traitement des demandes de rattachement pour un utilisateur et une structure.",
+        "description" : "La méthode ListerRattachementsStructureUtilisateur récupère les informations nécessaires au formulaire de traitement des demandes de rattachement pour un utilisateur et une structure.",
+        "operationId" : "listerRattachementsStructureUtilisateur",
+        "consumes" : [ "application/json;charset=utf-8" ],
+        "produces" : [ "application/json;charset=utf-8" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/ListerRattachementsStructureUtilisateurParam"
+          }
+        }, {
+          "name" : "cpro-account",
+          "in" : "header",
+          "description" : "Identifiant compte CPRO sous la forme 'login:password' encodé en base 64.\nExemple : 'bG9naW46cGFzc3dvcmQ='",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succès de la requête",
+            "schema" : {
+              "$ref" : "#/definitions/WsRetourListerRattachementsStructureUtilisateur"
+            }
+          },
+          "202" : {
+            "description" : "Requête acceptée"
+          },
+          "400" : {
+            "description" : "Requête mal formulée"
+          },
+          "401" : {
+            "description" : "Problème d'authentification"
+          },
+          "500" : {
+            "description" : "Erreur interne du serveur"
+          },
+          "403" : {
+            "description" : "Accès refusé"
+          },
+          "404" : {
+            "description" : "API non trouvée"
+          },
+          "415" : {
+            "description" : "Format de la requête non supporté"
+          }
+        }
+      }
+    },
+    "/v1/rechercher/services" : {
+      "post" : {
+        "tags" : [ "structures" ],
+        "summary" : "La méthode rechercherServicesStructure permet de rechercher les services appartenant à une structure publique ou à une structure à laquelle l'utilisateur est rattaché.",
+        "description" : "La méthode rechercherServicesStructure permet de rechercher les services appartenant à une structure publique ou à une structure à laquelle l'utilisateur est rattaché.",
+        "operationId" : "rechercherServicesStructure",
+        "consumes" : [ "application/json;charset=utf-8" ],
+        "produces" : [ "application/json;charset=utf-8" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/RechercherServicesStructureParam"
+          }
+        }, {
+          "name" : "cpro-account",
+          "in" : "header",
+          "description" : "Identifiant compte CPRO sous la forme 'login:password' encodé en base 64.\nExemple : 'bG9naW46cGFzc3dvcmQ='",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succès de la requête",
+            "schema" : {
+              "$ref" : "#/definitions/WsRetourRechercherServicesStructure"
+            }
+          },
+          "202" : {
+            "description" : "Requête acceptée"
+          },
+          "400" : {
+            "description" : "Requête mal formulée"
+          },
+          "401" : {
+            "description" : "Problème d'authentification"
+          },
+          "500" : {
+            "description" : "Erreur interne du serveur"
+          },
+          "403" : {
+            "description" : "Accès refusé"
+          },
+          "404" : {
+            "description" : "API non trouvée"
+          },
+          "415" : {
+            "description" : "Format de la requête non supporté"
+          }
+        }
+      }
+    },
+    "/v1/rechercher/espaces" : {
+      "post" : {
+        "tags" : [ "structures" ],
+        "summary" : "La méthode rechercherEspaces permet de retourner la liste des espaces définis sur une structure ou sur un service d'une structure.",
+        "description" : "La méthode rechercherEspaces permet de retourner la liste des espaces définis sur une structure ou sur un service d'une structure.",
+        "operationId" : "rechercherEspaces",
+        "consumes" : [ "application/json;charset=utf-8" ],
+        "produces" : [ "application/json;charset=utf-8" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/RechercherEspacesParam"
+          }
+        }, {
+          "name" : "cpro-account",
+          "in" : "header",
+          "description" : "Identifiant compte CPRO sous la forme 'login:password' encodé en base 64.\nExemple : 'bG9naW46cGFzc3dvcmQ='",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "deprecated" : true,
+        "responses" : {
+          "200" : {
+            "description" : "Succès de la requête",
+            "schema" : {
+              "$ref" : "#/definitions/WsRetourRechercherEspacesFo"
+            }
+          },
+          "202" : {
+            "description" : "Requête acceptée"
+          },
+          "400" : {
+            "description" : "Requête mal formulée"
+          },
+          "401" : {
+            "description" : "Problème d'authentification"
+          },
+          "500" : {
+            "description" : "Erreur interne du serveur"
+          },
+          "403" : {
+            "description" : "Accès refusé"
+          },
+          "404" : {
+            "description" : "API non trouvée"
+          },
+          "415" : {
+            "description" : "Format de la requête non supporté"
+          }
+        }
+      }
+    },
+    "/v1/consulter" : {
+      "post" : {
+        "tags" : [ "structures" ],
+        "summary" : "La méthode consulterStructure permet de consulter les informations relatives à une structure à laquelle l'utilisateur est rattaché ou une structure publique.",
+        "description" : "La méthode consulterStructure permet de consulter les informations relatives à une structure à laquelle l'utilisateur est rattaché ou une structure publique.",
+        "operationId" : "consulterStructureAvecTVAIntraCom",
+        "consumes" : [ "application/json;charset=utf-8" ],
+        "produces" : [ "application/json;charset=utf-8" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/ConsulterStructureAvecTVAIntraComParam"
+          }
+        }, {
+          "name" : "cpro-account",
+          "in" : "header",
+          "description" : "Identifiant compte CPRO sous la forme 'login:password' encodé en base 64.\nExemple : 'bG9naW46cGFzc3dvcmQ='",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succès de la requête",
+            "schema" : {
+              "$ref" : "#/definitions/WsRetourConsulterStructureTVAIntraCom"
+            }
+          },
+          "202" : {
+            "description" : "Requête acceptée"
+          },
+          "400" : {
+            "description" : "Requête mal formulée"
+          },
+          "401" : {
+            "description" : "Problème d'authentification"
+          },
+          "500" : {
+            "description" : "Erreur interne du serveur"
+          },
+          "403" : {
+            "description" : "Accès refusé"
+          },
+          "404" : {
+            "description" : "API non trouvée"
+          },
+          "415" : {
+            "description" : "Format de la requête non supporté"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions" : {
+    "SecurityProfile.OAuthApplication" : {
+      "description" : "OAuth",
+      "type" : "oauth2",
+      "tokenUrl" : "https://sandbox-oauth.piste.gouv.fr/api/oauth/token",
+      "flow" : "application",
+      "scopes" : {
+        "openid" : ""
+      }
+    },
+    "SecurityProfile.OAuth External OIDCApplication" : {
+      "description" : "OAuth External OIDC",
+      "type" : "oauth2",
+      "tokenUrl" : "https://sandbox-oauth.piste.gouv.fr/api/oauth/token",
+      "flow" : "application",
+      "scopes" : {
+        "openid profile" : ""
+      }
+    }
+  },
+  "definitions" : {
+    "WsRetourListerRattachementsStructureUtilisateur" : {
+      "type" : "object",
+      "required" : [ "codeRetour", "libelle" ],
+      "properties" : {
+        "codeRetour" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 0,
+          "description" : "Le code retour de la réponse associée au libellé"
+        },
+        "designationStructure" : {
+          "type" : "string"
+        },
+        "idStructure" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "identifiantStructure" : {
+          "type" : "string"
+        },
+        "libelle" : {
+          "type" : "string",
+          "example" : "TRA_MSG_00.000",
+          "description" : "Le libellé lié au codeRetour (si une erreur est retournée alors son libellé sera retourné)"
+        },
+        "listeServices" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/ServiceOutputListerRattachementsStructureUtilisateur"
+          }
+        },
+        "parametresRetour" : {
+          "$ref" : "#/definitions/ParametresRetour"
+        },
+        "premierService" : {
+          "type" : "boolean"
+        }
+      }
+    },
+    "WsRetourRechercherStructure" : {
+      "type" : "object",
+      "required" : [ "codeRetour", "libelle" ],
+      "properties" : {
+        "codeRetour" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 0,
+          "description" : "Le code retour de la réponse associée au libellé"
+        },
+        "libelle" : {
+          "type" : "string",
+          "example" : "TRA_MSG_00.000",
+          "description" : "Le libellé lié au codeRetour (si une erreur est retournée alors son libellé sera retourné)"
+        },
+        "listeStructures" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/StructureAAfficher"
+          }
+        },
+        "parametresRetour" : {
+          "$ref" : "#/definitions/ParametresRetour"
+        }
+      }
+    },
+    "ParametresRechercherEspacesFo" : {
+      "type" : "object",
+      "properties" : {
+        "nbResultatsParPage" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "pageResultatDemandee" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "triColonne" : {
+          "type" : "string",
+          "enum" : [ "CodeService", "LibelleService", "idEspaceFo", "CodeEspace", "LibelleEspace", "etatCourant", "TypeHabilitation", "IdService" ]
+        },
+        "triSens" : {
+          "type" : "string",
+          "enum" : [ "Descendant", "Ascendant" ]
+        }
+      }
+    },
+    "RechercherStructureInput" : {
+      "type" : "object",
+      "properties" : {
+        "adresseCodePays" : {
+          "type" : "string"
+        },
+        "adresseCodePostal" : {
+          "type" : "string"
+        },
+        "adresseVille" : {
+          "type" : "string"
+        },
+        "estMOA" : {
+          "type" : "boolean"
+        },
+        "estMOAUniquement" : {
+          "type" : "boolean"
+        },
+        "identifiantStructure" : {
+          "type" : "string"
+        },
+        "libelleStructure" : {
+          "type" : "string"
+        },
+        "nomStructure" : {
+          "type" : "string"
+        },
+        "prenomStructure" : {
+          "type" : "string"
+        },
+        "raisonSocialeStructure" : {
+          "type" : "string"
+        },
+        "statutStructure" : {
+          "type" : "string",
+          "enum" : [ "ACTIF", "INACTIF" ]
+        },
+        "typeIdentifiantStructure" : {
+          "type" : "string",
+          "enum" : [ "SIRET", "UE_HORS_FRANCE", "HORS_UE", "RIDET", "TAHITI", "AUTRE", "PARTICULIER" ]
+        },
+        "typeStructure" : {
+          "type" : "string",
+          "enum" : [ "PRIVEE", "PUBLIQUE" ]
+        }
+      }
+    },
+    "ConsulterServiceStructureParam" : {
+      "type" : "object",
+      "properties" : {
+        "codeLangue" : {
+          "type" : "string"
+        },
+        "idService" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idStructure" : {
+          "type" : "integer",
+          "format" : "int64"
+        }
+      }
+    },
+    "RechercherEspacesParam" : {
+      "type" : "object",
+      "properties" : {
+        "idService" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "parametresRechercherEspaces" : {
+          "$ref" : "#/definitions/ParametresRechercherEspacesFo"
+        },
+        "structure" : {
+          "$ref" : "#/definitions/ParametresStructureRechercherEspacesFo"
+        }
+      }
+    },
+    "ParamModifierServiceInfoGeneral" : {
+      "type" : "object",
+      "properties" : {
+        "codeService" : {
+          "type" : "string"
+        },
+        "descriptionService" : {
+          "type" : "string"
+        },
+        "nomService" : {
+          "type" : "string"
+        }
+      }
+    },
+    "ListerRattachementsStructureUtilisateurParam" : {
+      "type" : "object",
+      "properties" : {
+        "adresseEmailConnexionUtilisateur" : {
+          "type" : "string"
+        },
+        "idStructure" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idUtilisateur" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "identifiantStructure" : {
+          "type" : "string"
+        },
+        "parametresListerRattachementsStructureUtilisateur" : {
+          "$ref" : "#/definitions/ParamListerRattachementsStructureUtilisateur"
+        },
+        "typeIdentifiantStructure" : {
+          "type" : "string",
+          "enum" : [ "SIRET", "UE_HORS_FRANCE", "HORS_UE", "RIDET", "TAHITI", "AUTRE", "PARTICULIER" ]
+        }
+      }
+    },
+    "WsRetourConsulterStructureTVAIntraCom" : {
+      "type" : "object",
+      "required" : [ "codeRetour", "libelle" ],
+      "properties" : {
+        "adressePostaleDuSiege" : {
+          "$ref" : "#/definitions/AdressePostale"
+        },
+        "codeRetour" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 0,
+          "description" : "Le code retour de la réponse associée au libellé"
+        },
+        "informationGenerales" : {
+          "$ref" : "#/definitions/InformationsGeneralesStructureCompleteTVAIntraCom"
+        },
+        "libelle" : {
+          "type" : "string",
+          "example" : "TRA_MSG_00.000",
+          "description" : "Le libellé lié au codeRetour (si une erreur est retournée alors son libellé sera retourné)"
+        },
+        "parametres" : {
+          "$ref" : "#/definitions/ParamModifierStructure"
+        }
+      }
+    },
+    "ParametresRetour" : {
+      "type" : "object",
+      "properties" : {
+        "nbResultatsParPage" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "pageCourante" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "pages" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "total" : {
+          "type" : "integer",
+          "format" : "int32"
+        }
+      }
+    },
+    "StructureAAfficher" : {
+      "type" : "object",
+      "properties" : {
+        "designationStructure" : {
+          "type" : "string"
+        },
+        "idStructureCPP" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "identifiantStructure" : {
+          "type" : "string"
+        },
+        "statut" : {
+          "type" : "string",
+          "enum" : [ "ACTIVE", "INACTIVE" ]
+        },
+        "typeIdentifiantStructure" : {
+          "type" : "string",
+          "enum" : [ "SIRET", "UE_HORS_FRANCE", "HORS_UE", "RIDET", "TAHITI", "AUTRE", "PARTICULIER" ]
+        }
+      }
+    },
+    "ParamListerRattachementsStructureUtilisateur" : {
+      "type" : "object",
+      "properties" : {
+        "nbResultatsParPage" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "pageResultatDemandee" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "triColonne" : {
+          "type" : "string",
+          "enum" : [ "CodeService", "NomService", "StatutRattachement" ]
+        },
+        "triSens" : {
+          "type" : "string",
+          "enum" : [ "Descendant", "Ascendant" ]
+        }
+      }
+    },
+    "ParametresRechercherServicesStructure" : {
+      "type" : "object",
+      "properties" : {
+        "nbResultatsParPage" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "pageResultatDemandee" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "triColonne" : {
+          "type" : "string",
+          "enum" : [ "CodeService", "LibelleService", "DateDbtService", "DateFinService", "EstActif" ]
+        },
+        "triSens" : {
+          "type" : "string",
+          "enum" : [ "Descendant", "Ascendant" ]
+        }
+      }
+    },
+    "ParametresStructureRechercherEspacesFo" : {
+      "type" : "object",
+      "properties" : {
+        "idStructure" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "identifiantStructure" : {
+          "type" : "string"
+        },
+        "typeIdentifiantStructure" : {
+          "type" : "string",
+          "enum" : [ "SIRET", "UE_HORS_FRANCE", "HORS_UE", "RIDET", "TAHITI", "AUTRE", "PARTICULIER" ]
+        }
+      }
+    },
+    "WsRetourRechercherEspacesFo" : {
+      "type" : "object",
+      "required" : [ "codeRetour", "libelle" ],
+      "properties" : {
+        "codeRetour" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 0,
+          "description" : "Le code retour de la réponse associée au libellé"
+        },
+        "libelle" : {
+          "type" : "string",
+          "example" : "TRA_MSG_00.000",
+          "description" : "Le libellé lié au codeRetour (si une erreur est retournée alors son libellé sera retourné)"
+        },
+        "listeEspace" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/WsRetourEspaceFoServiceSxp"
+          }
+        },
+        "parametresRetour" : {
+          "$ref" : "#/definitions/ParametresRetour"
+        }
+      }
+    },
+    "ConsulterStructureAvecTVAIntraComParam" : {
+      "type" : "object",
+      "properties" : {
+        "codeLangue" : {
+          "type" : "string"
+        },
+        "idStructureCPP" : {
+          "type" : "integer",
+          "format" : "int64"
+        }
+      }
+    },
+    "ParametresRechercherStructure" : {
+      "type" : "object",
+      "properties" : {
+        "nbResultatsParPage" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "pageResultatDemandee" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "triColonne" : {
+          "type" : "string",
+          "enum" : [ "IdentifiantStructure", "DesignationStructure", "TypeIdentifiantStructure", "Statut" ]
+        },
+        "triSens" : {
+          "type" : "string",
+          "enum" : [ "Descendant", "Ascendant" ]
+        }
+      }
+    },
+    "AdressePostale" : {
+      "type" : "object",
+      "properties" : {
+        "adresse" : {
+          "type" : "string"
+        },
+        "codePostal" : {
+          "type" : "string"
+        },
+        "complementAdresse1" : {
+          "type" : "string"
+        },
+        "complementAdresse2" : {
+          "type" : "string"
+        },
+        "fax" : {
+          "type" : "string"
+        },
+        "indicatifFax" : {
+          "type" : "string"
+        },
+        "indicatifTelephone" : {
+          "type" : "string"
+        },
+        "pays" : {
+          "type" : "string"
+        },
+        "telephone" : {
+          "type" : "string"
+        },
+        "ville" : {
+          "type" : "string"
+        }
+      }
+    },
+    "WsRetourEspaceFoServiceSxp" : {
+      "type" : "object",
+      "properties" : {
+        "codeEspace" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "codeService" : {
+          "type" : "string"
+        },
+        "etatCourant" : {
+          "type" : "string",
+          "enum" : [ "ACTIVE", "SUPPRIME" ]
+        },
+        "idEspaceFo" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idService" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "libelleEspace" : {
+          "type" : "string"
+        },
+        "libelleService" : {
+          "type" : "string"
+        },
+        "typeHabilitation" : {
+          "type" : "string",
+          "enum" : [ "CONSULTATION_UNIQUEMENT", "MODIFICATION" ]
+        }
+      }
+    },
+    "WsRetourConsulterServiceStructure" : {
+      "type" : "object",
+      "required" : [ "codeRetour", "libelle" ],
+      "properties" : {
+        "adressePostale" : {
+          "$ref" : "#/definitions/AdressePostale"
+        },
+        "codeRetour" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 0,
+          "description" : "Le code retour de la réponse associée au libellé"
+        },
+        "informationsGenerales" : {
+          "$ref" : "#/definitions/ParamModifierServiceInfoGeneral"
+        },
+        "libelle" : {
+          "type" : "string",
+          "example" : "TRA_MSG_00.000",
+          "description" : "Le libellé lié au codeRetour (si une erreur est retournée alors son libellé sera retourné)"
+        },
+        "nbResultatsParPage" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "pageCourante" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "pages" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "parametres" : {
+          "$ref" : "#/definitions/ParamParametre"
+        },
+        "total" : {
+          "type" : "integer",
+          "format" : "int64"
+        }
+      }
+    },
+    "StructureDupliquee" : {
+      "type" : "object",
+      "properties" : {
+        "structureDupliquee" : {
+          "type" : "integer",
+          "format" : "int64"
+        }
+      }
+    },
+    "InformationsGeneralesStructureCompleteTVAIntraCom" : {
+      "type" : "object",
+      "properties" : {
+        "dateExpirationMotPasseCompteTech" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "emailStructure" : {
+          "type" : "string"
+        },
+        "estValideurDeleguee" : {
+          "type" : "boolean"
+        },
+        "idStructureCPP" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idStructureOrigine" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "identifiantStructure" : {
+          "type" : "string"
+        },
+        "libelleStructure" : {
+          "type" : "string"
+        },
+        "listeStructureDupliquees" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/StructureDupliquee"
+          }
+        },
+        "nomStructure" : {
+          "type" : "string"
+        },
+        "numeroRcsStructure" : {
+          "type" : "string"
+        },
+        "numeroTVA" : {
+          "type" : "string"
+        },
+        "prenomStructure" : {
+          "type" : "string"
+        },
+        "raisonSocialeStructure" : {
+          "type" : "string"
+        },
+        "structurePriveePublique" : {
+          "type" : "string",
+          "enum" : [ "PRIVEE", "PUBLIQUE" ]
+        },
+        "typeIdentifiantStructure" : {
+          "type" : "string",
+          "enum" : [ "SIRET", "UE_HORS_FRANCE", "HORS_UE", "RIDET", "TAHITI", "AUTRE", "PARTICULIER" ]
+        }
+      }
+    },
+    "ParamParametre" : {
+      "type" : "object",
+      "properties" : {
+        "dateCreation" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "dateDebutValidite" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "dateFinValidite" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "dateModification" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "miseEnPaiement" : {
+          "type" : "boolean"
+        },
+        "numeroEngagement" : {
+          "type" : "boolean"
+        }
+      }
+    },
+    "RechercherStructureParam" : {
+      "type" : "object",
+      "properties" : {
+        "parametres" : {
+          "$ref" : "#/definitions/ParametresRechercherStructure"
+        },
+        "restreindreStructuresPrivees" : {
+          "type" : "boolean"
+        },
+        "structure" : {
+          "$ref" : "#/definitions/RechercherStructureInput"
+        }
+      }
+    },
+    "WsRetourRechercherServicesStructure" : {
+      "type" : "object",
+      "required" : [ "codeRetour", "libelle" ],
+      "properties" : {
+        "codeRetour" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : 0,
+          "description" : "Le code retour de la réponse associée au libellé"
+        },
+        "libelle" : {
+          "type" : "string",
+          "example" : "TRA_MSG_00.000",
+          "description" : "Le libellé lié au codeRetour (si une erreur est retournée alors son libellé sera retourné)"
+        },
+        "listeServices" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/ServiceExpose"
+          }
+        },
+        "parametresRetour" : {
+          "$ref" : "#/definitions/ParametresRetour"
+        }
+      }
+    },
+    "TriColonne" : {
+      "type" : "object"
+    },
+    "ServiceExpose" : {
+      "type" : "object",
+      "properties" : {
+        "codeService" : {
+          "type" : "string"
+        },
+        "estActif" : {
+          "type" : "boolean"
+        },
+        "idService" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "libelleService" : {
+          "type" : "string"
+        },
+        "statutService" : {
+          "type" : "string"
+        }
+      }
+    },
+    "RechercherServicesStructureParam" : {
+      "type" : "object",
+      "properties" : {
+        "idStructure" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "parametresRechercherServicesStructure" : {
+          "$ref" : "#/definitions/ParametresRechercherServicesStructure"
+        }
+      }
+    },
+    "ParamModifierStructure" : {
+      "type" : "object",
+      "properties" : {
+        "codeServiceDoitEtreRenseigne" : {
+          "type" : "boolean"
+        },
+        "connexionEDI" : {
+          "type" : "boolean"
+        },
+        "estMoaUniquement" : {
+          "type" : "boolean"
+        },
+        "estValideurDelegue" : {
+          "type" : "boolean"
+        },
+        "gestionNumeroEJOuCodeService" : {
+          "type" : "boolean"
+        },
+        "getaMoa" : {
+          "type" : "boolean"
+        },
+        "nonDiffusibleInsee" : {
+          "type" : "boolean"
+        },
+        "numeroEJDoitEtreRenseigne" : {
+          "type" : "boolean"
+        },
+        "recevoirDonneesViaEDI" : {
+          "type" : "boolean"
+        },
+        "statutMiseEnPaiementNestPasRemonte" : {
+          "type" : "boolean"
+        }
+      }
+    },
+    "ServiceOutputListerRattachementsStructureUtilisateur" : {
+      "type" : "object",
+      "properties" : {
+        "codeService" : {
+          "type" : "string"
+        },
+        "commentaire" : {
+          "type" : "string"
+        },
+        "dateDebut" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "dateFin" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "idRattachement" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "idService" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "nomService" : {
+          "type" : "string"
+        },
+        "statutRattachement" : {
+          "type" : "string",
+          "enum" : [ "EN_COURS_DE_VALIDATION", "REFUSEE", "VALIDEE", "DESACTIVEE", "SUPPRIMEE" ]
+        }
+      }
+    }
+  },
+  "externalDocs" : {
+    "description" : "Documentations API",
+    "url" : "https://communaute.chorus-pro.gouv.fr/documentation/specifications-externes/"
+  }
+}
