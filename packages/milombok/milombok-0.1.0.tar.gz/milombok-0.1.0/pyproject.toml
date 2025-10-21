@@ -1,0 +1,74 @@
+[tool.poetry]
+name = "milombok"
+version = "0.1.0"
+description = "Python decorators inspired by Java Lombok - Eliminate boilerplate code with powerful class decorators"
+authors = ["Mag. en Ingeniería de Software Alberto Cortez"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/cortezalberto/miLombock.git"
+repository = "https://github.com/cortezalberto/miLombock.git"
+documentation = "https://github.com/cortezalberto/miLombock.git/blob/main/TUTORIAL.md"
+keywords = ["lombok", "decorators", "boilerplate", "data-classes", "builder-pattern", "getters-setters"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Code Generators",
+    "Typing :: Typed",
+]
+packages = [{include = "milombok", from = "milombok_lib"}]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.4"
+pytest-cov = "^6.0.0"
+black = "^25.0.0"
+ruff = "^0.9.0"
+mypy = "^1.14.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 100
+target-version = ['py312']
+include = '\.pyi?$'
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "UP", # pyupgrade
+]
+ignore = [
+    "E501",  # line too long (handled by black)
+    "B008",  # do not perform function calls in argument defaults
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_functions = "test_*"
+addopts = "--cov=milombok --cov-report=html --cov-report=term-missing"
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false

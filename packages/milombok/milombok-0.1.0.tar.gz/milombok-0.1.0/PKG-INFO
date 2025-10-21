@@ -1,0 +1,333 @@
+Metadata-Version: 2.4
+Name: milombok
+Version: 0.1.0
+Summary: Python decorators inspired by Java Lombok - Eliminate boilerplate code with powerful class decorators
+License: MIT
+License-File: LICENSE
+Keywords: lombok,decorators,boilerplate,data-classes,builder-pattern,getters-setters
+Author: Mag. en Ingeniería de Software Alberto Cortez
+Requires-Python: >=3.12,<4.0
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Classifier: Topic :: Software Development :: Code Generators
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Typing :: Typed
+Project-URL: Documentation, https://github.com/cortezalberto/miLombock.git/blob/main/TUTORIAL.md
+Project-URL: Homepage, https://github.com/cortezalberto/miLombock.git
+Project-URL: Repository, https://github.com/cortezalberto/miLombock.git
+Description-Content-Type: text/markdown
+
+# miLombock 🐍
+
+[![Python Version](https://img.shields.io/badge/python-3.12%2B-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Poetry](https://img.shields.io/badge/poetry-managed-blue.svg)](https://python-poetry.org/)
+
+**Python decorators inspired by Java Lombok** - Eliminate boilerplate code with powerful class decorators!
+
+miLombock brings the simplicity and elegance of Java's Lombok annotations to Python, helping you write cleaner, more maintainable code by automatically generating common methods like constructors, getters, setters, `__str__`, `__eq__`, `__hash__`, and more.
+
+## ✨ Features
+
+- 🎯 **Complete Decorators**: `@data`, `@data_inheritance`, `@singleton`, `@builder`, `@pickled`
+- 🏗️ **Constructor Decorators**: `@AllArgsConstructor`, `@NoArgsConstructor`, `@RequiredArgsConstructor`
+- 🔧 **Accessor Decorators**: `@Getter`, `@Setter`, `@GetterSetter`
+- 📝 **Utility Decorators**: `@ToString`, `@EqualsAndHashCode`
+- 🔗 **Full Inheritance Support**: Automatically includes parent class attributes
+- ✅ **Type Validation**: `NonNull[T]` generic type for required fields
+- 🔄 **Builder Pattern**: Fluent interface for object construction
+- 📦 **Zero Dependencies**: Pure Python, no external packages required
+
+## 📦 Installation
+
+### Using pip (PyPI - Coming Soon)
+
+```bash
+pip install milombok
+```
+
+### Using Poetry (Recommended)
+
+```bash
+poetry add milombok
+```
+
+### From Source
+
+```bash
+git clone https://github.com/yourusername/milombok.git
+cd milombok
+poetry install
+```
+
+## 🚀 Quick Start
+
+### Basic Example
+
+```python
+from milombok import data_inheritance, NonNull
+
+@data_inheritance
+class Person:
+    name: str
+    age: int
+    email: str
+
+# Automatically generates: __init__, __str__, __eq__, __hash__
+person = Person("John Doe", 30, "john@example.com")
+print(person)  # Person@[name=John Doe, age=30, email=john@example.com]
+```
+
+### Builder Pattern
+
+```python
+from milombok import builder, data_inheritance, NonNull
+
+@builder
+@data_inheritance
+class User:
+    username: NonNull[str]
+    password: NonNull[str]
+    email: str
+    phone: str
+
+# Fluent construction
+user = (User.builder()
+        .username("admin")
+        .password("secret123")
+        .email("admin@example.com")
+        .build())
+```
+
+### Getters and Setters
+
+```python
+from milombok import GetterSetter, data_inheritance
+
+@GetterSetter
+@data_inheritance
+class Product:
+    name: str
+    price: float
+    stock: int
+
+product = Product("Laptop", 999.99, 10)
+
+# Generated getters
+print(product.get_name())   # "Laptop"
+print(product.get_price())  # 999.99
+
+# Generated setters with method chaining
+product.set_price(899.99).set_stock(15)
+```
+
+### Advanced: Custom ToString and EqualsAndHashCode
+
+```python
+from milombok import ToString, EqualsAndHashCode, AllArgsConstructor
+
+@ToString(exclude=['password'])
+@EqualsAndHashCode(exclude=['last_login'])
+@AllArgsConstructor
+class User:
+    id: int
+    username: str
+    password: str
+    last_login: str
+
+user = User(1, "admin", "secret", "2024-10-20")
+print(user)  # User(id=1, username=admin, last_login=2024-10-20)
+# password is excluded from string representation
+```
+
+## 📚 Documentation
+
+- **[Complete Tutorial](TUTORIAL.md)**: Comprehensive guide with examples for all decorators
+- **[API Reference](CLAUDE.md)**: Architecture and internal documentation for developers
+
+## 🎯 Available Decorators
+
+### Complete Decorators
+
+| Decorator | Description | Generates |
+|-----------|-------------|-----------|
+| `@data` | Basic decorator without inheritance | `__init__`, `__str__`, `__eq__`, `__hash__` |
+| `@data_inheritance` | Advanced with full inheritance support | `__init__`, `__str__`, `__eq__`, `__hash__` |
+| `@Data` | Alias for `@data_inheritance` | Same as above |
+| `@singleton` | Singleton pattern implementation | Singleton instance management |
+| `@pickled` | Serialization support | `__dump__()`, `__load__()` |
+| `@builder` | Builder pattern | Builder class with fluent interface |
+
+### Constructor Decorators
+
+| Decorator | Description |
+|-----------|-------------|
+| `@AllArgsConstructor` | Constructor with all attributes (including inherited) |
+| `@NoArgsConstructor` | No-args constructor (all fields = None) |
+| `@RequiredArgsConstructor` | Constructor only for `NonNull` fields |
+
+### Accessor Decorators
+
+| Decorator | Description |
+|-----------|-------------|
+| `@Getter` | Generate `get_*()` methods for all attributes |
+| `@Setter` | Generate `set_*()` methods with chaining support |
+| `@GetterSetter` | Combines both Getter and Setter |
+
+### Utility Decorators
+
+| Decorator | Parameters | Description |
+|-----------|------------|-------------|
+| `@ToString` | `exclude`, `callSuper`, `includeFieldNames` | Customizable `__str__` method |
+| `@EqualsAndHashCode` | `exclude`, `callSuper`, `cacheHashCode` | Customizable `__eq__` and `__hash__` |
+
+## 🔍 Key Features Explained
+
+### NonNull Type
+
+Mark fields as required (cannot be None):
+
+```python
+from milombok import RequiredArgsConstructor, NonNull
+
+@RequiredArgsConstructor
+class BankAccount:
+    account_number: NonNull[str]  # Required
+    owner: NonNull[str]           # Required
+    balance: float                # Optional (defaults to None)
+
+# Only requires NonNull fields
+account = BankAccount("123456", "John Doe")
+```
+
+### Inheritance Support
+
+Automatically includes parent class attributes:
+
+```python
+from milombok import data_inheritance
+
+@data_inheritance
+class Animal:
+    name: str
+    age: int
+
+@data_inheritance
+class Dog(Animal):
+    breed: str
+    vaccinated: bool
+
+# Constructor includes parent attributes: name, age, breed, vaccinated
+dog = Dog("Max", 3, "Golden Retriever", True)
+```
+
+### Bidirectional Relationships
+
+Prevent infinite recursion with `exclude`:
+
+```python
+from milombok import ToString, data_inheritance
+from typing import Optional, List
+
+@ToString(exclude=['address'])
+@data_inheritance
+class Person:
+    name: str
+    address: Optional['Address']
+
+@ToString(exclude=['residents'])
+@data_inheritance
+class Address:
+    street: str
+    residents: List['Person']
+```
+
+## 🧪 Testing
+
+Run tests with pytest:
+
+```bash
+# Run all tests
+poetry run pytest
+
+# Run with coverage
+poetry run pytest --cov=milombok --cov-report=html
+
+# Run specific test file
+poetry run pytest tests/test_decorators.py
+```
+
+## 🛠️ Development
+
+### Setup Development Environment
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/milombok.git
+cd milombok
+
+# Install dependencies
+poetry install
+
+# Activate virtual environment
+poetry shell
+```
+
+### Code Quality Tools
+
+```bash
+# Format code with Black
+poetry run black milombok_lib/
+
+# Lint with Ruff
+poetry run ruff check milombok_lib/
+
+# Type checking with mypy
+poetry run mypy milombok_lib/
+```
+
+## 📝 Examples
+
+Check the [TUTORIAL.md](TUTORIAL.md) for comprehensive examples including:
+
+- Data Transfer Objects (DTOs)
+- Domain entities with validation
+- Immutable value objects
+- Configuration singletons
+- Builder pattern implementations
+- Custom decorator creation
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Inspired by [Project Lombok](https://projectlombok.org/) for Java
+- Thanks to the Python community for the amazing decorator pattern
+
+## 📞 Contact
+
+- **Issues**: [GitHub Issues](https://github.com/yourusername/milombok/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/yourusername/milombok/discussions)
+
+---
+
+**Made with ❤️ by the miLombock community**
+
