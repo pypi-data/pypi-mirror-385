@@ -1,0 +1,35 @@
+import json
+import os
+from functools import lru_cache
+
+SAGEMAKER_INTERNAL_METADATA_FILE = "/opt/.sagemakerinternal/internal-metadata.json"
+
+class InternalMetadataAdapter:
+    def __init__(self):
+        self.metadata = {}
+        self.modification_time = 0
+        self.config_file = SAGEMAKER_INTERNAL_METADATA_FILE
+        self._load_metadata()
+
+    def _load_metadata(self):
+        """Load metadata from internal configuration file."""
+        try:
+            self.modification_time = os.path.getmtime(self.config_file)
+            with open(self.config_file, "r") as file:
+                self.metadata = json.load(file)
+        except:
+            self.metadata = {}
+
+    def _is_config_file_mtime_changed(self):
+        """Check if config file has been modified."""
+        try:
+            return self.modification_time != os.path.getmtime(self.config_file)
+        except:
+            return False
+
+    @lru_cache(maxsize=1)
+    def get_app_network_access_type(self):
+        """Get application network access type."""
+        if self._is_config_file_mtime_changed():
+            self._load_metadata()
+        return self.metadata.get("AppNetworkAccessType", "UNKNOWN")
