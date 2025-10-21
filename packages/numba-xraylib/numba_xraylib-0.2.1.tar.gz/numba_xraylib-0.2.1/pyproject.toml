@@ -1,0 +1,71 @@
+[build-system]
+build-backend = 'mesonpy'
+requires = ['meson-python']
+
+[tool.meson-python]
+allow-windows-internal-shared-libs = true
+
+[project]
+authors = [{name = 'Chris Ninham', email = 'christopher.ninham@alumni-insa-lyon.org'},]
+dependencies = ['numba>=0.57', 'numpy', 'tomli; python_version < "3.11"']
+description = 'A numba compatible wrapper of the xraylib library.'
+name = 'numba-xraylib'
+version = '0.2.1'
+requires-python = '>=3.10'
+readme = "README.md"
+
+[project.urls]
+'Homepage' = 'https://github.com/Nin17/numba-xraylib'
+'Bug Tracker' = 'https://github.com/Nin17/numba-xraylib/issues'
+
+[project.optional-dependencies]
+dev = ['ruff', 'pytest', 'pytest-cov', 'pytest-env', 'pytest-randomly']
+
+[project.entry-points.numba_extensions]
+init = 'numba_xraylib:_init'
+
+[tool.coverage.report]
+skip_covered = true
+skip_empty = true
+show_missing = true
+exclude_also = [
+    "if TYPE_CHECKING:",
+    "def impl", # numba overload implementations
+]
+
+[tool.coverage.run]
+branch = true
+omit = ["tests/*"]
+
+
+
+[tool.pyright]
+reportInvalidTypeForm = false
+
+[tool.pytest.ini_options]
+addopts = ['--import-mode=importlib', '--cov=numba_xraylib']
+testpaths = 'tests'
+
+[tool.pytest_env]
+NUMBA_CAPTURED_ERRORS='new_style'
+
+[tool.ruff]
+line-length = 88
+exclude = ["subprojects",]
+
+[tool.ruff.lint]
+select = ['ALL']
+ignore = ['N802', 'N803', 'N806', 'PLR0913', 'TD003']
+
+[tool.ruff.lint.extend-per-file-ignores]
+'numba_xraylib/__init__.py' = ['F401', 'PLC0415' ]
+'numba_xraylib/overload_xraylib.py' = ['ANN001', 'ANN202']
+'numba_xraylib/overload_xraylib_np.py' = ['ANN001', 'ANN202']
+
+'tests/*' = ['D101', 'N801', 'S311']
+
+[[tool.uv.index]]
+name = "testpypi"
+url = "https://test.pypi.org/simple/"
+publish-url = "https://test.pypi.org/legacy/"
+explicit = true
