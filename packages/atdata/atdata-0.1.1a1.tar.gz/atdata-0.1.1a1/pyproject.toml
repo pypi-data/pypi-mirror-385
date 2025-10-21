@@ -1,0 +1,28 @@
+[project]
+name = "atdata"
+version = "0.1.1a1"
+description = "A loose federation of distributed, typed datasets"
+readme = "README.md"
+authors = [
+    { name = "Maxine Levesque", email = "hello@maxine.science" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "msgpack>=1.1.2",
+    "numpy>=2.3.4",
+    "ormsgpack>=1.11.0",
+    "webdataset>=1.0.2",
+]
+
+[project.scripts]
+ekumen = "atdata:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
+    "pytest-cov>=7.0.0",
+]
