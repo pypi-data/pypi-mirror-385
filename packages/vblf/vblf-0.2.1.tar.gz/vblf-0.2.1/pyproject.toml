@@ -1,0 +1,111 @@
+[build-system]
+requires = ["setuptools==80.*", "setuptools-scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vblf"
+description = "A library to read and write Vector BLF files (binary log format)"
+readme = "README.md"
+authors = [{ name = "Artur Drogunow", email = "Artur.Drogunow@zf.com" }]
+license = { text = "MIT" }
+requires-python = ">=3.9"
+dependencies = [ "typing_extensions>=4.0.0" ]
+dynamic = ["version"]
+keywords = ["BLF", "Vector", "binary log format", "Automotive"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Issues = "https://github.com/zariiii9003/vblf/issues"
+Source = "https://github.com/zariiii9003/vblf"
+Homepage = "https://github.com/zariiii9003/vblf"
+
+[tool.setuptools_scm]
+# presence of this section triggers setuptools_scm to manage the version
+
+[dependency-groups]
+dev = [
+    "tox>=4.23.2",
+    "towncrier",
+    {include-group = "lint"},
+]
+test = [
+    "pytest==8.4.*",
+]
+lint = [
+    "ruff==0.13.3",
+    "mypy==1.18.*",
+]
+
+[tool.ruff]
+line-length = 100
+lint.extend-select = [
+    "A",     # flake8-builtins
+    "B",     # flake8-bugbear
+    "BLE",   # flake8-blind-except
+    "C4",    # flake8-comprehensions
+    "E",     # pycodestyle
+    "EM",    # flake8-errmsg
+    "F",     # pyflakes
+    "FURB",  # refurb
+    "G",     # flake8-logging-format
+    "I",     # isort
+    "N",     # pep8-naming
+    "PERF",  # Perflint
+    "PIE",   # flake8-pie
+    "PL",    # pylint
+    "RSE",   # flake8-raise
+    "RUF",   # Ruff-specific rules
+    "SIM",   # flake8-simplify
+    "T20",   # flake8-print
+    "TC",    # flake8-type-checking
+    "UP",    # pyupgrade
+    "W",     # pycodestyle
+]
+lint.ignore = [
+    "PLR0913",  # too-many-arguments
+]
+lint.per-file-ignores."tests/**.py" = [
+    "PL",    # pylint
+]
+
+[tool.towncrier]
+directory = "changelog.d"
+filename = "CHANGELOG.md"
+start_string = "<!-- towncrier release notes start -->\n"
+underlines = ["", "", ""]
+title_format = "## [{version}](https://github.com/zariiii9003/vblf/tree/{version}) - {project_date}"
+issue_format = "[#{issue}](https://github.com/zariiii9003/vblf/issues/{issue})"
+
+[[tool.towncrier.type]]
+directory = "security"
+name = "Security"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "removed"
+name = "Removed"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "deprecated"
+name = "Deprecated"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "added"
+name = "Added"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "changed"
+name = "Changed"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "fixed"
+name = "Fixed"
+showcontent = true
