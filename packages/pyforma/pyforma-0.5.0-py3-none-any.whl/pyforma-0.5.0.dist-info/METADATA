@@ -1,0 +1,67 @@
+Metadata-Version: 2.4
+Name: pyforma
+Version: 0.5.0
+Summary: A python template engine
+Keywords: templates,template-engine,string-substitution
+Author: Jan Möller
+Author-email: Jan Möller <drag-on@gmx.de>
+License-Expression: MIT
+License-File: LICENSE
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Text Processing
+Classifier: Typing :: Typed
+Requires-Dist: annotated-types>=0.7.0
+Requires-Python: >=3.13
+Description-Content-Type: text/markdown
+
+# PyForma
+
+A Python template engine featuring partial substitution.
+
+[![Tests](https://github.com/jan-moeller/pyforma/actions/workflows/uv.yml/badge.svg)](https://github.com/jan-moeller/pyforma/actions/workflows/uv.yml)
+
+## Example
+
+```python
+from pyforma import Template
+
+template = Template("Hello, {{ subject }}! This is {{ lib_name }}.")
+assert template.unresolved_identifiers() == {"subject", "lib_name"}
+
+template = template.substitute({"lib_name": "PyForma"})
+assert template.unresolved_identifiers() == {"subject"}
+
+print(template.render({"subject": "World"}))  # Prints "Hello, World! This is PyForma."
+```
+
+## Features
+
+- 100% Python
+- Python-like expressions in templates
+- Special-purpose environments for more expressive templates
+- Templates can be inspected for what variables need to be substituted
+- Can partially substitute variables within templates
+- Rendering with undefined variables results in an error
+- Fully statically typed
+
+## Documentation
+
+- [API Documentation](./doc/api.md)
+- [Template Syntax Documentation](./doc/template_syntax.md)
+
+## Alternatives
+
+- **[Jinja2](https://pypi.org/project/Jinja2/)**:
+  The de-facto standard Python template engine. It's popular, fast, expressive and extensible, but doesn't support
+  partial template substitution.
+- **[Mako](https://pypi.org/project/Mako/)**:
+  Compiles templates to Python bytecode.
+- **[Chameleon](https://pypi.org/project/Chameleon/)**:
+  HTML/XML-compatible template engine.
+- **[string.Template](https://docs.python.org/3/library/string.html#string.Template)**:
+  The actual standard Python template engine. Pretty limited functionality.
