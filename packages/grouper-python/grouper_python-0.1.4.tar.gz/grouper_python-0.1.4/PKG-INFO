@@ -1,0 +1,16 @@
+Metadata-Version: 2.4
+Name: grouper_python
+Version: 0.1.4
+Requires-Python: >=3.11
+License-File: LICENSE
+Requires-Dist: httpx
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: pytest-cov; extra == "dev"
+Requires-Dist: pylama[pylint,toml]; extra == "dev"
+Requires-Dist: pydocstyle<6.2; extra == "dev"
+Requires-Dist: mypy; extra == "dev"
+Requires-Dist: black; extra == "dev"
+Requires-Dist: respx; extra == "dev"
+Provides-Extra: script
+Dynamic: license-file

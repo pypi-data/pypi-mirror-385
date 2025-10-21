@@ -1,0 +1,77 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "grouper_python"
+requires-python = ">=3.11"
+dynamic = ["dependencies", "optional-dependencies", "version"]
+
+[tool.setuptools]
+packages = ["grouper_python", "grouper_python.objects"]
+
+[tool.setuptools.package-data]
+"grouper_python" = ["py.typed"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = "requirements.txt"}
+optional-dependencies.dev = {file = "requirements-dev.txt"}
+optional-dependencies.script = {file = "requirements-script.txt"}
+version = {attr = "grouper_python.__version__"}
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--cov grouper_python --cov-branch --cov-report=term-missing"
+
+[tool.pylama]
+linters = "pycodestyle,pyflakes"
+skip = ".venv*/*,migrations/*,venv*/*,junk/*"
+max_line_length = 88
+ignore = "D301"
+
+[tool.pylama.linter.pydocstyle]
+convention = "pep257"
+
+[tool.pylama.linter.pylint]
+load_plugins = "pylint.extensions.docparams,pylint.extensions.docstyle"
+disable = "all"
+enable = "parameter_documentation,docstyle"
+
+accept_no_param_doc = false
+accept_no_raise_doc = false
+accept_no_return_doc = false
+accept_no_yields_doc = false
+
+[[tool.pylama.files]]
+# Only run these additional linters against the app directory
+# This might need to be more targeted, but this at least shows how
+# filtering can be done to apply different linters to different
+# parts of the code
+#
+# Test functions don't need docstrings, so don't check for them there.
+path = "grouper_python/*"
+linters = "pycodestyle,pyflakes,pydocstyle,pylint"
+
+[tool.mypy]
+files="tests,grouper_python"
+# --strict (as of 0.990)
+warn_unused_configs = true
+disallow_any_generics = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_return_any = true
+no_implicit_reexport = true
+strict_equality = true
+strict_concatenate = true
+# --strict end
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+allow_untyped_defs = true
+allow_incomplete_defs = true
