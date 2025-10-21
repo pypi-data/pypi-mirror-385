@@ -1,0 +1,45 @@
+Metadata-Version: 2.4
+Name: pypg-iam
+Version: 0.7.7
+Summary: Python package for interacting with pg-iam
+License: BSD-3-Clause
+Author: Leon du Toit
+Author-email: l.c.d.toit@usit.uio.no
+Requires-Python: >=3.9,<4.0
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Requires-Dist: psycopg2 (>=2.8.3,<3.0.0)
+Requires-Dist: sqlalchemy (>=1.4.22,<2)
+Project-URL: Repository, https://github.com/unioslo/pypg-iam
+Description-Content-Type: text/markdown
+
+
+# pypg-iam
+
+Python library for [pg-iam](https://github.com/unioslo/pg-iam).
+
+# Running tests
+
+```bash
+poetry install
+
+# set postgres environment variables for pg-iam db access
+export PYPGIAM_USER=""
+export PYPGIAM_PW=""
+export PYPGIAM_HOST=""
+export PYPGIAM_DB=""
+
+# and the run tests
+poetry run pytest iam/tests.py
+```
+
+# LICENSE
+
+BSD.
+
