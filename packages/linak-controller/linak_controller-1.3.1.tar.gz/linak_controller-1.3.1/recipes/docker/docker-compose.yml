@@ -1,0 +1,20 @@
+# Do `sudo killall -9 bluetoothd` on your host before starting.
+
+services:
+  linakcontroller:
+    build:
+      context: ../..
+      dockerfile: recipes/docker/Dockerfile
+    restart: always
+
+    volumes:
+      # your configuration file:
+      - "./data/config.yaml:/app/config.yaml:ro"
+      # remember paired bluetooth devices:
+      - "./data/bluetooth/:/var/lib/bluetooth/:rw"
+
+    # required for bluetooth:
+    network_mode: host
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
