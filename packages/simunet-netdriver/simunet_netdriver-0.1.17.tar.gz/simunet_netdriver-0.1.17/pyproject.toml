@@ -1,0 +1,75 @@
+[tool.poetry]
+name = "simunet-netdriver"
+version = "0.1.17"
+description = "The driver for network devices, which interact with network device using CLI."
+authors = ["vincent@byntra.se", "bobby@byntra.se", "sam@byntra.se", "mark@byntra.se"]
+readme = "README.md"
+license = "Apache-2.0"
+homepage = "https://github.com/OpenSecFlow/netdriver"
+repository = "https://github.com/OpenSecFlow/netdriver"
+documentation = "https://github.com/OpenSecFlow/netdriver#readme"
+keywords = ["network", "automation", "cli", "ssh", "device", "driver"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: System :: Networking",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+packages = [
+    {include = "netdriver/agent", from = "./bases"},
+    {include = "netdriver/simunet", from = "./bases"},
+    {include = "netdriver/client", from = "./components"},
+    {include = "netdriver/exception", from = "./components"},
+    {include = "netdriver/plugin", from = "./components"},
+    {include = "netdriver/plugins", from = "./components"},
+    {include = "netdriver/textfsm", from = "./components"},
+    {include = "netdriver/server", from = "./components"},
+    {include = "netdriver/utils",from = "./components"},
+    {include = "netdriver/log",from = "./components"},
+    {include = "config", from = "./"},
+]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.115.2"
+uvicorn = "^0.32.0"
+pyyaml = "^6.0.2"
+asyncssh = "^2.17.0"
+dependency-injector = "^4.42.0"
+loguru = "^0.7.2"
+aiofiles = "^24.1.0"
+six = "^1.16.0"
+asgi-correlation-id = "^4.3.4"
+
+# The specific dependencies of the Agent
+tabulate = { version = "^0.9.0", optional = true }
+httpx = { version = "^0.27.2", optional = true }
+pycryptodome = { version = "^3.21.0", optional = true }
+
+# Test dependencies
+pytest = { version = "^8.3.3", optional = true }
+pytest-asyncio = { version = "^0.24.0", optional = true }
+
+[tool.poetry.extras]
+agent = ["tabulate", "httpx", "pycryptodome"]
+simunet = []
+test = ["pytest", "pytest-asyncio"]
+all = ["tabulate", "httpx", "pycryptodome", "pytest", "pytest-asyncio"]
+
+[tool.poetry.scripts]
+agent = "netdriver.agent.main:start"
+simunet = "netdriver.simunet.main:start"
+
+[tool.pytest.ini_options]
+markers = ['unit', 'integration']
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "package"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
