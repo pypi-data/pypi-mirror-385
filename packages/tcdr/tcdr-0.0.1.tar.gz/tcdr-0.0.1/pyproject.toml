@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tcdr"
+version = "0.0.1"
+description = "thecode.report — zero-config .NET coverage dashboard powered by Z8ter"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [{ name = "Ashesh Nepal", email = "nepalashesh8@gmail.com" }]
+
+dependencies = [
+  "Jinja2==3.1.6",
+  "z8ter[auth]==0.2.6",
+  "uvicorn[standard]==0.35.0",
+  "platformdirs==4.3.8",
+  "watchdog==4.0.1",
+]
+
+[project.scripts]
+tcdr = "tcdr.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/ashesh808/thecodedotreport"
+Issues = "https://github.com/ashesh808/thecodedotreport/issues"
+
+[tool.setuptools.packages.find]
+include = ["tcdr*"]
+
+[tool.setuptools.package-data]
+tcdr = [
+  "scaffold/**/*",
+  "scaffold/**/.vite/**/*",
+]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.ruff]
+line-length = 79
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
