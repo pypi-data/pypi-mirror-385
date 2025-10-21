@@ -1,0 +1,52 @@
+name: Test install
+
+on:
+  schedule:
+    - cron: "0 0 * * 0"
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
+      tags:
+        description: 'manual run'
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+        python-version: [3.13]
+    defaults:  # https://github.com/marketplace/actions/setup-miniconda#use-a-default-shell
+      run:
+        shell: bash -l {0}
+    name: Python ${{ matrix.python-version }} on ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-activate-base: true
+          activate-environment: ""
+          channels: conda-forge,nvidia
+      - name: Install DAS (windows)
+        if: runner.os == 'Windows'
+        run: |
+          conda env create -n das -y -f https://raw.githubusercontent.com/janclemenslab/das/refs/heads/master/env/das_win.yaml
+      - name: Install DAS (linux)
+        if: runner.os == 'Linux'
+        run: |
+          conda env create -n das -y -f https://raw.githubusercontent.com/janclemenslab/das/refs/heads/master/env/das_linux.yaml
+      - name: Install DAS (macOS)
+        if: runner.os == 'macos'
+        run: |
+          conda env create -n das -y -f https://raw.githubusercontent.com/janclemenslab/das/refs/heads/master/env/das_mac.yaml
+      - name: Test cli
+        run: |
+          conda activate das
+          das version
+          das train --help
+          das predict --help
+          das gui --help
