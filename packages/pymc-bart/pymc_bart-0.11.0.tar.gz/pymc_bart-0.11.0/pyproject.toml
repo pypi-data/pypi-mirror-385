@@ -1,0 +1,51 @@
+[tool.pytest.ini_options]
+minversion = "6.0"
+xfail_strict = true
+addopts = ["-vv", "--color=yes"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "PL", "UP", "W"]
+ignore = [
+  "PLR2004", # Checks for the use of unnamed numerical constants ("magic") values in comparisons.
+  "PLR0913", # Too many arguments in function definition
+  "PLC0415", # import should be at the top-level
+]
+
+[tool.ruff.lint.pylint]
+max-args = 19
+max-branches = 15
+
+[tool.ruff.lint.extend-per-file-ignores]
+"docs/conf.py" = ["E501", "F541"]
+"tests/test_*.py" = ["F841"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "pragma: nocover",
+  "raise NotImplementedError",
+  "if TYPE_CHECKING:",
+]
+
+[tool.nbqa.mutate]
+isort = 1
+black = 1
+pyupgrade = 1
+
+
+[tool.mypy]
+files = "pymc_bart/*.py"
+
+[tool.mypy-matplotlib]
+ignore_missing_imports = true
+
+[tool.mypy-numba]
+ignore_missing_imports = true
+
+[tool.mypy-pymc]
+ignore_missing_imports = true
+
+[tool.mypy-scipy]
+ignore_missing_imports = true
