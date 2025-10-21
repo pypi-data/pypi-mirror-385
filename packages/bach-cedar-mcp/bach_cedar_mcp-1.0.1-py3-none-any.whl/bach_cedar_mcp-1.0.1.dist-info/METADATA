@@ -1,0 +1,207 @@
+Metadata-Version: 2.4
+Name: bach-cedar-mcp
+Version: 1.0.1
+Summary: A Model Context Protocol server for interacting with CEDAR metadata repository
+Project-URL: Homepage, https://github.com/BACH-AI-Tools/cedar-mcp
+Project-URL: Documentation, https://github.com/BACH-AI-Tools/cedar-mcp#readme
+Project-URL: Repository, https://github.com/BACH-AI-Tools/cedar-mcp
+Project-URL: Issues, https://github.com/BACH-AI-Tools/cedar-mcp/issues
+Author-email: Feng Rongquan <kirifeng@example.com>
+License: MIT
+License-File: LICENSE
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Python: >=3.10
+Requires-Dist: fastmcp
+Requires-Dist: pydantic>=2.0.0
+Requires-Dist: python-dotenv
+Requires-Dist: pyyaml>=6.0.0
+Requires-Dist: requests
+Description-Content-Type: text/markdown
+
+# CEDAR MCP Server
+
+A Model Context Protocol (MCP) server for interacting with the CEDAR (Center for Expanded Data Annotation and Retrieval) metadata repository.
+
+## 🚀 快速启动（推荐）
+
+### 使用 UVX 一键启动
+```bash
+uvx bach-cedar-mcp
+```
+
+### 在 Cursor/Cherry Studio 中配置
+```json
+{
+  "mcpServers": {
+    "cedar-mcp": {
+      "command": "uvx",
+      "args": ["bach-cedar-mcp"],
+      "env": {
+        "CEDAR_API_KEY": "<YOUR_CEDAR_API_KEY>",
+        "BIOPORTAL_API_KEY": "<YOUR_BIOPORTAL_API_KEY>"
+      }
+    }
+  }
+}
+```
+
+**PyPI 包地址**: https://pypi.org/project/bach-cedar-mcp/
+
+---
+
+## Prerequisites
+
+Before using this MCP server, you'll need API keys from:
+
+### CEDAR API Key
+- Go to [cedar.metadatacenter.org](https://cedar.metadatacenter.org)
+- Create an account or log in
+- Navigate to: Profile → API Key
+- Copy your API key
+
+### BioPortal API Key  
+- Go to [bioportal.bioontology.org](https://bioportal.bioontology.org)
+- Create an account or log in
+- Navigate to: Account Settings → API Key
+- Copy your API key
+
+## Running the CEDAR MCP Server
+
+### Option 1: Using UVX from PyPI (Recommended)
+
+Run directly without installation using `uvx`:
+
+```bash
+uvx bach-cedar-mcp \
+  --cedar-api-key "your-cedar-key" \
+  --bioportal-api-key "your-bioportal-key"
+```
+
+### Option 2: Install from PyPI
+
+Install using pip and run:
+
+```bash
+# Install from PyPI
+pip install bach-cedar-mcp
+
+# Run the server
+bach-cedar-mcp \
+  --cedar-api-key "your-cedar-key" \
+  --bioportal-api-key "your-bioportal-key"
+```
+
+### Option 3: Using Environment Variables
+
+Set environment variables instead of command-line arguments:
+
+```bash
+# Set environment variables
+export CEDAR_API_KEY="your-cedar-key"
+export BIOPORTAL_API_KEY="your-bioportal-key"
+
+# Run with uvx
+uvx bach-cedar-mcp
+
+# Or if installed with pip
+bach-cedar-mcp
+```
+
+### Option 4: Local Development
+
+Clone and run from source:
+
+```bash
+# Clone the repository
+git clone https://github.com/BACH-AI-Tools/cedar-mcp.git
+cd cedar-mcp
+
+# Install dependencies and run
+uv run python -m cedar_mcp.server \
+  --cedar-api-key "your-cedar-key" \
+  --bioportal-api-key "your-bioportal-key"
+```
+
+## Using with Claude Code
+
+Add the CEDAR MCP server to Claude Code:
+
+```bash
+# Add using uvx (from PyPI)
+claude mcp add cedar-mcp --uvx bach-cedar-mcp \
+  --cedar-api-key "your-cedar-key" \
+  --bioportal-api-key "your-bioportal-key"
+```
+
+## Using with Claude Desktop
+
+To use with Claude Desktop app:
+
+1. **Install the MCP server** using one of the methods above
+2. **Add to Claude Desktop configuration** in your `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "cedar-mcp": {
+      "command": "uvx",
+      "args": ["bach-cedar-mcp"],
+      "env": {
+        "CEDAR_API_KEY": "your-cedar-key",
+        "BIOPORTAL_API_KEY": "your-bioportal-key"
+      }
+    }
+  }
+}
+```
+
+Or if you have it installed with pip:
+
+```json
+{
+  "mcpServers": {
+    "cedar-mcp": {
+      "command": "bach-cedar-mcp",
+      "env": {
+        "CEDAR_API_KEY": "your-cedar-key", 
+        "BIOPORTAL_API_KEY": "your-bioportal-key"
+      }
+    }
+  }
+}
+```
+
+## Available Tools
+
+Here is the list of CEDAR tools with a short description
+
+* `get_template`: Fetches a template from the CEDAR repository.
+* `get_instances_based_on_template`: Gets template instances that belong to a specific template with pagination support.
+
+## Development
+
+### Install Development Dependencies
+
+```bash
+pip install -r requirements-dev.txt
+```
+
+### Running Tests
+
+This project includes comprehensive integration tests that validate real API interactions with both CEDAR and BioPortal APIs.
+
+For detailed testing information, see [test/README.md](test/README.md).
+
+## Contributing
+
+Contributions are welcome! Please ensure all tests pass before submitting a Pull Request:
+
+```bash
+python run_tests.py --integration
+```
