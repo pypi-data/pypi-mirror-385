@@ -1,0 +1,326 @@
+Metadata-Version: 2.4
+Name: docpipe-ai
+Version: 0.2.1
+Summary: OpenAI-Compatible & Dynamic-Batch AI post-processor for docpipe-mini
+Requires-Python: >=3.11
+Requires-Dist: docpipe-mini>=0.2.3
+Requires-Dist: langchain-core>=0.3.0
+Requires-Dist: openai>=2.5.0
+Requires-Dist: pydotenv>=0.0.7
+Requires-Dist: pymupdf>=1.26.5
+Requires-Dist: pypdfium2>=4.30.0
+Provides-Extra: anthropic
+Requires-Dist: anthropic>=0.3.22; extra == 'anthropic'
+Requires-Dist: langchain-anthropic>=0.3.22; extra == 'anthropic'
+Provides-Extra: dev
+Requires-Dist: langchain-openai>=0.3.35; extra == 'dev'
+Requires-Dist: mypy>=1.0.0; extra == 'dev'
+Requires-Dist: openai>=1.109.1; extra == 'dev'
+Requires-Dist: pytest-asyncio>=0.21.0; extra == 'dev'
+Requires-Dist: pytest>=8.4.2; extra == 'dev'
+Requires-Dist: ruff>=0.1.0; extra == 'dev'
+Provides-Extra: openai
+Requires-Dist: langchain-openai>=0.3.35; extra == 'openai'
+Requires-Dist: openai>=1.109.1; extra == 'openai'
+Description-Content-Type: text/markdown
+
+# docpipe-ai
+
+[![PyPI version](https://badge.fury.io/py/docpipe-ai.svg)](https://badge.fury.io/py/docpipe-ai)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+**Protocol-oriented & Mixin-based AI content processor for docpipe-mini**
+
+docpipe-ai is a flexible and extensible AI content analysis library that uses modern Python design patterns to provide intelligent image content understanding and structured output capabilities.
+
+## Features
+
+### Protocol-oriented Architecture
+- **Type Safety**: Interface definitions based on `typing.Protocol`
+- **Zero-cost Composition**: Reusable implementations via Mixin classes
+- **External Flow Control**: Users control document parsing, AI focuses on content processing
+
+### Multi AI Provider Support
+- **OpenAI**: GPT-4o, GPT-4 Turbo and other models
+- **Anthropic**: Claude series models
+- **GLM**: Zhipu AI model support
+- **Extensible**: Easy to add new AI providers
+
+### Structured Output
+- **JSON Schema**: Define return data structure
+- **Type Validation**: Pydantic model validation
+- **Multiple Analysis Types**: Contract, table, general analysis
+- **Smart Content Extraction**: Automatically identify key information
+
+### Performance Optimization
+- **Adaptive Batch Processing**: Dynamically adjust batch size based on content
+- **Memory Caching**: Avoid duplicate processing of same content
+- **Concurrent Processing**: Support multi-threaded parallel processing
+
+## Quick Start
+
+### Installation
+
+```bash
+pip install docpipe-ai
+```
+
+### Basic Usage
+
+```python
+from docpipe_ai import process_image, create_openai_processor
+from docpipe import PyMuPDFSerializer
+
+# 1. Create processor
+processor = create_openai_processor(
+    api_key="your-api-key",
+    model="gpt-4o"
+)
+
+# 2. Extract images from PDF
+serializer = PyMuPDFSerializer()
+images = []
+for chunk in serializer.iterate_chunks("document.pdf"):
+    if chunk.type == "image":
+        images.append(chunk)
+
+# 3. Process images
+results = processor.process_images(images)
+
+# 4. View results
+for result in results:
+    print(f"Page {result.original.page}: {result.processed_text}")
+```
+
+### Structured Output
+
+```python
+from docpipe_ai import ProcessingConfig, ContentAnalysisType
+
+# Create contract analysis configuration
+config = ProcessingConfig.create_contract_analysis_config()
+processor = create_openai_processor(
+    api_key="your-api-key",
+    model="gpt-4o",
+    config=config
+)
+
+# Process images to get structured data
+results = processor.process_images(images)
+
+for result in results:
+    if result.structured_data:
+        data = result.structured_data
+        print(f"Document type: {data['content_type']}")
+        print(f"Summary: {data['summary_text']}")
+
+        # Key information
+        key_elements = data['content_details']['key_elements']
+        for element in key_elements:
+            print(f"  - {element}")
+```
+
+## Documentation
+
+### Protocol-oriented API
+
+```python
+from docpipe_ai import AdaptiveImageProcessor, ProcessingConfig
+
+# Advanced usage: custom configuration
+config = ProcessingConfig(
+    model_name="gpt-4o",
+    temperature=0.3,
+    max_tokens=1000,
+    response_format=ResponseFormatType.STRUCTURED,
+    content_analysis_type=ContentAnalysisType.CONTRACT
+)
+
+processor = AdaptiveImageProcessor(config)
+results = processor.process_batch(image_contents)
+```
+
+### Supported Analysis Types
+
+| Type | Description | Use Cases |
+|------|-------------|-----------|
+| `CONTRACT` | Contract document analysis | Legal documents, agreements |
+| `TABLE` | Table data extraction | Financial reports, data tables |
+| `DOCUMENT` | Document structure analysis | Reports, papers, books |
+| `GENERAL` | General content analysis | Any type of image content |
+
+### AI Provider Configuration
+
+#### OpenAI
+```python
+processor = create_openai_processor(
+    api_key="your-openai-key",
+    model="gpt-4o",
+    api_base="https://api.openai.com/v1"
+)
+```
+
+#### Anthropic
+```python
+processor = create_anthropic_processor(
+    api_key="your-anthropic-key",
+    model="claude-3-sonnet-20240229"
+)
+```
+
+#### GLM (Zhipu AI)
+```python
+from docpipe_ai.processors.adaptive_image_processor import AdaptiveImageProcessor
+
+processor = AdaptiveImageProcessor.create_openai_processor(
+    api_key="your-glm-key",
+    api_base="https://open.bigmodel.cn/api/paas/v4/",
+    model="glm-4.5v"
+)
+```
+
+## Configuration
+
+### ProcessingConfig Parameters
+
+```python
+config = ProcessingConfig(
+    # Basic configuration
+    model_name="gpt-4o",              # AI model name
+    temperature=0.3,                  # Generation temperature
+    max_tokens=1000,                 # Maximum tokens
+
+    # Response format
+    response_format=ResponseFormatType.STRUCTURED,  # Structured output
+    content_analysis_type=ContentAnalysisType.GENERAL,  # Analysis type
+
+    # Batch processing configuration
+    max_concurrency=5,               # Maximum concurrency
+    batch_size=10,                   # Batch size
+
+    # Custom Schema
+    custom_schema={                  # Custom JSON Schema
+        "type": "object",
+        "properties": {
+            "title": {"type": "string"},
+            "content": {"type": "string"}
+        }
+    }
+)
+```
+
+## Project Structure
+
+```
+docpipe-ai/
+├── src/docpipe_ai/
+│   ├── api/                     # Simple user interface
+│   ├── core/                    # Core protocol definitions
+│   ├── mixins/                  # Reusable components
+│   ├── providers/               # AI Provider abstractions
+│   ├── processors/              # Concrete processor implementations
+│   ├── data/                    # Data structures and configuration
+│   └── pipelines/               # Legacy support
+├── docs/                        # Documentation
+├── tests/                       # Test files (git ignored)
+└── .github/workflows/           # CI/CD configuration
+```
+
+## Architecture
+
+### Protocol-oriented + Mixin Pattern
+
+```python
+# Define capability interfaces
+@runtime_checkable
+class Batchable(Protocol):
+    @abstractmethod
+    def should_process_batch(self, batch_size: int, total_items: int) -> bool: ...
+
+# Provide reusable implementations
+class DynamicBatchingMixin(Generic[T]):
+    def calculate_optimal_batch_size(self: "Batchable", remaining_items: int) -> int: ...
+
+# Compose usage
+class AdaptiveImageProcessor(Batchable, DynamicBatchingMixin[ImageContent]):
+    def should_process_batch(self, batch_size: int, total_items: int) -> bool:
+        return batch_size <= self.config.max_concurrency * 2
+```
+
+Advantages of this design pattern:
+- **Zero-cost Abstraction**: Compile-time type checking, no runtime overhead
+- **Flexible Composition**: Combine different capabilities as needed
+- **Easy Testing**: Protocols can be easily mocked
+- **Backward Compatible**: Doesn't break existing code
+
+## Deployment and Publishing
+
+### Automated Publishing
+
+The project is configured with GitHub Actions automated publishing workflow:
+
+```bash
+# Publish new version
+echo '__version__ = "0.2.1"' > src/docpipe_ai/__init__.py
+git add src/docpipe_ai/__init__.py
+git commit -m "bump: version 0.2.1"
+git tag v0.2.1
+git push origin v0.2.1
+```
+
+Trigger conditions:
+- Push `v*` format tags
+- Manual workflow trigger
+
+For detailed documentation, see: [DEPLOYMENT.md](docs/DEPLOYMENT.md)
+
+## Development
+
+### Local Development
+
+```bash
+# Clone repository
+git clone https://github.com/juncaifeng/docpipe-ai.git
+cd docpipe-ai
+
+# Install development dependencies
+pip install -e ".[dev]"
+
+# Run type checking
+mypy src/docpipe_ai
+
+# Run code checking
+ruff check src/docpipe_ai
+```
+
+### Testing
+
+```bash
+# Test files are excluded from git to protect privacy
+# Create your own test files if needed for testing
+
+python -m pytest tests/
+```
+
+## License
+
+MIT License - see [LICENSE](LICENSE) file for details
+
+## Contributing
+
+Issues and Pull Requests are welcome!
+
+## Support
+
+- 📧 Email: [your-email@example.com]
+- 🐛 Bug Reports: [GitHub Issues](https://github.com/juncaifeng/docpipe-ai/issues)
+- 📖 Documentation: [GitHub Wiki](https://github.com/juncaifeng/docpipe-ai/wiki)
+
+## Acknowledgments
+
+Thanks to [docpipe-mini](https://github.com/juncaifeng/docpipe-mini) for providing the document parsing foundation support.
+
+---
+
+**docpipe-ai** - Making AI content analysis simple and powerful! 🚀
