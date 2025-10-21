@@ -1,0 +1,198 @@
+# gandol2-ocr
+
+이미지 섹션 분리와 OCR을 통합한 Python 유틸리티입니다. 세로로 긴 상세페이지 이미지를 시각적 경계 기준으로 안전하게 섹션 분리하고, 각 섹션에 대해 OCR을 수행할 수 있습니다.
+
+## ✨ 주요 기능
+
+### 🖼️ 이미지 섹션 분리 (Splitter)
+
+- 세로로 긴 상세페이지 이미지를 시각적 경계 기준으로 자동 분리
+- OpenCV 기반의 고급 이미지 처리 알고리즘
+- 시각적 경계 감지 및 안전한 섹션 분할
+- 분리된 섹션 정보를 구조화된 데이터로 제공
+
+### 🔍 OCR (Optical Character Recognition)
+
+- PaddleOCR 기반의 고성능 OCR 엔진
+- 한국어(`korean`) 포함 다국어 지원
+- GPU/CPU 선택 가능
+- 바운딩박스와 텍스트 결과를 JSON으로 저장
+
+## 📦 설치
+
+```bash
+# uv 사용 (권장)
+uv add gandol2-ocr
+
+# pip 사용
+pip install gandol2-ocr
+```
+
+또는 소스에서 설치:
+
+```bash
+# uv 사용
+uv add git+https://github.com/gandol2/gandol2-ocr.git
+
+# pip 사용
+pip install git+https://github.com/gandol2/gandol2-ocr.git
+```
+
+## 🖥️ 요구 사항
+
+- Python **3.9-3.12** (pyproject.toml에 명시됨)
+- (선택) NVIDIA GPU + CUDA 12.6 환경 (PaddlePaddle GPU 지원)
+
+## 🚀 사용법
+
+### 1) 이미지 섹션 분리
+
+```python
+from splitter import split_image_sections
+
+# 이미지를 섹션으로 분리
+sections = split_image_sections(
+    image_path="./input/image.png",
+    output_dir="./output"
+)
+
+print(f"총 {len(sections)}개 섹션 생성:")
+for section in sections:
+    print(f"  {section.order}. {section.top}-{section.bottom} ({section.height}px)")
+```
+
+### 2) OCR 실행
+
+```python
+from image_ocr.ocr import run_ocr
+
+# OCR 실행
+results = run_ocr(
+    input_image="./input/image.png",
+    output_dir="./output",
+    lang="korean",
+    device="gpu"
+)
+
+# 결과 출력
+for result in results:
+    print(result["rec_texts"])
+```
+
+### 3) 통합 워크플로우
+
+```python
+from splitter import split_image_sections
+from image_ocr.ocr import run_ocr
+
+# 1단계: 이미지 섹션 분리
+sections = split_image_sections(
+    image_path="./input/long_image.png",
+    output_dir="./sections"
+)
+
+# 2단계: 각 섹션에 대해 OCR 수행
+for section in sections:
+    ocr_results = run_ocr(
+        input_image=section.path,
+        output_dir=f"./ocr_results/section_{section.order}",
+        lang="korean",
+        device="gpu"
+    )
+    print(f"섹션 {section.order}: {len(ocr_results)}개 텍스트 감지")
+```
+
+## 🧱 프로젝트 구조
+
+```
+gandol2-ocr/
+├─ pyproject.toml
+├─ README.md
+├─ src/
+│  ├─ splitter/           # 이미지 섹션 분리 모듈
+│  │  ├─ __init__.py
+│  │  └─ splitter.py
+│  └─ image_ocr/          # OCR 모듈
+│     ├─ __init__.py
+│     └─ ocr.py
+├─ examples/
+│  ├─ demo_splitter.py    # 섹션 분리 예제
+│  └─ demo_ocr.py         # OCR 예제
+├─ input/                 # 입력 이미지
+└─ output/                # 출력 결과
+```
+
+## 🔧 API 참조
+
+### Splitter API
+
+#### `split_image_sections(image_path, output_dir, debug_verbose=True, save_diagnostic=True)`
+
+이미지를 섹션으로 분리하는 메인 함수입니다.
+
+**매개변수:**
+
+- `image_path` (str): 입력 이미지 경로
+- `output_dir` (str): 출력 디렉토리
+- `debug_verbose` (bool): 디버그 출력 여부 (기본: True)
+- `save_diagnostic` (bool): 진단 이미지 저장 여부 (기본: True)
+
+**반환값:**
+
+- `List[SectionInfo]`: 섹션 정보 리스트
+
+#### `SectionInfo` 클래스
+
+```python
+@dataclass
+class SectionInfo:
+    order: int      # 섹션 순서
+    top: int        # 상단 좌표
+    bottom: int     # 하단 좌표
+    height: int     # 섹션 높이
+    path: str       # 저장된 파일 경로
+```
+
+### OCR API
+
+#### `run_ocr(input_image, output_dir, lang="korean", device="cpu")`
+
+이미지에서 텍스트를 인식하는 함수입니다.
+
+**매개변수:**
+
+- `input_image` (str): 입력 이미지 경로
+- `output_dir` (str): 출력 디렉토리
+- `lang` (str): OCR 언어 (기본: "korean")
+- `device` (str): "cpu" 또는 "gpu" (기본: "cpu")
+
+**반환값:**
+
+- `List[dict]`: OCR 결과 리스트
+
+## 🛠️ 개발 및 배포
+
+### 로컬 빌드
+
+```bash
+uv build
+```
+
+### TestPyPI 업로드
+
+### PyPI 업로드
+
+```bash
+twine upload dist/*
+```
+
+## 🔎 참고사항
+
+- **의존성**: OpenCV, PaddleOCR, PaddlePaddle, Matplotlib, Pandas, SciPy
+- **GPU 지원**: CUDA 12.6 환경에서 PaddlePaddle GPU 사용 가능
+- **이미지 형식**: PNG, JPG, JPEG 등 OpenCV 지원 형식
+- **언어 지원**: PaddleOCR이 지원하는 모든 언어 (한국어, 영어, 중국어 등)
+
+## 📄 라이선스
+
+MIT License
