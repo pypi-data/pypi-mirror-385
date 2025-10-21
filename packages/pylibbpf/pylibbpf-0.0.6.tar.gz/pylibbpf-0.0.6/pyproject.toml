@@ -1,0 +1,81 @@
+[build-system]
+requires = [
+    "setuptools>=42",
+    "wheel",
+    "ninja",
+    "cmake>=4.0",
+    "pybind11>=2.10",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pylibbpf"
+version = "0.0.6"
+description = "Python Bindings for Libbpf"
+authors = [
+    { name = "r41k0u", email = "pragyanshchaturvedi18@gmail.com" },
+    { name = "varun-r-mallya", email = "varunrmallya@gmail.com" }
+]
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: C++",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: System :: Operating System Kernels :: Linux",
+]
+dependencies = [
+    "llvmlite>=0.40.0",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=6.0"]
+
+[project.urls]
+Homepage = "https://github.com/pythonbpf/pylibbpf"
+Repository = "https://github.com/pythonbpf/pylibbpf"
+Issues = "https://github.com/pythonbpf/pylibbpf/issues"
+
+[tool.mypy]
+files = "setup.py"
+python_version = "3.8"
+strict = true
+show_error_codes = true
+enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]
+warn_unreachable = true
+
+[[tool.mypy.overrides]]
+module = ["ninja"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = ["-ra", "--showlocals", "--strict-markers", "--strict-config"]
+xfail_strict = true
+filterwarnings = [
+    "error",
+    "ignore:(ast.Str|Attribute s|ast.NameConstant|ast.Num) is deprecated:DeprecationWarning:_pytest",
+]
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py38"
+line-length = 88
+
+[tool.ruff.lint]
+extend-select = [
+    "B", # flake8-bugbear
+    "I", # isort
+    "PGH", # pygrep-hooks
+    "RUF", # Ruff-specific
+    "UP", # pyupgrade
+]
