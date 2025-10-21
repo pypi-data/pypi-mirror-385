@@ -1,0 +1,53 @@
+{
+  "format_version": "1.0",
+  "application": "HBAT",
+  "created": "2024-01-15T10:30:00.000000",
+  "description": "HBAT Strong Interactions Preset - Very strict criteria to identify only the strongest and most significant molecular interactions",
+  "parameters": {
+    "hydrogen_bonds": {
+      "h_a_distance_cutoff": 2.8,
+      "dha_angle_cutoff": 140.0,
+      "d_a_distance_cutoff": 3.5
+    },
+    "weak_hydrogen_bonds": {
+      "h_a_distance_cutoff": 3.0,
+      "dha_angle_cutoff": 160.0,
+      "d_a_distance_cutoff": 3.0
+    },
+    "halogen_bonds": {
+      "x_a_distance_cutoff": 3.9,
+      "dxa_angle_cutoff": 150.0
+    },
+    "pi_interactions": {
+      "h_pi_distance_cutoff": 4.0,
+      "dh_pi_angle_cutoff": 80.0,
+      "ccl_pi_distance_cutoff": 3.3,
+      "ccl_pi_angle_cutoff": 135.0,
+      "cbr_pi_distance_cutoff": 3.4,
+      "cbr_pi_angle_cutoff": 135.0,
+      "ci_pi_distance_cutoff": 3.5,
+      "ci_pi_angle_cutoff": 135.0,
+      "ch_pi_distance_cutoff": 4.0,
+      "ch_pi_angle_cutoff": 135.0,
+      "nh_pi_distance_cutoff": 3.7,
+      "nh_pi_angle_cutoff": 145.0,
+      "oh_pi_distance_cutoff": 3.5,
+      "oh_pi_angle_cutoff": 145.0,
+      "sh_pi_distance_cutoff": 3.8,
+      "sh_pi_angle_cutoff": 135.0
+    },
+    "general": {
+      "covalent_cutoff_factor": 0.85,
+      "analysis_mode": "complete"
+    },
+    "pdb_fixing": {
+      "enabled": false,
+      "method": "pdbfixer",
+      "add_hydrogens": true,
+      "add_heavy_atoms": false,
+      "replace_nonstandard": false,
+      "remove_heterogens": false,
+      "keep_water": true
+    }
+  }
+}
