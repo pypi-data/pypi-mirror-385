@@ -1,0 +1,11 @@
+import datetime as dt
+
+from pydantic.v1.datetime_parse import parse_datetime
+
+local_tz_info = dt.datetime.now().astimezone().tzinfo
+
+
+def convert_to_datetime(s):
+    if not s:
+        return
+    return parse_datetime(s).astimezone()

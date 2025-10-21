@@ -1,0 +1,81 @@
+Metadata-Version: 2.4
+Name: guniflask
+Version: 0.13.1
+Summary: Better coding experience for Flask
+Home-page: https://github.com/jadbin/guniflask
+Author: jadbin
+Author-email: jadbin.com@hotmail.com
+License: MIT
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Software Development :: Libraries :: Application Frameworks
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.6
+License-File: LICENSE
+Requires-Dist: Flask>=1.1.2
+Requires-Dist: pydantic<3,>=2.11.5
+Requires-Dist: SQLAlchemy>=1.3.22
+Requires-Dist: Flask-Cors>=3.0.10
+Requires-Dist: PyJWT<2.6.0,>=2.0.0
+Requires-Dist: APScheduler>=3.6.3
+Requires-Dist: requests>=2.25.1
+Requires-Dist: python-dotenv>=1.1.0
+Requires-Dist: PyYAML>=5.4.1
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: home-page
+Dynamic: license
+Dynamic: license-file
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+guniflask
+=========
+
+.. image:: https://travis-ci.com/jadbin/guniflask.svg?branch=master
+    :target: https://travis-ci.com/jadbin/guniflask
+
+.. image:: https://coveralls.io/repos/github/jadbin/guniflask/badge.svg?branch=master
+    :target: https://coveralls.io/github/jadbin/guniflask?branch=master
+
+.. image:: https://img.shields.io/github/license/jadbin/guniflask
+    :target: https://github.com/jadbin/guniflask/blob/master/LICENSE
+
+Overview
+--------
+
+guniflask是自动化生成基于flask + gunicorn的服务端项目基础代码的构建工具。
+
+Getting Started
+---------------
+
+安装guniflask项目生成工具::
+
+    $ pip install -U guniflask-cli
+
+新建一个空文件夹 ``foo`` 并进入到 ``foo`` 中::
+
+    $ mkdir foo && cd foo
+
+运行如下命令::
+
+    $ guniflask init
+
+当出现提示时按 ``Enter`` 键即可选择默认设置。
+提示项目创建成功后，安装项目所需依赖::
+
+    $ pip install -r requirements/app.txt
+
+调试模式启动项目::
+
+    $ bash bin/manage debug
+
+Documentation
+-------------
+
+https://guniflask.readthedocs.io/
