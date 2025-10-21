@@ -1,0 +1,65 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fredcollect"
+version = "0.1.2"
+description = "A Python wrapper for the Federal Reserve Economic Database (FRED) API"
+readme = "README.md"
+requires-python = ">=3.7"
+license = {text = "Apache-2.0"}
+authors = [
+    {name = "Oliver Grenon", email = "grenonoliver@gmail.com"}
+]
+keywords = ["FRED", "Federal Reserve", "Economic Data", "API", "Economics"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Financial and Insurance Industry",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Office/Business :: Financial",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+]
+dependencies = [
+    "requests",
+    "pandas>=1.5.3",
+    "numpy>=1.23.5",
+    "python-dotenv",
+    "matplotlib"
+]
+
+[project.urls]
+Homepage = "https://github.com/versaucc/fredcollect"
+Repository = "https://github.com/versaucc/fredcollect"
+Issues = "https://github.com/versaucc/fredcollect/issues"
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "black",
+    "flake8",
+    "mypy",
+    "isort"
+]
+
+[tool.setuptools.packages.find]
+include = ["fredcollect*"]
+
+[tool.setuptools.package-data]
+fredcollect = ["*.json", "*.yml", "*.yaml"]
+
+[tool.black]
+line-length = 88
+target-version = ['py37']
+
+[tool.isort]
+profile = "black"
