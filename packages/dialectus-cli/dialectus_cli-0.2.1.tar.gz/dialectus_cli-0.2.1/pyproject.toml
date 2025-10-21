@@ -1,0 +1,66 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dialectus-cli"
+version = "0.2.1"
+description = "Command-line interface for the Dialectus AI debate system"
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+authors = [
+    {name = "Dialectus AI"}
+]
+keywords = ["ai", "debate", "cli", "artificial-intelligence"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Environment :: Console",
+]
+
+dependencies = [
+    "rich>=14.1.0",
+    "click>=8.2.1",
+    "pydantic>=2.11.0",
+    "dialectus-engine>=0.3.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pyright>=1.1.406",
+    "ruff>=0.5.0",
+    "pytest>=7.0",
+    "pytest-asyncio>=0.23.0",
+    "twine",
+    "build"
+]
+
+[project.scripts]
+dialectus = "dialectus.cli:cli"
+
+[project.urls]
+Homepage = "https://github.com/Dialectus-AI/dialectus-cli"
+Repository = "https://github.com/Dialectus-AI/dialectus-cli"
+Issues = "https://github.com/Dialectus-AI/dialectus-cli/issues"
+
+[tool.setuptools]
+packages = ["dialectus"]
+
+[tool.black]
+line-length = 88
+preview = true  # Enables unstable features
+
+[tool.ruff]
+line-length = 88
+preview = true  # Matches Black's unstable
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
