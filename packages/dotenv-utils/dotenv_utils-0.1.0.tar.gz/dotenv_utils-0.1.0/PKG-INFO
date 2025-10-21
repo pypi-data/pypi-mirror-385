@@ -1,0 +1,40 @@
+Metadata-Version: 2.4
+Name: dotenv-utils
+Version: 0.1.0
+Dynamic: Author
+Dynamic: Author-email
+Dynamic: Summary
+Dynamic: Maintainer
+Dynamic: Maintainer-email
+Project-URL: Repository, https://github.com/FynnFreyer/dotenv-utils
+Project-URL: Issues, https://github.com/FynnFreyer/dotenv-utils/issues
+Project-URL: Docs, https://fynnfreyer.github.io/dotenv-utils/
+License-Expression: MIT
+License-File: LICENSE
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Requires-Python: >=3.9
+Provides-Extra: dev
+Requires-Dist: autopep8; extra == 'dev'
+Requires-Dist: isort; extra == 'dev'
+Requires-Dist: mypy; extra == 'dev'
+Requires-Dist: myst-parser; extra == 'dev'
+Requires-Dist: ruff; extra == 'dev'
+Requires-Dist: sphinx; extra == 'dev'
+Requires-Dist: sphinx-autodoc-typehints; extra == 'dev'
+Requires-Dist: sphinxcontrib-relativeinclude; extra == 'dev'
+Description-Content-Type: text/markdown
+
+# dotenv-utils
+
+A tiny, self-contained package for parsing environment variables.
+Works well in conjunction with [python-dotenv](https://pypi.org/project/python-dotenv/).
+
+For a full-fledged solution look at [environs](https://pypi.org/project/environs/) instead.
