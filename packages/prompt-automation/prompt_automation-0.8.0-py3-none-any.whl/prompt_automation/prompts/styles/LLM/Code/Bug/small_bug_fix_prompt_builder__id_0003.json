@@ -1,0 +1,90 @@
+{
+  "schema": 1,
+  "id": 3,
+  "title": "Small Bug-Fix Prompt Builder",
+  "style": "LLM",
+  "placeholders": [
+    {
+      "name": "bug",
+      "label": "Bug Report (Describe observed incorrect behavior; include clues)",
+      "multiline": true,
+      "default": ""
+    },
+    {
+      "name": "repo",
+      "label": "Optional repository name or link",
+      "default": ""
+    },
+    {
+      "name": "commit",
+      "label": "Optional commit hash or branch",
+      "default": ""
+    }
+  ],
+  "template": [
+    "## Objective",
+    "Craft a concise final prompt for an external LLM to diagnose and fix the bug with the smallest safe change.",
+    "",
+    "## Context",
+    "",
+    "## Inputs",
+    "- bug: {{bug}}",
+    "- repo: {{repo}}",
+    "- commit: {{commit}}",
+    "",
+    "## Assumptions",
+    "Assumption: If repo/commit are empty, proceed with general guidance and assumptions.",
+    "Assumption: Ask up to 2 clarifying questions if blocking.",
+    "",
+    "## Constraints",
+    "- Phase 1: ONLY clarifying questions (max 2, +1 if blocking).",
+    "- Phase 2: Output a single fenced code block (```markdown) containing the FINAL PROMPT ONLY (≤700 words).",
+    "",
+    "## Instructions",
+    "- Task Flow: List 3–5 conceptual steps to resolve the bug.",
+    "- Context Pack: Include repo, commit, and verbatim bug report.",
+    "- Contract: Smallest change, root cause identified, tests/validation, compatibility maintained.",
+    "- DIFF Limits: If >150 LOC or >5 files, propose scoped MVP or justify briefly.",
+    "",
+    "## Execution Flow",
+    "1) Phase 1 questions",
+    "2) Phase 2 final fenced prompt",
+    "",
+    "## Output Format",
+    "- Sections in final prompt: ASSUMPTIONS, REPRO_STEPS, ROOT_CAUSE, DIFFS, TEST_PLAN, VALIDATION, (optional NEEDS_INFO).",
+    "",
+    "## Quality Checks",
+    "- ≤2 questions (≤3 if blocking).",
+    "- DIFFS present and concrete.",
+    "- TEST_PLAN and VALIDATION include commands.",
+    "",
+    "## Eval Stubs",
+    "- pass_if(clarifying_questions_used <= 2 || (blocking && clarifying_questions_used == 3))",
+    "- pass_if(has_diffs == true)",
+    "- pass_if(has_validation == true)",
+    "",
+    "## Self-Check",
+    "If any Quality Check would fail, revise once before returning."
+  ],
+  "metadata": {
+    "path": "LLM/small-bug-fix-prompt-builder.json",
+    "tags": [
+      "bug",
+      "prompt",
+      "workflow",
+      "small-fix",
+      "llm",
+      "code"
+    ],
+    "version": 4.2,
+    "render": "markdown",
+    "share_this_file_openly": true,
+    "last_edited": "2025-09-24T00:00:00Z"
+  },
+  "changelog": [
+    "2025-09-24: Reordered sections to mandated structure and added explicit constraints.",
+    "2025-09-24: Consolidated optional repo/commit placeholders and referenced each.",
+    "2025-09-24: Set style to 'LLM', updated metadata.path to 'LLM/small-bug-fix-prompt-builder.json'.",
+    "2025-09-24: Bumped version 4.1 → 4.2; added last_edited and changelog; globals honored in Context."
+  ]
+}

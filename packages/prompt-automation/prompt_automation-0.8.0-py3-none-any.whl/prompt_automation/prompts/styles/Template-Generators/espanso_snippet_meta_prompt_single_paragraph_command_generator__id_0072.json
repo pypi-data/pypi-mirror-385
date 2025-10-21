@@ -1,0 +1,81 @@
+{
+  "schema": 1,
+  "id": 72,
+  "title": "Espanso Snippet – Meta-Prompt (Single-Paragraph Command Generator)",
+  "style": "Template-Generators",
+  "reminders": [
+    "Need inputs, files, preview, or multi-template composition? → Prompt-Automation.",
+    "Need blazing-fast, cursor-stays-put expansions? → espanso."
+  ],
+  "role": "assistant",
+  "placeholders": [
+    {
+      "name": "name",
+      "label": "Trigger + filename base (typed as you'll use it; ':' optional; becomes <name>.yml)",
+      "default": ":example",
+      "multiline": false
+    },
+    {
+      "name": "description",
+      "label": "What it should do (plain language)",
+      "default": "Send a brief thank-you with my name and today’s date",
+      "multiline": true
+    }
+  ],
+  "template": [
+    "Objective",
+    "Create exactly one espanso command from two inputs — (1) name={{name}} and (2) description={{description}} — optimized for intuitive use and aligned with this repository’s structure.",
+    "",
+    "Context",
+    "You are generating a snippet that will be installed under 'espanso-package/match/'. Prior templates sometimes copied text verbatim; you must instead interpret intent and improve the command. The consuming app expects a single-paragraph output artifact (one physical line).",
+    "",
+    "Inputs",
+    "- name: the trigger to use directly (we'll normalize minimally; see below).",
+    "- description: plain-language goal of the command.",
+    "",
+    "Constraints",
+    "- Output MUST be exactly one paragraph (one physical line), no line breaks or blank lines.",
+    "- Do not include commentary, headings, or analysis in the final output.",
+    "- Avoid secrets, destructive shell actions, and unsafe vars.",
+    "- Use repository conventions for lint/tests/sync.",
+    "",
+    "Instructions",
+    "- Think critically: interpret description, do not copy literally; normalize and improve phrasing for usability.",
+    "- Trigger: use {{name}} as provided with light normalization only: trim spaces; if it does not start with ':', prefix a single ':'; preserve dots/hyphens; avoid adding ':pa.' unless explicitly part of {{name}}; lowercase unless case is essential.",
+    "- Trigger collisions: avoid obvious collisions with existing triggers (:th, :comms, :bias, :nra, :tf) by appending a short numeric suffix (e.g., '-1') only if an exact match to one of these.",
+    "- Target file: always create a NEW file under 'espanso-package/match/'. Name it from {{name}} with normalization: strip leading ':', trim, lowercase, replace spaces with '-', remove characters outside [a-z0-9._-], and append '.yml'.",
+    "  - Collision handling: if a file with that name already exists in match/, append a short numeric suffix (e.g., '-1.yml'). DO NOT append to existing files.",
+    "- Replacement style: infer from description and emulate canonical patterns without changing the file naming: bias/truth/falsify/steelman/evidence→write a comprehensive adversarial analysis in the spirit of bias.yml (single-line); continuity/context/next steps/resume/session link→write a continuity loop prompt like nra.yml (single-line, include the 'Action: <summary> :' tail); simple thinking prompt→concise thinking aid like tf.yml; otherwise produce a succinct practical instruction. Add only minimal safe vars when they add obvious value (e.g., today's date, clipboard).",
+    "- YAML: produce ONE-PARAGRAPH flow-style of a full espanso YAML with vars nested inside the match, e.g., matches:[{trigger:\":example\",replace:\"Your text here\",vars:[{name:\"today\",type:\"date\",params:{format:\"%Y-%m-%d\"}}]}]. Escape quotes/backslashes; encode intended newlines as literal \\n.",
+    "- Repo commands: lint with 'scripts/espanso.sh lint'; tests 'pytest -q tests/espanso'; sync 'scripts/espanso.sh sync'.",
+    "- Ambiguity: when minor, choose the safest common interpretation and proceed; avoid speculative features.",
+    "",
+    "Execution Flow",
+    "1) Restate the intent internally; 2) Design trigger and derive a new target_file name; 3) Draft replacement and optional vars (style from heuristics); 4) Render single-paragraph YAML snippet; 5) Output exactly that one line and nothing else.",
+    "",
+    "Output Format (MANDATORY — one physical line)",
+    "Return ONLY the one-paragraph flow-style YAML snippet (string) like: matches:[{trigger:\":example\",replace:\"...\"}] optionally with vars:[...]. No JSON wrapper, no code fences, no labels, no commentary.",
+    "",
+    "Quality Checks (run silently, do not emit)",
+    "- Snippet YAML is valid and one paragraph; trigger conforms; target_file is new (would not append to an existing file); no unsafe commands; placeholders used.",
+    "- Absolutely no extra output before or after the one-line snippet: no JSON, no fences, no acknowledgements.",
+    "",
+    "Self-Check (silent)",
+    "- Did I avoid verbatim copying? Is the output exactly one physical line? Are repo conventions followed?"
+  ],
+  "metadata": {
+    "path": "Template-Generators/espanso-snippet-meta-prompt-single-paragraph-command-generator.json",
+    "tags": [
+      "espanso",
+      "meta",
+      "workflow",
+      "snippet",
+      "paragraph",
+      "template-generators"
+    ],
+    "version": 7.1,
+    "render": "markdown",
+    "share_this_file_openly": true,
+    "last_edited": "{{DATE}}"
+  }
+}
