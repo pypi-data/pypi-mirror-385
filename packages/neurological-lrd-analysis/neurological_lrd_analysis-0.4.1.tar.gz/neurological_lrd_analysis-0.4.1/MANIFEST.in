@@ -1,0 +1,59 @@
+# Include package data
+include README.md
+include LICENSE
+include CHANGELOG.md
+include CONTRIBUTING.md
+include requirements.txt
+include requirements-dev.txt
+include pyproject.toml
+
+# Include documentation
+recursive-include docs *.rst *.md *.txt *.yml *.yaml
+recursive-include docs/source *.rst *.md *.txt *.yml *.yaml
+
+# Include scripts
+recursive-include scripts *.py *.sh
+
+# Include examples
+recursive-include examples *.py *.ipynb *.md
+
+# Include tests
+recursive-include tests *.py *.md
+
+# Include GitHub workflows
+recursive-include .github *.yml *.yaml
+
+# Include configuration files
+include .readthedocs.yml
+include .gitignore
+
+# Exclude build artifacts
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude *.pyd
+global-exclude __pycache__
+global-exclude .git*
+global-exclude .DS_Store
+global-exclude *.so
+global-exclude *.dylib
+global-exclude *.dll
+global-exclude *.exe
+
+# Exclude development files
+global-exclude .pytest_cache
+global-exclude .coverage
+global-exclude htmlcov
+global-exclude .mypy_cache
+global-exclude .tox
+global-exclude .venv
+global-exclude venv
+global-exclude env
+global-exclude *.egg-info
+global-exclude build
+global-exclude dist
+
+# Exclude IDE files
+global-exclude .vscode
+global-exclude .idea
+global-exclude *.swp
+global-exclude *.swo

@@ -1,0 +1,45 @@
+name: Publish to TestPyPI
+
+on:
+  push:
+    branches: [ develop, test-publish ]
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  test-publish:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install build dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build twine
+    
+    - name: Build package
+      run: python -m build
+    
+    - name: Check package
+      run: twine check dist/*
+    
+    - name: Publish to TestPyPI
+      env:
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.TEST_PYPI_API_TOKEN }}
+      run: |
+        # Upload to TestPyPI for testing
+        twine upload --repository testpypi dist/*
+        echo "Package uploaded to TestPyPI for testing"
+        echo "Test installation with: pip install --index-url https://test.pypi.org/simple/ neurological-lrd-analysis"
+    
+    - name: Test installation from TestPyPI
+      run: |
+        # Test installing from TestPyPI
+        pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ neurological-lrd-analysis
+        python -c "import neurological_lrd_analysis; print('✓ Package installed successfully from TestPyPI')"

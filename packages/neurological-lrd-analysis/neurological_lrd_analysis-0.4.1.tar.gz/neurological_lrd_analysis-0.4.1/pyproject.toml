@@ -1,0 +1,176 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "neurological-lrd-analysis"
+version = "0.4.1"
+description = "Physics-Informed Fractional Operator Learning for Real-Time Neurological Biomarker Detection: A Framework for Memory-Driven EEG Analysis"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [
+    {name = "Davian R. Chin", email = "d.r.chin@pgr.reading.ac.uk"},
+]
+maintainers = [
+    {name = "Davian R. Chin", email = "d.r.chin@pgr.reading.ac.uk"},
+]
+keywords = [
+    "hurst", "long-range-dependence", "neurological", "time-series", "fractal", 
+    "eeg", "ecg", "neuroscience", "wavelet", "multifractal", "benchmarking", 
+    "biomedical", "physics-informed", "fractional-operators", "machine-learning",
+    "biomarker-detection", "memory-driven", "real-time", "fractional-calculus"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Healthcare Industry",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Scientific/Engineering :: Medical Science Apps.",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Environment :: GPU",
+    "Environment :: Console",
+]
+
+dependencies = [
+    "numpy>=1.24.0",
+    "scipy>=1.10.0",
+    "pandas>=2.0.0",
+    "scikit-learn>=1.3.0",
+    "matplotlib>=3.7.0",
+    "seaborn>=0.12.0",
+    "numba>=0.57.0",
+    "jax>=0.4.1",
+    "jaxlib>=0.4.1",
+    "flax>=0.7.0",
+    "optax>=0.1.0",
+    "numpyro>=0.13.0",
+    "hpfracc>=0.1.0",
+    "pywt>=1.4.0",
+    "fbm>=0.1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "pytest-html>=3.0.0",
+    "pytest-json-report>=1.5.0",
+    "pytest-timeout>=2.1.0",
+    "psutil>=5.9.0",
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "flake8>=6.0.0",
+    "mypy>=1.0.0",
+]
+docs = [
+    "sphinx>=6.0.0",
+    "sphinx-rtd-theme>=1.2.0",
+    "myst-parser>=1.0.0",
+]
+gpu = [
+    "jax[cuda12_pip]>=0.4.1",
+    "cupy-cuda12x>=12.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/dave2k77/neurological_lrd_analysis"
+Documentation = "https://neurological-lrd-analysis.readthedocs.io"
+Repository = "https://github.com/dave2k77/neurological_lrd_analysis.git"
+Issues = "https://github.com/dave2k77/neurological_lrd_analysis/issues"
+"Author ORCiD" = "https://orcid.org/0009-0003-9434-3919"
+Changelog = "https://github.com/dave2k77/neurological_lrd_analysis/blob/main/CHANGELOG.md"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["neurological_lrd_analysis*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.md", "*.txt", "*.yml", "*.yaml"]
+
+[tool.black]
+line-length = 88
+target-version = ['py311']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+known_first_party = ["neurological_lrd_analysis"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q --strict-markers --strict-config"
+testpaths = ["tests"]
+markers = [
+    "unit: Unit tests",
+    "integration: Integration tests", 
+    "validation: Validation tests",
+    "performance: Performance tests",
+    "slow: Slow tests",
+]
+filterwarnings = [
+    "error",
+    "ignore::UserWarning",
+    "ignore::DeprecationWarning",
+]
+
+[tool.coverage.run]
+source = ["neurological_lrd_analysis"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "*/__pycache__/*",
+    "*/venv/*",
+    "*/env/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
