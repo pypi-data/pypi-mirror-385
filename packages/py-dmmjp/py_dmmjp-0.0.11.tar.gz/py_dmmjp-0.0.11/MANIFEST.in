@@ -1,0 +1,25 @@
+include README.md
+include LICENSE
+include CHANGELOG.md
+include CONTRIBUTING.md
+include requirements.txt
+include requirements-dev.txt
+include mypy.ini
+include .pylintrc
+include .pre-commit-config.yaml
+recursive-include py_dmm *.py
+recursive-include py_dmm py.typed
+recursive-include tests *.py
+recursive-include examples *.py
+recursive-include docs *.md *.rst *.txt
+prune .git
+prune .github
+prune .mypy_cache
+prune __pycache__
+prune *.egg-info
+prune dist
+prune build
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude *~
+global-exclude .DS_Store
