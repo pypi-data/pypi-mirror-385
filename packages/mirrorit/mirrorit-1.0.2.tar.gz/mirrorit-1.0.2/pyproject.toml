@@ -1,0 +1,21 @@
+[project]
+name = "mirrorit"
+version = "1.0.2"
+description = "For mirroring text."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.5"
+authors = [
+    { name="Lunethra" }
+]
+dependencies = [
+    "typer[all]",
+    "rich"
+]
+
+[project.scripts]
+mirrorit = "mirrorit.cli:app"
+
+[project.urls]
+"Homepage" = "https://github.com/Lunethra/mirrorit"
