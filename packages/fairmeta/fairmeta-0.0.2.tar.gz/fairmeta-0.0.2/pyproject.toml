@@ -1,0 +1,47 @@
+[build-system]
+requires = ["hatchling >= 1.26"]
+build-backend = "hatchling.build"
+
+[project]
+name = "fairmeta"
+version = "0.0.2"
+dependencies = [
+    "dotenv",
+    "gcapi",
+    "pydantic",
+    "pyyaml",
+    "requests",
+    "sempyro"
+]
+requires-python = ">=3.10"
+authors = [
+    {name = "Yme Kingma", email = "yme.kingma@radboudumc.nl"}
+]
+description = "fairmeta"
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+keywords = ["fair", "metadata", "metadata-model", "fdp", "pydantic", "rdf", "dcat", "schema-transformation"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Information Analysis"
+]
+
+[project.optional-dependencies]
+tests = [
+    "pytest"
+]
+
+[project.urls]
+Homepage = "https://github.com/YKingma99/FAIRMeta"
+Issues = "https://github.com/YKingma99/FAIRMeta/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/fairmeta"]
+
+[project.scripts]
+fairmeta = "fairmeta.__main__:main"
