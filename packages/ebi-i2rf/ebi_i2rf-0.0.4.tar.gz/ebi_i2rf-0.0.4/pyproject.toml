@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["i2rf"]
+package-dir = {"" = "src"} 
+
+include-package-data = true
+
+[project]
+name = "ebi_i2rf"
+version = "0.0.4"
+authors = [
+  { name="David Maerker", email="david.maerker@kit.edu" },
+]
+dependencies = [
+  "numpy",
+  "pandas", 
+  "setuptools", 
+  "wheel"
+]
+description = "Post processing package for the I2RF tutorial at EBI-TFS (Karlsruhe Institute of Technology)"
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+keywords = ["EBI-TFS", "I2RF", "i2rf", "KIT-EBI"]
