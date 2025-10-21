@@ -1,0 +1,81 @@
+Metadata-Version: 2.4
+Name: ut_htx
+Version: 2.0.0.20251020
+Summary: Utilities for Dictionaries
+Author-email: Bernd Stroehle <bernd.stroehle@gmail.com>
+Maintainer-email: Bernd Stroehle <bernd.stroehle@gmail.com>
+License-Expression: GPL-3.0-only WITH Classpath-exception-2.0 OR BSD-3-Clause
+Project-URL: Source Code, https://github.com/bs29/ut_htx/tree/master
+Project-URL: Homepage, https://kosakya.de/
+Project-URL: Documentation, https://ut-dic.readthedocs.io/en/latest
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Natural Language :: English
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.10
+Description-Content-Type: text/x-rst
+License-File: LICENSE.txt
+Requires-Dist: httpx>=0.28.1
+Requires-Dist: ut_com>=2.0.0.20251018
+Requires-Dist: ut_gen>=1.1.0.20250821
+Requires-Dist: ut_http>=1.0.0.20250909
+Requires-Dist: xmltodict>=0.14.2
+Dynamic: license-file
+
+######
+ut_htx
+######
+
+Description
+===========
+
+.. start short_desc
+
+**Application 'Utilities'**
+
+.. end short_desc
+
+.. start long_desc
+
+**ut_htx ís a collection of interface modules to 'Python Httpx Utility'**
+
+.. end long_desc
+
+Installation
+============
+
+.. start installation
+
+``pyproject-parser`` can be installed from PyPI using pip.
+
+.. code-block:: shell
+
+	$ python -m pip install ut_htx
+
+.. end installation
+
+Modules
+=======
+
+``ut_htx`` contains the following modules.
+
+.. table:: **ut_htx Modules: Interface to 'Python Application Utilities'**
+
+    +-------------+-------------------------------------------------------------------+------------+
+    |*Module*     |*Python Module*                                                    |*Library*   |
+    +-------------+---------------+---------------------------------------------------+-----+------+
+    |*Name*       |*Imports*      |*Link*                                             |*Ref*|*Type*|
+    +=============+===============+===================================================+=====+======+
+    |ka_http.py   |http_client    |(https://pypi.org/http_client)                     |PyPi |      |
+    |             |requests       |(https://pypi.org/requests)                        |PyPi |      |
+    |             |socket         |(https://docs.python.org/3.10/library/socket.html) |PyPi |      |
+    |             |xmltodict      |(https://pypi.org/xmltodict                        |PyPi |      |
+    |             |urllib3        |(https://pypi.org/urllib3)                         |PyPi |      |
+    +-------------+---------------+---------------------------------------------------+-----+------+
+
+Appendix
+========
+
+.. contents:: **Table of Content**
