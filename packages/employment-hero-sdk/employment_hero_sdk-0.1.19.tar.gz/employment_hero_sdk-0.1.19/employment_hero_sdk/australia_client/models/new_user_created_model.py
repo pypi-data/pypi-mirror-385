@@ -1,0 +1,112 @@
+from typing import Any, Dict, List, Type, TypeVar, Union
+
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
+
+from ..types import UNSET, Unset
+
+T = TypeVar("T", bound="NewUserCreatedModel")
+
+
+@_attrs_define
+class NewUserCreatedModel:
+    """
+    Attributes:
+        id (Union[Unset, int]):
+        username (Union[Unset, str]):
+        display_name (Union[Unset, str]):
+        time_zone (Union[Unset, str]):
+        api_key (Union[Unset, str]):
+        email (Union[Unset, str]):
+        email_confirmed (Union[Unset, bool]):
+    """
+
+    id: Union[Unset, int] = UNSET
+    username: Union[Unset, str] = UNSET
+    display_name: Union[Unset, str] = UNSET
+    time_zone: Union[Unset, str] = UNSET
+    api_key: Union[Unset, str] = UNSET
+    email: Union[Unset, str] = UNSET
+    email_confirmed: Union[Unset, bool] = UNSET
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+
+    def to_dict(self) -> Dict[str, Any]:
+        id = self.id
+
+        username = self.username
+
+        display_name = self.display_name
+
+        time_zone = self.time_zone
+
+        api_key = self.api_key
+
+        email = self.email
+
+        email_confirmed = self.email_confirmed
+
+        field_dict: Dict[str, Any] = {}
+        field_dict.update(self.additional_properties)
+        field_dict.update({})
+        if id is not UNSET:
+            field_dict["id"] = id
+        if username is not UNSET:
+            field_dict["username"] = username
+        if display_name is not UNSET:
+            field_dict["displayName"] = display_name
+        if time_zone is not UNSET:
+            field_dict["timeZone"] = time_zone
+        if api_key is not UNSET:
+            field_dict["apiKey"] = api_key
+        if email is not UNSET:
+            field_dict["email"] = email
+        if email_confirmed is not UNSET:
+            field_dict["emailConfirmed"] = email_confirmed
+
+        return field_dict
+
+    @classmethod
+    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        d = src_dict.copy()
+        id = d.pop("id", UNSET)
+
+        username = d.pop("username", UNSET)
+
+        display_name = d.pop("displayName", UNSET)
+
+        time_zone = d.pop("timeZone", UNSET)
+
+        api_key = d.pop("apiKey", UNSET)
+
+        email = d.pop("email", UNSET)
+
+        email_confirmed = d.pop("emailConfirmed", UNSET)
+
+        new_user_created_model = cls(
+            id=id,
+            username=username,
+            display_name=display_name,
+            time_zone=time_zone,
+            api_key=api_key,
+            email=email,
+            email_confirmed=email_confirmed,
+        )
+
+        new_user_created_model.additional_properties = d
+        return new_user_created_model
+
+    @property
+    def additional_keys(self) -> List[str]:
+        return list(self.additional_properties.keys())
+
+    def __getitem__(self, key: str) -> Any:
+        return self.additional_properties[key]
+
+    def __setitem__(self, key: str, value: Any) -> None:
+        self.additional_properties[key] = value
+
+    def __delitem__(self, key: str) -> None:
+        del self.additional_properties[key]
+
+    def __contains__(self, key: str) -> bool:
+        return key in self.additional_properties

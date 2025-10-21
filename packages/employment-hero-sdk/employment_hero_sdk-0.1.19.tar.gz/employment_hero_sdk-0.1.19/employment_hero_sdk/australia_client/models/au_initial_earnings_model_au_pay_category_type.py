@@ -1,0 +1,42 @@
+from enum import Enum
+
+
+class AuInitialEarningsModelAuPayCategoryType(str, Enum):
+    BACKPAYMENT = "BackPayment"
+    ETPLUMPSUMD = "EtpLumpSumD"
+    ETPSUPERABLETYPEOTAXABLE = "EtpSuperableTypeOTaxable"
+    ETPSUPERABLETYPEOTAXFREE = "EtpSuperableTypeOTaxFree"
+    ETPSUPERABLETYPEPTAXABLE = "EtpSuperableTypePTaxable"
+    ETPSUPERABLETYPEPTAXFREE = "EtpSuperableTypePTaxFree"
+    ETPTYPEOTAXABLE = "EtpTypeOTaxable"
+    ETPTYPEOTAXFREE = "EtpTypeOTaxFree"
+    ETPTYPEOUNUSEDLEAVEPAYMENT = "EtpTypeOUnusedLeavePayment"
+    ETPTYPEPTAXABLE = "EtpTypePTaxable"
+    ETPTYPEPTAXFREE = "EtpTypePTaxFree"
+    ETPTYPEPUNUSEDLEAVEPAYMENT = "EtpTypePUnusedLeavePayment"
+    ETPTYPERTAXABLE = "EtpTypeRTaxable"
+    ETPTYPERTAXFREE = "EtpTypeRTaxFree"
+    ETPTYPESTAXABLE = "EtpTypeSTaxable"
+    ETPTYPESTAXFREE = "EtpTypeSTaxFree"
+    GENUINEREDUNDANCYLEAVELOADING = "GenuineRedundancyLeaveLoading"
+    GENUINEREDUNDANCYLEAVEPAYMENT = "GenuineRedundancyLeavePayment"
+    JOBKEEPERCANCELTIER = "JobKeeperCancelTier"
+    JOBKEEPERTIER = "JobKeeperTier"
+    JOBMAKERCANCELNOMINATION = "JobMakerCancelNomination"
+    JOBMAKERCANCELPERIOD = "JobMakerCancelPeriod"
+    JOBMAKERCANCELRENOMINATION = "JobMakerCancelRenomination"
+    JOBMAKERNOMINATION = "JobMakerNomination"
+    JOBMAKERPERIOD = "JobMakerPeriod"
+    JOBMAKERRENOMINATION = "JobMakerRenomination"
+    LEAVELOADING = "LeaveLoading"
+    METHODB2ADDITIONALPAYMENTSOPENINGBALANCE = "MethodB2AdditionalPaymentsOpeningBalance"
+    NORMALTERMINATIONLEAVELOADING = "NormalTerminationLeaveLoading"
+    OPENINGBALANCEALLOWANCES = "OpeningBalanceAllowances"
+    PAIDFAMILYANDDOMESTICVIOLENCELEAVE = "PaidFamilyAndDomesticViolenceLeave"
+    PUBLICHOLIDAYNOTWORKED = "PublicHolidayNotWorked"
+    PUBLICHOLIDAYWORKED = "PublicHolidayWorked"
+    STANDARD = "Standard"
+    UNUSEDLEAVEPAYMENTNORMALTERMINATION = "UnusedLeavePaymentNormalTermination"
+
+    def __str__(self) -> str:
+        return str(self.value)
