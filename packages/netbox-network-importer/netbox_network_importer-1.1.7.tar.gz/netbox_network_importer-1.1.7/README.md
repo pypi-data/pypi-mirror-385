@@ -1,0 +1,206 @@
+# Netbox Network Importer
+
+Tool to analyze and synchronize an existing network with a Netbox (SOT).
+
+The main use cases for the network importer: 
+ - Import an existing network into a Netbox
+ - ~~Check the differences between the running network and the Netbox~~
+
+---
+## Install
+1. Clone repository
+   - `git clone git@gitlab.cesnet.cz:701/done/netbox_network_importer.git`
+2. Go into the repository
+   - `cd netbox_network_importer `
+3. Create `virtualenv`
+   - `python3 -m venv venv`
+3. Activate it
+   - `source venv/bin/activate`
+3. Install the tool
+   - `pip install .`
+---
+## Pre-requisite
+To operate, the Netbox Network Importer is dependent on the following items:
+- Access to Netbox API
+- Access to Network Devices via SSH
+- Created Custom Field on Netbox
+```json
+   {
+    "display": "Ignore Importer",
+    "content_types": [
+        "dcim.interface",
+    ],
+    "type": {
+        "value": "boolean",
+        "label": "Boolean (true/false)"
+    },
+    "object_type": null,
+    "data_type": "boolean",
+    "name": "ignore_importer",
+    "label": "Ignore Importer",
+    "description": "Will be ignored when processed by Network Importer",
+    "required": true,
+    "filter_logic": {
+        "value": "exact",
+        "label": "Exact"
+    },
+    "default": false,
+    "weight": 100,
+   }
+```
+---
+## Inventory
+A device inventory must be available in NetBox. 
+
+To be able to connect to the device the following information needs to be defined :
+- Primary ip address
+- Platform (must be a one of the following ['iosxr', 'ios', 'iosxe'])
+---
+## Configuration file
+The information to connect to NetBox must be provided via the configuration file. The configuration file below presents all available options that can be provided to control the behavior of the Netbox Network Importer.
+
+Netbox Network Importer tries to find the configuration file at:
+- `/home/<user>/.config/netbox_network_importer/config.yml` 
+- `/etc/netbox_network_importer/config.yml`
+- Or you can set path to configuration file like:
+   - `netbox_network_importer --configs path_to_dir_with_config/ synchronize`
+
+### Complete Configuration Example
+```yaml
+---
+netbox:
+  NETBOX_API_TOKEN: "your_api_token_here"
+  NETBOX_INSTANCE_URL: "https://your-netbox-instance.com/"
+  NETBOX_GRAPHQL_URL: "https://your-netbox-instance.com/graphql/"
+tacacs:
+  TACACS_USERNAME: "your_username"
+  TACACS_PASSWORD: "your_password"
+config:
+  # Logging Configuration
+  LOG_DIR: "logs"                            # Directory for log files
+  LOG_LEVEL: "INFO"                          # Log level: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  
+  # Output Configuration  
+  OUTPUT_DIR: "outputs"                      # Directory for result files (JSON/HTML)
+  
+  # Network Behavior
+  SUPPRESS_CONNECTION_ERRORS: true           # Suppress verbose NAPALM/NETCONF/SSH logs
+  NORNIR_WORKERS: 20                        # Number of parallel workers (default: 20)
+  
+  # Result Filtering
+  FILTER_EMPTY_UPDATE_RESULTS: true         # Filter UPDATE actions with empty diff
+  FILTER_EMPTY_TASK_RESULTS: true          # Filter tasks with no results
+  
+  # Output Formatting
+  USE_NORNIR_RICH_PRINT: true              # Use rich formatting (true) vs plain text (false)
+```
+
+### Configuration Options Explained
+
+#### Logging Options
+- **`LOG_LEVEL`**: Controls verbosity (DEBUG for detailed info, CRITICAL for errors only)
+- **`LOG_DIR`**: Where log files are stored (creates automatically)
+- **`SUPPRESS_CONNECTION_ERRORS`**: When `true`, hides verbose network library logs
+
+#### Performance Options  
+- **`NORNIR_WORKERS`**: Number of devices processed in parallel (adjust based on your system)
+
+#### Output Control
+- **`FILTER_EMPTY_UPDATE_RESULTS`**: Hides UPDATE operations with no actual changes
+- **`FILTER_EMPTY_TASK_RESULTS`**: Hides tasks that produced no results
+- **`USE_NORNIR_RICH_PRINT`**: Choose between colored rich output or plain text
+
+#### Log Files Generated
+- **`logs/output.log`**: Main application log (rotated at 5MB, kept 10 days)
+- **`logs/errors.log`**: Error-only log (rotated at 5MB, kept 30 days)  
+- **`logs/debug.log`**: Detailed debug log (only when LOG_LEVEL=DEBUG, kept 3 days)
+---
+## Execute
+The Netbox Network Importer runs only in apply mode and provides detailed logging and result filtering.
+
+- In apply mode, the NETBOX will be updated with:
+   - Device serial numbers
+   - Network interfaces
+   - IP addresses
+   - VLANs 
+   - Link Aggregation Groups (LAGs)
+   - Interface bandwidths
+
+### Apply Mode
+The Netbox Network Importer will attempt to create/update or delete all elements in the Netbox that do not match what has been observed in the network.
+
+#### Device Filtering Rules
+It will ignore devices on certain circumstances:
+- Device `status` must be `Active`, otherwise the device is skipped
+- Device `primary_ip` must be properly set, otherwise the device is skipped
+- Device `platform` must include one of the following values `[ios, iosxr, iosxe]`, otherwise the device is skipped
+
+#### Interface Filtering Rules
+- If interface has attribute `Ignore Importer` set to `True`, then the processing on the Interface will be skipped and ignored
+
+#### Result Filtering (Configurable)
+- **Empty Updates**: When `FILTER_EMPTY_UPDATE_RESULTS: true`, UPDATE actions with no actual changes are hidden from output
+- **Empty Tasks**: When `FILTER_EMPTY_TASK_RESULTS: true`, tasks that produce no results are hidden from output
+- **Output Format**: When `USE_NORNIR_RICH_PRINT: true`, uses colored rich formatting; when `false`, uses plain text
+
+**Execution Examples**:
+- `netbox_network_importer synchronize` # runs the importer on all active devices
+- `netbox_network_importer synchronize -d Rxx` # runs importer on device Rxx from Netbox
+- `netbox_network_importer synchronize -p iosxe` # runs importer on all devices with platform iosxe
+- `netbox_network_importer synchronize -d Rxx -d Ryy` # runs importer on devices Rxx and Ryy
+
+**Logging and Output**:
+- Real-time progress is shown in the console
+- Detailed logs are written to `logs/output.log`
+- Errors are separately logged to `logs/errors.log`
+- Results are saved as JSON and HTML in the `outputs/` directory
+---
+
+### Help
+```
+~/netbox_network_importer$ netbox_network_importer --help
+Usage: netbox_network_importer [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  -c, --configs PATH  path to folder with configurations
+  --help              Show this message and exit.
+
+Commands:
+  pyats             Connect to device using pyats and pynetbox and print parsed command
+  synchronize       Run set of Nornir task to update data in Netbox from network devices
+  synchronize-device  Synchronize specific device data in Netbox from network
+
+~/netbox_network_importer$ netbox_network_importer synchronize --help
+Usage: netbox_network_importer synchronize [OPTIONS]
+
+  Run set of Nornir task to update data in Netbox from network devices
+
+  Args:     
+    devices (str): device name filter, can be used multiple times
+    platforms (str): platform name filter, can be used multiple times
+  Returns:     
+    dict: Dictionary of hosts, it's actions and results
+
+Options:
+  -d, --devices TEXT    Run on specified devices
+  -p, --platforms TEXT  Run on specified platforms
+  --help                Show this message and exit.
+```
+
+### Troubleshooting
+
+#### Configuration Issues
+- Check that `config.yml` exists in one of the expected locations
+- Verify NETBOX_API_TOKEN has proper permissions
+- Ensure NETBOX_INSTANCE_URL is accessible
+
+#### Logging Issues
+- Check that `LOG_DIR` path is writable
+- Use `LOG_LEVEL: "DEBUG"` for detailed troubleshooting
+- Set `SUPPRESS_CONNECTION_ERRORS: false` to see network connection details
+
+#### Performance Issues
+- Adjust `NORNIR_WORKERS` (reduce for slower systems, increase for faster ones)
+- Use result filtering to reduce output volume
+- Monitor log files for bottlenecks
+---
