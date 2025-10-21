@@ -1,0 +1,302 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+maturityAttributes:
+  productionStatus: PROD
+securityAttributes:
+  defaultGranularity: record
+  securityLevels:
+    - PUBLIC
+entryTypes:
+
+  dataset:
+    id: dataset
+    name: Dataset
+    ontologyTermForThisType:
+      id: NCIT:C47824
+      label: Data set
+    partOfSpecification: Beacon v2.2.0
+    description: >-
+      A Dataset is a collection of related sets of information, e.g. genomic
+      variations together with associated procedural and biological metadata. In a
+      Beacon context, a datasets may consist of information generated in a specific
+      study or project, or represent the main content of the Beacon resource.
+    defaultSchema:
+      id: dataset
+      name: Default schema for datasets
+      referenceToSchemaDefinition: https://progenetix.org/services/schemas/dataset
+      schemaVersion: v2.2.0
+    aCollectionOf:
+      - id: genomicVariant
+        name: Genomic Variants
+      - id: biosample
+        name: Biosamples
+      - id: individual
+        name: Individuals
+      - id: analysis
+        name: Genomic Analyses
+    additionalSupportedSchemas: []
+    #- byconic -#
+    path_id_value_bycon_parameter: dataset_ids
+    response_schema: beaconCollectionsResponse
+    tests:
+      - description: default test mode
+        test_values:
+          testMode: true
+
+################################################################################
+
+  cohort:
+    id: cohort
+    name: Cohort
+    ontologyTermForThisType:
+      id: NCIT:C61512
+      label: Cohort
+    partOfSpecification: Beacon v2.2.0
+    description: >-
+      A group of individuals, identified by a common characteristic.
+    defaultSchema:
+      id: cohort
+      name: Default schema for cohorts
+      referenceToSchemaDefinition: https://progenetix.org/services/schemas/cohort
+      schemaVersion: v2.2.0
+    aCollectionOf:
+      - id: individual
+        name: Individuals
+    additionalSupportedSchemas: []
+    #- byconic -#
+    path_id_value_bycon_parameter: filters
+    response_schema: beaconCollectionsResponse
+    tests:
+      - description: default test mode
+        test_values:
+          testMode: true
+
+################################################################################
+
+  genomicVariant:
+    id: genomicVariant
+    name: Genomic Variants
+    ontologyTermForThisType:
+      id: ENSGLOSSARY:0000092
+      label: Variant
+    partOfSpecification: Beacon v2.2.0
+    description: >-
+      Information about matching genomic variants from the corresponding dataset.
+      The type of response used for the endpoint depends on the requested and granted
+      `responseGranularity`.
+    defaultSchema:
+      id: genomicVariant
+      name: Default schema for a genomic variation
+      referenceToSchemaDefinition: https://progenetix.org/services/schemas/genomicVariant
+      schemaVersion: v2.2.0
+    additionallySupportedSchemas: []
+    #- byconic -#
+    response_schema: beaconResultsetsResponse
+    path_id_value_bycon_parameter: variant_ids
+    tests:
+      - description: default test mode
+        test_values:
+          testMode: true
+   
+################################################################################
+
+  individual:
+    id: individual
+    name: Individual
+    ontologyTermForThisType:
+      id: NCIT:C25190
+      label: Person
+    partOfSpecification: Beacon v2.2.0
+    description: >-
+      Information about matching subjects (individuals) from the corresponding dataset.
+      The type of response used for the endpoint depends on the requested and granted
+      `responseGranularity`.
+    defaultSchema:
+      id: individual
+      name: Default schema for an individual
+      referenceToSchemaDefinition: https://progenetix.org/services/schemas/individual
+    additionallySupportedSchemas: []
+    #- byconic -#
+    response_schema: beaconResultsetsResponse
+    path_id_value_bycon_parameter: individual_ids
+    examples:
+      - ?filters=EFO:0030049&limit=5
+    tests:
+      - description: default test mode
+        test_values:
+          testMode: true
+
+
+################################################################################
+
+  biosample:
+    id: biosample
+    name: Biological Sample
+    ontologyTermForThisType:
+      id: NCIT:C70699
+      label: Biospecimen
+    partOfSpecification: Beacon v2.2.0
+    description: >-
+      Information about matching samples from the corresponding dataset.
+      The type of response used for the endpoint depends on the requested and granted
+      `responseGranularity`.
+    defaultSchema:
+      id: biosample
+      name: Default schema for a biological sample
+      referenceToSchemaDefinition: https://progenetix.org/services/schemas/biosample
+    additionallySupportedSchemas: []
+    #- byconic -#
+    response_schema: beaconResultsetsResponse
+    path_id_value_bycon_parameter: biosample_ids
+    tests:
+      - description: default test mode
+        test_values:
+          testMode: true
+
+
+################################################################################
+
+  run:
+    id: run
+    name: Experimental run
+    ontologyTermForThisType:
+      id: NCIT:C148088
+      label: Sequencing run
+    partOfSpecification: Beacon v2.2.0
+    description: The valid and completed operation of a high-throughput sequencing
+      instrument for a single sequencing process. [ NCI ]
+    defaultSchema:
+      id: run
+      name: Default schema for a sequencing run
+      referenceToSchemaDefinition: https://progenetix.org/services/schemas/run
+      schemaVersion: v2.2.0
+    additionallySupportedSchemas: []
+    #- byconic -#
+    response_schema: beaconResultsetsResponse
+    path_id_value_bycon_parameter: run_ids
+    tests:
+      - description: default test mode
+        test_values:
+          testMode: true
+
+################################################################################
+
+  analysis:
+    id: analysis
+    name: Bioinformatics analysis of a genomic experiment
+    ontologyTermForThisType:
+      id: edam:operation_2945
+      label: Analysis
+    partOfSpecification: Beacon v2.2.0
+    description: >-
+      Information about matching analyses from the corresponding dataset.
+      The type of response used for the endpoint depends on the requested and granted
+      `responseGranularity`.
+    defaultSchema:
+      id: analysis
+      name: Default schema for a bioinformatics analysis
+      referenceToSchemaDefinition: https://progenetix.org/services/schemas/analysis
+      schemaVersion: v2.2.0
+    additionallySupportedSchemas: []
+    #- byconic -#
+    response_schema: beaconResultsetsResponse
+    path_id_value_bycon_parameter: analysis_ids
+    tests:
+      - description: default test mode
+        test_values:
+          testMode: true
+
+
+################################################################################
+
+  phenopacket:
+    id: phenopacket
+    name: Phenopacket
+    ontologyTermForThisType:
+      id: NCIT:C25190
+      label: Person
+    partOfSpecification: BeaconPlus
+    description: >-
+      Information about matching subjects (individuals) from the corresponding dataset,
+      converted to Phenopackets format by aggregating the relevant information from
+      the matched `individual`, `biosample`s, `analysis`(/es) and `genomicVariation`s.
+    defaultSchema:
+      id: phenopacket
+      name: Default schema for a phenopacket
+      referenceToSchemaDefinition: https://progenetix.org/services/schemas/phenopacket
+    additionallySupportedSchemas: []
+    #- byconic -#
+    response_schema: beaconResultsetsResponse
+    path_id_value_bycon_parameter: individual_ids
+    tests:
+      - description: default test mode
+        test_values:
+          testMode: true
+
+
+################################################################################
+################################################################################
+################################################################################
+
+  filteringTerm:
+    id: filteringTerm
+    description: >-
+      Information about the filtering terms available in the beacon instance.
+    response_schema: beaconFilteringTermsResponse
+    defaultSchema:
+      id: filteringTerm
+      referenceToSchemaDefinition: https://progenetix.org/services/schemas/filteringTermsSchema/
+    path_id_value_bycon_parameter: filters
+    tests:
+      - description: default test mode
+        test_values:
+          testMode: true
+
+
+################################################################################
+
+  info:
+    id: info
+    description: >-
+      Information about the beacon instance.
+    response_schema: beaconInfoResponse
+    defaultSchema:
+      id: configuration
+      referenceToSchemaDefinition: https://progenetix.org/services/schemas/beaconInfoResults/
+    content: {}
+
+
+  ################################################################################
+
+  beaconMap:
+    id: beaconMap
+    description: >-
+      Map of the beacon instance configuration.
+    response_schema: beaconMapResponse
+    defaultSchema:
+      id: map
+      referenceToSchemaDefinition: https://progenetix.org/services/schemas/beaconMapSchema/
+
+
+  ################################################################################
+
+  configuration:
+    description: >-
+      Information about the beacon instance configuration.
+    id: configuration
+    response_schema: beaconConfigurationResponse
+    defaultSchema:
+      id: configuration
+      referenceToSchemaDefinition: https://progenetix.org/services/schemas/beaconConfigurationSchema/
+
+
+  ################################################################################
+
+  entryType:
+    id: entryType
+    response_schema: beaconEntryTypesResponse
+    defaultSchema:
+      id: entryType
+      referenceToSchemaDefinition: https://progenetix.org/services/schemas/entryTypesSchema/
+
+
+
