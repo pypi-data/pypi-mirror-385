@@ -1,0 +1,131 @@
+---
+title: Relationship building (no extra DB round trips)
+---
+
+**What you'll learn**: How to build parent-child relationships in memory and flush once, avoiding N+1 database queries.
+
+**Prerequisites**: Understanding of `InstanceEmit` and composite keys.
+
+Build relationships in-memory using composite keys, then flush once. This avoids per-row database round trips.
+
+### Many-to-one via relationship keys
+
+Here's how etielle builds relationships without database round trips:
+
+1. **Compute keys**: Walk through your JSON again to compute which child belongs to which parent
+2. **Store in sidecar**: Keep these relationships separate from your instances (in a "sidecar" dict)
+3. **Bind in memory**: Link child objects to parent objects using Python references
+4. **Flush once**: Save everything to the database in one operation
+
+This avoids the typical ORM pattern of "insert parent, get ID, insert child with foreign key" which requires multiple queries.
+
+### Example structure
+
+```
+JSON:
+{
+  "users": [
+    {"id": "u1", "posts": [
+      {"id": "p1", "title": "Hello"},
+      {"id": "p2", "title": "World"}
+    ]}
+  ]
+}
+
+In memory after mapping:
+User(id="u1")
+Post(id="p1", user=None)  ← We need to link this
+Post(id="p2", user=None)  ← And this
+
+After bind_many_to_one:
+User(id="u1")
+Post(id="p1", user=<User u1>)  ← Now linked!
+Post(id="p2", user=<User u1>)  ← Now linked!
+```
+
+### Complete example
+
+``` {python}
+#| echo: false
+from etielle.relationships import ManyToOneSpec, compute_relationship_keys, bind_many_to_one
+from etielle.executor import run_mapping
+from etielle.transforms import get, get_from_parent
+from etielle.core import MappingSpec, TraversalSpec, field_of
+from etielle.instances import InstanceEmit, FieldSpec, PydanticBuilder
+from pydantic import BaseModel
+
+class User(BaseModel):
+    id: str
+    email: str | None = None
+
+class Post(BaseModel):
+    id: str
+    title: str
+    user: User | None = None
+
+root = {
+  "users": [
+    {"id": "u1", "email": "alice@example.com", "posts": [
+      {"id": "p1", "title": "Hello"},
+      {"id": "p2", "title": "World"}
+    ]},
+    {"id": "u2", "email": "bob@example.com", "posts": []}
+  ]
+}
+
+users_emit = InstanceEmit[User](
+    table="users",
+    join_keys=[get("id")],
+    fields=[
+        FieldSpec(selector=field_of(User, lambda u: u.id), transform=get("id")),
+        FieldSpec(selector=field_of(User, lambda u: u.email), transform=get("email")),
+    ],
+    builder=PydanticBuilder(User),
+)
+
+posts_emit = InstanceEmit[Post](
+    table="posts",
+    join_keys=[get("id")],
+    fields=[
+        FieldSpec(selector=field_of(Post, lambda p: p.id), transform=get("id")),
+        FieldSpec(selector=field_of(Post, lambda p: p.title), transform=get("title")),
+    ],
+    builder=PydanticBuilder(Post),
+)
+
+mapping = MappingSpec(traversals=[
+    TraversalSpec(path=["users"], mode="auto", emits=[users_emit]),
+    TraversalSpec(path=["users"], mode="auto", inner_path=["posts"], inner_mode="auto", emits=[posts_emit]),
+])
+```
+
+``` {python}
+# Using the models, emits, mapping, and root from above
+
+relationships = [
+    ManyToOneSpec(
+        child_table="posts",
+        parent_table="users",
+        attr="user",
+        child_to_parent_key=[get_from_parent("id")],
+    )
+]
+
+results = run_mapping(root, mapping)
+sidecar = compute_relationship_keys(root, mapping.traversals, relationships)
+bind_many_to_one(results, relationships, sidecar)
+print(sorted([(p.id, p.user.id if p.user else None) for p in results["posts"].instances.values()]))
+```
+
+### Behavior
+
+- Parent indices are built from finalized instances per table.
+- Missing parents aggregate clear errors (optional raise).
+- No mutation of domain objects during key computation (keys stored in sidecar map).
+
+For a complete SQLAlchemy integration example with automatic flushing, see [SQLAlchemy adapter](sqlalchemy-adapter.qmd).
+
+### See also
+
+- [SQLAlchemy adapter](sqlalchemy-adapter.qmd) - Full integration with SQLAlchemy ORM
+- [Instance emission](instance-emission.qmd) - Creating the instances that relationships link
