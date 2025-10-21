@@ -1,0 +1,100 @@
+Metadata-Version: 2.4
+Name: pkdb-analysis
+Version: 0.3.1
+Summary: Python utilities for PK-DB.
+Author-email: Matthias König <konigmatt@googlemail.com>
+Maintainer-email: Matthias König <konigmatt@googlemail.com>
+License-File: LICENSE
+Keywords: PK-DB,pharmacokinetics,standardization
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Scientific/Engineering :: Bio-Informatics
+Requires-Python: >=3.11
+Requires-Dist: altair>=4.1.0
+Requires-Dist: coloredlogs>=14.0
+Requires-Dist: depinfo>=0.1.7
+Requires-Dist: gspread-pandas>=2.2.3
+Requires-Dist: ipython
+Requires-Dist: matplotlib>=3.4
+Requires-Dist: numpy>=2.2
+Requires-Dist: openpyxl>=3.0.5
+Requires-Dist: pandas>=1.3
+Requires-Dist: pint>=0.17
+Requires-Dist: pyyaml>=5.3.1
+Requires-Dist: requests>=2.24.0
+Requires-Dist: rich
+Requires-Dist: scikit-learn>=0.24.2
+Requires-Dist: seaborn>=0.11.1
+Requires-Dist: xlsxwriter>=1.3.7
+Provides-Extra: dev
+Requires-Dist: bump-my-version>=1.2.4; extra == 'dev'
+Requires-Dist: mypy>=1.18.2; extra == 'dev'
+Requires-Dist: pre-commit>=4.3.0; extra == 'dev'
+Requires-Dist: ruff>=0.14.0; extra == 'dev'
+Provides-Extra: test
+Requires-Dist: pytest-cov>=7.0.0; extra == 'test'
+Requires-Dist: pytest>=8.4.2; extra == 'test'
+Requires-Dist: tox>=4.31.0; extra == 'test'
+Description-Content-Type: text/markdown
+
+# pkdb_analysis: PK-DB python interface
+[![GitHub Actions CI/CD Status](https://github.com/matthiaskoenig/pkdb_analysis/workflows/CI-CD/badge.svg)](https://github.com/matthiaskoenig/pkdb_analysis/actions/workflows/main.yml)
+[![Version](https://img.shields.io/pypi/v/pkdb_analysis.svg)](https://pypi.org/project/pkdb_analysis/)
+[![Python Versions](https://img.shields.io/pypi/pyversions/pkdb-analysis.svg)](https://pypi.org/project/pkdb-analysis/)
+[![MIT License](https://img.shields.io/pypi/l/sbmlutils.svg)](https://opensource.org/licenses/MIT)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3997539.svg)](https://doi.org/10.5281/zenodo.3997539)
+
+pkdb_analysis is a collection of python utilities to interact with
+PK-DB https://pk-db.com via the available REST endpoints https://pk-db.com/api/v1/swagger/.
+
+## How to cite
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3997539.svg)](https://doi.org/10.5281/zenodo.3997539)
+
+## Installation
+
+pkdb_analysis is available from [pypi](https://pypi.python.org/pypi/pkdb-analysis) and
+can be installed via
+```
+pip install pkdb-analysis
+```
+
+## PK-DB endpoint
+
+pkdb_analysis requires an existing PK-DB endpoint, which can be set by setting the
+respective environment variables.
+
+```bash
+set -a && source .env.local
+```
+
+The public instances of PK-DB are available from
+```bash
+API_BASE=https://alpha.pk-db.com
+API_BASE=https://pk-db.com
+```
+
+## License
+
+- Source Code: [MIT](https://opensource.org/license/MIT)
+- Documentation: [CC BY-SA 4.0](http://creativecommons.org/licenses/by-sa/4.0/)
+
+
+## Funding
+
+Matthias König is supported and by the German Research Foundation (DFG) within the Research Unit Programme FOR 5151
+"`QuaLiPerF <https://qualiperf.de>`__ (Quantifying Liver Perfusion-Function Relationship in Complex Resection -
+A Systems Medicine Approach)" by grant number 436883643 and by grant number
+465194077 (Priority Programme SPP 2311, Subproject SimLivA).
+
+Matthias König was supported by the Federal Ministry of Education and Research (BMBF, Germany)
+within the research network Systems Medicine of the Liver (**LiSyM**, grant number 031L0054).
+
+© 2018-2025 Jan Grzegorzewski & Matthias König.
