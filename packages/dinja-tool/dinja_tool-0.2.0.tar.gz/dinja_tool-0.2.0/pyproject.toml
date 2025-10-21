@@ -1,0 +1,202 @@
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[project]
+name = "dinja-tool"
+version = "0.2.0"
+description = "Tool to create text files from DBML using Jinja2 templates."
+readme = "README.md"
+authors = [
+  {name = "Thomas Wesenigk", email = "aardjon@noreply.codeberg.org"}
+]
+license = "EUPL-1.2"
+license-files = ["LICENSE.txt"]
+keywords = ["dbml", "jinja", "template", "code generation", "database", "schema"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: European Union Public Licence 1.2 (EUPL 1.2)",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Database",
+  "Topic :: Documentation",
+  "Topic :: Software Development",
+  "Topic :: Software Development :: Code Generators",
+  "Topic :: Utilities",
+]
+requires-python = ">=3.12"
+dependencies = [
+  "jinja2",
+  "pydbml",
+]
+
+[project.optional-dependencies]
+dev = [
+  "black",
+  "isort",
+  "mypy",
+  "ruff",
+]
+
+[project.urls]
+Homepage = "https://codeberg.org/Aardjon/dinja"
+Repository = "https://codeberg.org/Aardjon/dinja.git"
+
+
+
+[tool.poetry]
+packages = [
+    { include = "dinja", from="src" },
+]
+
+[tool.poetry.scripts]
+dinja = "dinja.main:main"
+
+
+
+[tool.isort]
+profile = "black"
+line_length = 100
+src_paths = ["src"]
+
+
+
+[tool.mypy]
+mypy_path = "src"
+explicit_package_bases = true
+namespace_packages = true
+
+# The following settings configure the rules checked by MyPy. As with other linters, the basic idea
+# is to first enable everything and only disable single errors we don't want. Further reasoning for
+# this can be found after this configuration.
+# Please refer tp https://mypy.readthedocs.io/en/stable/error_codes.html for information about the
+# available error codes.
+strict = true  # Enable strict mode
+warn_unused_ignores = true
+warn_redundant_casts = true
+
+# Enable additional error codes that seem to be not included in 'strict'
+enable_error_code = ["ignore-without-code"]
+
+
+# Override some settings for external packages to avoid issues from them
+[[tool.mypy.overrides]]
+module = ["pydbml.*"]
+ignore_missing_imports = true
+
+
+
+[tool.ruff]
+# Same as Black, but with a line length of 100.
+line-length = 100
+indent-width = 4
+
+
+[tool.ruff.lint]
+# Allow fix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+# The following settings configure the rules checked by the ruff linter. The idea is to initially
+# enable everything and only disable single rules/categories as necessary. The 'ignore' setting
+# shall preferably contain concrete rule codes, but may also disable whole categories of course.
+# When ignoring rules, please document the reason/motivation. Keep the rules sorted by their
+# categories.
+# Please see https://docs.astral.sh/ruff/rules/ for a full list of available rules and categories.
+#
+select = ["ALL"]
+
+ignore = [
+  # Disable all flake8-annotations rules because they are checked by MyPy
+  "ANN",
+
+  # Disable most of the pydocstyle (D) rules because we don't want to enforce too much docstring
+  # content and style. We mainly want to ensure that there are docstrings at all.
+  "D105",  # Missing docstring in magic method
+  "D200",  # One-line docstring should fit on one line
+  "D203",  # 1 blank line required before class docstring
+  "D205",  # 1 blank line required between summary line and description
+  "D210",  # No whitespaces allowed surrounding docstring text
+  "D212",  # Multi-line docstring summary should start at the first line 
+  "D213",  # Multi-line docstring summary should start at the second line
+  "D214",  # Section is over-indented
+  "D215",  # Section underline is over-indented
+  "D400",  # First line should end with a period
+  "D401",  # First line of docstring should be in imperative mood
+  "D403",  # First word of the first line should be capitalized
+  "D404",  # First word of the docstring should not be "This"
+  "D405",  # Section name should be properly capitalized
+  "D406",  # Section name should end with a newline
+  "D407",  # Missing dashed underline after section
+  "D408",  # Section underline should be in the line following the section's name
+  "D409",  # Section underline should match the length of its name
+  "D410",  # Missing blank line after section
+  "D411",  # Missing blank line before section
+  "D412",  # No blank lines allowed between a section header and its content
+  "D413",  # Missing blank line after last section
+  "D414",  # Section has no content
+  "D415",  # First line should end with a period, question mark, or exclamation point
+  "D416",  # Section name should end with a colon
+
+  # Line length is controlled by the formatter which may produce longer lines in some cases. So
+  # we disable the hard check during linting.
+  "E501",  # Line too long
+
+  # Disable the "traceback beautification" rules from flake8-errmsg, because we don't consider them
+  # being such a thing.
+  "EM101",  # Exception must not use a string literal, assign to variable first
+  "EM102",  # Exception must not use an f-string literal, assign to variable first
+  "EM103",  # Exception must not use a .format() string directly, assign to variable first
+
+  # Do not ban implicit namespace packages, because it's unclear why they are bad.
+  "INP001",  # File is part of an implicit namespace package. Add an __init__.py.
+
+  # We don't want to create issues for every single TODO.
+  "TD003",  # TODO: this link has no issue
+
+  # Disabled because we don't want to enforce many specialized exception classes just for different
+  # messages for now.
+  "TRY003",  # Avoid specifying long messages outside the exception class
+
+  # Disabled because specifying the open mode makes it more explicit, more robust against (though
+  # very unlike) future changes to the default values and doesn't cause any harm.
+  "UP015",  # Unnecessary open mode parameters
+
+  # The following rules conflict with the ruff/black formatting style, so they must be disabled as
+  # recommended by https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules
+  "W191",  # tab-indentation
+  "E111",  # indentation-with-invalid-multiple
+  "E114",  # indentation-with-invalid-multiple-comment
+  "E117",  # over-indented
+  "D206",  # indent-with-spaces
+  "D300",  # triple-single-quotes
+  "Q000",  # bad-quotes-inline-string
+  "Q001",  # bad-quotes-multiline-string
+  "Q002",  # bad-quotes-docstring
+  "Q003",  # avoidable-escaped-quote
+  "COM812",  # missing-trailing-comma
+  "COM819",  # prohibited-trailing-comma
+  "ISC001",  # single-line-implicit-string-concatenation
+  "ISC002",  # multi-line-implicit-string-concatenation
+]
+
+[tool.ruff.lint.flake8-quotes]
+docstring-quotes = "double"
+
+
+[tool.ruff.format]
+# Like Black, use double quotes for strings.
+quote-style = "double"
+
+# Like Black, indent with spaces, rather than tabs.
+indent-style = "space"
+
+# Like Black, respect magic trailing commas.
+skip-magic-trailing-comma = false
+
+# Like Black, automatically detect the appropriate line ending.
+line-ending = "auto"

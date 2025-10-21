@@ -1,0 +1,140 @@
+# Dinja
+
+Dinja is a small tool for creating any text file format from a [DBML](https://dbml.dbdiagram.io/home/)
+database definition using [Jinja2](https://jinja.palletsprojects.com/en/stable/) templates. It can
+be used to auto-generate e.g. DDL, database access code or schema documentation from a single DBML
+file, maintaining a single source of truth for your database schema definition.
+
+Its name is made from "**D**BML" and "J**inja**2", but it's also name of
+[Cucumis melo](https://en.wikipedia.org/wiki/Cucumis_melo) (a melon) 🍈 🍉 in Croatian.
+
+## Installation
+
+Dinja is available on [PyPI](https://pypi.org/project/dinja-tool/), so you can install it with pip:
+
+```
+pip install dinja-tool
+```
+
+## Usage
+
+### 1. Create your Jinja2 template(s)
+
+The template files are of the destination file format but contain some special markers that Dinja
+replaces with the real database schema data. Their file names must end with either `.jinja` or
+`.in`. See the [Jinja2 template documentation](https://jinja.palletsprojects.com/en/stable/templates/)
+for how to write such a template.
+
+The Python data structures provided to the templates are documented in the
+[dinja.api](https://codeberg.org/Aardjon/dinja/src/branch/main/src/dinja/api.py) module.
+
+Dinja can render several template files at once - simply put them all into a single directory.
+
+### 2. Run Dinja on your DBML file
+
+The following command converts the `dbschema.dbml` file by rendering all template files inside the
+`jinja_templates` directory, storing the resulting files into the `generated` directory (creating
+one rendered file for each template).
+
+```
+$ dinja dbschema.dbml jinja_templates generated
+```
+
+The result files have the same names as their corresponding template files, but without the `.jinja`
+or `.in` suffix. Existing files are overwritten without a warning.
+
+`dinja -h` or `dinja --help` prints a summary of all possible options and arguments.
+
+## Examples
+
+Let's create and render a template for the example tables from the
+[DBML introduction](https://dbml.dbdiagram.io/home/):
+
+```dbml
+Table users {
+  id integer
+  username varchar
+  role varchar
+  created_at timestamp
+}
+
+Table posts {
+  id integer [primary key]
+  title varchar
+  body text [note: 'Content of the post']
+  user_id integer
+  status integer
+  created_at timestamp
+}
+```
+
+Store this into the local file `example.dbml`.
+
+For example, the following Jinja2 template generates SQLite2 DDL:
+
+```
+{% for table in tables %}
+CREATE TABLE {{table.name}} (
+    {% for column in table.columns %}
+    "{{column.name}}" {{column.type.upper()}}
+        {{-" PRIMARY KEY" if column.primary_key}}
+        {{-" UNIQUE" if column.unique}}
+        {{-" NOT NULL" if not column.nullable}}
+        {{-" AUTOINCREMENT" if column.autoincrement}}
+        {{-"," if not loop.last or table.primary_key or table.unique_constraints or table.references}}
+    {% endfor %}
+    {% if table.primary_key %}
+    PRIMARY KEY({{table.primary_key|join(", ")}})
+    {{-"," if table.unique_constraints or table.references}}
+    {%endif %}
+    {% for columns in table.unique_constraints %}
+    UNIQUE({{columns|join(", ")}})
+        {{- "," if not loop.last or table.references}}
+    {% endfor %}
+    {% for ref in table.references %}
+    FOREIGN KEY("{{ref.local_columns|join(", ")}}") REFERENCES "{{ref.table_name}}" ("{{ref.remote_columns|join(", ")}}")
+        {{-" ON DELETE {}".format(ref.delete_action) if ref.delete_action}}
+        {{-"," if not loop.last}}
+    {% endfor %}
+);
+
+{% endfor %}
+
+```
+
+Store it into a local file named `schema_creation.sql.in` within the `templates` directory, and run
+
+```
+$ dinja example.dbml templates .
+```
+
+This will create a new file `schema_creation.sql` with the following SQL content:
+
+```
+CREATE TABLE users (
+    "id" INTEGER,
+    "username" VARCHAR,
+    "role" VARCHAR,
+    "created_at" TIMESTAMP
+);
+
+CREATE TABLE posts (
+    "id" INTEGER PRIMARY KEY,
+    "title" VARCHAR,
+    "body" TEXT,
+    "user_id" INTEGER,
+    "status" INTEGER,
+    "created_at" TIMESTAMP
+);
+```
+
+By creating Jinja2 templates according to your needs, you can generate literally any text-based file
+format from your DBML definition.
+
+
+## Copyright & License
+
+Copyright 2025 by Thomas Wesenigk.
+
+Licensed under the EUPL 1.2. Visit https://interoperable-europe.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+to read it in your favourite language.
