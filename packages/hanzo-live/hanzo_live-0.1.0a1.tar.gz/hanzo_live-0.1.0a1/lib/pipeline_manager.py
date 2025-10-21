@@ -1,0 +1,375 @@
+"""Pipeline Manager for lazy loading and managing ML pipelines."""
+
+import asyncio
+import gc
+import logging
+import os
+import platform
+import threading
+import traceback
+from enum import Enum
+from typing import Any
+
+import torch
+from omegaconf import OmegaConf
+
+logger = logging.getLogger(__name__)
+
+
+def get_device() -> torch.device:
+    """Get the appropriate device based on hardware auto-detection."""
+    cpu_mode = os.getenv("SCOPE_CPU_MODE") == "1"
+
+    # Force CPU mode if requested
+    if cpu_mode:
+        logger.info("CPU mode enabled via SCOPE_CPU_MODE")
+        return torch.device("cpu")
+
+    # Auto-detect available hardware
+    if torch.cuda.is_available():
+        # CUDA available (Linux/Windows with NVIDIA GPU)
+        logger.info(f"Using CUDA device: {torch.cuda.get_device_name(0)}")
+        return torch.device("cuda")
+    elif platform.system() == "Darwin" and hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+        # macOS with Apple Silicon - automatically use Metal/MPS
+        try:
+            import mlx.core as mx
+            logger.info(f"Using MLX/Metal backend on Apple Silicon (MLX version {mx.__version__})")
+        except ImportError:
+            logger.info("Using MPS (Metal) backend on Apple Silicon")
+        return torch.device("mps")
+    else:
+        logger.warning("No GPU available, falling back to CPU")
+        return torch.device("cpu")
+
+
+class PipelineNotAvailableException(Exception):
+    """Exception raised when pipeline is not available for processing."""
+
+    pass
+
+
+class PipelineStatus(Enum):
+    """Pipeline loading status enumeration."""
+
+    NOT_LOADED = "not_loaded"
+    LOADING = "loading"
+    LOADED = "loaded"
+    ERROR = "error"
+
+
+class PipelineManager:
+    """Manager for ML pipeline lifecycle."""
+
+    def __init__(self):
+        self._status = PipelineStatus.NOT_LOADED
+        self._pipeline = None
+        self._pipeline_id = None
+        self._load_params = None
+        self._error_message = None
+        self._lock = threading.RLock()  # Single reentrant lock for all access
+
+    @property
+    def status(self) -> PipelineStatus:
+        """Get current pipeline status."""
+        return self._status
+
+    @property
+    def pipeline_id(self) -> str | None:
+        """Get current pipeline ID."""
+        return self._pipeline_id
+
+    @property
+    def error_message(self) -> str | None:
+        """Get last error message."""
+        return self._error_message
+
+    def get_pipeline(self):
+        """Get the loaded pipeline instance (thread-safe)."""
+        with self._lock:
+            if self._status != PipelineStatus.LOADED or self._pipeline is None:
+                raise PipelineNotAvailableException(
+                    f"Pipeline not available. Status: {self._status.value}"
+                )
+            return self._pipeline
+
+    def get_status_info(self) -> dict[str, Any]:
+        """Get detailed status information (thread-safe)."""
+        with self._lock:
+            return {
+                "status": self._status.value,
+                "pipeline_id": self._pipeline_id,
+                "load_params": self._load_params,
+                "error": self._error_message,
+            }
+
+    async def get_pipeline_async(self):
+        """Get the loaded pipeline instance (async wrapper)."""
+        loop = asyncio.get_event_loop()
+        return await loop.run_in_executor(None, self.get_pipeline)
+
+    async def get_status_info_async(self) -> dict[str, Any]:
+        """Get detailed status information (async wrapper)."""
+        loop = asyncio.get_event_loop()
+        return await loop.run_in_executor(None, self.get_status_info)
+
+    async def load_pipeline(
+        self, pipeline_id: str | None = None, load_params: dict | None = None
+    ) -> bool:
+        """
+        Load a pipeline asynchronously.
+
+        Args:
+            pipeline_id: ID of pipeline to load. If None, uses PIPELINE env var.
+            load_params: Pipeline-specific load parameters.
+
+        Returns:
+            bool: True if loaded successfully, False otherwise.
+        """
+        loop = asyncio.get_event_loop()
+        return await loop.run_in_executor(
+            None, self._load_pipeline_sync_wrapper, pipeline_id, load_params
+        )
+
+    def _load_pipeline_sync_wrapper(
+        self, pipeline_id: str | None = None, load_params: dict | None = None
+    ) -> bool:
+        """Synchronous wrapper for pipeline loading with proper locking."""
+        with self._lock:
+            # If already loaded with same type and same params, return success
+            # Normalize None to empty dict for comparison
+            current_params = self._load_params or {}
+            new_params = load_params or {}
+
+            if (
+                self._status == PipelineStatus.LOADED
+                and self._pipeline_id == pipeline_id
+                and current_params == new_params
+            ):
+                logger.info(
+                    f"Pipeline {pipeline_id} already loaded with matching parameters"
+                )
+                return True
+
+            # If a different pipeline is loaded OR same pipeline with different params, unload it first
+            if self._status == PipelineStatus.LOADED and (
+                self._pipeline_id != pipeline_id or current_params != new_params
+            ):
+                self._unload_pipeline_unsafe()
+
+            # If already loading, someone else is handling it
+            if self._status == PipelineStatus.LOADING:
+                logger.info("Pipeline already loading by another thread")
+                return False
+
+            try:
+                self._status = PipelineStatus.LOADING
+                self._error_message = None
+
+                # Determine pipeline type
+                if pipeline_id is None:
+                    pipeline_id = os.getenv("PIPELINE", "longlive")
+
+                logger.info(f"Loading pipeline: {pipeline_id}")
+
+                # Load the pipeline synchronously (we're already in executor thread)
+                pipeline = self._load_pipeline_implementation(pipeline_id, load_params)
+
+                self._pipeline = pipeline
+                self._pipeline_id = pipeline_id
+                self._load_params = load_params
+                self._status = PipelineStatus.LOADED
+
+                logger.info(f"Pipeline {pipeline_id} loaded successfully")
+                return True
+
+            except Exception as e:
+                error_msg = f"Failed to load pipeline {pipeline_id}: {str(e)}"
+                logger.error(error_msg)
+                logger.error(f"Traceback:\n{traceback.format_exc()}")
+
+                self._status = PipelineStatus.ERROR
+                self._error_message = error_msg
+                self._pipeline = None
+                self._pipeline_id = None
+                self._load_params = None
+
+                return False
+
+    def _unload_pipeline_unsafe(self):
+        """Unload the current pipeline. Must be called with lock held."""
+        if self._pipeline:
+            logger.info(f"Unloading pipeline: {self._pipeline_id}")
+
+        # Change status and pipeline atomically
+        self._status = PipelineStatus.NOT_LOADED
+        self._pipeline = None
+        self._pipeline_id = None
+        self._load_params = None
+        self._error_message = None
+
+        # Cleanup resources
+        gc.collect()
+        if torch.cuda.is_available():
+            try:
+                torch.cuda.empty_cache()
+                torch.cuda.synchronize()
+                logger.info("CUDA cache cleared")
+            except Exception as e:
+                logger.warning(f"CUDA cleanup failed: {e}")
+
+    def _load_pipeline_implementation(
+        self, pipeline_id: str, load_params: dict | None = None
+    ):
+        """Synchronous pipeline loading (runs in thread executor)."""
+        if pipeline_id == "streamdiffusionv2":
+            from lib.models_config import get_model_file_path, get_models_dir
+            from pipelines.streamdiffusionv2.pipeline import StreamDiffusionV2Pipeline
+
+            config = OmegaConf.load("pipelines/streamdiffusionv2/model.yaml")
+            models_dir = get_models_dir()
+            config["model_dir"] = str(models_dir)
+            config["text_encoder_path"] = str(
+                get_model_file_path(
+                    "WanVideo_comfy/umt5-xxl-enc-fp8_e4m3fn.safetensors"
+                )
+            )
+
+            # Use load parameters for resolution and seed
+            height = 512
+            width = 512
+            seed = 42
+            if load_params:
+                height = load_params.get("height", 512)
+                width = load_params.get("width", 512)
+                seed = load_params.get("seed", 42)
+
+            config["height"] = height
+            config["width"] = width
+            config["seed"] = seed
+
+            pipeline = StreamDiffusionV2Pipeline(
+                config, device=get_device(), dtype=torch.bfloat16
+            )
+            logger.info("StreamDiffusionV2 pipeline initialized")
+            return pipeline
+
+        elif pipeline_id == "passthrough":
+            from pipelines.passthrough.pipeline import PassthroughPipeline
+
+            # Use load parameters for resolution, default to 512x512
+            height = 512
+            width = 512
+            if load_params:
+                height = load_params.get("height", 512)
+                width = load_params.get("width", 512)
+
+            pipeline = PassthroughPipeline(
+                height=height,
+                width=width,
+                device=get_device(),
+                dtype=torch.bfloat16,
+            )
+            logger.info("Passthrough pipeline initialized")
+            return pipeline
+
+        elif pipeline_id == "vod":
+            from pipelines.vod.pipeline import VodPipeline
+
+            # Use load parameters for resolution, default to 512x512
+            height = 512
+            width = 512
+            if load_params:
+                height = load_params.get("height", 512)
+                width = load_params.get("width", 512)
+
+            pipeline = VodPipeline(
+                height=height,
+                width=width,
+                device=get_device(),
+                dtype=torch.bfloat16,
+            )
+            logger.info("VOD pipeline initialized")
+            return pipeline
+
+        elif pipeline_id == "longlive":
+            from lib.models_config import get_model_file_path, get_models_dir
+            from pipelines.longlive.pipeline import LongLivePipeline
+
+            config = OmegaConf.load("pipelines/longlive/model.yaml")
+            models_dir = get_models_dir()
+            config["model_dir"] = str(models_dir)
+            config["generator_path"] = get_model_file_path(
+                "LongLive-1.3B/models/longlive_base.pt"
+            )
+            config["lora_path"] = get_model_file_path("LongLive-1.3B/models/lora.pt")
+            config["text_encoder_path"] = str(
+                get_model_file_path(
+                    "WanVideo_comfy/umt5-xxl-enc-fp8_e4m3fn.safetensors"
+                )
+            )
+
+            height = 320
+            width = 576
+            seed = 42
+            if load_params:
+                height = load_params.get("height", 320)
+                width = load_params.get("width", 576)
+                seed = load_params.get("seed", 42)
+
+            config["height"] = height
+            config["width"] = width
+            config["seed"] = seed
+
+            pipeline = LongLivePipeline(
+                config, device=get_device(), dtype=torch.bfloat16
+            )
+            logger.info("LongLive pipeline initialized")
+            return pipeline
+
+        elif pipeline_id == "selfforcing":
+            from lib.models_config import get_model_file_path, get_models_dir
+            from pipelines.selfforcing.pipeline import SelfForcingPipeline
+
+            config = OmegaConf.load("pipelines/selfforcing/model.yaml")
+            models_dir = get_models_dir()
+            config["model_dir"] = str(models_dir)
+            config["checkpoint_path"] = get_model_file_path(
+                "Self-Forcing/checkpoints/self_forcing_dmd.pt"
+            )
+            config["text_encoder_path"] = str(
+                get_model_file_path(
+                    "WanVideo_comfy/umt5-xxl-enc-fp8_e4m3fn.safetensors"
+                )
+            )
+
+            height = 320
+            width = 576
+            seed = 42
+            if load_params:
+                height = load_params.get("height", 320)
+                width = load_params.get("width", 576)
+                seed = load_params.get("seed", 42)
+
+            config["height"] = height
+            config["width"] = width
+            config["seed"] = seed
+
+            pipeline = SelfForcingPipeline(
+                config, device=get_device(), dtype=torch.bfloat16
+            )
+            logger.info("Self-Forcing pipeline initialized")
+            return pipeline
+
+        else:
+            raise ValueError(f"Invalid pipeline ID: {pipeline_id}")
+
+    def unload_pipeline(self):
+        """Unload the current pipeline (thread-safe)."""
+        with self._lock:
+            self._unload_pipeline_unsafe()
+
+    def is_loaded(self) -> bool:
+        """Check if pipeline is loaded and ready (thread-safe)."""
+        with self._lock:
+            return self._status == PipelineStatus.LOADED
