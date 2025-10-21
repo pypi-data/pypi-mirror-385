@@ -1,0 +1,143 @@
+// objective.metadata exceptions file, see its document
+// for information on how to update this file.
+{
+ "definitions": {
+  "enum": {
+   "CMErrorNilData": { "value": 112 },
+   "CMErrorSize": { "value": 113 },
+   "CMFallDetectionEventUserResolutionConfirmed": { "value": 0 },
+   "CMFallDetectionEventUserResolutionDismissed": { "value": 1 },
+   "CMFallDetectionEventUserResolutionRejected": { "value": 2 },
+   "CMFallDetectionEventUserResolutionUnresponsive": { "value": 3 }
+  },
+  "classes": {
+   "CMDeviceMotion": {
+    "methods": [
+     {
+      "selector": "gravity",
+      "class_method": false,
+      "retval": {"type_override": "{CMAcceleration=ddd}"}
+     },
+     {
+      "selector": "magneticField",
+      "class_method": false,
+      "retval": {"type_override": "{CMCalibratedMagneticField={CMMagneticField=ddd}i}"}
+     },
+     {
+      "selector": "rotationRate",
+      "class_method": false,
+      "retval": {"type_override": "{CMRotationRate=ddd}"}
+     },
+     {
+      "selector": "userAcceleration",
+      "class_method": false,
+      "retval": {"type_override": "{CMAcceleration=ddd}"}
+     }
+    ]
+   },
+   "CMGyroData": {
+    "methods": [
+     {
+      "selector": "rotationRate",
+      "class_method": false,
+      "retval": {"type_override": "{CMRotationRate=ddd}"}
+     }
+    ]
+   },
+   "CMMagnetometerData": {
+    "methods": [
+     {
+      "selector": "magneticField",
+      "class_method": false,
+      "retval": {"type_override": "{CMMagneticField=ddd}"}
+     }
+    ]
+   },
+   "CMRotationRateData": {
+    "methods": [
+     {
+      "selector": "rotationRate",
+      "class_method": false,
+      "retval": {"type_override": "{CMRotationRate=ddd}"}
+     }
+    ]
+   },
+   "CMAttitude": {
+    "methods": [
+     {
+      "selector": "quaternion",
+      "class_method": false,
+      "retval": {"type_override": "{CMQuaternion=dddd}"}
+     },
+     {
+      "selector": "rotationMatrix",
+      "class_method": false,
+      "retval": {"type_override": "{CMRotationMatrix=ddddddddd}"}
+     }
+    ]
+   },
+   "CMAccelerometerData": {
+    "methods": [
+     {
+      "selector": "acceleration",
+      "class_method": false,
+      "retval": {"type": "{CMAcceleration=ddd}"}
+     }
+    ]
+   },
+   "CMPedometer": {
+    "methods": [
+     {
+      "selector": "startPedometerEventUpdatesWithHandler:",
+      "class_method": false,
+      "args": {
+       "0": {
+        "callable": {
+	 "arguments": {
+	  "0": { "type": "^v" },
+	  "1": { "type": "@" },
+	  "2": { "type": "@" }
+	 },
+	 "retval": { "type": "v" }
+	}
+       }
+      }
+     },
+     {
+      "selector": "startPedometerUpdatesFromDate:withHandler:",
+      "class_method": false,
+      "args": {
+       "1": {
+        "callable": {
+	 "arguments": {
+	  "0": { "type": "^v" },
+	  "1": { "type": "@" }
+	 },
+	 "retval": { "type": "v" }
+	}
+       }
+      }
+     },
+     {
+      "selector": "queryPedometerDataFromDate:toDate:withHandler:",
+      "class_method": false,
+      "args": {
+       "2": {
+        "callable": {
+	 "arguments": {
+	  "0": { "type": "^v" },
+	  "1": { "type": "@" }
+	 },
+	 "retval": { "type": "v" }
+	}
+       }
+      }
+     }
+    ]
+   }
+  },
+  "formal_protocols": {},
+  "functions": {},
+  "informal_protocols": {}
+ }
+}
