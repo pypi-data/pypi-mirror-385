@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "django-otp-auth"
+version = "2.1.0"
+description = "OTP module for Django"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "requests",
+    "Django>=3.0"
+]
+
