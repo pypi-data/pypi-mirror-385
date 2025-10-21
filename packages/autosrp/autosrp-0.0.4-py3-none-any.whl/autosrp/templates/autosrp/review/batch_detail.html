@@ -1,0 +1,557 @@
+{% extends 'autosrp/base.html' %}
+{% load tz %}
+{% load i18n %}
+{% load humanize %}
+{% block content %}
+<div class="container-xxl py-3">
+    <div class="d-flex flex-wrap align-items-center justify-content-between mb-3 gap-2">
+        <h2 class="m-0">
+            {% if title_word and systems_list and submission.start_at %}
+                {% if systems_list|length > 1 %}
+                    {% trans "The Battles of" %} {{ systems_list|join:", " }} {% trans "on" %} {{ submission.start_at|date:"Y-m-d" }} {% trans "starting at" %} {{ submission.start_at|date:"H:i:s T" }}
+                {% else %}
+                    {% trans "The Battle of" %} {{ systems_list.0 }} {% trans "on" %} {{ submission.start_at|date:"Y-m-d" }} {% trans "starting at" %} {{ submission.start_at|date:"H:i:s T" }}
+                {% endif %}
+            {% else %}
+                {% trans "Submission" %} #{{ submission.id }}
+            {% endif %}
+        </h2>
+        <span class="badge bg-secondary">{{ submission.status|default:"unknown" }}</span>
+    </div>
+    <div class="row g-3 mb-3">
+        <div class="col-12 col-lg-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-2">{% trans "Window (EVE/UTC)" %}</h5>
+                    <div class="text-muted small">
+                        <div><strong>{% trans "Start" %}:</strong> {{ submission.start_at|date:"Y-m-d H:i:s T" }}</div>
+                        <div><strong>{% trans "Duration" %}:</strong> {{ submission.duration_minutes }} {% trans "minutes" %}</div>
+                        <div><strong>{% trans "Created" %}:</strong> {{ submission.created|date:"Y-m-d H:i:s T" }}</div>
+                        <div><strong>{% trans "Processed" %}:</strong> {{ submission.processed_at|default:"—" }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-2">{% trans "Summary" %}</h5>
+                    <div class="text-muted small">
+                        <div><strong>{% trans "Total Kills" %}:</strong> {{ totals.count }}</div>
+                        <div><strong>{% trans "Fit Pass" %}:</strong> {{ totals.pass }}</div>
+                        <div><strong>{% trans "Fit Fail" %}:</strong> {{ totals.fail }}</div>
+                        <div><strong>{% trans "Total Suggested ISK" %}:</strong> {{ totals.sum_suggested|floatformat:2|intcomma }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if submission.error %}
+    <div class="alert alert-warning">
+        <strong>{% trans "Notes" %}:</strong> {{ submission.error }}
+    </div>
+    {% endif %}
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex flex-column flex-md-row align-items-stretch align-items-md-center justify-content-between gap-2 mb-2">
+                <h5 class="card-title m-0">{% trans "Kills" %} ({{ totals.count }})</h5>
+                {% if perms.autosrp.manage %}
+                <form id="toggleModeForm" method="post" action="{% url 'autosrp:review-toggle-mode' submission.id %}" class="d-none">
+                    {% csrf_token %}
+                </form>
+                {% endif %}
+                <div class="d-flex align-items-center gap-2">
+                    <form class="d-flex gap-2" method="post" action="{% url 'autosrp:review-kill-add' submission.id %}">
+                        {% csrf_token %}
+                        <input type="url" name="zkb_url" class="form-control form-control-sm themable-input"
+                            placeholder="{% trans 'Paste a zKill link…' %}" required
+                            pattern="https?://(zkillboard\.com|beta\.zkillboard\.com)/kill/[\d]+/?"
+                            title="https://zkillboard.com/kill/<id>/" style="min-width: 280px;">
+                        <button type="submit" class="btn btn-sm btn-outline-success">{% trans "Add" %}</button>
+                    </form>
+                    <form method="post" action="{% url 'autosrp:export-srp' submission.id %}" id="csvForm">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-primary">{% trans "Export CSV" %}</button>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center gap-2">
+                        {% if perms.autosrp.manage %}
+                        <button type="submit"
+                                form="toggleModeForm"
+                                class="btn btn-sm btn-outline-warning">
+                            {% if submission.strict_mode %}{% trans "Switch to Loose" %}{% else %}{% trans "Switch to Strict" %}{% endif %}
+                        </button>
+                        {% endif %}
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <form method="post" action="{% url 'autosrp:review-recheck' submission.id %}" id="recheckForm" class="mb-0">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-primary">{% trans "Re-Run Fit Checks" %}</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="card-body p-2">
+                    <div class="table-responsive">
+                        <table class="table table-sm align-middle mb-0">
+                            <thead>
+                            <tr>
+                                <th>{% trans "Kill" %}</th>
+                                <th>{% trans "System" %}</th>
+                                <th>{% trans "Occurred (UTC)" %}</th>
+                                <th>{% trans "Victim" %}</th>
+                                <th>{% trans "Hull" %}</th>
+                                <th>{% trans "Details" %}</th>
+                                <th>{% trans "Force doctrine fit" %}</th>
+                                <th>{% trans "Suggested ISK" %}</th>
+                                <th>{% trans "Actual ISK" %}</th>
+                                <th>{% trans "Result" %}</th>
+                                <th colspan="2">{% trans "Actions" %}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for k in kills %}
+                            <tr data-kill-id="{{ k.id }}">
+                                <td>
+                                    {% if k.status == "approved" or k.status == "approved_with_comment" %}
+                                    <i class="fa fa-check-circle text-success me-1" data-bs-toggle="tooltip"
+                                       title="{% trans 'Approved' %}"></i>
+                                    {% elif k.status == "rejected" %}
+                                    <i class="fa fa-times-circle text-danger me-1" data-bs-toggle="tooltip"
+                                       title="{% trans 'Rejected' %}"></i>
+                                    {% else %}
+                                    <i class="fa fa-clock text-secondary me-1" data-bs-toggle="tooltip"
+                                       title="{% trans 'Pending' %}"></i>
+                                    {% endif %}
+                                    <a href="{{ k.zkb_url }}" target="_blank" rel="noopener">{{ k.killmail_id }}</a>
+                                    {% if k.status_comment %}
+                                    <i class="fa fa-comment-dots text-info ms-1"
+                                       data-bs-toggle="tooltip"
+                                       data-bs-placement="top"
+                                       title="{{ k.status_comment|escape }}"></i>
+                                    {% endif %}
+                                </td>
+                                <td>{{ k.system_name }}</td>
+                                <td>{% timezone "UTC" %}{{ k.occurred_at|date:"Y-m-d H:i" }}{% endtimezone %}</td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <button type="button"
+                                                class="btn btn-outline-secondary btn-sm copy-btn"
+                                                data-copy-value="{{ k.victim_char_name }}"
+                                                data-bs-toggle="tooltip"
+                                                title="{% trans 'Copy victim name' %}">
+                                            <i class="fa fa-copy"></i>
+                                        </button>
+                                        <div>
+                                            {{ k.victim_char_name }}<br>
+                                            <small class="text-muted">{{ k.victim_corp_name }}{% if k.victim_all_name %} ({{ k.victim_all_name }}){% endif %}</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{{ k.ship_type_name }}</td>
+                                <td>
+                                    <button type="button"
+                                            class="btn btn-sm btn-info view-fit-btn"
+                                            data-url="{% url 'autosrp:kill-fit-detail' k.id %}"
+                                            data-title="{% trans 'Fit details' %} – {{ k.ship_type_name }} ({{ k.ship_type_id }})"
+                                            data-bs-toggle="modal" data-bs-target="#fitDetailModal">
+                                        {% trans "Details" %}
+                                    </button>
+                                </td>
+                                <td>
+                                    <select class="form-select form-select-sm themable-select" name="fit_for_{{ k.id }}" form="recheckForm">
+                                        <option value="">{% trans "Auto (best match)" %}</option>
+                                        {% for f in k.available_fits %}
+                                        <option value="{{ f.id }}"
+                                                {% if k.fitcheck and k.fitcheck.doctrine_fit_id == f.id %}selected{% endif %}>{{ f.name }}
+                                        </option>
+                                        {% empty %}
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <button type="button"
+                                                class="btn btn-outline-secondary btn-sm copy-btn"
+                                                data-copy-value="{{ k.payout.suggested_isk|default_if_none:'0.00' }}"
+                                                data-bs-toggle="tooltip"
+                                                title="{% trans 'Copy suggested ISK' %}">
+                                            <i class="fa fa-copy"></i>
+                                        </button>
+                                        <span id="suggest_for_{{ k.id }}">
+                                            {{ k.payout.suggested_isk|default_if_none:"0.00"|floatformat:2|intcomma }}
+                                        </span>
+                                    </div>
+                                </td>
+                                <td style="min-width: 180px">
+                                    <div class="input-group input-group-sm">
+                                        <input id="actual_for_{{ k.id }}" type="number" step="0.01"
+                                               class="form-control form-control-sm themable-input"
+                                               name="actual_for_{{ k.id }}" value="{{ k.prefill_actual_isk }}" form="recheckForm">
+                                        <button type="button"
+                                                class="btn btn-outline-secondary copy-btn"
+                                                data-copy-target="#actual_for_{{ k.id }}"
+                                                data-bs-toggle="tooltip"
+                                                title="{% trans 'Copy actual ISK' %}">
+                                            <i class="fa fa-copy"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                                <td>
+                                    {% if k.fitcheck %}
+                                    {% if k.fitcheck.passed %}
+                                    <span class="badge bg-success">{% trans "Pass" %}</span>
+                                    {% else %}
+                                    <span class="badge bg-danger">{% trans "Fail" %}</span>
+                                    {% endif %}
+                                    {% else %}
+                                    <span class="badge bg-secondary">{% trans "Pending" %}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <form method="post" action="{% url 'autosrp:review-kill-delete' submission.id k.id %}" onsubmit="return confirm('Delete this kill from the fleet?');">
+                                        {% csrf_token %}
+                                        <button type="submit"
+                                                class="btn btn-sm btn-outline-danger"
+                                                data-bs-toggle="tooltip"
+                                                title="{% trans 'Delete' %}">
+                                            <i class="fa fa-trash text-danger me-1"></i>
+                                        </button>
+                                        </form>
+                                        <form method="post"
+                                              action="{% url 'autosrp:review-save-status' submission.id k.id %}"
+                                              data-role="status-form">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="action" value="approve">
+                                            <input type="hidden" name="actual_for_{{ k.id }}" value="{{ k.prefill_actual_isk }}">
+                                            <button type="submit"
+                                                    class="btn btn-outline-success btn-sm"
+                                                    data-bs-toggle="tooltip"
+                                                    title="{% trans 'Approve' %}">
+                                                <i class="fa fa-check text-success me-1"></i>
+                                            </button>
+                                        </form>
+
+                                        <button type="button"
+                                                class="btn btn-outline-warning btn-sm"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#approvalModal"
+                                                data-mode="comment"
+                                                data-kill-id="{{ k.id }}"
+                                                data-status-url="{% url 'autosrp:review-save-status' submission.id k.id %}"
+                                                title="{% trans 'Approve with comment' %}">
+                                            <i class="fa fa-check-double text-warning me-1"></i>
+                                        </button>
+
+                                        <button type="button"
+                                                class="btn btn-outline-danger btn-sm"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#approvalModal"
+                                                data-mode="reject"
+                                                data-kill-id="{{ k.id }}"
+                                                data-status-url="{% url 'autosrp:review-save-status' submission.id k.id %}"
+                                                title="{% trans 'Reject' %}">
+                                            <i class="fa fa-x text-danger me-1"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="fitDetailModal" tabindex="-1" aria-labelledby="fitDetailModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="fitDetailModalLabel">{% trans "Fit details" %}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="{% trans 'Close' %}"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="text-center py-5 text-muted" id="fitDetailLoading">
+                            <div class="spinner-border" role="status" aria-hidden="true"></div>
+                            <div class="mt-2">{% trans "Loading fit…" %}</div>
+                        </div>
+                        <div id="fitDetailContent" class="d-none"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Close" %}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="approvalModal" tabindex="-1" aria-labelledby="approvalModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form method="post" action="" id="approvalModalForm">
+                        {% csrf_token %}
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="approvalModalLabel">{% trans "Item Action" %}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="{% trans 'Close' %}"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" id="actionType" name="action" value="">
+                            <input type="hidden" id="modalActualField" name="" value="">
+                            <div class="mb-3">
+                                <label for="commentText" class="form-label">{% trans "Reason/Comment" %}</label>
+                                <textarea id="commentText" name="comment" class="form-control themable-input" rows="3"
+                                          placeholder="{% trans 'Enter reason or comment (if required)…' %}"
+                                          required></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+                            <button type="submit" class="btn btn-primary">{% trans "Confirm" %}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <style>
+            .container-xxl { max-width: 90%; }
+
+            [data-bs-theme="dark"] .themable-select {
+              background-color: #212529;
+              color: #f8f9fa;
+              border-color: #495057;
+            }
+            [data-bs-theme="dark"] .themable-select:focus {
+              background-color: #212529;
+              color: #f8f9fa;
+              border-color: #6c757d;
+              box-shadow: 0 0 0 .25rem rgba(13,110,253,.25);
+            }
+            [data-bs-theme="dark"] .themable-input {
+              background-color: #212529;
+              color: #f8f9fa;
+              border-color: #495057;
+            }
+            [data-bs-theme="dark"] .themable-input::placeholder {
+              color: #adb5bd;
+            }
+            [data-bs-theme="dark"] .themable-input:focus {
+              background-color: #212529;
+              color: #f8f9fa;
+              border-color: #6c757d;
+              box-shadow: 0 0 0 .25rem rgba(13,110,253,.25);
+            }
+        </style>
+
+        <script>
+            (function () {
+              const modal = document.getElementById('fitDetailModal');
+              const titleEl = document.getElementById('fitDetailModalLabel');
+              const loadingEl = document.getElementById('fitDetailLoading');
+              const contentEl = document.getElementById('fitDetailContent');
+
+              document.addEventListener('click', function (e) {
+                const btn = e.target.closest('.view-fit-btn');
+                if (!btn) return;
+                const url = btn.getAttribute('data-url');
+                const title = btn.getAttribute('data-title') || '';
+                if (titleEl) titleEl.textContent = title;
+                if (loadingEl) loadingEl.classList.remove('d-none');
+                if (contentEl) { contentEl.classList.add('d-none'); contentEl.innerHTML = ''; }
+
+                fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                  .then(r => {
+                    if (!r.ok) throw new Error('HTTP ' + r.status);
+                    return r.text();
+                  })
+                  .then(html => {
+                    if (contentEl) {
+                      if (window.bootstrap) {
+                        contentEl.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => {
+                          try { bootstrap.Tooltip.getInstance(el)?.dispose(); } catch(e) {}
+                        });
+                      }
+
+                      contentEl.innerHTML = html;
+                      contentEl.classList.remove('d-none');
+
+                      if (window.bootstrap) {
+                        contentEl.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => {
+                          try {
+                            new bootstrap.Tooltip(el, {
+                              container: 'body',
+                              boundary: 'viewport',
+                              trigger: 'hover focus'
+                            });
+                          } catch(e) {}
+                        });
+                      }
+                    }
+                  })
+                  .catch(err => {
+                    if (contentEl) {
+                      contentEl.innerHTML = '<div class="alert alert-danger mb-0">' +
+                        (err?.message || 'Error loading fit') + '</div>';
+                      contentEl.classList.remove('d-none');
+                    }
+                  })
+                  .finally(() => {
+                    if (loadingEl) loadingEl.classList.add('d-none');
+                  });
+              });
+
+              modal?.addEventListener('hidden.bs.modal', () => {
+                if (window.bootstrap && contentEl) {
+                  contentEl.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => {
+                    try { bootstrap.Tooltip.getInstance(el)?.dispose(); } catch(e) {}
+                  });
+                }
+                if (contentEl) contentEl.innerHTML = '';
+                if (loadingEl) loadingEl.classList.remove('d-none');
+                if (contentEl) contentEl.classList.add('d-none');
+              });
+
+              // Copy-to-clipboard support for victim name, suggested ISK, and actual ISK
+              document.addEventListener('click', function (e) {
+                const btn = e.target.closest('.copy-btn');
+                if (!btn) return;
+
+                // Prevent any default button/form behavior
+                e.preventDefault();
+                e.stopPropagation();
+
+                const explicit = btn.getAttribute('data-copy-value');
+                const targetSel = btn.getAttribute('data-copy-target');
+                let text = '';
+
+                if (explicit !== null) {
+                  text = explicit;
+                } else if (targetSel) {
+                  const el = document.querySelector(targetSel);
+                  if (el) {
+                    // Prefer input value; else take the visible text
+                    text = (('value' in el && el.value) ? el.value : (el.textContent || '')).toString();
+                  }
+                }
+
+                if (!text) return;
+
+                const fallbackCopy = (t) => {
+                  try {
+                    const ta = document.createElement('textarea');
+                    ta.value = String(t);
+                    ta.setAttribute('readonly', '');
+                    ta.style.position = 'fixed';
+                    ta.style.top = '-9999px';
+                    document.body.appendChild(ta);
+                    ta.focus();
+                    ta.select();
+                    document.execCommand && document.execCommand('copy');
+                    document.body.removeChild(ta);
+                  } catch (_) {}
+                };
+
+                const onCopiedFeedback = () => {
+                  const original = btn.getAttribute('title') || '';
+                  btn.setAttribute('title', '{% trans "Copied!" %}');
+                  try {
+                    if (window.bootstrap) {
+                      const t = bootstrap.Tooltip.getInstance(btn) || new bootstrap.Tooltip(btn);
+                      t.show();
+                      setTimeout(() => { t.hide(); btn.setAttribute('title', original); }, 900);
+                    }
+                  } catch (e) {
+                    // ignore tooltip errors
+                    btn.setAttribute('title', original);
+                  }
+                };
+
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                  navigator.clipboard.writeText(String(text))
+                    .then(onCopiedFeedback)
+                    .catch(() => { fallbackCopy(text); onCopiedFeedback(); });
+                } else {
+                  fallbackCopy(text);
+                  onCopiedFeedback();
+                }
+              });
+
+              if (window.bootstrap) {
+                document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => {
+                  try {
+                    new bootstrap.Tooltip(el, {
+                      container: 'body',
+                      boundary: 'viewport',
+                      trigger: 'hover focus'
+                    });
+                  } catch(e) {}
+                });
+              }
+
+              document.querySelectorAll('form[data-role="status-form"]').forEach(form => {
+                form.addEventListener('submit', (ev) => {
+                  const tr = form.closest('tr');
+                  const visible = tr?.querySelector('input[name^="actual_for_"]');
+                  const hidden = form.querySelector('input[name^="actual_for_"]');
+                  if (visible && hidden) {
+                    hidden.value = visible.value || '0.00';
+                  }
+                });
+              });
+
+              const approvalModal = document.getElementById('approvalModal');
+              const modalForm = document.getElementById('approvalModalForm');
+              const modalActualField = document.getElementById('modalActualField');
+
+              approvalModal?.addEventListener('show.bs.modal', (event) => {
+                const button = event.relatedTarget;
+                const actionMode = button.getAttribute('data-mode');
+                const statusUrl = button.getAttribute('data-status-url');
+                const killId = button.getAttribute('data-kill-id');
+
+                const modalInput = approvalModal.querySelector('#actionType');
+                const modalLabel = approvalModal.querySelector('.modal-title');
+                const commentField = approvalModal.querySelector('#commentText');
+
+                if (actionMode === 'comment') {
+                  modalLabel.textContent = "{% trans 'Approve with Comment' %}";
+                  commentField.placeholder = "{% trans 'Enter approval comment (required)…' %}";
+                } else if (actionMode === 'reject') {
+                  modalLabel.textContent = "{% trans 'Reject' %}";
+                  commentField.placeholder = "{% trans 'Enter rejection reason (required)…' %}";
+                }
+
+                modalInput.value = actionMode;
+                if (modalForm && statusUrl) {
+                  modalForm.setAttribute('action', statusUrl);
+                }
+
+                // Set the hidden "actual" field name/value for this kill
+                if (killId && modalActualField) {
+                  const visible = document.getElementById('actual_for_' + killId);
+                  modalActualField.name = 'actual_for_' + killId;
+                  modalActualField.value = visible ? (visible.value || '0.00') : '0.00';
+                  // Cache the kill id on the form for submit-time sync
+                  modalForm.dataset.killId = killId;
+                }
+              });
+
+              modalForm?.addEventListener('submit', () => {
+                const killId = modalForm?.dataset?.killId;
+                if (!killId) return;
+                const visible = document.getElementById('actual_for_' + killId);
+                if (visible && modalActualField) {
+                  modalActualField.value = visible.value || '0.00';
+                }
+              });
+            })();
+        </script>
+        {% endblock %}
