@@ -1,0 +1,259 @@
+# GPT Invoker
+
+A practical, self-contained wrapper around the OpenAI Chat Completions API designed for reproducibility and traceability.
+
+- SQLite-backed response cache keyed by prompt + model arguments
+- Token usage accounting with rough price estimation per model
+- Human-readable markdown dumps for inspection and debugging
+- Optional structured append-only JSON log
+- Convenience helpers to extract code/JSON/Java/invariant blocks from responses
+
+This module focuses on simple, reproducible calls and auditing, not exposing the entire OpenAI surface area.
+
+## Table of Contents
+
+- Features
+- Requirements
+- Installation
+- Environment Setup
+- Quick Start
+- Programmatic Usage
+- Caching
+- Logging and Dumps
+- API Overview
+- Token Usage and Pricing
+- Troubleshooting
+- Testing
+- Packaging and Publishing
+- License
+
+## Features
+
+- Content-addressed cache to avoid repeated network calls for identical inputs
+- Deterministic model-args hashing across `max_tokens`, `temperature`, and optional `top_p`
+- Markdown dump files that capture inputs, outputs, and metadata
+- Compact, append-only JSON lines log for automated analysis
+- Utilities to extract common response structures (code blocks, JSON, Java, invariants)
+
+## Requirements
+
+- Python 3.10+
+- uv (fast Python package and environment manager): https://docs.astral.sh/uv/
+
+If you don't have uv installed:
+
+```zsh
+# Install uv (Linux/macOS)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+# Restart your shell or source your profile if needed, then verify
+uv --version
+```
+
+## Installation
+
+```zsh
+# Recommended one-step: create .venv and install dependencies from pyproject.toml
+uv sync
+
+# Optional: ensure a specific Python version via uv, then sync
+uv python install 3.10
+uv sync --python 3.10
+```
+
+Notes:
+- `uv sync` creates a local `.venv/` and installs dependencies declared in `pyproject.toml`.
+- You typically do not need to manually activate the venv; use `uv run` instead.
+
+## Environment Setup
+
+This module loads environment variables from a `.env` file located next to `gpt_invoker.py` (and also from your shell environment).
+
+Supported variables:
+- `GPT_INVOKER_API_KEY` (required): API key for the target API host.
+- `GPT_INVOKER_API_HOST` (optional): Base URL for the API. Default: `https://api.openai.com`.
+- `GPT_INVOKER_DEF_MODEL` (optional): Default model if not passed explicitly. Default: `gpt-5`.
+
+Example `.env` file:
+
+```dotenv
+GPT_INVOKER_API_KEY=sk-...your_api_key...
+# GPT_INVOKER_API_HOST=https://api.openai.com
+# GPT_INVOKER_DEF_MODEL=gpt-5
+```
+
+## Quick Start
+
+Run the included demo to verify your setup:
+
+```zsh
+# Preferred: run without activating; uv finds and uses .venv automatically
+uv run python gpt_invoker.py
+
+# Alternatively, activate then run
+source .venv/bin/activate
+python gpt_invoker.py
+```
+
+It will print the model’s reply and a usage summary.
+
+## Programmatic Usage
+
+```python
+from gpt_invoker import GPTInvoker
+
+invoker = GPTInvoker(
+    # You can also set these via environment variables
+    # api_key="...",               # If not provided, read from GPT_INVOKER_API_KEY
+    # api_host="https://api.openai.com",
+    model="gpt-5",
+    max_tokens=1024,
+    temperature=0.0,
+    read_from_cache=True,
+    write_to_cache=True,
+)
+
+messages = [
+    {"role": "user", "content": "Write a haiku about the sea."},
+]
+
+text = invoker.generate(messages)
+print(text)
+
+# Token usage and estimated cost (rough)
+print(invoker.usage)
+```
+
+Bypass cache for a specific call:
+
+```python
+full = invoker.generate_all_res(messages, ignore_cache=True)
+print(full.choices[0].message.content)
+```
+
+Streaming text:
+
+```python
+streamed_text = invoker.generate_inner_stream(messages)
+print(streamed_text)
+```
+
+Extract helpers:
+
+```python
+resp = invoker.generate([
+    {"role": "user", "content": "Return a JSON object with a title and tags."}
+])
+
+maybe_json = invoker.extract_json(resp)  # dict/list parsed from a fenced `json` block
+# Other helpers: extract_code, extract_java, extract_invs
+```
+
+## Caching
+
+- Backend: SQLite, located at `gpt_cache.db` in the same folder by default.
+- Keying: Prompt content + model arguments (including `temperature`, `max_tokens`, and optionally `top_p`).
+- Controls:
+  - `read_from_cache` (bool, default True)
+  - `write_to_cache` (bool, default True)
+  - `gpt_cache_path` (str): custom path to the SQLite file
+- Threading: The connection is opened with `check_same_thread` depending on `sqlite3.threadsafety`. A warning is logged if threadsafety is not ideal.
+
+## Logging and Dumps
+
+Two logging forms are available:
+
+1. Markdown dumps (human-readable):
+   - Location: `gpt_dump/YYYY-MM-DD/HH-<C|N|E>/...`
+   - `C` = cache hit, `N` = fresh network call, `E` = error
+   - Includes input messages, response metadata, and choices content
+   - Configure with `gpt_dump_folder` (set to `None` to disable)
+
+2. Structured log (JSONL-like):
+   - Location: `gpt_log.txt` by default
+   - Append-only; one JSON object per line with timestamp, inputs, outputs, and flags
+   - Controlled by `gpt_log_path` (set to `None` to disable)
+
+## API Overview
+
+Constructor:
+
+```python
+GPTInvoker(
+    api_key: str | None = None,
+    model: str | None = None,
+    top_p: float | None = None,
+    max_tokens: int = 4096,
+    temperature: float = 0.0,
+    api_host: str | None = None,
+    gpt_cache_path: str | None = None,
+    read_from_cache: bool = True,
+    write_to_cache: bool = True,
+    gpt_log_path: str | None = None,
+    write_gpt_log: bool = True,
+    gpt_dump_folder: str | None = None,
+    dump_gpt_log: bool = True,
+)
+```
+
+Key methods:
+- `generate(messages) -> str`: Returns the single choice text content; raises if zero/multiple choices or finish reason not `stop`.
+- `generate_all_res(messages, ignore_cache=False) -> ChatCompletion`: Returns the full response object, consulting cache unless bypassed.
+- `generate_inner(messages) -> ChatCompletion`: Raw API call with current model args.
+- `generate_inner_stream(messages) -> str`: Streams and concatenates content.
+- `extract_code(text) -> str`: First fenced code block.
+- `extract_json(text) -> Any`: Parse first fenced `json` block.
+- `extract_java(text) -> str`: First fenced `java` block.
+- `extract_invs(text) -> list[str]`: All `<invariant>...</invariant>` blocks.
+
+## Token Usage and Pricing
+
+- `invoker.usage` tracks prompt/completion tokens and cache-hit tokens separately.
+- Pricing is a rough estimate using a static table embedded in the code. Treat it as indicative only.
+
+## Troubleshooting
+
+- Missing API key: Set `GPT_INVOKER_API_KEY` or pass `api_key` to `GPTInvoker`.
+- Invalid model name: Usage estimates fall back to a default pricing tier with a warning; API calls still use the model you provided.
+- Cache not working: Ensure the process has write permissions to the folder. You can disable caching via `read_from_cache=False` and/or `write_to_cache=False`.
+- Threadsafety warning: SQLite may warn if `sqlite3.threadsafety != 3`. If you use multiple threads, consider one invoker instance per thread or add your own synchronization.
+- Base URL: If targeting a different host or gateway, set `GPT_INVOKER_API_HOST`.
+- Error diagnostics: Failures are recorded as `-E` dumps under `gpt_dump/` with traceback text. The JSON log also records `is_error=True`.
+
+## Testing
+
+Run the test suite:
+
+```zsh
+uv run pytest -q
+```
+
+Highlights:
+- Unit tests cover cache overwrite behavior, dump logging branches, usage accounting, streaming, and error paths.
+- Coverage reports are generated in `htmlcov/` and `coverage.xml` when configured.
+
+## Packaging and Publishing (PyPI)
+
+This project uses a modern `pyproject.toml` configuration with setuptools. The module is a single file (`gpt_invoker.py`) exposed via `py-modules`.
+
+Build (using uv + build backend):
+
+```zsh
+uv build
+```
+
+Artifacts will be in `dist/`.
+
+Upload to PyPI (requires `twine` and PyPI credentials):
+
+```zsh
+uv tool install twine  # or: uv run python -m pip install twine
+twine upload dist/*
+```
+
+Versioning:
+- Keep `project.version` in `pyproject.toml` in sync with `__version__` in `gpt_invoker.py`.
+- Use tags/releases in your VCS as needed.
+
+## License
+
+MIT License. See `LICENSE` for details.

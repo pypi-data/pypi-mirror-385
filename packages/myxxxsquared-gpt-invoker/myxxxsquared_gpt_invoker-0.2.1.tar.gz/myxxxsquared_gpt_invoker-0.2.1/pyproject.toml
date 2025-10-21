@@ -1,0 +1,51 @@
+[project]
+name = "myxxxsquared-gpt-invoker"
+version = "0.2.1"
+description = "Thin OpenAI Chat Completions invoker with SQLite caching, usage/cost tracking, and reproducible Markdown dumps."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+dependencies = [
+    "colorlog>=6.4.0",
+    "openai>=2.0.0",
+    "python-dotenv>=1.0.0",
+]
+
+authors = [ { name = "myxxxsquared" } ]
+keywords = ["openai", "chat", "gpt", "invoker", "cache", "logging"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Environment :: Console",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Libraries",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/myxxxsquared/myxxxsquared_gpt_invoker"
+Repository = "https://github.com/myxxxsquared/myxxxsquared_gpt_invoker"
+Issues = "https://github.com/myxxxsquared/myxxxsquared_gpt_invoker/issues"
+
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["gpt_invoker"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
