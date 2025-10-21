@@ -1,0 +1,59 @@
+from typing import overload
+import numpy as np
+from dvsense_driver import DvsFileInfo
+
+class RawFileReader:
+    def __init__(self, file_path: str) -> None:
+        ...
+
+    def load_file(self) -> bool:
+        ...
+
+    def get_start_timestamp(self) -> tuple[bool, int]:
+        ...
+
+    def get_end_timestamp(self) -> tuple[bool, int]:
+        ...
+
+    def seek_time(self, t: int) -> bool:
+        ...
+
+    def get_current_pos_timestamp(self) -> int:
+        ...
+
+    def get_current_pos_event_num(self) -> int:
+        ...
+
+    @overload
+    def get_n_events(self, n: int) -> np.ndarray:
+        ...
+
+    def get_n_events(self, start_time: int, n: int) -> np.ndarray:
+        ...
+
+    @overload
+    def get_n_time_events(self, t: int) -> np.ndarray:
+        ...
+
+    def get_n_time_events(self, start_time: int, end_time: int) -> np.ndarray:
+        ...
+
+    def get_width(self) -> int:
+        ...
+
+    def get_height(self) -> int:
+        ...
+
+    def export_event_to_video(self) -> bool:
+       ...
+
+    def reached_end_of_events(self) -> bool:
+       ...
+
+    def extract_event_data(self) -> bool:
+       ...
+    def close(self) -> None:
+        ...
+
+    def get_file_info(self, file_info: DvsFileInfo) -> bool:
+        ...
