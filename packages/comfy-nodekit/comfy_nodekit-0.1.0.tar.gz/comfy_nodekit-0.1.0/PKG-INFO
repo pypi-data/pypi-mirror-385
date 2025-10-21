@@ -1,0 +1,95 @@
+Metadata-Version: 2.3
+Name: comfy-nodekit
+Version: 0.1.0
+Summary: Add your description here
+Requires-Dist: pydantic>=2.12.3
+Requires-Dist: requests>=2.32.5
+Requires-Dist: ruff>=0.14.1
+Requires-Python: >=3.12
+Description-Content-Type: text/markdown
+
+# Comfy Nodekit
+
+Utilities for working with [ComfyUI](https://github.com/comfyanonymous/ComfyUI) node graphs from Python. The project provides typed wrappers around ComfyUI nodes, lightweight graph primitives, and helpers for exporting a workflow back to the JSON format that the ComfyUI API expects.
+
+- Typed `Node` and `Edge` models (Pydantic) for tracking dependencies and serialising graphs.
+- A generated `nodes.py` module that mirrors the ComfyUI node catalogue with Python callables.
+- Tooling (`nodes_to_py.py`) to regenerate those bindings directly from a running ComfyUI server.
+- Example workflow builder scaffolding that shows how to stitch nodes into higher-level pipelines.
+
+## Requirements
+
+- Python 3.12+
+- `requests` and `pydantic` (installed automatically when the package is installed)
+- Access to a running ComfyUI server when regenerating node bindings
+
+## Installation
+
+```bash
+uv venv
+source .venv/bin/activate
+uv pip install -e .
+```
+
+`uv` is used in this repository because the `pyproject.toml` declares the `uv_build` backend. If you prefer `pip`, install the dependencies (`requests`, `pydantic`) manually and run Python with your environment of choice.
+
+## Usage
+
+Create nodes the same way you would wire a ComfyUI graph. Each factory function from `nodes.py` returns a typed `Edge` that keeps track of its originating node. When you are ready to export the workflow, grab the `source_node` of your terminal edge and call `build_json_workflow()`.
+
+```python
+from comfy_nodekit.models import Edge
+from comfy_nodekit.nodes import (
+    CheckpointLoaderSimple,
+    CLIPTextEncode,
+    EmptyLatentImage,
+    KSampler,
+    VAEDecode,
+)
+
+# Load base models
+model, clip, vae = CheckpointLoaderSimple("juggernautXL_v9Rdphoto2Lightning.safetensors")
+
+# Encode prompts
+positive = CLIPTextEncode(text="a cinematic portrait of an astronaut", clip=clip)
+negative = CLIPTextEncode(text="", clip=clip)
+
+# Create latents and sample
+latent = EmptyLatentImage(width=1024, height=1024, batch_size=1)
+sampled = KSampler(
+    model=model,
+    seed=42,
+    steps=20,
+    cfg=7.5,
+    sampler_name="euler",
+    scheduler="normal",
+    positive=positive,
+    negative=negative,
+    latent_image=latent,
+    denoise=1.0,
+)
+decoded = VAEDecode(samples=sampled, vae=vae)
+
+# Export to ComfyUI JSON format
+workflow = decoded.source_node.build_json_workflow()
+
+# Optionally: print or send to a ComfyUI server
+import json
+print(json.dumps(workflow, indent=2))
+```
+
+## Regenerating node bindings
+
+`nodes.py` is generated from the ComfyUI `/object_info` endpoint. To sync with the nodes available on your server, run:
+
+```bash
+uv run python -m comfy_nodekit.nodes_to_py http://127.0.0.1:8188/
+```
+
+If you omit the URL, the script defaults to `http://127.0.0.1:8188/`. The script downloads the node schema, sanitises type names, and rewrites `nodes.py` with updated classes and helper functions.
+
+The `just` recipe `just run` wraps that command if you prefer using [just](https://github.com/casey/just).
+
+## Acknowledgments
+
+Thanks to [ComfyScript](https://github.com/Chaoses-Ib/ComfyScript) for inspiration and prior art.
