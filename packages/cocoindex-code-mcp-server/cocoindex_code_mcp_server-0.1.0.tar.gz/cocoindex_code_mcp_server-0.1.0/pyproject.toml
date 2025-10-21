@@ -1,0 +1,162 @@
+[build-system]
+requires = ["maturin>=1.0,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "cocoindex_code_mcp_server"
+version = "0.1.0"
+description = "RAG based on cocoindex as MCP server (streamingHttp), with Haskell support"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Rust",
+    "Operating System :: OS Independent",
+    "Development Status :: 4 - Beta",
+    "Topic :: Software Development",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Text Processing :: Linguistic",
+    "Topic :: Text Processing :: Indexing",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: Science/Research",
+]
+requires-python = ">=3.11"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [{ name = "aanno", email = "aanno@users.noreply.github.com" }]
+package = { include = ["src/cocoindex_code_mcp_server/**/*.py"] }
+dependencies = [
+    "cocoindex[embeddings]>=0.1.63", 
+    "python-dotenv>=1.0.1",
+    "psycopg[pool]>=3.2.9",
+    "psycopg[binary]>=3.1.0",
+    "psycopg_pool>=3.1.0",
+    "pgvector>=0.4.1",
+    "numpy>=2.3.1",
+    # "astchunk @ git+https://github.com/yilinjz/astchunk.git",
+    "astchunk>=0.1.0",
+    "lark-parser>=0.12.0",
+    "prompt-toolkit>=3.0.0",
+    "cachetools>=6.1.0",
+    "click>=8.2.1",
+    "tree-sitter>=0.23.0,<0.24.0",
+    "tree-sitter-python>=0.23.6,<0.24.0",
+    "tree-sitter-c-sharp>=0.23.1,<0.24.0",
+    "tree-sitter-java>=0.23.5,<0.24.0",
+    "tree-sitter-typescript>=0.23.2,<0.24.0",
+    "tree-sitter-c>=0.21.4,<0.23.0",
+    "tree-sitter-cpp>=0.22.3,<0.23.0",
+    "tree-sitter-rust>=0.21.2,<0.23.0",
+    "tree-sitter-kotlin>=1.0.0",
+    "tree-sitter-javascript>=0.23.1,<0.24.0",  # 0.25.0 uses language v15, incompatible with tree-sitter v14
+]
+
+[project.scripts]
+mcp-server = "cocoindex_code_mcp_server.main_mcp_server:main"
+
+[project.urls]
+Homepage = "https://github.com/aanno/cocoindex-code-mcp-server"
+Issues = "https://github.com/aanno/cocoindex-code-mcp-server/issues"
+
+[project.optional-dependencies]
+test = [
+    # testing
+    "pytest>=8.4.1",
+    "pytest-cov>=7.0.0",
+    "pytest-asyncio>=1.1.0",
+    "pytest-mock>=3.10.0",
+    "pytest-timeout>=2.1.0",
+    "pytest-xdist>=3.4.0",
+    "pytest-mypy>=1.0.1",
+    "coverage>=7.9.2",
+]
+mcp-server = [
+    "mcp>=1.12.0",
+]
+build = [
+    "maturin>=1.0,<2.0",
+    # typing
+    "mypy>=1.10.0",
+    "MonkeyType>=23.3.0",
+    "pytest-monkeytype>=1.1.0",
+    "auto-type-annotate>=1.1.2",
+    # code quality
+    "isort>=6.0.1",
+    "autoflake8>=0.4.1",
+    "autopep8>=2.0.0",
+    "flake8>=7.3.0",
+    "autopep8>=2.0.0",
+    # dependency management
+    "pipdeptree>=2.8.0",
+    "deptry>=0.14.0",
+    # linting
+    "pydocstyle>=6.3.0",
+    "ruff>=0.4.0",
+    # "asyncpg>=0.29.0",
+]
+# github actions for building wheels or local act including pypi publishing
+act = [
+    "twine>=6.2.0",
+    "maturin[patchelf]>=1.0,<2.0",
+    "auditwheel>=6.2.0",
+    "abi3audit>=0.0.22",
+    "cibuildwheel>=3.2.1",
+    "delvewheel>=1.11.2",
+    "delocate>=0.8.1",
+]
+
+[tool.maturin]
+features = ["pyo3/extension-module"]
+module-name = "cocoindex_code_mcp_server"
+manifest-path = "rust/Cargo.toml"
+bindings = "pyo3"
+compatibility = "manylinux_2_28"  # or linux, macos, etc.
+python-source = "src"
+include = ["src/cocoindex_code_mcp_server/**/*.py"]
+
+[tool.isort]
+# profile = "pep8"
+profile = "black"
+
+[tool.ruff]
+line-length = 120
+exclude = [".git", "__pycache__", ".venv", "build", "dist", "docs"]
+# extend-ignore = ["E203", "W503"]  # common ignores for some formatters like black
+
+[tool.pydocstyle]
+line-length = 120
+
+[tool.flake8]
+max-line-length = 120
+exclude = [".git", "__pycache__", ".venv", "build", "dist", "docs"]
+extend-ignore = ["E203", "W503"]
+
+[tool.autoflake8]
+max-line-length = 120
+remove-unused-variables = true
+# remove-all-unused-imports = true
+expand-star-imports = true
+
+[tool.autopep8]
+max_line_length = 120
+
+[tool.mypy]
+# global config here, if any
+# strict = true
+# check-untyped-defs = true
+# local-partial-type = true
+check_untyped_defs = true
+ignore_missing_imports = false
+local_partial_types = false
+exclude = ["tests/fixtures/"]
+
+[[tool.mypy.overrides]]
+module = ["pgvector.*", "astchunk.*", "cachetools.*"]
+ignore_missing_imports = true
+ignore_errors = true
