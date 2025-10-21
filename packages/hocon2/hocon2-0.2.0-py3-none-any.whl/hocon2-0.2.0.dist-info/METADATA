@@ -1,0 +1,129 @@
+Metadata-Version: 2.4
+Name: hocon2
+Version: 0.2.0
+Summary: HOCON parser for python
+Project-URL: Homepage, https://github.com/myjniak/hocon
+Project-URL: Source, https://github.com/myjniak/hocon
+Project-URL: Changelog, https://github.com/myjniak/hocon/blob/main/CHANGELOG.md
+Author-email: Michał Szajkowski <myjniak@gmail.com>
+License-File: LICENSE
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Classifier: Topic :: File Formats
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+
+# HOCON parser with json-like interface
+
+[![codecov](https://codecov.io/github/myjniak/hocon/graph/badge.svg?token=ZY5KK0BSJY)](https://codecov.io/github/myjniak/hocon)
+
+## Installation
+
+```shell
+pip install hocon
+```
+
+## Usage
+
+Just like in python json module, you can load from a file or from a string to python dictionary/list:
+
+```python
+import hocon
+
+data = """
+animal.favorite: badger
+key : ${animal.favorite} is my favorite animal
+"""
+dictionary = hocon.loads(data)
+```
+
+And you can dump it back to string:
+
+```pycon
+>>> import json
+>>> print(json.dumps(dictionary, indent=4))
+{
+    "animal": {"favorite": "badger"},
+    "key": "badger is my favorite animal"
+}
+```
+
+## Specification
+
+The library has NOT YET been tested according to each and every statement in
+the [hocon specification](https://github.com/lightbend/config/blob/v1.4.3/HOCON.md).
+Check [FEATURES.md](https://github.com/myjniak/hocon/blob/main/FEATURES.md) to see which HOCON functionalities are already implemented and tested.
+# Changelog
+
+## 0.2.0
+- Various bugfixes in resolving self-referential substitutions
+- Changes in Exception raises in certain scenarios
+- Big change in resolve algorithm approach:
+  1. parse
+  2. resolve what can be resolved without touching substitutions
+  3. resolve all substitutions
+- Step 2 has been added to get rid of self.lazy attribute and self.lazy ifology in Resolver.
+
+## 0.1.0
+- Substitutions are looking at app root config as 1st priority AND (NEW) at relative included file keypath as 2nd priority.
+
+## 0.0.19
+- Separated substitution resolving to a separate module
+- Fixed a bug where substitution was incorrectly detecting a cycle (bad detecting of pointing to self parent)
+- Fixed a bug where comments can stuck key reading till the end of the config
+
+## 0.0.18
+- include statement and filepath can now be separated by newline
+- Proper exception is raised if included file is an array
+
+## 0.0.17
+- Very basic implementation of include statement: {include "path/to/file.conf"} syntax supported only
+
+## 0.0.16
+- More tests for self-referential substitutions and cycle exceptions
+- Fixed string concatenation with undefined substitutions
+
+## 0.0.15
+- Substitutions now store their location in the document
+- Exception will be now raised when substitution points to its ancestor
+- Self-referential substitution fallback fixed and covered with tests
+
+## 0.0.14
+- Support for optional ${?x} substitutions
+
+## 0.0.13
+- Support for substitution fallback to env vars
+
+## 0.0.12
+- Support for += operator
+
+## 0.0.11
+- Support for self-referential substitutions
+
+## 0.0.10
+- Added ${x} substitution parser 
+
+## 0.0.9
+- Split loads to parser and resolver
+
+## 0.0.8
+- Fixed multiline string corner cases
+
+## 0.0.7
+- Handled corner negative cases for unquoted strings
+
+## 0.0.6
+- More test coverage
+
+## 0.0.5
+- Added full support for commas
+- Refactored source code a bit
+
+## 0.0.3
+- First draft, many features don't work yet
