@@ -1,0 +1,70 @@
+[build-system]
+requires = ['hatchling', 'hatch-fancy-pypi-readme>=22.5.0']
+build-backend = 'hatchling.build'
+
+[project]
+
+name = "hocon2"
+authors = [
+    { name = "Michał Szajkowski", email = "myjniak@gmail.com"}
+]
+description = "HOCON parser for python"
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Developers",
+    "Topic :: File Formats",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+dynamic = ["readme", "version"]
+
+dependencies = []
+requires-python = ">= 3.11"
+
+[project.urls]
+Homepage = 'https://github.com/myjniak/hocon'
+Source = 'https://github.com/myjniak/hocon'
+Changelog = 'https://github.com/myjniak/hocon/blob/main/CHANGELOG.md'
+
+[tool.hatch.version]
+path = "src/hocon/__version__.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src/hocon",
+    "/CHANGELOG.md",
+    "/README.md",
+    "/tests",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = [
+    "/src/hocon"
+]
+
+[tool.hatch.metadata.hooks.fancy-pypi-readme]
+content-type = 'text/markdown'
+fragments = [
+    {path = "README.md"},
+    {path = "FEATURES.md"},
+]
+
+[tool.hatch.envs.test]
+dependencies = [
+    "pytest",
+    "pytest-timeout",
+    "pytest-cov",
+    "black",
+    "mypy"
+]
+
+[tool.hatch.envs.test.scripts]
+coverage = "python -m pytest -vs --cov hocon --cov-fail-under=97 --junitxml=junit/test-results.xml-{env:PYTHON_VERSION}.xml"
+black = "python -m black --check src/"
+mypy = "python -m mypy -p hocon"
+
+[tool.black]
+line-length = 120
