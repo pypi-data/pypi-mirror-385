@@ -1,0 +1,31 @@
+# pyproject.toml
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "depweaver"
+version = "0.1.1"
+authors = [
+  { name="Joshua Gigo Peter", email="joshuagigofnaf@gmail.com" },
+]
+description = "A smart dependency resolver for Python data science projects."
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "typer[all]",
+    "requests",
+    "packaging",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+]
+
+# Add this section at the end of the file
+[project.scripts]
+depweaver = "depweaver.cli:app"
