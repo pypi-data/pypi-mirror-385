@@ -1,0 +1,90 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "_version.py"
+
+[project]
+name = "bygg"
+dynamic = ["version"]
+dependencies = [
+  "argcomplete>=3.6.2",
+  "dacite>=1.9.2",
+  "dc-schema>=0.0.8",
+  "dill>=0.4.0",
+  "loky>=3.5.5",
+  "watchdog>=6.0.0",
+]
+
+# Replace the line above with the next two lines to use a static version number, e.g. if you don't
+# have the full git repo available:
+
+# dynamic = []
+# version = "0.0.0.dev0"
+
+authors = [{ name = "Rikard Gillemyr", email = "rikard.gillemyr@gmail.com" }]
+description = "A small build system"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.11"
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Intended Audience :: Developers",
+  "Topic :: Software Development :: Build Tools",
+  "Environment :: Console",
+  "Framework :: Pytest",
+  "Typing :: Typed",
+]
+
+[project.scripts]
+bygg = "bygg.main:main"
+
+[project.urls]
+"Homepage" = "https://github.com/rikardg/bygg"
+"Bug Tracker" = "https://github.com/rikardg/bygg/issues"
+
+[tool.pyright]
+include = ["src/bygg", "tests"]
+
+[tool.pytest.ini_options]
+addopts = ["-vv", "--import-mode=importlib", "tests/", "--snapshot-warn-unused"]
+markers = [
+  "digest: Tests for digest functionality.",
+  "scheduler: Tests for the scheduler.",
+  "help: Tests for the help functionality.",
+  "focus: Marker for test(s) to focus on currently.",
+]
+
+[tool.ruff]
+exclude = ["_version.py"]
+
+[tool.ruff.lint]
+extend-select = ["I", "UP006"]
+ignore = ["E501"]
+
+[tool.ruff.lint.isort]
+order-by-type = true
+force-sort-within-sections = true
+
+[dependency-groups]
+dev = [
+  "mypy>=1.16.1",
+  "pip>=25.2",
+  "pyinstrument>=5.0.3",
+  "pyright>=1.1.402",
+  "pytest>=8.4.1",
+  "pytest-mock>=3.14.1",
+  "pytest-xdist>=3.8.0",
+  "ruff>=0.12.2",
+  "setuptools>=80.9.0",
+  "syrupy>=4.9.1",
+]
+
+[tool.uv]
+reinstall-package = ["bygg"]
