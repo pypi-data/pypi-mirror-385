@@ -1,0 +1,205 @@
+<h1>
+  <img src="images/logo.png"
+       alt="Genie Bottle logo" height="120" align="left">
+  Genie Bottle
+</h1>
+<p><em>Your personal AI server and Python package to do anything - like a magical genie.</em></p>
+<br clear="left">
+
+> **⚠️ Work in Progress**: This project is currently under active development. Features and APIs may change.
+
+Genie Bottle is a simple python package and your personal server for doing just about anything with machine learning.
+
+In the worst-to-best order I could think of, Genie Bottle can be used for
+
+text generation,
+
+GIF making inference with one of these models in one line of code
+
+image generation,
+
+GIF making inference with one of these models in one line of code
+
+speech-to-text and text-to-speech,
+
+GIF making inference with one of these models in one line of code
+
+easily generating complicated interactive experiences like a Dungeons and Dragons game,
+
+GIF of generating a dungeons and dragons game with Genie Bottle
+
+making a virtual company of employees,
+
+GIF of generating a team of ai employees to do a task for you
+
+building and running code,
+
+GIF writing and executing code
+
+automating your work as an assistant (interacting with any app on your computer)
+
+GIF automating work as an assistant
+
+and anything else you can think up ([read the docs]()).
+
+## Models
+
+Simply, privately and with fun magic analogies, run one of over X models from open and closed-source libraries and services, including:
+
+- **Huggingface** (e.g. with Llama2, Wav2Vec2 and Speech2Text2),
+
+- **OpenAI** (e.g., with ChatGPT, DALL-E and Whisper) and
+
+- **Stability AI** (e.g., with Stable diffusion).
+
+## Use it
+
+Genie Bottle can be used from its pre-built app,
+
+[Mac]() | [Linux]() | [Windows]()
+
+GIF using the prebuilt server
+
+the web,
+
+GIF of the Genie Bottle scroll
+
+the terminal,
+
+GIF of coding in the terminal
+
+be integrated into your python applications,
+
+```python
+from geniebottle import Magic
+from geniebottle.spells import Local, OpenAI
+
+magic = Magic()
+
+magic.add(Local().get('Llama2'))
+magic.add(OpenAI().get('DALL-E'))
+
+magic.cast('Can you draw me a cat with a wizards hat?')
+```
+
+GIF coding and running the above code with python
+
+or used to build your own personalised server automagically
+
+```python
+from geniebottle import Magic
+from geniebottle.spellbooks import Local, OpenAI
+
+magic = Magic()
+
+magic.add(Local.get('Llama2'))
+magic.add(OpenAI.get('DALL-E'))
+
+app = magic.FastAPI_app
+```
+
+served using uvicorn
+
+```bash
+uvicorn main:app --reload
+```
+
+or gunicorn
+
+```bash
+gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app
+```
+
+GIF building the above server in the command line
+
+Perhaps most importantly, you can host your server from home and connect to it from anywhere!
+
+Connect via Tailscale VPN | Connect via local Wifi
+
+### Run models locally
+
+- Run a model locally on your own machine with a
+[transformers](https://github.com/huggingface/transformers) or [diffusers](https://github.com/huggingface/diffusers) based deployment.
+
+```
+DEPLOYMENT VIA HUGGINGFACE TRANSFORMERS wrappers
+```
+
+GIF using models locally
+
+- or **with any AI API service**: by integrating with services like OpenAI, Huggingface Endpoints and Stability AI.
+
+GIF using OpenAI and Huggingface APIs with tokens copied from the web browser.
+
+  ```python
+  from geniebottle import Magic
+  from geniebottle.spellbooks import OpenAI, StabilityAI, HuggingfaceEndpoints
+
+  magic = Magic(openai_key='YOUR_OPENAI_API_KEY', stabilityai_key='YOUR_STABILITY_AI_API_KEY')
+
+  magic.add(OpenAI('Llama2'))
+  magic.add(StabilityAI('DALL-E'))
+
+  magic.cast('Can you draw me a cat with a wizards hat?')
+  ```
+
+  Please [contribute]() if you want to implement a new endpoint that you
+  would like to share with the community.
+
+## Use with python 🐍
+
+Genie Bottle is made almost entirely with python. That means, you can integrate it into your projects, or modify it with one of the easiest to read and beginner-friendly programming languages!
+
+**Want to contribute or develop locally?** Check out the [Development Guide](development.md) to get started with the `bottle` CLI tool.
+
+### Installation
+
+Install Genie Bottle via pip
+
+```bash
+pip install geniebottle
+```
+
+### Add models to your python scripts
+
+Adding new machine learning models is as easy as adding a new spell (quite literally). Using the `add()` method
+will automatically connect to and use that service for you.
+
+```python
+from geniebottle import Magic
+from geniebottle.spellbooks import Local
+
+magic = Magic()
+
+magic.add(Local().get('Llama2'))
+
+magic.cast('Speak to me like a genie')
+```
+
+### Make custom spells
+
+You can make custom spells for unique behaviours, like our above Dungeons and Dragons example:
+
+```python
+CODE REQUIRED
+EXAMPLE USING Llama2 and DALL-E to generate a dungeons and dragons game with images updating what is happening
+```
+
+GIF adding a new model to the server via one line and then it generating both a Llama2 response and
+an image with DALL-E.
+
+Contribute your custom spells to the community by [sharing a spellbook]().
+
+## Join the Magic
+
+- Star this package on GitHub,
+- Share your experiences (add share links),
+- Contribute by [adding a feature](development.md#making-changes), [updating documentation](development.md#updating-documentation), [making a discussion]() or [raising an issue]().
+
+Genie Bottle is licensed under the Mozilla Public License 2.0 (see the [LICENSE](./LICENSE) for specifics, read the [FAQ](https://www.mozilla.org/en-US/MPL/2.0/FAQ/) and see [NOTICE](./NOTICE) for the copyright notice). It ensures your work benefits the whole world and remains free. The MPL only creates obligations for you if you want to distribute the software outside your organization.
+
+Parts of the system prompt in the [dungeon master example](./examples/agent_dungeon_master.py) are derived from material taken from the [System Reference Document 5.1](https://dnd.wizards.com/resources/systems-reference-document) ("SRD 5.1") by Wizards of the Coast LLC. The SRD 5.1 is licensed under the [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcode).
+
+Genie Bottle is crafted with ❤ by Jake Manger, an entirely bootstrapped indie developer.
+
+Support is never required but always appreciated. Join us in this magical journey of making machine learning accessible and enjoyable for everyone!

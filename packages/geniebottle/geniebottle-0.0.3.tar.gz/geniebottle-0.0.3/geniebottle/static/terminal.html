@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magic Terminal</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm-addon-web-links@0.9.0/lib/xterm-addon-web-links.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1e1e2e 0%, #0f0f1e 100%);
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+        }
+
+        #container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        #header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 6px 20px;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.3);
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+        }
+
+        #header-title {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 11px;
+            font-weight: normal;
+            letter-spacing: 0.5px;
+            grid-column: 2;
+        }
+
+        #connection-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #94a3b8;
+            font-size: 10px;
+            justify-self: end;
+            grid-column: 3;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #22c55e;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.disconnected {
+            background: #ef4444;
+            animation: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        #terminal-wrapper {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #terminal {
+            width: 100%;
+            background: transparent;
+            position: relative;
+        }
+
+        .xterm-viewport {
+            background: transparent !important;
+        }
+
+        #image-buttons {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .image-link {
+            display: inline-block;
+            padding: 4px 12px;
+            margin: 2px 4px;
+            background: linear-gradient(135deg, #89b4fa 0%, #6c8eef 100%);
+            color: #1e1e2e;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(137, 180, 250, 0.3);
+            pointer-events: auto;
+            position: absolute;
+        }
+
+        .image-link:hover {
+            background: linear-gradient(135deg, #a6c7ff 0%, #89b4fa 100%);
+            box-shadow: 0 4px 8px rgba(137, 180, 250, 0.5);
+            transform: translateY(-1px);
+        }
+
+
+        /* Loading overlay */
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.3s;
+        }
+
+        #loading.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader {
+            border: 4px solid #333;
+            border-top: 4px solid #a78bfa;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div id="loading">
+        <div class="loader"></div>
+    </div>
+
+    <div id="container">
+        <div id="header">
+            <div></div>
+            <div id="header-title">geniebottle terminal</div>
+            <div id="connection-status">
+                <span class="status-dot" id="status-dot"></span>
+                <span id="status-text">Connecting...</span>
+            </div>
+        </div>
+
+        <div id="terminal-wrapper">
+            <div id="terminal">
+                <div id="image-buttons"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/xterm@5.3.0/lib/xterm.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/lib/xterm-addon-fit.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xterm-addon-web-links@0.9.0/lib/xterm-addon-web-links.js"></script>
+    <script>
+        // Initialize terminal
+        const term = new Terminal({
+            cursorBlink: true,
+            fontSize: 14,
+            fontFamily: '"Cascadia Code", "Fira Code", "Courier New", monospace',
+            theme: {
+                background: '#1e1e2e',
+                foreground: '#cdd6f4',
+                cursor: '#f5e0dc',
+                black: '#45475a',
+                red: '#f38ba8',
+                green: '#a6e3a1',
+                yellow: '#f9e2af',
+                blue: '#89b4fa',
+                magenta: '#f5c2e7',
+                cyan: '#94e2d5',
+                white: '#bac2de',
+                brightBlack: '#585b70',
+                brightRed: '#f38ba8',
+                brightGreen: '#a6e3a1',
+                brightYellow: '#f9e2af',
+                brightBlue: '#89b4fa',
+                brightMagenta: '#f5c2e7',
+                brightCyan: '#94e2d5',
+                brightWhite: '#a6adc8'
+            },
+            allowProposedApi: true
+        });
+
+        // Add addons
+        const fitAddon = new FitAddon.FitAddon();
+        const webLinksAddon = new WebLinksAddon.WebLinksAddon();
+        term.loadAddon(fitAddon);
+        term.loadAddon(webLinksAddon);
+
+        term.open(document.getElementById('terminal'));
+        fitAddon.fit();
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            fitAddon.fit();
+        });
+
+        // WebSocket connection
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const ws = new WebSocket(`${protocol}//${window.location.host}/terminal`);
+
+        let currentLine = '';
+        const statusDot = document.getElementById('status-dot');
+        const statusText = document.getElementById('status-text');
+        const loading = document.getElementById('loading');
+        const imageStore = {}; // Store images by ID
+        let imageCounter = 0;
+
+        function updateStatus(connected) {
+            const serverAddress = window.location.host;
+            if (connected) {
+                statusDot.classList.remove('disconnected');
+                statusText.textContent = serverAddress;
+            } else {
+                statusDot.classList.add('disconnected');
+                statusText.textContent = 'Disconnected';
+            }
+        }
+
+        ws.onopen = () => {
+            updateStatus(true);
+            loading.classList.add('hidden');
+        };
+
+        function openImage(imageId) {
+            const imgUrl = imageStore[imageId];
+            if (imgUrl) {
+                const win = window.open();
+                win.document.write(`<img src="${imgUrl}" style="max-width: 100%; height: auto;" />`);
+                win.document.title = 'Image Viewer';
+            }
+        }
+
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+
+            if (data.type === 'output') {
+                term.write(data.data.replace(/\n/g, '\r\n'));
+            } else if (data.type === 'error') {
+                term.write('\x1b[1;31m' + data.data.replace(/\n/g, '\r\n') + '\x1b[0m');
+            } else if (data.type === 'image') {
+                // Store the image data
+                const imgUrl = 'data:image/png;base64,' + data.data;
+                const imageId = `img-${imageCounter++}`;
+                imageStore[imageId] = imgUrl;
+
+                // Get terminal buffer position
+                const buffer = term.buffer.active;
+                const cursorY = buffer.cursorY;
+                const cursorX = buffer.cursorX;
+
+                // Create inline clickable button
+                const buttonContainer = document.getElementById('image-buttons');
+                const link = document.createElement('a');
+                link.className = 'image-link';
+                link.setAttribute('data-image-id', imageId);
+                link.textContent = `🖼️ View Image (${data.width}x${data.height})`;
+                link.onclick = (e) => {
+                    e.preventDefault();
+                    openImage(imageId);
+                };
+
+                // Position the button at the current cursor position
+                // Each character is approximately 9px wide and 17px tall (depends on fontSize)
+                const charWidth = 9;
+                const charHeight = 17;
+                link.style.top = `${cursorY * charHeight}px`;
+                link.style.left = `${cursorX * charWidth}px`;
+
+                buttonContainer.appendChild(link);
+
+                // Write placeholder text in terminal to reserve space with padding above and below
+                term.write(`\r\n[Image ${imageId}]                    \r\n\r\n`);
+
+                // Scroll to show the button
+                const terminalWrapper = document.getElementById('terminal-wrapper');
+                setTimeout(() => {
+                    terminalWrapper.scrollTop = terminalWrapper.scrollHeight;
+                }, 10);
+            } else if (data.type === 'binary') {
+                term.write('\r\n\x1b[1;35m📦 Binary data received (' + data.size + ' bytes)\x1b[0m\r\n\r\n');
+            } else if (data.type === 'spell_cast') {
+                term.write('\r\n\x1b[1;36m🪄 Casting ' + data.spell_name + '\x1b[0m\r\n\r\n');
+            } else if (data.type === 'spell_args') {
+                term.write('\x1b[2m' + data.data + '\x1b[0m');
+            } else if (data.type === 'warning') {
+                term.write('\r\n\x1b[1;33m⚠️  Warning:\x1b[0m\r\n' + data.data + '\r\n');
+            }
+        };
+
+        ws.onclose = () => {
+            updateStatus(false);
+            term.write('\r\n\x1b[1;31m\r\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\r\n');
+            term.write('Connection to server lost.\r\n');
+            term.write('Please refresh the page to reconnect.\r\n');
+            term.write('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\r\n\x1b[0m');
+        };
+
+        ws.onerror = (error) => {
+            console.error('WebSocket error:', error);
+            updateStatus(false);
+        };
+
+        // Handle terminal input
+        term.onData((data) => {
+            const code = data.charCodeAt(0);
+
+            // Handle Enter key
+            if (code === 13) {
+                term.write('\r\n');
+                if (currentLine.trim()) {
+                    ws.send(JSON.stringify({
+                        type: 'input',
+                        data: currentLine
+                    }));
+                }
+                currentLine = '';
+            }
+            // Handle Backspace
+            else if (code === 127) {
+                if (currentLine.length > 0) {
+                    currentLine = currentLine.slice(0, -1);
+                    term.write('\b \b');
+                }
+            }
+            // Handle Ctrl+C
+            else if (code === 3) {
+                term.write('^C\r\n> ');
+                currentLine = '';
+            }
+            // Handle Ctrl+L (clear screen)
+            else if (code === 12) {
+                term.clear();
+                currentLine = '';
+                term.write('> ');
+            }
+            // Regular character
+            else if (code >= 32 && code < 127) {
+                currentLine += data;
+                term.write(data);
+            }
+        });
+
+        // Focus terminal on load
+        term.focus();
+    </script>
+</body>
+</html>

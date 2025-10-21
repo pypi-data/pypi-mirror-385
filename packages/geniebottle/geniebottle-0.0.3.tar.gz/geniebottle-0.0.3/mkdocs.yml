@@ -1,0 +1,50 @@
+site_name: Genie Bottle
+
+nav:
+  - Home: index.md
+  - Learn:
+      - learn/cast_your_first_spell.md
+      - learn/cast_chained_spells.md
+  - Project Design: project-design.md
+  - Reference: reference.md
+  - Development: development.md
+
+theme:
+  name: material
+  logo: images/logo.png
+  favicon: images/logo.png
+  font:
+    text: Lora
+    code: Roboto Mono
+  palette:
+    scheme: default
+    primary: custom
+    accent: custom
+  features:
+    - navigation.footer
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/jakemanger/magic
+
+extra_css:
+  - stylesheets/custom.css
+  - stylesheets/themes.min.css
+
+watch:
+  - docs
+
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets

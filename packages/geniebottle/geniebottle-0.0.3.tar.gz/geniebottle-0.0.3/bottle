@@ -1,0 +1,45 @@
+#!/bin/sh
+# Genie Bottle CLI wrapper for Unix-like systems (macOS, Linux, WSL)
+
+# Get script directory (resolve symlinks)
+if [ -L "$0" ]; then
+    # If this script is a symlink, resolve it
+    SCRIPT_PATH="$(readlink "$0")"
+    # If readlink returned a relative path, make it absolute
+    case "$SCRIPT_PATH" in
+        /*) ;; # Already absolute
+        *) SCRIPT_PATH="$(cd "$(dirname "$0")" && pwd)/$(basename "$SCRIPT_PATH")" ;;
+    esac
+else
+    SCRIPT_PATH="$0"
+fi
+SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_PATH")" && pwd)"
+
+# Check if venv exists and use it, otherwise find system Python
+if [ -f "$SCRIPT_DIR/venv/bin/python" ]; then
+    PYTHON_CMD="$SCRIPT_DIR/venv/bin/python"
+else
+    # Fallback to system Python for install command
+    for cmd in python3 python; do
+        if command -v "$cmd" >/dev/null 2>&1; then
+            version=$("$cmd" --version 2>&1 | cut -d' ' -f2)
+            major=$(echo "$version" | cut -d'.' -f1)
+            minor=$(echo "$version" | cut -d'.' -f2)
+
+            if [ "$major" -eq 3 ] && [ "$minor" -ge 7 ]; then
+                PYTHON_CMD="$cmd"
+                break
+            fi
+        fi
+    done
+
+    if [ -z "$PYTHON_CMD" ]; then
+        echo "Error: Python 3.7+ is required but not found."
+        echo ""
+        echo "Please install Python 3.7 or higher and try again."
+        exit 1
+    fi
+fi
+
+# Run the Python script
+exec "$PYTHON_CMD" "$SCRIPT_DIR/bottle.py" "$@"

@@ -1,0 +1,76 @@
+/* Increase base font size by 10% */
+html {
+	font-size: 140%;
+}
+
+/* Custom parchment color scheme */
+:root,
+[data-md-color-scheme="default"] {
+	/* Default colors - parchment background */
+	--md-default-bg-color: #fde9c0 !important;
+	--md-default-fg-color: #2d2419 !important;
+	--md-default-fg-color--light: #5a4a3a !important;
+	--md-default-fg-color--lighter: #8b7a6a !important;
+	--md-default-fg-color--lightest: rgba(45, 36, 25, 0.07) !important;
+
+	/* Primary color (header, links, etc.) */
+	--md-primary-fg-color: #8b6f47 !important;
+	--md-primary-fg-color--light: #a8865f !important;
+	--md-primary-fg-color--dark: #6b5437 !important;
+	--md-primary-bg-color: #fde9c0 !important;
+	--md-primary-bg-color--light: #fde9c0 !important;
+
+	/* Accent color (hover states, buttons) */
+	--md-accent-fg-color: #8b6f47 !important;
+	--md-accent-fg-color--transparent: rgba(139, 111, 71, 0.1) !important;
+	--md-accent-bg-color: #fde9c0 !important;
+	--md-accent-bg-color--light: #fde9c0 !important;
+
+	/* Code colors */
+	--md-code-fg-color: #2d2419 !important;
+	--md-code-bg-color: rgba(139, 111, 71, 0.08) !important;
+
+	/* Typeset colors */
+	--md-typeset-a-color: #8b6f47 !important;
+
+	/* Footer colors */
+	--md-footer-bg-color: #fde9c0 !important;
+	--md-footer-bg-color--dark: #ebd4a8 !important;
+	--md-footer-fg-color: #2d2419 !important;
+	--md-footer-fg-color--light: #5a4a3a !important;
+	--md-footer-fg-color--lighter: #8b7a6a !important;
+}
+
+/* Make header background match page background */
+.md-header {
+	background-color: #fde9c0 !important;
+	color: #2d2419 !important;
+	box-shadow: none !important;
+}
+
+/* Keep header elements dark */
+.md-header__title,
+.md-header__button,
+.md-header .md-icon {
+	color: #2d2419 !important;
+  margin-left: 4px !important;
+}
+
+/* Limit logo size on homepage */
+.md-typeset h1 img {
+	max-height: 180px;
+	height: auto;
+}
+
+/* Make header logo bigger */
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+	height: 2rem;
+	width: auto;
+}
+
+/* Remove h1 top margin */
+.md-typeset h1 {
+	margin-top: 0;
+}
+

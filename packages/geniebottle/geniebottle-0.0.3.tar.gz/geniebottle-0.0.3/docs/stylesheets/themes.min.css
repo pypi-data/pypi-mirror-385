@@ -1,0 +1,9 @@
+/* Drop cap for first paragraph after h1 (not italic) */
+.md-typeset h1 + p:not(:has(> em:first-child)):not(:has(> i:first-child))::first-letter {
+  font-size: 3.5em;
+  line-height: 0.9;
+  float: left;
+  margin: 0.05em 0.1em 0 0;
+  color: var(--md-primary-fg-color);
+  font-weight: 700;
+}
