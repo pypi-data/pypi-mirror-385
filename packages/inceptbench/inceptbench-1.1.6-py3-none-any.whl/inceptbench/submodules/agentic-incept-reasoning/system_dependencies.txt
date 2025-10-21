@@ -1,0 +1,40 @@
+# System Dependencies for Agentic-Incept-Reasoning
+# Install with: sudo yum install -y $(cat system_dependencies.txt)
+
+# Core development tools
+gcc
+gcc-c++
+make
+git
+curl
+wget
+
+# Cairo graphics library (needed for CairoSVG)
+cairo
+cairo-devel
+
+# Node.js and npm for screenshot service
+nodejs
+npm
+
+# Python package dependencies (install via pip in requirements.txt)
+# - cairosvg      # For SVG to PNG conversion
+# - requests      # For HTTP requests in image_stylize.py
+# - openai        # For OpenAI API calls
+# - python-dotenv # For environment variable management
+# - matplotlib    # For data visualization and chart generation
+# - numpy         # For numerical operations with matplotlib
+# - aiohttp       # For HTTP client calls to screenshot service
+
+# Add other system dependencies below as needed
+
+# Manim dependencies (for CentOS/RHEL/Amazon Linux)
+ffmpeg  # For video rendering in Manim animations  
+texlive-latex  # LaTeX support for mathematical typesetting in Manim
+texlive-collection-fontsrecommended  # Additional LaTeX fonts for Manim
+texlive-collection-latexextra  # Extra LaTeX packages for Manim
+pkg-config  # Required for building pycairo and other native dependencies
+
+# Screenshot service dependencies
+chromium  # Chromium browser for screenshots (if available)
+xorg-x11-server-Xvfb  # Virtual framebuffer for headless operation 
