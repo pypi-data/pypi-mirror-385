@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>recipe_grid.compiler: Recipe description language compiler &#8212; Recipe Grid 2.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/nature.css?v=279e0f84" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/recipe_grid_tables.css?v=22be8b51" />
+    <script src="_static/documentation_options.js?v=20623aea"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="recipe_grid.recipe: Recipe Data Model" href="data_model.html" />
+    <link rel="prev" title="recipe_grid.markdown: Markdown recipe compiler" href="markdown.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="data_model.html" title="recipe_grid.recipe: Recipe Data Model"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="markdown.html" title="recipe_grid.markdown: Markdown recipe compiler"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Recipe Grid 2.1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">recipe_grid.compiler</span></code>: Recipe description language compiler</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-recipe_grid.compiler">
+<span id="recipe-grid-compiler-recipe-description-language-compiler"></span><h1><a class="reference internal" href="#module-recipe_grid.compiler" title="recipe_grid.compiler"><code class="xref py py-mod docutils literal notranslate"><span class="pre">recipe_grid.compiler</span></code></a>: Recipe description language compiler<a class="headerlink" href="#module-recipe_grid.compiler" title="Link to this heading">¶</a></h1>
+<p>The recipe description language is compiled into the recipe Grid data model
+(see <a class="reference internal" href="data_model.html#module-recipe_grid.recipe" title="recipe_grid.recipe"><code class="xref py py-mod docutils literal notranslate"><span class="pre">recipe_grid.recipe</span></code></a>) by the following function:</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="recipe_grid.compiler.compile">
+<span class="sig-prename descclassname"><span class="pre">recipe_grid.compiler.</span></span><span class="sig-name descname"><span class="pre">compile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sources</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="data_model.html#recipe_grid.recipe.Recipe" title="recipe_grid.recipe.Recipe"><span class="pre">Recipe</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#recipe_grid.compiler.compile" title="Link to this definition">¶</a></dt>
+<dd><p>Compile a recipe from source into a series of
+<a class="reference internal" href="data_model.html#recipe_grid.recipe.Recipe" title="recipe_grid.recipe.Recipe"><code class="xref py py-class docutils literal notranslate"><span class="pre">recipe_grid.recipe.Recipe</span></code></a> data structures.</p>
+<p>The input recipe may be split into several blocks with later blocks
+referencing sub recipes in earlier ones. The code for each block should be
+passed separately and for each of these a separate
+<a class="reference internal" href="data_model.html#recipe_grid.recipe.Recipe" title="recipe_grid.recipe.Recipe"><code class="xref py py-class docutils literal notranslate"><span class="pre">Recipe</span></code></a> object will be produced.</p>
+<p>May throw <a class="reference external" href="https://peggie.readthedocs.io/en/latest/index.html#peggie.ParseError" title="(in Peggie v0.2.1)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">peggie.ParseError</span></code></a> during parsing and subclasses of
+<a class="reference internal" href="#recipe_grid.compiler.RecipeCompileError" title="recipe_grid.compiler.RecipeCompileError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RecipeCompileError</span></code></a> during compilation.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>It is assumed that all source blocks originate from a single file (e.g.
+from different indented blocks in a Markdown file). To make error
+messages report correct line numbers, pad the start of each source
+string with empty lines according to the position of the block in the
+original file. This will ensure that error messages give useful line
+numbers.</p>
+</div>
+</dd></dl>
+
+<p>During compilation the following exception types may be thrown. In all cases,
+when cast to <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, the string representation takes the form similar
+to:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>At line 19 column 2:
+    ))
+     ^
+Expected &#39;,&#39;
+</pre></div>
+</div>
+<p>With a line number, code snippet and error explanation provided.</p>
+<dl class="py exception">
+<dt class="sig sig-object py">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">peggie.</span></span><span class="sig-name descname"><span class="pre">ParseError</span></span></dt>
+<dd><p>Thrown if parsing fails due to a syntactic error (see
+<a class="reference external" href="https://peggie.readthedocs.io/en/latest/index.html#peggie.ParseError" title="(in Peggie v0.2.1)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">peggie.ParseError</span></code></a> in the <a class="reference external" href="https://peggie.readthedocs.io/en/latest/index.html#module-peggie" title="(in Peggie v0.2.1)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">peggie</span></code></a> documentation for
+details).</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="recipe_grid.compiler.RecipeCompileError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">recipe_grid.compiler.</span></span><span class="sig-name descname"><span class="pre">RecipeCompileError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">snippet</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#recipe_grid.compiler.RecipeCompileError" title="Link to this definition">¶</a></dt>
+<dd><p>Base type for compilation errors.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="recipe_grid.compiler.NameRedefinedError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">recipe_grid.compiler.</span></span><span class="sig-name descname"><span class="pre">NameRedefinedError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">snippet</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">second_output_name_definition</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">String</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#recipe_grid.compiler.NameRedefinedError" title="Link to this definition">¶</a></dt>
+<dd><p>Thrown when an output name is redefined.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="recipe_grid.compiler.ProportionGivenForIngredientError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">recipe_grid.compiler.</span></span><span class="sig-name descname"><span class="pre">ProportionGivenForIngredientError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">snippet</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ast_reference</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Reference</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#recipe_grid.compiler.ProportionGivenForIngredientError" title="Link to this definition">¶</a></dt>
+<dd><p>Thrown when an ingredient is prefixed with a proportion rather than a
+quantity. This probably implies that this was intended to be a reference to
+some earlier output and the user misspelt the name.</p>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">recipe_grid.compiler</span></code>: Recipe description language compiler</a><ul>
+<li><a class="reference internal" href="#recipe_grid.compiler.compile"><code class="docutils literal notranslate"><span class="pre">compile()</span></code></a></li>
+<li><a class="reference internal" href="#recipe_grid.compiler.RecipeCompileError"><code class="docutils literal notranslate"><span class="pre">RecipeCompileError</span></code></a></li>
+<li><a class="reference internal" href="#recipe_grid.compiler.NameRedefinedError"><code class="docutils literal notranslate"><span class="pre">NameRedefinedError</span></code></a></li>
+<li><a class="reference internal" href="#recipe_grid.compiler.ProportionGivenForIngredientError"><code class="docutils literal notranslate"><span class="pre">ProportionGivenForIngredientError</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="markdown.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">recipe_grid.markdown</span></code>: Markdown recipe compiler</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="data_model.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">recipe_grid.recipe</span></code>: Recipe Data Model</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/compiler.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="data_model.html" title="recipe_grid.recipe: Recipe Data Model"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="markdown.html" title="recipe_grid.markdown: Markdown recipe compiler"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Recipe Grid 2.1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">recipe_grid.compiler</span></code>: Recipe description language compiler</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2020, Jonathan Heathcote.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+  </body>
+</html>

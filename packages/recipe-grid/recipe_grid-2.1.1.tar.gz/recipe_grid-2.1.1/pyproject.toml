@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "recipe_grid"
+description = "A tool for generating table-based recipe descriptions."
+authors = [
+    {name = "Jonathan Heathcote", email = "mail@jhnet.co.uk"},
+]
+readme = "README.rst"
+license-files = ["LICENSE"]
+dependencies = [
+    "lxml",
+    "marko ~= 2.0.0",
+    "peggie",
+    "jinja2",
+]
+dynamic = ["version"]
+
+[project.urls]
+source = "https://github.com/mossblaser/recipe_grid"
+
+[project.scripts]
+recipe-grid = "recipe_grid.scripts.recipe_grid:main"
+recipe-grid-lint = "recipe_grid.scripts.recipe_grid_lint:main"
+recipe-grid-site = "recipe_grid.scripts.recipe_grid_site:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.dynamic]
+version = {attr = "recipe_grid.__version__"}
