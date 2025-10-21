@@ -1,0 +1,198 @@
+[project]
+name = "res-wind-up"
+version = "0.4.4"
+authors = [
+    { name = "Alex Clerc", email = "alex.clerc@res-group.com" }
+]
+description = "A tool to assess yield uplift of wind turbines"
+readme = "README.md"
+requires-python = ">=3.9,<4.0"
+license = { file = "LICENSE.txt" }
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3 :: Only",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering"
+]
+dependencies = [
+    'eval-type-backport',
+    'geographiclib',
+    'matplotlib',
+    'pandas >= 2.0.0',
+    'pyarrow',
+    'pydantic >= 2.0.0',
+    'python-dotenv',
+    'pyyaml',
+    'ruptures',
+    'scipy',
+    'seaborn',
+    'tabulate',
+    'toml',
+    'tqdm',
+    'utm',
+]
+
+[project.urls]
+Homepage = "https://github.com/resgroup/wind-up"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project.optional-dependencies]
+dev = [
+    'pytest',
+    'coverage',
+    'poethepoet',
+    'types-pyyaml',
+    'types-tabulate',
+    'types-toml',
+    'types-tqdm',
+    'types-requests',
+    'ruff',
+    'mypy',
+    'requests',
+    'pytest-env',
+]
+examples = [
+    'jupyterlab',
+    'notebook',
+    'ipywidgets',
+    'requests',
+    'ephem',
+    'flaml[automl]',
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["wind_up*"]
+
+[tool.ruff]
+line-length = 120
+show-fixes = true
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["ALL"] # https://beta.ruff.rs/docs/rules/
+ignore = [
+    "ANN204", # `__init__` doesn't need annotations
+    "S301", # `pickle` and modules that wrap it can be unsafe when used to deserialize untrusted data, possible security issue
+    "PGH004", # Use specific rule codes when using `noqa`. Seems to give false alarms
+    "COM812", # can conflict with ruff formatter
+    "ISC001", # can conflict with ruff formatter
+    "G004", # logging statement can use f-string
+    "D203",  # `incorrect-blank-line-before-class` (D203) and `no-blank-line-before-class` (D211) are incompatible
+    "D213",  # `multi-line-summary-first-line` (D212) and `multi-line-summary-second-line` (D213) are incompatible
+]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 12 # try to bring this down to 10
+
+[tool.ruff.lint.pylint]
+max-branches = 14 # try to bring this down to 12
+max-statements = 66 # try to bring this down to 50
+max-args = 17 # try to bring this down to 5
+
+[tool.ruff.lint.per-file-ignores]
+"wind_up/models.py" = ["N805", "PERF401"] # try to eliminate this
+"tests/**/*.py" = [
+    "S101",  # allow `assert`
+    "PLR2004",  # allow magic values
+    "D",  # TODO: remove this
+]
+"tests/test_smart_data.py" = ["DTZ001"]  # SMART functions use tz naive datetimes
+"**/__init__.py" = ["F401"]  # ignore unused imports in __init__.py
+"examples/**/*.py" = ["T20", "D"]
+"examples/**/kelmarsh_kaggle.py" = ["S101","PLR0915","PD013","N806"]
+"wind_up/smart_data.py" = ["D"]  # RES specific data loading
+"wind_up/plots/*.py" = ["D"]  # TODO: remove this
+"examples/*.ipynb" = ["D"]  # Jupyter notebooks
+
+[tool.mypy]
+plugins = ["pydantic.mypy"]
+python_version = "3.9"
+exclude = "build|tests|venv|.venv|__ignore__"
+disallow_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = [
+    "geographiclib.geodesic",
+    "pandas",
+    "pandas.testing",
+    "ruptures.*",
+    "scipy.stats",
+    "seaborn",
+    "utm",
+    "ephem",
+    "flaml",
+    "sklearn.*",
+]
+disable_error_code = ["name-defined"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "error",
+    "ignore:Passing unrecognized arguments to super:DeprecationWarning",  # pycharm debugger issue
+    "ignore:Passing a BlockManager to DataFrame is deprecated:DeprecationWarning",
+    "ignore:invalid value encountered in cast:RuntimeWarning", # occurs with ubuntu, Python 3.9, pandas 2.3.2
+]
+markers = [
+    "slow: mark test as slow.",
+]
+
+[tool.coverage.report]
+omit = [
+    "wind_up/plots/*.py",
+]
+exclude_lines = ["if __name__ == .__main__.:"]
+
+[tool.poe.tasks]
+[tool.poe.tasks.lint]
+help = "Runs formater and linter"
+sequence = [
+    { cmd = "ruff format ." },
+    { cmd = "ruff check . --fix" },
+    { cmd = "mypy ." }
+]
+
+[tool.poe.tasks.lint-check]
+help = "Checks formatter and linter"
+sequence = [
+    { cmd = "ruff format . --check" },
+    { cmd = "ruff check ." },
+    { cmd = "mypy ." }
+]
+
+[tool.poe.tasks.test-fast]
+help = "Runs tests that are not marked as slow"
+sequence = [
+    { cmd = 'coverage run --source wind_up -m pytest -m "not slow"' },
+    { cmd = "coverage report -m" },
+]
+
+[tool.poe.tasks.test]
+help = "Runs unit tests and show coverage"
+sequence = [
+    { cmd = "coverage run --source wind_up -m pytest ./tests" },
+    { cmd = "coverage report -m" },
+]
+
+[tool.poe.tasks.all-fast]
+help = "Run all required pre-push commands but skips marked slow tests"
+sequence = [{ ref = "lint" }, { ref = "test-fast" }]
+
+[tool.poe.tasks.all]
+help = "Run all required pre-push commands"
+sequence = [{ ref = "lint" }, { ref = "test" }]
+
+[tool.poe.tasks.jupy]
+help = "Start local Jupyterlab server"
+cmd = "python -m jupyter lab"
