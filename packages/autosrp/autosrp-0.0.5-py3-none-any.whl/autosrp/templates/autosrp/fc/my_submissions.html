@@ -1,0 +1,79 @@
+{% extends 'autosrp/base.html' %}
+{% load i18n humanize tz %}
+{% block content %}
+<div class="container-xxl py-3">
+  <div class="d-flex flex-wrap align-items-center justify-content-between mb-3 gap-2">
+    <h3 class="m-0">{% trans "My SRP Submissions" %}</h3>
+    <a href="{% url 'autosrp:submit' %}" class="btn btn-primary btn-sm">{% trans "New Submission" %}</a>
+  </div>
+
+  <div class="card">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-sm align-middle mb-0">
+          <thead class="table-dark">
+          <tr>
+            <th style="width: 8%;">{% trans "ID" %}</th>
+            <th style="width: 16%;">{% trans "Doctrine" %}</th>
+            <th style="width: 12%;">{% trans "Fit Mode" %}</th>
+            <th style="width: 16%;">{% trans "Start (UTC)" %}</th>
+            <th style="width: 10%;">{% trans "Duration (m)" %}</th>
+            <th style="width: 20%;">{% trans "Systems" %}</th>
+            <th style="width: 10%;">{% trans "Status" %}</th>
+            <th style="width: 8%;"></th>
+          </tr>
+          </thead>
+          <tbody>
+          {% for s in object_list %}
+          <tr>
+            <td><div class="fw-semibold">#{{ s.id }}</div></td>
+            <td>
+              {% if s.doctrine_name %}
+                {{ s.doctrine_name }}
+              {% else %}
+                {% trans "Doctrine" %} {{ s.doctrine_id }}
+              {% endif %}
+            </td>
+            <td>
+              <span class="badge bg-info">
+                {% if s.strict_mode %}{% trans "Strict" %}{% else %}{% trans "Loose" %}{% endif %}
+              </span>
+            </td>
+            <td>{% timezone "UTC" %}{{ s.start_at|date:"Y-m-d H:i:s T" }}{% endtimezone %}</td>
+            <td>{{ s.duration_minutes|default:"—" }}</td>
+            <td>
+              {% if s.system_names %}
+                <span title="{{ s.system_names|join:', ' }}">{{ s.system_names|join:", " }}</span>
+              {% elif s.systems %}
+                {{ s.systems|join:", " }}
+              {% else %}
+                —
+              {% endif %}
+            </td>
+            <td>
+              <span class="badge bg-secondary">{{ s.status|default:"unknown" }}</span>
+            </td>
+            <td class="text-end">
+              <a href="{% url 'autosrp:review_detail' s.id %}" class="btn btn-outline-primary btn-sm">
+                {% trans "Open" %}
+              </a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="8" class="text-center text-muted py-4">
+              {% trans "No submissions." %}
+            </td>
+          </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+    .container-xxl { max-width: 90%; }
+</style>
+{% endblock %}

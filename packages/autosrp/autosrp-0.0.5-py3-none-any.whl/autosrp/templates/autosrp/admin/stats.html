@@ -1,0 +1,144 @@
+{% extends "autosrp/base.html" %}
+{% load static %}
+{% load i18n humanize %}
+{% block content %}
+<div class="container">
+  <h2>Statistics</h2>
+
+  <div class="card" style="margin-top:1rem;">
+    <div class="card-body">
+      <h4>Totals</h4>
+      <ul>
+        <li>Total Loss of Requested Ships: {{ total_loss|floatformat:2|intcomma }}</li>
+        <li>Total Paid Out for Requested Ships: {{ total_paid|floatformat:2|intcomma }}</li>
+        <li>Total Fights: {{ total_fights }}</li>
+        <li>Total Requests: {{ total_kills }}</li>
+      </ul>
+
+      <h4>Averages</h4>
+      <ul>
+        <li>Average Requests per Fight: {{ avg_kills_per_fight }}</li>
+        <li>Average Loss per fight: {{ avg_loss_per_fight|floatformat:2|intcomma }}</li>
+        <li>Average Paid per fight: {{ avg_paid_per_fight|floatformat:2|intcomma }}</li>
+      </ul>
+
+      <h4>Review Status</h4>
+      <ul>
+        <li>Approved: {{ approved_cnt }}</li>
+        <li>Rejected: {{ rejected_cnt }}</li>
+        <li>Submitted (pending): {{ submitted_cnt }}</li>
+      </ul>
+
+      <h4>Penalty</h4>
+      <ul>
+        <li>Average Penalty Percent: {{ avg_penalty_pct|floatformat:2 }}%</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:1rem;">
+    <div class="card-body">
+      <h4>Charts</h4>
+      <div style="max-width: 100%;">
+        <canvas id="killsChart" height="120"></canvas>
+      </div>
+      <div style="max-width: 100%; margin-top: 24px;">
+        <canvas id="paidLossChart" height="120"></canvas>
+      </div>
+      <div style="max-width: 100%; margin-top: 24px;">
+        <canvas id="statusPie" height="120"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const labels = {{ chart_labels_json|safe }};
+  const kills = {{ kills_per_month_json|safe }};
+  const paid = {{ paid_per_month_json|safe }};
+  const loss = {{ loss_per_month_json|safe }};
+  const statusLabels = {{ status_labels_json|safe }};
+  const statusValues = {{ status_values_json|safe }};
+
+  new Chart(document.getElementById('killsChart'), {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Rquests per Month',
+        data: kills,
+        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+    }
+  });
+
+  new Chart(document.getElementById('paidLossChart'), {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Total Paid (ISK)',
+          data: paid,
+          borderColor: 'rgba(75, 192, 192, 1)',
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          tension: 0.2
+        },
+        {
+          label: 'Total Loss (ISK)',
+          data: loss,
+          borderColor: 'rgba(255, 99, 132, 1)',
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          tension: 0.2
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            callback: function(value) {
+              // Compact number formatting for readability
+              const formatter = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 });
+              return formatter.format(value);
+            }
+          }
+        }
+      }
+    }
+  });
+
+  new Chart(document.getElementById('statusPie'), {
+    type: 'pie',
+    data: {
+      labels: statusLabels,
+      datasets: [{
+        data: statusValues,
+        backgroundColor: [
+          'rgba(201, 203, 207, 0.7)',
+          'rgba(75, 192, 192, 0.7)',
+          'rgba(153, 102, 255, 0.7)',
+          'rgba(255, 99, 132, 0.7)'
+        ],
+        borderColor: [
+          'rgba(201, 203, 207, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 99, 132, 1)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: { responsive: true }
+  });
+</script>
+{% endblock %}

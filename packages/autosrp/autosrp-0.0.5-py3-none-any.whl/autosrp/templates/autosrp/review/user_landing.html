@@ -1,0 +1,279 @@
+{% extends "autosrp/base.html" %}
+{% load static %}
+{% load i18n humanize %}
+{% block content %}
+<div class="container-xxl mt-4">
+  <div class="row">
+    <div class="col-md-3">
+      <h3>My Discord settings</h3>
+      <form method="post" class="mt-3">
+        {% csrf_token %}
+        <div class="form-check mb-3">
+          {{ discord_form.discord_enabled }}
+          <label class="form-check-label" for="{{ discord_form.discord_enabled.id_for_label }}">
+            {{ discord_form.discord_enabled.label }}
+          </label>
+          {% if discord_form.discord_enabled.errors %}
+            <div class="text-danger small">{{ discord_form.discord_enabled.errors }}</div>
+          {% endif %}
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </form>
+      <p class="mt-2 text-muted">Toggle whether AutoSRP sends you Discord notifications.</p>
+    </div>
+
+    <div class="col-md-9">
+      <h3>My SRP requests</h3>
+      {% if my_srp_requests %}
+        <div class="table-responsive">
+          <table class="table table-sm table-striped align-middle">
+            <thead>
+              <tr>
+                <th scope="col">Time</th>
+                <th scope="col">Character</th>
+                <th scope="col">Ship</th>
+                <th scope="col">Doctrine</th>
+                <th scope="col">Kill</th>
+                <th scope="col">Status</th>
+                <th scope="col" class="text-end">Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for r in my_srp_requests %}
+              <tr>
+                <td>{{ r.occurred_at|date:"Y-m-d H:i" }}</td>
+                <td>{{ r.char_name }}</td>
+                <td>{{ r.ship_name }}</td>
+                <td>{{ r.doctrine_name }}</td>
+                <td>
+                  {% if r.killmail_id %}
+                    <a href="{{ r.zkb_url }}" target="_blank" rel="noopener">#{{ r.killmail_id }}</a>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+                <td>
+                  <a href="{{ r.status_modal_url }}" class="{{ r.status_class }} srp-status-link" data-kill-id="{{ r.id }}">
+                    {{ r.status|title }}
+                  </a>
+                  {% if r.comment %}
+                    <div class="small text-muted mt-1">“{{ r.comment }}”</div>
+                  {% endif %}
+                </td>
+                <td class="text-end">
+                  <div class="small text-muted">{{ r.value_label }}</div>
+                  <div>{{ r.value_amount }}</div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="card" style="margin-top:1rem;">
+          <div class="card-body">
+            <h5>Totals</h5>
+            <ul>
+              <li>Total Loss of Requests: {{ u_total_loss|floatformat:2|intcomma }}</li>
+              <li>Total Paid of Rquests: {{ u_total_paid }}</li>
+              <li>Total Fights: {{ u_total_fights }}</li>
+              <li>Total Requests: {{ u_total_kills }}</li>
+            </ul>
+
+            <h5>Averages</h5>
+            <ul>
+              <li>Average Requests per Fight: {{ u_avg_kills_per_fight }}</li>
+              <li>Average Loss per fight: {{ u_avg_loss_per_fight|floatformat:2|intcomma }}</li>
+              <li>Average Paid per fight: {{ u_avg_paid_per_fight|floatformat:2|intcomma }}</li>
+            </ul>
+
+            <h5>Review Status</h5>
+            <ul>
+              <li>Submitted: {{ u_submitted_cnt }}</li>
+              <li>Approved: {{ u_approved_cnt }}</li>
+              <li>Approved with Comment: {{ u_approved_with_comment_cnt }}</li>
+              <li>Rejected: {{ u_rejected_cnt }}</li>
+            </ul>
+
+            <h5>Penalty</h5>
+            <ul>
+              <li>Average Penalty Percent: {{ u_avg_penalty_pct|floatformat:2 }}%</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card" style="margin-top:1rem;">
+          <div class="card-body">
+            <div style="max-width: 100%; margin-top: 24px;">
+              <canvas id="uKillsChart" height="120"></canvas>
+            </div>
+            <div style="max-width: 100%; margin-top: 24px;">
+              <canvas id="uPaidLossChart" height="120"></canvas>
+            </div>
+            <div style="max-width: 100%; margin-top: 24px;">
+              <canvas id="uStatusPie" height="120"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" id="srpFitDetailModal" tabindex="-1" aria-labelledby="srpFitDetailModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="srpFitDetailModalLabel">Fit Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body" id="srpFitDetailBody">
+                <div class="text-center text-muted">Loading…</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% else %}
+        <p class="text-muted">No SRP requests found. If your characters are linked to your auth account, their eligible kills will appear here.</p>
+      {% endif %}
+        <style>
+            .container-xxl { max-width: 90%; }
+        </style>
+        <script>
+        (function() {
+          function openModalWithUrl(url) {
+            var modalEl = document.getElementById('srpFitDetailModal');
+            var bodyEl = document.getElementById('srpFitDetailBody');
+            if (!modalEl || !bodyEl) {
+              window.location.href = url;
+              return;
+            }
+            bodyEl.innerHTML = '<div class="text-center text-muted">Loading…</div>';
+
+            fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+              .then(function(r) { return r.text(); })
+              .then(function(html) { bodyEl.innerHTML = html; })
+              .catch(function(err) {
+                bodyEl.innerHTML = '<div class="text-danger">Error loading fit detail: ' +
+                  (err && err.message ? err.message : err) + '</div>';
+              });
+
+            if (window.bootstrap && bootstrap.Modal) {
+              var modal = new bootstrap.Modal(modalEl);
+              modal.show();
+            } else {
+              try {
+                modalEl.classList.add('show');
+                modalEl.style.display = 'block';
+              } catch (e) {
+                window.location.href = url;
+              }
+            }
+          }
+
+          function handleClick(e) {
+            var a = e.currentTarget;
+            if (!a || !a.href) return;
+            e.preventDefault();
+            openModalWithUrl(a.href);
+          }
+
+          function wireUp() {
+            var links = document.querySelectorAll('a.srp-status-link');
+            for (var i = 0; i < links.length; i++) {
+              links[i].addEventListener('click', handleClick);
+            }
+          }
+
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', wireUp);
+          } else {
+            wireUp();
+          }
+        })();
+        </script>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+          (function(){
+            const uLabels = {{ u_chart_labels_json|safe }};
+            const uKills = {{ u_kills_per_month_json|safe }};
+            const uPaid = {{ u_paid_per_month_json|safe }};
+            const uLoss = {{ u_loss_per_month_json|safe }};
+            const uStatusLabels = {{ u_status_labels_json|safe }};
+            const uStatusValues = {{ u_status_values_json|safe }};
+
+            new Chart(document.getElementById('uKillsChart'), {
+              type: 'bar',
+              data: {
+                labels: uLabels,
+                datasets: [{
+                  label: 'My Requests per Month',
+                  data: uKills,
+                  backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                  borderColor: 'rgba(54, 162, 235, 1)',
+                  borderWidth: 1
+                }]
+              },
+              options: { responsive: true, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } }
+            });
+
+            new Chart(document.getElementById('uPaidLossChart'), {
+              type: 'line',
+              data: {
+                labels: uLabels,
+                datasets: [
+                  {
+                    label: 'My Total Paid (ISK)',
+                    data: uPaid,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    tension: 0.2
+                  },
+                  {
+                    label: 'My Total Loss (ISK)',
+                    data: uLoss,
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    tension: 0.2
+                  }
+                ]
+              },
+              options: {
+                responsive: true,
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    ticks: {
+                      callback: function(value) {
+                        const formatter = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 });
+                        return formatter.format(value);
+                      }
+                    }
+                  }
+                }
+              }
+            });
+
+            new Chart(document.getElementById('uStatusPie'), {
+              type: 'pie',
+              data: {
+                labels: uStatusLabels,
+                datasets: [{
+                  data: uStatusValues,
+                  backgroundColor: [
+                    'rgba(201, 203, 207, 0.7)',
+                    'rgba(75, 192, 192, 0.7)',
+                    'rgba(153, 102, 255, 0.7)',
+                    'rgba(255, 99, 132, 0.7)'
+                  ],
+                  borderColor: [
+                    'rgba(201, 203, 207, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 99, 132, 1)'
+                  ],
+                  borderWidth: 1
+                }]
+              },
+              options: { responsive: true }
+            });
+          })();
+        </script>
+    </div>
+  </div>
+</div>
+{% endblock %}
