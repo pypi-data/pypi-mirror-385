@@ -1,0 +1,79 @@
+[project]
+name = "envencrypt-core"
+version = "0.1.2"
+description = "Core encryption utilities for python envencrypt"
+readme = "README.md"
+license = "GPL-3.0-or-later"
+license-files = ["LICENSE*"]
+authors = [
+    { name = "Dyve", email = "dev@dyve.ch" },
+    { name = "Igor Petrovic", email = "758832+igorovic@users.noreply.github.com" }
+]
+requires-python = ">=3.11"
+dependencies = ["envencrypt_core_dpapi; sys_platform=='win32'"]
+
+# [project.optional-dependencies]
+# dpapi = [
+#     "envencrypt-core-dpapi>=0.1.0; sys_platform=='win32'"
+# ]
+# keyring = [
+#     "envencrypt-core-keyring>=0.1.0"
+# ]
+# all = [
+#     "envencrypt-core-dpapi>=0.1.0; sys_platform=='win32'",
+#     "envencrypt-core-keyring>=0.1.0"
+# ]
+
+[tool.pyright]
+typeCheckingMode = "strict"
+exclude = ["dist/", "target/"]
+
+# [project.scripts]
+# envencrypt-core = "envencrypt_core:main"
+
+[tool.uv]
+# cache-dir = "../../.uv_cache"
+cache-keys = [
+    { file = "pyproject.toml" }, 
+    { file = "src/**/*.rs" }, 
+    { file = "crates/**/*.rs" },
+    { file = "crates/**/Cargo.toml" },
+    { file = "crates/**/pyproject.toml" },
+    { file = "Cargo.toml" }, 
+    { file = "Cargo.lock" }
+]
+
+[tool.uv.sources]
+envencrypt_core_dpapi = { workspace = true, marker = "sys_platform == 'win32'" }
+# keyring = { workspace = true }
+[tool.uv.workspace]
+members = ["crates/*"]
+exclude = ["crates/keyring"]
+
+# [build-system]
+# requires = ["setuptools>=61.0", "wheel"]
+# build-backend = "setuptools.build_meta"
+
+# [tool.setuptools.packages.find]
+# where = ["src"]
+# include = ["envencrypt_core*"]
+[build-system]
+requires = ["uv_build>=0.9.3,<0.10.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "maturin>=1.9.6",
+]
+
+[[tool.uv.index]]
+name = "testpypi"
+url = "https://test.pypi.org/envencrypt-core/"
+publish-url = "https://test.pypi.org/legacy/"
+explicit = true
+
+[[tool.uv.index]]
+name = "pypi"
+url = "https://pypi.org/envencrypt/"
+publish-url = "https://upload.pypi.org/legacy/"
+explicit = false
