@@ -1,0 +1,32 @@
+Metadata-Version: 2.4
+Name: kc-ohlc
+Version: 0.2.1
+Summary: Authenticated client + CLI for KC Trading OHLC API (pandas/polars). Optional HMAC signing.
+Author-email: Karan Chavan <Karan80121@gmail.com>
+License: MIT
+Project-URL: Homepage, https://kctradings.com
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+Requires-Dist: requests>=2.31.0
+Requires-Dist: python-dateutil>=2.8.2
+Provides-Extra: pandas
+Requires-Dist: pandas>=2.0.0; extra == "pandas"
+Provides-Extra: polars
+Requires-Dist: polars>=1.1.0; extra == "polars"
+
+# kc-ohlc (v0.2.1)
+
+Changes:
+- **Embedded default base URL**: `https://ohlc.kctradings.com` (no need to pass `base_url`).
+- **Per-call library override**: `get_bars(..., library="pd")` / `get_symbols(..., library="pd")`, default is **pandas**.
+
+## Quickstart
+```python
+from kc_ohlc import KCClient
+
+c = KCClient(api_key="YOUR_KEY")       # base_url defaults internally
+df = c.get_bars("EURUSD", "h1", "2024-01-01", "2025-01-01")            # pandas by default
+df_pl = c.get_bars("EURUSD", "h1", "2024-01-01", "2025-01-01", library="pl")  # per-call polars
+```
+
+CLI still works with env vars; default base URL embedded.

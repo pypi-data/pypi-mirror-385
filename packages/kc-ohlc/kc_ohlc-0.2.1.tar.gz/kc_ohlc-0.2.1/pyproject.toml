@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kc-ohlc"
+version = "0.2.1"
+description = "Authenticated client + CLI for KC Trading OHLC API (pandas/polars). Optional HMAC signing."
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [{name = "Karan Chavan", email = "Karan80121@gmail.com"}]
+dependencies = [
+  "requests>=2.31.0",
+  "python-dateutil>=2.8.2",
+]
+
+[project.optional-dependencies]
+pandas = ["pandas>=2.0.0"]
+polars = ["polars>=1.1.0"]
+
+[project.urls]
+Homepage = "https://kctradings.com"
+
+[project.scripts]
+kc-ohlc = "kc_ohlc.cli:main"
