@@ -1,0 +1,24 @@
+include README.md
+include LICENSE
+include pyproject.toml
+include DEVELOPMENT.md
+include PUBLISHING.md
+include Makefile
+recursive-include sam_mask_cli *.py
+global-exclude __pycache__
+global-exclude *.py[co]
+global-exclude .DS_Store
+global-exclude *.so
+global-exclude .git*
+global-exclude *.png
+global-exclude *.jpg
+global-exclude *.jpeg
+global-exclude *.webp
+global-exclude *.bmp
+global-exclude *.tiff
+global-exclude *.tif
+global-exclude test_*
+global-exclude example_*
+global-exclude mask_*
+global-exclude *.pt
+global-exclude .venv
