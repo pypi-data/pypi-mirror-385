@@ -1,0 +1,69 @@
+{% extends 'autosrp/base.html' %}
+{% load i18n humanize %}
+{% block content %}
+<div class="container-xxl py-3">
+    <div class="d-flex flex-wrap align-items-center justify-content-between mb-3 gap-2">
+        <h3 class="m-0">{% trans "Penalty Schemes" %}</h3>
+        {% if perms.autosrp.manage %}
+        <a class="btn btn-primary btn-sm" href="{% url 'autosrp:penalty-create' %}">{% trans "New Scheme" %}</a>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-sm align-middle mb-0">
+                    <thead class="table-dark">
+                    <tr>
+                        <th style="width: 28%;">{% trans "Name" %}</th>
+                        <th style="width: 12%;">{% trans "Missing (%)" %}</th>
+                        <th style="width: 12%;">{% trans "Wrong (%)" %}</th>
+                        <th style="width: 12%;">{% trans "Max (%)" %}</th>
+                        <th style="width: 12%;">{% trans "Count Rigs?" %}</th>
+                        <th style="width: 12%;">{% trans "Count Subs?" %}</th>
+                        <th style="width: 12%;">{% trans "Default" %}</th>
+                        <th style="width: 12%;"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for s in object_list %}
+                    <tr>
+                        <td>
+                            <div class="fw-semibold">{{ s.name }}</div>
+                        </td>
+                        <td>{{ s.per_missing_module_pct|floatformat:2 }}</td>
+                        <td>{{ s.per_extra_module_pct|floatformat:2 }}</td>
+                        <td>{{ s.max_total_deduction_pct|floatformat:2 }}</td>
+                        <td>{{ s.count_rigs }}</td>
+                        <td>{{ s.count_subsystems }}</td>
+                        <td>{{ s.is_default }}</td>
+                        <td class="text-end">
+                            {% if perms.autosrp.manage %}
+                            <a href="{% url 'autosrp:penalty-update' s.pk %}" class="btn btn-outline-secondary btn-sm">{% trans "Edit" %}</a>
+                        </td>
+                        <td class="text-end">
+                            <form method="post" action="{% url 'autosrp:penalty-delete' s.pk %}" onsubmit="return confirm('Delete this penalty scheme?');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-outline-danger">{% trans "Delete" %}</button>
+                            </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-4">
+                            {% trans "No schemes yet." %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .container-xxl { max-width: 90%; }
+</style>
+{% endblock %}

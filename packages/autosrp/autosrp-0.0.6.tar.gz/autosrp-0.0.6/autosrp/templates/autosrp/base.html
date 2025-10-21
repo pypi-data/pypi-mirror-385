@@ -1,0 +1,68 @@
+{% extends 'allianceauth/base-bs5.html' %}
+
+{% load i18n %}
+
+{% block header_nav_collapse_right %}
+    {{ block.super }}
+        <li class="nav-item">
+            <a class="btn btn-secondary me-2{% if request.resolver_match.url_name == 'user_landing' %} active{% endif %}"
+               href="{% url 'autosrp:user_landing' %}"
+               title="{% translate 'My SRP and Settings' %}">
+                <i class="fa-solid fa-paper-plane"></i>&nbsp;{% translate "My SRP" %}
+            </a>
+        </li>
+    {% if perms.autosrp.submit %}
+        <li class="nav-item">
+            <a class="btn btn-secondary me-2{% if request.resolver_match.url_name == 'submit' %} active{% endif %}"
+               href="{% url 'autosrp:submit' %}"
+               title="{% translate 'Submit new SRP search' %}">
+                <i class="fa-solid fa-paper-plane"></i>&nbsp;{% translate "Submit" %}
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="btn btn-secondary me-2{% if request.resolver_match.url_name == 'my-submissions' %} active{% endif %}"
+               href="{% url 'autosrp:my-submissions' %}"
+               title="{% translate 'View my submissions' %}">
+                <i class="fa-solid fa-list"></i>&nbsp;{% translate "My Submissions" %}
+            </a>
+        </li>
+    {% endif %}
+
+    {% if perms.autosrp.review %}
+        {% with n=request.resolver_match.url_name %}
+            <li class="nav-item">
+                <a class="btn btn-secondary me-2{% if n == 'review-list' or n == 'review_detail' %} active{% endif %}"
+                   href="{% url 'autosrp:review-list' %}"
+                   title="{% translate 'Review submission batches' %}">
+                    <i class="fa-solid fa-clipboard-check"></i>&nbsp;{% translate "Review Batches" %}
+                </a>
+            </li>
+        {% endwith %}
+    {% endif %}
+
+    {% if perms.autosrp.manage %}
+        {% with n=request.resolver_match.url_name %}
+        <li class="nav-item">
+            <a class="btn btn-secondary me-2{% if n == 'admin-home' %} active{% endif %}"
+               href="{% url 'autosrp:admin-home' %}"
+               title="{% translate 'Admin Settings' %}">
+                <i class="fa-solid fa-sliders"></i>&nbsp;{% translate "Admin Settings" %}
+            </a>
+        </li>
+        {% endwith %}
+    {% endif %}
+{% endblock %}
+
+{% block page_title %}
+    {% translate "Auto SRP" %}
+{% endblock %}
+
+{% block header_nav_brand %}
+    {% translate "Auto SRP" %}
+{% endblock header_nav_brand %}
+
+{% block content %}
+    <div class="autosrp">
+        {% block details %}{% endblock %}
+    </div>
+{% endblock %}
