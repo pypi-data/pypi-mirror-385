@@ -1,0 +1,32 @@
+[build-system]
+requires = ["hatchling>=1.25.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ami-crypto-next"
+version = "0.1.0"
+description = "国家电网内网系统《电力采集系统2.0》的相关加解密支持"
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+authors = [{ name = "Author Name", email = "email@tmd.wtf" }]
+keywords = ["SM2", "SM3", "SM4", "AES", "crypto", "State Grid", "AMI", "SGCC"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Topic :: Security :: Cryptography",
+]
+
+# 这里只写“加解密包真实需要的依赖”
+dependencies = [
+  "gmssl>=3.2.2",
+  "pycryptodome>=3.20.0",
+]
+
+# 使用 src 布局，直接暴露顶层模块 ami_crypto_next.py
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
+[project.urls]
+Homepage = "https://example.com/"
