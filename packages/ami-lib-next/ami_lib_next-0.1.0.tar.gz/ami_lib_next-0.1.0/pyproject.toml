@@ -1,0 +1,33 @@
+[build-system]
+requires = ["hatchling>=1.25.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ami-lib-next"
+version = "0.1.0"
+description = "国家电网内网系统《电力采集系统2.0》的一些API"
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+authors = [{ name = "Author Name", email = "email@tmd.wtf" }]
+keywords = ["SM2", "SM3", "SM4", "AES", "crypto", "State Grid", "AMI", "SGCC"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Topic :: Internet :: WWW/HTTP",
+]
+
+# 关键点：声明依赖 ami-crypto-next
+dependencies = [
+  "ami-crypto-next>=0.1.0",
+  "requests>=2.31.0",
+  "numpy>=1.26.0",
+  "opencv-python>=4.8.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
+[project.urls]
+Homepage = "https://example.com/ami-lib-next"

@@ -1,0 +1,22 @@
+Metadata-Version: 2.4
+Name: ami-lib-next
+Version: 0.1.0
+Summary: 国家电网内网系统《电力采集系统2.0》的一些API
+Project-URL: Homepage, https://example.com/ami-lib-next
+Author-email: Author Name <email@tmd.wtf>
+License-Expression: MIT
+Keywords: AES,AMI,SGCC,SM2,SM3,SM4,State Grid,crypto
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Internet :: WWW/HTTP
+Requires-Python: >=3.8
+Requires-Dist: ami-crypto-next>=0.1.0
+Requires-Dist: numpy>=1.26.0
+Requires-Dist: opencv-python>=4.8.0
+Requires-Dist: requests>=2.31.0
+Description-Content-Type: text/markdown
+
+# ami-lib-next
+主库：统一请求入口、验证码识别（模板匹配）、加解密链路处理等。依赖 `ami-crypto-next`。
+安装：`pip install ami-lib-next` （将自动安装 ami-crypto-next）
