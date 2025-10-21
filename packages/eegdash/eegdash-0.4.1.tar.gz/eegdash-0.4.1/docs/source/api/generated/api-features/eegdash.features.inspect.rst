@@ -1,0 +1,21 @@
+﻿eegdash.features.inspect
+========================
+
+.. automodule:: eegdash.features.inspect
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      get_all_feature_extractors
+      get_all_feature_kinds
+      get_all_features
+      get_feature_kind
+      get_feature_predecessors
+   
+
