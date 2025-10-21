@@ -1,0 +1,467 @@
+# This file defines the mapping between applications, their log paths,
+# and which Ansible node groups they belong to
+
+# Define applications and their log file paths
+
+applications:
+  # alice-ecs
+  alice-ecs:
+    log_paths:
+      - /var/log/o2-aliecs-core*
+    journal: false # Use file-based logs only
+    journal_mode: binary # Optional: not used when journal: false
+
+  # Apricot
+  apricot:
+    log_paths:
+      - /var/log/o2-apricot*
+    journal: false # Use file-based logs only
+    journal_mode: binary # Optional: not used when journal: false
+
+  # Audit
+  audit:
+    log_paths:
+      - /var/log/audit
+    journal: false # Enable systemd journal collection
+    journal_mode: binary # 'binary' (copy journal files) or 'export' (journalctl export)
+
+  # Auditbeat
+  auditbeat:
+    log_paths:
+      - /var/log/auditbeat
+    journal: false # Use file-based logs only
+    journal_mode: binary # Optional: not used when journal: false
+
+  # Bookkeeping
+  bookkeeping:
+    log_paths:
+      - /var/log/o2-bkp*
+    journal: false # Use file-based logs only
+    journal_mode: binary # Optional: not used when journal: false
+
+  # Boot logs
+  boot:
+    log_paths:
+      - /var/log/boot.log*
+    journal: false # Use file-based logs only
+    journal_mode: binary # Optional: not used when journal: false
+
+  # Failed logins log
+  btmp:
+    log_paths:
+      - /var/log/btmp*
+
+  # CCDB
+  ccdb-memory:
+    log_paths:
+      - /var/log/ccdb-memory*
+    journal: false # Use file-based logs only
+    journal_mode: binary # Optional: not used when journal: false
+
+  # COG
+  cog:
+    log_paths:
+      - var/log/o2-cog*
+    journal: false # Use file-based logs only
+    journal_mode: binary # Optional: not used when journal: false
+
+  # Consul
+  consul:
+    log_paths:
+      - /var/log/consul
+    journal: false # Use file-based logs only
+    journal_mode: binary # Optional: not used when journal: false
+
+  # Cron jobs
+  cron:
+    log_paths:
+      - /var/log/cron*
+    journal: false # Use file-based logs only
+    journal_mode: binary # Optional: not used when journal: false
+
+  # Elasticsearch database
+  elasticsearch:
+    log_paths:
+      - /var/log/elasticsearch/elastic-*.log.*
+    journal: false # Use file-based logs only
+    journal_mode: binary # Optional: not used when journal: false
+
+  # Grafana
+  grafana:
+    log_paths:
+      - /var/log/grafana
+    journal: false # Use file-based logs only
+    journal_mode: binary # Optional: not used when journal: false
+
+  # Influxdb
+  influxdb:
+    log_paths:
+      - /var/log/influxdb
+    journal: false # Use file-based logs only
+    journal_mode: binary # Optional: not used when journal: false
+
+  # Infologger
+  infologger:
+    log_paths:
+      - /var/log/o2-ilg*
+      - /var/log/o2-infologger-daemon.log*
+    journal: false # Use file-based logs only
+    journal_mode: binary # Optional: not used when journal: false
+
+  # Kafka
+  kafka:
+    log_paths:
+      - /var/log/kafka
+      - /var/log/kafka-ui*
+      - /var/log/confluent
+    journal: false # Use file-based logs only
+    journal_mode: binary # Optional: not used when journal: false
+
+  # Kibana
+  kibana:
+    log_paths:
+      - /var/log/kibana
+    journal: false # Use file-based logs only
+    journal_mode: binary # Optional: not used when journal: false
+
+  # Logstash
+  logstash:
+    log_paths:
+      - /var/log/logstash
+    journal: false # Use file-based logs only
+    journal_mode: binary # Optional: not used when journal: false
+
+  # MariaDB
+  mariadb:
+    log_paths:
+      - /var/log/mariadb
+    journal: false # Enable systemd journal collection
+    journal_mode: binary # 'binary' (copy journal files) or 'export' (journalctl export)
+
+  # Mesos
+  mesos:
+    log_paths:
+      - /var/log/mesos
+    journal: false # Use file-based logs only
+    journal_mode: binary # Optional: not used when journal: false
+
+  # Nginx
+  nginx:
+    log_paths:
+      - /var/log/nginx
+    journal: false # Use file-based logs only
+    journal_mode: binary # Optional: not used when journal: false
+
+  # Nomad
+  nomad:
+    log_paths:
+      - /var/log/nomad/
+    journal: false # Use file-based logs only
+    journal_mode: binary # Optional: not used when journal: false
+
+  # o2-flp-setup deployments
+  o2-flp-setup:
+    log_paths:
+      - /var/log/o2-flp-setup/logs/deploy/
+    journal: false # Use file-based logs only
+    journal_mode: binary # Optional: not used when journal: false
+
+  # OpenSearch
+  opensearch:
+
+  # OpenSearch-Dashboards
+  opensearch-dashboards:
+
+  # Private
+  private:
+    log_paths:
+      - /var/log/private
+    journal: false # Enable systemd journal collection
+    journal_mode: binary # 'binary' (copy journal files) or 'export' (journalctl export)
+
+  # QCDB backup
+  qcdb-backup:
+    log_paths:
+      - /var/log/qcdb-backup*
+    journal: false # Use file-based logs only
+    journal_mode: binary # Optional: not used when journal: false
+
+  # QCG
+  qcg:
+    log_paths:
+      - /var/log/o2-qcg*
+    journal: false # Use file-based logs only
+    journal_mode: binary # Optional: not used when journal: false
+
+  # SSSD
+  sssd:
+    log_paths:
+      - /var/log/sssd
+    journal: false # Enable systemd journal collection
+    journal_mode: binary # 'binary' (copy journal files) or 'export' (journalctl export)
+
+  # System
+  system:
+    journal: true # Enable systemd journal collection
+    journal_mode: binary # 'binary' (copy journal files) or 'export' (journalctl export)
+
+  # Telegraf
+  telegraf:
+    log_paths:
+      - /var/log/telegraf/
+    journal: false # Use file-based logs only
+    journal_mode: binary # Optional: not used when journal: false
+
+  # Vault
+  vault:
+    log_paths:
+      - /var/log/vault
+    journal: false # Use file-based logs only
+    journal_mode: binary # Optional: not used when journal: false
+
+  # XRootd
+  xrootd:
+    log_paths:
+      - /var/log/xrootd
+    journal: false # Enable systemd journal collection
+    journal_mode: binary # 'binary' (copy journal files) or 'export' (journalctl export)
+
+  # Zookeeper
+  zookeeper:
+    log_paths:
+      - /var/log/zookeeper/
+    journal: false # Use file-based logs only
+    journal_mode: binary # Optional: not used when journal: false
+
+# Define which applications run on which node groups
+# Group names should match those in your Ansible inventory
+#
+# Special group '_all_nodes': Applications here are collected from ALL nodes
+# regardless of their inventory group membership
+node_groups:
+  # Special: Applied to ALL nodes automatically
+  _all_nodes:
+    - audit
+    - cron
+    - system
+    - telegraf
+
+  bookkeepingdb:
+    - bookkeeping
+    - telegraf
+    - consul
+
+  bookkeeping-lhc:
+    - bookkeeping
+    - telegraf
+    - consul
+
+  consul-ui:
+    - consul
+
+  elasticsearch:
+    - elasticsearch
+    - consul
+    - telegraf
+
+  head:
+    - apricot
+    - bookkeeping
+    - cog
+    - consul
+    - elasticsearch
+    - grafana
+    - influxdb
+    - infologger
+    - kafka
+    - kibana
+    - logstash
+    - mesos
+    - nginx
+    - nomad
+    - o2-flp-setup
+    - qcg
+    - telegraf
+    - vault
+
+  flps:
+    - consul
+    - mesos
+    - telegraf
+    - infologger
+    - ccdb-memory
+
+  index-page:
+    - nginx
+
+  kafka-aliecs:
+    - kafka
+
+  kafka-metric-processing:
+    - kafka
+
+  kafka-rest:
+    - kafka
+
+  notification:
+    - kafka
+
+  zookeepers:
+    - zookeeper
+
+  qcdb:
+    - telegraf
+    - consul
+
+  nomad:
+    - nomad
+    - telegraf
+    - consul
+
+  vault:
+    - vault
+
+  gateways:
+    - telegraf
+
+  logstash:
+    - logstash
+    - consul
+    - telegraf
+
+  kibana:
+    - kibana
+    - consul
+    - telegraf
+
+  kafka-brokers:
+    - kafka
+    - telegraf
+    - consul
+    - nomad
+
+  calib-dcs:
+    - infologger
+    - consul
+    - telegraf
+  
+  qc:
+    # - infologger
+    - consul
+    - telegraf
+    - ccdb-memory
+  
+  qcpp:
+    - consul
+    - telegraf
+    - ccdb-memory
+    - nomad
+
+# Rsync and collection options
+rsync_options:
+  # Maximum number of parallel rsync jobs
+  max_parallel_jobs: 5
+
+  # Enable post-sync compression of collected logs (creates tar.gz archives)
+  # Set to false to keep logs uncompressed (default, saves CPU and allows immediate access)
+  # Set to true to automatically compress logs after each sync (saves disk space)
+  # Note: You can always compress later using the 'compress' command
+  compress: false
+
+  # Local directory where logs will be stored
+  # Can be absolute path (e.g., /var/logs/collected) or relative to this directory
+  # Directory will be created automatically if it doesn't exist
+  local_storage: /data/logs/p2-staging
+
+  # SSH user for remote connections
+  ssh_user: root
+
+  # SSH port
+  ssh_port: 22
+
+  # SSH options for ignoring host key verification
+  # Set to true to skip fingerprint checking (useful for automated scripts)
+  # WARNING: This reduces security - only use in trusted networks
+  ssh_ignore_host_key: true
+
+  # Enable rsync compression during transfer (-z flag)
+  # Set to false to reduce CPU load on remote hosts (recommended for fast networks)
+  # Set to true for slow/high-latency connections where bandwidth is limited
+  use_compression: true
+
+  # Additional rsync flags
+  # -a: archive mode (preserves permissions, timestamps, etc.)
+  # --progress: show progress during transfer
+  additional_flags:
+    - -a
+    - --progress
+
+  # Number of retry attempts for failed syncs
+  retry_count: 3
+
+  # Delay in seconds between retry attempts
+  retry_delay: 5
+
+  # Timeout in seconds for each rsync operation
+  timeout: 300
+
+  # Date filter: only sync files modified within last N days
+  # Set to null or omit to sync all files
+  date_filter: null
+
+# Raw mode options (for quick disk usage estimation)
+raw_mode:
+  # Generic log directories to check for total size estimation
+  # These are standard directories that commonly contain logs across all systems
+  generic_log_dirs:
+    - /var/log
+    - /var/log/journal
+    - /tmp
+
+# Journal collection options (for systemd journal logs)
+journal_options:
+  # Default collection mode for journal logs:
+  #   'binary': Copy journal files directly (RECOMMENDED - minimal remote impact, complete data)
+  #   'export': Use journalctl to export logs (processes on remote, more flexible filtering)
+  default_mode: binary
+
+  # Binary mode settings (when journal_mode: binary)
+  binary:
+    # Remote journal directory (or directories)
+    # Can be a single path (string) or multiple paths (list)
+    # Common locations:
+    #   - /var/log/journal/  (persistent storage)
+    #   - /run/log/journal/  (volatile/runtime storage)
+    remote_journal_path:
+      # - /var/log/journal/
+      - /run/log/journal/
+
+    # Or single path:
+    # remote_journal_path: /var/log/journal/
+
+    # Copy only current boot's journal (reduces transfer size significantly)
+    current_boot_only: true
+
+  # Export mode settings (when journal_mode: export)
+  export:
+    # Output format: 'export', 'json', 'json-pretty'
+    # 'export': Structured format with all fields (best for complete data)
+    # 'json': JSON format (best for Logstash)
+    output_format: export
+
+    # Enable SSH compression for journal transfer
+    ssh_compression: true
+
+    # Priority filter: only collect logs at this level or higher
+    # Set to null to collect all priorities
+    priority_filter: null
+
+    # Maximum lines to collect per journal query (safety limit)
+    max_lines: null
+
+# To be sorted?
+# - { role: control-core, tags: [control-core, control] }
+# - { role: control-gui, tags: [control-gui, control, guis], when: 'groups["cog"] is not defined' }
+# - { role: control-consul, tags: [control-consul, control] }
+# - { role: o2-software, tags: [control-core, control] }
+# - { role: quality-control, tags: [quality-control, qc] }

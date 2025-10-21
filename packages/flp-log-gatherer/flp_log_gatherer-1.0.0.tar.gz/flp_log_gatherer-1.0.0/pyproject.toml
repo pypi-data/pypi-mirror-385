@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "flp-log-gatherer"
+version = "1.0.0"
+description = "Collect logs from heterogeneous nodes using rsync and systemd journal"
+readme = "README.md"
+requires-python = ">=3.7"
+license = "MIT"
+authors = [
+    {name = "Matteo Concas", email = "matteo.concas@cern.ch"}
+]
+keywords = ["logs", "rsync", "systemd", "journal", "collection", "monitoring"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: System Administrators",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: System :: Logging",
+    "Topic :: System :: Monitoring",
+]
+dependencies = [
+    "PyYAML>=5.1",
+]
+
+[project.urls]
+Homepage = "https://github.com/mconcas/flp-log-gatherer"
+Repository = "https://github.com/mconcas/flp-log-gatherer"
+
+[project.scripts]
+flp-log-gatherer = "src.cli:main"
+
+[tool.setuptools]
+packages = ["src"]
+package-dir = {"" = "."}

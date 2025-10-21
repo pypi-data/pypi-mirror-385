@@ -1,0 +1,397 @@
+############
+# Services
+############
+[bookkeepingdb]
+alio2-cr1-hv-bdb01
+
+[bookkeeping]
+alio2-cr1-hv-web02
+
+[bookkeeping-lhc]
+alio2-cr1-hv-bis01
+
+[rpm-repo]
+alio2-cr1-hv-web01
+
+[cog]
+alio2-cr1-hv-web01
+
+[index-page]
+alio2-cr1-hv-web02
+
+[nginx]
+alio2-cr1-hv-web01
+alio2-cr1-hv-web02
+qcg-test
+
+[qcg]
+alio2-cr1-hv-web02
+
+[qcg-mc]
+alio2-cr1-hv-web02
+
+[qcg-test]
+qcg-test
+
+[ilg]
+alio2-cr1-hv-web02
+
+[grafana]
+alio2-cr1-hv-web02
+
+[head]
+alio2-cr1-hv-aliecs
+
+[influxdb]
+alio2-cr1-hv-ifx01
+alio2-cr1-hv-ifx02
+alio2-cr1-hv-ifx03
+alio2-cr1-hv-ifx04
+
+[qcdb]
+alio2-cr1-hv-qcdb
+alio2-cr1-hv-qcdb1
+alio2-cr1-hv-qcdbmc
+
+[nomad]
+alio2-cr1-hv-nom01
+
+[nomad-client:children]
+head
+kafka-brokers
+grafana
+qcpp
+
+[elasticsearch]
+alio2-cr1-hv-els01
+alio2-cr1-hv-els02
+alio2-cr1-hv-els03
+
+[logstash]
+alio2-cr1-hv-log01
+alio2-cr1-hv-log02
+
+[kibana]
+alio2-cr1-hv-kib01
+
+[consul]
+alio2-cr1-hv-con01
+alio2-cr1-hv-con02
+alio2-cr1-hv-con03
+
+[consul-ui]
+alio2-cr1-hv-web01
+
+[vault]
+alio2-cr1-hv-web01
+
+[zookeepers]
+alio2-cr1-hv-aliecs
+
+[kafka-brokers]
+alio2-cr1-hv-brk01
+alio2-cr1-hv-brk02
+
+[kafka-rest]
+alio2-cr1-hv-brk01
+alio2-cr1-hv-brk02
+
+[kafka-ui]
+alio2-cr1-hv-web01
+
+[notification]
+alio2-cr1-hv-brk02
+
+[kafka-aliecs]
+alio2-cr1-hv-brk01
+
+[gateways]
+alio2-cr1-hv-gw01
+alio2-cr1-hv-gw04
+
+[gitlab-runners]
+alio2-cr1-hv-gw04
+
+[p2-cwf-mirror]
+alio2-cr1-hv-gw04
+
+[flps]
+alio2-cr1-flp[001:161]
+alio2-cr1-flp163
+alio2-cr1-flp[166:199]
+
+; [services:children]
+; head
+; bookkeepingdb
+; bookkeeping
+; bookkeeping-lhc
+; consul-ui
+; cog
+; index-page
+; nginx
+; qcg
+; qcg-mc
+; ilg
+; grafana
+; influxdb
+; qcdb
+; nomad
+; consul
+; gateways
+
+; ############
+; # FLPs
+; ############
+; [flps-emc]
+; alio2-cr1-flp[146:147]
+
+; [flps-fdd]
+; alio2-cr1-flp201
+
+; [flps-ft0]
+; alio2-cr1-flp200
+
+; [flps-fv0]
+; alio2-cr1-flp180
+
+; [flps-hmp]
+; alio2-cr1-flp[160:161]
+
+; [flps-its]
+; alio2-cr1-flp187 its_halflayer=l0t
+; alio2-cr1-flp188 its_halflayer=l1t
+; alio2-cr1-flp189 its_halflayer=l2t
+; alio2-cr1-flp190 its_halflayer=l2b
+; alio2-cr1-flp191 its_halflayer=l3
+; alio2-cr1-flp192 its_halflayer=l4t
+; alio2-cr1-flp193 its_halflayer=l4b
+; alio2-cr1-flp194 its_halflayer=l5t
+; alio2-cr1-flp195 its_halflayer=l5b
+; alio2-cr1-flp196 its_halflayer=l6t
+; alio2-cr1-flp197 its_halflayer=l6b
+; alio2-cr1-flp198 its_halflayer=l0b
+; alio2-cr1-flp203 its_halflayer=l1b
+
+; [flps-mch]
+; alio2-cr1-flp148 dim_dns_node=alimchfred001.cern.ch
+; alio2-cr1-flp149 dim_dns_node=alimchfred002.cern.ch
+; alio2-cr1-flp150 dim_dns_node=alimchfred003.cern.ch
+; alio2-cr1-flp151 dim_dns_node=alimchfred001.cern.ch
+; alio2-cr1-flp152 dim_dns_node=alimchfred001.cern.ch
+; alio2-cr1-flp153 dim_dns_node=alimchfred002.cern.ch
+; alio2-cr1-flp154 dim_dns_node=alimchfred002.cern.ch
+; alio2-cr1-flp155 dim_dns_node=alimchfred003.cern.ch
+; alio2-cr1-flp156 dim_dns_node=alimchfred003.cern.ch
+; alio2-cr1-flp157 dim_dns_node=alimchfred002.cern.ch
+; alio2-cr1-flp158 dim_dns_node=alimchfred002.cern.ch
+
+; [flps-mft]
+; alio2-cr1-flp182 mft_sector=H0D0-H1D4
+; alio2-cr1-flp183 mft_sector=H0D1-H1D3
+; alio2-cr1-flp184 mft_sector=H0D2-H1D2
+; alio2-cr1-flp185 mft_sector=H0D3-H1D1
+; alio2-cr1-flp186 mft_sector=H0D4-H1D0
+
+; [flps-mft-psu]
+; alio2-cr1-flp202
+
+; [flps-mid]
+; alio2-cr1-flp159
+
+; [flps-tof]
+; alio2-cr1-flp[178:179]
+
+; [flps-tpc]
+; alio2-cr1-flp[001:144]
+; alio2-cr1-flp145 dim_dns_node=alitpcfred002.cern.ch
+
+; [flps-trd]
+; alio2-cr1-flp[166:177]
+
+; [flps-trg]
+; alio2-cr1-flp163
+
+; [flps-tst]
+; alio2-cr1-flp204
+
+; [flps-zdc]
+; alio2-cr1-flp181 dim_dns_node=alizdcfred001.cern.ch
+
+; [flps:children]
+; flps-emc
+; flps-fdd
+; flps-ft0
+; flps-fv0
+; flps-hmp
+; flps-its
+; flps-mch
+; flps-mft
+; flps-mid
+; flps-tof
+; flps-tpc
+; flps-trd
+; flps-trg
+; flps-tst
+; flps-zdc
+
+; ############
+; # Quality Control
+; ############
+[qc]
+alio2-cr1-qc01 shm_size=40G
+alio2-cr1-qc02 shm_size=40G
+alio2-cr1-qc03 shm_size=40G
+alio2-cr1-qc05 shm_size=40G
+alio2-cr1-qc07 shm_size=40G
+alio2-cr1-qc08 shm_size=40G
+alio2-cr1-qme01 shm_size=40G
+alio2-cr1-qme02 shm_size=40G
+alio2-cr1-qme03 shm_size=40G
+alio2-cr1-qme04 shm_size=40G
+alio2-cr1-qme05 shm_size=40G
+alio2-cr1-qme06 shm_size=40G
+alio2-cr1-qme07 shm_size=40G
+alio2-cr1-qme08 shm_size=40G
+alio2-cr1-qme09 shm_size=40G
+alio2-cr1-qts01 shm_size=100G
+alio2-cr1-qts02 shm_size=100G
+alio2-cr1-qts03 shm_size=100G
+
+[qcpp]
+alio2-cr1-qpp01 shm_size=40G
+alio2-cr1-qpp02 shm_size=40G
+
+; ############
+; # PDP
+; ############
+[calib-dcs]
+alio2-cr1-flp199
+
+; ############
+; # TRG
+; ############
+; [trg:children]
+; trg-ctrl
+; trg-app
+
+; [trg-ctrl]
+; alio2-cr1-ctpctr
+
+; [trg-app]
+; alio2-cr1-ctpapp
+
+; ############
+; # TPC sectors
+; ############
+; [A01]
+; alio2-cr1-flp[001:004] tpc_sector=A01 dim_dns_node=alitpcfred001.cern.ch
+; [A02]
+; alio2-cr1-flp[005:008] tpc_sector=A02 dim_dns_node=alitpcfred001.cern.ch
+; [A03]
+; alio2-cr1-flp[009:012] tpc_sector=A03 dim_dns_node=alitpcfred001.cern.ch
+; [A04]
+; alio2-cr1-flp[013:016] tpc_sector=A04 dim_dns_node=alitpcfred001.cern.ch
+; [A05]
+; alio2-cr1-flp[017:020] tpc_sector=A05 dim_dns_node=alitpcfred001.cern.ch
+; [A06]
+; alio2-cr1-flp[021:024] tpc_sector=A06 dim_dns_node=alitpcfred001.cern.ch
+; [A07]
+; alio2-cr1-flp[025:028] tpc_sector=A07 dim_dns_node=alitpcfred001.cern.ch
+; [A08]
+; alio2-cr1-flp[029:032] tpc_sector=A08 dim_dns_node=alitpcfred001.cern.ch
+; [A09]
+; alio2-cr1-flp[033:036] tpc_sector=A09 dim_dns_node=alitpcfred003.cern.ch
+; [A10]
+; alio2-cr1-flp[037:040] tpc_sector=A10 dim_dns_node=alitpcfred003.cern.ch
+; [A11]
+; alio2-cr1-flp[041:044] tpc_sector=A11 dim_dns_node=alitpcfred003.cern.ch
+; [A12]
+; alio2-cr1-flp[045:048] tpc_sector=A12 dim_dns_node=alitpcfred003.cern.ch
+; [A13]
+; alio2-cr1-flp[049:052] tpc_sector=A13 dim_dns_node=alitpcfred003.cern.ch
+; [A14]
+; alio2-cr1-flp[053:056] tpc_sector=A14 dim_dns_node=alitpcfred003.cern.ch
+; [A15]
+; alio2-cr1-flp[057:060] tpc_sector=A15 dim_dns_node=alitpcfred003.cern.ch
+; [A16]
+; alio2-cr1-flp[061:064] tpc_sector=A16 dim_dns_node=alitpcfred003.cern.ch
+; [A17]
+; alio2-cr1-flp[065:068] tpc_sector=A17 dim_dns_node=alitpcfred003.cern.ch
+; [A00]
+; alio2-cr1-flp[069:072] tpc_sector=A00 dim_dns_node=alitpcfred001.cern.ch
+; [C00]
+; alio2-cr1-flp[073:076] tpc_sector=C00 dim_dns_node=alitpcfred002.cern.ch
+; [C01]
+; alio2-cr1-flp[077:080] tpc_sector=C01 dim_dns_node=alitpcfred002.cern.ch
+; [C02]
+; alio2-cr1-flp[081:084] tpc_sector=C02 dim_dns_node=alitpcfred002.cern.ch
+; [C03]
+; alio2-cr1-flp[085:088] tpc_sector=C03 dim_dns_node=alitpcfred002.cern.ch
+; [C04]
+; alio2-cr1-flp[089:092] tpc_sector=C04 dim_dns_node=alitpcfred002.cern.ch
+; [C05]
+; alio2-cr1-flp[093:096] tpc_sector=C05 dim_dns_node=alitpcfred002.cern.ch
+; [C06]
+; alio2-cr1-flp[097:100] tpc_sector=C06 dim_dns_node=alitpcfred002.cern.ch
+; [C07]
+; alio2-cr1-flp[101:104] tpc_sector=C07 dim_dns_node=alitpcfred002.cern.ch
+; [C08]
+; alio2-cr1-flp[105:108] tpc_sector=C08 dim_dns_node=alitpcfred002.cern.ch
+; [C09]
+; alio2-cr1-flp[109:112] tpc_sector=C09 dim_dns_node=alitpcfred004.cern.ch
+; [C10]
+; alio2-cr1-flp[113:116] tpc_sector=C10 dim_dns_node=alitpcfred004.cern.ch
+; [C11]
+; alio2-cr1-flp[117:120] tpc_sector=C11 dim_dns_node=alitpcfred004.cern.ch
+; [C12]
+; alio2-cr1-flp[121:124] tpc_sector=C12 dim_dns_node=alitpcfred004.cern.ch
+; [C13]
+; alio2-cr1-flp[125:128] tpc_sector=C13 dim_dns_node=alitpcfred004.cern.ch
+; [C14]
+; alio2-cr1-flp[129:132] tpc_sector=C14 dim_dns_node=alitpcfred004.cern.ch
+; [C15]
+; alio2-cr1-flp[133:136] tpc_sector=C15 dim_dns_node=alitpcfred004.cern.ch
+; [C16]
+; alio2-cr1-flp[137:140] tpc_sector=C16 dim_dns_node=alitpcfred004.cern.ch
+; [C17]
+; alio2-cr1-flp[141:144] tpc_sector=C17 dim_dns_node=alitpcfred004.cern.ch
+
+; [Aside:children]
+; A01
+; A02
+; A03
+; A04
+; A05
+; A06
+; A07
+; A08
+; A09
+; A10
+; A11
+; A12
+; A13
+; A14
+; A15
+; A16
+; A17
+; A00
+
+; [Cside:children]
+; C00
+; C01
+; C02
+; C03
+; C04
+; C05
+; C06
+; C07
+; C08
+; C09
+; C10
+; C11
+; C12
+; C13
+; C14
+; C15
+; C16
+; C17

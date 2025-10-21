@@ -1,0 +1,35 @@
+Metadata-Version: 2.4
+Name: flp-log-gatherer
+Version: 1.0.0
+Summary: Collect logs from heterogeneous nodes using rsync and systemd journal
+Home-page: https://github.com/mconcas/flp-log-gatherer
+Author: Matteo Concas
+Author-email: Matteo Concas <matteo.concas@cern.ch>
+License-Expression: MIT
+Project-URL: Homepage, https://github.com/mconcas/flp-log-gatherer
+Project-URL: Repository, https://github.com/mconcas/flp-log-gatherer
+Keywords: logs,rsync,systemd,journal,collection,monitoring
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: System Administrators
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: System :: Logging
+Classifier: Topic :: System :: Monitoring
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: PyYAML>=5.1
+Dynamic: author
+Dynamic: home-page
+Dynamic: license-file
+Dynamic: requires-python
+
+# flp-log-gatherer
+
+> AI disclaimer: this project has been heavily coded with the help of AI tools.
+
+Utility to collect logs from remote nodes using **rsync**, with support for **Ansible inventories** and **systemd journal** collection.
