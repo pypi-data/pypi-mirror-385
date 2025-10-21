@@ -1,0 +1,1 @@
+I like the charts and graphs I create as part of my research to have a consistent theme and share some functionality, and so I thought creating a library to store all this that can be referenced across my projects would be useful.
