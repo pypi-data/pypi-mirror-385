@@ -1,0 +1,40 @@
+[project]
+name = "sli-lib"
+requires-python = ">=3.11"
+dynamic = [
+  "version",
+  "readme",
+  "description",
+  "keywords",
+  "home_page",
+  "author",
+  "author_email",
+  "license",
+  "project_url",
+]
+license-files = [
+    "LICENSE",
+]
+
+[project.urls]
+documentation = "https://sli-lib.gitlab.io/sli/python"
+
+[project.optional-dependencies]
+# dependencies used for developing the python bindings
+dev = [
+  "mypy>=1.15",
+  "pytest>=8.3",
+  "pdoc>=15",
+]
+
+[build-system]
+requires = ["maturin>=1.0,<2.0"]
+build-backend = "maturin"
+
+[tool.maturin]
+features = [
+  "extension-module"
+]
+manifest-path = "./sli/pysli-lib/Cargo.toml"
+python-source = "./sli/pysli-lib/python"
+data = "./sli/pysli-lib/python/sli_lib.data"
