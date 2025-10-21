@@ -1,0 +1,33 @@
+name: Lint
+
+on:
+  push:
+    branches: [ 'release_conda' ]
+
+jobs:
+  run-linters:
+    name: Run linters
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ['3.10']
+        include:
+          - environment-file: .github/environments/lint-environment.yml
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      - name: Set up Conda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+          environment-file: ${{ matrix.environment-file }}
+          activate-environment: lint-env
+
+      - name: Run linters
+        shell: bash -l {0}
+        run: |
+          black .
+          flake8 . --max-line-length=120

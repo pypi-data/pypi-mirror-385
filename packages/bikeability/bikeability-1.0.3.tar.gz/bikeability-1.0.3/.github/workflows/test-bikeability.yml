@@ -1,0 +1,36 @@
+name: Test Bikeability on Ubuntu
+
+on:
+  push:
+    branches: [ main, dependencies-update ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.10', "3.11", "3.12"]
+ #       include:
+ #         - environment-file: .github/environments/requirements-bikeability.txt
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Install uv and set the Python version
+        uses: astral-sh/setup-uv@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Install the project
+        run: uv sync --locked --all-extras --dev
+
+      - name: Install pytest
+        run: uv pip install pytest
+
+      - name: Run tests
+        run: uv run pytest tests
+        shell: bash
