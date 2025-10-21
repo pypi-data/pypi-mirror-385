@@ -1,0 +1,149 @@
+# Enov8 MCP Server
+
+A Model Context Protocol (MCP) server for interacting with Enov8 ecosystem management platform.
+
+## Features
+
+- 🚀 **9 Powerful Tools** - Access all Enov8 data types
+- 🔍 **Search & Filter** - Find exactly what you need
+- ⚡ **No Limits** - Returns ALL results (not just first 10-20)
+- 🔒 **Secure** - Runs locally, credentials never leave your machine
+- 🎯 **Easy Setup** - Just `pip install` and configure
+
+## What You Can Query
+
+- **Systems** - Infrastructure and applications
+- **Projects** - Projects and initiatives
+- **Service Requests** - Tickets and incidents
+- **Events** - Environment events
+- **Bookings** - Environment reservations
+- **Environments** - Environment configurations
+- **System Instances** - Deployed instances
+- **System Components** - System components
+- **Releases** - Release schedules
+
+## Installation
+
+```bash
+pip install enov8-mcp-server
+```
+
+## Usage
+
+### For Cursor IDE
+
+Add to your `mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "enov8": {
+      "command": "python",
+      "args": ["-m", "enov8_mcp_server"],
+      "env": {
+        "ENOV8_API_BASE": "https://your-instance.enov8.com/ecosystem/api",
+        "ENOV8_USER_ID": "your_user_id",
+        "ENOV8_APP_ID": "your_app_id",
+        "ENOV8_APP_KEY": "your_app_key"
+      }
+    }
+  }
+}
+```
+
+### For Claude Desktop
+
+Add to `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "enov8": {
+      "command": "python",
+      "args": ["-m", "enov8_mcp_server"],
+      "env": {
+        "ENOV8_API_BASE": "https://your-instance.enov8.com/ecosystem/api",
+        "ENOV8_USER_ID": "your_user_id",
+        "ENOV8_APP_ID": "your_app_id",
+        "ENOV8_APP_KEY": "your_app_key"
+      }
+    }
+  }
+}
+```
+
+## Configuration
+
+You need 4 environment variables:
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `ENOV8_API_BASE` | Your Enov8 instance API URL | `https://dashboard.enov8.com/ecosystem/api` |
+| `ENOV8_USER_ID` | Your Enov8 user ID | `john.doe` |
+| `ENOV8_APP_ID` | Your application ID | `app123` |
+| `ENOV8_APP_KEY` | Your application key | `abc123xyz789` |
+
+**Get your credentials from your Enov8 administrator.**
+
+## Example Queries
+
+Once configured, you can ask:
+
+```
+"How many systems are in the ecosystem?"
+"List all projects with green RAG status"
+"Show service requests for Alpha project"
+"What releases are scheduled this month?"
+"List all PROD environments"
+"Show me SAP system and its instances"
+```
+
+## Requirements
+
+- Python 3.10 or higher
+- Valid Enov8 instance credentials
+- Cursor IDE or Claude Desktop (optional, works with any MCP client)
+
+## Updating
+
+```bash
+pip install --upgrade enov8-mcp-server
+```
+
+## Troubleshooting
+
+### "Missing required environment variables"
+- Check all 4 environment variables are set in your config
+- Verify no typos in variable names
+
+### "HTTP 401: Unauthorized"
+- Verify your credentials are correct
+- Contact your Enov8 administrator
+
+### "Connection refused"
+- Check your `ENOV8_API_BASE` URL is correct
+- Ensure it ends with `/ecosystem/api` (no trailing slash)
+- Verify you can access the URL
+
+## Support
+
+- **Credential Issues**: Contact your Enov8 administrator
+- **Technical Issues**: Open an issue on GitHub
+- **Feature Requests**: Open an issue on GitHub
+
+## License
+
+MIT
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Changelog
+
+### 0.1.0 (2024-10-21)
+- Initial release
+- 9 tools for Enov8 data access
+- No result limits
+- Search and filtering support
+
