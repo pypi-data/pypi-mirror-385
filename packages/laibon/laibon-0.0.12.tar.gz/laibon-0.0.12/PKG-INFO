@@ -1,0 +1,89 @@
+Metadata-Version: 2.4
+Name: laibon
+Version: 0.0.12
+Summary: Common library for django development
+Author-email: Wenceslaus Mumala <info@dvectors.com>
+License-File: LICENSE
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.8
+Requires-Dist: django>=4.2
+Requires-Dist: jsonschema>=4.0.0
+Description-Content-Type: text/markdown
+
+# Laibon
+
+Laibon is a collection of useful common classes that can go a long way to help in developing a django based web application.
+
+## Features
+
+- **Database Access**: Abstract adapter pattern for clean separation between business logic and Django models
+- **Flow Management**: Activity-based workflow execution with conditional jumps and error handling  
+- **Container Pattern**: Thread-safe key-value storage for passing data between activities
+- **JSON Validation**: Schema-based request validation with caching for performance
+- **Exception Handling**: Comprehensive exception hierarchy for different error scenarios
+
+## Installation
+
+From PyPI:
+```bash
+python3 -m pip install laibon
+```
+
+From TestPyPI:
+```bash
+pip install --extra-index-url https://testpypi.python.org/pypi laibon
+```
+
+## Quick Examples
+
+### Database Adapter Pattern
+```python
+from laibon.db import Adapter, BaseModel
+
+class UserAdapter(Adapter):
+    def __init__(self, entity_id=None, name=None, email=None):
+        super().__init__(entity_id)
+        self.name = name
+        self.email = email
+    
+    def to_model(self, existing=None):
+        if existing:
+            existing.name = self.name
+            return existing
+        return UserModel(name=self.name, email=self.email)
+```
+
+### Flow Management
+```python
+from laibon.rtf import FlowDefinition, FlowRunner
+
+flow = FlowDefinition("User Registration")
+flow.add(ValidateInputActivity) \
+    .jump_if(ValidationResult.INVALID, ErrorActivity) \
+    .jump_default(CreateUserActivity)
+
+runner = FlowRunner(data_container)
+runner.run_flow(flow)
+```
+
+### JSON Validation
+```python
+from laibon.rest import JSONSchemaValidator
+
+try:
+    JSONSchemaValidator.validate_schema(
+        {"name": "John", "age": 30}, 
+        "user/create_request.json"
+    )
+except JSONValidationException:
+    # Handle validation error
+    pass
+```
+
+## Requirements
+
+- Python >= 3.8
+- Django >= 4.2
+- jsonschema >= 4.0.0
