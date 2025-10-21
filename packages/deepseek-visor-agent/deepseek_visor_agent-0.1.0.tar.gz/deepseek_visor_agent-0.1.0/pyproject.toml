@@ -1,0 +1,73 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "deepseek-visor-agent"
+version = "0.1.0"
+description = "Standard vision tool for AI agents - Convert documents to structured data"
+authors = [{name = "Jack Chen", email = "jack_ai@qq.com"}]
+readme = "README.md"
+license = {text = "Apache-2.0"}
+requires-python = ">=3.9"
+keywords = ["ocr", "ai-agent", "deepseek", "langchain", "document-understanding"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+    "torch>=2.6.0",
+    "transformers>=4.46.3",
+    "tokenizers>=0.20.3",
+    "einops",
+    "addict",
+    "easydict",
+    "pillow>=10.0.0",
+    "psutil>=5.9.0",
+    "pydantic>=2.0.0",
+    "loguru>=0.7.0",
+]
+
+[project.optional-dependencies]
+flash-attn = ["flash-attn==2.7.3"]
+api = ["fastapi>=0.104.0", "uvicorn[standard]>=0.24.0"]
+all = ["flash-attn==2.7.3", "fastapi>=0.104.0", "uvicorn[standard]>=0.24.0"]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+    "mypy>=1.5.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/JackChen-ai/deepseek-visor-agent"
+Documentation = "https://github.com/JackChen-ai/deepseek-visor-agent/blob/main/README.md"
+Repository = "https://github.com/JackChen-ai/deepseek-visor-agent"
+Issues = "https://github.com/JackChen-ai/deepseek-visor-agent/issues"
+
+[tool.setuptools]
+packages = ["deepseek_visor_agent"]
+
+[tool.black]
+line-length = 100
+target-version = ['py39', 'py310', 'py311']
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
