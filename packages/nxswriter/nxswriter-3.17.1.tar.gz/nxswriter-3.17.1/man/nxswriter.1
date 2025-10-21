@@ -1,0 +1,4305 @@
+.\" Man page generated from reStructuredText.
+.
+.
+.nr rst2man-indent-level 0
+.
+.de1 rstReportMargin
+\\$1 \\n[an-margin]
+level \\n[rst2man-indent-level]
+level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
+-
+\\n[rst2man-indent0]
+\\n[rst2man-indent1]
+\\n[rst2man-indent2]
+..
+.de1 INDENT
+.\" .rstReportMargin pre:
+. RS \\$1
+. nr rst2man-indent\\n[rst2man-indent-level] \\n[an-margin]
+. nr rst2man-indent-level +1
+.\" .rstReportMargin post:
+..
+.de UNINDENT
+. RE
+.\" indent \\n[an-margin]
+.\" old: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.nr rst2man-indent-level -1
+.\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.in \\n[rst2man-indent\\n[rst2man-indent-level]]u
+..
+.TH "NXSWRITER" "1" "Jun 04, 2025" "3.16" "NXSDataWriter"
+.SH NAME
+nxswriter \- nxswriter Documentation
+.sp
+\fI\%\fP
+\fI\%\fP
+\fI\%\fP
+\fI\%\fP
+.sp
+Authors: Jan Kotanski, Eugen Wintersberger, Halil Pasic
+.SH INTRODUCTION
+.sp
+NXSDataWriter is a Tango server which allows to store NeXuS Data in H5 files.
+.sp
+The server provides storing data from other Tango devices,
+various databases as well as passed by a user client via JSON strings.
+.sp
+Tango Server API: \fI\%https://nexdatas.github.io/nxsdatawriter/doc_html\fP
+.nf
+Source code: \fI\%https://github.com/nexdatas/nxsdatawriter\fP
+Project Web page: \fI\%https://nexdatas.github.io/nxsdatawriter\fP
+NexDaTaS Web page: \fI\%https://nexdatas.github.io\fP
+.fi
+.sp
+.SH INSTALLATION
+.sp
+Install the dependencies:
+.nf
+pninexus or h5py, tango, numpy, nxstools, sphinx
+.fi
+.sp
+.SS From sources
+.sp
+Download the latest NexDaTaS version from
+.nf
+\fI\%https://github.com/nexdatas/nxsdatawriter\fP
+.fi
+.sp
+.sp
+Extract sources and run
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ python3 setup.py install
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Debian packages
+.sp
+Debian \fIbookworm\fP, \fIbullseye\fP, \fIbuster\fP  or Ubuntu \fIplucky\fP,  \fInoble\fP, \fIjammy\fP  packages can be found in the HDRI repository.
+.sp
+To install the debian packages, add the PGP repository key
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ sudo su
+$ curl \-s http://repos.pni\-hdri.de/debian_repo.pub.gpg | gpg \-\-no\-default\-keyring \-\-keyring gnupg\-ring:/etc/apt/trusted.gpg.d/debian\-hdri\-repo.gpg \-\-import
+$ chmod 644 /etc/apt/trusted.gpg.d/debian\-hdri\-repo.gpg
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+and then download the corresponding source list
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ cd /etc/apt/sources.list.d
+$ wget http://repos.pni\-hdri.de/bookworm\-pni\-hdri.list
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+To install tango server
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ apt\-get update
+$ apt\-get install nxswriter
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+or
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ apt\-get update
+$ apt\-get install nxswriter3
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+for older python3 releases.
+.sp
+To install only the python3 package
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ apt\-get update
+$ apt\-get install python3\-nxswriter
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+and for python2
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ apt\-get update
+$ apt\-get install python\-nxswriter
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+if exists.
+.SS From pip
+.sp
+To install it from pip you can
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ python3 \-m venv myvenv
+$ . myvenv/bin/activate
+
+$ pip install nxswriter
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Moreover it is also good to install
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ pip install pytango
+$ pip install pymysqldb
+$ pip install psycopg2\-binary
+$ pip install cx\-oracle
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Setting NeXus Writer Server
+.sp
+To set up  NeXus Writer Server run
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ nxsetup \-x NXSDataWriter
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+The \fInxsetup\fP command comes from the \fBpython3\-nxstools\fP package.
+.SH CLIENT CODE
+.sp
+In order to use Nexus Data Server one has to write a client code. Some simple client codes
+are in the  nexdatas repository. In this section we add some
+comments related to the client code.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# To use the Tango Server we must import the tango module and
+# create DeviceProxy for the server.
+
+import tango
+
+device = \(dqp09/tdw/r228\(dq
+dpx = tango.DeviceProxy(device)
+dpx.set_timeout_millis(10000)
+
+dpx.Init()
+
+# Here device corresponds to a name of our Nexus Data Server.
+# The Init() method resets the state of the server.
+
+dpx.FileName = \(dqtest.h5\(dq
+dpx.OpenFile()
+
+# We set the name of the output HDF5 file and open it.
+
+# Now we are ready to pass the XML settings describing a structure of
+# the output file as well as defining a way of data storing.
+# Examples of the XMLSettings can be found in the XMLExamples directory.
+
+with open(\(dqtest.xml\(dq, \(aqr\(aq) as fl:
+    xml = fl.read()
+dpx.XMLSettings = xml
+
+dpx.JSONRecord = \(aq{\(dqdata\(dq: {\(dqparameterA\(dq:0.2},
+                      \(dqdecoders\(dq:{\(dqDESY2D\(dq:\(dqdesydecoders.desy2Ddec.desy2d\(dq},
+                      \(dqdatasources\(dq:{
+                           \(dqMCLIENT\(dq:\(dqsources.DataSources.LocalClientSource\(dq}
+}\(aq
+
+dpx.OpenEntry()
+
+# We read our XML settings settings from a file and pass them to the server via
+# the XMLSettings attribute. Then we open an entry group related to the XML
+# configuration. Optionally, we can also set JSONRecord, i.e. an attribute
+# which contains a global JSON string with data needed to store during opening
+# the entry and also other stages of recording. If external decoder for
+# DevEncoded data is need one can registred it passing its packages and
+# class names in JSONRecord,
+# e.g. \(dqdesy2d\(dq class of \(dqDESY2D\(dq label in \(dqdesydecoders.desy2Ddec\(dq package.
+# Similarly making use of \(dqdatasources\(dq records of the JSON string one can
+# registred additional datasources. The OpenEntry method stores data defined
+# in the XML string with strategy=INIT.
+# The JSONRecord attribute can be changed during recording our data.
+
+# After finalization of the configuration process we can start recording
+# the main experiment data in a STEP mode.
+
+dpx.Record(\(aq{\(dqdata\(dq: {\(dqp09/counter/exp.01\(dq:0.1, \(dqp09/counter/exp.02\(dq:1.1}}\(aq)
+
+# Every time we call the Record method all nexus fields defined with
+# strategy=STEP are extended by one record unit and the assigned to them data
+# is stored. As the method argument we pass a local JSON string with the client
+# data. To record the client data one can also use the global JSONRecord string.
+# Contrary to the global JSON string the local one is only
+# valid during one record step.
+
+dpx.Record(\(aq{\(dqdata\(dq: {\(dqemittance_x\(dq: 0.1},  \(dqtriggers\(dq:[\(dqtrigger1\(dq, \(dqtrigger2\(dq]  }\(aq)
+
+# If you denote in your XML configuration string some fields by additional
+# trigger attributes you may ask the server to store your data only in specific
+# record steps. This can be helpful if you want to store your data in
+# asynchronous mode. To this end you define in the local JSON string a list of
+# triggers which are used in the current record step.
+
+dpx.JSONRecord = \(aq{\(dqdata\(dq: {\(dqparameterB\(dq:0.3}}\(aq
+dpx.CloseEntry()
+
+# After scanning experiment data in \(aqSTEP\(aq mode we close the entry.
+# To this end we call the CloseEntry method which also stores data defined
+# with strategy=FINAL. Since our HDF5 file can contain many entries we can again
+# open the entry and repeat our record procedure. If we define more than one entry
+# in one XML setting string the defined entries are recorded parallel
+# with the same steps.
+
+# Finally, we can close our output file by
+
+dpx.CloseFile()
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Additionally, one can use asynchronous versions of \fBOpenEntry\fP, \fBRecord\fP, \fBCloseEntry\fP, i.e.
+\fBOpenEntryAsynch\fP, \fBRecordAsynch\fP, \fBCloseEntryAsynch\fP\&. In this case data is stored
+in a background thread and during this writing Tango Data Server has a state \fIRUNNING\fP\&.
+.sp
+In order to build the XML configurations in the easy way the authors of the server provide
+for this purpose a specialized GUI tool, Component Designer.
+The attached to the server XML examples
+was created by XMLFile class defined in XMLCreator/simpleXML.py.
+.SH NXSWRITER PACKAGE
+.SS Submodules
+.SS nxswriter.ClientSource module
+.sp
+Definitions of CLIENT datasource
+.INDENT 0.0
+.TP
+.B class  nxswriter.ClientSource.ClientSource(streams=None, name=None)
+Bases: \fI\%DataSource\fP
+.sp
+Client data source
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Brief
+It sets all member variables to None
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBstreams\fP (\fBStreamSet\fP or \fI\%tango.LatestDeviceImpl\fP) \-\- tango\-like steamset class
+.IP \(bu 2
+\fBname\fP (\fI\%str\fP) \-\- datasource name
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B getData()
+provides access to the data
+.INDENT 7.0
+.TP
+.B Returns
+dictionary with collected data
+.TP
+.B Return type
+{\(aqrank\(aq: \fI\%str\fP, \(aqvalue\(aq: any, \(aqtangoDType\(aq: \fI\%str\fP,         :        \(aqshape\(aq: \fI\%list\fP <int>, \(aqencoding\(aq: \fI\%str\fP,         :        \(aqdecoders\(aq: \fI\%str\fP} )
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B name
+(\fI\%str\fP) data name
+.UNINDENT
+.INDENT 7.0
+.TP
+.B setJSON(globalJSON, localJSON=None)
+sets JSON string
+.INDENT 7.0
+.TP
+.B Brief
+It sets the currently used  JSON string
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBglobalJSON\fP (\fI\%dict\fP         :                 <\fI\%str\fP, \fI\%dict\fP <\fI\%str\fP, any>>) \-\- static JSON string
+.IP \(bu 2
+\fBlocalJSON\fP (\fI\%dict\fP                          <\fI\%str\fP, \fI\%dict\fP <\fI\%str\fP, any>>) \-\- dynamic JSON string
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B setup(xml)
+sets the parrameters up from xml
+.INDENT 7.0
+.TP
+.B Parameters
+\fBxml\fP (\fI\%str\fP) \-\- datasource parameters
+.TP
+.B Raises
+\fI\%nxswriter.Errors.DataSourceSetupError\fP         :        if \fI\%name\fP is not defined
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS nxswriter.DBaseSource module
+.sp
+Definitions of DB datasource
+.INDENT 0.0
+.TP
+.B nxswriter.DBaseSource.DB_AVAILABLE  =  [\(aqMYSQL\(aq, \(aqPGSQL\(aq]
+(\fI\%list\fP) list of available databases
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class  nxswriter.DBaseSource.DBaseSource(streams=None, name=None)
+Bases: \fI\%DataSource\fP
+.sp
+DataBase data source
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Brief
+It sets all member variables to None
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBstreams\fP (\fBStreamSet\fP or \fI\%tango.LatestDeviceImpl\fP) \-\- tango\-like steamset class
+.IP \(bu 2
+\fBname\fP (\fI\%str\fP) \-\- datasource name
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B dbname
+(\fI\%str\fP) database name
+.UNINDENT
+.INDENT 7.0
+.TP
+.B dbtype
+(\fI\%str\fP) database type, i.e. MYSQL, PGSQL, ORACLE
+.UNINDENT
+.INDENT 7.0
+.TP
+.B dsn
+(\fI\%str\fP) DSN string
+.UNINDENT
+.INDENT 7.0
+.TP
+.B format
+(\fI\%str\fP) record format, i.e. \fISCALAR\fP, \fISPECTRUM\fP, \fIIMAGE\fP
+.UNINDENT
+.INDENT 7.0
+.TP
+.B getData()
+provides access to the data
+.INDENT 7.0
+.TP
+.B Returns
+dictionary with collected data
+.TP
+.B Return type
+\fI\%dict\fP <\fI\%str\fP, any>
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B hostname
+(\fI\%str\fP) name of the host with the data source
+.UNINDENT
+.INDENT 7.0
+.TP
+.B mode
+(\fI\%str\fP) oracle database mode
+.UNINDENT
+.INDENT 7.0
+.TP
+.B mycnf
+(\fI\%str\fP) mysql database configuration file
+.UNINDENT
+.INDENT 7.0
+.TP
+.B passwd
+(\fI\%str\fP) database password
+.UNINDENT
+.INDENT 7.0
+.TP
+.B port
+(\fI\%str\fP) port related to the host
+.UNINDENT
+.INDENT 7.0
+.TP
+.B query
+(\fI\%str\fP) database query
+.UNINDENT
+.INDENT 7.0
+.TP
+.B setup(xml)
+sets the parrameters up from xml
+.INDENT 7.0
+.TP
+.B Parameters
+\fBxml\fP (\fI\%str\fP) \-\- datasource parameters
+.TP
+.B Raises
+\fI\%nxswriter.Errors.DataSourceSetupError\fP
+if \fI\%format\fP or \fI\%query\fP is not defined
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B user
+(\fI\%str\fP) database user
+.UNINDENT
+.UNINDENT
+.SS nxswriter.DataHolder module
+.sp
+definition of a data holder with casting methods
+.INDENT 0.0
+.TP
+.B class  nxswriter.DataHolder.DataHolder(rank, value, tangoDType, shape, encoding=None, decoders=None, streams=None)
+Bases: \fI\%object\fP
+.sp
+Holder for passing data
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBrank\fP (\fI\%str\fP) \-\- format of the data, i.e. SCALAR, SPECTRUM, IMAGE, VERTEX
+.IP \(bu 2
+\fBvalue\fP (\fIany\fP) \-\- value of the data. It may be also 1D and 2D array
+.IP \(bu 2
+\fBtangoDType\fP (\fI\%str\fP) \-\- type of the data
+.IP \(bu 2
+\fBshape\fP (\fI\%list\fP <\fI\%int\fP>) \-\- shape of the data
+.IP \(bu 2
+\fBencoding\fP (\fI\%str\fP) \-\- encoding type of Tango DevEncoded varibles
+.IP \(bu 2
+\fBdecoders\fP (\fI\%nxswriter.DecoderPool.DecoderPool\fP) \-\- poll with decoding classes
+.IP \(bu 2
+\fBstreams\fP (\fBStreamSet\fP or \fI\%tango.LatestDeviceImpl\fP) \-\- tango\-like steamset class
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B cast(dtype)
+casts the data into given type
+.INDENT 7.0
+.TP
+.B Parameters
+\fBdtype\fP (\fI\%str\fP) \-\- given type of data
+.TP
+.B Returns
+numpy array of defined type or list
+for strings or value for SCALAR
+.TP
+.B Return type
+\fI\%numpy.ndarray\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B decoders
+pool with decoding algorithm
+.UNINDENT
+.INDENT 7.0
+.TP
+.B encoding
+(\fI\%str\fP)  encoding type of Tango DevEncoded varibles
+.UNINDENT
+.INDENT 7.0
+.TP
+.B format
+(\fI\%str\fP) data format, i.e. SCALAR, SPECTRUM, IMAGE, VERTEX
+.UNINDENT
+.INDENT 7.0
+.TP
+.B shape
+(\fI\%list\fP <\fI\%int\fP>) data shape
+.UNINDENT
+.INDENT 7.0
+.TP
+.B tangoDType
+(\fI\%str\fP)  tango data type
+.UNINDENT
+.INDENT 7.0
+.TP
+.B value
+(any) data value
+.UNINDENT
+.UNINDENT
+.SS nxswriter.DataSourceFactory module
+.sp
+factory with datasources
+.INDENT 0.0
+.TP
+.B class  nxswriter.DataSourceFactory.DataSourceFactory(attrs, last, streams=None)
+Bases: \fI\%Element\fP
+.sp
+Data source creator
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBattrs\fP (\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>) \-\- dictionary with the tag attributes
+.IP \(bu 2
+\fBlast\fP (\fI\%nxswriter.Element.Element\fP) \-\- the last element on the stack
+.IP \(bu 2
+\fBstreams\fP (\fBStreamSet\fP or \fI\%tango.LatestDeviceImpl\fP) \-\- tango\-like steamset class
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B setDataSources(datasources)
+sets the used datasources
+.INDENT 7.0
+.TP
+.B Parameters
+\fBdatasources\fP (\fI\%nxswriter.DataSourcePool.DataSourcePool\fP) \-\- pool to be set
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B setDecoders(decoders)
+sets the used decoders
+.INDENT 7.0
+.TP
+.B Parameters
+\fBdecoders\fP (\fI\%nxswriter.DecoderPool.DecoderPool\fP) \-\- pool to be set
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B store(xml=None, globalJSON=None)
+sets the datasource form xml string
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBxml\fP (\fI\%str\fP) \-\- input parameter
+.IP \(bu 2
+\fBglobalJSON\fP (:     \fI\%dict\fP <\fI\%str\fP, \fI\%dict\fP <\fI\%str\fP, any>>) \-\- global JSON string
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS nxswriter.DataSourcePool module
+.sp
+pool with datasource evaluation classes
+.INDENT 0.0
+.TP
+.B class  nxswriter.DataSourcePool.DataSourcePool(configJSON=None)
+Bases: \fI\%object\fP
+.sp
+DataSource pool
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Brief
+It creates know datasources
+.TP
+.B Parameters
+\fBconfigJSON\fP (:    \fI\%dict\fP <\fI\%str\fP, \fI\%dict\fP <\fI\%str\fP, any>>) \-\- JSON dictionary with datasources
+.UNINDENT
+.INDENT 7.0
+.TP
+.B append(datasource, name)
+adds additional datasource
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBname\fP (\fI\%str\fP) \-\- name of the adding datasource
+.IP \(bu 2
+\fBdatasource\fP (\fI\%nxswriter.DataSources.DataSource\fP) \-\- instance of the adding datasource
+.UNINDENT
+.TP
+.B Returns
+name of datasource
+.TP
+.B Return type
+\fI\%str\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B appendUserDataSources(configJSON)
+loads user datasources
+.INDENT 7.0
+.TP
+.B Parameters
+\fBconfigJSON\fP (:    \fI\%dict\fP <\fI\%str\fP, \fI\%dict\fP <\fI\%str\fP, any>>) \-\- string with datasources
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B canfail
+(\fI\%bool\fP) can fail switch
+.UNINDENT
+.INDENT 7.0
+.TP
+.B common
+(\fI\%dict\fP <\fI\%str\fP, \fI\%dict\fP <\fI\%str\fP, any>>) global variables for specific datasources
+.UNINDENT
+.INDENT 7.0
+.TP
+.B counter
+(\fI\%int\fP) step counter: INIT: \-1; STEP: 1,2,3...; FINAL: \-2;
+.UNINDENT
+.INDENT 7.0
+.TP
+.B get(datasource)
+checks it the datasource is registered
+.INDENT 7.0
+.TP
+.B Parameters
+\fBdatasource\fP (\fI\%str\fP) \-\- the given datasource name
+.TP
+.B Returns
+datasource type if it the datasource
+is registered
+.TP
+.B Return type
+\fI\%nxswriter.DataSources.DataSource\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B hasDataSource(datasource)
+checks if the datasource is registered
+.INDENT 7.0
+.TP
+.B Parameters
+\fBdatasource\fP (\fI\%str\fP) \-\- the given datasource
+.TP
+.B Returns
+True if it the datasource is registered
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B lock
+(\fI\%threading.Lock\fP) pool lock
+.UNINDENT
+.INDENT 7.0
+.TP
+.B nxroot
+(\fBnxswriter.FileWriter.FTGroup\fP) H5 file handle
+.UNINDENT
+.INDENT 7.0
+.TP
+.B pop(name)
+adds additional datasource
+.INDENT 7.0
+.TP
+.B Parameters
+\fBname\fP (\fI\%str\fP) \-\- name of the adding datasource
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS nxswriter.DataSources module
+.sp
+Definitions of various datasources
+.INDENT 0.0
+.TP
+.B class  nxswriter.DataSources.DataSource(streams=None, name=None)
+Bases: \fI\%object\fP
+.sp
+Data source
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Brief
+It cleans all member variables
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBstreams\fP (\fBStreamSet\fP or \fI\%tango.LatestDeviceImpl\fP) \-\- tango\-like steamset class
+.IP \(bu 2
+\fBname\fP (\fI\%str\fP) \-\- datasource name
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B getData()
+access to data
+.INDENT 7.0
+.TP
+.B Brief
+It is an abstract method providing data
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B isValid()
+checks if the data is valid
+.INDENT 7.0
+.TP
+.B Returns
+True if the data is valid
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B setup(xml)
+sets the parrameters up from xml
+.INDENT 7.0
+.TP
+.B Parameters
+\fBxml\fP (\fI\%str\fP) \-\- datasource parameters
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS nxswriter.DecoderPool module
+.sp
+Provides a pool  with data decoders
+.INDENT 0.0
+.TP
+.B class  nxswriter.DecoderPool.DATAARRAYdecoder
+Bases: \fI\%object\fP
+.sp
+DATA ARRAY LIMA decoder
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Brief
+It clears the local variables
+.UNINDENT
+.INDENT 7.0
+.TP
+.B decode()
+provides the decoded data
+.INDENT 7.0
+.TP
+.B Returns
+the decoded data if data was loaded
+.TP
+.B Return type
+\fI\%numpy.ndarray\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B dtype
+(\fI\%str\fP) data type
+.UNINDENT
+.INDENT 7.0
+.TP
+.B format
+(\fI\%str\fP) decoder format
+.UNINDENT
+.INDENT 7.0
+.TP
+.B frameNumber()
+no data
+.UNINDENT
+.INDENT 7.0
+.TP
+.B load(data)
+loads encoded data
+.INDENT 7.0
+.TP
+.B Parameters
+\fBdata\fP ([\fI\%str\fP, \fI\%str\fP]) \-\- encoded data
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B name
+(\fI\%str\fP) decoder name
+.UNINDENT
+.INDENT 7.0
+.TP
+.B shape()
+provides the data shape
+.INDENT 7.0
+.TP
+.B Returns
+the data shape if data was loaded
+.TP
+.B Return type
+\fI\%list\fP <\fI\%int\fP >
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B steps()
+provides the data steps
+.INDENT 7.0
+.TP
+.B Returns
+the data steps if data was loaded
+.TP
+.B Return type
+\fI\%list\fP <\fI\%int\fP >
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class  nxswriter.DecoderPool.DecoderPool(configJSON=None)
+Bases: \fI\%object\fP
+.sp
+Decoder pool
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Brief
+It creates know decoders
+.TP
+.B Parameters
+\fBconfigJSON\fP (:    \fI\%dict\fP <\fI\%str\fP, \fI\%dict\fP <\fI\%str\fP, any>>) \-\- string with decoders
+.UNINDENT
+.INDENT 7.0
+.TP
+.B append(decoder, name)
+adds additional decoder
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBname\fP (\fI\%str\fP) \-\- name of the adding decoder
+.IP \(bu 2
+\fBdecoder\fP (\fI\%object\fP) \-\- instance of the adding decoder
+.UNINDENT
+.TP
+.B Returns
+name of decoder
+.TP
+.B Return type
+\fI\%str\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B appendUserDecoders(configJSON)
+loads user decoders
+.INDENT 7.0
+.TP
+.B Parameters
+\fBconfigJSON\fP (:    \fI\%dict\fP <\fI\%str\fP, \fI\%dict\fP <\fI\%str\fP, any>>) \-\- string with decoders
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B get(decoder)
+checks it the decoder is registered
+.INDENT 7.0
+.TP
+.B Parameters
+\fBdecoder\fP (\fI\%str\fP) \-\- the given decoder
+.TP
+.B Returns
+True if it the decoder is registered
+.TP
+.B Return type
+\fI\%object\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B hasDecoder(decoder)
+checks it the decoder is registered
+.INDENT 7.0
+.TP
+.B Parameters
+\fBdecoder\fP (\fI\%str\fP) \-\- the given decoder
+.TP
+.B Returns
+True if it the decoder is registered
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B pop(name)
+adds additional decoder
+.INDENT 7.0
+.TP
+.B Parameters
+\fBname\fP (\fI\%str\fP) \-\- name of the adding decoder
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class  nxswriter.DecoderPool.UINT32decoder
+Bases: \fI\%object\fP
+.sp
+INT decoder
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Brief
+It clears the local variables
+.UNINDENT
+.INDENT 7.0
+.TP
+.B decode()
+provides the decoded data
+.INDENT 7.0
+.TP
+.B Returns
+the decoded data if data was loaded
+.TP
+.B Return type
+\fI\%numpy.ndarray\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B dtype
+(\fI\%str\fP) data type
+.UNINDENT
+.INDENT 7.0
+.TP
+.B format
+(\fI\%str\fP) decoder format
+.UNINDENT
+.INDENT 7.0
+.TP
+.B load(data)
+loads encoded data
+.INDENT 7.0
+.TP
+.B Parameters
+\fBdata\fP ([\fI\%str\fP, \fI\%bytes\fP]) \-\- encoded data
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B name
+(\fI\%str\fP) decoder name
+.UNINDENT
+.INDENT 7.0
+.TP
+.B shape()
+provides the data shape
+.INDENT 7.0
+.TP
+.B Returns
+the data shape if data was loaded
+.TP
+.B Return type
+\fI\%list\fP <\fI\%int\fP >
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class  nxswriter.DecoderPool.UTF8decoder
+Bases: \fI\%object\fP
+.sp
+UTF8 decoder
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Brief
+It clears the local variables
+.UNINDENT
+.INDENT 7.0
+.TP
+.B decode()
+provides the decoded data
+.INDENT 7.0
+.TP
+.B Returns
+the decoded data if data was loaded
+.TP
+.B Return type
+\fI\%bytes\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B dtype
+(\fI\%str\fP) data type
+.UNINDENT
+.INDENT 7.0
+.TP
+.B format
+(\fI\%str\fP) decoder format
+.UNINDENT
+.INDENT 7.0
+.TP
+.B load(data)
+loads encoded data
+.INDENT 7.0
+.TP
+.B Parameters
+\fBdata\fP ([\fI\%str\fP, \fI\%bytes\fP]) \-\- encoded data
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B name
+(\fI\%str\fP) decoder name
+.UNINDENT
+.INDENT 7.0
+.TP
+.B shape()
+provides the data shape
+.INDENT 7.0
+.TP
+.B Returns
+the data shape i.e. \fI[1, 0]\fP
+.TP
+.B Return type
+\fI\%list\fP <\fI\%int\fP >
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class  nxswriter.DecoderPool.VDEOdecoder
+Bases: \fI\%object\fP
+.sp
+VIDEO IMAGE LIMA decoder
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Brief
+It clears the local variables
+.UNINDENT
+.INDENT 7.0
+.TP
+.B decode()
+provides the decoded data
+.INDENT 7.0
+.TP
+.B Returns
+the decoded data if data was loaded
+.TP
+.B Return type
+\fI\%numpy.ndarray\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B dtype
+(\fI\%str\fP) data type
+.UNINDENT
+.INDENT 7.0
+.TP
+.B format
+(\fI\%str\fP) decoder format
+.UNINDENT
+.INDENT 7.0
+.TP
+.B load(data)
+loads encoded data
+.INDENT 7.0
+.TP
+.B Parameters
+\fBdata\fP ([\fI\%str\fP, \fI\%str\fP]) \-\- encoded data
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B name
+(\fI\%str\fP) decoder name
+.UNINDENT
+.INDENT 7.0
+.TP
+.B shape()
+provides the data shape
+.INDENT 7.0
+.TP
+.B Returns
+the data shape if data was loaded
+.TP
+.B Return type
+\fI\%list\fP <\fI\%int\fP >
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS nxswriter.EAttribute module
+.sp
+Definitions of attribute tag evaluation classes
+.INDENT 0.0
+.TP
+.B class  nxswriter.EAttribute.EAttribute(attrs, last, streams=None)
+Bases: \fI\%FElement\fP
+.sp
+attribute tag element
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBattrs\fP (\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>) \-\- dictionary of the tag attributes
+.IP \(bu 2
+\fBlast\fP (\fI\%nxswriter.Element.Element\fP) \-\- the last element from the stack
+.IP \(bu 2
+\fBstreams\fP (\fBStreamSet\fP or \fI\%tango.LatestDeviceImpl\fP) \-\- tango\-like steamset class
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B lengths
+(\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>) shape of the attribute, i.e. {index: length}
+.UNINDENT
+.INDENT 7.0
+.TP
+.B markFailed(error=None)
+marks the field as failed
+.INDENT 7.0
+.TP
+.B Brief
+It marks the field as failed
+.TP
+.B Parameters
+\fBerror\fP (\fI\%str\fP) \-\- error string
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B name
+(\fI\%str\fP) attribute name
+.UNINDENT
+.INDENT 7.0
+.TP
+.B rank
+(\fI\%str\fP) rank of the attribute
+.UNINDENT
+.INDENT 7.0
+.TP
+.B run()
+runner
+.INDENT 7.0
+.TP
+.B Brief
+During its thread run it fetches the data from the source
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B setLength(index, value)
+sets lengths dict element
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBindex\fP (\fI\%int\fP) \-\- length index
+.IP \(bu 2
+\fBvalue\fP (\fI\%int\fP or \fI\%str\fP) \-\- length value
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B setRank(rank)
+sets dimension rank
+.INDENT 7.0
+.TP
+.B Parameters
+\fBindex\fP (\fBsrc\fP) \-\- dimension rank
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B store(xml=None, globalJSON=None)
+stores the tag content
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBxml\fP (\fI\%str\fP) \-\- xml setting
+.IP \(bu 2
+\fBglobalJSON\fP (:     \fI\%dict\fP <\fI\%str\fP, \fI\%dict\fP <\fI\%str\fP, any>>) \-\- global JSON string
+.UNINDENT
+.TP
+.B Returns
+(strategy,trigger)
+.TP
+.B Return type
+(\fI\%str\fP, \fI\%str\fP)
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B strategy
+(\fI\%str\fP) strategy, i.e. INIT, STEP, FINAL
+.UNINDENT
+.INDENT 7.0
+.TP
+.B trigger
+(\fI\%str\fP) trigger for asynchronous writting
+.UNINDENT
+.UNINDENT
+.SS nxswriter.EField module
+.sp
+Definitions of field tag evaluation classes
+.INDENT 0.0
+.TP
+.B class  nxswriter.EField.EField(attrs, last, streams=None, reloadmode=False)
+Bases: \fI\%FElementWithAttr\fP
+.sp
+field H5 tag element
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBattrs\fP (\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>) \-\- dictionary of the tag attributes
+.IP \(bu 2
+\fBlast\fP (\fI\%nxswriter.Element.Element\fP) \-\- the last element from the stack
+.IP \(bu 2
+\fBstreams\fP (\fBStreamSet\fP or \fI\%tango.LatestDeviceImpl\fP) \-\- tango\-like steamset class
+.IP \(bu 2
+\fBreloadmode\fP (\fI\%bool\fP) \-\- reload mode
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B compression
+(\fI\%bool\fP) compression algorithm id
+.UNINDENT
+.INDENT 7.0
+.TP
+.B compression_opts
+(\fI\%int\fP) compression rate
+.UNINDENT
+.INDENT 7.0
+.TP
+.B filters
+(\fI\%dict\fP <\fI\%int\fP, (\fI\%int\fP, \fI\%str\fP, \fI\%str\fP, \fI\%str\fP) >) index filter lists, i.e. {index: (filter_id, name, id, cd_values, availability)}
+.UNINDENT
+.INDENT 7.0
+.TP
+.B grows
+(\fI\%int\fP) growing dimension
+.UNINDENT
+.INDENT 7.0
+.TP
+.B lengths
+(\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>) shape of the field, i.e. {index: length}
+.UNINDENT
+.INDENT 7.0
+.TP
+.B markFailed(error=None)
+marks the field as failed
+.INDENT 7.0
+.TP
+.B Brief
+It marks the field as failed
+.TP
+.B Parameters
+\fBerror\fP (\fI\%str\fP) \-\- error string
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B postrun
+(\fI\%str\fP) label for postprocessing data
+.UNINDENT
+.INDENT 7.0
+.TP
+.B rank
+(\fI\%str\fP) rank of the field
+.UNINDENT
+.INDENT 7.0
+.TP
+.B rate
+(\fI\%list\fP < \fI\%int\fP >) compression algorithm options
+.UNINDENT
+.INDENT 7.0
+.TP
+.B run()
+runner
+.INDENT 7.0
+.TP
+.B Brief
+During its thread run it fetches the data from the source
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B setLength(index, value)
+sets lengths dict element
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBindex\fP (\fI\%int\fP) \-\- length index
+.IP \(bu 2
+\fBvalue\fP (\fI\%int\fP or \fI\%str\fP) \-\- length value
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B setRank(rank)
+sets dimension rank
+.INDENT 7.0
+.TP
+.B Parameters
+\fBindex\fP (\fBsrc\fP) \-\- dimension rank
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B shuffle
+(\fI\%bool\fP) compression shuffle
+.UNINDENT
+.INDENT 7.0
+.TP
+.B store(xml=None, globalJSON=None)
+stores the tag content
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBxml\fP (\fI\%str\fP) \-\- xml setting
+.IP \(bu 2
+\fBglobalJSON\fP (:     \fI\%dict\fP <\fI\%str\fP, \fI\%dict\fP <\fI\%str\fP, any>>) \-\- global JSON string
+.UNINDENT
+.TP
+.B Returns
+(strategy, trigger)
+.TP
+.B Return type
+(\fI\%str\fP, \fI\%str\fP)
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B strategy
+(\fI\%str\fP) strategy, i.e. INIT, STEP, FINAL, POSTRUN
+.UNINDENT
+.INDENT 7.0
+.TP
+.B trigger
+(\fI\%str\fP) trigger for asynchronous writing
+.UNINDENT
+.UNINDENT
+.SS nxswriter.EGroup module
+.sp
+Definitions of group tag evaluation classes
+.INDENT 0.0
+.TP
+.B class  nxswriter.EGroup.EGroup(attrs, last, streams=None, reloadmode=False)
+Bases: \fI\%FElementWithAttr\fP
+.sp
+group H5 tag element
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBattrs\fP (\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>) \-\- dictionary of the tag attributes
+.IP \(bu 2
+\fBlast\fP (\fI\%nxswriter.Element.Element\fP) \-\- the last element from the stack
+.IP \(bu 2
+\fBstreams\fP (\fBStreamSet\fP or \fI\%tango.LatestDeviceImpl\fP) \-\- tango\-like steamset class
+.IP \(bu 2
+\fBreloadmode\fP (\fI\%bool\fP) \-\- reload mode
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B store(xml=None, globalJSON=None)
+stores the tag content
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBxml\fP (\fI\%str\fP) \-\- xml setting
+.IP \(bu 2
+\fBglobalJSON\fP (:     \fI\%dict\fP <\fI\%str\fP, \fI\%dict\fP <\fI\%str\fP, any>>) \-\- global JSON string
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS nxswriter.ELink module
+.sp
+Definitions of link tag evaluation classes
+.INDENT 0.0
+.TP
+.B class  nxswriter.ELink.ELink(attrs, last, streams=None)
+Bases: \fI\%FElement\fP
+.sp
+link H5 tag element
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBattrs\fP (\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>) \-\- dictionary of the tag attributes
+.IP \(bu 2
+\fBlast\fP (\fI\%nxswriter.Element.Element\fP) \-\- the last element from the stack
+.IP \(bu 2
+\fBstreams\fP (\fBStreamSet\fP or \fI\%tango.LatestDeviceImpl\fP) \-\- tango\-like steamset class
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B createLink(groupTypes=None, target=None)
+creates the link the H5 file
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBgroupTypes\fP (\fI\%dict\fP <\fI\%str\fP ,  \fI\%str\fP >) \-\- dictionary with type:name group pairs
+.IP \(bu 2
+\fBtarget\fP \-\- NeXus target path
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B h5Object
+(\fBnxswriter.FileWriter.FTLink\fP) stored H5 file object (defined in base class)
+.UNINDENT
+.INDENT 7.0
+.TP
+.B run()
+runner
+.INDENT 7.0
+.TP
+.B Brief
+During its thread run it fetches the data from the source
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B store(xml=None, globalJSON=None)
+stores the tag content
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBxml\fP (\fI\%str\fP) \-\- xml setting
+.IP \(bu 2
+\fBglobalJSON\fP (:     \fI\%dict\fP <\fI\%str\fP, \fI\%dict\fP <\fI\%str\fP, any>>) \-\- global JSON string
+.UNINDENT
+.TP
+.B Returns
+(strategy, trigger)
+.TP
+.B Return type
+(\fI\%str\fP, \fI\%str\fP)
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B strategy
+(\fI\%str\fP) strategy, i.e. INIT, STEP, FINAL
+.UNINDENT
+.INDENT 7.0
+.TP
+.B trigger
+(\fI\%str\fP) trigger for asynchronous writting
+.UNINDENT
+.UNINDENT
+.SS nxswriter.EStrategy module
+.sp
+Definitions of strategy evaluation classes
+.INDENT 0.0
+.TP
+.B class  nxswriter.EStrategy.EStrategy(attrs, last, streams=None)
+Bases: \fI\%Element\fP
+.sp
+strategy tag element
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBattrs\fP (\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>) \-\- dictionary of the tag attributes
+.IP \(bu 2
+\fBlast\fP (\fI\%nxswriter.Element.Element\fP) \-\- the last element from the stack
+.IP \(bu 2
+\fBstreams\fP (\fBStreamSet\fP or \fI\%tango.LatestDeviceImpl\fP) \-\- tango\-like steamset class
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B setCanFail()
+sets can fail flag
+.UNINDENT
+.INDENT 7.0
+.TP
+.B store(xml=None, globalJSON=None)
+stores the tag content
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBxml\fP (\fI\%str\fP) \-\- xml setting
+.IP \(bu 2
+\fBglobalJSON\fP (:     \fI\%dict\fP <\fI\%str\fP, \fI\%dict\fP <\fI\%str\fP, any>>) \-\- global JSON string
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS nxswriter.Element module
+.sp
+Provides the base class Element for xml tags
+.INDENT 0.0
+.TP
+.B class  nxswriter.Element.Element(name, attrs, last=None, streams=None)
+Bases: \fI\%object\fP
+.sp
+Tag element stored on our stack
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBname\fP (\fI\%str\fP) \-\- tag name
+.IP \(bu 2
+\fBattrs\fP (\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>) \-\- dictionary of the tag attributes
+.IP \(bu 2
+\fBlast\fP (\fI\%nxswriter.Element.Element\fP) \-\- the last element from the stack
+.IP \(bu 2
+\fBstreams\fP (\fBStreamSet\fP or \fI\%tango.LatestDeviceImpl\fP) \-\- tango\-like steamset class
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B content
+(\fI\%list\fP <\fI\%str\fP>) stored tag content
+.UNINDENT
+.INDENT 7.0
+.TP
+.B doc
+(\fI\%str\fP) doc string
+.UNINDENT
+.INDENT 7.0
+.TP
+.B last
+(\fI\%nxswriter.Element.Element\fP) the previous element
+.UNINDENT
+.INDENT 7.0
+.TP
+.B store(xml=None, globalJSON=None)
+stores the tag
+.INDENT 7.0
+.TP
+.B Brief
+abstract method to store the tag element
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBxml\fP (\fI\%str\fP) \-\- tuple of xml code
+.IP \(bu 2
+\fBglobalJSON\fP (: \fI\%dict\fP <\fI\%str\fP, \fI\%dict\fP <\fI\%str\fP, any>>) \-\- global JSON string
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B tagName
+(\fI\%str\fP) stored tag name
+.UNINDENT
+.UNINDENT
+.SS nxswriter.ElementThread module
+.sp
+Implementation of element thread for tag evaluation
+.INDENT 0.0
+.TP
+.B class  nxswriter.ElementThread.ElementThread(index, queue)
+Bases: \fI\%Thread\fP
+.sp
+single thread element
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Brief
+It creates ElementThread from the runnable element
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBindex\fP (\fI\%int\fP) \-\- the current thread index
+.IP \(bu 2
+\fBqueue\fP (\fI\%Queue.Queue\fP) \-\- queue with tasks
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B index
+(\fI\%int\fP) thread index
+.UNINDENT
+.INDENT 7.0
+.TP
+.B run()
+runner
+.INDENT 7.0
+.TP
+.B Brief
+It runs the defined thread
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS nxswriter.Errors module
+.sp
+Tango Data Writer errors
+.INDENT 0.0
+.TP
+.B exception  nxswriter.Errors.CorruptedFieldArrayError
+Bases: \fI\%Exception\fP
+.sp
+exception for corrupted FieldArray
+.UNINDENT
+.INDENT 0.0
+.TP
+.B exception  nxswriter.Errors.DataSourceError
+Bases: \fI\%Exception\fP
+.sp
+exception for fetching data from data source
+.UNINDENT
+.INDENT 0.0
+.TP
+.B exception  nxswriter.Errors.DataSourceSetupError
+Bases: \fI\%Exception\fP
+.sp
+exception for setting data source
+.UNINDENT
+.INDENT 0.0
+.TP
+.B exception  nxswriter.Errors.PackageError
+Bases: \fI\%Exception\fP
+.sp
+exception for fetching data from data source
+.UNINDENT
+.INDENT 0.0
+.TP
+.B exception  nxswriter.Errors.ThreadError
+Bases: \fI\%Exception\fP
+.sp
+exception for problems in thread
+.UNINDENT
+.INDENT 0.0
+.TP
+.B exception  nxswriter.Errors.UnsupportedTagError
+Bases: \fI\%Exception\fP
+.sp
+unsupported tag exception
+.UNINDENT
+.INDENT 0.0
+.TP
+.B exception  nxswriter.Errors.XMLSettingSyntaxError
+Bases: \fI\%Exception\fP
+.sp
+exception for syntax in XML settings
+.UNINDENT
+.INDENT 0.0
+.TP
+.B exception  nxswriter.Errors.XMLSyntaxError
+Bases: \fI\%Exception\fP
+.sp
+exception for syntax in XML settings
+.UNINDENT
+.SS nxswriter.FElement module
+.sp
+Definitions of file tag evaluation classes
+.INDENT 0.0
+.TP
+.B class  nxswriter.FElement.FElement(name, attrs, last, h5object=None, streams=None)
+Bases: \fI\%Element\fP
+.sp
+NeXuS runnable tag element
+tag element corresponding to one of H5 objects
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBname\fP \-\- tag name
+.IP \(bu 2
+\fBattrs\fP (\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>) \-\- dictionary of the tag attributes
+.IP \(bu 2
+\fBlast\fP (\fI\%nxswriter.Element.Element\fP) \-\- the last element from the stack
+.IP \(bu 2
+\fBh5object\fP (\fBnxswriter.FileWriter.FTObject\fP) \-\- H5 file object
+.IP \(bu 2
+\fBstreams\fP (\fBStreamSet\fP or \fI\%tango.LatestDeviceImpl\fP) \-\- tango\-like steamset class
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B canfail
+(\fI\%bool\fP) flag for devices for which is allowed to failed
+.UNINDENT
+.INDENT 7.0
+.TP
+.B error
+(\fI\%str\fP) notification of error in the run method
+.UNINDENT
+.INDENT 7.0
+.TP
+.B h5Object
+(\fBnxswriter.FileWriter.FTObject\fP) stored H5 file object
+.UNINDENT
+.INDENT 7.0
+.TP
+.B run()
+runner
+.INDENT 7.0
+.TP
+.B Brief
+During its thread run it fetches the data from the source
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B runtime
+(\fI\%float\fP) runtime
+.UNINDENT
+.INDENT 7.0
+.TP
+.B setMessage(exceptionMessage=None)
+creates the error message
+.INDENT 7.0
+.TP
+.B Parameters
+\fBexceptionMessage\fP (\fI\%str\fP) \-\- additional message of exception
+.TP
+.B Returns
+error message
+.TP
+.B Return type
+\fI\%str\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B source
+(\fI\%nxswriter.DataSources.DataSource\fP) data source
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class  nxswriter.FElement.FElementWithAttr(name, attrs, last, h5object=None, streams=None, reloadmode=False)
+Bases: \fI\%FElement\fP
+.sp
+NeXuS runnable tag element with attributes
+tag element corresponding to one of H5 objects with attributes
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBname\fP (\fI\%str\fP) \-\- tag name
+.IP \(bu 2
+\fBattrs\fP (\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>) \-\- dictionary of the tag attributes
+.IP \(bu 2
+\fBlast\fP (\fI\%nxswriter.Element.Element\fP) \-\- the last element from the stack
+.IP \(bu 2
+\fBh5object\fP (\fBnxswriter.FileWriter.FTObject\fP) \-\- H5 file object
+.IP \(bu 2
+\fBstreams\fP (\fBStreamSet\fP or \fI\%tango.LatestDeviceImpl\fP) \-\- tango\-like steamset class
+.IP \(bu 2
+\fBreloadmode\fP (\fI\%bool\fP) \-\- reload mode
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B h5Attribute(name)
+provides attribute h5 object
+.INDENT 7.0
+.TP
+.B Parameters
+\fBname\fP (\fI\%str\fP) \-\- attribute name
+.TP
+.B Returns
+instance of the attribute object if created
+.TP
+.B Return type
+\fBnxswriter.FileWriter.FTObject\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B tagAttributes
+(\fI\%dict\fP <\fI\%str\fP, (\fI\%str\fP, \fI\%str\fP, \fI\%tuple\fP)>  or \fI\%dict\fP <\fI\%str\fP, (\fI\%str\fP, \fI\%str\fP) > ) dictionary with attribures from sepatare attribute tags
+written as (name, value, shape)
+.UNINDENT
+.UNINDENT
+.SS nxswriter.FetchNameHandler module
+.sp
+SAX parser for fetching name attributes of tags
+.INDENT 0.0
+.TP
+.B class  nxswriter.FetchNameHandler.FetchNameHandler(streams=None)
+Bases: \fI\%ContentHandler\fP
+.sp
+SAX2 parser
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Brief
+It constructs parser handler for fetching group names
+.TP
+.B Parameters
+\fBstreams\fP (\fBStreamSet\fP or \fI\%tango.LatestDeviceImpl\fP) \-\- tango\-like steamset class
+.UNINDENT
+.INDENT 7.0
+.TP
+.B characters(content)
+adds the tag content
+.INDENT 7.0
+.TP
+.B Parameters
+\fBcontent\fP (\fI\%str\fP) \-\- partial content of the tag
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B endElement(name)
+parses an closing tag
+.INDENT 7.0
+.TP
+.B Parameters
+\fBname\fP (\fI\%str\fP) \-\- tag name
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B groupTypes
+(\fI\%TNObject\fP) tree of TNObjects with names and types
+.UNINDENT
+.INDENT 7.0
+.TP
+.B startElement(name, attrs)
+parses the opening tag
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBname\fP (\fI\%str\fP) \-\- tag name
+.IP \(bu 2
+\fBattrs\fP (\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>) \-\- attribute dictionary
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class  nxswriter.FetchNameHandler.TNObject(name=\(aqroot\(aq, nxtype=None, parent=None)
+Bases: \fI\%object\fP
+.sp
+Type Name object
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Brief
+It sets default values of TNObject
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBname\fP (\fI\%str\fP) \-\- name of the object
+.IP \(bu 2
+\fBnxtype\fP (\fI\%str\fP) \-\- Nexus type of the object
+.IP \(bu 2
+\fBparent\fP (\fI\%nxswriter.Element.Element\fP) \-\- object parent
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B child(name=\(aq\(aq, nxtype=\(aq\(aq)
+get child by name or nxtype
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBname\fP (\fI\%str\fP) \-\- group name
+.IP \(bu 2
+\fBnxtype\fP (\fI\%str\fP) \-\- nexus group type
+.UNINDENT
+.TP
+.B Returns
+child instance
+.TP
+.B Return type
+\fI\%nxswriter.Element.Element\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B children
+(:obj\(ga:list\(ga <\fI\%nxswriter.Element.Element\fP>) object children
+.UNINDENT
+.INDENT 7.0
+.TP
+.B name
+(\fI\%str\fP) object name
+.UNINDENT
+.INDENT 7.0
+.TP
+.B nxtype
+(\fI\%str\fP) object Nexus type
+.UNINDENT
+.INDENT 7.0
+.TP
+.B parent
+(\fI\%nxswriter.Element.Element\fP) object parent
+.UNINDENT
+.UNINDENT
+.SS nxswriter.H5Elements module
+.sp
+Definitions of tag evaluation classes
+.INDENT 0.0
+.TP
+.B class  nxswriter.H5Elements.EDim(attrs, last, streams=None)
+Bases: \fI\%Element\fP
+.sp
+dim tag element
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBattrs\fP (\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>) \-\- dictionary of the tag attributes
+.IP \(bu 2
+\fBlast\fP (\fI\%nxswriter.Element.Element\fP) \-\- the last element from the stack
+.IP \(bu 2
+\fBstreams\fP (\fBStreamSet\fP or \fI\%tango.LatestDeviceImpl\fP) \-\- tango\-like steamset class
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B content
+(\fI\%list\fP <\fI\%str\fP>) tag content
+.UNINDENT
+.INDENT 7.0
+.TP
+.B source
+(\fI\%nxswriter.DataSources.DataSource\fP) data source
+.UNINDENT
+.INDENT 7.0
+.TP
+.B store(xml=None, globalJSON=None)
+stores the tag content
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBxml\fP \-\- xml setting
+.IP \(bu 2
+\fBglobalJSON\fP (:     \fI\%dict\fP <\fI\%str\fP, \fI\%dict\fP <\fI\%str\fP, any>>) \-\- global JSON string
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class  nxswriter.H5Elements.EDimensions(attrs, last, streams=None)
+Bases: \fI\%Element\fP
+.sp
+dimensions tag element
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBattrs\fP (\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>) \-\- dictionary of the tag attributes
+.IP \(bu 2
+\fBlast\fP (\fI\%nxswriter.Element.Element\fP) \-\- the last element from the stack
+.IP \(bu 2
+\fBstreams\fP (\fBStreamSet\fP or \fI\%tango.LatestDeviceImpl\fP) \-\- tango\-like steamset class
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class  nxswriter.H5Elements.EDoc(attrs, last, streams=None)
+Bases: \fI\%Element\fP
+.sp
+doc tag element
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBattrs\fP (\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>) \-\- dictionary of the tag attributes
+.IP \(bu 2
+\fBlast\fP (\fI\%nxswriter.Element.Element\fP) \-\- the last element from the stack
+.IP \(bu 2
+\fBstreams\fP (\fBStreamSet\fP or \fI\%tango.LatestDeviceImpl\fP) \-\- tango\-like steamset class
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B store(xml=None, globalJSON=None)
+stores the tag content
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBxml\fP \-\- xml setting
+.IP \(bu 2
+\fBglobalJSON\fP (:     \fI\%dict\fP <\fI\%str\fP, \fI\%dict\fP <\fI\%str\fP, any>>) \-\- global JSON string
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class  nxswriter.H5Elements.EFile(attrs, last, h5fileObject, streams=None)
+Bases: \fI\%FElement\fP
+.sp
+file H5 element
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBattrs\fP (\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>) \-\- dictionary of the tag attributes
+.IP \(bu 2
+\fBlast\fP (\fI\%nxswriter.Element.Element\fP) \-\- the last element from the stack
+.IP \(bu 2
+\fBh5fileObject\fP (\fBnxswriter.FileWriter.FTfile\fP) \-\- H5 file object
+.IP \(bu 2
+\fBstreams\fP (\fBStreamSet\fP or \fI\%tango.LatestDeviceImpl\fP) \-\- tango\-like steamset class
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class  nxswriter.H5Elements.EFilter(attrs, last, streams=None)
+Bases: \fI\%Element\fP
+.sp
+filter tag element
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBattrs\fP (\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>) \-\- dictionary of the tag attributes
+.IP \(bu 2
+\fBlast\fP (\fI\%nxswriter.Element.Element\fP) \-\- the last element from the stack
+.IP \(bu 2
+\fBstreams\fP (\fBStreamSet\fP or \fI\%tango.LatestDeviceImpl\fP) \-\- tango\-like steamset class
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class  nxswriter.H5Elements.ESelection(attrs, last, streams=None)
+Bases: \fI\%Element\fP
+.sp
+selection tag element
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBattrs\fP (\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>) \-\- dictionary of the tag attributes
+.IP \(bu 2
+\fBlast\fP (\fI\%nxswriter.Element.Element\fP) \-\- the last element from the stack
+.IP \(bu 2
+\fBstreams\fP (\fBStreamSet\fP or \fI\%tango.LatestDeviceImpl\fP) \-\- tango\-like steamset class
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class  nxswriter.H5Elements.ESlab(attrs, last, streams=None)
+Bases: \fI\%Element\fP
+.sp
+slab tag element
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBattrs\fP (\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>) \-\- dictionary of the tag attributes
+.IP \(bu 2
+\fBlast\fP (\fI\%nxswriter.Element.Element\fP) \-\- the last element from the stack
+.IP \(bu 2
+\fBstreams\fP (\fBStreamSet\fP or \fI\%tango.LatestDeviceImpl\fP) \-\- tango\-like steamset class
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B content
+(\fI\%list\fP <\fI\%str\fP>) tag content
+.UNINDENT
+.INDENT 7.0
+.TP
+.B source
+(\fI\%nxswriter.DataSources.DataSource\fP) data source
+.UNINDENT
+.INDENT 7.0
+.TP
+.B store(xml=None, globalJSON=None)
+stores the tag content
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBxml\fP \-\- xml setting
+.IP \(bu 2
+\fBglobalJSON\fP (:     \fI\%dict\fP <\fI\%str\fP, \fI\%dict\fP <\fI\%str\fP, any>>) \-\- global JSON string
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class  nxswriter.H5Elements.ESlice(attrs, last, streams=None)
+Bases: \fI\%Element\fP
+.sp
+slice tag element
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBattrs\fP (\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>) \-\- dictionary of the tag attributes
+.IP \(bu 2
+\fBlast\fP (\fI\%nxswriter.Element.Element\fP) \-\- the last element from the stack
+.IP \(bu 2
+\fBstreams\fP (\fBStreamSet\fP or \fI\%tango.LatestDeviceImpl\fP) \-\- tango\-like steamset class
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B content
+(\fI\%list\fP <\fI\%str\fP>) tag content
+.UNINDENT
+.INDENT 7.0
+.TP
+.B source
+(\fI\%nxswriter.DataSources.DataSource\fP) data source
+.UNINDENT
+.INDENT 7.0
+.TP
+.B store(xml=None, globalJSON=None)
+stores the tag content
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBxml\fP \-\- xml setting
+.IP \(bu 2
+\fBglobalJSON\fP (:     \fI\%dict\fP <\fI\%str\fP, \fI\%dict\fP <\fI\%str\fP, any>>) \-\- global JSON string
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class  nxswriter.H5Elements.ESymbol(attrs, last, streams=None)
+Bases: \fI\%Element\fP
+.sp
+symbol tag element
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBattrs\fP (\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>) \-\- dictionary of the tag attributes
+.IP \(bu 2
+\fBlast\fP (\fI\%nxswriter.Element.Element\fP) \-\- the last element from the stack
+.IP \(bu 2
+\fBstreams\fP (\fBStreamSet\fP or \fI\%tango.LatestDeviceImpl\fP) \-\- tango\-like steamset class
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B store(xml=None, globalJSON=None)
+stores the tag content
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBxml\fP \-\- xml setting2
+.IP \(bu 2
+\fBglobalJSON\fP (:     \fI\%dict\fP <\fI\%str\fP, \fI\%dict\fP <\fI\%str\fP, any>>) \-\- global JSON string
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B symbols
+(\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>) dictionary with symbols4
+.UNINDENT
+.UNINDENT
+.SS nxswriter.InnerXMLParser module
+.sp
+SAX parser for taking XML string inside specified tag
+.INDENT 0.0
+.TP
+.B class  nxswriter.InnerXMLParser.InnerXMLHandler(xmlReader, contentHandler, name, attrs)
+Bases: \fI\%ContentHandler\fP
+.sp
+Inner SAX2 parser
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Brief
+It constructs parser handler for taking xml of datasources
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBxmlReader\fP (\fI\%xml.sax.xmlreader.XMLReader\fP) \-\- NeXus xml sax reader
+.IP \(bu 2
+\fBcontentHandler\fP (\fI\%nxswriter.NexusXMLHandler.NexusXMLHandler\fP) \-\- NeXus XML content handler
+.IP \(bu 2
+\fBname\fP (\fI\%str\fP) \-\- tag name
+.IP \(bu 2
+\fBattrs\fP (\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>) \-\- dictionary of the tag attributes
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B characters(content)
+adds the tag content
+.INDENT 7.0
+.TP
+.B Parameters
+\fBcontent\fP (\fI\%str\fP) \-\- partial content of the tag
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B endElement(name)
+parses an closing tag
+.INDENT 7.0
+.TP
+.B Parameters
+\fBname\fP (\fI\%str\fP) \-\- tag name
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B startElement(name, attrs)
+parses the opening tag
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBname\fP (\fI\%str\fP) \-\- tag name
+.IP \(bu 2
+\fBattrs\fP (\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>) \-\- attribute dictionary
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B xml
+(\fI\%str\fP) xml string
+.UNINDENT
+.UNINDENT
+.SS nxswriter.NXSWriter module
+.sp
+Nexus Data Writer \- Tango Server
+.INDENT 0.0
+.TP
+.B class  nxswriter.NXSWriter.CommandThread(server, command, finalState, args=None)
+Bases: \fI\%Thread\fP
+.sp
+thread with server command
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBserver\fP (\fI\%tango.LatestDeviceImpl\fP) \-\- Tango server implementation
+.IP \(bu 2
+\fBcommand\fP (\fI\%str\fP) \-\- Thread command
+.IP \(bu 2
+\fBfinalState\fP (\fI\%tango.DevState\fP) \-\- Final State Code
+.IP \(bu 2
+\fBargs\fP (\fI\%list\fP <\fI\%str\fP>) \-\- List of command arguments
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B args
+(\fI\%list\fP <\fI\%str\fP>) command arguments
+.UNINDENT
+.INDENT 7.0
+.TP
+.B command
+(\fB__callable__\fP) command
+.UNINDENT
+.INDENT 7.0
+.TP
+.B estate
+(\fI\%tango.DevState\fP) error state
+.UNINDENT
+.INDENT 7.0
+.TP
+.B fstate
+(\fI\%tango.DevState\fP) final state
+.UNINDENT
+.INDENT 7.0
+.TP
+.B run()
+runs the given command on the server and changes the state on exit
+.UNINDENT
+.INDENT 7.0
+.TP
+.B server
+(\fI\%tango.LatestDeviceImpl\fP) tango server
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class  nxswriter.NXSWriter.NXSDataWriter(cl, name)
+Bases: \fI\%LatestDeviceImpl\fP
+.sp
+Tango Server to store data in H5 files
+.INDENT 7.0
+.TP
+.B Brief
+Device States Description:
+DevState.ON :       NeXuS Data Server is switch on
+DevState.OFF :      NeXuS Data Writer is switch off
+DevState.EXTRACT :  H5 file is open
+DevState.OPEN :     XML configuration is initialized
+DevState.RUNNING :  NeXus Data Server is writing
+DevState.FAULT :    Error state
+.UNINDENT
+.sp
+Device constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBcl\fP (\fI\%str\fP) \-\- class name
+.IP \(bu 2
+\fBname\fP (\fI\%str\fP) \-\- device name
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B CloseEntry()
+CloseEntry command
+.INDENT 7.0
+.TP
+.B Brief
+Closes the entry
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B CloseEntryAsynch()
+CloseEntryAsynch command
+.INDENT 7.0
+.TP
+.B Brief
+Closes the entry is asynchronous mode
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B CloseFile()
+CloseFile command
+.INDENT 7.0
+.TP
+.B Brief
+Close the H5 file
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B OpenEntry()
+OpenEntry command
+.INDENT 7.0
+.TP
+.B Brief
+Creates the new entry
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B OpenEntryAsynch()
+OpenEntryAsynch command
+.INDENT 7.0
+.TP
+.B Brief
+Creates the new entry in asynchronous mode
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B OpenFile()
+OpenFile command
+.INDENT 7.0
+.TP
+.B Brief
+Opens the H5 file
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Record(argin)
+Record command
+.INDENT 7.0
+.TP
+.B Brief
+Records data for one scan step
+.TP
+.B Parameters
+\fBargin\fP (\fI\%str\fP) \-\- JSON string with data
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B RecordAsynch(argin)
+RecordAsynch command
+.INDENT 7.0
+.TP
+.B Brief
+Records data for one scan step in asynchronous mode
+.TP
+.B Parameters
+\fBargin\fP (\fI\%str\fP) \-\- DevString    JSON string with data
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B always_executed_hook()
+Always excuted hook method
+.UNINDENT
+.INDENT 7.0
+.TP
+.B cthread
+(\fI\%CommandThread\fP) closentry thread
+.UNINDENT
+.INDENT 7.0
+.TP
+.B delete_device()
+Device destructor
+.UNINDENT
+.INDENT 7.0
+.TP
+.B dev_state()
+dev_state method
+.INDENT 7.0
+.TP
+.B Returns
+State Code
+.TP
+.B Return type
+\fI\%tango.DevState\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B dev_status()
+Status command
+.INDENT 7.0
+.TP
+.B Brief
+This command gets the device status
+(stored in its <i>device_status</i> data member)
+and returns it to the caller.
+.TP
+.B Returns
+Status description
+.TP
+.B Return type
+\fI\%str\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B errors
+(\fBlist\(ga<:obj:\(gastr\fP>) list with errors
+.UNINDENT
+.INDENT 7.0
+.TP
+.B init_device()
+Device initialization
+.UNINDENT
+.INDENT 7.0
+.TP
+.B is_CanFail_allowed(_)
+CanFail attribute State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B is_CanFail_write_allowed()
+CanFail attribute Write State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B is_CloseEntryAsynch_allowed()
+CloseEntryAsynch command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B is_CloseEntry_allowed()
+CloseEntry command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B is_CloseFile_allowed()
+CloseFile command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B is_FileName_allowed(_)
+FileName attribute State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B is_FileName_write_allowed()
+FileName attribute Write State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B is_JSONRecord_allowed(_)
+JSONRecord attribute State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B is_OpenEntryAsynch_allowed()
+OpenEntryAsynch command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B is_OpenEntry_allowed()
+OpenEntry command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B is_OpenFile_allowed()
+OpenFile command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B is_RecordAsynch_allowed()
+RecordAsynch command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B is_Record_allowed()
+Record command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B is_SkipAcquisition_allowed(_)
+SkipAcquisition attribute State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B is_SkipAcquisition_write_allowed()
+SkipAcquisition attribute Write State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B is_StepsPerFile_allowed(_)
+StepsPerFile attribute State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B is_StepsPerFile_write_allowed()
+StepsPerFile attribute Write State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B is_XMLSettings_allowed(_)
+XMLSettings attribute State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B lock
+(\fI\%threading.Lock\fP) thread lock
+.UNINDENT
+.INDENT 7.0
+.TP
+.B othread
+(\fI\%CommandThread\fP) openentry thread
+.UNINDENT
+.INDENT 7.0
+.TP
+.B read_CanFail(attr)
+Read CanFail attribute
+.INDENT 7.0
+.TP
+.B Parameters
+\fBattr\fP (\fI\%tango.Attribute\fP) \-\- attribute object
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B read_CurrentFileId(attr)
+Read CurrentFileId
+.INDENT 7.0
+.TP
+.B Parameters
+\fBattr\fP (\fI\%tango.Attribute\fP) \-\- attribute object
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B read_Errors(attr)
+Read Errors attribute
+.INDENT 7.0
+.TP
+.B Parameters
+\fBattr\fP (\fI\%tango.Attribute\fP) \-\- attribute object
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B read_FileName(attr)
+Read FileName attribute
+.INDENT 7.0
+.TP
+.B Parameters
+\fBattr\fP (\fI\%tango.Attribute\fP) \-\- attribute object
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B read_JSONRecord(attr)
+Read JSONRecord attribute
+.INDENT 7.0
+.TP
+.B Parameters
+\fBattr\fP (\fI\%tango.Attribute\fP) \-\- attribute object
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B read_SkipAcquisition(attr)
+Read SkipAcquisition attribute
+.INDENT 7.0
+.TP
+.B Parameters
+\fBattr\fP (\fI\%tango.Attribute\fP) \-\- attribute object
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B read_StepsPerFile(attr)
+Read StepsPerFile attribute
+.INDENT 7.0
+.TP
+.B Parameters
+\fBattr\fP (\fI\%tango.Attribute\fP) \-\- attribute object
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B read_XMLSettings(attr)
+Read XMLSettings attribute
+.INDENT 7.0
+.TP
+.B Parameters
+\fBattr\fP (\fI\%tango.Attribute\fP) \-\- attribute object
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B read_attr_hardware(_)
+Read Attribute Hardware
+.UNINDENT
+.INDENT 7.0
+.TP
+.B rthread
+(\fI\%CommandThread\fP) record thread
+.UNINDENT
+.INDENT 7.0
+.TP
+.B set_state(state)
+set_state method
+.INDENT 7.0
+.TP
+.B Parameters
+\fBstate\fP (\fI\%tango.DevState\fP) \-\- State Code
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B state_flag
+(\fI\%tango.DevState\fP) state flag
+.UNINDENT
+.INDENT 7.0
+.TP
+.B tdw
+(\fI\%nxswriter.TangoDataWriter.TangoDataWriter\fP) Tango Data Writer
+.UNINDENT
+.INDENT 7.0
+.TP
+.B write_CanFail(attr)
+Write CanFail attribute
+.INDENT 7.0
+.TP
+.B Parameters
+\fBattr\fP (\fI\%tango.Attribute\fP) \-\- attribute object
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B write_FileName(attr)
+Write FileName attribute
+.INDENT 7.0
+.TP
+.B Parameters
+\fBattr\fP (\fI\%tango.Attribute\fP) \-\- attribute object
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B write_JSONRecord(attr)
+Write JSONRecord attribute
+.INDENT 7.0
+.TP
+.B Parameters
+\fBattr\fP (\fI\%tango.Attribute\fP) \-\- attribute object
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B write_SkipAcquisition(attr)
+Write SkipAcquisition attribute
+.INDENT 7.0
+.TP
+.B Parameters
+\fBattr\fP (\fI\%tango.Attribute\fP) \-\- attribute object
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B write_StepsPerFile(attr)
+Write StepsPerFile attribute
+.INDENT 7.0
+.TP
+.B Parameters
+\fBattr\fP (\fI\%tango.Attribute\fP) \-\- attribute object
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B write_XMLSettings(attr)
+Write XMLSettings attribute
+.INDENT 7.0
+.TP
+.B Parameters
+\fBattr\fP (\fI\%tango.Attribute\fP) \-\- attribute object
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class  nxswriter.NXSWriter.NXSDataWriterClass(name)
+Bases: \fBDeviceClass\fP
+.sp
+NXSDataWriterClass class definition
+.sp
+NXSDataWriterClass Constructor
+.INDENT 7.0
+.TP
+.B attr_list  =  {\(aqCanFail\(aq: [[tango._tango.CmdArgType.DevBoolean, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqlabel\(aq: \(aqCan fail\(aq, \(aqdescription\(aq: \(aqGlobal can fail flag. By default it is False\(aq}], \(aqCurrentFileId\(aq: [[tango._tango.CmdArgType.DevLong, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ], {\(aqlabel\(aq: \(aqCurrent file id\(aq, \(aqdescription\(aq: \(aqcurrent file id\(aq}], \(aqErrors\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SPECTRUM, tango._tango.AttrWriteType.READ, 1000], {\(aqlabel\(aq: \(aqList of errors\(aq, \(aqdescription\(aq: \(aqlist of errors\(aq}], \(aqFileName\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqlabel\(aq: \(aqOutput file with its path\(aq, \(aqdescription\(aq: \(aqA name of H5 output file with its full path\(aq}], \(aqJSONRecord\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqlabel\(aq: \(aqJSON string with client data\(aq, \(aqdescription\(aq: \(aqA JSON string with global client data.\(aq, \(aqDisplay level\(aq: tango._tango.DispLevel.EXPERT}], \(aqSkipAcquisition\(aq: [[tango._tango.CmdArgType.DevBoolean, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqlabel\(aq: \(aqSkip acquisition\(aq, \(aqdescription\(aq: \(aqSkip acquisition. It is set to default False value after excuting the OpenEntry, Record or CloseEntry\(aq}], \(aqStepsPerFile\(aq: [[tango._tango.CmdArgType.DevLong, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqlabel\(aq: \(aqSteps per file\(aq, \(aqdescription\(aq: \(aqNumber of steps per file\(aq, \(aqMemorized\(aq: \(aqtrue\(aq}], \(aqXMLSettings\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqlabel\(aq: \(aqXML Configuration\(aq, \(aqdescription\(aq: \(aqAn XML string with Nexus configuration.\(aq, \(aqDisplay level\(aq: tango._tango.DispLevel.EXPERT}]}
+(\fI\%dict\fP <\fI\%str\fP, [[ \fI\%tango.CmdArgType\fP, \fI\%tango.AttrDataFormat\fP, \fI\%tango.AttrWriteType\fP], \fI\%dict\fP <\fI\%str\fP, any> ] > ) Attribute definitions
+.UNINDENT
+.INDENT 7.0
+.TP
+.B class_property_list  =  {}
+(\fI\%dict\fP <\fI\%str\fP, [ \fI\%str\fP, \fI\%tango.CmdArgType\fP, [ \fI\%list\fP <\fI\%int\fP> ] ] > ) Class Properties
+.UNINDENT
+.INDENT 7.0
+.TP
+.B cmd_list  =  {\(aqCloseEntry\(aq: [[tango._tango.CmdArgType.DevVoid, \(aq\(aq], [tango._tango.CmdArgType.DevVoid, \(aq\(aq]], \(aqCloseEntryAsynch\(aq: [[tango._tango.CmdArgType.DevVoid, \(aq\(aq], [tango._tango.CmdArgType.DevVoid, \(aq\(aq]], \(aqCloseFile\(aq: [[tango._tango.CmdArgType.DevVoid, \(aq\(aq], [tango._tango.CmdArgType.DevVoid, \(aq\(aq]], \(aqOpenEntry\(aq: [[tango._tango.CmdArgType.DevVoid, \(aq\(aq], [tango._tango.CmdArgType.DevVoid, \(aq\(aq]], \(aqOpenEntryAsynch\(aq: [[tango._tango.CmdArgType.DevVoid, \(aq\(aq], [tango._tango.CmdArgType.DevVoid, \(aq\(aq]], \(aqOpenFile\(aq: [[tango._tango.CmdArgType.DevVoid, \(aq\(aq], [tango._tango.CmdArgType.DevVoid, \(aq\(aq]], \(aqRecord\(aq: [[tango._tango.CmdArgType.DevString, \(aqJSON string with data\(aq], [tango._tango.CmdArgType.DevVoid, \(aq\(aq]], \(aqRecordAsynch\(aq: [[tango._tango.CmdArgType.DevString, \(aqJSON string with data\(aq], [tango._tango.CmdArgType.DevVoid, \(aq\(aq]]}
+(\fI\%dict\fP <\fI\%str\fP, [[ \fI\%tango.CmdArgType\fP, \fI\%str\fP]] >)
+Command definitions
+.UNINDENT
+.INDENT 7.0
+.TP
+.B device_property_list  =  {\(aqAddingLogs\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqAdd XML logs\(aq, [True]], \(aqDefaultCanFail\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqDefault value of CanFail attribute\(aq, [True]], \(aqMaxElementRuntime\(aq: [tango._tango.CmdArgType.DevDouble, \(aqmaximal runtime for a thread element in seconds\(aq, [0.0]], \(aqMaxRecordRuntime\(aq: [tango._tango.CmdArgType.DevDouble, \(aqmaximal runtime for a record command in seconds\(aq, [0.0]], \(aqMetadataOutput\(aq: [tango._tango.CmdArgType.DevString, \(aqmetadata output\(aq, [\(aq\(aq]], \(aqNumberOfThreads\(aq: [tango._tango.CmdArgType.DevLong, \(aqmaximal number of threads\(aq, [100]], \(aqWriter\(aq: [tango._tango.CmdArgType.DevString, \(aqwriter module\(aq, [\(aq\(aq]]}
+(\fI\%dict\fP <\fI\%str\fP, [ \fI\%str\fP, \fI\%tango.CmdArgType\fP, [ \fI\%list\fP <\fI\%int\fP> ] ] > ) Device Properties
+.UNINDENT
+.UNINDENT
+.SS nxswriter.NexusXMLHandler module
+.sp
+SAX parser for interpreting content of  XML configuration string
+.INDENT 0.0
+.TP
+.B class  nxswriter.NexusXMLHandler.NexusXMLHandler(fileElement, datasources=None, decoders=None, groupTypes=None, parser=None, globalJSON=None, streams=None, reloadmode=False)
+Bases: \fI\%ContentHandler\fP
+.sp
+SAX2 parser
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Brief
+It constructs parser and defines the H5 output file
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBfileElement\fP (\fI\%nxswriter.H5Elements.EFile\fP) \-\- file element
+.IP \(bu 2
+\fBdecoders\fP (\fI\%nxswriter.DecoderPool.DecoderPool\fP) \-\- decoder pool
+.IP \(bu 2
+\fBdatasources\fP (\fI\%nxswriter.DataSourcePool.DataSourcePool\fP) \-\- datasource pool
+.IP \(bu 2
+\fBgroupTypes\fP (\fI\%nxswriter.FetchNameHandler.TNObject\fP) \-\- map of NXclass : name
+.IP \(bu 2
+\fBparser\fP (\fI\%xml.sax.xmlreader.XMLReader\fP) \-\- instance of sax.xmlreader
+.IP \(bu 2
+\fBglobalJSON\fP (:     \fI\%dict\fP <\fI\%str\fP, \fI\%dict\fP <\fI\%str\fP, any>>) \-\- global json string
+.IP \(bu 2
+\fBstreams\fP (\fBStreamSet\fP or \fI\%tango.LatestDeviceImpl\fP) \-\- tango\-like steamset class
+.IP \(bu 2
+\fBreloadmode\fP \-\- reload mode
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B characters(content)
+adds the tag content
+.INDENT 7.0
+.TP
+.B Parameters
+\fBcontent\fP (\fI\%str\fP) \-\- partial content of the tag
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B close()
+closes the elements
+.INDENT 7.0
+.TP
+.B Brief
+It goes through all stack elements closing them
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B elementClass
+(\fI\%dict\fP <\fI\%str\fP, \fI\%type\fP > ) map of tag names to related classes
+.UNINDENT
+.INDENT 7.0
+.TP
+.B endElement(name)
+parses the closing tag
+.INDENT 7.0
+.TP
+.B Parameters
+\fBname\fP (\fI\%str\fP) \-\- tag name
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B entryAttrs
+(\fI\%list\fP <\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP > >) list of entry group attributes
+.UNINDENT
+.INDENT 7.0
+.TP
+.B finalPool
+(\fI\%nxswriter.ThreadPool.ThreadPool\fP) thread pool with FINAL elements
+.UNINDENT
+.INDENT 7.0
+.TP
+.B initPool
+(\fI\%nxswriter.ThreadPool.ThreadPool\fP) thread pool with INIT elements
+.UNINDENT
+.INDENT 7.0
+.TP
+.B raiseUnsupportedTag
+(\fI\%bool\fP) True if raise exception on unsupported tag
+.UNINDENT
+.INDENT 7.0
+.TP
+.B startElement(name, attrs)
+parses the opening tag
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBname\fP (\fI\%str\fP) \-\- tag name
+.IP \(bu 2
+\fBattrs\fP (\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>) \-\- attribute dictionary
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B stepPool
+(\fI\%nxswriter.ThreadPool.ThreadPool\fP) thread pool with STEP elements
+.UNINDENT
+.INDENT 7.0
+.TP
+.B transparentTags
+(\fI\%list\fP <\fI\%str\fP>) transparent tags
+.UNINDENT
+.INDENT 7.0
+.TP
+.B triggerPools
+(\fI\%dict\fP <\fI\%str\fP, \fI\%nxswriter.ThreadPool.ThreadPool\fP> ) collection of thread pool with triggered STEP elements
+.UNINDENT
+.INDENT 7.0
+.TP
+.B withAttr
+(\fI\%dict\fP <\fI\%str\fP, \fI\%type\fP > ) map of tag names to related classes
+.UNINDENT
+.INDENT 7.0
+.TP
+.B withXMLinput
+(\fI\%dict\fP <\fI\%str\fP: \fI\%nxswriter.Element.Element\fP > ) tags with inner xml as its input
+.UNINDENT
+.UNINDENT
+.SS nxswriter.PyEvalSource module
+.sp
+Definitions of PYEVAL datasource
+.INDENT 0.0
+.TP
+.B class  nxswriter.PyEvalSource.PyEvalSource(streams=None, name=None)
+Bases: \fI\%DataSource\fP
+.sp
+Python Eval data source
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Brief
+It cleans all member variables
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBstreams\fP (\fBStreamSet\fP or \fI\%tango.LatestDeviceImpl\fP) \-\- tango\-like steamset class
+.IP \(bu 2
+\fBname\fP (\fI\%str\fP) \-\- datasource name
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B getData()
+provides access to the data
+.INDENT 7.0
+.TP
+.B Returns
+dictionary with collected data
+.TP
+.B Return type
+{\(aqrank\(aq: \fI\%str\fP, \(aqvalue\(aq: any, \(aqtangoDType\(aq: \fI\%str\fP,         :        \(aqshape\(aq: \fI\%list\fP <int>, \(aqencoding\(aq: \fI\%str\fP,         :        \(aqdecoders\(aq: \fI\%str\fP} )
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B setDataSources(pool)
+sets the datasources
+.INDENT 7.0
+.TP
+.B Parameters
+\fBpool\fP (\fI\%nxswriter.DataSourcePool.DataSourcePool\fP) \-\- datasource pool
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B setDecoders(decoders)
+sets the used decoders
+.INDENT 7.0
+.TP
+.B Parameters
+\fBdecoders\fP (\fI\%nxswriter.DecoderPool.DecoderPool\fP) \-\- pool to be set
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B setJSON(globalJSON, localJSON=None)
+sets JSON string
+.INDENT 7.0
+.TP
+.B Brief
+It sets the currently used  JSON string
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBglobalJSON\fP (:     \fI\%dict\fP <\fI\%str\fP , \fI\%dict\fP <\fI\%str\fP, any>>) \-\- static JSON string
+.IP \(bu 2
+\fBlocalJSON\fP (:     \fI\%dict\fP <\fI\%str\fP , \fI\%dict\fP <\fI\%str\fP, any>>) \-\- dynamic JSON string
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B setup(xml)
+sets the parrameters up from xml
+.INDENT 7.0
+.TP
+.B Parameters
+\fBxml\fP (\fI\%str\fP) \-\- datasource parameters
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class  nxswriter.PyEvalSource.Variables
+Bases: \fI\%object\fP
+.sp
+Variables for PyEval datasource
+.UNINDENT
+.SS nxswriter.StreamSet module
+.sp
+labels to Tango Streams
+.INDENT 0.0
+.TP
+.B class  nxswriter.StreamSet.StreamSet(streams)
+Bases: \fI\%object\fP
+.sp
+streamset constractor
+.INDENT 7.0
+.TP
+.B Parameters
+\fBstreams\fP (\fI\%StreamSet\fP or \fI\%tango.LatestDeviceImpl\fP) \-\- tango\-like steamset class
+.UNINDENT
+.INDENT 7.0
+.TP
+.B debug(message, std=None)
+writes debug message
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBmessage\fP (\fI\%str\fP) \-\- debug message
+.IP \(bu 2
+\fBstd\fP (\fI\%bool\fP) \-\- True if it writes to sys stream
+when log stream does not exist
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B error(message, std=None)
+writes error message
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBmessage\fP (\fI\%str\fP) \-\- error message
+.IP \(bu 2
+\fBstd\fP (\fI\%bool\fP) \-\- True if it writes to sys stream
+when log stream does not exist
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B fatal(message, std=None)
+writes fatal error message
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBmessage\fP (\fI\%str\fP) \-\- error message
+.IP \(bu 2
+\fBstd\fP (\fI\%bool\fP) \-\- True if it writes to sys stream
+when log stream does not exist
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B info(message, std=None)
+writes info message
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBmessage\fP (\fI\%str\fP) \-\- info message
+.IP \(bu 2
+\fBstd\fP (\fI\%bool\fP) \-\- True if it writes to sys stream
+when log stream does not exist
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B log_debug
+(\fBtango.log4tango.TangoStream\fP) Tango debug log stream
+.UNINDENT
+.INDENT 7.0
+.TP
+.B log_error
+(\fBtango.log4tango.TangoStream\fP) Tango error log stream
+.UNINDENT
+.INDENT 7.0
+.TP
+.B log_fatal
+(\fBtango.log4tango.TangoStream\fP) Tango fatal log stream
+.UNINDENT
+.INDENT 7.0
+.TP
+.B log_info
+(\fBtango.log4tango.TangoStream\fP) Tango info log stream
+.UNINDENT
+.INDENT 7.0
+.TP
+.B log_warn
+(\fBtango.log4tango.TangoStream\fP) Tango warn log stream
+.UNINDENT
+.INDENT 7.0
+.TP
+.B warn(message, std=None)
+writes warning message
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBmessage\fP (\fI\%str\fP) \-\- warning message
+.IP \(bu 2
+\fBstd\fP (\fI\%bool\fP) \-\- True if it writes to sys stream
+when log stream does not exist
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS nxswriter.TangoDataWriter module
+.sp
+Tango Data Writer implementation
+.INDENT 0.0
+.TP
+.B nxswriter.TangoDataWriter.PYTG_BUG_213  =  False
+(\fI\%bool\fP) tango bug #213 flag related to EncodedAttributes in python3
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class  nxswriter.TangoDataWriter.TangoDataWriter(server=None)
+Bases: \fI\%object\fP
+.sp
+NeXuS data writer
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Brief
+It initialize the data writer for the H5 output file
+.TP
+.B Parameters
+\fBserver\fP (\fI\%tango.LatestDeviceImpl\fP) \-\- Tango server
+.UNINDENT
+.INDENT 7.0
+.TP
+.B addingLogs
+(\fI\%str\fP) adding logs
+.UNINDENT
+.INDENT 7.0
+.TP
+.B property  canfail
+the global can fail flag
+.UNINDENT
+.INDENT 7.0
+.TP
+.B closeEntry()
+closes the data entry
+.INDENT 7.0
+.TP
+.B Brief
+It runs threads from the FINAL pool and
+removes the thread pools
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B closeFile()
+the H5 file closing
+.INDENT 7.0
+.TP
+.B Brief
+It closes the H5 file
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B property  currentfileid
+the json data string
+.UNINDENT
+.INDENT 7.0
+.TP
+.B property  defaultCanFail
+the global can fail flag
+.UNINDENT
+.INDENT 7.0
+.TP
+.B property  fileName
+the parent nexus path
+.UNINDENT
+.INDENT 7.0
+.TP
+.B getFile()
+the H5 file handle
+.INDENT 7.0
+.TP
+.B Returns
+the H5 file handle
+.TP
+.B Return type
+\fBnxswriter.FileWriter.FTFile\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B property  jsonrecord
+the json data string
+.UNINDENT
+.INDENT 7.0
+.TP
+.B maxElementRuntime
+(\fI\%float\fP) maximal element record time in sec
+.UNINDENT
+.INDENT 7.0
+.TP
+.B maxRecordRuntime
+(\fI\%float\fP) maximal record time in sec
+.UNINDENT
+.INDENT 7.0
+.TP
+.B metadataOutput
+(\fI\%str\fP) metadata output
+.UNINDENT
+.INDENT 7.0
+.TP
+.B numberOfThreads
+(\fI\%int\fP) maximal number of threads
+.UNINDENT
+.INDENT 7.0
+.TP
+.B openEntry()
+opens the data entry corresponding to a new XML settings
+.INDENT 7.0
+.TP
+.B Brief
+It parse the XML settings, creates thread pools
+and runs the INIT pool.
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B openFile()
+the H5 file opening
+.INDENT 7.0
+.TP
+.B Brief
+It opens the H5 file
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B record(jsonstring=None)
+runs threads form the STEP pool
+.INDENT 7.0
+.TP
+.B Brief
+It runs threads from the STEP pool
+.TP
+.B Parameters
+\fBjsonstring\fP (\fI\%str\fP) \-\- local JSON string with data records
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B skipacquisition
+(\fI\%bool\fP) skip acquisition flag
+.UNINDENT
+.INDENT 7.0
+.TP
+.B stepsperfile
+(\fI\%int\fP) steps per file
+.UNINDENT
+.INDENT 7.0
+.TP
+.B writer
+(\fI\%str\fP) writer type
+.UNINDENT
+.INDENT 7.0
+.TP
+.B property  xmlsettings
+the xmlsettings
+.UNINDENT
+.UNINDENT
+.SS nxswriter.TangoSource module
+.sp
+Definitions of TANGO datasource
+.INDENT 0.0
+.TP
+.B nxswriter.TangoSource.PYTANGO_AVAILABLE  =  True
+(\fI\%str\fP) global variable if tango module installed
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class  nxswriter.TangoSource.ProxyTools
+Bases: \fI\%object\fP
+.sp
+tools for proxy
+.INDENT 7.0
+.TP
+.B classmethod  isProxyValid(proxy)
+checks if proxy is valid
+.INDENT 7.0
+.TP
+.B Parameters
+\fBproxy\fP (\fI\%tango.DeviceProxy\fP) \-\- tango proxy
+.TP
+.B Returns
+True if proxy is valid else false
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B classmethod  proxySetup(device, streams=None, maxcount=10)
+sets the Tango proxy up
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBdevice\fP (\fI\%str\fP) \-\- tango device
+.IP \(bu 2
+\fBstreams\fP (\fBStreamSet\fP or \fI\%tango.LatestDeviceImpl\fP) \-\- tango\-like steamset class
+.IP \(bu 2
+\fBmaxcount\fP (\fI\%int\fP) \-\- a number of tries
+.UNINDENT
+.TP
+.B Returns
+proxy if proxy is set up
+.TP
+.B Return type
+\fI\%tango.DeviceProxy\fP
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class  nxswriter.TangoSource.TangoSource(streams=None, name=None)
+Bases: \fI\%DataSource\fP
+.sp
+Tango data source
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Brief
+It cleans all member variables
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBstreams\fP (\fBStreamSet\fP or \fI\%tango.LatestDeviceImpl\fP) \-\- tango\-like steamset class
+.IP \(bu 2
+\fBname\fP (\fI\%str\fP) \-\- datasource name
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B client
+(\fI\%str\fP) client datasource for mixed CLIENT/TANGO mode
+.UNINDENT
+.INDENT 7.0
+.TP
+.B device
+(\fI\%str\fP) full device name
+.UNINDENT
+.INDENT 7.0
+.TP
+.B fullclient
+(\fI\%str\fP) client datasource for mixed CLIENT/TANGO mode with fqdn
+.UNINDENT
+.INDENT 7.0
+.TP
+.B getData()
+data provider
+.INDENT 7.0
+.TP
+.B Returns
+dictionary with collected data
+.TP
+.B Return type
+{\(aqrank\(aq: \fI\%str\fP, \(aqvalue\(aq: any, \(aqtangoDType\(aq: \fI\%str\fP,         :        \(aqshape\(aq: \fI\%list\fP <int>, \(aqencoding\(aq: \fI\%str\fP,         :        \(aqdecoders\(aq: \fI\%str\fP}
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B group
+(\fI\%TgGroup\fP) datasource tango group
+.UNINDENT
+.INDENT 7.0
+.TP
+.B member
+(\fI\%TgMember\fP) Tango device member
+.UNINDENT
+.INDENT 7.0
+.TP
+.B setDataSources(pool)
+sets the datasources
+.INDENT 7.0
+.TP
+.B Parameters
+\fBpool\fP (\fI\%nxswriter.DataSourcePool.DataSourcePool\fP) \-\- datasource pool
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B setDecoders(decoders)
+sets the used decoders
+.INDENT 7.0
+.TP
+.B Parameters
+\fBdecoders\fP (\fI\%nxswriter.DecoderPool.DecoderPool\fP) \-\- pool to be set
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B setJSON(globalJSON, localJSON=None)
+sets JSON string
+.INDENT 7.0
+.TP
+.B Brief
+It sets the currently used  JSON string
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBglobalJSON\fP (:     \fI\%dict\fP <\fI\%str\fP , \fI\%dict\fP <\fI\%str\fP, any>>) \-\- static JSON string
+.IP \(bu 2
+\fBlocalJSON\fP (:     \fI\%dict\fP <\fI\%str\fP, \fI\%dict\fP <\fI\%str\fP, any>>) \-\- dynamic JSON string
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B setup(xml)
+sets the parrameters up from xml
+.INDENT 7.0
+.TP
+.B Parameters
+\fBxml\fP (\fI\%str\fP) \-\- datasource parameters
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class  nxswriter.TangoSource.TgDevice(device, proxy=None, streams=None)
+Bases: \fI\%object\fP
+.sp
+tango device
+.sp
+default constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBdevice\fP (\fI\%str\fP) \-\- tango device name
+.IP \(bu 2
+\fBproxy\fP (\fI\%tango.DeviceProxy\fP) \-\- device proxy
+.IP \(bu 2
+\fBstreams\fP (\fBStreamSet\fP or \fI\%tango.LatestDeviceImpl\fP) \-\- tango\-like steamset class
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B attributes
+(\fI\%list\fP <\fI\%str\fP>) device attribute names
+.UNINDENT
+.INDENT 7.0
+.TP
+.B commands
+(\fI\%list\fP <\fI\%str\fP>) device command names
+.UNINDENT
+.INDENT 7.0
+.TP
+.B device
+(\fI\%str\fP) tango device name
+.UNINDENT
+.INDENT 7.0
+.TP
+.B members
+(\fI\%dict\fP <\fI\%str\fP , \fI\%TgMember\fP > ) dictionary with tango members
+.UNINDENT
+.INDENT 7.0
+.TP
+.B properties
+(\fI\%list\fP <\fI\%str\fP>) device property names
+.UNINDENT
+.INDENT 7.0
+.TP
+.B proxy
+(\fI\%tango.DeviceProxy\fP) device proxy
+.UNINDENT
+.INDENT 7.0
+.TP
+.B setMember(member)
+provides tango device member
+.INDENT 7.0
+.TP
+.B Parameters
+\fBmember\fP (\fI\%TgMember\fP) \-\- tango  device member
+.TP
+.B Returns
+TgMember instance of tango device member
+.TP
+.B Return type
+\fI\%TgMember\fP
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class  nxswriter.TangoSource.TgGroup(counter=0, streams=None)
+Bases: \fI\%object\fP
+.sp
+Group of tango devices
+.sp
+default constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBcounter\fP (\fI\%int\fP) \-\- counts of steps
+.IP \(bu 2
+\fBstreams\fP (\fBStreamSet\fP or \fI\%tango.LatestDeviceImpl\fP) \-\- tango\-like steamset class
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B counter
+(\fI\%int\fP) counter of steps
+.UNINDENT
+.INDENT 7.0
+.TP
+.B devices
+(\fI\%dict\fP <\fI\%str\fP,  \fI\%TgDevice\fP> ) TANGO devices
+.UNINDENT
+.INDENT 7.0
+.TP
+.B getData(counter, proxy=None, member=None)
+reads data from device proxy
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBcounter\fP (\fI\%int\fP) \-\- counts of scan steps
+.IP \(bu 2
+\fBproxy\fP (\fI\%tango.DeviceProxy\fP) \-\- device proxy
+.IP \(bu 2
+\fBmember\fP (\fI\%TgMember\fP) \-\- required member
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B getDevice(device)
+provides tango device
+.INDENT 7.0
+.TP
+.B Parameters
+\fBdevice\fP (\fI\%str\fP) \-\- tango device name
+.TP
+.B Returns
+TgDevice instance of tango device
+.TP
+.B Return type
+\fI\%TgDevice\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B lock
+(\fI\%threading.Lock\fP) threading lock
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class  nxswriter.TangoSource.TgMember(name, memberType=\(aqattribute\(aq, encoding=None, streams=None)
+Bases: \fI\%object\fP
+.sp
+tango device member
+.sp
+default constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBname\fP (\fI\%str\fP) \-\- name of data record
+.IP \(bu 2
+\fBmemberType\fP (\fI\%str\fP) \-\- member type of the data
+.IP \(bu 2
+\fBencoding\fP (\fI\%str\fP) \-\- encoding type of Tango DevEncoded variables
+.IP \(bu 2
+\fBstreams\fP (\fBStreamSet\fP or \fI\%tango.LatestDeviceImpl\fP) \-\- tango\-like steamset class
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B encoding
+(\fI\%str\fP) encoding type of Tango DevEncoded variables
+.UNINDENT
+.INDENT 7.0
+.TP
+.B getData(proxy)
+reads data from device proxy
+.INDENT 7.0
+.TP
+.B Parameters
+\fBproxy\fP (\fI\%tango.DeviceProxy\fP) \-\- device proxy
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B getValue(decoders=None)
+provides value of tango member
+.INDENT 7.0
+.TP
+.B Parameters
+\fBdecoders\fP (\fI\%nxswriter.DecoderPool.DecoderPool\fP) \-\- decoder pool
+.TP
+.B Returns
+dictionary with {\(dqrank\(dq:, \(dqvalue\(dq:, \(dqtangoDType\(dq:,
+\(dqshape\(dq:, \(dqencoding\(dq:, \(dqdecoders\(dq:}
+.TP
+.B Returns
+dictionary with collected data
+.TP
+.B Return type
+{\(aqrank\(aq: \fI\%str\fP, \(aqvalue\(aq: any, \(aqtangoDType\(aq: \fI\%str\fP,         :        \(aqshape\(aq: \fI\%list\fP <int>, \(aqencoding\(aq: \fI\%str\fP,         :        \(aqdecoders\(aq: \fI\%str\fP}
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B isDataSet()
+checks if data is set
+.INDENT 7.0
+.TP
+.B Returns
+True if data is set
+.TP
+.B Return type
+\fI\%str\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B memberType
+(\fI\%str\fP) member type of the data, i.e. attribute, property,...
+.UNINDENT
+.INDENT 7.0
+.TP
+.B name
+(\fI\%str\fP) name of data record
+.UNINDENT
+.INDENT 7.0
+.TP
+.B reset()
+cleans output value
+.UNINDENT
+.INDENT 7.0
+.TP
+.B setData(data, cmd=None)
+sets tango data
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBdata\fP (\fI\%tango.DeviceAttribute\fP) \-\- output tango data
+.IP \(bu 2
+\fBcmd\fP (\fI\%tango.CommandInfo\fP) \-\- input command data
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS nxswriter.ThreadPool module
+.sp
+Provides a pool with element threads
+.INDENT 0.0
+.TP
+.B class  nxswriter.ThreadPool.ThreadPool(numberOfThreads=None, streams=None, maxruntime=0)
+Bases: \fI\%object\fP
+.sp
+Pool with threads
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Brief
+It cleans the member variables
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBnumberOfThreads\fP (\fI\%int\fP) \-\- number of threads
+.IP \(bu 2
+\fBstreams\fP (\fBStreamSet\fP or \fI\%tango.LatestDeviceImpl\fP) \-\- tango\-like steamset class
+.IP \(bu 2
+\fBmaxruntime\fP (\fI\%int\fP) \-\- maxruntime
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B append(elem)
+appends the thread element
+.INDENT 7.0
+.TP
+.B Parameters
+\fBelem\fP (\fI\%nxswriter.Element.Element\fP) \-\- the thread element
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B checkErrors()
+checks errors from threads
+.UNINDENT
+.INDENT 7.0
+.TP
+.B close()
+closer
+.INDENT 7.0
+.TP
+.B Brief
+It close the threads from the pool
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B join(timeout=None)
+waits for all thread from the pool
+.INDENT 7.0
+.TP
+.B Parameters
+\fBtimeout\fP (\fI\%int\fP) \-\- the maximal waiting time
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B maxRuntime
+(\fI\%float\fP) maximal runtime
+.UNINDENT
+.INDENT 7.0
+.TP
+.B numberOfThreads
+(\fI\%int\fP) maximal number of threads
+.UNINDENT
+.INDENT 7.0
+.TP
+.B run()
+thread runner
+.INDENT 7.0
+.TP
+.B Brief
+It runs the threads from the pool
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B runAndWait()
+runner with waiting
+.INDENT 7.0
+.TP
+.B Brief
+It runs and waits the threads from the pool
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B setJSON(globalJSON, localJSON=None)
+sets the JSON string to threads
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBglobalJSON\fP (:     \fI\%dict\fP <\fI\%str\fP , \fI\%dict\fP <\fI\%str\fP, any>>) \-\- the static JSON string
+.IP \(bu 2
+\fBlocalJSON\fP (:     \fI\%dict\fP <\fI\%str\fP, \fI\%dict\fP <\fI\%str\fP, any>>) \-\- the dynamic JSON string
+.UNINDENT
+.TP
+.B Returns
+self object
+.TP
+.B Return type
+\fI\%ThreadPool\fP
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS nxswriter.Types module
+.sp
+Types converters
+.INDENT 0.0
+.TP
+.B class  nxswriter.Types.Converters
+Bases: \fI\%object\fP
+.sp
+set of converters
+.INDENT 7.0
+.TP
+.B classmethod  toBool(value)
+converts to bool
+.INDENT 7.0
+.TP
+.B Parameters
+\fBvalue\fP (\fIany\fP) \-\- variable to convert
+.TP
+.B Returns
+result in bool type
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class  nxswriter.Types.NTP
+Bases: \fI\%object\fP
+.sp
+type converter
+.INDENT 7.0
+.TP
+.B aTn  =  {\(aqaxis\(aq: \(aqNX_INT\(aq, \(aqfile_time\(aq: \(aqNX_DATE_TIME\(aq, \(aqfile_update_time\(aq: \(aqNX_DATE_TIME\(aq, \(aqignoreExtraAttributes\(aq: \(aqNX_BOOLEAN\(aq, \(aqignoreExtraFields\(aq: \(aqNX_BOOLEAN\(aq, \(aqignoreExtraGroups\(aq: \(aqNX_BOOLEAN\(aq, \(aqmaxOccus\(aq: \(aqNX_INT\(aq, \(aqminOccus\(aq: \(aqNX_INT\(aq, \(aqoffset\(aq: \(aqNX_INT\(aq, \(aqprimary\(aq: \(aqNX_INT32\(aq, \(aqrestricts\(aq: \(aqNX_INT\(aq, \(aqsignal\(aq: \(aqNX_INT\(aq, \(aqstride\(aq: \(aqNX_INT\(aq}
+(\fI\%dict\fP <\fI\%str\fP , \fI\%str\fP >) map of tag attribute types
+.UNINDENT
+.INDENT 7.0
+.TP
+.B aTnv  =  {\(aqvector\(aq: \(aqNX_FLOAT\(aq}
+(\fI\%dict\fP <\fI\%str\fP , \fI\%str\fP >) map of vector tag attribute types
+.UNINDENT
+.INDENT 7.0
+.TP
+.B arrayRank(array)
+array rank
+.INDENT 7.0
+.TP
+.B Brief
+It calculates the rank of the array
+.TP
+.B Parameters
+\fBarray\fP (\fIany\fP) \-\- given array
+.TP
+.B Returns
+rank
+.TP
+.B Return type
+\fI\%int\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B arrayRankRShape(array)
+array rank, inverse shape and type
+.INDENT 7.0
+.TP
+.B Brief
+It calculates the rank, inverse shape and type of
+the first element of the list array
+.TP
+.B Parameters
+\fBarray\fP (\fIany\fP) \-\- given array
+.TP
+.B Returns
+(rank, inverse shape, type)
+.TP
+.B Return type
+(\fI\%int\fP , \fI\%list\fP <\fI\%int\fP > , \fI\%str\fP )
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B arrayRankShape(array)
+array rank, shape and type
+.INDENT 7.0
+.TP
+.B Brief
+It calculates the rank, shape and type of
+the first element of the list array
+.TP
+.B Parameters
+\fBarray\fP (\fIany\fP) \-\- given array
+.TP
+.B Returns
+(rank, shape, type)
+.TP
+.B Return type
+(\fI\%int\fP , \fI\%list\fP <\fI\%int\fP > , \fI\%str\fP )
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B convert  =  {\(aqbool\(aq: <bound method Converters.toBool of <class \(aqnxswriter.Types.Converters\(aq>>, \(aqfloat\(aq: <class \(aqfloat\(aq>, \(aqfloat16\(aq: <class \(aqfloat\(aq>, \(aqfloat32\(aq: <class \(aqfloat\(aq>, \(aqfloat64\(aq: <class \(aqfloat\(aq>, \(aqint\(aq: <class \(aqint\(aq>, \(aqint16\(aq: <class \(aqint\(aq>, \(aqint32\(aq: <class \(aqint\(aq>, \(aqint64\(aq: <class \(aqint\(aq>, \(aqint8\(aq: <class \(aqint\(aq>, \(aqstr\(aq: <class \(aqstr\(aq>, \(aqstring\(aq: <class \(aqstr\(aq>, \(aquint\(aq: <class \(aqint\(aq>, \(aquint16\(aq: <class \(aqint\(aq>, \(aquint32\(aq: <class \(aqint\(aq>, \(aquint64\(aq: <class \(aqint\(aq>, \(aquint8\(aq: <class \(aqint\(aq>}
+(\fI\%dict\fP <\fI\%str\fP , \fI\%type\fP or \fI\%types.MethodType\fP >) map of type : converting function
+.UNINDENT
+.INDENT 7.0
+.TP
+.B createArray(value, fun=None)
+.INDENT 7.0
+.TP
+.B creates python array from the given array with applied
+the given function to it elements
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBvalue\fP \-\- given array
+.IP \(bu 2
+\fBfun\fP (\fI\%type\fP or \fI\%types.MethodType\fP) \-\- applied function
+.UNINDENT
+.TP
+.B Returns
+created array
+.TP
+.B Return type
+\fI\%list\fP <any>
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B nTnp  =  {\(aqISO8601\(aq: \(aqstring\(aq, \(aqNX_BOOLEAN\(aq: \(aqbool\(aq, \(aqNX_CHAR\(aq: \(aqstring\(aq, \(aqNX_DATE_TIME\(aq: \(aqstring\(aq, \(aqNX_FLOAT\(aq: \(aqfloat64\(aq, \(aqNX_FLOAT32\(aq: \(aqfloat32\(aq, \(aqNX_FLOAT64\(aq: \(aqfloat64\(aq, \(aqNX_INT\(aq: \(aqint64\(aq, \(aqNX_INT16\(aq: \(aqint16\(aq, \(aqNX_INT32\(aq: \(aqint32\(aq, \(aqNX_INT64\(aq: \(aqint64\(aq, \(aqNX_INT8\(aq: \(aqint8\(aq, \(aqNX_NUMBER\(aq: \(aqfloat64\(aq, \(aqNX_POSINT\(aq: \(aquint64\(aq, \(aqNX_UINT\(aq: \(aquint64\(aq, \(aqNX_UINT16\(aq: \(aquint16\(aq, \(aqNX_UINT32\(aq: \(aquint32\(aq, \(aqNX_UINT64\(aq: \(aquint64\(aq, \(aqNX_UINT8\(aq: \(aquint8\(aq}
+(\fI\%dict\fP <\fI\%str\fP , \fI\%str\fP >) map of NEXUS :  numpy types
+.UNINDENT
+.INDENT 7.0
+.TP
+.B pTt  =  {\(aqbool\(aq: \(aqDevBoolean\(aq, \(aqfloat\(aq: \(aqDevDouble\(aq, \(aqfloat16\(aq: \(aqDevFloat\(aq, \(aqfloat32\(aq: \(aqDevFloat\(aq, \(aqfloat64\(aq: \(aqDevDouble\(aq, \(aqint\(aq: \(aqDevLong64\(aq, \(aqint16\(aq: \(aqDevShort\(aq, \(aqint32\(aq: \(aqDevLong\(aq, \(aqint64\(aq: \(aqDevLong64\(aq, \(aqint8\(aq: \(aqDevUChar\(aq, \(aqlong\(aq: \(aqDevLong64\(aq, \(aqstr\(aq: \(aqDevString\(aq, \(aqstring\(aq: \(aqDevString\(aq, \(aquint\(aq: \(aqDevULong64\(aq, \(aquint16\(aq: \(aqDevUShort\(aq, \(aquint32\(aq: \(aqDevULong\(aq, \(aquint64\(aq: \(aqDevULong64\(aq, \(aquint8\(aq: \(aqDevUChar\(aq, \(aqunicode\(aq: \(aqDevString\(aq}
+(\fI\%dict\fP <\fI\%str\fP ,:obj:\fIstr\fP >) map of Python:Tango types
+.UNINDENT
+.INDENT 7.0
+.TP
+.B rTf  =  {0: \(aqSCALAR\(aq, 1: \(aqSPECTRUM\(aq, 2: \(aqIMAGE\(aq, 3: \(aqVERTEX\(aq}
+(\fI\%dict\fP <\fI\%int\fP , \fI\%str\fP >) map of rank :  data format
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B nxswriter.Types.nptype(dtype)
+converts to numpy types
+.INDENT 7.0
+.TP
+.B Parameters
+\fBdtype\fP (\fI\%str\fP) \-\- h5 writer type type
+.TP
+.B Returns
+nupy type
+.TP
+.B Return type
+\fI\%str\fP
+.UNINDENT
+.UNINDENT
+.SS Module contents
+.sp
+Tango Data Writer
+.INDENT 0.0
+.TP
+.B nxswriter.globallock  =  <unlocked _thread.lock object>
+(\fI\%threading.Lock\fP) global lock
+.UNINDENT
+.INDENT 0.0
+.TP
+.B nxswriter.run(argv)
+launches the TANGO server
+.INDENT 7.0
+.TP
+.B Parameters
+\fBargv\fP (\fI\%list\fP <\fI\%str\fP>) \-\- command\-line arguments
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Index\fP
+.IP \(bu 2
+\fI\%Module Index\fP
+.IP \(bu 2
+\fI\%Search Page\fP
+.UNINDENT
+.SH AUTHOR
+Author
+.SH COPYRIGHT
+2012-2017 DESY, Jan Kotanski <jkotan@mail.desy.de>
+
+GNU GENERAL PUBLIC LICENSE, version 3
+.\" Generated by docutils manpage writer.
+.
