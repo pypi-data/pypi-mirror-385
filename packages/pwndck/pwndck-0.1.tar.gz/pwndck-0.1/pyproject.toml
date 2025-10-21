@@ -1,0 +1,47 @@
+[build-system]
+requires = ["poetry-core>=2.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[project]
+name = "pwndck"
+version = "0.1"
+description = "Check for leaked passwords in HaveIBeenPwned."
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [ { name = "David Steele", email = "dsteele@gmail.com" } ]
+keywords = [ "passwords", "security", "breach", "haveibeenpwned" ]
+classifiers = [
+    "Environment :: Console",
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
+    "Natural Language :: English",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Security",
+]
+dependencies = [
+    "requests (>=2.32.5,<3.0.0)",
+    "argparse-formatter (>=1.4,<2.0)"
+]
+
+[urls]
+homepage = ""
+repository = "https://github.com/davesteele/pwndck"
+
+[project.scripts]
+pwndck = "pwndck.pwndck:main"
+
+[tool.poetry]
+package-mode = true
+packages = [
+    {include = "pwndck"},
+]
+
+[tool.black]
+line-length = 79
+
+[tool.isort]
+profile = "black"

@@ -1,0 +1,55 @@
+Metadata-Version: 2.4
+Name: pwndck
+Version: 0.1
+Summary: Check for leaked passwords in HaveIBeenPwned.
+License-File: LICENSE
+Keywords: passwords,security,breach,haveibeenpwned
+Author: David Steele
+Author-email: dsteele@gmail.com
+Requires-Python: >=3.9
+Classifier: Environment :: Console
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)
+Classifier: Natural Language :: English
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Operating System :: MacOS
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Topic :: Security
+Requires-Dist: argparse-formatter (>=1.4,<2.0)
+Requires-Dist: requests (>=2.32.5,<3.0.0)
+Description-Content-Type: text/markdown
+
+# pwndck
+
+Check the the HaveIBeenPwned password database to see if a particular password
+has been compromised.
+
+It uses the [haveibeenpwned API](https://haveibeenpwned.com/API/v3#PwnedPasswords)
+for the check:
+  * This use does not require an API key. Anyone can run it.
+  * This is more secure than the [web page tool](https://haveibeenpwned.com/Passwords).
+    your password is not exposed beyond your local machine.
+  * It returns the number of times the password occurs in the database.
+
+# Usage
+
+    $ pwndck.py -h
+    usage: pwndck.py [-h] [password]
+    
+    Report # of password hits in HaveIBeenPwned
+    
+    positional arguments:
+      password    The password to check
+    
+    options:
+      -h, --help  show this help message and exit
+    
+    Evaluate a password agains the HaveIBeenPwned password database,
+    and return the number of accounts for which it has been reported
+    as compromised. If the password is not specified on the command
+    line, the user will be prompted.
+
+    See https://haveibeenpwned.com/API/v3#PwnedPasswords
+
