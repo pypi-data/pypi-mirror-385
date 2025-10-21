@@ -1,0 +1,106 @@
+Metadata-Version: 2.4
+Name: semanticlayertools
+Version: 1.1.1
+Summary: Create social, material or semantic layers using different methods to work with the Socio-epistemic networks framework.
+Project-URL: Project Homepage, https://modelsen.gea.mpg.de
+Project-URL: Homepage, https://gitlab.gwdg.de/modelsen/semanticlayertools
+Project-URL: Issues, https://gitlab.gwdg.de/modelsen/semanticlayertools/-/issues
+Author-email: Malte Vogl <vogl@gea.mpg.de>, Raphael Schlattmann <raphael.schlattmann@tu-berlin.de>
+License-File: AUTHORS.md
+License-File: LICENSE.md
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.8
+Requires-Dist: bertopic
+Requires-Dist: dask[dataframe]
+Requires-Dist: datashader
+Requires-Dist: igraph
+Requires-Dist: infomap>=2.3
+Requires-Dist: leidenalg
+Requires-Dist: matplotlib
+Requires-Dist: numpy
+Requires-Dist: pandas
+Requires-Dist: plotly
+Requires-Dist: polars
+Requires-Dist: python-dotenv
+Requires-Dist: scikit-image
+Requires-Dist: scikit-learn
+Requires-Dist: scipy
+Requires-Dist: spacy
+Requires-Dist: tqdm
+Provides-Extra: dev
+Requires-Dist: ruff; extra == 'dev'
+Requires-Dist: sphinx; extra == 'dev'
+Requires-Dist: tox; extra == 'dev'
+Requires-Dist: twine; extra == 'dev'
+Provides-Extra: ml
+Requires-Dist: accelerate; extra == 'ml'
+Requires-Dist: datamapplot; extra == 'ml'
+Requires-Dist: hdbscan; extra == 'ml'
+Requires-Dist: plotly; extra == 'ml'
+Requires-Dist: sentence-transformers; extra == 'ml'
+Requires-Dist: tbb; extra == 'ml'
+Description-Content-Type: text/markdown
+
+# SemanticLayerTools
+
+![PyPI](https://img.shields.io/pypi/v/semanticlayertools?label=pypi%20package) [![DH community code review: May 2022](https://img.shields.io/badge/DHCodeReview-May_2022-blue)](https://github.com/DHCodeReview/SemanticLayerTools/pull/1) [![Documentation Status](https://readthedocs.org/projects/semanticlayertools/badge/?version=latest)](https://semanticlayertools.readthedocs.io/en/latest/?badge=latest)
+
+Collects tools to create semantic layers in the socio-epistemic networks framework. Source material can be any structured corpus with metadata of authors, time, and at least one text column.
+
+Documentation is available on [ReadTheDocs](https://semanticlayertools.readthedocs.io/).
+
+Part of the code was reviewed by [Itay Zandbank](https://github.com/zmbq), thank you. 
+
+## Installation
+
+tl;dr Use pip
+
+~~~bash
+pip install semanticlayertools
+~~~
+
+Consider using a clean virtual environment to keep your main packages separated.
+Create a new virtual environment and install the package
+
+~~~bash
+python3 -m venv env
+source env/bin/activate
+pip install semanticlayertools
+~~~
+
+To use some sentence embedding utility functions please install with the
+`ml` option
+
+~~~bash
+pip install semanticlayertools[ml]
+~~~
+
+
+## Testing
+
+Tests can be run by installing the _dev_ requirements and running `tox`.
+
+~~~bash
+pip install semanticlayertools[dev]
+tox
+~~~
+
+## Building documentation
+
+The documentation is build using _sphinx_. Install with the _dev_ option and run
+
+~~~bash
+pip install semanticlayertools[dev]
+tox -e docs
+~~~
+
+## Funding information
+
+The development was part of the research project [ModelSEN](https://modelsen.gea.mpg.de)
+
+> Socio-epistemic networks: Modelling Historical Knowledge Processes,
+
+in Department I of the Max Planck Institute for the History of Science
+and funded by the Federal Ministry of Education and Research, Germany (Grant No. 01 UG2131). The work is continued at the Max Planck Institute of Geoanthropology, Jena. 
