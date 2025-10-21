@@ -1,0 +1,20 @@
+[project]
+name = "jupyter-hurl-kernel"
+version = "0.0.7"
+description = "A Jupyter kernel for running Hurl commands"
+readme = "README.md"
+authors = [
+    { name = "Cédric Couralet", email = "cedric.couralet@insee.fr" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "ipykernel>=6.29.0",
+    "jupyter-client>=8.6.0",
+]
+
+[project.scripts]
+install-hurl-kernel = "jupyter_hurl_kernel:main"
+
+[build-system]
+requires = ["uv_build>=0.9.4,<0.10.0"]
+build-backend = "uv_build"
