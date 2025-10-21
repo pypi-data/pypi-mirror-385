@@ -1,0 +1,264 @@
+Metadata-Version: 2.4
+Name: wauo
+Version: 0.9.5
+Summary: A comprehensive Python utility library featuring web scraping, decorators, thread pool management, and database operations
+Author-email: WangTuo <markadc@126.com>
+License: MIT
+Project-URL: Homepage, https://github.com/markadc/wauo
+Project-URL: Repository, https://github.com/markadc/wauo.git
+Project-URL: Documentation, https://github.com/markadc/wauo#-usage-guide
+Project-URL: Issues, https://github.com/markadc/wauo/issues
+Keywords: spider,crawler,web-scraping,thread-pool,database,mysql,postgresql,utils,decorators
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: Chinese (Simplified)
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Internet :: WWW/HTTP
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Utilities
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: requests
+Requires-Dist: parsel
+Requires-Dist: fake_useragent
+Requires-Dist: loguru
+Requires-Dist: pymysql
+Requires-Dist: psycopg2
+Requires-Dist: dbutils
+
+# Wauo - Python 工具大全 🚀
+
+[![Python Version](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![PyPI version](https://img.shields.io/badge/PyPI-wauo-blue.svg)](https://pypi.org/project/wauo/)
+[![GitHub](https://img.shields.io/badge/GitHub-markadc/wauo-black.svg)](https://github.com/markadc/wauo)
+
+一个功能强大且易于使用的 **Python 工具库**，集成了爬虫、装饰器、线程池、数据库操作等实用功能。
+
+## ✨ 主要特性
+
+| 功能              | 描述                                 |
+| ----------------- | ------------------------------------ |
+| 🕷️ **爬虫模块**   | 简化的 HTTP 请求、响应处理和数据提取 |
+| 🔧 **装饰器集合** | 类型强校验、函数计时、错误处理等     |
+| ⚡ **线程池管理** | 内存安全的线程池，自动防溢出         |
+| 🗄️ **数据库支持** | 快速操作 MySQL 和 PostgreSQL         |
+| 🎨 **彩色输出**   | 美观的终端颜色输出                   |
+| 📦 **工具函数**   | 多层字典取值、时间戳转换等实用工具   |
+
+## 📋 系统要求
+
+- **Python 版本**: 3.10 或更高
+- **主要依赖**:
+  - `requests` - HTTP 客户端
+  - `parsel` - HTML/XML 解析
+  - `fake_useragent` - User-Agent 生成
+  - `loguru` - 日志管理
+  - `pymysql` - MySQL 驱动
+  - `psycopg2` - PostgreSQL 驱动
+  - `dbutils` - 数据库连接池
+
+## 🔧 快速安装
+
+### 使用 pip（推荐）
+
+```bash
+pip install wauo -U
+```
+
+### 升级到最新版本
+
+```bash
+pip install --upgrade wauo
+```
+
+### 从源码安装
+
+```bash
+git clone https://github.com/markadc/wauo.git
+cd wauo
+pip install -e .
+```
+
+## 🎯 快速开始
+
+### 1️⃣ 爬虫模块
+
+```python
+from wauo import WauoSpider
+
+spider = WauoSpider()
+
+# GET 请求
+resp = spider.send('https://www.example.com')
+print(resp.text)
+
+# XPath 选择器
+title = resp.get_one("//title/text()")
+print(title)
+```
+
+### 2️⃣ 数据库操作
+
+```python
+from wauo.db import PostgresqlClient
+
+psql = PostgresqlClient(
+    host="localhost",
+    port=5432,
+    db="test",
+    user="wauo",
+    password="admin1"
+)
+psql.connect()
+
+# 创建表
+psql.create_table('users', ['name', 'age'])
+
+# 插入数据
+psql.insert_one('users', {'name': 'Alice', 'age': 30})
+
+# 查询数据
+rows = psql.query("SELECT * FROM users")
+for row in rows:
+    print(dict(row))
+```
+
+### 3️⃣ 类型强校验
+
+```python
+from wauo.utils import type_check
+
+@type_check
+def add(x: int, y: int) -> int:
+    """计算两个数的和"""
+    return x + y
+
+add(1, 2)      # ✅ 正确
+add(1, "2")    # ❌ 报错
+```
+
+### 4️⃣ 多层字典取值
+
+```python
+from wauo.utils import nget
+
+data = {
+    "user": {
+        "info": {
+            "profile": {
+                "name": "张三",
+                "age": 25
+            }
+        }
+    }
+}
+
+name = nget(data, "user.info.profile.name")  # "张三"
+age = nget(data, "user.info.profile.age")    # 25
+phone = nget(data, "user.info.contact.phone", failed="未提供")  # "未提供"
+```
+
+### 5️⃣ 彩色输出
+
+```python
+from wauo.printer import Printer
+
+p = Printer()
+p.red("这是红色消息")
+p.green("这是绿色消息")
+p.yellow("这是黄色消息")
+p.blue("这是蓝色消息")
+```
+
+### 6️⃣ 线程池管理
+
+```python
+from wauo.pool import PoolWait
+
+def worker(task_id: int):
+    return f"Task {task_id} completed"
+
+pool = PoolWait(max_workers=10)
+
+for i in range(100):
+    pool.submit(worker, i)
+
+results = pool.get_results()
+for result in results:
+    print(result)
+```
+
+## 📚 详细文档
+
+更多详细信息请查看 [wauo/README.md](./wauo/README.md)，包含：
+
+- [🕷️ 爬虫模块详细指南](./wauo/README.md#1️⃣-爬虫模块)
+- [🗄️ 数据库操作详细指南](./wauo/README.md#2️⃣-数据库模块)
+- [🔧 工具函数详细指南](./wauo/README.md#3️⃣-工具函数)
+- [⚡ 线程池管理详细指南](./wauo/README.md#4️⃣-线程池管理)
+
+## 📝 更新日志
+
+### v0.9.4.2 (当前版本)
+
+**新增功能**
+
+- ✨ 数据库模块，支持 MySQL 和 PostgreSQL
+- ✨ `jsonp2json` 静态方法
+- ✨ `get_uuid` 和 base64 加解密方法
+
+**优化改进**
+
+- 🔄 爬虫默认保持会话状态
+- 🔄 `send` 方法增加 `delay` 参数支持
+- 📝 完善代码注释和文档
+
+### 历史版本
+
+- ✨ 线程池管理器支持上下文管理
+- ✨ `PoolWait` 和 `PoolMan` 线程池管理器
+- ✨ 装饰器函数集合
+- ✨ 彩色输出模块
+
+## 🤝 贡献指南
+
+欢迎各种形式的贡献！
+
+1. Fork 本仓库
+2. 创建你的特性分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交你的更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 开启一个 Pull Request
+
+## 📄 许可证
+
+本项目采用 **MIT License** - 详见 [LICENSE](LICENSE) 文件
+
+## 👤 关于作者
+
+- **姓名**: WangTuo
+- **邮箱**: [markadc@126.com](mailto:markadc@126.com)
+- **GitHub**: [markadc](https://github.com/markadc)
+- **项目地址**: [github.com/markadc/wauo](https://github.com/markadc/wauo)
+
+## 📞 联系与支持
+
+- 📮 遇到问题？[提交 Issue](https://github.com/markadc/wauo/issues)
+- 💬 有建议或想法？欢迎讨论！
+- 📖 需要帮助？查看详细文档
+
+## 🙏 致谢
+
+感谢所有为这个项目做出贡献的开发者和用户！
+
+---
+
+**如果觉得有帮助，请给一个 ⭐ Star！**
