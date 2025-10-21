@@ -1,0 +1,139 @@
+Metadata-Version: 2.4
+Name: django-qs-lsp
+Version: 1.4.4
+Summary: Language Server Protocol implementation for Django ORM operations
+Project-URL: Homepage, https://github.com/JBSK8NC/django-lsp
+Project-URL: Documentation, https://github.com/JBSK8NC/django-lsp#readme
+Project-URL: Repository, https://github.com/JBSK8NC/django-lsp
+Project-URL: Issues, https://github.com/JBSK8NC/django-lsp/issues
+Author-email: Django LSP Contributors <contributors@django-lsp.dev>
+License: MIT
+License-File: LICENSE
+Classifier: Development Status :: 3 - Alpha
+Classifier: Framework :: Django
+Classifier: Framework :: Django :: 4.2
+Classifier: Framework :: Django :: 5.0
+Classifier: Framework :: Django :: 5.1
+Classifier: Framework :: Django :: 5.2
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Text Editors :: Integrated Development Environments (IDE)
+Requires-Python: >=3.10
+Requires-Dist: build>=1.0.0
+Requires-Dist: django<6.0,>=4.2
+Requires-Dist: lsprotocol>=2023.0.0
+Requires-Dist: pygls<2.0,>=1.0.0
+Requires-Dist: tree-sitter-python>=0.20.0
+Requires-Dist: tree-sitter>=0.20.0
+Provides-Extra: build
+Requires-Dist: uv>=0.7.12; extra == 'build'
+Provides-Extra: dev
+Requires-Dist: black>=23.0.0; extra == 'dev'
+Requires-Dist: mypy>=1.0.0; extra == 'dev'
+Requires-Dist: pre-commit>=3.0.0; extra == 'dev'
+Requires-Dist: pytest-asyncio>=0.21.0; extra == 'dev'
+Requires-Dist: pytest-cov>=4.0.0; extra == 'dev'
+Requires-Dist: pytest-lsp>=0.3.0; extra == 'dev'
+Requires-Dist: pytest>=7.0.0; extra == 'dev'
+Requires-Dist: python-semantic-release>=10.0.0; extra == 'dev'
+Requires-Dist: ruff>=0.3.0; extra == 'dev'
+Requires-Dist: twine>=4.0.0; extra == 'dev'
+Description-Content-Type: text/markdown
+
+# Django ORM Language Server Protocol (LSP)
+
+[![CI](https://github.com/JBSK8NC/django-lsp/actions/workflows/ci.yml/badge.svg)](https://github.com/JBSK8NC/django-lsp/actions/workflows/ci.yml)
+
+A Language Server Protocol implementation for Django ORM that provides intelligent autocompletion for model queries, field lookups, and related field navigation.
+
+## Features
+
+- **Smart Completions**: Field lookups (`__exact`, `__contains`, `__startswith`) and related field navigation (`user__profile__bio`)
+- **Context-Aware**: Only shows completions for imported models
+- **Multi-App Support**: Works with Django projects that have multiple apps
+- **Django Integration**: Uses Django's built-in field lookup APIs
+
+## Installation
+
+```bash
+pip install django-qs-lsp
+```
+
+## Usage
+
+### Running the Server
+
+```bash
+django-qs-lsp-server
+```
+
+### Neovim Setup
+
+1. Install via Mason:
+   ```vim
+   :MasonInstall django-qs-lsp
+   ```
+
+2. Configure LSPConfig:
+   ```lua
+   require("lspconfig").django_lsp.setup({
+     filetypes = { "python" },
+     root_dir = require("lspconfig.util").root_pattern("manage.py"),
+   })
+   ```
+
+## Supported Contexts
+
+The LSP provides completions for:
+- `Model.objects.filter(...)`
+- `Model.objects.exclude(...)`
+- `Model.objects.get(...)`
+- `Model.objects.annotate(...)`
+- `Model.objects.order_by(...)`
+
+## Example
+
+```python
+from django.contrib.auth.models import User
+
+# Field completions
+User.objects.filter(username=  # Suggests: username=
+User.objects.filter(email__   # Suggests: email__exact, email__contains, etc.
+
+# Related field completions
+User.objects.filter(profile__  # Suggests: profile__bio, profile__user, etc.
+```
+
+## Configuration
+
+```bash
+# Context-aware completions (default: true)
+export DJANGO_LSP_CONTEXT_AWARE=true
+
+# Debug logging
+export DJANGO_LSP_DEBUG=true
+```
+
+## Development
+
+```bash
+# Install dependencies
+pip install -e ".[dev]"
+
+# Run tests
+python -m pytest tests/ -v
+
+# Code quality
+ruff check .
+mypy src/django_lsp/
+```
+
+## License
+
+MIT License# Test release trigger

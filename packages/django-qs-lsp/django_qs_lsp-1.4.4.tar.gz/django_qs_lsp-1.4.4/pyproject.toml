@@ -1,0 +1,236 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "django-qs-lsp"
+version = "1.4.4"
+description = "Language Server Protocol implementation for Django ORM operations"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Django LSP Contributors", email = "contributors@django-lsp.dev"}
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Text Editors :: Integrated Development Environments (IDE)",
+    "Framework :: Django",
+    "Framework :: Django :: 4.2",
+    "Framework :: Django :: 5.0",
+    "Framework :: Django :: 5.1",
+    "Framework :: Django :: 5.2",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "pygls>=1.0.0,<2.0",
+    "django>=4.2,<6.0",
+    "lsprotocol>=2023.0.0",
+    "build>=1.0.0",
+    "tree-sitter>=0.20.0",
+    "tree-sitter-python>=0.20.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.3.0",
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-lsp>=0.3.0",
+    "pytest-cov>=4.0.0",
+    "black>=23.0.0",
+    "mypy>=1.0.0",
+    "pre-commit>=3.0.0",
+    "twine>=4.0.0",
+    "python-semantic-release>=10.0.0",
+]
+build = [
+    "uv>=0.7.12",
+]
+
+[project.scripts]
+django-qs-lsp = "django_lsp.server:start_server"
+
+[project.urls]
+Homepage = "https://github.com/JBSK8NC/django-lsp"
+Documentation = "https://github.com/JBSK8NC/django-lsp#readme"
+Repository = "https://github.com/JBSK8NC/django-lsp"
+Issues = "https://github.com/JBSK8NC/django-lsp/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/django_lsp"]
+include = [
+    "src/django_lsp/py.typed",
+]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src",
+    "/README.md",
+    "/LICENSE",
+    "/pyproject.toml",
+]
+
+[tool.ruff]
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+    "venv",
+]
+
+# Same as Black.
+line-length = 88
+indent-width = 4
+
+# Assume Python 3.9
+target-version = "py312"
+
+[tool.ruff.lint]
+# Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`) codes by default.
+# Unlike Flake8, Ruff doesn't enable pycodestyle warnings (`W`) or
+# McCabe complexity (`C901`) by default.
+select = ["E4", "E7", "E9", "F"]
+ignore = []
+
+# Allow fix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+unfixable = []
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.format]
+# Like Black, use double quotes for strings.
+quote-style = "double"
+
+# Like Black, indent with spaces, rather than tabs.
+indent-style = "space"
+
+# Like Black, respect magic trailing commas.
+skip-magic-trailing-comma = false
+
+# Like Black, automatically detect the appropriate line ending.
+line-ending = "auto"
+
+# Enable auto-formatting of code examples in docstrings. Markdown,
+# reStructuredText code/literal blocks and doctests are all supported.
+#
+# This is currently disabled by default, but it is planned for this
+# to be opt-out in the future.
+docstring-code-format = false
+
+# Set the line length limit used when formatting code snippets in
+# docstrings.
+#
+# This only has an effect when the `docstring-code-format` setting is
+# enabled.
+docstring-code-line-length = "dynamic"
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = false
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = [
+    "django.*",
+    "pygls.*",
+    "lsprotocol.*",
+    "tree_sitter.*",
+    "tree_sitter_python.*",
+]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "django_lsp.server"
+disallow_untyped_decorators = false
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+ignore_missing_imports = true
+check_untyped_defs = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+pythonpath = ["src", "tests/mock_django_project"]
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "-v",
+    "--tb=short"
+]
+
+[tool.semantic_release]
+version_toml = ["pyproject.toml:project.version"]
+version_variables = ["src/django_lsp/__init__.py:__version__"]
+dist_path = "dist/"
+upload_to_pypi = true
+upload_to_release = true
+build_command = """
+python -m pip install -e '.[build]'
+uv lock --upgrade-package "$PACKAGE_NAME"
+git add uv.lock
+uv build
+"""
+changelog_file = "CHANGELOG.md"
+commit_message = "chore(release): {version} [skip ci]"
+commit_parser = "conventional"
+major_on_zero = false
+tag_format = "v{version}"
+prerelease_tag = "alpha"
+prerelease_branches = ["develop", "beta", "rc"]
+prerelease_channels = ["alpha", "beta", "rc"]
+
+[tool.semantic_release.changelog]
+exclude_commit_types = ["docs", "style", "refactor", "test", "ci"]
+exclude_commit_patterns = ["^Merge.*", "^Revert.*"]
+
+[tool.semantic_release.publish]
+dist_commits = true
+upload_to_pypi = true
+upload_to_release = true 
