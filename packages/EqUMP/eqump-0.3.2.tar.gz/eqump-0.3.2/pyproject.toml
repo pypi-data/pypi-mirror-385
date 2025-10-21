@@ -1,0 +1,50 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "EqUMP"
+version = "0.3.2"
+description = "IRT Equating for Unidimensional Mixed Format Test with Python"
+readme = "README.md"
+requires-python = ">=3.9, <3.14"
+license = {text = "MIT"}
+authors = [
+    { name = "JeeHun Sung", email = "jhun1023@naver.com" },
+    { name = "YoungJin Kim", email = "edu.yj.kim@gmail.com"},
+    { name = "Hoon Kim", email = "h000000nkim@gmail.com" },
+    { name = "YeJin Woo", email = "wooye6093@gmail.com" }
+]
+keywords = ["item response theory", "test equating", "linking", "mixed format test", "educational measurement"]
+dependencies = [
+    "matplotlib>=3.9.4",
+    "numpy>=2.0.2",
+    "pandas>=2.3.1",
+    "python-dotenv>=1.1.1",
+    "scipy>=1.13.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.4.1",
+    "black>=25.1.0",
+]
+
+[project.urls]
+Repository = "https://github.com/huni1023/EqUMP"
+
+[tool.pytest.ini_options]
+markers = [
+    "rbridge: tests that require R bridge / skip on dev CI"
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/EqUMP"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "src/EqUMP/**",
+  "pyproject.toml",
+  "README.*",
+  "LICENSE*"
+]
