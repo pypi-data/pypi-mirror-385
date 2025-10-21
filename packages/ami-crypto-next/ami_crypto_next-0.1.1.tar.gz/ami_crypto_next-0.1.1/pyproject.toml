@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ami-crypto-next"
+version = "0.1.1"
+description = "国家电网内网系统《电力采集系统2.0》的相关加解密支持"
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+authors = [{ name = "Author Name", email = "email@tmd.wtf" }]
+keywords = ["SM2", "SM3", "SM4", "AES", "crypto", "State Grid", "AMI", "SGCC"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Operating System :: OS Independent",
+  "Topic :: Security :: Cryptography",
+]
+
+# 这里只写“加解密包真实需要的依赖”
+dependencies = [
+  "gmssl>=3.2.2",
+  "pycryptodome>=3.20.0",
+]
+
+[tool.setuptools]
+# 告诉 setuptools：源码都在 src/ 里
+package-dir = {"" = "src"}
+# 这是“单文件模块”列表（没有包目录也能被打包）
+py-modules = ["ami_crypto_next"]
+
+[project.urls]
+Homepage = "https://example.com/"
