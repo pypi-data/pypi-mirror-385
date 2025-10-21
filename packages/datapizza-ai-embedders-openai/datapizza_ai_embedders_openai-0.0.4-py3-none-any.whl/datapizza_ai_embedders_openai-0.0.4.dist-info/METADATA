@@ -1,0 +1,31 @@
+Metadata-Version: 2.4
+Name: datapizza-ai-embedders-openai
+Version: 0.0.4
+Summary: OpenAI embedder for the datapizza-ai framework
+License: MIT
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Requires-Python: <4,>=3.10.0
+Requires-Dist: datapizza-ai-core>=0.0.1
+Requires-Dist: openai<3.0.0,>=2.0.0
+Description-Content-Type: text/markdown
+
+# OpenAI Embedder
+
+OpenAI embedder implementation.
+
+## Installation
+
+```bash
+pip install datapizza-ai-embedders-openai
+```
+
+## Usage
+
+```python
+from datapizza.embedders.openai import OpenAIEmbedder
+
+embedder = OpenAIEmbedder(api_key="your-openai-api-key")
+embeddings = embedder.embed("Hello world", model_name="text-embedding-ada-002")
+```
