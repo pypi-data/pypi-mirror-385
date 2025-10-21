@@ -1,0 +1,7 @@
+[console_scripts]
+novnc-supervisorctl = jupyter_tigervnc_novnc_proxy.hooks:supervisorctl
+novnc-supervisord = jupyter_tigervnc_novnc_proxy.hooks:supervisord
+novnc-wait = jupyter_tigervnc_novnc_proxy.hooks:wait_for_vnc_port
+
+[jupyter_serverproxy_servers]
+novnc = jupyter_tigervnc_novnc_proxy:run_app
