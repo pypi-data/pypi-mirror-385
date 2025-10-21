@@ -1,0 +1,19 @@
+[project]
+name = "delftsolutions-scan-your-trash"
+version = "1.0.0"
+authors = [
+	{ name="Max Maton", email="info@delftsolutions.nl" },
+]
+description = "A tool that extracts samples created using the Scan Your Trash app."
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+dependencies = ["av", "exiftool", "pil"]
+
+[project.urls]
+Homepage = "https://scanyourtrash.de"
+
+[build-system]
+requires = ["hatchling >= 1.12"]
+build-backend = "hatchling.build"
