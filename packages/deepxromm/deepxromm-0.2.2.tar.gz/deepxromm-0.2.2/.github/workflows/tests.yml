@@ -1,0 +1,84 @@
+name: Run test suite and publish to testPyPI
+run-name: Run tests for ${{ github.head_ref }}
+on: [pull_request]
+jobs:
+  tests:
+    name: Run unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          version: 0.8.22
+
+      - name: Set up python
+        run: uv python install
+
+      - name: Install dependencies
+        run: uv sync --locked --all-extras --dev
+
+      - name: Run pre-commit hooks
+        run: uv run pre-commit run -a
+
+      - name: Download source trial
+        run: curl -L https://github.com/sam-delap/deepxromm/releases/download/test-video-files/xma_dlc_care_package.zip -o tests/xma_dlc_care_package.zip
+
+      - name: Unpack source trial
+        run: unzip tests/xma_dlc_care_package.zip 
+
+      - name: Rename trial CSV
+        run: mv 30DEC2021_LF04_t01_c.csv trial.csv
+
+      - name: Rename cam1
+        run: mv 30DEC2021_LF04_t01_c_cam1.avi trial_cam1.avi 
+      
+      - name: Rename cam2
+        run: mv 30DEC2021_LF04_t01_c_cam2.avi trial_cam2.avi 
+
+      - name: Run unit tests in the environment
+        run: uv run tests/test_deepxromm.py
+
+  build:
+    name: Build package distribution
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.10"
+      - name: Install pypa/build
+        run: >-
+          python3 -m pip install build --user
+      - name: Build a binary wheel and source tarball
+        run: python3 -m build
+      - name: Store distribution packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+
+  publish-to-testpypi:
+    name: Publish Python distribution to TestPyPI
+    needs:
+    - build
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/deepxromm
+    permissions:
+      id-token: write  # IMPORTANT: mandatory for trusted publishing
+
+    steps:
+    - name: Download all the dists
+      uses: actions/download-artifact@v5
+      with:
+        name: python-package-distributions
+        path: dist/
+    - name: Publish distribution to TestPyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        repository-url: https://test.pypi.org/legacy/
+
