@@ -1,0 +1,61 @@
+[project]
+name = "mcp-kb"
+version = "0.4.0"
+description = "MCP server exposing a local markdown knowledge base"
+readme = "README.md"
+authors = [{ name = "LLM Maintainer" }]
+requires-python = ">=3.11"
+dependencies = [
+    "chardet>=5.2.0",
+    "httpx>=0.28.1",
+    "mcp[cli]>=1.15.0",
+    "pydantic>=2.11.9",
+]
+
+[project.scripts]
+mcp-kb = "mcp_kb.cli.main:main"
+mcp-kb-server = "mcp_kb.cli.main:main"
+mcp-kb-reindex = "mcp_kb.cli.reindex:main"
+
+[project.optional-dependencies]
+vector = [
+    "chromadb>=1.1.0",
+    "tiktoken>=0.11.0",
+    "langchain-text-splitters>=0.3.11",
+    "umap-learn>=0.5.9.post2",
+
+]
+vector-gpu = [
+    "mcp-kb[vector]",          # ensure vector stack is present
+    "onnxruntime-gpu",         # add GPU runtime
+]
+sentence-transformer=[
+    "mcp-kb[vector]",
+    "sentence-transformers>=5.1.1",
+]
+dev = [
+    "pytest>=8.4.2",
+    "pytest-cov>=6.2.1",
+]
+
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = { find = { where = ["src"] } }
+package-dir = { ""= "src" }
+include-package-data = true
+
+[tool.setuptools.package-data]
+"mcp_kb.data" = ["KNOWLEDBASE_DOC.md"]
+"mcp_kb.ui.assets" = ["index.html", "assets/**", "entries/**","ui/**"]
+
+[tool.uv]
+package = true
+
+[dependency-groups]
+dev = [
+    "mcp-kb[dev,vector-gpu]",
+]
