@@ -1,0 +1,4 @@
+::: platypus.EditGraph
+    :docstring:
+    :members:
+

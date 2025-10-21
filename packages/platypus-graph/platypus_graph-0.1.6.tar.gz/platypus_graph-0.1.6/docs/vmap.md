@@ -1,0 +1,4 @@
+::: platypus.VMap
+    :docstring:
+    :members:
+
