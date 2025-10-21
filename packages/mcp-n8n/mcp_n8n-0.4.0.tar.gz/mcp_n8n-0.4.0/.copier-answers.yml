@@ -1,0 +1,55 @@
+# Answers file for chora-base template tracking
+# This file tracks mcp-n8n's relationship to the chora-base template
+# Used for selective syncing of template improvements
+
+_src_path: gh:liminalcommons/chora-base
+_commit: v1.5.0
+
+# Project Metadata
+project_name: mcp-n8n
+project_slug: mcp-n8n
+package_name: mcp_n8n
+project_description: "MCP Gateway & Aggregator - Routes artifact creation to Chora Composer and integrates multiple MCP servers"
+project_version: "0.2.0"
+
+# Author Information
+author_name: Victor Piper
+author_email: victor@example.com
+github_username: liminalcommons
+
+# Python Configuration
+python_version: "3.11"
+
+# Project Type & Features
+project_type: mcp_server
+include_cli: true
+cli_framework: click
+
+# Chora Ecosystem Features
+include_memory_system: true
+include_agents_md: true
+
+# Testing & Quality
+include_tests: true
+test_coverage_threshold: 85
+include_pre_commit: true
+include_github_actions: true
+
+# Documentation
+include_contributing: true
+include_development_docs: true
+include_troubleshooting: true
+
+# License
+license: MIT
+
+# Development Tools
+include_justfile: true
+include_docker: false
+
+# Template Relationship Notes:
+# - mcp-n8n IS the exemplar that chora-base was extracted from
+# - This file tracks which template version we're conceptually "based on"
+# - Use for selective sync of template improvements:
+#   copier update --dry-run gh:liminalcommons/chora-base
+# - Do NOT auto-apply all changes - cherry-pick useful improvements only

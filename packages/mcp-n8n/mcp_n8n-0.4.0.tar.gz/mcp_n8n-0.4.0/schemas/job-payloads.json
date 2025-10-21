@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Media Processor Job Payloads",
+  "description": "Contracts for job queue entries dispatched to n8n workflows.",
+  "type": "object",
+  "properties": {
+    "segment_audio": {
+      "type": "object",
+      "required": ["job_id", "scenario_id", "source_path"],
+      "properties": {
+        "job_id": {
+          "type": "string",
+          "description": "Unique identifier for the queued job (UUID or bundle-based)."
+        },
+        "scenario_id": {
+          "type": "string",
+          "enum": ["VS-MP-001"],
+          "description": "Scenario requesting the task."
+        },
+        "source_path": {
+          "type": "string",
+          "description": "Absolute path or URI to the OBS recording."
+        },
+        "priority": {
+          "type": "string",
+          "enum": ["low", "normal", "high"],
+          "default": "normal",
+          "description": "Optional priority indicator."
+        },
+        "metadata": {
+          "type": "object",
+          "description": "Additional metadata (timestamps, track map, file size).",
+          "properties": {
+            "recorded_at": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Timestamp derived from filename or metadata."
+            },
+            "file_size_mb": {
+              "type": "number",
+              "minimum": 0
+            },
+            "audio_tracks": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Identifiers for speech-bearing tracks."
+            }
+          }
+        },
+        "target_config": {
+          "type": "object",
+          "description": "Optional override for output directories or storage classes.",
+          "properties": {
+            "segments_dir": {
+              "type": "string"
+            },
+            "stt_ready_dir": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

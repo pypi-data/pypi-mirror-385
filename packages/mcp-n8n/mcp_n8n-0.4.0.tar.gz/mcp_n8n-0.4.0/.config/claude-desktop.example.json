@@ -1,0 +1,49 @@
+{
+  "mcpServers": {
+    "mcp-n8n-stable": {
+      "comment": "STABLE: Uses published package from PyPI",
+      "command": "mcp-n8n",
+      "args": [],
+      "env": {
+        "ANTHROPIC_API_KEY": "your_key_here",
+        "CODA_API_KEY": "your_key_here",
+        "MCP_N8N_LOG_LEVEL": "INFO"
+      }
+    },
+    "mcp-n8n-dev": {
+      "comment": "DEV: Uses local editable install (pip install -e)",
+      "command": "/Users/victorpiper/code/mcp-n8n/.venv/bin/python",
+      "args": ["-m", "mcp_n8n.gateway"],
+      "cwd": "/Users/victorpiper/code/mcp-n8n",
+      "env": {
+        "ANTHROPIC_API_KEY": "your_key_here",
+        "CODA_API_KEY": "your_key_here",
+        "MCP_N8N_LOG_LEVEL": "DEBUG",
+        "MCP_N8N_DEBUG": "1",
+        "PYTHONPATH": "/Users/victorpiper/code/mcp-n8n/src"
+      }
+    }
+  },
+  "_instructions": {
+    "usage": [
+      "Copy this file to ~/Library/Application Support/Claude/claude_desktop_config.json",
+      "Enable ONLY ONE server at a time:",
+      "  - For stable: keep mcp-n8n-stable, comment out mcp-n8n-dev",
+      "  - For dev: keep mcp-n8n-dev, comment out mcp-n8n-stable",
+      "Restart Claude Desktop after changes"
+    ],
+    "toggle_to_dev": [
+      "1. Ensure dev install: cd /path/to/mcp-n8n && pip install -e .[dev]",
+      "2. Comment out mcp-n8n-stable section",
+      "3. Uncomment mcp-n8n-dev section",
+      "4. Update paths to match your system",
+      "5. Restart Claude Desktop"
+    ],
+    "toggle_to_stable": [
+      "1. Comment out mcp-n8n-dev section",
+      "2. Uncomment mcp-n8n-stable section",
+      "3. Restart Claude Desktop"
+    ],
+    "rollback": "If dev breaks, toggle back to stable following toggle_to_stable steps"
+  }
+}

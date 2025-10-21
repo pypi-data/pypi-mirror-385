@@ -1,0 +1,77 @@
+# Event-to-Workflow Mappings for mcp-n8n
+#
+# This file defines which workflows are triggered by which gateway events.
+# The EventWorkflowRouter reads this file and automatically routes events
+# to the appropriate workflows.
+#
+# Hot Reload: This file is watched for changes. Modifications are detected
+# and loaded automatically without restarting the gateway.
+
+mappings:
+  # Mapping 1: Tool call failures trigger error alert workflow
+  - event_pattern:
+      type: "gateway.tool_call"
+      status: "failure"
+    workflow:
+      id: "error-alert-workflow"
+      namespace: "n8n"  # Optional: which backend to use
+      parameters:
+        # Template parameters using {{ event.* }} syntax
+        error: "{{ event.data.error }}"
+        tool: "{{ event.data.tool_name }}"
+        trace_id: "{{ event.trace_id }}"
+        timestamp: "{{ event.timestamp }}"
+
+  # Mapping 2: All tool calls are logged (partial pattern - matches any status)
+  - event_pattern:
+      type: "gateway.tool_call"
+    workflow:
+      id: "tool-call-logger"
+      namespace: "n8n"
+      parameters:
+        tool: "{{ event.data.tool_name }}"
+        status: "{{ event.status }}"
+        duration: "{{ event.data.duration_ms }}"
+
+  # Mapping 3: Backend status changes monitored for chora-composer
+  - event_pattern:
+      type: "gateway.backend_status"
+      backend: "chora-composer"
+    workflow:
+      id: "chora-status-monitor"
+      namespace: "n8n"
+      parameters:
+        backend: "{{ event.backend }}"
+        status: "{{ event.data.status }}"
+        message: "{{ event.data.message }}"
+
+# Pattern Matching Rules:
+#
+# 1. All fields in event_pattern must be present in the event
+# 2. If event has extra fields not in pattern, it still matches
+# 3. First matching pattern wins (order matters!)
+# 4. Parameters are templated using Jinja2 syntax
+# 5. Missing fields in templates result in empty string or None
+#
+# Example Event:
+#   {
+#     "type": "gateway.tool_call",
+#     "status": "failure",
+#     "backend": "chora-composer",
+#     "trace_id": "abc123",
+#     "timestamp": "2025-10-20T10:00:00Z",
+#     "data": {
+#       "tool_name": "generate_content",
+#       "error": "Template not found",
+#       "duration_ms": 150
+#     }
+#   }
+#
+# Matches: Mapping 1 (type + status match exactly)
+# Triggers: error-alert-workflow
+# Parameters: {
+#   "error": "Template not found",
+#   "tool": "generate_content",
+#   "trace_id": "abc123",
+#   "timestamp": "2025-10-20T10:00:00Z"
+# }
