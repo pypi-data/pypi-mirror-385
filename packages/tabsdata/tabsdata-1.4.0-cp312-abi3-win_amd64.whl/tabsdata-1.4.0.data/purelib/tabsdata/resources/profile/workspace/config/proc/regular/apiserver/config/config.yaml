@@ -1,0 +1,46 @@
+#
+# Copyright 2024 Tabs Data Inc.
+#
+
+# storage_url: null # by default given by supervisor
+addresses:
+  - 127.0.0.1:2457
+internal_addresses:
+  - 127.0.0.1:2458
+agent_addresses:
+  - 127.0.0.1:2459
+password:
+  algorithm: argon2id
+  version: 19
+  memory_cost_mib: 20
+  time_cost: 2
+  parallelism_cost: 1
+jwt:
+  #secret: null # by default an UUID is generated
+  access_token_expiration: 3600
+request_timeout: 60
+database:
+  #  url: null # by default is given as parameter by supervisor
+  min_connections: 1
+  max_connections: 10
+  acquire_timeout: 30
+  max_lifetime: 3600
+  idle_timeout: 60
+  test_before_acquire: true
+storage:
+  mounts:
+    - id: ROOT
+      path: /
+      uri: file://${env:TD_URI_REPOSITORY}/storage/data/
+    # IMPORTANT: /bundles must be a local mount.
+    - id: BUNDLES
+      path: /bundles
+      uri: file://${env:TD_URI_REPOSITORY}/storage/bundles/
+
+#    # Mount configuration sample:
+#    - id: PREFIX
+#      path: /foo
+#      uri: file://${env:TD_URI_REPOSITORY}/storage/data/
+#      options:
+#        - option_1: value1
+#          option_2: value2

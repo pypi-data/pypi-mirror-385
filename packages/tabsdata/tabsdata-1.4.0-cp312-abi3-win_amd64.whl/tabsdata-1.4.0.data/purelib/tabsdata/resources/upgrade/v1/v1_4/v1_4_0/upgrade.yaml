@@ -1,0 +1,54 @@
+#
+# Copyright 2025 Tabs Data Inc.
+#
+
+instance:
+  - path: [ "controllers", "init", "workers", "name:apiserver-mounts-options-extractor" ]
+    action: insert_sibling
+    position: after
+    data:
+      name: aiagent-configuration-resolver
+      kind: processor
+      location: system
+      program: tdcfgrsv
+      parameters:
+        - input: ${TD_PATH_CONFIG}/proc/regular/aiagent/config/config.yaml
+        - strategies: env,hashicorp
+        - hashicorp-url: ""
+        - hashicorp-token: ""
+        - hashicorp-namespace: ""
+        - env-hashicorp-url: ""
+        - env-hashicorp-token: ""
+        - env-hashicorp-namespace: ""
+      set-state:
+        state-type: blob
+        state-key: aiagent-configuration
+  - path: ["controllers", "regular", "workers", "name:apiserver"]
+    action: insert_sibling
+    position: after
+    data:
+      name: aiagent
+      kind: processor
+      runtime:
+        kind: python
+      location: system
+      program: aiagent
+      parameters:
+        - log-config-file: ${TD_PATH_CONFIG}/proc/regular/aiagent/config/log.yaml
+      arguments:
+        - logs-folder
+      get-states:
+        - state-type: blob
+          state-key: aiagent-configuration
+  - path: [ "controllers", "regular", "workers", "name:janitor", "parameters", "instance" ]
+    action: insert_sibling
+    position: before
+    data:
+      log-config-file: ${TD_PATH_CONFIG}/proc/regular/janitor/config/log.yaml
+apiserver:
+  - path: ["internal_addresses"]
+    action: insert_sibling
+    position: after
+    data:
+      agent_addresses:
+        - 127.0.0.1:2459
