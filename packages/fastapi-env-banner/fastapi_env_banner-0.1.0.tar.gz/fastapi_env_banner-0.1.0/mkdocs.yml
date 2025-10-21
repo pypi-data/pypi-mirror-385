@@ -1,0 +1,81 @@
+site_name: FastAPI Environment Banner
+site_description: A lightweight and simple library for adding visual environment banners to FastAPI applications
+site_author: PinnLabs
+site_url: https://pinnlabs.github.io/fastapi-env-banner/
+
+repo_name: pinnlabs/fastapi-env-banner
+repo_url: https://github.com/pinnlabs/fastapi-env-banner
+edit_uri: edit/master/docs/
+
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: green
+      accent: green
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: green
+      accent: green
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+  icon:
+    repo: fontawesome/brands/github
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - admonition
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - attr_list
+  - md_in_html
+  - tables
+
+plugins:
+  - search
+
+nav:
+  - Get Started: index.md
+  - Installation: installation.md
+  - Usage:
+      - Quick Start: usage/quick-start.md
+      - Configuration: usage/configuration.md
+      - Examples: usage/examples.md
+  - API Reference:
+      - EnvBannerConfig: api/config.md
+      - EnvBannerMiddleware: api/middleware.md
+      - Swagger Setup: api/swagger.md
+  - Contributing: contributing.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/pinnlabs
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/project/fastapi-env-banner/
