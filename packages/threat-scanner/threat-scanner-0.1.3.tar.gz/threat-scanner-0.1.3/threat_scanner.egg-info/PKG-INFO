@@ -1,0 +1,193 @@
+Metadata-Version: 2.1
+Name: threat-scanner
+Version: 0.1.3
+Summary: Detect threats in videos using MovieNet locally or via Vertex AI.
+Home-page: https://github.com/threatscan-ai/threatscan
+Author: Ogo-Oluwasubomi Popoola
+Author-email: 52616005+popoolasubomi@users.noreply.github.com
+License: MIT
+Project-URL: Bug Tracker, https://github.com/threatscan-ai/threatscan/issues
+Project-URL: Source Code, https://github.com/threatscan-ai/threatscan
+Project-URL: Documentation, https://github.com/threatscan-ai/threatscan/blob/main/README.md
+Keywords: vertex ai,video analysis,threat detection,action recognition,movienet,google cloud
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Security
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# Threat Scanner (`threat_scanner`)
+
+[![PyPI version](https://badge.fury.io/py/threat-scanner.svg)](https://badge.fury.io/py/threat-scanner) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+A lightweight Python client for detecting threats in videos using a deployed Google Cloud Vertex AI action recognition endpoint.
+
+This package simplifies the process of sending videos to a live Vertex AI endpoint, interpreting the model's predictions, and triggering alerts, making it easy to integrate powerful video analysis into your applications.
+
+## The Cloud-First Workflow
+
+This tool is designed to be the client-side component in a cloud-based machine learning pipeline. The intended workflow is simple:
+
+1. **Deploy a Model on Vertex AI:** Use Google Cloud's Model Garden to deploy a pre-trained video model (or a model you have fine-tuned).
+2. **Configure threat_scanner:** Point this package to your live endpoint.
+3. **Run Inference:** Use the package to send video URIs to your endpoint and get back meaningful, human-readable results.
+
+## Getting Started: A Step-by-Step Guide
+
+### Step 1: Deploy a Model Endpoint on Vertex AI
+
+Before you can use this package, you need a live model endpoint. The easiest way to get one is by deploying a pre-trained model from the Google Cloud Model Garden.
+
+1. **Go to the MovieNet Model Page:**
+
+- Click this link to go directly to the recommended starter model in the Vertex AI Model Garden (ensure you are logged into your Google Cloud project):
+- [Deploy MovieNet VCN Model](https://console.cloud.google.com/vertex-ai/publishers/google/model-garden/tfvision-movinet-vcn?project=threatscan-475623)
+
+2. **Deploy the Model:**
+
+- Follow the on-screen instructions to deploy the model to a new endpoint.
+- You will need to choose a machine type and an accelerator. A good starting point is an n1-standard-4 machine with 1 NVIDIA Tesla T4 GPU.
+- The deployment process will take 10-20 minutes. Once it's complete, you will have a live endpoint with a unique Endpoint ID. Copy this numeric ID.
+
+### Step 2: Install the package
+
+- Run the following command in your terminal and follow the browser prompts to log in:
+
+```bash
+pip install threat-scanner
+```
+
+This will install the package and its core dependencies.
+
+**Dependencies:**
+
+- `google-cloud-aiplatform`: Required only for cloud inference.
+- `google-auth`: Required only for cloud authentication.
+- `tensorflow`: Required only for local inference (can be large).
+- `sendgrid`: Required only for email alerts.
+- `numpy`: General numerical operations.
+- `opencv-python-headless`: Required for video preprocessing in local inference (Note: Full preprocessing logic is currently a placeholder within the package).
+
+See `requirements.txt` in the source repository for specific versions. You may only need to install dependencies relevant to your chosen inference mode (local vs. cloud).
+
+### Step 3: Authenticate Your Local Environment
+
+Your script needs permission to securely access your Google Cloud project.
+
+- Run the following command in your terminal and follow the browser prompts to log in:
+
+```bash
+gcloud auth application-default login
+```
+
+### Step 4: Use threat_scanner to Get Predictions
+
+Now you can use the package to test your new endpoint.
+
+1. Create a config.json file with your endpoint details:
+
+```json
+{
+  "cloud_params": {
+    "project_id": "PROJECT_ID",
+    "region": "REGION",
+    "endpoint_id": "YOUR_ENDPOINT_ID_HERE",
+    "gcs_uri": "gs://your-bucket-name/your-test-video.mp4",
+    "timeSegmentStart": "0s",
+    "timeSegmentEnd": "10s"
+  },
+  "email_params": {
+    "api_key": "YOUR_SENDGRID_API_KEY",
+    "recipient_email": "alerts-recipient@example.com",
+    "sender_email": "your-verified-sender@example.com"
+  },
+  "threat_classes": ["shooting rifle", "setting fire", "rioting", "smashing"]
+}
+```
+
+- Replace `PROJECT_ID`, `REGION`, `YOUR_ENDPOINT_ID_HERE`, `gcs_uri` with the details from Step 1.
+- You can also modify `timeSegmentStart` and `timeSegmentEnd`
+- Ensure the video at gcs_uri exists in your Google Cloud Storage.
+- For sending emails, sign up with [Send Grid](https://sendgrid.com/en-us/solutions/email-api) to get an API and valid sender email
+- `threat_classes` overrides actions from our labels we perceive as threat
+
+Write your Python script:
+
+2. from threat_scanner import ThreatDetector
+
+```python
+try: # Initialize the detector by pointing it to your config file
+detector = ThreatDetector(config_path="config.json")
+
+    # Run detection
+    label, confidence, is_threat = detector.detect()
+
+    if label:
+        print(f"Analysis complete. Top prediction: '{label}' ({confidence*100:.2f}%)")
+        if is_threat:
+            print("Result: A potential threat was detected and an alert was sent.")
+
+except Exception as e:
+print(f"An error occurred: {e}")
+```
+
+## Understanding Label Maps
+
+Action recognition models output a list of scores, where each position in the list corresponds to a specific action. A label map is required to translate a position (e.g., index `197`) into a human-readable name (e.g., `"lighting fire"`).
+
+- **Default Behavior:** By default, this package uses a built-in kinetics_600_labels.json file, which works perfectly with the pre-trained MovieNet model from the Model Garden link above. You can view the contents of this default map here.
+
+- **Custom Models:** If you have fine-tuned a model on your own set of classes, you must provide a path to your own custom label map. The file must be a JSON object mapping the class index (as a string) to the class name.
+
+Example `my_custom_labels.json`:
+
+```json
+{
+  "0": "custom_action_one",
+  "1": "custom_action_two",
+  "2": "another_action"
+}
+```
+
+You would then specify this in your config.json:
+
+```json
+{
+  "cloud_params": {},
+  "label_map_path": "/path/to/my_custom_labels.json"
+}
+```
+
+## Important Considerations
+
+- **Permissions:** The service account running your Vertex AI Endpoint (service-[PROJECT_NUMBER]@gcp-sa-aiplatform.iam.gserviceaccount.com) needs the "Storage Object Viewer" role to access videos in your GCS bucket.
+
+- **Costs:** Running a Vertex AI Endpoint incurs costs based on machine type and uptime. Remember to shut down or undeploy endpoints when you are not using them to avoid unnecessary charges. 💰
+
+- **Cloud Costs:** Using the Vertex AI endpoint incurs Google Cloud costs based on machine type, accelerator usage, and endpoint uptime. 💰 Remember to shut down endpoints when not in use if cost is a concern.
+
+- **Authentication (Cloud):** Cloud inference relies on Application Default Credentials (ADC). The library checks for these credentials when cloud_params are provided. If they are not found, it will attempt to guide the user to run gcloud auth application-default login in their terminal. Authentication must be completed before the prediction request can succeed.
+
+- **Threat Definition:** The default list of THREAT_CLASSES in utils.py is a sample based on potentially harmful actions from the Kinetics dataset. You should review and customize this list (via config file or by modifying the code) to match your specific definition of a "threat".
+
+- **Local Inference:** This version of the package is focused exclusively on cloud inference and does not support local model execution.
+
+## For Developers
+
+- Clone the source repository.
+- Create and activate a Python virtual environment.
+- Install dependencies: pip install -r requirements.txt
+- Install the package in editable mode: pip install -e .
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request on the project repository.
