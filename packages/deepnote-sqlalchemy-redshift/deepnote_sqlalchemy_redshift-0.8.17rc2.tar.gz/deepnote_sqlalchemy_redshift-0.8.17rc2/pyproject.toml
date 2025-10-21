@@ -1,0 +1,65 @@
+[build-system]
+requires = ["hatchling", "uv-dynamic-versioning"]
+build-backend = "hatchling.build"
+
+[project]
+name = "deepnote-sqlalchemy-redshift"
+dynamic = ["version"]
+description = "Amazon Redshift Dialect for sqlalchemy"
+readme = "README.rst"
+requires-python = ">=3.9,<3.14"
+license = "MIT"
+authors = [
+    {name = "Matt George", email = "mgeorge@gmail.com"},
+]
+maintainers = [
+    {name = "Deepnote", email = "product-engineers@deepnote.com"},
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+dependencies = [
+    "SQLAlchemy>=1.4.15,<3.0.0",
+    "packaging",
+]
+
+[project.urls]
+Homepage = "https://github.com/deepnote/sqlalchemy-redshift"
+
+[project.entry-points."sqlalchemy.dialects"]
+redshift = "sqlalchemy_redshift.dialect:RedshiftDialect_psycopg2"
+"redshift.psycopg2" = "sqlalchemy_redshift.dialect:RedshiftDialect_psycopg2"
+"redshift.redshift_connector" = "sqlalchemy_redshift.dialect:RedshiftDialect_redshift_connector"
+
+[tool.hatch.version]
+source = "uv-dynamic-versioning"
+
+[tool.uv-dynamic-versioning]
+fallback-version = "0.0.1"
+pattern = "default-unprefixed"
+vcs = "git"
+style = "pep440"
+
+[tool.hatch.build.targets.wheel]
+packages = ["sqlalchemy_redshift"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"sqlalchemy_redshift/redshift-ca-bundle.crt" = "sqlalchemy_redshift/redshift-ca-bundle.crt"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "sqlalchemy_redshift/",
+    "README.rst",
+    "CHANGES.rst",
+    "LICENSE",
+]

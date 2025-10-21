@@ -1,0 +1,112 @@
+Metadata-Version: 2.4
+Name: deepnote-sqlalchemy-redshift
+Version: 0.8.17rc2
+Summary: Amazon Redshift Dialect for sqlalchemy
+Project-URL: Homepage, https://github.com/deepnote/sqlalchemy-redshift
+Author-email: Matt George <mgeorge@gmail.com>
+Maintainer-email: Deepnote <product-engineers@deepnote.com>
+License-Expression: MIT
+License-File: LICENSE
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Requires-Python: <3.14,>=3.9
+Requires-Dist: packaging
+Requires-Dist: sqlalchemy<3.0.0,>=1.4.15
+Description-Content-Type: text/x-rst
+
+sqlalchemy-redshift
+===================
+
+Amazon Redshift dialect for SQLAlchemy.
+
+Installation
+------------
+
+The package is available on PyPI::
+
+    pip install sqlalchemy-redshift
+
+.. warning::
+
+    This dialect requires either ``redshift_connector`` or ``psycopg2``
+    to work properly. It does not provide
+    it as required, but relies on you to select the distribution you need:
+
+    * psycopg2 - standard distribution of psycopg2, requires compilation so few system dependencies are required for it
+    * psycopg2-binary - already compiled distribution (no system dependencies are required)
+
+    See `Psycopg2's binary install docs <http://initd.org/psycopg/docs/install.html#binary-install-from-pypi>`_
+    for more context on choosing a distribution.
+
+Usage
+-----
+The DSN format is similar to that of regular Postgres::
+
+    >>> import sqlalchemy as sa
+    >>> sa.create_engine('redshift+psycopg2://username@host.amazonaws.com:5439/database')
+    Engine(redshift+psycopg2://username@host.amazonaws.com:5439/database)
+
+See the `RedshiftDDLCompiler documentation
+<https://sqlalchemy-redshift.readthedocs.org/en/latest/ddl-compiler.html>`_
+for details on Redshift-specific features the dialect supports.
+
+Running Tests
+-------------
+Tests are ran via tox and can be run with the following command::
+
+    $ tox
+
+However, this will not run integration tests unless the following
+environment variables are set:
+
+* REDSHIFT_HOST
+* REDSHIFT_PORT
+* REDSHIFT_USERNAME
+* PGPASSWORD (this is the redshift instance password)
+* REDSHIFT_DATABASE
+* REDSHIFT_IAM_ROLE_ARN
+
+Note that the IAM role specified will need to be associated with
+redshift cluster and have the correct permissions to create databases
+and tables as well drop them. Exporting these environment variables in
+your shell and running ``tox`` will run the integration tests against
+a real redshift instance. Practice caution when running these tests
+against a production instance.
+
+Continuous Integration (CI)
+---------------------------
+
+Project CI is built using AWS CodePipeline and CloudFormation. Please see the ``ci/`` folder and included ``README.txt``
+for details on how to spin up the project's CI.
+
+Releasing
+---------
+
+To perform a release, you will need to be an admin for the project on
+GitHub and on PyPI. Contact the maintainers if you need that access.
+
+You will need to have a `~/.pypirc` with your PyPI credentials and
+also the following settings::
+
+    [zest.releaser]
+    create-wheels = yes
+
+To perform a release, run the following::
+
+    python -m venv ~/.virtualenvs/dist
+    workon dist
+    pip install -U pip setuptools wheel
+    pip install -U tox zest.releaser
+    fullrelease  # follow prompts, use semver ish with versions.
+
+The releaser will handle updating version data on the package and in
+CHANGES.rst along with tagging the repo and uploading to PyPI.
