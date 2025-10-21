@@ -1,0 +1,112 @@
+# CovetPy Development Dependencies
+# ================================
+#
+# Sprint 1 Remediation: Updated dependencies with security fixes
+# Version: 0.2.0-sprint1
+# Updated: 2025-10-11
+#
+# This file contains all dependencies needed for CovetPy development.
+# The core framework maintains zero runtime dependencies, but development
+# requires various tools for code quality, testing, and productivity.
+#
+# PHILOSOPHY: These are development-time tools only. They do NOT affect
+# the zero-dependency guarantee of the core framework.
+#
+# Install with: pip install -r requirements-dev.txt
+
+# Code Quality and Formatting
+# ============================
+black>=25.9.0,<26.0.0            # Code formatter
+isort>=6.0.1,<7.0.0              # Import sorter
+ruff>=0.14.0,<1.0.0              # Fast Python linter (replaces flake8, pylint)
+mypy>=1.7.1,<2.0.0               # Static type checker
+pre-commit>=3.5.0,<4.0.0         # Git hooks for code quality
+pylint>=3.0.0,<4.0.0             # Additional static analysis
+
+# Development Tools
+# =================
+ipython>=8.12.3,<9.0.0           # Enhanced Python shell
+ipdb>=0.13.0,<1.0.0              # Debugger
+rich>=14.2.0,<15.0.0             # Rich text and beautiful formatting
+typer[all]>=0.9.0,<1.0.0         # CLI framework for dev tools
+click>=8.3.0,<9.0.0              # Alternative CLI tool
+pydantic>=2.12.0,<3.0.0          # For configuration validation
+
+# Documentation
+# =============
+mkdocs>=1.5.3,<2.0.0             # Documentation generator
+mkdocs-material>=9.5.32,<10.0.0  # Material theme (SECURITY FIXED: CVE XSS)
+mkdocstrings[python]>=0.24.0,<1.0.0  # Python API docs
+sphinx>=7.1.0,<8.0.0             # Alternative docs generator
+sphinx-rtd-theme>=1.3.0,<2.0.0   # Read the Docs theme
+
+# Development HTTP Tools
+# ======================
+httpx>=0.28.1,<1.0.0             # Modern HTTP client for testing APIs
+requests>=2.32.5,<3.0.0          # HTTP library for scripts (SECURITY FIXED: CVE-2024-47081, CVE-2024-35195)
+curl-cffi>=0.5.0,<1.0.0          # Fast HTTP client
+aiohttp>=3.12.14,<4.0.0          # Async HTTP client (SECURITY FIXED: Multiple CVEs)
+urllib3>=2.5.0,<3.0.0            # HTTP library (SECURITY FIXED: GHSA-48p4-8xcf-vxj5, GHSA-pq67-6m6q-mj2v)
+
+# Development Database Tools
+# ==========================
+# NOTE: These are for local development only, not production
+sqlalchemy>=2.0.43,<3.0.0        # ORM for development utilities
+alembic>=1.16.5,<2.0.0           # Database migrations
+asyncpg>=0.30.0,<1.0.0           # PostgreSQL driver for dev testing
+redis>=6.4.0,<7.0.0              # Redis client for dev testing (SECURITY FIXED)
+mysql-connector-python>=9.1.0,<10.0.0  # MySQL connector (SECURITY FIXED: CVE-2024-21272)
+
+# Performance Profiling
+# ======================
+py-spy>=0.4.1,<1.0.0             # CPU profiler
+memory-profiler>=0.61.0,<1.0.0   # Memory profiler
+psutil>=7.1.0,<8.0.0             # System monitoring (SECURITY FIXED)
+line-profiler>=4.0.0,<5.0.0      # Line-by-line profiler
+
+# Development Utilities
+# =====================
+watchdog>=6.0.0,<7.0.0           # File system monitoring
+python-dotenv>=1.1.1,<2.0.0      # Environment variable management
+freezegun>=1.2.2,<2.0.0          # Time mocking for development
+factory-boy>=3.3.3,<4.0.0        # Test data generation
+
+# Jupyter/Notebook Support
+# ========================
+jupyter>=1.0.0,<2.0.0            # Jupyter notebook
+notebook>=7.0.0,<8.0.0           # Jupyter notebook server
+jupyterlab>=4.0.0,<5.0.0         # JupyterLab interface
+
+# Optional: Advanced Development Tools
+# ====================================
+# Uncomment these if needed for specific development workflows:
+#
+# docker>=6.1.0                  # Docker client for container development
+# pytest-xvfb>=3.0.0             # Virtual display for GUI testing  
+# selenium>=4.11.0               # Browser automation for E2E testing
+# playwright>=1.36.0             # Modern browser automation
+# locust>=2.16.0                 # Load testing framework
+
+# Development Security Tools
+# ===========================
+bandit>=1.8.6,<2.0.0             # Security linter (SECURITY FIXED: SQL injection detection)
+safety>=3.6.2,<4.0.0             # Dependency vulnerability scanner (SECURITY FIXED)
+semgrep>=1.139.0,<2.0.0          # Static analysis security scanner
+
+# Optional: Language Server Protocol (LSP) Tools
+# ==============================================
+# For enhanced IDE support:
+# pylsp[all]>=1.7.0              # Python LSP server
+# python-lsp-server[all]>=1.7.0  # Alternative LSP server
+
+# Git and Version Control Tools
+# ==============================
+gitpython>=3.1.45,<4.0.0         # Git interface for Python scripts
+
+# Testing Dependencies (Included for convenience)
+# ================================================
+pytest>=8.4.2,<9.0.0             # Primary testing framework
+pytest-asyncio>=1.2.0,<2.0.0     # Async test support
+pytest-cov>=7.0.0,<8.0.0         # Coverage reporting
+pytest-mock>=3.15.1,<4.0.0       # Mocking utilities
+pytest-benchmark>=5.1.0,<6.0.0   # Performance benchmarking
