@@ -1,0 +1,98 @@
+Metadata-Version: 2.4
+Name: imapdump
+Version: 0.2.0
+Summary: A cli utility for dumping emails as EML files to a folder.
+Author-email: das-kaesebrot <49565683+das-kaesebrot@users.noreply.github.com>
+Project-URL: Homepage, https://github.com/das-kaesebrot/imapdump
+Project-URL: Bug Tracker, https://github.com/das-kaesebrot/imapdump/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: System Administrators
+Classifier: License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)
+Classifier: Environment :: Console
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+Requires-Dist: dacite==1.8.1; python_version >= "3.6"
+Requires-Dist: greenlet==3.2.4; python_version >= "3.9"
+Requires-Dist: imapclient==3.0.1; python_full_version >= "3.7.0"
+Requires-Dist: pyyaml==6.0.3; python_version >= "3.8"
+Requires-Dist: sqlalchemy==2.0.44; python_version >= "3.7"
+Requires-Dist: typing-extensions==4.15.0; python_version >= "3.9"
+Requires-Dist: yamlargparse==1.30.0; python_version >= "3.5"
+
+# imapdump
+[![Upload Python Package](https://github.com/das-kaesebrot/imapdump/actions/workflows/python-publish.yml/badge.svg)](https://github.com/das-kaesebrot/imapdump/actions/workflows/python-publish.yml)
+
+`imapdump` is a cli based tool to export imap accounts to a local folder.
+
+## Installation
+
+Install the module from [PyPI](https://pypi.org/project/imapdump/):
+```bash
+pip install imapdump
+```
+
+## Usage
+Launch the application via the included command `imapdump`.
+
+```bash
+user@machine:~$ imapdump -h
+usage: dump.py [-h] [-l {critical,fatal,error,warn,info,debug}] [--host HOST] [-f DATABASE_FILE] [-p PORT] [-u USERNAME]
+                   [--password PASSWORD] [--encryption-mode {none,ssl,starttls}] [--folder-regex FOLDER_REGEX] [--force-dump]
+                   [--dump-folder DUMP_FOLDER] [--config CONFIG]
+
+Dump IMAP accounts to a local directory
+
+options:
+  -h, --help            show this help message and exit
+  -l, --logging {critical,fatal,error,warn,info,debug}
+                        set the log level (default: info)
+  --host HOST           Hostname of the IMAP server (default: None)
+  -f, --file DATABASE_FILE
+                        Database file (default: None)
+  -p, --port PORT       Port of the IMAP server (default: 993)
+  -u, --username USERNAME
+                        Username for the IMAP account (default: None)
+  --password PASSWORD   Password of the IMAP account (default: None)
+  --encryption-mode {none,ssl,starttls}
+                        IMAP encryption mode (default: ssl)
+  --folder-regex FOLDER_REGEX
+                        Pattern to match against for including folders (default: ^.*$)
+  --force-dump          Force dump all matching messages without checking against existing database (default: False)
+  --dump-folder DUMP_FOLDER
+                        Where to dump .eml files to (default: None)
+  --config CONFIG       Supply a config file (default: None)
+```
+
+## Configuration
+Create a `config.yml`.
+
+Example configuration:
+```yaml
+host: imap.example.com
+username: user
+password: supers3cr3tp4ssw0rd
+loglevel: info
+dump_folder: /path/to/dump/folder
+```
+
+Then run the application:
+```bash
+user@machine~$ imapdump -l debug --config config.yml
+```
+
+## Open Source License Attribution
+
+This application uses Open Source components. You can find the source code of their open source projects along with license information below. We acknowledge and are grateful to these developers for their contributions to open source.
+### [dacite](https://github.com/konradhalas/dacite)
+- Copyright (c) [Konrad Hałas](https://github.com/konradhalas) and contributors
+- [MIT License](https://github.com/konradhalas/dacite/blob/master/LICENSE)
+
+### [PyYAML](https://pyyaml.org/)
+- Copyright (c) [The YAML Project](https://github.com/yaml) and contributors
+- [MIT License](https://github.com/yaml/pyyaml/blob/main/LICENSE)
+
+### [imapclient](https://github.com/mjs/imapclient/)
+- Copyright (c) 2014 [Menno Smits](https://github.com/mjs) and contributors
+- [New BSD License](https://github.com/mjs/imapclient/blob/master/COPYING)
