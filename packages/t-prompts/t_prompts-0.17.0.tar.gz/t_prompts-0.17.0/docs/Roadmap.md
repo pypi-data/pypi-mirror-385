@@ -1,0 +1,16 @@
+- Analysis
+    - Document metadata fields
+    - Token counting (Likely belongs in another package)
+        - Approximate
+        - Offline
+        - Using API
+    - Cost (Likely belongs in another package)
+        - `llm_costs`
+        - uncached / cached
+- Simple optimization demos (Single notebook toy example)
+- nested bullets -- track nesting depth like with header
+- revamp diffing
+- diff views
+    - unified
+    - side-by-side
+    - merge view
