@@ -1,0 +1,33 @@
+# SPDX-FileCopyrightText: 2025 GFZ Helmholtz Centre for Geosciences
+# SPDX-FileCopyrightText: 2025 Felix Dombrowski
+# SPDX-License-Identifier: EUPL-1.2
+
+
+name: enmap_downloader
+
+channels: &id1
+  - conda-forge
+
+dependencies:
+  - python>=3.12.*
+  - pip
+  # test requirements
+  - pytest
+  - pytest-cov
+  - urlchecker
+  # package requirements
+  - geopandas
+  - pyproj
+  - python-dotenv
+  - pystac
+  - pydantic
+  - geojson
+  - gdal=3.10
+  - rasterio
+  - dask
+  - dask[distributed]
+  - tqdm
+  - pystac-client
+  - numpy
+  - tifffile
+  - tenacity
