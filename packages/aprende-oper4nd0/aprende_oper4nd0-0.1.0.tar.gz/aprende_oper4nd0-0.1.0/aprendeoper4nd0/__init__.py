@@ -1,0 +1,1 @@
+from .codigo import suma_pares_impares, numeros_divisibles_3_o_5, calcular_factorial, contar_digitos_pares_impares, suma_serie_aritmetica, fibonacci, calcular_potencia
