@@ -1,0 +1,41 @@
+from enum import Enum
+
+
+class AuJournalItemResponseJournalItemType(str, Enum):
+    ASSET = "Asset"
+    DEDUCTIONASSET = "DeductionAsset"
+    DEDUCTIONEXPENSE = "DeductionExpense"
+    DEDUCTIONLIABILITY = "DeductionLiability"
+    DEFAULTDEDUCTIONEXPENSE = "DefaultDeductionExpense"
+    DEFAULTDEDUCTIONLIABILITY = "DefaultDeductionLiability"
+    DEFAULTEMPLOYEEEXPENSE = "DefaultEmployeeExpense"
+    DEFAULTEMPLOYERLIABILITYEXPENSE = "DefaultEmployerLiabilityExpense"
+    DEFAULTEMPLOYERLIABILITYLIABILITY = "DefaultEmployerLiabilityLiability"
+    DEFAULTEXPENSE = "DefaultExpense"
+    DEFAULTSALARYSACRIFICEEXPENSE = "DefaultSalarySacrificeExpense"
+    DEFAULTSALARYSACRIFICELIABILITY = "DefaultSalarySacrificeLiability"
+    EMPLOYEEEXPENSE = "EmployeeExpense"
+    EMPLOYERLIABILITYEXPENSE = "EmployerLiabilityExpense"
+    EMPLOYERLIABILITYLIABILITY = "EmployerLiabilityLiability"
+    INTERCOMPANYLOANCREDIT = "InterCompanyLoanCredit"
+    INTERCOMPANYLOANDEBIT = "InterCompanyLoanDebit"
+    LEAVEACCRUALEXPENSE = "LeaveAccrualExpense"
+    LEAVEACCRUALLIABILITY = "LeaveAccrualLiability"
+    LEAVEADJUSTMENTEXPENSE = "LeaveAdjustmentExpense"
+    LEAVEADJUSTMENTLIABILITY = "LeaveAdjustmentLiability"
+    LEAVETAKENEXPENSE = "LeaveTakenExpense"
+    LEAVETAKENLIABILITY = "LeaveTakenLiability"
+    PAYGEXPENSE = "PaygExpense"
+    PAYGLIABILITY = "PaygLiability"
+    POSTGRADUATESTUDENTLOANLIABILITY = "PostGraduateStudentLoanLiability"
+    POSTTAXDEDUCTIONLIABILITY = "PostTaxDeductionLiability"
+    PRETAXDEDUCTIONASSET = "PreTaxDeductionAsset"
+    PRETAXDEDUCTIONLIABILITY = "PreTaxDeductionLiability"
+    STUDENTLOANLIABILITY = "StudentLoanLiability"
+    SUPEREXPENSE = "SuperExpense"
+    SUPERLIABILITY = "SuperLiability"
+    W1EXEMPTWAGESEXPENSE = "W1ExemptWagesExpense"
+    WAGESEXPENSE = "WagesExpense"
+
+    def __str__(self) -> str:
+        return str(self.value)

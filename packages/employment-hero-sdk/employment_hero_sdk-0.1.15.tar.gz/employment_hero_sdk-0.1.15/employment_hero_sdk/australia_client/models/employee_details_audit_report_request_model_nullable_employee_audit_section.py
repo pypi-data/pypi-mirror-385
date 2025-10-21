@@ -1,0 +1,40 @@
+from enum import Enum
+
+
+class EmployeeDetailsAuditReportRequestModelNullableEmployeeAuditSection(str, Enum):
+    ADDITIONALEARNINGSLINES = "AdditionalEarningsLines"
+    BANKACCOUNTS = "BankAccounts"
+    CISSUBCONTRACTOR = "CisSubcontractor"
+    DOCUMENTS = "Documents"
+    EARNINGSCERTIFICATE = "EarningsCertificate"
+    EMERGENCYCONTACTS = "EmergencyContacts"
+    EMPLOYEEDETAILS = "EmployeeDetails"
+    EMPLOYEEPORTALACCESS = "EmployeePortalAccess"
+    EMPLOYEESCHEDULEDUPDATES = "EmployeeScheduledUpdates"
+    EMPLOYEESTATUTORYDETAILS = "EmployeeStatutoryDetails"
+    JOBKEEPER = "JobKeeper"
+    JOBMAKER = "JobMaker"
+    KIOSKACCESS = "KioskAccess"
+    KIWISAVER = "KiwiSaver"
+    LEAVEALLOWANCES = "LeaveAllowances"
+    LEAVEPAYSETTINGS = "LeavePaySettings"
+    LOCATIONS = "Locations"
+    NATIONALINSURANCERECORD = "NationalInsuranceRecord"
+    NATIONALREGISTRATIONIDENTITYRECORD = "NationalRegistrationIdentityRecord"
+    NOTES = "Notes"
+    OPENINGBALANCES = "OpeningBalances"
+    PAYRATES = "PayRates"
+    PAYRUNDEFAULTS = "PayRunDefaults"
+    PENSIONSETTINGS = "PensionSettings"
+    PREVIOUSEMPLOYER = "PreviousEmployer"
+    QUALIFICATIONS = "Qualifications"
+    RECURRINGTRANSACTIONS = "RecurringTransactions"
+    SELFMANAGEDSUPERFUNDS = "SelfManagedSuperFunds"
+    SUPERFUNDS = "SuperFunds"
+    TAXCODEDECLARATION = "TaxCodeDeclaration"
+    TAXFILEDECLARATION = "TaxFileDeclaration"
+    UNAVAILABILITIES = "Unavailabilities"
+    WORKTYPES = "WorkTypes"
+
+    def __str__(self) -> str:
+        return str(self.value)
