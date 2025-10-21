@@ -1,0 +1,196 @@
+Metadata-Version: 2.1
+Name: synthesized
+Version: 2.22
+Summary: Synthesized SDK
+Author-email: "Synthesized Ltd." <sdk-team@synthesized.io>
+License: Copyright 2018 Synthesized LTD
+        
+        Licence
+        
+        Definitions. As used in this Licence:
+        
+        Collaborator means a person who get access to the private repository of Synthesized LTD
+        
+        “Confidential Information” means all trade secrets, proprietary information, know-how, and confidential information of Synthesized  LTD including but not limited to: (i) any and all technical, business or financial information or property, owned by or licensed to Synthesized  LTD, or otherwise relating to Synthesized  LTD and/or any of its subsidiaries, affiliates and related entities which is heretofore or hereinafter disclosed to Supplier, including but not limited to information regarding Synthesized  LTD’s goods or services, processes, personnel, finances, business plans, studies, analyses, projections, research, market data, operations, apparatus, computer software, know-how, trade secrets, inventions, equipment, tools, molds, dies, fixtures, parts, prototypes, samples, drawings, test results, material and manufacturing specifications, suppliers, customers, employees, processes, licensing and any other ideas or information relating to Synthesized  LTD’s business or Synthesized  LTD Products, the Supplies or any business or activity in which Synthesized  LTD is engaged, regardless of the form of disclosure, whether or not disclosed in a writing marked “Confidential” or in some similar manner or identified as confidential; (ii) improvements derived by Supplier from the information identified in Subsection l(A)(i) or from access to Synthesized  LTD’s facilities; and (iii) any and all software, reports, memoranda, documents, developments, or other results produced by Supplier in the performance of providing Supplies that are directly related to Synthesized  LTD’s business and not primarily to general technology used by Supplier in the conduct of its core business.
+        
+        
+        “Invention” means any work of authorship, invention, know-how, device, design, algorithm, method, process, improvement, concept, idea, expression, discovery or invention, whether or not copyrightable or patentable and whether or not reduced to practice.
+        
+        "Intellectual Properties" means patents, utility models, trademarks, service marks, trade names, service names and copyrights and applications therefor and registrations thereof, and computer programs, software, firmware and documentation, designs, inventions, research records, drawings, technical knowledge and information, rights to products under research and development and trade secrets.
+        
+        B. Inventions and Patents.
+        
+        Collaborator agrees that all the Inventions are, upon creation, Inventions of the Synthesized  LTD, shall be the sole and exclusive property of the Synthesized  LTD and its assignees, and the Synthesized  LTD and its assignees shall be the sole and exclusive owner of all title, rights and interest in and to any patents, copyrights, trade secrets and all other rights of any kind or nature, including moral rights, in connection with such Inventions. 
+        
+        C. Confidential Information.
+        
+        During the term of this Licence and at all times thereafter, the Collaborator shall maintain the confidentiality of the Confidential Information and will exercise the same standard of care with respect to the storage of such information.
+        
+        The Collaborator agrees that he will not, during the term of this Licence or at any time thereafter, directly or indirectly:  (i) transfer or disclose any Confidential Information to any third party; (ii) use, access, copy, or manipulate any Confidential Information for any purpose other than solely as necessary to perform the work.
+        
+Project-URL: homepage, https://synthesized.io
+Project-URL: documentation, https://docs.synthesized.io/
+Project-URL: repository, https://github.com/synthesized-io/synthesized-sdk
+Keywords: synthetic,generative,data
+Platform: MacOS
+Platform: Windows
+Platform: Linux
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: License :: Other/Proprietary License
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Financial and Insurance Industry
+Classifier: Intended Audience :: Information Technology
+Classifier: Intended Audience :: Healthcare Industry
+Classifier: Operating System :: MacOS
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: POSIX
+Classifier: Operating System :: Unix
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Requires-Python: <3.12,>=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE.md
+Requires-Dist: Babel>=2.2.1
+Requires-Dist: cleanco>=2.2
+Requires-Dist: faker>=18.0.0
+Requires-Dist: matplotlib<3.8,>=3.4
+Requires-Dist: numpy>=1.19.2
+Requires-Dist: pandas<2.0,>=1.3
+Requires-Dist: prompt-toolkit>=3.0
+Requires-Dist: psutil>=5.0
+Requires-Dist: PyYAML>=5.2
+Requires-Dist: rsa>=4.7
+Requires-Dist: rstr>=2.2
+Requires-Dist: scikit-learn<1.4,>=0.23
+Requires-Dist: scipy<1.12,>=1.5
+Requires-Dist: seaborn>=0.11
+Requires-Dist: synthesized-insight>=0.5
+Requires-Dist: typo>=0.1.7
+Requires-Dist: yamale>=4.0.4
+Requires-Dist: tensorflow<2.15.0,>=2.6.2; platform_machine != "arm64" or platform_system != "Darwin"
+Requires-Dist: tensorflow-macos<2.15.0,>=2.6; platform_machine == "arm64" and platform_system == "Darwin"
+Requires-Dist: faker<37.11.0; python_version < "3.10"
+Requires-Dist: urllib3<2.0; python_version < "3.8"
+Provides-Extra: dev
+Requires-Dist: pre-commit; extra == "dev"
+Requires-Dist: black; extra == "dev"
+Requires-Dist: mypy; extra == "dev"
+Requires-Dist: pylint; extra == "dev"
+Provides-Extra: dp
+Requires-Dist: tensorflow-privacy<0.8,>=0.6; extra == "dp"
+Requires-Dist: tensorflow-probability<0.19.0,>=0.14.0; extra == "dp"
+Requires-Dist: tensorflow<2.11,>=2.6.2; (platform_machine != "arm64" or platform_system != "Darwin") and extra == "dp"
+Requires-Dist: tensorflow-macos<2.11,>=2.6; (platform_machine == "arm64" and platform_system == "Darwin") and extra == "dp"
+Provides-Extra: gcloud
+Requires-Dist: google-cloud-service-control>=1.9; extra == "gcloud"
+Provides-Extra: test
+Requires-Dist: pytest; extra == "test"
+Requires-Dist: pytest-cov; extra == "test"
+Requires-Dist: synthesized-datasets>=1.5; extra == "test"
+Requires-Dist: hypothesis[pandas]; extra == "test"
+Requires-Dist: pytest-httpserver; extra == "test"
+Requires-Dist: h5py<3.15; extra == "test"
+Provides-Extra: tune
+Requires-Dist: ray[tune]; extra == "tune"
+Requires-Dist: ax-platform; extra == "tune"
+
+<img width="450" alt="Synthesized" src="https://user-images.githubusercontent.com/13236749/127093790-daab8320-7d13-4073-962a-0723bf389d5c.png">
+
+[![Documentation](https://shields.io/badge/docs-latest-lightblue)](https://docs.synthesized.io/sdk/latest/)
+[![PyPI](https://img.shields.io/pypi/v/synthesized?color=%23DA5&label=latest&logo=semver)](https://pypi.org/project/synthesized/) 
+[![codecov](https://codecov.io/gh/synthesized-io/synthesized-sdk/branch/master/graph/badge.svg?token=YYOVQHUWFF)](https://codecov.io/gh/synthesized-io/synthesized-sdk)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=synthesized-io_synthesized-sdk&metric=alert_status&token=8f6373021560fd51af99c27919a0aca8753fd595)](https://sonarcloud.io/summary/new_code?id=synthesized-io_synthesized-sdk)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=synthesized-io_synthesized-sdk&metric=sqale_index&token=8f6373021560fd51af99c27919a0aca8753fd595)](https://sonarcloud.io/summary/new_code?id=synthesized-io_synthesized-sdk)
+[![Supported Python Versions](https://shields.io/badge/python-3.8%20|%203.9%20|%203.10%20|%203.11-blue)]()
+[![Supported OS](https://shields.io/badge/platform-linux%20|%20macos%20(x64/arm)%20|%20windows-%2387B)]()
+
+-----
+
+![synthesize](https://user-images.githubusercontent.com/13236749/138488145-ae8ac235-1222-403c-8bee-eae84c682154.gif)
+
+
+#  Synthesized's Scientific Data Kit (SDK)
+
+The SDK generates high quality, privacy-preserving datasets for machine learning and data science use cases.
+It's available on PyPi for a free 30-day trial.
+
+## Usage
+
+A licence key is required to use the full version of the package.
+If you don't have one, a free 30-day trial licence key will be provided during the installation.
+See the [comparison table](https://docs.synthesized.io/sdk/latest/user_guide/install#comparison) in the
+[documentation](https://docs.synthesized.io/home/) for details about the features included in the trial.
+
+Please [contact us](https://www.synthesized.io/contact-us) for more information about obtaining a full licence key.
+
+## Installation
+
+It is assumed that you have Python 3.8+ already installed on a Windows, Linux, or MacOS machine.
+
+Before starting, ensure that `pip` and `wheel` are installed and up to date.
+
+```shell
+pip install -U pip wheel
+```
+
+Synthesized can then be installed directly with `pip`.
+
+```shell
+pip install synthesized
+```
+
+
+## Setting the licence key
+
+Once you have installed the package, you'll need a licence key to run the
+software. The quickest way to check if the SDK is working is by running the
+command:
+
+```shell
+synth-validate
+```
+
+The first time this is run you will be asked if you have a licence key. If you
+do not have one simply select "no" and the prompts will guide you in acquiring
+one by entering your email address.
+
+[![asciicast](https://asciinema.org/a/ZynbNNeSiiHRg9qHDBmGxsgBW.svg)](https://asciinema.org/a/ZynbNNeSiiHRg9qHDBmGxsgBW)
+
+Once you have set your licence key, the SDK will briefly verify the
+installation was successful.
+
+With the SDK installed you are now able to get synthesizing! Check out our
+[quick start](https://docs.synthesized.io/sdk/latest/user_guide/tutorials/quickstart) or
+[user guides](https://docs.synthesized.io/sdk/latest/user_guide/) for
+ways that the SDK can be put to use.
+
+
+## Dependencies
+
+Below are the minimum dependencies required to run the SDK.
+
+|Package                               | Version |
+| ------------------------------------ | ------- |
+|[faker](https://github.com/joke2k/faker)| `>=8.0` |
+|[matplotlib](https://matplotlib.org)|`>=3.4` |
+|[numpy](https://www.numpy.org)|`>=1.19.2` |
+|[pandas](https://pandas.pydata.org)|`<2.0, >=1.3` |
+|[prompt-toolkit](https://pypi.org/project/prompt-toolkit/)|`>=3.0` |
+|[PyYAML](https://pyyaml.org/)|`>=5.2` |
+|[rsa](https://stuvel.eu/rsa)|`>=4.7` |
+|[rstr](https://github.com/leapfrogonline/rstr)|`>=2.2` |
+|[scikit_learn](http://scikit-learn.org)|`>=0.23` |
+|[scipy](https://www.scipy.org)|`>=1.5` |
+|[seaborn](https://seaborn.pydata.org)|`>=0.11` |
+|[synthesized_insight](https://synthesized.io)|`>=0.5` |
+|[tensorflow](https://www.tensorflow.org/)|`>=2.6` |
+|[yamale](https://pypi.org/project/yamale/)|`>=4.0.4` |
+
+The library can use a GPU but it is not required.
