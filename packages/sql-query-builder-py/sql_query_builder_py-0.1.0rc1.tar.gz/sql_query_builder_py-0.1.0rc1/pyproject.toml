@@ -1,0 +1,57 @@
+[project]
+name = "sql-query-builder-py"
+version = "0.1.0rc1"
+description = "Dynamically generate SQL queries"
+authors = [
+    {name = "Arthur Murat", email = "test@email.org"},
+]
+dependencies = []
+requires-python = ">=3.12"
+readme = "README.md"
+license = {text = "MIT"}
+
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.pdm]
+distribution = true
+
+[tool.pdm.scripts]
+lint = {composite = [
+    "black --line-length 120 --preview src/ tests/",
+    "ruff check --select B,D,E,F,I --ignore D103,D100,D415,D400,D101,D203,D213 --line-length 120 --fix --show-fixes src/ tests/"
+]}
+test = {composite = [
+    "coverage run -m unittest discover -v -s tests -p '*test*.py'",
+    "coverage report"
+]}
+deploy = {composite = [
+    "pdm run test",
+    "rm -rf dist/",
+    "pdm publish --repository pypi"
+]}
+
+
+[tool.black]
+line-length = 120
+preview = true
+
+[tool.coverage.run]
+source = ["src"]
+omit = ["tests/*"]
+
+[tool.ruff]
+line-length = 120
+fix = true
+show-fixes = true
+
+[dependency-groups]
+dev = [
+    "black>=25.9.0",
+    "ruff>=0.14.1",
+    "coverage>=7.11.0",
+    "sphinx==8.2.3",
+    "sphinx-rtd-theme==3.0.2",
+    "furo==2025.9.25",
+]
