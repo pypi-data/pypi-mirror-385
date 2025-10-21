@@ -1,0 +1,1 @@
+export const env={"PUBLIC_SAMPLES_URL":"/images","PUBLIC_LIGHTLY_STUDIO_API_URL":"/","PUBLIC_POSTHOG_DEV_KEY":"phc_A9K0pMRovzmhFhngbKAZIr2qZdA14eHvsZY6kjNdYWr","PUBLIC_POSTHOG_KEY":"","PUBLIC_POSTHOG_HOST":"https://eu.i.posthog.com"}
