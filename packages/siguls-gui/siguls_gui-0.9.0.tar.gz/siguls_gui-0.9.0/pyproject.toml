@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=61", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "siguls-gui"
+dynamic = ["version"]
+description = "GUI for the Signal Generator for User-Specified Laboratory Signals (SIGULS)"
+readme = "README.md"
+authors = [
+    {name = "Abelardo Pérez Paz", email = "abelardo.perez@tum.de"},
+    {name = "Oliver Maximilian Zobel", email = "oliver.zobel@tum.de"},
+]
+dependencies = [
+    "pyqt5",
+    "numpy",
+    "esptool",
+    "matplotlib",
+    "pyexsi",
+]
+requires-python = ">=3.11"
+
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development :: User Interfaces",
+]
+
+[project.urls]
+Homepage = "https://gitlab.com/siguls/siguls-gui"
+
+[tool.setuptools_scm]
+version_scheme = "post-release"
+local_scheme = "node-and-date"
+fallback_version = "0.0.0"
+
+[project.scripts]
+siguls-gui = "siguls_gui.siguls_main:main"
+
+[tool.setuptools.package-data]
+"siguls_gui" = ["mklittlefs", "mklittlefs.exe"]
