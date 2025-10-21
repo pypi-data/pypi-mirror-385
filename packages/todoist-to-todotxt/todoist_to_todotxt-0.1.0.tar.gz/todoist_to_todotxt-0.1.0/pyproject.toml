@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61.0", "requests"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "todoist-to-todotxt"
+version = "0.1.0"
+authors = [
+  { name="Anton Larionov" },
+]
+description = "Save tasks from Todoist to todo.txt format"
+readme = "README.md"
+license = { file = "LICENSE.txt" }
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+keywords = ["todoist", "todo.txt"]
+
+[project.scripts]
+todoist-to-todotxt = "todoist_to_todotxt.main:cli"
+
+[project.urls]
+"Homepage" = "https://github.com/anlar/todoist-to-todotxt"
+"Repository" = "https://github.com/anlar/todoist-to-todotxt"
+"Bug Tracker" = "https://github.com/anlar/todoist-to-todotxt/issues"
