@@ -1,0 +1,98 @@
+services:
+  # Redis for Celery
+  redis:
+    image: redis:7.4.2-alpine
+    container_name: automagik-spark-redis
+    ports:
+      - "16379:16379"
+    command: redis-server --port 16379 --appendonly yes
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-p", "16379", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - automagik-spark-network
+
+  # Automagik's PostgreSQL
+  automagik-spark-db:
+    image: postgres:15
+    container_name: automagik-spark-db
+    environment:
+      POSTGRES_USER: automagik
+      POSTGRES_PASSWORD: automagik
+      POSTGRES_DB: automagik
+    volumes:
+      - automagik-spark-db-data:/var/lib/postgresql/data
+    command: postgres -p 15432
+    ports:
+      - "15432:15432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U automagik -p 15432"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - automagik-spark-network
+
+  # Automagik API service
+  automagik-spark-api:
+    image: namastexlabs/automagik_spark-spark-api:latest
+    container_name: automagik-spark-api
+    env_file:
+      - .env
+    environment:
+      AM_ENV: production
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "8883:8883"
+    depends_on:
+      automagik-spark-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8883/health || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - automagik-spark-network
+
+  # Automagik Worker service
+  automagik-spark-worker:
+    image: namastexlabs/automagik_spark-spark-worker:latest
+    container_name: automagik-spark-worker
+    env_file:
+      - .env
+    environment:
+      AM_ENV: production
+      PYTHONUNBUFFERED: 1
+    depends_on:
+      automagik-spark-db:
+        condition: service_healthy
+      automagik-spark-api:
+        condition: service_healthy
+    networks:
+      - automagik-spark-network
+
+  # Optional LangFlow service
+  langflow:
+    image: logspace/langflow:latest
+    ports:
+      - "7860:7860"
+    volumes:
+      - langflow-data:/data
+    networks:
+      - automagik-spark-network
+    profiles:
+      - langflow
+
+volumes:
+  automagik-spark-db-data:
+  redis-data:
+  langflow-data:
+
+networks:
+  automagik-spark-network:
+    name: automagik-spark-network
