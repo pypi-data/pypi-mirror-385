@@ -1,0 +1,22 @@
+name: commitlint
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  forgejo:
+    runs-on: docker
+    container:
+      image: codeberg.org/margau/buildenv-commitlint:latest@sha256:7a3ca762fd592f168c134f93186ac7f3eeeace4f53ebf87a1f85edc23488ecb2
+
+    steps:
+      - uses: https://code.forgejo.org/actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+        with:
+          fetch-depth: 0
+      - name: Validate current commit (last commit) with commitlint
+        if: github.event_name == 'push'
+        run: commitlint --last --verbose
+      - name: Validate PR commits with commitlint
+        if: github.event_name == 'pull_request'
+        run: commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
