@@ -1,0 +1,170 @@
+# src/konvigius/__init__.py
+"""
+# Dynamic Configuration System with Validation and Metadata
+
+This module provides a flexible and extensible system for defining,
+validating, and managing configuration fields using metadata.
+
+
+## Main Features
+
+- Dynamic class creation with named fields
+- Schema-based configuration definition using Schema and Option objects
+- Builtin type and range/length validation, including mandatory-check (required)
+- Support for custom defined validation functions
+- Support for loading from dictionaries (e.g. parsed from JSON/YAML)
+- Access to current config values and their metadata
+- Serialization via `to_dict()` and `to_json()`
+- Peak-into-utils  like `info_vars', 'get_meta` and more
+- A Config object is an iterable (`for field, value in my_config: ...`)
+- Suppport CLI out of the box, often no additional configuration needed
+- Additional generation of inverted-bool fields (e.g. --debug field => --no_debug field)
+- Support for auto generated fields by defining custom functions (e.g. --minutes => --in-seconds)
+
+
+## Example Usages
+
+First you must create a list that contains so called Schema objects; a Schema oject
+represents a typical configuration item such as:
+
+- `--userrole`
+- `--timeout`
+- `--port`
+
+A Schema-object defines the fieldname (like `--userrole`) and the associated metadata of 
+that field such as:
+
+- field type
+- default value
+- is-required?
+- domain (a set collection)
+- minimum value/length/elements
+- maximum value/length/elements
+- custom validation functions
+- custom auto-field-creation functions
+- help text for the field (to support CLI mode help info)
+- short flag (single char to support options in CLI mode)
+
+Then you pass that schema with 1 or more Schema-objects as a list to the
+factory function of the Config class; that produces a config object.
+
+Here are some simple examples. The package also comes with a subdirectory (examples) 
+containing more elaborate, working demo Python files. Each file includes a short manual.
+
+``` python
+schema = [
+  Schema("debug", default=False, field_type=bool),
+  Schema("timeout", default=5, r_min=1, r_max=60, field_type=int),
+]
+
+cfg_1 = Config.config_factory(schema)
+
+print(cfg_1.timeout)       # 5
+print(cfg_1.debug)         # False
+print(cfg_1.no_debug)      # True   (auto generated config-var)
+print(cfg_1.info_vars())   # markdown overview vars
+
+cfg_1.timeout = 99       # raises ConfigRangeError
+cfg_1.timeout = 'abc'    # raises ConfigTypeError
+```
+
+Now create an _additional_ new config instance using the _same schema_, but with a _different_ 
+default value for the timeout option.
+
+``` python
+cfg_2 = Config.from_dict(schema, {'timeout': 10})
+
+print(cfg_2.timeout)     # 10      (no longer 5 on initialization)
+```
+
+Force that timeout can only be a multiple of 5 (5, 10, 15...).
+For that a custom validation function is used:
+
+``` python
+def fn_multiple_of_5(value, cfg):
+    if values % 5 != 0:
+        raise ConfigValidationError("Value Must be a multiple of 5")
+
+schema = [
+  Schema("debug", default_value=False, field_type=bool),
+  Schema("timeout", default=5, r_min=5, r_max=60, field_type=int),
+         fn_validator=fn_multiple_of_5)
+]
+
+cfg = Config.config_factory(schema)
+cfg.timeout = 33       # raises ConfigValidationError
+```
+
+Below is a example that demonstrates the auto-create field.
+It creates derived fields for the values of the fields 'minutes' and 'num_spaces':
+
+- cfg.spaces     : a string with spaces based on the value of field cfg.num_spaces
+- cfg.in_seconds : the time in seconds based on the value of field cfg.minutes
+
+``` python
+@with_field_name('spaces')
+def fn_spaces(value, cfg):
+    return ' ' * cfg.num_spaces 
+
+@with_field_name('in_seconds')
+def fn_seconds(value, cfg):
+    return 60 * cfg.minutes 
+
+schema = [
+    Schema("num_spaces|s", default=2, fn_computed=fn_spaces, field_type=int, help_text="Number of spaces."),
+    Schema("minutes|m", default=5, fn_computed=fn_seconds, field_type=int, help_text="Duration in minutes"),
+]
+
+# Create a config instance
+cfg = Config.config_factory(schema)
+
+# Parse the CLI arguments from the terminal.
+
+cli_parser.run_parser(cfg)
+
+print("num-spaces", cfg.num_spaces)
+print(f"spaces: '{cfg.spaces}'  (computed)")
+
+print("minutes:", cfg.minutes)
+print("seconds:", cfg.in_seconds, "  (computed)")
+
+```
+
+## Key Components
+
+### Schema
+    Defines metadata for a config field, including default value,
+    type constraints, and optional numeric bounds or testing on
+    length of 'sized' objects like str and list.
+    A one or more Schema-objects are as a list passed to the config-factory
+    which produces a Config-instance with field properties according
+    the Schema definitions.
+
+### Option
+    A Schema-object is in the Config object converted into an Option object.
+    These objects contain the metadata from the Schema-objects and
+    control the validators.
+
+### Config
+    The base class for config objects. Config instances are created
+    dynamically using the `config_factory()` or `from_dict()` methods.
+
+
+## Intended Use Cases
+
+- Application configuration
+- Plugin settings
+- User preference systems
+- Validated parameter schemas for dynamic interfaces
+
+"""
+from .configlib import Config, Option, Schema, with_field_name
+from .exceptions import (ConfigError, ConfigMetadataError, ConfigValidationError,
+                         ConfigRangeError, ConfigDomainError, ConfigTypeError,
+                         ConfigRequiredError)
+
+__all__ = [ConfigError, ConfigRangeError, ConfigTypeError, 
+           ConfigMetadataError, ConfigValidationError,
+           Config, Option, Schema]
+
+# === END ===
