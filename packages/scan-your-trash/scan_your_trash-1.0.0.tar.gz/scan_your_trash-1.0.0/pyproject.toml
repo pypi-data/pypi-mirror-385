@@ -1,0 +1,30 @@
+[project]
+name = "scan_your_trash"
+version = "1.0.0"
+authors = [
+	{ name="Max Maton", email="info@delftsolutions.nl" },
+]
+description = "A tool that extracts samples created using the Scan Your Trash app."
+classifiers = [
+	"Programming Language :: Python :: 3",
+	"Operating System :: OS Independent",
+]
+dependencies = ["av >= 10.0.0", "numpy >= 1.24.2", "pillow >= 9.4.0", "boto3 >= 1.26.27"]
+license = "MIT"
+license-files = [
+	"LICENSE"
+]
+
+[project.scripts]
+scan-your-trash = "scan_your_trash.cli:main"
+
+[project.urls]
+Homepage = "https://scanyourtrash.de"
+
+[build-system]
+requires = ["hatchling >= 1.12"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/delftsolutions/scan_your_trash"]
+
