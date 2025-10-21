@@ -1,0 +1,11 @@
+# Include tests
+include tests/*.py
+
+# Include all third_party and generated sources needed to build cmark.
+# Note: src/cmarkgfm/*.h files are automatically included via include-package-data
+recursive-include third_party/cmark/src *.c *.h *.inc
+recursive-include third_party/cmark/extensions *.c *.h *.inc
+recursive-include generated *.h
+
+# Include cmark licensing information
+include third_party/cmark/COPYING
