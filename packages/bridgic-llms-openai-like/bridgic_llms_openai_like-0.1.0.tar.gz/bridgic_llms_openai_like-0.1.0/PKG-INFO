@@ -1,0 +1,26 @@
+Metadata-Version: 2.4
+Name: bridgic-llms-openai-like
+Version: 0.1.0
+Summary: OpenAI-like LLM adapters for Bridgic, enabling connectivity with external LLM providers.
+Author-email: Tielei Zhang <zhangtl04@gmail.com>
+License: MIT
+License-File: LICENSE
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.9
+Requires-Dist: bridgic-core>=0.1.0
+Requires-Dist: httpx-aiohttp>=0.1.8
+Requires-Dist: httpx>=0.28.1
+Requires-Dist: openai>=1.60.0
+Description-Content-Type: text/markdown
+
+Bridgic LLMs Integration
+========================
+
+This package is a thin wrapper around the OpenAI API. It is designed to be used with model service that is compatible with the OpenAI API.
+
+Installation
+------------
+
+```shell
+pip install bridgic-llms-openai-like
+```
