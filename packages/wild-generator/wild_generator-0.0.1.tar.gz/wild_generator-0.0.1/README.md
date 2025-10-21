@@ -1,0 +1,26 @@
+# Django Generator
+
+*Um gerador de código para CRUDs completos no Django, incluindo Views, Forms e URLs.*
+
+## O que é o Django Generator?
+
+Cansado de escrever o mesmo código repetitivo toda vez que precisa criar um CRUD (Create, Read, Update, Delete) em um projeto Django? O Django Generator é uma ferramenta de linha de comando que automatiza a criação de boilerplate, permitindo que você foque na lógica de negócio que realmente importa.
+
+Com apenas alguns comandos, você pode gerar:
+* Views completas no estilo API, com todos os métodos HTTP (GET, POST, PUT, DELETE).
+* Views tradicionais do Django, utilizando `forms.py` e validação com `form.is_valid()`.
+* Os arquivos `urls.py` correspondentes para todas as views geradas.
+* O arquivo `forms.py` para as views baseadas em formulários.
+
+## Principais Funcionalidades
+
+- 🚀 **Alta Produtividade**: Gere a estrutura completa de um CRUD em segundos.
+- ⚙️ **Duas Abordagens**: Crie tanto APIs REST quanto views clássicas baseadas em formulários.
+- 🔗 **Geração de URLs**: As rotas para suas novas views são criadas e configuradas automaticamente.
+- 📋 **Criação de Forms**: Gera automaticamente a classe `ModelForm` no arquivo `forms.py`.
+- 🧩 **Integrado ao Django**: Funciona como comandos de gerenciamento (`management commands`), integrando-se perfeitamente ao seu fluxo de trabalho.
+
+## Instalação
+
+```bash
+pip install django-generator
