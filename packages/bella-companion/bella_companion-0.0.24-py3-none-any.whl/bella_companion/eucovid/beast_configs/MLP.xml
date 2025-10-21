@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beast 
+    namespace="
+        beast.base.inference
+        :beast.base.inference.parameter
+        :beast.base.evolution.branchratemodel
+        :beast.base.evolution.substitutionmodel
+        :beast.base.evolution.sitemodel
+        :beast.base.evolution.tree.coalescent
+        :beast.base.evolution.tree
+        :beast.base.evolution.likelihood
+        :beast.base.evolution.alignment
+        :beast.base.evolution.operator
+        :beast.base.evolution.operator.kernel
+        :beast.base.inference.operator.kernel
+        :beast.base.inference.operator
+        :beast.base.math.distributions
+        :beast.base.evolution
+        :bdmmprime.util.operators
+        :bdmmprime.util.priors
+        :bdmmprime.distribution
+        :bdmmprime.parameterization
+        :bdmmprime.mapping
+        :bdmmprime.util
+        :bdmmprime.trajectories
+        :feast
+        :feast.parameter
+        :feast.fileio
+        :feast.function
+        :feast.expressions"
+    required="BEAST.base v2.7.7:BDMM-Prime v2.2.2"
+    version="2.7"
+>
+    <map name="Uniform">beast.base.inference.distribution.Uniform</map>
+    <map name="Exponential">beast.base.inference.distribution.Exponential</map>
+    <map name="LogNormal">beast.base.inference.distribution.LogNormalDistributionModel</map>
+    <map name="Normal">beast.base.inference.distribution.Normal</map>
+    <map name="prior">beast.base.inference.distribution.Prior</map>
+
+    <map name="AlignmentFromFasta">feast.fileio.AlignmentFromFasta</map>
+	<map name="TraitSetFromTaxonSet">feast.fileio.TraitSetFromTaxonSet</map>
+	<map name="TypeSet">bdmmprime.parameterization.TypeSet</map>
+
+    <alignment id="alignment" spec="AlignmentFromFasta" fileName="$(msa_file)"/>
+    <TaxonSet id="TaxonSet" spec="TaxonSet" alignment="@alignment"/>
+    <TraitSetFromTaxonSet id="typeTraitSet" traitname="type" delimiter="|" takeGroup="1" taxa="@TaxonSet"/>
+    <TraitSetFromTaxonSet id="dateTraitSet" traitname="date" dateFormat="yyyy-M-dd" delimiter= "|" everythingAfterLast="true" taxa="@TaxonSet"/>
+    <typeSet id="typeSet" spec="TypeSet" typeTraitSet="@typeTraitSet"/>
+
+    <parameter id="processLength" spec="RealParameter" value="1.0"/>
+
+    <Re id="ReSP" spec="SkylineVectorParameter" timesAreAges="true" processLength="@processLength" typeSet="@typeSet">
+        <skylineValues id="Re" spec="RealParameter" dimension="$(ReDimension)" value="1.0"/>
+        <changeTimes spec="RealParameterFromXSV" fileName="$(changeTimesFile)"/>
+    </Re>
+
+    <samplingProportion id="samplingProportionSP" spec="SkylineVectorParameter" timesAreAges="true" processLength="@processLength" typeSet="@typeSet" changeTimes="0.123 0.205">
+        <skylineValues id="samplingProportion" spec="RealParameter" value="1.11E-5 1.2E-5 1.3E-5 1.4E-5 1.5E-5 1.1E-5 1.2E-5 1.3E-5 1.4E-5 1.5E-5 0.0 0.0 0.0 0.0 0.0"/>
+    </samplingProportion>
+
+    <becomeUninfectiousRate id="becomeUninfectiousRateSP" spec="SkylineVectorParameter" typeSet="@typeSet" skylineValues="36.5"/>
+
+    <migrationRate id="migrationRateSP" spec="SkylineMatrixParameter" timesAreAges="true" processLength="@processLength" typeSet="@typeSet">
+        <skylineValues id="migrationRate" spec="bella.BayesMLP" nodes="$(nodes)">
+            <plate var="predictorFile" range="$(predictorFiles)">
+                <predictor spec="RealParameterFromXSV" fileName="$(predictorFile)"/>
+            </plate>
+            <plate var="n" range="$(layersRange)">
+                <weights idref="migrationW$(n)"/>
+            </plate>
+        </skylineValues>
+        <changeTimes spec="RealParameterFromXSV" fileName="$(changeTimesFile)"/>
+    </migrationRate>
+
+    <removalProb id="removalProbSP" spec="SkylineVectorParameter" skylineValues="1.0" processLength="@processLength" typeSet="@typeSet"/>
+
+    <startTypePriorProbs id="typeFrequencies" spec="RealParameter" value="1.0 0.0 0.0 0.0 0.0"/>
+
+    <siteModel id="siteModel" spec="SiteModel" gammaCategoryCount="4" proportionInvariant="0.0">
+        <parameter id="gammaShape" name="shape" value="1.0"/>
+        <substModel spec="HKY">
+            <kappa id="kappa" spec="RealParameter" value="2.0"/>
+            <frequencies id="empiricalFreqs" spec="Frequencies" data="@alignment"/>
+        </substModel>
+    </siteModel>
+
+    <branchRateModel id="branchRateModel" spec="StrictClockModel" clock.rate="8.0E-4"/>
+
+    <popFunc id="popFunc" spec="ConstantPopulation" popSize="0.1"/>
+
+    <run spec="MCMC" chainLength="10000000" numInitializationAttempts="100">
+
+        <state spec="State" storeEvery="5000">            
+            <stateNode id="treeBDMMPrime" spec="RandomTree" taxa="@alignment" populationModel="@popFunc" trait="@dateTraitSet"/>
+            <stateNode idref="processLength"/>
+            <stateNode idref="Re"/>
+            <stateNode idref="samplingProportion"/>
+            <plate var="n" range="$(layersRange)">
+                <stateNode spec="RealParameter" id="migrationW$(n)" value="0"/>
+            </plate>
+            <stateNode idref="kappa"/>
+            <stateNode idref="gammaShape"/>
+        </state>
+    
+        <distribution id="posterior" spec="CompoundDistribution">
+            <distribution id="likelihood" spec="CompoundDistribution" useThreads="true">
+                <distribution id="treeLikelihood" spec="ThreadedTreeLikelihood" data="@alignment" tree="@treeBDMMPrime" siteModel="@siteModel" branchRateModel="@branchRateModel"/>
+            </distribution>
+
+            <distribution id="prior" spec="CompoundDistribution">
+                <distribution id="BDMMPrime" spec="BirthDeathMigrationDistribution" tree="@treeBDMMPrime" conditionOnSurvival="true" finalSampleOffset="0.0" typeTraitSet="@typeTraitSet" startTypePriorProbs="@typeFrequencies">
+                    <parameterization id="EpiBDMMPrimeParameterization" spec="EpiParameterization" processLength="@processLength" Re="@ReSP" samplingProportion="@samplingProportionSP" becomeUninfectiousRate="@becomeUninfectiousRateSP" migrationRate="@migrationRateSP" removalProb="@removalProbSP" typeSet="@typeSet"/>
+                </distribution> 
+
+                <prior name="distribution" x="@processLength">
+                    <LogNormal name="distr" M="-1.0" S="0.2"/>
+                </prior>
+                <distribution spec="SmartZeroExcludingPrior" x="@Re">
+                    <LogNormal name="distr" M="0.8" S="0.5"/>
+                </distribution>
+                <distribution spec="SmartZeroExcludingPrior" x="@samplingProportion" classesToExclude="1.2E-5 1.3E-5 1.4E-5 1.5E-5">
+                    <Uniform name="distr" lower="0" upper="0.15"/>
+                </distribution>
+                <distribution spec="SmartZeroExcludingPrior" x="@samplingProportion" classesToExclude="1.1E-5 1.3E-5 1.4E-5 1.5E-5">
+                    <Uniform name="distr" lower="0" upper="0.093"/>
+                </distribution>
+                <distribution spec="SmartZeroExcludingPrior" x="@samplingProportion" classesToExclude="1.1E-5 1.2E-5 1.4E-5 1.5E-5">
+                    <Uniform name="distr" lower="0" upper="0.10"/>
+                </distribution>
+                <distribution spec="SmartZeroExcludingPrior" x="@samplingProportion" classesToExclude="1.1E-5 1.2E-5 1.3E-5 1.5E-5">
+                    <Uniform name="distr" lower="0" upper="0.005"/>
+                </distribution>
+                <distribution spec="SmartZeroExcludingPrior" x="@samplingProportion" classesToExclude="1.1E-5 1.2E-5 1.3E-5 1.4E-5">
+                    <Uniform name="distr" lower="0" upper="0.057"/>
+                </distribution>
+                <plate var="n" range="$(layersRange)">
+                    <prior name="distribution" x="@migrationW$(n)">
+                        <Normal name="distr" mean="0.0" sigma="1.0"/>
+                    </prior>
+                </plate>
+                <prior name="distribution" x="@gammaShape">
+                    <Exponential name="distr" mean="0.5"/>
+                </prior>
+                <prior name="distribution" x="@kappa">
+                    <LogNormal name="distr" M="1.0" S="1.25"/>
+                </prior>
+            </distribution>
+        </distribution>
+
+        <operator spec="BactrianScaleOperator" tree="@treeBDMMPrime" rootOnly="true" scaleFactor="0.25"  weight="5.0"/>
+        <operator spec="BactrianNodeOperator" tree="@treeBDMMPrime" weight="30.0"/>
+        <operator spec="BactrianSubtreeSlide" tree="@treeBDMMPrime" weight="15.0"/>
+        <operator spec="Exchange" tree="@treeBDMMPrime" weight="15.0"/>
+        <operator spec="Exchange" tree="@treeBDMMPrime" isNarrow="false" weight="3.0"/>
+        <operator spec="WilsonBalding" tree="@treeBDMMPrime" weight="3.0"/>
+        <operator spec="EpochFlexOperator" tree="@treeBDMMPrime" scaleFactor="0.1" weight="2.0"/>
+        <operator spec="EpochFlexOperator" tree="@treeBDMMPrime" fromOldestTipOnly="false" scaleFactor="0.1" weight="2.0"/>
+        <operator spec="TreeStretchOperator" tree="@treeBDMMPrime" scaleFactor="0.01" weight="2.0"/>
+        <operator spec="BactrianScaleOperator" parameter="@processLength" scaleFactor="0.25" weight="3.0" />
+        <operator spec="BactrianScaleOperator" parameter="@Re" scaleFactor="0.25" weight="10.0"/>
+        <operator spec="SmartScaleOperator" parameter="@samplingProportion" weight="3.0" />
+        <plate var="n" range="$(layersRange)">
+            <operator spec="BactrianRandomWalkOperator" parameter="@migrationW$(n)" weight="5.0"/>
+        </plate>
+        <operator id="gammaShapeScaler" spec="BactrianScaleOperator" parameter="@gammaShape" weight="1.0"/>
+        <operator id="KappaScaler" spec="BactrianScaleOperator" parameter="@kappa" weight="1.0"/>
+        <operatorschedule spec="OperatorSchedule"/>
+
+        <logger spec="Logger" fileName="MCMC.log" logEvery="1000" model="@posterior" sanitiseHeaders="true" sort="smart">
+            <log idref="posterior"/>
+            <log idref="likelihood"/>
+            <log idref="prior"/>
+            <log idref="BDMMPrime"/>
+            <log idref="ReSP"/>
+            <log idref="samplingProportionSP"/>
+            <log idref="migrationRateSP"/>
+            <log idref="migrationRate"/>
+            <log spec="TypedTreeStatsLogger" includeRootEdge="true" typeLabel="type" typeSet="@typeSet">
+                <typedTree id="typeMappedTree" spec="TypeMappedTree" bdmmDistrib="@BDMMPrime" startTypePriorProbs="@typeFrequencies" mapOnInit="false" remapOnLog="true" typeLabel="type" typeTraitSet="@typeTraitSet" untypedTree="@treeBDMMPrime"/>
+            </log>
+        </logger>
+
+        <logger spec="OptionalLogger" enableLogger="true" fileName="TypedTree.trees" logEvery="10000" mode="tree">
+            <log idref="typeMappedTree"/>
+        </logger>
+
+        <logger spec="OptionalLogger" enableLogger="true" fileName="TypedNodeTree.trees" logEvery="10000" mode="tree">
+            <log spec="TypedNodeTreeLogger" typedTree="@typeMappedTree"/>
+        </logger>
+
+        <logger spec="OptionalLogger" enableLogger="true" fileName="trajectory.traj" logEvery="10000">
+            <log spec="SampledTrajectory" bdmmDistrib="@BDMMPrime" startTypePriorProbs="@typeFrequencies" typeMappedTree="@typeMappedTree" useTauLeaping="true"/>
+        </logger>
+
+    </run>
+    
+</beast>
