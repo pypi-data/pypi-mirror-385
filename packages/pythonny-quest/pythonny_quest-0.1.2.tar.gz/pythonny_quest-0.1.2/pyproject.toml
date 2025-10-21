@@ -1,0 +1,59 @@
+[project]
+name = "pythonny-quest"
+version = "0.1.2"
+description = "An iPython REPL that guides and motivates your quest to learn Python. Augments iPython with hints and CFL-style games to track your progress and avoid villains and pitfalls."
+readme = "README.md"
+authors = [
+    { name = "hobs", email = "github@totalgood.com" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "axiom-py",
+    "fuzzywuzzy>=0.18.0",
+    "ipython>=9.3.0",
+    "jsonlines",
+    "lxml>=5.4.0",
+    "matplotlib>=3.10.3",
+    "pandas>=2.3.0",
+    "pyperclip>=1.9.0",
+    "pyte>=0.8.2",
+    "pytest>=8.4.1",
+    "python-levenshtein>=0.27.1",
+    "requests>=2.32.4",
+    "scikit-learn>=1.7.0",
+    "seaborn>=0.13.2",
+    "dotenv>=0.9.9",
+]
+
+[project.scripts]
+pq = "pyquest:shell.main"
+pyquest = "pyquest:shell.main"
+pythonny = "pyquest:shell.main"
+
+# python-quest = "pyquest:main"
+# ipython-quest = "pyquest:main"
+# pythonquest = "pyquest:main"
+# ipythonquest = "pyquest:main"
+# python_quest = "pyquest:main"
+# ipython_quest = "pyquest:main"
+
+
+[project.optional-dependencies]
+dev = [
+    "pytest-coverage",
+    "black",
+    "twine",
+    "pip",
+    "build",
+    "wheel",
+    "jupyter",
+    "ipython",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pyquest"]
+
