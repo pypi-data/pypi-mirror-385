@@ -1,0 +1,17 @@
+{
+  "name": "@deephaven/js-plugin-theme-pack",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "npm run build -- -w",
+    "update-dh-packages": "node ../../../../tools/update-dh-packages.mjs"
+  },
+  "devDependencies": {
+    "@deephaven/plugin": "^1.6.0"
+  },
+  "private": true
+}
