@@ -1,0 +1,204 @@
+Metadata-Version: 2.4
+Name: hidennsim
+Version: 1.0.0
+Summary: Secure MCP server with JAX-based numerical tools
+Home-page: https://github.com/yourusername/hidennsim
+Author: HIDENNSIM Team
+Author-email: HIDENNSIM Team <support@hidennsim.com>
+License: Proprietary
+Project-URL: Homepage, https://github.com/yourusername/hidennsim
+Project-URL: Documentation, https://hidennsim.readthedocs.io
+Project-URL: Issues, https://github.com/yourusername/hidennsim/issues
+Keywords: mcp,jax,numerical,llm,claude
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: mcp>=1.0.0
+Requires-Dist: cryptography>=41.0.0
+Provides-Extra: cpu
+Requires-Dist: jax[cpu]>=0.4.20; extra == "cpu"
+Provides-Extra: cuda
+Requires-Dist: jax[cuda12]>=0.4.20; extra == "cuda"
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0.0; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.21.0; extra == "dev"
+Requires-Dist: black>=23.0.0; extra == "dev"
+Requires-Dist: mypy>=1.0.0; extra == "dev"
+Requires-Dist: cibuildwheel>=2.16.0; extra == "dev"
+Dynamic: author
+Dynamic: home-page
+Dynamic: requires-python
+
+# HIDENNSIM - Secure MCP Server with JAX Integration
+
+A licensed Model Context Protocol (MCP) server providing JAX-based numerical computation tools with hardware-bound license validation.
+
+## Features
+
+- ✅ MCP server with `add_jax` tool for floating-point addition using JAX
+- ✅ Layered security with Cython binary compilation
+- ✅ Hardware-bound license validation system
+- ✅ Cross-platform support (Windows, macOS, Linux)
+- ✅ Professional pip-installable distribution
+- ✅ Integration guides for Claude Desktop, Cursor, and ChatGPT
+
+## Quick Start
+
+### 1. Create Virtual Environment (Recommended)
+
+Creating a virtual environment isolates HIDENNSIM and its dependencies from your system Python, preventing conflicts with other projects.
+
+**macOS/Linux:**
+```bash
+python3 -m venv hidennsim-env
+source hidennsim-env/bin/activate
+```
+
+**Windows (PowerShell):**
+```powershell
+python -m venv hidennsim-env
+.\hidennsim-env\Scripts\Activate.ps1
+```
+
+**Windows (Command Prompt):**
+```cmd
+python -m venv hidennsim-env
+hidennsim-env\Scripts\activate.bat
+```
+
+> **Note:** Your terminal prompt should now show `(hidennsim-env)` indicating the virtual environment is active.
+
+### 2. Install HIDENNSIM
+
+**If you received a wheel file (.whl):**
+
+```bash
+# Windows (PowerShell)
+pip install C:\Path\To\hidennsim-1.0.0-cp313-cp313-win_amd64.whl
+
+# macOS/Linux
+pip install /path/to/hidennsim-1.0.0-cp313-cp313-win_amd64.whl
+```
+
+**If published to PyPI (future):**
+
+```bash
+pip install hidennsim
+```
+
+> **Note:** If you received a wheel file directly, use the wheel installation method above. See [CLIENT_INSTALLATION.md](CLIENT_INSTALLATION.md) for detailed client installation instructions.
+
+### 3. Install JAX
+
+Choose the appropriate JAX installation for your system:
+
+**CPU-Only:**
+```bash
+pip install "jax[cpu]"
+```
+
+**GPU-Accelerated (NVIDIA GPU with CUDA):**
+```bash
+pip install "jax[cuda12]"
+```
+
+### 4. Get Hardware Fingerprint
+
+```bash
+hidennsim-license hardware
+```
+
+### 5. Activate License
+
+After purchasing your license, activate it:
+
+```bash
+hidennsim-license activate /path/to/license.key
+```
+
+### 6. Configure LLM
+
+#### Claude Desktop Config Location
+
+**macOS:**
+```
+~/Library/Application Support/Claude/claude_desktop_config.json
+```
+
+**Windows:**
+```
+%APPDATA%\Claude\claude_desktop_config.json
+```
+
+**Linux:**
+```
+~/.config/Claude/claude_desktop_config.json
+```
+
+#### Configuration
+
+Add to your Claude Desktop config:
+
+**If virtual environment is active when starting Claude Desktop:**
+```json
+{
+  "mcpServers": {
+    "hidennsim": {
+      "command": "hidennsim",
+      "args": [],
+      "env": {}
+    }
+  }
+}
+```
+
+**OR use full path to virtual environment executable:**
+
+**macOS/Linux:**
+```json
+{
+  "mcpServers": {
+    "hidennsim": {
+      "command": "/full/path/to/hidennsim-env/bin/hidennsim",
+      "args": [],
+      "env": {}
+    }
+  }
+}
+```
+
+**Windows:**
+```json
+{
+  "mcpServers": {
+    "hidennsim": {
+      "command": "C:\\full\\path\\to\\hidennsim-env\\Scripts\\hidennsim.exe",
+      "args": [],
+      "env": {}
+    }
+  }
+}
+```
+
+## Documentation
+
+- [Installation Guide](docs/installation.md)
+- [Configuration Guide](docs/configuration.md)
+- [License Activation](docs/license-activation.md)
+- [Troubleshooting](docs/troubleshooting.md)
+
+## System Requirements
+
+- **Python:** 3.10 or higher
+- **Operating System:** Windows 10+, macOS 12+, or Linux (Ubuntu 20.04+)
+- **RAM:** 4GB minimum (8GB recommended for GPU acceleration)
+- **Disk Space:** 1GB for installation
+
+## License
+
+Proprietary - Contact support@hidennsim.com for licensing information.
+
+## Support
+
+- **Email:** support@hidennsim.com
+- **Documentation:** https://hidennsim.readthedocs.io
+- **Issues:** https://github.com/yourusername/hidennsim/issues
