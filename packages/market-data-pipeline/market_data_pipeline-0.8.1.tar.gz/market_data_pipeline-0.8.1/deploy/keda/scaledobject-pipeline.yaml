@@ -1,0 +1,31 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: mdp-pipeline-scaler
+  namespace: market-data
+spec:
+  scaleTargetRef:
+    name: mdp-pipeline
+  minReplicaCount: 1
+  maxReplicaCount: 10
+  cooldownPeriod: 60
+  pollingInterval: 15
+  triggers:
+    # Trigger 1: Scale based on feedback queue depth from store
+    - type: prometheus
+      metadata:
+        serverAddress: http://prometheus.monitoring.svc.cluster.local:9090
+        metricName: pipeline_feedback_queue_depth
+        threshold: "5000"  # Scale up when store queue > 5000 items
+        query: |
+          max(pipeline_feedback_queue_depth{source="store_coordinator"})
+    
+    # Trigger 2: Scale based on hard backpressure state
+    - type: prometheus
+      metadata:
+        serverAddress: http://prometheus.monitoring.svc.cluster.local:9090
+        metricName: pipeline_backpressure_hard
+        threshold: "0.5"  # Scale up if any provider in HARD state
+        query: |
+          max(pipeline_backpressure_state{provider=~".*"} == 2)
+

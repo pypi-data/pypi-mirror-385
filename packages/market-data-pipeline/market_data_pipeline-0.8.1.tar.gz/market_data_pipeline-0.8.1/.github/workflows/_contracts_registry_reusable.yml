@@ -1,0 +1,73 @@
+name: _contracts_registry_reusable
+
+on:
+  workflow_call:
+    inputs:
+      registry_url:
+        description: "Schema Registry URL"
+        required: false
+        type: string
+        default: "https://registry.openbb.co/api/v1"
+      schema_track:
+        description: "Schema track (v1/v2)"
+        required: false
+        type: string
+        default: "v2"
+    secrets:
+      REGISTRY_TOKEN:
+        description: "Optional registry authentication token"
+        required: false
+
+jobs:
+  registry-contracts:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+      
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install project + dev deps
+        run: |
+          pip install -U pip wheel
+          pip install -e ".[dev]"
+      
+      - name: Fetch schemas from Registry
+        env:
+          REGISTRY_URL: ${{ inputs.registry_url }}
+          REGISTRY_TOKEN: ${{ secrets.REGISTRY_TOKEN }}
+          SCHEMA_TRACK: ${{ inputs.schema_track }}
+        run: |
+          echo "Fetching schemas from Registry..."
+          python scripts/fetch_schemas.py \
+            --output tests/contracts/schemas \
+            --track ${{ inputs.schema_track }}
+      
+      - name: Verify schemas fetched
+        run: |
+          echo "Fetched schemas:"
+          ls -lh tests/contracts/schemas/
+      
+      - name: Run contract tests (registry mode)
+        env:
+          REGISTRY_ENABLED: "true"
+          REGISTRY_URL: ${{ inputs.registry_url }}
+          REGISTRY_TOKEN: ${{ secrets.REGISTRY_TOKEN }}
+          SCHEMA_PREFER_TRACK: ${{ inputs.schema_track }}
+        run: |
+          pytest tests/contracts/ -v --tb=short -m "not skip_registry"
+      
+      - name: Upload schema artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: registry-schemas-${{ inputs.schema_track }}
+          path: tests/contracts/schemas/
+          retention-days: 7
+
+

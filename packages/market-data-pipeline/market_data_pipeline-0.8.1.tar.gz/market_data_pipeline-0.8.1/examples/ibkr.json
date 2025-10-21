@@ -1,0 +1,19 @@
+{
+  "tenant_id": "T1",
+  "pipeline_id": "ibkr-live",
+  "source": "ibkr",
+  "symbols": ["AAPL", "MSFT", "TSLA"],
+  "duration_sec": null,
+  "operator": "bars",
+  "sink": "store",
+  "overrides": {
+    "ticks_per_sec": 200,
+    "pacing_max_per_sec": 200,
+    "pacing_burst": 200,
+    "batch_size": 500,
+    "flush_ms": 50,
+    "sink_workers": 4,
+    "sink_queue_max": 500,
+    "bar_allowed_lateness_sec": 1
+  }
+}

@@ -1,0 +1,16 @@
+name: dispatch_contracts
+
+on:
+  workflow_dispatch:
+    inputs:
+      core_ref:
+        description: "Core ref (tag/branch/SHA)"
+        required: true
+        type: string
+
+jobs:
+  run:
+    uses: ./.github/workflows/_contracts_reusable.yml
+    with:
+      core_ref: ${{ inputs.core_ref }}
+

@@ -1,0 +1,38 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: mdp-pipeline
+  namespace: market-data
+  labels:
+    app: mdp-pipeline
+    prometheus: kube-prometheus
+spec:
+  selector:
+    matchLabels:
+      app: mdp-pipeline
+  namespaceSelector:
+    matchNames:
+      - market-data
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 15s
+      scrapeTimeout: 10s
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mdp-pipeline
+  namespace: market-data
+  labels:
+    app: mdp-pipeline
+spec:
+  type: ClusterIP
+  selector:
+    app: mdp-pipeline
+  ports:
+  - name: http
+    port: 8000
+    targetPort: 8000
+    protocol: TCP
+

@@ -1,0 +1,18 @@
+{
+  "tenant_id": "trading_tenant",
+  "pipeline_id": "ibkr_hft",
+  "source": "ibkr",
+  "symbols": ["SPY", "QQQ", "IWM", "GLD"],
+  "operator": "bars",
+  "sink": "store",
+  "overrides": {
+    "ticks_per_sec": 500,
+    "pacing_max_per_sec": 2000,
+    "pacing_burst": 3000,
+    "batch_size": 1000,
+    "flush_ms": 50,
+    "sink_workers": 4,
+    "sink_queue_max": 500,
+    "bar_allowed_lateness_sec": 1
+  }
+}

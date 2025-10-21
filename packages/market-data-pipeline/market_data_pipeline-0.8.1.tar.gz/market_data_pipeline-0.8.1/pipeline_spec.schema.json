@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PipelineSpec",
+  "type": "object",
+  "required": ["tenant_id", "pipeline_id", "source"],
+  "properties": {
+    "tenant_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique tenant identifier"
+    },
+    "pipeline_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique pipeline identifier"
+    },
+    "source": {
+      "type": "string",
+      "enum": ["synthetic", "replay", "ibkr"],
+      "description": "Pipeline source type"
+    },
+    "symbols": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Symbols to subscribe (synthetic/IBKR sources only)",
+      "default": []
+    },
+    "duration_sec": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "description": "Duration in seconds to run (null = indefinite)"
+    },
+    "operator": {
+      "type": "string",
+      "enum": ["bars", "options"],
+      "description": "Pipeline operator type",
+      "default": "bars"
+    },
+    "sink": {
+      "type": "string",
+      "enum": ["store", "kafka"],
+      "description": "Pipeline sink type",
+      "default": "store"
+    },
+    "overrides": {
+      "type": "object",
+      "description": "Optional overrides for source/operator/batcher/sink settings",
+      "properties": {
+        "ticks_per_sec": { 
+          "type": "integer", 
+          "minimum": 1,
+          "description": "Ticks per second for synthetic/IBKR sources"
+        },
+        "pacing_max_per_sec": { 
+          "type": "integer", 
+          "minimum": 1,
+          "description": "Maximum messages per second for pacing"
+        },
+        "pacing_burst": { 
+          "type": "integer", 
+          "minimum": 1,
+          "description": "Pacing burst capacity"
+        },
+        "replay_path": { 
+          "type": "string",
+          "description": "Path to replay file (replay source only)"
+        },
+        "replay_speed": { 
+          "type": "number", 
+          "minimum": 0,
+          "description": "Replay speed multiplier (1.0 = realtime)"
+        },
+        "bar_window_sec": { 
+          "type": "integer", 
+          "minimum": 1,
+          "description": "Bar aggregation window in seconds"
+        },
+        "bar_allowed_lateness_sec": { 
+          "type": "integer", 
+          "minimum": 0,
+          "description": "Allowed lateness for bar aggregation"
+        },
+        "batch_size": { 
+          "type": "integer", 
+          "minimum": 1,
+          "description": "Maximum batch size"
+        },
+        "max_bytes": { 
+          "type": "integer", 
+          "minimum": 1,
+          "description": "Maximum batch size in bytes"
+        },
+        "flush_ms": { 
+          "type": "integer", 
+          "minimum": 1,
+          "description": "Flush interval in milliseconds"
+        },
+        "op_queue_max": { 
+          "type": "integer", 
+          "minimum": 1,
+          "description": "Maximum operator queue size"
+        },
+        "drop_policy": { 
+          "type": "string", 
+          "enum": ["oldest", "newest", "block"],
+          "description": "Drop policy for backpressure"
+        },
+        "sink_workers": { 
+          "type": "integer", 
+          "minimum": 1,
+          "description": "Number of sink workers"
+        },
+        "sink_queue_max": { 
+          "type": "integer", 
+          "minimum": 1,
+          "description": "Maximum sink queue size"
+        },
+        "kafka_bootstrap": { 
+          "type": "string",
+          "description": "Kafka bootstrap servers (kafka sink only)"
+        },
+        "kafka_topic": { 
+          "type": "string",
+          "description": "Kafka topic name (kafka sink only)"
+        },
+        "database_vendor": { 
+          "type": "string",
+          "description": "Database vendor identifier (database sink only)"
+        },
+        "database_timeframe": { 
+          "type": "string",
+          "description": "Database timeframe label (database sink only)"
+        },
+        "database_retry_max_attempts": { 
+          "type": "integer", 
+          "minimum": 1,
+          "description": "Maximum database retry attempts (database sink only)"
+        },
+        "database_retry_backoff_ms": { 
+          "type": "integer", 
+          "minimum": 1,
+          "description": "Database retry backoff in milliseconds (database sink only)"
+        },
+        "database_url": { 
+          "type": "string",
+          "description": "Database connection URL (database sink only)"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,29 @@
+name: dispatch_contracts_registry
+
+on:
+  workflow_dispatch:
+    inputs:
+      registry_url:
+        description: "Schema Registry URL"
+        required: false
+        type: string
+        default: "https://registry.openbb.co/api/v1"
+      schema_track:
+        description: "Schema track (v1/v2)"
+        required: false
+        type: choice
+        options:
+          - v2
+          - v1
+        default: "v2"
+
+jobs:
+  run:
+    uses: ./.github/workflows/_contracts_registry_reusable.yml
+    with:
+      registry_url: ${{ inputs.registry_url }}
+      schema_track: ${{ inputs.schema_track }}
+    secrets:
+      REGISTRY_TOKEN: ${{ secrets.REGISTRY_TOKEN }}
+
+

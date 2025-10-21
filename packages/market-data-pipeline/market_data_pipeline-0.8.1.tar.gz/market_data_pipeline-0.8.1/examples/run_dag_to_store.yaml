@@ -1,0 +1,33 @@
+mode: dag
+
+dag:
+  graph:
+    nodes:
+      - id: src
+        type: provider.ibkr.stream
+        params:
+          stream: "bars"
+          symbols:
+            - AAPL
+            - MSFT
+          resolution: "5s"
+          settings:
+            host: "127.0.0.1"
+            port: 4002
+            client_id: 101
+
+      - id: resample
+        type: operator.resample_ohlc
+        params:
+          interval: "1m"
+
+      - id: sink
+        type: operator.map
+        params:
+          fn_name: "store_bars"
+          sink: "market_data_store.sinks.bars.BarsSink"
+
+    edges:
+      - [src, resample]
+      - [resample, sink]
+

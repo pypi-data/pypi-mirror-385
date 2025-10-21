@@ -1,0 +1,15 @@
+{
+  "tenant_id": "demo_tenant",
+  "pipeline_id": "synthetic_demo",
+  "source": "synthetic",
+  "symbols": ["AAPL", "MSFT", "GOOGL"],
+  "duration_sec": 10.0,
+  "operator": "bars",
+  "sink": "store",
+  "overrides": {
+    "ticks_per_sec": 100,
+    "batch_size": 500,
+    "flush_ms": 100,
+    "sink_workers": 2
+  }
+}

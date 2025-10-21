@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mdp-pipeline
+  namespace: market-data
+  labels:
+    app: mdp-pipeline
+    version: "0.8.1"
+spec:
+  replicas: 1  # KEDA will override this
+  selector:
+    matchLabels:
+      app: mdp-pipeline
+  template:
+    metadata:
+      labels:
+        app: mdp-pipeline
+        version: "0.8.1"
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8000"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+      - name: pipeline
+        image: your-registry/mdp-pipeline:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
+          name: http
+          protocol: TCP
+        env:
+        - name: MDP_MODE
+          value: "dag"
+        - name: MDP_FB_ENABLE_FEEDBACK
+          value: "true"
+        - name: MDP_FB_PROVIDER_NAME
+          value: "ibkr"
+        - name: MDP_METRICS_ENABLE
+          value: "true"
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "512Mi"
+          limits:
+            cpu: "2000m"
+            memory: "2Gi"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 5
+

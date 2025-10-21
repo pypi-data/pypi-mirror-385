@@ -1,0 +1,30 @@
+name: dispatch_enforcement_matrix
+
+on:
+  workflow_dispatch:
+    inputs:
+      registry_url:
+        description: "Schema Registry URL"
+        required: false
+        type: string
+        default: "https://registry.openbb.co/api/v1"
+  
+  # Auto-run on push to main/base for enforcement validation
+  push:
+    branches:
+      - base
+      - main
+    paths:
+      - 'src/market_data_pipeline/schemas/**'
+      - 'tests/schemas/**'
+      - 'tests/contracts/**'
+
+jobs:
+  run:
+    uses: ./.github/workflows/_enforcement_matrix.yml
+    with:
+      registry_url: ${{ inputs.registry_url || 'https://registry.openbb.co/api/v1' }}
+    secrets:
+      REGISTRY_TOKEN: ${{ secrets.REGISTRY_TOKEN }}
+
+

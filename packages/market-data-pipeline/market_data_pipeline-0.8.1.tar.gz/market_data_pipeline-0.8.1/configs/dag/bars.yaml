@@ -1,0 +1,32 @@
+mode: dag
+
+dag:
+  graph:
+    nodes:
+      - id: src
+        type: provider.ibkr.stream
+        params:
+          stream: "bars"
+          settings:
+            host: "127.0.0.1"
+            port: 4002
+            client_id: 17
+          symbols: ["AAPL", "MSFT"]
+          resolution: "5s"
+
+      - id: buffer
+        type: operator.buffer
+        params:
+          max_items: 500
+          flush_interval: 0.25
+
+      - id: sink
+        type: operator.map
+        params:
+          # Demo: pass-through (replace with a sink adapter map if desired)
+          fn_name: "identity"
+
+    edges:
+      - [src, buffer]
+      - [buffer, sink]
+

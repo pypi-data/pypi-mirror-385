@@ -1,0 +1,17 @@
+{
+  "tenant_id": "T1",
+  "pipeline_id": "synthetic-demo",
+  "source": "synthetic",
+  "symbols": ["NVDA", "SPY", "QQQ"],
+  "duration_sec": 15,
+  "operator": "bars",
+  "sink": "store",
+  "overrides": {
+    "ticks_per_sec": 50,
+    "batch_size": 200,
+    "flush_ms": 100,
+    "sink_workers": 2,
+    "sink_queue_max": 100,
+    "drop_policy": "oldest"
+  }
+}

@@ -1,0 +1,23 @@
+name: dispatch_pulse
+
+on:
+  workflow_dispatch:
+    inputs:
+      core_ref:
+        description: "Core ref (tag/branch/SHA)"
+        required: true
+        type: string
+
+jobs:
+  matrix:
+    strategy:
+      matrix:
+        schema_track: [v1, v2]
+        bus_backend: [inmem, redis]
+    
+    uses: ./.github/workflows/_pulse_reusable.yml
+    with:
+      core_ref: ${{ inputs.core_ref }}
+      schema_track: ${{ matrix.schema_track }}
+      bus_backend: ${{ matrix.bus_backend }}
+

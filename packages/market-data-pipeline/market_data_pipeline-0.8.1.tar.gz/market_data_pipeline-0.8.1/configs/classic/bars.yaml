@@ -1,0 +1,14 @@
+mode: classic
+
+classic:
+  # Pass-through for your existing PipelineBuilder/Service
+  spec:
+    name: "bars-classic"
+    source:
+      type: "synthetic"   # Your builder understands this type
+      symbols: ["AAPL", "MSFT"]
+      interval_ms: 100
+    sink:
+      type: "console"
+    # other builder knobs...
+

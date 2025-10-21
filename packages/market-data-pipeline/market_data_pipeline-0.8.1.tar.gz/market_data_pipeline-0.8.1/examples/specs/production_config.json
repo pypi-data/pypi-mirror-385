@@ -1,0 +1,22 @@
+{
+  "tenant_id": "prod_tenant",
+  "pipeline_id": "production_pipeline",
+  "source": "synthetic",
+  "symbols": ["SPY", "QQQ", "IWM"],
+  "operator": "bars",
+  "sink": "store",
+  "overrides": {
+    "ticks_per_sec": 1000,
+    "pacing_max_per_sec": 5000,
+    "pacing_burst": 7500,
+    "batch_size": 2000,
+    "max_bytes": 1024000,
+    "flush_ms": 25,
+    "op_queue_max": 16,
+    "drop_policy": "oldest",
+    "sink_workers": 8,
+    "sink_queue_max": 1000,
+    "bar_window_sec": 1,
+    "bar_allowed_lateness_sec": 2
+  }
+}

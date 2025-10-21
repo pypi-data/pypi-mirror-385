@@ -1,0 +1,17 @@
+{
+  "tenant_id": "research_tenant",
+  "pipeline_id": "options_analysis",
+  "source": "replay",
+  "operator": "options",
+  "sink": "kafka",
+  "overrides": {
+    "replay_path": "/data/market_replay_2024.parquet",
+    "replay_speed": 2.0,
+    "kafka_bootstrap": "kafka-cluster:9092",
+    "kafka_topic": "options_chains",
+    "batch_size": 2000,
+    "flush_ms": 200,
+    "sink_workers": 6,
+    "bar_window_sec": 5
+  }
+}

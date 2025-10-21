@@ -1,0 +1,18 @@
+{
+  "tenant_id": "T1",
+  "pipeline_id": "replay-sim",
+  "source": "replay",
+  "symbols": [],
+  "duration_sec": 30,
+  "operator": "bars",
+  "sink": "store",
+  "overrides": {
+    "replay_path": "data/sample_ticks.parquet",
+    "replay_speed": 1.0,
+    "batch_size": 300,
+    "flush_ms": 200,
+    "sink_workers": 2,
+    "sink_queue_max": 200,
+    "drop_policy": "oldest"
+  }
+}

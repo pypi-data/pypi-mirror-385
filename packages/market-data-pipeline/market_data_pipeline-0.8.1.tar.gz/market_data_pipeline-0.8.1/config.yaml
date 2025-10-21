@@ -1,0 +1,49 @@
+# Market Data Pipeline Configuration
+# This file provides default configuration values for the pipeline
+# Environment variables can override these settings using PIPELINE_ prefix
+
+# Pipeline Configuration
+pipeline:
+  batch_size: 500
+  flush_ms: 100
+  max_bytes: 512000
+
+# Queue Configuration  
+queues:
+  op_queue_max: 8
+  sink_queue_max: 16
+  drop_policy: "oldest"  # "oldest" or "newest"
+
+# Sink Configuration
+sink:
+  workers: 2
+  queue_max: 100
+  backpressure_policy: "block"  # "block", "drop_oldest", "drop_newest"
+
+# Database Sink Configuration
+database:
+  vendor: "market_data_pipeline"
+  timeframe: "1s"
+  workers: 2
+  queue_max: 200
+  backpressure_policy: "block"  # "block", "drop_oldest", "drop_newest"
+  retry_max_attempts: 5
+  retry_backoff_ms: 50
+  pool_size: 10
+  # database_url: "postgresql://user:pass@localhost/db"  # Optional, for AMDS
+
+# Pacing Configuration
+pacing:
+  max_msgs_per_sec: 1000
+  burst: 1000
+
+# Telemetry Configuration
+telemetry:
+  enable_metrics: true
+  enable_tracing: false
+  metrics_port: 8080
+
+# Development Configuration
+development:
+  log_level: "INFO"
+  debug: false

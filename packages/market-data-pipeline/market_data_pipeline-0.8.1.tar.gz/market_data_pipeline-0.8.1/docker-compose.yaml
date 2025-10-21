@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  mdp-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mdp_api
+    command: uvicorn market_data_pipeline.runners.api:app --host 0.0.0.0 --port 8083
+    ports:
+      - "8083:8083"
+    environment:
+      LOG_LEVEL: INFO
+      PIPELINE_BATCH_SIZE: 500
+      PIPELINE_FLUSH_MS: 100
+      SINK_WORKERS: 2
+      SINK_QUEUE_MAX: 100
+      DROP_POLICY: oldest
+      # DB config passed through to market_data_store
+      DATABASE_URL: postgres://postgres:postgres@md_postgres:5432/market_data
+    depends_on:
+      - md_postgres
+
+  md_postgres:
+    image: timescale/timescaledb:2.20.3-pg15-oss
+    container_name: md_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: market_data
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./docker/initdb.d:/docker-entrypoint-initdb.d:ro
+
+volumes:
+  pg_data:
