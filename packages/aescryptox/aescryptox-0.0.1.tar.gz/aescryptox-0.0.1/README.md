@@ -1,0 +1,210 @@
+# 🔒 AESCryptoX — Pure Python Advanced AES Encryption Library
+
+> **Versi:** 0.0.1  
+> **Dibuat oleh:** [ATHALLAH RAJENDRA PUTRA JUNIARTO]  
+> **Lisensi:** MIT  
+> **Bahasa:** Python 3.7+  
+> **Topik:** Keamanan, Kriptografi, Enkripsi File
+
+---
+
+## 🧠 Tentang AESCryptoX
+
+**AESCryptoX** adalah **library AES (Advanced Encryption Standard)** yang ditulis **murni dalam Python (tanpa dependensi eksternal seperti `pycryptodome`)**.  
+Dirancang untuk memberikan **fungsi enkripsi dan dekripsi tingkat lanjut**, termasuk berbagai **mode operasi AES modern dan aman**, serta **dukungan untuk file encryption, HMAC, dan AES Key Wrap (RFC 3394).**
+
+Library ini cocok untuk:
+- Pengembang yang ingin **memahami cara kerja AES di level rendah (block cipher & mode operasi)**.
+- Proyek yang membutuhkan **implementasi AES tanpa dependensi luar.**
+- Aplikasi keamanan, sistem file terenkripsi, atau protokol komunikasi aman.
+
+---
+
+## ⚙️ Fitur Utama
+
+| Fitur | Deskripsi |
+|:------|:-----------|
+| 🔐 **Multi-Mode AES** | Mendukung semua mode operasi penting: `ECB`, `CBC`, `PCBC`, `CTR`, `GCM`, `CCM`, `XTS`, `SIV`, `EAX`, `OCB3`, `OFB`, `CFB` |
+| 📂 **File Encryption** | Enkripsi & dekripsi file langsung (`AESFile`) dengan dukungan HMAC opsional |
+| 🧩 **HMAC-SHA256** | Implementasi murni HMAC-SHA256 untuk verifikasi integritas data |
+| 🪄 **AES Key Wrap / Unwrap** | Implementasi standar RFC 3394 untuk mengamankan kunci |
+| 🧰 **Utility Lengkap** | Padding, Base64, Hex, dan random byte generator |
+| 🧠 **Tanpa Dependensi Eksternal** | 100% Python — tidak memerlukan pustaka eksternal |
+| 🧪 **Mode Autentikasi Lengkap** | Termasuk `GCM`, `CCM`, `SIV`, `EAX`, dan `OCB3` |
+| 🔁 **File Mode-Aware Header** | Setiap file terenkripsi menyimpan mode AES di header-nya |
+| 🧾 **Tipe Data Lengkap** | Dapat mengenkripsi `bytes`, `str`, atau file dalam berbagai mode |
+| 🧩 **Integrasi Mudah** | Dapat diintegrasikan dengan aplikasi CLI, GUI, atau web backend |
+
+---
+
+## 📦 Instalasi
+
+### 1️⃣ Menginstal Langsung dari Sumber
+Clone repositori dan instal secara lokal:
+
+```bash
+git clone https://github.com/yourusername/AESCryptoX.git
+cd AESCryptoX
+pip install .
+```
+
+### 2️⃣ Instalasi via pip (setelah upload ke PyPI)
+```bash
+pip install aescryptox
+```
+dengan versi
+```bash
+pip install aescryptox==0.0.1
+```
+
+## 🧭 Struktur Paket
+```yaml
+AESCryptoX/
+├── __init__.py
+├── aes.py              # Implementasi utama AES
+├── modes.py            # Enum mode AES
+├── utils.py            # Fungsi bantu (pad, hex, base64, random_bytes)
+├── filecrypto.py       # Enkripsi & dekripsi file
+├── hmac_sha256.py      # Implementasi HMAC-SHA256
+├── keywrap.py          # AES Key Wrap / Unwrap (RFC 3394)
+└── setup.py            # Konfigurasi paket
+```
+
+## 📘 Dokumentasi Lengkap
+🔹 **1. Import Library**
+```python
+from aescryptox import AES, AESMode, AESFile, random_bytes
+```
+
+🔹 **2. Enkripsi dan Dekripsi Sederhana (ECB/CBC/CTR)**
+```python
+from aescryptox import AES, AESMode, random_bytes
+
+key = random_bytes(16)  # 128-bit key
+iv = random_bytes(16)
+data = b"Data rahasia super penting!"
+
+# Enkripsi CBC
+aes = AES(key, AESMode.CBC, iv)
+ciphertext = aes.encrypt(data)
+print("Ciphertext:", ciphertext.hex())
+
+# Dekripsi CBC
+plaintext = aes.decrypt(ciphertext)
+print("Dekripsi:", plaintext.decode())
+```
+
+🔹 **3. Enkripsi File**
+```python
+from aescryptox import AESFile, AESMode, random_bytes
+
+key = random_bytes(32)  # AES-256
+AESFile.encrypt_file("dokumen.pdf", "dokumen_encrypted.aes", key, AESMode.GCM)
+AESFile.decrypt_file("dokumen_encrypted.aes", "dokumen_decrypted.pdf", key)
+```
+🔹 **4. Enkripsi File dengan Mode AEAD (contoh: GCM)**
+```python
+AESFile.encrypt_file(
+    "data.txt", "data_secure.bin", key, AESMode.GCM
+)
+AESFile.decrypt_file(
+    "data_secure.bin", "data_decrypted.txt", key
+)
+```
+> 📌 File terenkripsi menyimpan header mode dan IV di bagian awal file secara otomatis.
+
+🔹 **4. Menggunakan AES di Mode-Mode Modern**
+🟢 **AES-GCM (Authenticated Encryption)**
+```python
+from aescryptox import AES, AESMode, random_bytes
+
+key = random_bytes(16)
+iv = random_bytes(16)
+aes = AES(key, AESMode.GCM, iv)
+
+ciphertext, tag = aes.gcm_encrypt(b"Pesan penting", aad=b"header-aman")
+plaintext = aes.gcm_decrypt(ciphertext, tag, aad=b"header-aman")
+
+print("Hasil:", plaintext.decode())
+```
+
+🔵 **AES-CCM**
+```python
+aes = AES(key, AESMode.CCM, iv)
+ciphertext, tag = aes.ccm_encrypt(b"Rahasia!", aad=b"metadata")
+plaintext = aes.ccm_decrypt(ciphertext, tag, aad=b"metadata")
+```
+
+🟣 **AES-EAX**
+```python
+aes = AES(key, AESMode.EAX)
+ciphertext, tag = aes.eax_encrypt(b"Data rahasia", nonce=iv)
+plaintext = aes.eax_decrypt(ciphertext, nonce=iv, tag=tag)
+```
+
+🔴 **AES-SIV (Nonce-Misuse Resistant)**
+```python
+aes = AES(key * 2, AESMode.SIV)
+ciphertext, tag = aes.siv_encrypt(b"Pesan aman", aad=b"context")
+plaintext = aes.siv_decrypt(ciphertext, tag, aad=b"context")
+```
+
+⚫ **AES-OCB3 (Authenticated, Efficient)**
+```python
+aes = AES(key, AESMode.OCB3)
+ciphertext, tag = aes.ocb3_encrypt(b"Data super aman", nonce=iv)
+plaintext = aes.ocb3_decrypt(ciphertext, nonce=iv, tag=tag)
+```
+
+🔹 **5. Mode Streaming (OFB, CFB)**
+```python
+aes = AES(key, AESMode.OFB, iv)
+enc = aes.ofb_encrypt(b"stream-data")
+dec = aes.ofb_decrypt(enc)
+```
+
+🔹 6. **AES Key Wrap / Unwrap (RFC 3394)**
+```python
+from aescryptox import AESKeyWrap
+
+kek = random_bytes(32)  # Key Encryption Key
+plaintext_key = random_bytes(32)
+wrapped = AESKeyWrap.wrap(kek, plaintext_key)
+unwrapped = AESKeyWrap.unwrap(kek, wrapped)
+
+print("Key cocok:", plaintext_key == unwrapped)
+```
+
+🔹 **7. HMAC-SHA256 (Integrity Check)**
+```python
+from aescryptox import HMAC_SHA256
+
+key = b"supersecret"
+msg = b"Integrity check"
+h = HMAC_SHA256(key)
+digest = h.digest(msg)
+print("HMAC:", digest.hex())
+```
+
+🔹 **8. Contoh Konversi Utility**
+```python
+from aescryptox import bytes_to_hex, hex_to_bytes, bytes_to_base64, base64_to_bytes
+
+data = b"hello world"
+print(bytes_to_hex(data))        # → 68656c6c6f20776f726c64
+print(bytes_to_base64(data))     # → aGVsbG8gd29ybGQ=
+```
+
+## 🧑‍💻 Kontribusi
+Kontribusi sangat diterima! \n
+Jika kamu menemukan bug atau ingin menambah fitur baru:
+1. Fork repository ini.
+2. Buat branch baru.
+3. Lakukan perubahan.
+4. Kirim Pull Request.
+
+## 🛡️ Lisensi
+AESCryptoX dilisensikan di bawah **[MIT License]()**. \n
+Kamu bebas menggunakan, memodifikasi, dan mendistribusikan library ini secara komersial maupun non-komersial.
+
+> “AESCryptoX — Dirancang untuk keamanan, dibangun dengan presisi, dijalankan dengan Python.”
