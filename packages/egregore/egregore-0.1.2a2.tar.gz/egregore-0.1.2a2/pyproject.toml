@@ -1,0 +1,70 @@
+[tool.poetry]
+name = "egregore"
+version = "0.1.2a2"
+description = "Tools for creating llm applications"
+authors = ["Earl Dennison Tan"]
+readme = "README.md"
+packages = [{ include = "egregore" }]
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.13"
+uvicorn = "^0.34.2"
+chromadb = "^0.4.17"
+guidance = "^0.1.14"
+openai = "^1.99.9"
+pydantic = "^2.7.1"
+anthropic = "^0.52.0"
+msal = "^1.31.0"
+pygtrie = "^2.5.0"
+jinja2 = "^3.1.6"
+google-genai = "^1.16.1"
+instructor = "^1.7.9"
+matplotlib = "^3.10.3"
+seaborn = "^0.13.2"
+litellm = "^1.72.9"
+pyyaml = "^6.0.2"
+any-llm-sdk = "^0.20.3"
+
+[tool.poetry.group.dev.dependencies]
+ipython = "^8.16.1"
+ipykernel = "^6.25.2"
+types-requests = "^2.32.0.20240914"
+types-regex = "^2024.9.11.20240912"
+pytest-asyncio = "^1.0.0"
+pytest-cov = "^4.0.0"
+
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--tb=short",
+    "--cov=egregore",
+    "--cov-report=term-missing",
+    "--cov-report=html:htmlcov",
+    "--cov-fail-under=70"
+]
+markers = [
+    "unit: Unit tests",
+    "core: Core tests",
+    "integration: Integration tests", 
+    "e2e: End-to-end tests",
+    "performance: Performance tests",
+    "slow: Tests that take a long time to run",
+    "provider: Provider-specific tests",
+    "scaffold: Scaffold-specific tests",
+    "tool: Tool-specific tests",
+    "regression: Regression tests"
+]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+sync-version = "scripts.sync_version:main"
+build-package = "scripts.build:main"
