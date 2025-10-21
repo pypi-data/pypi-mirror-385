@@ -1,0 +1,29 @@
+name: Release-cut guards
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'scripts/release-cut.sh'
+      - '.github/scripts/guard-release-cut.sh'
+      - '.github/workflows/release-cut-guards.yml'
+  push:
+    branches:
+      - chore/hard-guard-release-cut
+    paths:
+      - 'scripts/release-cut.sh'
+      - '.github/scripts/guard-release-cut.sh'
+      - '.github/workflows/release-cut-guards.yml'
+  workflow_dispatch: {}
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - name: Guard release-cut invariants
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash -x .github/scripts/guard-release-cut.sh

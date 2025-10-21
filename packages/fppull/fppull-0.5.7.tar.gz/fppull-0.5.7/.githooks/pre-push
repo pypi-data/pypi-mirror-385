@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+# Fast skip on CI
+[ -n "${CI:-}" ] && exit 0
+
+# Must be executable and bannered
+test -x scripts/release-cut.sh
+grep -q '=== DRY-RUN MODE' scripts/release-cut.sh
+
+# Dry-run must not modify the tree
+git stash -q --keep-index
+STASH_BEFORE=$(git rev-parse -q --verify refs/stash || true)
+trap 'if [ -n "$STASH_BEFORE" ] || git rev-parse -q --verify refs/stash >/dev/null; then git stash pop -q >/dev/null || true; fi' EXIT
+trap 'git stash pop -q >/dev/null || true' EXIT
+./scripts/release-cut.sh v0.0.0 v0.0.0 --dry-run >/dev/null
+git diff --quiet
