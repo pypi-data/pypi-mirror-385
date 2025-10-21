@@ -1,0 +1,98 @@
+Metadata-Version: 2.1
+Name: pymbc
+Version: 1.1.4
+Summary: A python package for working with MB Century downhole data.
+Home-page: https://github.com/tricky67/pymbc
+Author: Richard Williams
+Author-email: rwilliams@mbcentury.com
+Keywords: dab,csv,pts,htcc,Century Logger
+Classifier: Development Status :: 4 - Beta
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Framework :: Matplotlib
+Classifier: Environment :: No Input/Output (Daemon)
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Other Audience
+Classifier: Intended Audience :: Science/Research
+Classifier: Topic :: Text Processing
+Classifier: Topic :: Scientific/Engineering
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy >=1.24
+Requires-Dist: pandas >=1.5
+Requires-Dist: matplotlib >=3.6
+Requires-Dist: scipy >=1.13.0
+
+# MB Century Downhole Data Toolkit
+
+https://www.mbcentury.com/services 
+
+This toolkit provides easy access to data that has been exported from one of MB Century's data logging applications. It is primarily used to access downhole data that has been collected using MB Century's data collection systems.
+
+
+## Example use
+
+Use pip to import the package.
+
+```ccs
+pip import pymbc
+```
+
+## Example python code
+
+Open a CSV file containing PTS data, plot it against depth and time, and convert it to Well Test Analysis format.
+```css
+import pymbc as mbc
+from pathlib import Path
+
+csvfile = Path(r'tests\_20230626_PTS__A.csv')
+mb = mbc.MbcLog()
+mb.ReadMbCsv(csvfile)
+fnotes = csvfile.parent / (csvfile.stem + '_notes' + csvfile.suffix)
+mb.ReadNotes(fnotes)
+mb.CreateRunLogGuess()
+plotdef = [mbc.PlotDefinition('TIMEDELTA', 'DEPTH', 'slategray', '-', False),
+		   mbc.PlotDefinition('TIMEDELTA', 'PTS_PRES', 'royalblue', '-', False),
+		   mbc.PlotDefinition('TIMEDELTA', 'PTS_FREQ', 'limegreen', '-', False),
+		   mbc.PlotDefinition('TIMEDELTA', 'PTS_TEMP', 'tomato', '--', True)]
+st,figt = mbc.PlotLog(mb, plotdef, title=mb.name, depthaxis=False)
+
+plotdef = [mbc.PlotDefinition('DEPTH', 'TIMEDELTA', 'black', '-', False),
+		   mbc.PlotDefinition('DEPTH', 'PTS_FREQ', 'limegreen', '--', True),
+		   mbc.PlotDefinition('DEPTH', 'PTS_PRES', 'royalblue', '-', False),
+		   mbc.PlotDefinition('DEPTH', 'PTS_TEMP', 'tomato', '-', True)]
+sd,figd = mbc.PlotLog(mb, plotdef, title=mb.name, depthaxis=True) 
+pts = mb.PtsWellTestAnalysis()
+	
+```      
+
+
+
+# CHANGELOG
+
+## Version 1.1.4 21/10/2024
+- Can work with open file streams.
+- rounded TIMEDELTA and TIMESTAMPISO to 10us
+- Changed encoding to ISO-8859-1 to avoid problems reading unicode in utf-8
+
+## Version 1.1.3 13/09/2024
+- Now works with TIMESTAMPISO when plotting vs. time.
+- Updated sample data
+
+## Version 1.1.2 29/07/2024
+- Updated sample code in README.md
+
+## Version 1.1.1 19/06/2024
+- Improved CreateRunLogGuess method to split log in to multiple runs automatically.
+
+## Version 1.1.0 12/06/2024
+- Changed the column names to be consistant with industry norms.
+- Added CreateRunLogGuess method to split log in to multiple runs automatically.
+
+## Version 1.0.0 21/05/2024
+- Released to PyPI
