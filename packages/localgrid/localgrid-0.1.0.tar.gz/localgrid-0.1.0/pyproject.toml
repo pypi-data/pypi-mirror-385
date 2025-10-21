@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "localgrid"
+version = "0.1.0"
+authors = [
+  { name="Alan Mackiewicz", email="alanmackiewicz03@gmail.com" },
+]
+description = "A library for inspecting local LLM providers and tokenizers."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Developers", 
+    "Topic :: Software Development :: Libraries :: Python Modules", 
+    "Topic :: Scientific/Engineering :: Artificial Intelligence" 
+]
+dependencies = [
+    "tiktoken",
+    "httpx",
+    "transformers",
+    "protobuf",
+    "sentencepiece"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/AlanM03/LocalGrid"
+"Source" = "https://github.com/AlanM03/LocalGrid"
+
+[project.optional-dependencies]
+dev = [
+    "ruff",
+    "pytest",
+    "pytest-asyncio",
+    "pytest-mock",
+    "anyio",
+]
+
+[tool.setuptools]
+package-data = { "localgrid" = ["tokenizers/**/*", "data/localgrid_cache.json"] }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+addopts = "-ra"
+asyncio_mode = "auto"
