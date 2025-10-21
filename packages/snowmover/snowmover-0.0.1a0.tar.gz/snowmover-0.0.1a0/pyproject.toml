@@ -1,0 +1,38 @@
+# pyproject.toml (at repo root)
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "snowmover"
+version = "0.0.1a0"
+description = "A lightweight Python toolkit for Snowflake data moves: upload local text files with PUT/COPY INTO, row-by-row inserts, extract tables to local files (TXT/CSV/Excel), Snowflake-to-Snowflake transfers, and simple, secure connection helpers."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{ name = "Harjinder Sidhu"}]
+keywords = [
+    "Python", "open-source",
+    "snowflake",
+    "snowflake-connector",
+    "data-loader",
+    "data-pipeline",
+    "etl",
+    "data-ingestion",
+    "data-export",
+    "data-engineering",
+    "data-warehouse",
+    "database-tools",
+
+]
+
+dependencies = [
+  # "numpy>=1.26",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["snowmover*"]
