@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "donkit-vectorstore-loader"
+version = "0.1.1"
+description = "Vectorstore upload helpers for Donkit RagOps"
+authors = ["Donkit AI <opensource@donkit.ai>"]
+license = "MIT"
+packages = [{ include = "donkit", from = "src" }]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pydantic = "^2.7.4"
+loguru = "^0.7.3"
+
+qdrant-client = {extras = ["fastembed"], version = "^1.15.1"}
+langchain = "^0.3.27"
+langchain-core = "^0.3.79"
+pymilvus = "==2.6.0"
+chromadb = ">=1.0.20,<2.0.0"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "8.4.2"
+testcontainers = "4.13.0"
+httpx = "0.28.1"
+
+[build-system]
+requires = ["poetry-core>=1.9.0"]
+build-backend = "poetry.core.masonry.api"
