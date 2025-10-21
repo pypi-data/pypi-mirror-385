@@ -1,0 +1,60 @@
+Metadata-Version: 2.4
+Name: halsteadpp
+Version: 0.1.0
+Summary: A Python tool for analyzing C code complexity using Halstead and Cyclomatic metrics.
+Author-email: Arthur Morgado Teixeira <arthurmorgado7751@gmail.com>
+License: MIT License
+Project-URL: Homepage, https://github.com/Morgadineo/Halsteadpp
+Project-URL: Issues, https://github.com/Morgadineo/Halsteadpp/issues
+Keywords: halstead,complexity,metrics,c-code,pycparser,rich
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+Requires-Dist: pycparser>=2.21
+Requires-Dist: rich>=13.0.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0; extra == "dev"
+Requires-Dist: black; extra == "dev"
+Requires-Dist: flake8; extra == "dev"
+
+# 🧮 Halstead++
+
+**Halstead++** is a lightweight static analysis tool for **C source code**, built in Python.  
+It leverages **Abstract Syntax Tree (AST)** parsing to compute both **Halstead complexity metrics** and **Cyclomatic complexity**, providing structured insights into code readability, logical structure, and cognitive effort.
+
+This tool offers a clear, visually rich output directly in the terminal — ideal for developers, educators, and researchers studying code complexity or program structure.
+
+---
+
+## ✨ Key Features
+
+- 📊 **Halstead Metrics**
+  - Distinct operators (n₁), distinct operands (n₂)  
+  - Total operators (N₁), total operands (N₂)  
+  - Vocabulary, Length, Volume, Difficulty, Effort, Time, Estimated Bugs  
+
+- 🔁 **Cyclomatic Complexity (McCabe)** per function  
+
+- 🌳 **AST-based analysis** using [`pycparser`](https://github.com/eliben/pycparser)  
+
+- 🎨 **Beautiful console output** with [`rich`](https://github.com/Textualize/rich)  
+
+- ⚙️ **Preprocessing support** for handling macros and standard headers (`gcc -E`)  
+
+- 🧩 Modular design — can be used both as a **CLI tool** or **Python module**
+
+---
+
+## 📦 Installation
+
+### From PyPI
+```
+pip install halsteadpp
+```
+
+### From GitHub
+```
+pip install git+https://github.com/Morgadineo/Halsteadpp.git
+```
+
+## 🚀 Usage
+
