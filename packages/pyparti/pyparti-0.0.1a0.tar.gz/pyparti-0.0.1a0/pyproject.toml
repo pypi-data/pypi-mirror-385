@@ -1,0 +1,59 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyparti"
+version = "0.0.1a0"
+description = "Pareto Task Inference Analysis (ParTI) in Python"
+authors = [
+    {name = "ggit12"}
+]
+license = {text = "BSD-3-Clause"}
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7"
+]
+dependencies = [
+    "numpy",
+    "pandas",
+    "anndict",
+    "igraph",
+    "scipy",
+    "anndata",
+    "scikit-learn",
+    "scanpy",
+    "seaborn",
+    "matplotlib",
+
+    "cvxpy",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "pytest-cov",
+]
+
+[project.urls]
+"Source" = "https://github.com/ggit12/pyparti"
+"Documentation" = "https://ggit12.github.io/pyparti"
+
+[tool.setuptools]
+packages = [
+    "pyparti",
+    "pyparti.preprocess",
+    "pyparti.fit_polytope",
+    "pyparti.get_genes",
+    "pyparti.align_archetypes",
+    "pyparti.plot",
+]
+
+[tool.setuptools.package-data]
+"pyparti" = ["dat/*.csv"]
+
+[tool.black]
+line-length = 100
