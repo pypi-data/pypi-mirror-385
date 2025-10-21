@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>
+            {% block title %}{% if page_title %}{{ page_title }} - {% endif %}Blog{% endblock %}
+        </title>
+
+        <!-- Tailwind CSS via CDN -->
+        <script src="https://cdn.tailwindcss.com"></script>
+
+        <!-- Custom Tailwind Configuration -->
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            primary: {
+                                50: "#eff6ff",
+                                500: "#3b82f6",
+                                600: "#2563eb",
+                                700: "#1d4ed8",
+                            },
+                        },
+                        fontFamily: {
+                            sans: ["Inter", "system-ui", "sans-serif"],
+                        },
+                    },
+                },
+            };
+        </script>
+
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+
+        <!-- Custom CSS -->
+        <style>
+            .prose {
+                max-width: none;
+            }
+            .prose h1,
+            .prose h2,
+            .prose h3,
+            .prose h4 {
+                color: #1f2937;
+                font-weight: 600;
+            }
+            .prose a {
+                color: #3b82f6;
+                text-decoration: none;
+            }
+            .prose a:hover {
+                color: #2563eb;
+                text-decoration: underline;
+            }
+        </style>
+
+        {% block extra_css %}{% endblock %}
+
+        <!-- SEO Meta Tags -->
+        {% block meta_tags %}
+        <meta
+            name="description"
+            content="{% block meta_description %}A modern blog built with Django and Tailwind CSS{% endblock %}"
+        />
+        <meta
+            name="keywords"
+            content="{% block meta_keywords %}blog, django, tailwind, python{% endblock %}"
+        />
+
+        <!-- Open Graph -->
+        <meta property="og:type" content="website" />
+        <meta
+            property="og:title"
+            content="{% block og_title %}Blog{% endblock %}"
+        />
+        <meta
+            property="og:description"
+            content="{% block og_description %}A modern blog built with Django and Tailwind CSS{% endblock %}"
+        />
+        <meta property="og:site_name" content="Blog" />
+
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+            name="twitter:title"
+            content="{% block twitter_title %}Blog{% endblock %}"
+        />
+        <meta
+            name="twitter:description"
+            content="{% block twitter_description %}A modern blog built with Django and Tailwind CSS{% endblock %}"
+        />
+        {% endblock %}
+    </head>
+    <body class="bg-gray-50 font-sans text-gray-800 antialiased">
+        <!-- Header -->
+        {% load blog_tags %}
+        {% get_blog_settings as blog_settings %}
+        {% if blog_settings.USE_CUSTOM_HEADER and blog_settings.CUSTOM_HEADER_TEMPLATE %}
+            {% include blog_settings.CUSTOM_HEADER_TEMPLATE %}
+        {% else %}
+            {% include blog_settings.HEADER_TEMPLATE %}
+        {% endif %}
+
+        <!-- Main Content -->
+        <main class="min-h-screen">
+            {% block content_wrapper %}
+            <div class="container mx-auto px-4 py-8">
+                {% block breadcrumb %}{% endblock %}
+
+                <!-- Messages -->
+                {% if messages %}
+                <div class="mb-6 space-y-3">
+                    {% for message in messages %}
+                    <div
+                        class="p-4 rounded-lg {% if message.tags == 'success' %}bg-green-50 text-green-800 border border-green-200{% elif message.tags == 'error' %}bg-red-50 text-red-800 border border-red-200{% elif message.tags == 'warning' %}bg-yellow-50 text-yellow-800 border border-yellow-200{% else %}bg-blue-50 text-blue-800 border border-blue-200{% endif %}"
+                    >
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %} {% block content %}
+                <!-- Main content goes here -->
+                {% endblock %}
+            </div>
+            {% endblock %}
+        </main>
+
+        <!-- Footer -->
+        {% if blog_settings.USE_CUSTOM_FOOTER and blog_settings.CUSTOM_FOOTER_TEMPLATE %}
+            {% include blog_settings.CUSTOM_FOOTER_TEMPLATE %}
+        {% else %}
+            {% include blog_settings.FOOTER_TEMPLATE %}
+        {% endif %}
+
+        <!-- JavaScript -->
+        {% block extra_js %}{% endblock %}
+
+        <!-- Load template tags -->
+        {% load blog_tags %}
+    </body>
+</html>
