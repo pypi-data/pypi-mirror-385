@@ -1,0 +1,81 @@
+Metadata-Version: 2.1
+Name: robodyno
+Version: 1.7.2
+Summary: The Robodyno Robot SDK for Python 3
+Home-page: http://101.42.250.169/
+Author: song
+Author-email: zhaosongy@126.com
+Maintainer: robottime
+Maintainer-email: lab@robottime.cn
+License: Apache License, Version 2.0
+Keywords: robodyno,robot,robot module
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Framework :: Robot Framework
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Education
+Classifier: Intended Audience :: Science/Research
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy>=1.10.0
+Requires-Dist: rich>=12.6.0
+Requires-Dist: click>=7.1.2
+Requires-Dist: python-can<4.0,>=3.2.0
+Requires-Dist: importlib-metadata
+Requires-Dist: setuptools<80.0
+Requires-Dist: candle-bus; sys_platform == "win32"
+
+# robodyno
+
+[![pypi](https://img.shields.io/pypi/v/robodyno)](https://pypi.org/project/robodyno/)
+[![Python](https://img.shields.io/pypi/pyversions/robodyno)](https://www.python.org/downloads/)
+[![wheel](https://img.shields.io/pypi/wheel/robodyno)](https://pypi.org/project/robodyno/#files)
+[![download](https://img.shields.io/pypi/dm/robodyno)](https://pypi.org/project/robodyno/)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
+## Installation
+
+```bash
+pip install robodyno
+```
+
+## Usage
+
+### Command Line Interface
+
+```bash
+robodyno --help
+```
+
+### Python API
+
+```python
+import time
+from robodyno.interfaces import CanBus
+from robodyno.components import Motor
+
+can_bus = CanBus()
+motor = Motor(can_bus)
+
+motor.enable()
+motor.set_pos(6.28)
+time.sleep(1)
+print(motor.get_pos())
+motor.disable()
+```
+
+For more examples, please refer to `examples` directory.
+
+For more documentation, please refer to [docs](http://101.42.250.169/latest/).

@@ -1,0 +1,30 @@
+[console_scripts]
+robodyno = robodyno.tools.cli:robodyno
+
+[robodyno.components.can_bus]
+Battery = robodyno.components.can_bus.battery:Battery
+CliffSensor = robodyno.components.can_bus.cliff_sensor:CliffSensor
+GpsSensor = robodyno.components.can_bus.gps_sensor:GpsSensor
+ImpactSensor = robodyno.components.can_bus.impact_sensor:ImpactSensor
+ImuSensor = robodyno.components.can_bus.imu_sensor:ImuSensor
+LedDriver = robodyno.components.can_bus.led_driver:LedDriver
+MagneticSensor = robodyno.components.can_bus.magnetic_sensor:MagneticSensor
+MiMotor = robodyno.components.can_bus.mi_motor:MiMotor
+Motor = robodyno.components.can_bus.motor:Motor
+ProximitySensor = robodyno.components.can_bus.proximity_sensor:ProximitySensor
+PwmDriver = robodyno.components.can_bus.pwm_driver:PwmDriver
+SliderModule = robodyno.components.can_bus.slider_module:SliderModule
+StepperDriver = robodyno.components.can_bus.stepper_driver:StepperDriver
+UltrasonicSensor = robodyno.components.can_bus.ultrasonic_sensor:UltrasonicSensor
+
+[robodyno.components.webots]
+Motor = robodyno.components.webots.motor:Motor
+SliderModule = robodyno.components.webots.slider_module:SliderModule
+
+[robodyno.robots]
+FourDoFPallet = robodyno.robots.four_dof_palletizing_robot.four_dof_pallet_robot:FourDoFPallet
+FourDoFScara = robodyno.robots.four_dof_scara_robot.four_dof_scara_robot:FourDoFScara
+SixDoFCollabRobot = robodyno.robots.six_dof_collaborative_robot.six_dof_collab_robot:SixDoFCollabRobot
+ThreeDoFCartesian = robodyno.robots.three_dof_cartesian_robot.three_dof_cartesian_robot:ThreeDoFCartesian
+ThreeDoFDelta = robodyno.robots.three_dof_delta_robot.three_dof_delta_robot:ThreeDoFDelta
+ThreeDoFPallet = robodyno.robots.three_dof_palletizing_robot.three_dof_pallet_robot:ThreeDoFPallet
