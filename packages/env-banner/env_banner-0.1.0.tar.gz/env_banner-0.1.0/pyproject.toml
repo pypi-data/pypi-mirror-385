@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "env-banner"
+version = "0.1.0"
+description = "A universal environment banner for Python web frameworks."
+readme = "README.md"
+license = { file = "LICENSE" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Framework :: FastAPI",
+    "Framework :: Flask",
+    "Framework :: Django",
+]
+requires-python = ">=3.8"
+
+[project.urls]
+Homepage = "https://github.com/sagearbor/env-banner-python"
+Repository = "https://github.com/sagearbor/env-banner-python"
+Issues = "https://github.com/sagearbor/env-banner-python/issues"
+
+[tool.setuptools]
+packages = ["envbanner"]
+
+[tool.setuptools.exclude-package-data]
+"*" = ["test/*", "test/**/*"]
