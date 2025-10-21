@@ -1,0 +1,42 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "StreamDeckLayoutManager"
+description = "A higher-level Python API for ElGato's Stream Deck."
+readme = "README.md"
+requires-python = ">=3.8"
+license = "GPL-3.0-or-later"
+keywords = ["streamdeck", "elgato"]
+authors = [
+  { name = "Didier Malenfant", email = "didier@malenfant.net" },
+]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = ['streamdeck', 'tomli >= 1.1.0 ; python_version < "3.11"',
+                'Pillow >= 9.0.0', 'dm-py-utilities >= 2.1.0']
+
+dynamic = ["version"]
+
+[project.urls]
+"Source Code" = "https://code.malenfant.net/didier/StreamDeckLayoutManager"
+"Bug Tracker" = "https://code.malenfant.net/didier/StreamDeckLayoutManager/issues"
+
+[tool.setuptools_scm]
+
+[tool.hatch.version]
+path = "StreamDeckLayoutManager/__about__.py"
+
+[tool.hatch.build.targets.sdist]
+exclude = []
+
+[tool.hatch.build.targets.wheel]
+packages = ["StreamDeckLayoutManager"]
+
+[tool.hatch.envs.default]
+dependencies = []
