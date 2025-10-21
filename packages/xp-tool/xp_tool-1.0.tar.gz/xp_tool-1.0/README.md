@@ -1,0 +1,265 @@
+# Excel 与 OSS 处理工具库
+
+这是一个集成了 OpenAI API 调用、阿里云 OSS 文件管理和 Excel 数据处理功能的 Python 工具库。
+
+## 功能特性
+
+### 🤖 AI 对话功能 (CallAi 类)
+- 支持 OpenAI 兼容的 API 调用
+- 可自定义系统提示词和模型参数
+- 灵活的对话配置（temperature、top_p）
+
+### ☁️ OSS 文件管理 (ExcelOSSHandler 类)
+- Excel 文件上传到阿里云 OSS
+- 从 OSS 下载 Excel 文件并转换为 pandas DataFrame
+- 支持环境变量自动配置
+- 完整的错误处理和文件验证
+
+### 📧 数据导出与邮件发送 (ExportToEmail 函数)
+- 将 DataFrame 导出为 Excel 文件
+- 自动通过邮件发送 Excel 附件
+- 支持 HTML 格式的邮件内容
+- 自动清理临时文件
+
+## 安装依赖
+
+```bash
+pip install openai pandas oss2 python-dotenv openpyxl
+```
+
+## 快速开始
+
+### 1. 环境配置
+
+创建 `.env` 文件配置敏感信息：
+
+```env
+# OpenAI 配置
+OPENAI_API_KEY=your-openai-api-key
+OPENAI_BASE_URL=https://api.openai.com/v1
+
+# 阿里云 OSS 配置
+access_key_id=your-access-key-id
+access_key_secret=your-access-key-secret
+endpoint=oss-cn-hangzhou.aliyuncs.com
+bucket_name=your-bucket-name
+
+# 邮件配置
+email_sender=your-email@163.com
+email_password=your-email-authorization-code
+```
+
+### 2. AI 对话功能
+
+```python
+from your_module import CallAi
+
+# 初始化 AI 客户端
+ai = CallAi(
+    api_key="your-api-key",
+    base_url="https://api.openai.com/v1",
+    model="qwen-plus"  # 默认模型
+)
+
+# 设置系统提示词
+ai.prompt = "你是一个有用的助手"
+
+# 进行对话
+response = ai.chat("你好，请介绍一下自己")
+print(response)
+```
+
+### 3. OSS 文件管理（支持环境变量自动加载）
+
+```python
+from your_module import ExcelOSSHandler
+
+# 方式1：使用环境变量自动配置
+oss_handler = ExcelOSSHandler()  # 自动从 .env 文件读取配置
+
+# 方式2：手动传入配置
+oss_handler = ExcelOSSHandler(
+    access_key_id="your-access-key-id",
+    access_key_secret="your-access-key-secret",
+    endpoint="https://oss-cn-hangzhou.aliyuncs.com",
+    bucket_name="your-bucket-name"
+)
+
+# 上传 Excel 文件到 OSS
+success = oss_handler.upload_excel_to_oss(
+    local_file_path="local_file.xlsx",
+    oss_file_path="oss/path/file.xlsx"
+)
+
+# 从 OSS 下载 Excel 并转换为 DataFrame
+df = oss_handler.get_excel_from_oss("oss/path/file.xlsx")
+```
+
+### 4. 数据导出与邮件发送
+
+```python
+from your_module import ExportToEmail
+import pandas as pd
+
+# 创建示例数据
+df = pd.DataFrame({
+    'Name': ['Alice', 'Bob', 'Charlie'],
+    'Age': [25, 30, 35],
+    'City': ['Beijing', 'Shanghai', 'Guangzhou']
+})
+
+# 方式1：使用环境变量自动配置邮件
+result = ExportToEmail(
+    df=df,
+    receiver="recipient@example.com",
+    subject="数据导出报告"
+)
+
+# 方式2：手动配置邮件
+result = ExportToEmail(
+    df=df,
+    receiver="recipient@example.com",
+    subject="数据导出报告",
+    sender="your-email@163.com",
+    password="your-email-password"
+)
+
+print(result)
+```
+
+## API 参考
+
+### CallAi 类
+
+#### 初始化参数
+- `api_key`: OpenAI API 密钥
+- `base_url`: API 基础地址
+- `model`: 模型名称（默认：'qwen-plus'）
+
+#### 属性
+- `prompt`: 系统提示词（可读写属性）
+
+#### 方法
+- `chat(text, top_p=0.9, temperature=0.7)`: 发送对话请求
+
+### ExcelOSSHandler 类
+
+#### 初始化参数
+所有参数都是可选的，如果不提供会自动从环境变量读取：
+- `access_key_id`: 阿里云访问密钥 ID
+- `access_key_secret`: 阿里云访问密钥 Secret
+- `endpoint`: OSS 服务端点
+- `bucket_name`: 存储桶名称
+
+#### 方法
+- `upload_excel_to_oss(local_file_path, oss_file_path)`: 上传 Excel 文件到 OSS
+- `get_excel_from_oss(oss_file_path)`: 从 OSS 下载 Excel 文件并转换为 DataFrame
+
+### ExportToEmail 函数
+
+#### 参数
+- `df`: 要导出的 pandas DataFrame（必需）
+- `receiver`: 收件人邮箱地址（默认：'xupeng23456@126.com'）
+- `subject`: 邮件主题（可选，自动生成时间戳）
+- `sender`: 发件人邮箱（可选，从环境变量读取）
+- `password`: 发件人邮箱密码/授权码（可选，从环境变量读取）
+
+#### 返回值
+返回包含操作结果的字典：
+```python
+{
+    "status": "success" | "failed",
+    "message": "描述信息",
+    "file_path": "临时文件路径",
+    "email_sent": True | False,
+    "row_count": 数据行数,
+    "timestamp": "时间戳"
+}
+```
+
+### 工具函数
+- `uuid(length=16)`: 生成随机字符串 ID
+
+## 使用示例
+
+### 完整工作流程示例
+
+```python
+from your_module import CallAi, ExcelOSSHandler, ExportToEmail
+import pandas as pd
+
+# 1. 使用 AI 生成数据建议
+ai = CallAi(api_key="your-key", base_url="your-url")
+ai.prompt = "你是一个数据分析专家"
+analysis = ai.chat("分析销售数据时应该关注哪些指标？")
+
+# 2. 从 OSS 获取数据
+oss_handler = ExcelOSSHandler()  # 自动使用环境变量
+df = oss_handler.get_excel_from_oss("sales/data.xlsx")
+
+# 3. 处理数据
+processed_df = df.groupby('category').sum()
+
+# 4. 导出并发送邮件
+result = ExportToEmail(
+    df=processed_df,
+    receiver="team@company.com",
+    subject="销售数据汇总报告"
+)
+
+print(f"操作结果: {result['status']}")
+print(f"发送状态: {'成功' if result['email_sent'] else '失败'}")
+```
+
+## 错误处理
+
+所有函数都包含完整的异常处理，会返回详细的错误信息：
+
+```python
+# 检查操作结果
+result = oss_handler.upload_excel_to_oss("nonexistent.xlsx", "oss/path/file.xlsx")
+if not result:
+    print("文件上传失败")
+
+# 检查邮件发送结果
+email_result = ExportToEmail(df, "receiver@example.com")
+if email_result["status"] == "failed":
+    print(f"发送失败: {email_result['message']}")
+```
+
+## 注意事项
+
+1. **文件格式**: 仅支持 `.xlsx` 和 `.xls` 格式的 Excel 文件
+2. **邮件服务**: 默认使用 163 邮箱的 SMTP 服务（端口 465，SSL）
+3. **临时文件**: 自动创建 `./temp` 目录存放临时文件，邮件发送成功后自动清理
+4. **环境变量**: 建议使用 `.env` 文件管理敏感信息，不要将密钥硬编码在代码中
+
+## 故障排除
+
+### 常见问题
+
+**OSS 连接问题**:
+- 检查 Access Key 和 Secret 是否正确
+- 确认 endpoint 格式正确（包含 http/https）
+- 验证 bucket 名称和权限
+
+**邮件发送失败**:
+- 确认邮箱密码是授权码而非登录密码
+- 检查发件人邮箱是否开启 SMTP 服务
+- 验证网络连接和防火墙设置
+
+**Excel 文件处理错误**:
+- 确认文件没有被其他程序占用
+- 检查 pandas 和 openpyxl 版本兼容性
+- 验证文件内容格式正确
+
+## 更新日志
+
+### v1.1.0
+- 新增环境变量自动加载功能
+- 改进错误处理和日志输出
+- 优化邮件发送逻辑
+
+## 许可证
+
+MIT License
