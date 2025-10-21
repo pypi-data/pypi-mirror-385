@@ -1,0 +1,32 @@
+repos:
+-   repo: https://github.com/psf/black-pre-commit-mirror
+    rev: 25.9.0
+    hooks:
+    -   id: black
+        args: [--safe, --quiet]
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+    -   id: trailing-whitespace
+    -   id: end-of-file-fixer
+    -   id: check-yaml
+    -   id: debug-statements
+-   repo: https://github.com/asottile/reorder-python-imports
+    rev: v3.16.0
+    hooks:
+    -   id: reorder-python-imports
+-   repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.18.2
+    hooks:
+      - id: mypy
+        files: ^(src|tests)
+        args: []
+        additional_dependencies: [attrs>=19.2.0, pytest>=7, typing-extensions]
+-   repo: local
+    hooks:
+    -   id: rst
+        name: rst
+        entry: rst-lint --encoding utf-8
+        files: ^(CHANGELOG.rst|RELEASING.rst|README.rst)$
+        language: python
+        additional_dependencies: [pygments, restructuredtext_lint]
