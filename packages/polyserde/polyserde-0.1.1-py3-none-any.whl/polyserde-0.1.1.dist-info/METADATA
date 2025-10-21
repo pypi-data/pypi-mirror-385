@@ -1,0 +1,176 @@
+Metadata-Version: 2.3
+Name: polyserde
+Version: 0.1.1
+Summary: Polymorphic serialization / deserialization for pydantic data classes
+Keywords: pydantic,serialization,deserialization,polymorphic,json,configuration
+Author: Janos Tolgyesi
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Software Development :: Object Brokering
+Classifier: Typing :: Typed
+Requires-Dist: packaging>=25.0,<=26.0
+Requires-Dist: pydantic>=2.0.0,<3.0.0
+Requires-Dist: pytest>=7.0.0 ; extra == 'dev'
+Requires-Python: >=3.9
+Project-URL: Bug Tracker, https://github.com/mrtj/polyserde/issues
+Project-URL: Documentation, https://github.com/mrtj/polyserde#readme
+Project-URL: Homepage, https://github.com/mrtj/polyserde
+Project-URL: Repository, https://github.com/mrtj/polyserde
+Provides-Extra: dev
+Description-Content-Type: text/markdown
+
+# Polyserde
+
+## Introduction
+
+`polyserde` solves a common problem when **saving Pydantic models to JSON**: it preserves the exact class types. When you use Pydantic's built-in `model_dump()`, it loses information about subclasses - so if you have a list of `Animal` objects that are actually `Cat` and `Dog` instances, the JSON won't remember which is which. `polyserde` embeds type information (like `"__class__": "myapp.Cat"`) directly into the JSON, so when you load it back later, it automatically imports the right classes and reconstructs your exact object structure - no manual type tracking needed. It even checks if the library version you're loading with is compatible with the one that saved the file, warning you if there might be breaking changes (using semantic versioning rules). This makes it perfect for saving complex configuration objects, ML pipelines, or any nested data where preserving polymorphic types matters.
+
+## Features
+
+* **Polymorphic type preservation** — automatically remembers exact subclass types (e.g., `Cat` vs `Dog` when both inherit from `Animal`)
+* **Automatic class imports** — reconstructs objects by importing the right modules when deserializing
+* **Semantic version checking** — warns if the saved config may be incompatible with installed library versions
+* **Supports complex Python types** — handles enums, class references, and dictionaries with non-string keys
+* **Human-readable JSON** — produces self-describing, inspectable output that's easy to debug
+* **Minimal dependencies** — only requires `pydantic` ≥ 2.0 and `packaging`
+
+## Installation
+
+```bash
+pip install polyserde
+```
+
+Requires *Python ≥ 3.9* and *Pydantic ≥ 2.0*.
+
+## Quick Start
+
+Below is a complete usage example. Suppose the following classes are defined inside a module called `zoolib`.
+
+```python
+# zoolib/__init__.py
+from pydantic import BaseModel
+from enum import Enum
+
+class Species(Enum):
+    CAT = "cat"
+    DOG = "dog"
+
+class Animal(BaseModel):
+    name: str
+    species: Species
+
+class Cat(Animal):
+    lives_left: int = 9
+
+class Dog(Animal):
+    breed: str
+    is_good_boy: bool = True
+
+class Zoo(BaseModel):
+    location: str
+    animals: list[Animal]
+    caretaker_class: type = dict  # just an example class reference
+```
+
+Now use `polyserde` to serialize and deserialize the structure:
+
+```python
+from zoolib import Zoo, Cat, Dog, Species
+from polyserde import PolymorphicSerde
+
+zoo = Zoo(
+    location="Berlin",
+    animals=[
+        Cat(name="Mittens", species=Species.CAT, lives_left=7),
+        Dog(name="Rex", species=Species.DOG, breed="Labrador"),
+    ]
+)
+
+# Serialize to dict with metadata
+data = PolymorphicSerde.dump(zoo, lib="zoolib", version="1.2.3")
+
+# Save to JSON file
+import json
+with open("zoo_config.json", "w") as f:
+    json.dump(data, f, indent=2)
+
+# Load from JSON file
+with open("zoo_config.json") as f:
+    data = json.load(f)
+
+# Deserialize (with version checking)
+restored = PolymorphicSerde.load(data)
+print(restored)
+print(type(restored.animals[0]))
+```
+
+**Output:**
+
+```
+Zoo(location='Berlin', animals=[Cat(...), Dog(...)], caretaker_class=<class 'dict'>)
+<class 'zoolib.Cat'>
+```
+
+If the current environment doesn’t have the same library version, `polyserde` emits helpful warnings such as:
+
+```
+⚠️ Major version mismatch for zoolib: serialized=1.2.3, installed=2.0.0 (config may be incompatible)
+```
+
+## How It Works
+
+`PolymorphicSerde` recursively converts complex Python objects into a JSON-safe structure with embedded type metadata:
+
+* Each Pydantic model is tagged with `"__class__": "module.ClassName"`.
+* Enums are represented as `"__enum__": "module.EnumClass.MEMBER"`.
+* Class references are stored as `"__class_ref__": "module.Class"`.
+* Non-string dict keys are safely represented via `{ "__dict__": [{"__key__": ..., "value": ...}, ...]}`.
+
+This makes every JSON file **self-describing** — you can reload it anywhere, and `PolymorphicSerde` will reconstruct the correct objects automatically.
+
+## Version Safety
+
+When saving a configuration, you can specify both the **library name** and **version**:
+
+```python
+data = PolymorphicSerde.dump(my_config, lib="docling", version="0.14.0")
+```
+
+At load time, `polyserde`:
+
+* Looks up the installed version of the library,
+* Parses both versions semantically (using [PEP 440](https://peps.python.org/pep-0440/)),
+* Emits a warning if major or minor versions differ,
+* Falls back to strict equality for non-semantic versions.
+
+Example warning:
+
+```
+⚠️ Minor version difference for docling: serialized=0.14.0, installed=0.15.0 (review config compatibility)
+```
+
+## Contributing
+
+Contributions are welcome!
+If you’d like to improve the serializer, add features, or extend compatibility, feel free to open a PR or issue.
+
+1. Fork the repo
+2. Create a feature branch
+3. Run tests (`pytest`)
+4. Submit a PR
+
+---
+
+## Acknowledgments
+
+Inspired by real-world serialization challenges in projects like **Docling**, **FastAPI**, and **LangChain**, where polymorphic configuration graphs are the norm.
+
+`polyserde` brings predictable, portable, and version-safe serialization to any Pydantic-based system.
