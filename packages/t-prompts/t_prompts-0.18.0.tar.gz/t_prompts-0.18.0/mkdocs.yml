@@ -1,0 +1,54 @@
+site_name: t-prompts
+site_description: Structured prompts using template strings
+site_author: Nehal Patel
+repo_url: https://github.com/habemus-papadum/t-prompts
+repo_name: t-prompts
+extra_css:
+  - extra.css
+theme:
+  name: "material"
+  custom_dir: docs/overrides
+  palette:
+    primary: blue grey
+  features:
+    - navigation.instant
+    - navigation.tracking
+
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - Quick Interactive Demo: quick_demo.ipynb
+  - Tutorial: tutorial.ipynb
+  - Architecture: Architecture.md
+  - Developer:
+    - Setup: developer/setup.md
+    - JSON Format: developer/json-format.md
+  - Roadmap: Roadmap.md
+  - API Reference: reference.md
+
+
+# If you'd like to specify a separate docs directory, you can do so here
+docs_dir: docs
+
+# Plugins to enable
+plugins:
+  - search
+  - mkdocs-jupyter:
+      execute: true
+      allow_errors: false
+      kernel_name: python3
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          options:
+            docstring_style: numpy
+            show_submodules: true
+
+# Hooks to inject version from pyproject.toml
+hooks:
+  - docs/hooks.py
+
+exclude_docs: |
+  /planning
+  hooks.py
