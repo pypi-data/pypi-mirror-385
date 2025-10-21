@@ -1,0 +1,29 @@
+[package]
+name = "duper"
+description = "The format that's super."
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+authors = ["Eric Rodrigues Pires <eric@eric.dev.br>"]
+repository = "https://github.com/EpicEric/duper"
+homepage = "https://github.com/EpicEric/duper"
+readme = "README.md"
+categories = ["encoding", "parser-implementations"]
+keywords = ["duper", "parser", "serialization"]
+
+[features]
+default = []
+ansi = ["dep:owo-colors"]
+serde = ["dep:serde_core"]
+
+[dependencies]
+owo-colors = { version = "4.2.3", optional = true }
+pest = { version = "2.8.3", features = ["miette-error"] }
+pest_derive = "2.8.3"
+ryu = "1.0.20"
+serde_core = { version = "1", optional = true }
+unicode-general-category = "1.1.0"
+
+[dev-dependencies]
+insta = "1.43.2"
+miette = "7.6.0"
