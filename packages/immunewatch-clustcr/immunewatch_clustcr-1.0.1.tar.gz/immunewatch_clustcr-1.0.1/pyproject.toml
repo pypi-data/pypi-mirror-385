@@ -1,0 +1,114 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "immunewatch-clustcr"
+dynamic = ["version"]
+description = "a Python interface for rapid clustering of large sets of CDR3 sequences"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Max Van Houcke", email = "max@immunewatch.com"},
+]
+keywords = ["TCR", "clustering", "CDR3", "immunology"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+requires-python = ">=3.7"
+dependencies = [
+    "numpy",
+    "pandas",
+    "networkx",
+    "scikit-learn",
+    "markov_clustering",
+    "parmap",
+    "python-louvain",
+    "matplotlib",
+    "faiss-cpu",
+    "scipy==1.8"
+]
+
+[project.urls]
+Homepage = "https://www.immunewatch.com/"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+    "pytest-cov",
+    "flake8"
+]
+test = [
+    "pytest>=6.0",
+    "pytest-cov"
+]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["imw_clustcr*"]
+exclude = ["tests*", "test*"]
+
+[tool.setuptools.dynamic]
+version = {attr = "imw_clustcr.__version__"}
+
+[tool.setuptools.package-data]
+imw_clustcr = [
+    "input/adaptive_imgt_mapping.csv",
+    "input/vdjdb/vdjdb_full.txt",
+    "input/alphabeta_gammadelta_db.tsv",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["test"]
+norecursedirs = [".* *.egg* build dist conda.recipe .git benchmarks .asv"]
+addopts = [
+    "--junitxml=junit.xml",
+    "--ignore=setup.py",
+    "--ignore=run_test.py",
+    "--cov=imw_clustcr",
+    "--cov-report=term-missing",
+    "--tb=native",
+    "--strict-markers",
+    "--durations=20"
+]
+markers = [
+    "serial: execute test serially (to avoid race conditions)"
+]
+
+[tool.coverage.run]
+source = ["imw_clustcr"]
+omit = ["*/tests/*", "*/test/*", "*/_version.py"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]
+
+[tool.ruff]
+line-length = 100
+exclude = [
+    "build",
+    "tests",
+    ".git",
+    ".asv"
+]
+
+[tool.ruff.lint]
+# E122, E123, E126, E127, E128 are formatting-related
+# E731 is lambda assignment
+# E722 is bare except
+ignore = ["E122", "E123", "E126", "E127", "E128", "E731", "E722"]
