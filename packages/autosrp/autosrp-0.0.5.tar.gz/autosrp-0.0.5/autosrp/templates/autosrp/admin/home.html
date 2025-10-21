@@ -1,0 +1,176 @@
+{% extends 'autosrp/base.html' %}
+{% block content %}
+<div class="container-xxl py-4">
+
+  {% if app %}
+  <div class="row g-4">
+    <div class="col-12 col-lg-8">
+      <div class="card shadow-sm">
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center gap-2">
+            <span class="fw-semibold">Global Settings</span>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <form method="post" action="" class="needs-validation" novalidate>
+            {% csrf_token %}
+
+            <div class="row g-3 align-items-end">
+              <div class="col-12 col-md-6">
+                <label for="id_default_penalty_scheme" class="form-label mb-1">Default Penalty Scheme</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fa-solid fa-scale-balanced"></i></span>
+                  <select id="id_default_penalty_scheme" name="default_penalty_scheme" class="form-select">
+                    <option value="">— None —</option>
+                    {% for s in penalty_schemes %}
+                      <option value="{{ s.id }}" {% if app.default_penalty_scheme and app.default_penalty_scheme.id == s.id %}selected{% endif %}>
+                        {{ s.name }}
+                      </option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label for="id_default_duration_minutes" class="form-label">Default Battle Duration</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fa-regular fa-clock"></i></span>
+                  <input type="number" min="1" step="1" class="form-control" id="id_default_duration_minutes" name="default_duration_minutes" value="{{ app.default_duration_minutes|default:120 }}">
+                  <span class="input-group-text">minutes</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-4 d-flex flex-wrap align-items-center gap-6">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="id_ignore_capsules" name="ignore_capsules" {% if app.ignore_capsules %}checked{% endif %}>
+                <label class="form-check-label" for="id_ignore_capsules">
+                  Ignore Capsule Losses
+                </label>
+              </div>
+            </div>
+            <div class="mt-4 d-flex flex-wrap align-items-center gap-6">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="id_discord_mute_all" name="discord_mute_all" {% if app.discord_mute_all %}checked{% endif %}>
+                <label class="form-check-label" for="id_discord_mute_all">
+                  Mute All Discord Notifications
+                </label>
+              </div>
+            </div>
+
+            <div class="mt-4 d-flex align-items-center justify-content-between">
+              <div class="btn-group">
+                <button type="submit" class="btn btn-primary btn-sm">
+                  <i class="fa-solid fa-floppy-disk me-1"></i> Save Changes
+                </button>
+                <a href="{% url 'autosrp:admin-home' %}" class="btn btn-outline-secondary btn-sm">
+                  <i class="fa-solid fa-rotate-left me-1"></i> Reset
+                </a>
+              </div>
+
+              <div class="text-muted small">
+                <i class="fa-regular fa-circle-question me-1"></i>
+                Duration applies to new battle reports. Muting Discord does not alter user preferences.
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="card-footer bg-secondary">
+          <div class="d-flex flex-wrap align-items-center gap-3">
+            <div class="d-flex align-items-center gap-2">
+                {% if app.discord_mute_all %}
+                <i class="fa-solid fa-circle text-danger small"></i>
+                {% else %}
+                <i class="fa-solid fa-circle text-success small"></i>
+                {% endif %}
+              <span class="small">Discord: {% if app.discord_mute_all %}Muted globally{% else %}Per-user{% endif %}</span>
+            </div>
+            <div class="vr d-none d-md-block"></div>
+            <div class="d-flex align-items-center gap-2">
+              {% if app.ignore_capsules %}
+              <i class="fa-solid fa-circle text-success small"></i>
+              {% else %}
+              <i class="fa-solid fa-circle text-danger small"></i>
+              {% endif %}
+              <span class="small">Ignoring Capsules: {% if app.ignore_capsules %}Yes{% else %}No{% endif %}</span>
+            </div>
+            <div class="vr d-none d-md-block"></div>
+            <div class="d-flex align-items-center gap-2">
+              <span class="small">Penalty: {{ app.default_penalty_scheme.name|default:"None" }}</span>
+            </div>
+            <div class="vr d-none d-md-block"></div>
+            <div class="d-flex align-items-center gap-2">
+              <span class="small">Default Battle Duration: {{ app.default_duration_minutes|default:"120" }}</span>
+            </div>
+            <div class="vr d-none d-md-block"></div>
+            <div class="d-flex align-items-center gap-2">
+              <i class="fa-solid fa-ban text-muted small"></i>
+              <span class="small">Ignored Modules: {{ ignored_count|default:"0" }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center gap-2">
+            <i class="fa-solid fa-wrench text-secondary"></i>
+            <span class="fw-semibold">Quick Actions</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="btn-group w-100 mb-2" role="group">
+            <a class="btn btn-outline-primary" href="{% url 'autosrp:penalty-create' %}">
+              <i class="fa-solid fa-plus me-1"></i> New Penalty Scheme
+            </a>
+            <a class="btn btn-outline-success" href="{% url 'autosrp:reward-create' %}">
+              <i class="fa-solid fa-plus me-1"></i> New Reward
+            </a>
+          </div>
+
+          <div class="list-group list-group-flush">
+            <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between" href="{% url 'autosrp:penalty-list' %}">
+              <span><i class="fa-solid fa-layer-group me-2"></i>Manage Penalty Schemes</span>
+              <i class="fa-solid fa-chevron-right small text-muted"></i>
+            </a>
+            <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between" href="{% url 'autosrp:reward-list' %}">
+              <span><i class="fa-solid fa-ship me-2"></i>Manage Doctrine Rewards</span>
+              <i class="fa-solid fa-chevron-right small text-muted"></i>
+            </a>
+            <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between" href="{% url 'autosrp:review-list' %}">
+              <span><i class="fa-solid fa-clipboard-check me-2"></i>Review Batches</span>
+              <i class="fa-solid fa-chevron-right small text-muted"></i>
+            </a>
+            <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between" href="{% url 'autosrp:admin-stats' %}">
+              <span><i class="fa-solid fa-chart-column me-2"></i>View Stats</span>
+              <i class="fa-solid fa-chevron-right small text-muted"></i>
+            </a>
+            <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between" href="{% url 'autosrp:ignored-modules' %}">
+              <span><i class="fa-solid fa-ban me-2"></i>Manage Ignored Modules</span>
+              <i class="fa-solid fa-chevron-right small text-muted"></i>
+            </a>
+          </div>
+        </div>
+        <div class="card-footer bg-secondary">
+          <div class="small text-muted">
+            Use these actions to configure and monitor SRP operations.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="alert alert-warning d-flex align-items-center" role="alert">
+    <i class="fa-solid fa-triangle-exclamation me-2"></i>
+    <div>No AppSetting found. Use Django Admin to create one.</div>
+  </div>
+  {% endif %}
+</div>
+<style>
+    .container-xxl { max-width: 90%; }
+</style>
+{% endblock %}

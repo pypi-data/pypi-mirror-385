@@ -1,0 +1,144 @@
+{% extends 'autosrp/base.html' %}
+{% load i18n form_extras %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-10 col-xl-8">
+      <div class="card shadow-sm">
+        <div class="card-header">
+          <h5 class="mb-0">{% trans "Penalty Scheme" %}</h5>
+        </div>
+        <div class="card-body">
+          {% if form.non_field_errors %}
+            <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+          {% endif %}
+
+          <form method="post" novalidate id="penaltyForm">
+            {% csrf_token %}
+            <div style="display:none;">
+              {{ form.per_wrong_module_pct }}
+            </div>
+
+            <div class="row g-3">
+              <div class="col-12">
+                <label for="id_name" class="form-label">{{ form.name.label }}</label>
+                {{ form.name|add_class:"form-control" }}
+                <div class="form-text">
+                  A human-friendly name for this penalty scheme. This name appears in selections,
+                  defaults, and reporting.
+                </div>
+                {% if form.name.errors %}
+                <div class="invalid-feedback d-block">{{ form.name.errors|join:", " }}</div>
+                {% endif %}
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label for="id_per_missing_module_pct" class="form-label">{{ form.per_missing_module_pct.label }}</label>
+                {{ form.per_missing_module_pct|add_class:"form-control" }}
+                <div class="form-text">
+                  Percent deduction applied for each missing required doctrine module.
+                  Example: 5.00 deducts 5% per missing module.
+                </div>
+                {% if form.per_missing_module_pct.errors %}
+                <div class="invalid-feedback d-block">{{ form.per_missing_module_pct.errors|join:", " }}</div>
+                {% endif %}
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label for="id_per_extra_module_pct" class="form-label">{{ form.per_extra_module_pct.label }}</label>
+                {{ form.per_extra_module_pct|add_class:"form-control" }}
+                <div class="form-text">
+                  Percent deduction applied for each wrong (not defined by doctrine) module present.
+                  Example: 2.50 deducts 2.5% per extra module.
+                </div>
+                {% if form.per_extra_module_pct.errors %}
+                <div class="invalid-feedback d-block">{{ form.per_extra_module_pct.errors|join:", " }}</div>
+                {% endif %}
+              </div>
+
+              <div class="col-12 col-md-4">
+                <div class="form-check mt-2">
+                  {{ form.count_rigs|add_class:"form-check-input" }}
+                  <label for="id_count_rigs" class="form-check-label">{{ form.count_rigs.label }}</label>
+                </div>
+                <div class="form-text">
+                  If enabled, rigs are included in wrong/missing calculations for penalties.
+                </div>
+                {% if form.count_rigs.errors %}
+                <div class="invalid-feedback d-block">{{ form.count_rigs.errors|join:", " }}</div>
+                {% endif %}
+              </div>
+
+              <div class="col-12 col-md-4">
+                <div class="form-check mt-2">
+                  {{ form.count_subsystems|add_class:"form-check-input" }}
+                  <label for="id_count_subsystems" class="form-check-label">{{ form.count_subsystems.label }}</label>
+                </div>
+                <div class="form-text">
+                  If enabled, T3 subsystems count toward wrong/missing module penalties.
+                </div>
+                {% if form.count_subsystems.errors %}
+                <div class="invalid-feedback d-block">{{ form.count_subsystems.errors|join:", " }}</div>
+                {% endif %}
+              </div>
+
+              <div class="col-12 col-md-4">
+                <div class="form-check mt-2">
+                  {{ form.relax_substitutions_no_penalty|add_class:"form-check-input" }}
+                  <label for="id_relax_substitutions_no_penalty" class="form-check-label">
+                    {{ form.relax_substitutions_no_penalty.label }}
+                  </label>
+                </div>
+                <div class="form-text">
+                  When enabled, modules explicitly allowed as substitutions (listed as cargo in the Fittings app) do not incur penalties.
+                  This relaxes strict doctrine matching for approved alternatives.
+                </div>
+                {% if form.relax_substitutions_no_penalty.errors %}
+                <div class="invalid-feedback d-block">{{ form.relax_substitutions_no_penalty.errors|join:", " }}</div>
+                {% endif %}
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label for="id_max_total_deduction_pct" class="form-label">{{ form.max_total_deduction_pct.label }}</label>
+                {{ form.max_total_deduction_pct|add_class:"form-control" }}
+                <div class="form-text">
+                  Maximum total deduction (percent) allowed for a single loss. The computed penalties
+                  will not exceed this cap. Example: 50.00 caps total deduction at 50%.
+                </div>
+                {% if form.max_total_deduction_pct.errors %}
+                <div class="invalid-feedback d-block">{{ form.max_total_deduction_pct.errors|join:", " }}</div>
+                {% endif %}
+              </div>
+
+              <div class="col-12 col-md-6">
+                <div class="form-check mt-2">
+                  {{ form.is_default|add_class:"form-check-input" }}
+                  <label for="id_is_default" class="form-check-label">{{ form.is_default.label }}</label>
+                </div>
+                <div class="form-text">
+                  If selected, this scheme becomes the default when a doctrine reward does not
+                  specify a penalty scheme explicitly. Only one scheme should generally be default.
+                </div>
+                {% if form.is_default.errors %}
+                <div class="invalid-feedback d-block">{{ form.is_default.errors|join:", " }}</div>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mt-4">
+              <a href="{% url 'autosrp:penalty-list' %}" class="btn btn-outline-secondary">{% trans "Cancel" %}</a>
+              <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="text-muted small mt-3">
+        <i class="fa fa-info-circle me-1"></i>
+        {% trans "Penalty percentages are applied per-module, then capped by the maximum total deduction." %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
