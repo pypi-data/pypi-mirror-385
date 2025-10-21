@@ -1,0 +1,23 @@
+---
+include:
+  - component: $CI_SERVER_FQDN/maxiv/components/workflow/python-public@main
+
+test-docs:
+  image: ghcr.io/astral-sh/uv:python3.12-bookworm
+  stage: test
+  # Do not wait auto-build-conda-package
+  needs: [build-pypi-package]
+  before_script:
+    - uv venv
+    - uv pip install -e ".[doc]"
+    - source .venv/bin/activate
+  script:
+    - python -m sphinx -n -W docs build/html
+    - echo "Documentation can be found at https://$CI_PROJECT_NAMESPACE.gitlab.io/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/build/html/index.html"
+  artifacts:
+    when: always
+    paths:
+      - build
+  environment:
+    name: Docs-dev
+    url: "https://$CI_PROJECT_NAMESPACE.gitlab.io/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/build/html/index.html"
