@@ -1,0 +1,20 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "lapisworks:item/amel_orb_empty"
+    },
+    "overrides": [
+        {
+            "model": "lapisworks:item/amel_constructs/amel_orb",
+            "predicate": {
+                "lapisworks:amel_orb_is_filled": 0.0
+            }
+        },
+        {
+            "model": "lapisworks:item/amel_constructs/amel_orb_filled",
+            "predicate": {
+                "lapisworks:amel_orb_is_filled": 1.0
+            }
+        }
+    ]
+}

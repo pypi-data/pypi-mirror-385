@@ -1,0 +1,34 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "IAI",
+        "R R",
+        "ICI"
+    ],
+    "key": {
+        "A": {
+            "tag": "lapisworks:amel"
+        },
+        "R": {
+            "item": "hexcasting:charged_amethyst"
+        },
+        "C": {
+            "item": "minecraft:lightning_rod"
+        },
+        "I" : {
+            "item": "minecraft:copper_ingot"
+        }
+    },
+    "result": {
+        "item": "lapisworks:cradle"
+    },
+
+    "fabric:load_conditions": [
+        {
+            "condition": "fabric:all_mods_loaded",
+            "values": [
+                "hexical"
+            ]
+        }
+    ]
+}
