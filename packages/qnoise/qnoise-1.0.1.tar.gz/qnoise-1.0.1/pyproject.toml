@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=64", "wheel", "pybind11>=2.6.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qnoise"
+version = "1.0.1"
+description = "Non-Gaussian colored noise generator"
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+authors = [{name = "J. Ignacio Deza", email = "ignacio.deza@uwe.ac.uk"}]
+keywords = ["noise", "stochastic", "non-gaussian", "colored-noise"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = ["numpy>=1.20.0"]
+
+[project.urls]
+Homepage = "https://github.com/ignaciodeza/qNoise"
+Repository = "https://github.com/ignaciodeza/qNoise"
+Paper = "https://doi.org/10.1016/j.softx.2022.101034"
+
+[tool.setuptools]
+packages = ["qnoise"]
