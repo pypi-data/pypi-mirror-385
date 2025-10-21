@@ -1,0 +1,1 @@
+from .EjerciciosAmpliacionSeleccionRepeticion import suma_pares_impares, divisibles_3y5, factorialNum, pares_impares, serie_aritmetica, fibonacci, numeros_perfectos, inversion_numero, Palindromo_numerico, conversion_decimalBinario, MCD, triangulo_pascal, numeros_primos, descomposicion_factoresPrimos, suma_digitos_repetida, cifras_crecientes, primos_gemelos, secuencia_collatz
