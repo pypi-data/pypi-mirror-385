@@ -1,0 +1,34 @@
+Metadata-Version: 2.4
+Name: fairmeta
+Version: 0.0.2
+Summary: fairmeta
+Project-URL: Homepage, https://github.com/YKingma99/FAIRMeta
+Project-URL: Issues, https://github.com/YKingma99/FAIRMeta/issues
+Author-email: Yme Kingma <yme.kingma@radboudumc.nl>
+License-Expression: Apache-2.0
+License-File: LICENSE
+Keywords: dcat,fair,fdp,metadata,metadata-model,pydantic,rdf,schema-transformation
+Classifier: Development Status :: 4 - Beta
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Scientific/Engineering :: Information Analysis
+Requires-Python: >=3.10
+Requires-Dist: dotenv
+Requires-Dist: gcapi
+Requires-Dist: pydantic
+Requires-Dist: pyyaml
+Requires-Dist: requests
+Requires-Dist: sempyro
+Provides-Extra: tests
+Requires-Dist: pytest; extra == 'tests'
+Description-Content-Type: text/markdown
+
+# FAIRMeta
+FAIRMeta module. Made using Python 3.12.3
+
+## Usage:
+```shell
+fairmeta config.yaml platform identifier name_in_fdp
+```
