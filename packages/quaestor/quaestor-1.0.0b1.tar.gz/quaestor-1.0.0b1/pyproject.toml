@@ -1,0 +1,143 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "quaestor"
+version = "1.0.0b1"
+description = "Skills-first specification-driven development - automatic spec creation, lifecycle management, progress tracking, and PR generation"
+authors = [{name = "Jean Luciano", email = "jeanluciano@example.com"}]
+license = "MIT"
+readme = "README.md"
+requires-python = ">=3.12"
+keywords = ["ai", "development", "context", "claude", "project-management", "ai-tools"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Quality Assurance",
+]
+dependencies = [
+    "typer>=0.16.0",
+    "rich>=13.0.0",
+    "textual>=1.0.0",
+    "PyYAML>=6.0,<7.0",
+    "pydantic>=2.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/jeanluciano/quaestor"
+Repository = "https://github.com/jeanluciano/quaestor"
+Issues = "https://github.com/jeanluciano/quaestor/issues"
+
+[project.scripts]
+quaestor = "quaestor.cli:app"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.1",
+    "pytest-cov>=6.2.1",
+    "pytest-mock>=3.14.1",
+    "pytest-xdist>=3.5.0",
+    "pytest-sugar>=1.0.0",
+    "pytest-timeout>=2.2.0",
+    "ruff>=0.12.2",
+    "pre-commit>=3.5.0",
+    "psutil>=7.0.0",
+    "pytest-asyncio>=1.1.0",
+    "pydantic-ai[openai]>=0.0.47",
+]
+
+# Note: pydantic-ai includes pydantic-evals for evaluation framework
+# Level 2 integration: Subprocess-based skill execution with async polling
+
+[tool.setuptools]
+packages = [
+    "quaestor",
+    "quaestor.agents",
+    "quaestor.commands",
+    "quaestor.scripts",
+    "quaestor.skills",
+]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.package-data]
+quaestor = [
+    "*.md",
+    "*.yaml",
+    "agents/*.md",
+    "commands/*.md",
+    "skills/*/*.md",
+    "skills/*/languages/*.md",
+    "scripts/*.py",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-n", "auto",  # Use all available CPU cores
+    "--maxfail=3",  # Stop after 3 failures
+    "--strict-markers",  # Enforce marker declarations
+    "--tb=short",  # Shorter traceback format
+    "-ra",  # Show summary of all test outcomes
+    "--ignore=tests/performance",  # Exclude performance tests by default
+]
+# Timeout for individual tests (in seconds)
+timeout = 60
+timeout_method = "thread"
+# Markers for test categorization
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "stress: marks tests as stress tests",
+    "performance: marks tests as performance tests",
+]
+
+[tool.coverage.run]
+source = ["src/quaestor"]
+omit = ["*/tests/*", "*/__pycache__/*"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "UP",  # pyupgrade
+    "SIM", # flake8-simplify
+]
+ignore = [
+    "B008",   # Allow function calls in argument defaults (needed for Typer)
+    "SIM102", # Use a single if statement instead of nested if statements
+    "SIM103", # Return the condition directly
+    "SIM110", # Simplify for loops
+    "E722",   # Do not use bare except (sometimes needed for robustness)
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+# Ensure consistent formatting of docstrings and multiline expressions
+docstring-code-format = true
+docstring-code-line-length = 88
