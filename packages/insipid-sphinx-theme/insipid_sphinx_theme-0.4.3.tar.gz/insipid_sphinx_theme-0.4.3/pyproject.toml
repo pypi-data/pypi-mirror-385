@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "insipid-sphinx-theme"
+license = "BSD-2-Clause"
+dynamic = ["version"]
+description = "An insipid Sphinx theme"
+readme = "README.rst"
+keywords = ["mobile-friendly"]
+authors = [
+  {name = "Matthias Geier", email = "Matthias.Geier@gmail.com"},
+]
+dependencies = [
+  "sphinx >= 5",
+  "docutils >= 0.18",
+  "jinja2 >= 2.11",  # suport for pathlib.path
+]
+requires-python = ">= 3.6"
+classifiers = [
+  "Framework :: Sphinx",
+  "Framework :: Sphinx :: Theme",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Topic :: Documentation :: Sphinx",
+]
+
+[project.urls]
+Documentation = "https://insipid-sphinx-theme.readthedocs.io/"
+Repository = "https://github.com/mgeier/insipid-sphinx-theme/"
+Issues = "https://github.com/mgeier/insipid-sphinx-theme/issues"
+
+[dependency-groups]
+dev = [{ include-group = "test" }, { include-group = "doc" }]
+test = []
+doc = ["sphinx-last-updated-by-git"]
+
+[tool.setuptools.dynamic]
+version = {attr = "insipid_sphinx_theme.__version__"}
+
+[project.entry-points]
+"sphinx.html_themes" = { insipid = "insipid_sphinx_theme" }

@@ -1,0 +1,32 @@
+{%- set sidebar_side = 'right' if theme_rightsidebar|tobool else 'left' %}
+
+#ethical-ad-placement {
+    margin-top: auto;
+    padding-top: 3em;
+    min-height: 200px;
+}
+
+#sidebar-checkbox:not(:checked) ~ .ethical-fixedfooter {
+    left: 0;
+    right: 0;
+    width: unset;
+}
+
+#sidebar-checkbox:checked ~ .ethical-fixedfooter {
+    {%- if theme_rightsidebar|tobool %}
+    left: 0;
+    right: var(--sidebar-width);
+    {%- else %}
+    left: var(--sidebar-width);
+    right: 0;
+    {%- endif %}
+    width: unset;
+}
+
+body:not(.sidebar-resizing) .ethical-fixedfooter {
+    transition: {{ sidebar_side }} {{ theme_sidebar_transition }};
+}
+
+{#
+vim:ft=css
+#}
