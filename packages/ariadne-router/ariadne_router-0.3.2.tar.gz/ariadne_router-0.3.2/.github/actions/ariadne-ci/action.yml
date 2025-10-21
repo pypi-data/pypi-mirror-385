@@ -1,0 +1,178 @@
+name: 'Ariadne CI Action'
+description: 'Run quantum circuit regression tests with Ariadne'
+author: 'Ariadne Quantum'
+
+inputs:
+  circuits-folder:
+    description: 'Folder containing quantum circuit files'
+    required: false
+    default: 'test_circuits'
+  backends-list:
+    description: 'Comma-separated list of backends to test'
+    required: false
+    default: 'auto,stim,qiskit,mps'
+  tolerance:
+    description: 'Tolerance for cross-backend result comparison'
+    required: false
+    default: '0.05'
+  shots:
+    description: 'Number of shots per simulation'
+    required: false
+    default: '1000'
+  algorithms:
+    description: 'Comma-separated list of algorithms to benchmark'
+    required: false
+    default: 'bell,ghz,qaoa'
+
+outputs:
+  results-file:
+    description: 'Path to benchmark results file'
+  success-rate:
+    description: 'Overall success rate across all tests'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install Ariadne
+      shell: bash
+      run: |
+        python -m pip install --upgrade pip
+        pip install ariadne-router[all]
+
+    - name: Create test circuits
+      shell: bash
+      run: |
+        mkdir -p ${{ inputs.circuits-folder }}
+
+        # Create Bell state circuit
+        cat > ${{ inputs.circuits-folder }}/bell.qasm << 'EOF'
+        OPENQASM 2.0;
+        include "qelib1.inc";
+        qreg q[2];
+        creg c[2];
+        h q[0];
+        cx q[0],q[1];
+        measure q -> c;
+        EOF
+
+        # Create GHZ circuit
+        cat > ${{ inputs.circuits-folder }}/ghz.qasm << 'EOF'
+        OPENQASM 2.0;
+        include "qelib1.inc";
+        qreg q[4];
+        creg c[4];
+        h q[0];
+        cx q[0],q[1];
+        cx q[0],q[2];
+        cx q[0],q[3];
+        measure q -> c;
+        EOF
+
+    - name: Run benchmark suite
+      shell: bash
+      run: |
+        ariadne benchmark-suite \
+          --algorithms ${{ inputs.algorithms }} \
+          --backends ${{ inputs.backends-list }} \
+          --shots ${{ inputs.shots }} \
+          --output benchmark_results.json
+
+    - name: Validate cross-backend consistency
+      shell: bash
+      run: |
+        python << 'EOF'
+        import json
+        import sys
+        import numpy as np
+
+        # Load benchmark results
+        with open('benchmark_results.json') as f:
+            results = json.load(f)
+
+        tolerance = float('${{ inputs.tolerance }}')
+        total_tests = 0
+        successful_tests = 0
+
+        print("Validating cross-backend consistency...")
+        print(f"Tolerance: {tolerance}")
+        print("=" * 50)
+
+        for alg_name, alg_data in results['results'].items():
+            print(f"\nAlgorithm: {alg_name}")
+
+            # Collect results from successful backends
+            backend_results = {}
+            for backend_name, backend_data in alg_data['backends'].items():
+                if backend_data['success']:
+                    backend_results[backend_name] = backend_data['counts']
+
+            if len(backend_results) < 2:
+                print(f"  Warning: Need at least 2 successful backends for comparison")
+                continue
+
+            # Compare distributions
+            backends_list = list(backend_results.keys())
+            reference_backend = backends_list[0]
+            reference_counts = backend_results[reference_backend]
+
+            # Normalize to probabilities
+            total_shots_ref = sum(reference_counts.values())
+            reference_probs = {k: v/total_shots_ref for k, v in reference_counts.items()}
+
+            consistent = True
+            for backend in backends_list[1:]:
+                backend_counts = backend_results[backend]
+                total_shots_backend = sum(backend_counts.values())
+                backend_probs = {k: v/total_shots_backend for k, v in backend_counts.items()}
+
+                # Calculate KL divergence or simply compare probabilities
+                max_diff = 0
+                for outcome in reference_probs:
+                    ref_prob = reference_probs.get(outcome, 0)
+                    back_prob = backend_probs.get(outcome, 0)
+                    diff = abs(ref_prob - back_prob)
+                    max_diff = max(max_diff, diff)
+
+                if max_diff > tolerance:
+                    print(f"  ✗ {reference_backend} vs {backend}: max diff = {max_diff:.3f}")
+                    consistent = False
+                else:
+                    print(f"  ✓ {reference_backend} vs {backend}: max diff = {max_diff:.3f}")
+
+                total_tests += 1
+                if consistent:
+                    successful_tests += 1
+
+        print(f"\nSummary: {successful_tests}/{total_tests} tests passed")
+
+        # Set outputs
+        with open('success_rate.txt', 'w') as f:
+            f.write(str(successful_tests/total_tests if total_tests > 0 else 0))
+
+        if successful_tests < total_tests:
+            print("Some cross-backend consistency tests failed!")
+            sys.exit(1)
+        else:
+            print("All cross-backend consistency tests passed!")
+        EOF
+
+    - name: Upload results
+      uses: actions/upload-artifact@v3
+      with:
+        name: ariadne-benchmark-results
+        path: benchmark_results.json
+
+    - name: Set outputs
+      shell: bash
+      run: |
+        echo "results-file=benchmark_results.json" >> $GITHUB_OUTPUT
+
+        if [ -f "success_rate.txt" ]; then
+          success_rate=$(cat success_rate.txt)
+          echo "success-rate=$success_rate" >> $GITHUB_OUTPUT
+        fi

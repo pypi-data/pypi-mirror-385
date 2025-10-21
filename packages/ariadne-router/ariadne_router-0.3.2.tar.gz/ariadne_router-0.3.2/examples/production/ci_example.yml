@@ -1,0 +1,138 @@
+# GitHub Action example for quantum circuit regression testing
+name: Quantum Circuit CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  quantum-regression:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ['3.11', '3.12']
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install Ariadne
+      run: |
+        python -m pip install --upgrade pip
+        pip install ariadne-router[all]
+
+    - name: Create test circuits
+      run: |
+        mkdir -p test_circuits
+
+        # Create Bell state circuit
+        cat > test_circuits/bell.qasm << 'EOF'
+        OPENQASM 2.0;
+        include "qelib1.inc";
+        qreg q[2];
+        creg c[2];
+        h q[0];
+        cx q[0],q[1];
+        measure q -> c;
+        EOF
+
+        # Create GHZ circuit
+        cat > test_circuits/ghz.qasm << 'EOF'
+        OPENQASM 2.0;
+        include "qelib1.inc";
+        qreg q[4];
+        creg c[4];
+        h q[0];
+        cx q[0],q[1];
+        cx q[0],q[2];
+        cx q[0],q[3];
+        measure q -> c;
+        EOF
+
+    - name: Run quantum regression tests
+      run: |
+        # Test Bell state across backends
+        echo "Testing Bell state..."
+        ariadne simulate test_circuits/bell.qasm --shots 1000 --output bell_results.json
+
+        # Test GHZ state across backends
+        echo "Testing GHZ state..."
+        ariadne simulate test_circuits/ghz.qasm --shots 1000 --output ghz_results.json
+
+        # Run benchmark suite
+        echo "Running benchmark suite..."
+        ariadne benchmark-suite --algorithms bell,ghz --backends auto --output benchmark_results.json
+
+    - name: Validate results consistency
+      run: |
+        python << 'EOF'
+        import json
+        import sys
+
+        # Load results
+        with open('bell_results.json') as f:
+            bell = json.load(f)
+        with open('ghz_results.json') as f:
+            ghz = json.load(f)
+        with open('benchmark_results.json') as f:
+            benchmark = json.load(f)
+
+        # Basic validation checks
+        def validate_results(name, results):
+            print(f"Validating {name}...")
+
+            # Check we have results
+            if not results.get('counts'):
+                print(f"ERROR: No counts found for {name}")
+                return False
+
+            # Check shot count
+            total_shots = sum(results['counts'].values())
+            if total_shots != 1000:
+                print(f"ERROR: Expected 1000 shots, got {total_shots} for {name}")
+                return False
+
+            # Check execution time is reasonable
+            if results.get('execution_time', 0) > 60:
+                print(f"WARNING: Long execution time for {name}: {results['execution_time']}s")
+
+            print(f"✓ {name} passed validation")
+            return True
+
+        # Validate all results
+        all_valid = True
+        all_valid &= validate_results('bell', bell)
+        all_valid &= validate_results('ghz', ghz)
+
+        # Validate benchmark results
+        if 'results' in benchmark:
+            for alg_name, alg_data in benchmark['results'].items():
+                for backend, backend_data in alg_data.get('backends', {}).items():
+                    if backend_data.get('success', False):
+                        print(f"✓ {alg_name} on {backend} benchmark passed")
+                    else:
+                        print(f"✗ {alg_name} on {backend} benchmark failed: {backend_data.get('error', 'Unknown error')}")
+
+        if not all_valid:
+            print("Some validation checks failed!")
+            sys.exit(1)
+        else:
+            print("All validation checks passed!")
+        EOF
+
+    - name: Upload results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: quantum-results-${{ matrix.os }}-${{ matrix.python-version }}
+        path: |
+          bell_results.json
+          ghz_results.json
+          benchmark_results.json

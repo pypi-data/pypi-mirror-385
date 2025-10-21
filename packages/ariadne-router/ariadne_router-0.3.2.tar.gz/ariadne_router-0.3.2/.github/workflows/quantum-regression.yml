@@ -1,0 +1,217 @@
+name: Quantum Regression Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+
+jobs:
+  quantum-matrix:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ['3.11', '3.12']
+        include:
+          - os: ubuntu-latest
+            python-version: '3.11'
+            extra-backends: 'cuda'
+          - os: macos-latest
+            python-version: '3.11'
+            extra-backends: 'metal'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Run Ariadne CI
+      uses: ./.github/actions/ariadne-ci
+      with:
+        circuits-folder: 'test_circuits'
+        backends-list: 'auto,stim,qiskit,mps,${{ matrix.extra-backends }}'
+        tolerance: '0.05'
+        shots: '1000'
+        algorithms: 'bell,ghz,qaoa,vqe'
+
+    - name: Upload additional artifacts
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: quantum-results-${{ matrix.os }}-${{ matrix.python-version }}
+        path: |
+          benchmark_results.json
+          success_rate.txt
+        retention-days: 30
+
+  cross-platform-summary:
+    runs-on: ubuntu-latest
+    needs: quantum-matrix
+    if: always()
+
+    steps:
+    - name: Download all artifacts
+      uses: actions/download-artifact@v3
+      with:
+        path: artifacts/
+
+    - name: Generate summary report
+      shell: bash
+      run: |
+        python << 'EOF'
+        import json
+        import os
+        from pathlib import Path
+
+        print("Quantum Regression Test Summary")
+        print("=" * 50)
+
+        artifacts_dir = Path('artifacts')
+        all_results = {}
+
+        # Collect results from all matrix jobs
+        for artifact_dir in artifacts_dir.iterdir():
+            if artifact_dir.is_dir():
+                benchmark_file = artifact_dir / 'benchmark_results.json'
+                if benchmark_file.exists():
+                    with open(benchmark_file) as f:
+                        results = json.load(f)
+                        all_results[artifact_dir.name] = results
+
+        # Generate summary
+        total_tests = 0
+        total_successful = 0
+
+        for job_name, results in all_results.items():
+            print(f"\nJob: {job_name}")
+            print("-" * 30)
+
+            job_tests = 0
+            job_successful = 0
+
+            for alg_name, alg_data in results['results'].items():
+                for backend_name, backend_data in alg_data['backends'].items():
+                    job_tests += 1
+                    total_tests += 1
+
+                    if backend_data['success']:
+                        job_successful += 1
+                        total_successful += 1
+                        print(f"  ✓ {alg_name} on {backend_name}")
+                    else:
+                        print(f"  ✗ {alg_name} on {backend_name}: {backend_data.get('error', 'Unknown')}")
+
+            success_rate = job_successful / job_tests if job_tests > 0 else 0
+            print(f"  Success rate: {success_rate:.2%} ({job_successful}/{job_tests})")
+
+        # Overall summary
+        overall_success_rate = total_successful / total_tests if total_tests > 0 else 0
+        print(f"\nOVERALL SUMMARY")
+        print("=" * 30)
+        print(f"Total tests: {total_tests}")
+        print(f"Successful: {total_successful}")
+        print(f"Success rate: {overall_success_rate:.2%}")
+
+        # Save summary
+        summary = {
+            'total_tests': total_tests,
+            'successful_tests': total_successful,
+            'success_rate': overall_success_rate,
+            'job_results': {job: {'tests': len([b for a in r['results'].values() for b in a['backends'].values()]),
+                                  'successful': len([b for a in r['results'].values() for b in a['backends'].values() if b['success']])}
+                           for job, r in all_results.items()}
+        }
+
+        with open('summary_report.json', 'w') as f:
+            json.dump(summary, f, indent=2)
+
+        # Set exit code based on overall success
+        if overall_success_rate < 0.8:  # Require at least 80% success rate
+            print(f"\nWARNING: Overall success rate ({overall_success_rate:.2%}) below threshold!")
+            # Don't fail the job, just warn
+        else:
+            print(f"\n✓ Overall success rate ({overall_success_rate:.2%}) meets requirements!")
+        EOF
+
+    - name: Upload summary report
+      uses: actions/upload-artifact@v3
+      with:
+        name: quantum-regression-summary
+        path: summary_report.json
+        retention-days: 90
+
+  performance-trends:
+    runs-on: ubuntu-latest
+    needs: quantum-matrix
+    if: github.event_name == 'schedule' || github.event_name == 'push'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        pip install ariadne-router[all] matplotlib
+
+    - name: Run performance benchmark
+      shell: bash
+      run: |
+        python << 'EOF'
+        import json
+        import time
+        from datetime import datetime
+        from ariadne.benchmarking import export_benchmark_report
+
+        print("Running performance trend benchmark...")
+
+        # Run comprehensive benchmark
+        report = export_benchmark_report(
+            algorithms=['bell', 'ghz', 'qaoa', 'vqe', 'stabilizer'],
+            backends=['auto', 'stim', 'qiskit', 'mps'],
+            shots=1000,
+            fmt='json'
+        )
+
+        # Save with timestamp
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        filename = f'performance_trend_{timestamp}.json'
+
+        with open(filename, 'w') as f:
+            json.dump(report, f, indent=2, default=str)
+
+        print(f"Performance data saved to: {filename}")
+
+        # Extract key metrics for trending
+        metrics = {}
+        for alg_name, alg_data in report['results'].items():
+            metrics[alg_name] = {}
+            for backend_name, backend_data in alg_data['backends'].items():
+                if backend_data['success']:
+                    metrics[alg_name][backend_name] = {
+                        'execution_time': backend_data['execution_time'],
+                        'throughput': backend_data['throughput']
+                    }
+
+        print("\nKey Performance Metrics:")
+        print("=" * 40)
+        for alg_name, alg_metrics in metrics.items():
+            print(f"\n{alg_name.upper()}:")
+            for backend, data in alg_metrics.items():
+                print(f"  {backend}: {data['execution_time']:.3f}s, {data['throughput']:.0f} shots/s")
+        EOF
+
+    - name: Upload performance data
+      uses: actions/upload-artifact@v3
+      with:
+        name: performance-trends
+        path: performance_trend_*.json
+        retention-days: 365

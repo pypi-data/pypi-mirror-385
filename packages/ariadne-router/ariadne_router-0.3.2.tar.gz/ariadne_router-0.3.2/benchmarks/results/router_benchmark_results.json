@@ -1,0 +1,283 @@
+[
+  {
+    "name": "ghz_chain_10",
+    "description": "Clifford GHZ ladder (H + CX)",
+    "category": "clifford",
+    "num_qubits": 10,
+    "num_gates": 10,
+    "analysis": {
+      "num_qubits": 10,
+      "depth": 11,
+      "two_qubit_depth": 9,
+      "edges": 9,
+      "treewidth_estimate": 1,
+      "light_cone_width": 2,
+      "clifford_ratio": 1.0,
+      "is_clifford": true,
+      "gate_entropy": 0.4689955935892812,
+      "entanglement_entropy_estimate": 5.934303402594009,
+      "quantum_volume_estimate": 1024,
+      "parallelization_factor": 0.9090909090909091,
+      "noise_susceptibility": 0.42600000000000005,
+      "classical_simulation_complexity": 100,
+      "connectivity_score": 0.13999999999999999,
+      "gate_diversity": 0.5781296526357758,
+      "expressivity_measure": 0.5912518610543104
+    },
+    "timings": [
+      {
+        "backend": "ariadne_router",
+        "mean_time": 0.03653683402808383,
+        "stdev": 0.0,
+        "repetitions": 1,
+        "succeeded": true,
+        "error": null
+      },
+      {
+        "backend": "qiskit_basic",
+        "mean_time": 0.0008914589998312294,
+        "stdev": 0.0,
+        "repetitions": 1,
+        "succeeded": true,
+        "error": null
+      },
+      {
+        "backend": "stim",
+        "mean_time": Infinity,
+        "stdev": 0.0,
+        "repetitions": 0,
+        "succeeded": false,
+        "error": "'EnhancedQuantumRouter' object has no attribute '_simulate_stim'"
+      },
+      {
+        "backend": "tensor_network",
+        "mean_time": 2.810587750049308,
+        "stdev": 0.0,
+        "repetitions": 1,
+        "succeeded": true,
+        "error": null
+      }
+    ],
+    "router_backend": "stim"
+  },
+  {
+    "name": "random_clifford_12",
+    "description": "Random layered Clifford circuit",
+    "category": "clifford",
+    "num_qubits": 12,
+    "num_gates": 115,
+    "analysis": {
+      "num_qubits": 12,
+      "depth": 25,
+      "two_qubit_depth": 51,
+      "edges": 11,
+      "treewidth_estimate": 1,
+      "light_cone_width": 2,
+      "clifford_ratio": 1.0,
+      "is_clifford": true,
+      "gate_entropy": 2.4972257435913807,
+      "entanglement_entropy_estimate": 11.877350757394245,
+      "quantum_volume_estimate": 4096,
+      "parallelization_factor": 4.6,
+      "noise_susceptibility": 0.341304347826087,
+      "classical_simulation_complexity": 144,
+      "connectivity_score": 0.11666666666666665,
+      "gate_diversity": 1.3123395947574483,
+      "expressivity_measure": 0.7162401857290663
+    },
+    "timings": [
+      {
+        "backend": "ariadne_router",
+        "mean_time": 0.1707977080368437,
+        "stdev": 0.0,
+        "repetitions": 1,
+        "succeeded": true,
+        "error": null
+      },
+      {
+        "backend": "qiskit_basic",
+        "mean_time": 0.009393166983500123,
+        "stdev": 0.0,
+        "repetitions": 1,
+        "succeeded": true,
+        "error": null
+      },
+      {
+        "backend": "stim",
+        "mean_time": Infinity,
+        "stdev": 0.0,
+        "repetitions": 0,
+        "succeeded": false,
+        "error": "'EnhancedQuantumRouter' object has no attribute '_simulate_stim'"
+      },
+      {
+        "backend": "tensor_network",
+        "mean_time": 0.4021150410408154,
+        "stdev": 0.0,
+        "repetitions": 1,
+        "succeeded": true,
+        "error": null
+      }
+    ],
+    "router_backend": "stim"
+  },
+  {
+    "name": "random_nonclifford_8",
+    "description": "Random non-Clifford rotations + entanglement",
+    "category": "non_clifford",
+    "num_qubits": 8,
+    "num_gates": 124,
+    "analysis": {
+      "num_qubits": 8,
+      "depth": 26,
+      "two_qubit_depth": 25,
+      "edges": 7,
+      "treewidth_estimate": 1,
+      "light_cone_width": 2,
+      "clifford_ratio": 0.22580645161290322,
+      "is_clifford": false,
+      "gate_entropy": 1.997696811857739,
+      "entanglement_entropy_estimate": 7.758420932621452,
+      "quantum_volume_estimate": 256,
+      "parallelization_factor": 4.769230769230769,
+      "noise_susceptibility": 0.2463225806451613,
+      "classical_simulation_complexity": 1217.2512005538479,
+      "connectivity_score": 0.175,
+      "gate_diversity": 0.5742354107645241,
+      "expressivity_measure": 0.4232425514025839
+    },
+    "timings": [
+      {
+        "backend": "ariadne_router",
+        "mean_time": 0.274540624988731,
+        "stdev": 0.0,
+        "repetitions": 1,
+        "succeeded": true,
+        "error": null
+      },
+      {
+        "backend": "qiskit_basic",
+        "mean_time": 0.0014740839833393693,
+        "stdev": 0.0,
+        "repetitions": 1,
+        "succeeded": true,
+        "error": null
+      },
+      {
+        "backend": "tensor_network",
+        "mean_time": 0.6220590840093791,
+        "stdev": 0.0,
+        "repetitions": 1,
+        "succeeded": true,
+        "error": null
+      }
+    ],
+    "router_backend": "mps"
+  },
+  {
+    "name": "qaoa_maxcut_8_p3",
+    "description": "QAOA MaxCut with p=3 layers",
+    "category": "algorithmic",
+    "num_qubits": 8,
+    "num_gates": 95,
+    "analysis": {
+      "num_qubits": 8,
+      "depth": 38,
+      "two_qubit_depth": 40,
+      "edges": 7,
+      "treewidth_estimate": 1,
+      "light_cone_width": 2,
+      "clifford_ratio": 0.5263157894736842,
+      "is_clifford": false,
+      "gate_entropy": 1.8040124751481095,
+      "entanglement_entropy_estimate": 7.958019852806549,
+      "quantum_volume_estimate": 256,
+      "parallelization_factor": 2.5,
+      "noise_susceptibility": 0.4048421052631579,
+      "classical_simulation_complexity": 1353.0629680287357,
+      "connectivity_score": 0.175,
+      "gate_diversity": 0.6074446133234529,
+      "expressivity_measure": 0.5145567926978022
+    },
+    "timings": [
+      {
+        "backend": "ariadne_router",
+        "mean_time": 0.1779461660189554,
+        "stdev": 0.0,
+        "repetitions": 1,
+        "succeeded": true,
+        "error": null
+      },
+      {
+        "backend": "qiskit_basic",
+        "mean_time": 0.0012222080258652568,
+        "stdev": 0.0,
+        "repetitions": 1,
+        "succeeded": true,
+        "error": null
+      },
+      {
+        "backend": "tensor_network",
+        "mean_time": 0.08679162501357496,
+        "stdev": 0.0,
+        "repetitions": 1,
+        "succeeded": true,
+        "error": null
+      }
+    ],
+    "router_backend": "mps"
+  },
+  {
+    "name": "vqe_ansatz_12",
+    "description": "Hardware-efficient variational ansatz",
+    "category": "algorithmic",
+    "num_qubits": 12,
+    "num_gates": 105,
+    "analysis": {
+      "num_qubits": 12,
+      "depth": 13,
+      "two_qubit_depth": 6,
+      "edges": 11,
+      "treewidth_estimate": 1,
+      "light_cone_width": 2,
+      "clifford_ratio": 0.3142857142857143,
+      "is_clifford": false,
+      "gate_entropy": 1.5837730791644518,
+      "entanglement_entropy_estimate": 11.232865665519508,
+      "quantum_volume_estimate": 4096,
+      "parallelization_factor": 8.076923076923077,
+      "noise_susceptibility": 0.20371428571428574,
+      "classical_simulation_complexity": 15594.925760747947,
+      "connectivity_score": 0.11666666666666665,
+      "gate_diversity": 0.445903012715505,
+      "expressivity_measure": 0.4412183479433449
+    },
+    "timings": [
+      {
+        "backend": "ariadne_router",
+        "mean_time": 0.15598366601625457,
+        "stdev": 0.0,
+        "repetitions": 1,
+        "succeeded": true,
+        "error": null
+      },
+      {
+        "backend": "qiskit_basic",
+        "mean_time": 0.004811042046640068,
+        "stdev": 0.0,
+        "repetitions": 1,
+        "succeeded": true,
+        "error": null
+      },
+      {
+        "backend": "tensor_network",
+        "mean_time": 0.06080008397111669,
+        "stdev": 0.0,
+        "repetitions": 1,
+        "succeeded": true,
+        "error": null
+      }
+    ],
+    "router_backend": "mps"
+  }
+]
