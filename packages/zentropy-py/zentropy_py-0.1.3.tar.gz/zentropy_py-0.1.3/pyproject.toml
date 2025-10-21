@@ -1,0 +1,56 @@
+[build-system]
+requires = ["hatchling >= 1.26"]
+build-backend = "hatchling.build"
+
+[project]
+name = "zentropy-py"
+version = "0.1.3"
+description = "A simple client for Zentropy server"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "MailMug", email = "info@mailmug.net"}
+]
+keywords = ["zentropy", "redis", "zig", "client", "tcp"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent"
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "pytest-mock>=3.10.0",
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "flake8>=6.0.0",
+    "mypy>=1.0.0",
+    "twine>=4.0.0",
+    "build>=0.10.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/mailmug/zentropy-py"
+Documentation = "https://github.com/mailmug/zentropy-py#readme"
+Repository = "https://github.com/mailmug/zentropy-py"
+Issues = "https://github.com/mailmug/zentropy-py/issues"
+
+[project.scripts]
+zentropy-cli = "zentropy.cli:main"
+
+# Hatchling specific configuration
+[tool.hatch.build.targets.wheel]
+packages = ["src/zentropy"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src",
+    "/tests",
+    "LICENSE",
+    "README.md",
+    "pyproject.toml",
+]
