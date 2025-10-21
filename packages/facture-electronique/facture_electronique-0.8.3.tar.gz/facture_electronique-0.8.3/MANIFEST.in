@@ -1,0 +1,9 @@
+include readme.md
+include LICENSE
+include facture_electronique/xsd
+graft facture_electronique/afnor_client/swagger
+graft facture_electronique/api/swagger
+
+include facture_electronique/exemples/dummy.pdf
+exclude facture_electronique/config.py
+
