@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mcp_weather_server"
+version = "0.5.0"
+authors = [
+  { name = "danielshih", email = "dog830228@gmail.com" },
+]
+description = "An MCP server for weather information"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+  "mcp[cli]>=1.18.0",
+  "argparse>=1.4.0",
+  "httpx>=0.28.1",
+  "python-dotenv>=1.1.1",
+  "python-dateutil>=2.8.2",
+  "starlette>=0.48.0",
+  "uvicorn>=0.38.0",
+  "tzdata>=2025.2",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/mcp_weather_server"]
+
+[project.scripts]
+mcp_weather_server = "mcp_weather_server:main"
+
+[project.urls]
+Source = "https://github.com/isdaniel/mcp_weather_server"
+
+
