@@ -1,0 +1,1 @@
+from .funciones import factorial, numInverso, aBin, fibonacci
