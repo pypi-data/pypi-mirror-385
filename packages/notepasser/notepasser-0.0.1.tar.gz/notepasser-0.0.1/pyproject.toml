@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "notepasser"
+version = "0.0.1"
+authors = [{name = "AmNotAGoose"}]
+description = "Discover users on the same network and send encrypted messages"
+requires-python = ">=3.13"
+dependencies = [
+    "PyNaCl",
+]
+
+[project.urls]
+Homepage = "https://github.com/AmNotAGoose/notepasser"
+
+[tool.setuptools.packages.find]
+include = ["core*", "cli*"]
