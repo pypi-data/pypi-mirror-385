@@ -1,0 +1,121 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    {{- if .Values.deployment.annotations }}
+    {{- toYaml .Values.deployment.annotations | nindent 4}}
+    {{- end }}
+  labels:
+    app.kubernetes.io/name: mocktrics-exporter
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    {{- if .Values.deployment.labels }}
+    {{- toYaml .Values.deployment.labels | nindent 4}}
+    {{- end }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/name: mocktrics-exporter
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ toYaml .Values.config | sha256sum }}
+        {{- if .Values.deployment.podAnnotations }}
+        {{- toYaml .Values.deployment.podAnnotations | nindent 8}}
+        {{- end }}
+      labels:
+        app.kubernetes.io/name: mocktrics-exporter
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/version: {{ .Chart.AppVersion }}
+        {{- if .Values.deployment.podLabels }}
+        {{- toYaml .Values.deployment.podLabels | nindent 8}}
+        {{- end }}
+    spec:
+      {{- if .Values.deployment.nodeSelector }}
+      nodeSelector:
+        {{- toYaml .Values.deployment.nodeSelector | nindent 8 }}
+      {{- end }}
+      containers:
+      - name: {{ .Release.Name }}
+        image: {{ .Values.deployment.image.name }}:{{ default .Chart.AppVersion .Values.deployment.image.tag }}
+        imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+        args:
+        {{- if .Values.persistence.enabled }}
+        - --persistence_path
+        - /opt/mocktrics-exporter/storage.db
+        {{- end }}
+        {{- if .Values.configMap.enabled }}
+        - --config-file
+        - /opt/mocktrics-exporter/config.yaml
+        {{- end }}
+        ports:
+        - name: http-api
+          containerPort: 8080
+          protocol: TCP
+        - name: http-metrics
+          containerPort: 8000
+          protocol: TCP
+        {{- with .Values.deployment.livenessProbe }}
+        {{- if .enabled }}
+        livenessProbe:
+          httpGet:
+            path: {{ default "/healthz" .path }}
+            port: {{ default 8080 .port }}
+            scheme: {{ default "HTTP" .scheme }}
+          initialDelaySeconds: {{ default 5 .initialDelaySeconds }}
+          periodSeconds: {{ default 10 .periodSeconds }}
+          timeoutSeconds: {{ default 2 .timeoutSeconds }}
+          failureThreshold: {{ default 3 .failureThreshold }}
+          successThreshold: {{ default 1 .successThreshold }}
+        {{- end }}
+        {{- end }}
+        {{- with .Values.deployment.readinessProbe }}
+        {{- if .enabled }}
+        readinessProbe:
+          httpGet:
+            path: {{ default "/healthz" .path }}
+            port: {{ default 8080 .port }}
+            scheme: {{ default "HTTP" .scheme }}
+          initialDelaySeconds: {{ default 2 .initialDelaySeconds }}
+          periodSeconds: {{ default 10 .periodSeconds }}
+          timeoutSeconds: {{ default 2 .timeoutSeconds }}
+          failureThreshold: {{ default 3 .failureThreshold }}
+          successThreshold: {{ default 1 .successThreshold }}
+        {{- end }}
+        {{- end }}
+        volumeMounts:
+        {{- if .Values.persistence.enabled }}
+        - name: database
+          mountPath: /opt/mocktrics-exporter/
+        {{- end }}
+        {{- if .Values.configMap.enabled }}
+        - name: config
+          mountPath: /opt/mocktrics-exporter/config.yaml
+          subPath: config
+        {{- end }}  
+        resources:
+        {{- toYaml .Values.deployment.resources | nindent 10 }}
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
+      {{- if and (hasKey .Values.deployment "tolerations") (gt (len .Values.deployment.tolerations) 0) }}
+      tolerations:
+      {{- toYaml .Values.deployment.tolerations | nindent 8 }}
+      {{- end }}
+      volumes:
+      {{- if .Values.persistence.enabled }}
+      - name: database
+        persistentVolumeClaim:
+          claimName: {{ .Release.Name }}
+      {{- end }}
+      {{- if .Values.configMap.enabled }}
+      - name: config
+        configMap:
+          name: {{ .Release.Name }}
+      {{- end }}
