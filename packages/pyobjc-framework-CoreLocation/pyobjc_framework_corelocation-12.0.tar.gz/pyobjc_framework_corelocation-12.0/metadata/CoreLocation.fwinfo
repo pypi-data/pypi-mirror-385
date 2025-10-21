@@ -1,0 +1,347 @@
+# objective.metada exceptions file, see its document
+# for information on how to update this file.
+{
+ "definitions": {
+  "structs": {
+   "CLLocationCoordinate2D": {
+    "typestr": "{CLLocationCoordinate2D=dd}",
+    "fieldnames": [ "latitude", "longitude" ]
+   }
+  },
+  "externs": {
+   "kCLLocationAccuracyReduced": { "typestr": "d" },
+   "kCLLocationAccuracyBestForNavigation": { "typestr": "d" },
+   "kCLDistanceFilterNone": { "typestr": "d" },
+   "CLLocationDistanceMax": { "typestr": "d" },
+   "kCLLocationAccuracyBest": { "typestr": "d" },
+   "CLTimeIntervalMax": { "typestr": "d" },
+   "kCLLocationAccuracyNearestTenMeters": { "typestr": "d" },
+   "kCLLocationAccuracyHundredMeters": { "typestr": "d" },
+   "kCLLocationAccuracyKilometer": { "typestr": "d" },
+   "kCLLocationAccuracyThreeKilometers": { "typestr": "d" },
+   "kCLLocationCoordinate2DInvalid": { "typestr": "{CLLocationCoordinate2D=dd}" }
+  },
+  "enum": {
+    "CLActivityTypeAirborne": { "value": 5 },
+    "kCLAuthorizationStatusAuthorizedAlways": { "value": 3 }
+  },
+  "classes": {
+   "CLRegion": {
+    "methods": [
+     {
+      "selector": "center",
+      "class_method": false,
+      "retval": {"type_override": "{CLLocationCoordinate2D=dd}"}
+     },
+     {
+      "selector": "containsCoordinate:",
+      "class_method": false,
+      "retval": {"type_override": "Z"},
+      "args": {
+       "0": {"type_override": "{CLLocationCoordinate2D=dd}"}
+      }
+     },
+     {
+      "selector": "initCircularRegionWithCenter:radius:identifier:",
+      "class_method": false,
+      "args": {
+       "0": {"type_override": "{CLLocationCoordinate2D=dd}"}
+      }
+     }
+    ]
+   },
+   "CLLocationSourceInformation": {
+    "methods": [
+     {
+      "selector": "isProducedByAccessory",
+      "class_method": false,
+      "retval": {"type_override": "Z"}
+     },
+     {
+      "selector": "isSimulatedBySoftware",
+      "class_method": false,
+      "retval": {"type_override": "Z"}
+     },
+     {
+      "selector": "initWithSoftwareSimulationState:andExternalAccessoryState:",
+      "class_method": false,
+      "args": {
+       "1": {"type_override": "Z"}
+      }
+     }
+    ]
+   },
+   "CLCircularRegion": {
+    "methods": [
+     {
+      "selector": "center",
+      "class_method": false,
+      "retval": { "type_override": "{CLLocationCoordinate2D=dd}"}
+     },
+     {
+      "selector": "containsCoordinate:",
+      "class_method": false,
+      "retval": {"type_override": "Z"},
+      "args": {
+       "0": {"type_override": "{CLLocationCoordinate2D=dd}"}
+      }
+     },
+     {
+      "selector": "initWithCenter:radius:identifier:",
+      "class_method": false,
+      "args": {
+       "0": {"type_override": "{CLLocationCoordinate2D=dd}"}
+      }
+     }
+    ]
+   },
+   "CLMonitorConfiguration": {
+    "methods": [
+     {
+      "selector": "eventHandler",
+      "class_method": false,
+      "retval": {
+       "callable": {
+        "arguments": {
+         "0": { "type": "^v" },
+         "1": { "type": "@" },
+         "2": { "type": "@" }
+        },
+        "retval": { "type": "v" }
+       }
+      }
+     },
+     {
+      "selector": "configWithMonitorName:queue:eventHandler:",
+      "class_method": false,
+      "args": {
+       "2": {
+        "callable": {
+         "arguments": {
+          "0": { "type": "^v" },
+          "1": { "type": "@" },
+          "2": { "type": "@" }
+         },
+         "retval": { "type": "v" }
+        }
+       }
+      }
+     }
+    ]
+   },
+   "CLGeocoder": {
+     "methods": [
+        {
+	  "selector": "geocodeAddressDictionary:completionHandler:",
+	  "class_method": false,
+	  "args": {
+	     "1": {
+	        "callable": {
+		   "arguments": {
+		      "0": { "typestr": "^v" },
+		      "1": { "typestr": "@" },
+		      "2": { "typestr": "@" }
+		   },
+		   "retval": { "typestr": "v" }
+		}
+	     }
+	  }
+	},
+        {
+	  "selector": "geocodeAddressString:completionHandler:",
+	  "class_method": false,
+	  "args": {
+	     "1": {
+	        "callable": {
+		   "arguments": {
+		      "0": { "typestr": "^v" },
+		      "1": { "typestr": "@" },
+		      "2": { "typestr": "@" }
+		   },
+		   "retval": { "typestr": "v" }
+		}
+	     }
+	  }
+	},
+	{
+          "selector": "geocodeAddressString:inRegion:completionHandler:",
+	  "class_method": false,
+	  "args": {
+	     "2": {
+	        "callable": {
+		   "arguments": {
+		      "0": { "typestr": "^v" },
+		      "1": { "typestr": "@" },
+		      "2": { "typestr": "@" }
+		   },
+		   "retval": { "typestr": "v" }
+		}
+	     }
+	  }
+	},
+	{
+          "selector": "geocodeAddressString:inRegion:preferredLocale:completionHandler:",
+	  "class_method": false,
+	  "args": {
+	     "3": {
+	        "callable": {
+		   "arguments": {
+		      "0": { "typestr": "^v" },
+		      "1": { "typestr": "@" },
+		      "2": { "typestr": "@" }
+		   },
+		   "retval": { "typestr": "v" }
+		}
+	     }
+	  }
+	},
+	{
+          "selector": "geocodePostalAddress:completionHandler:",
+	  "class_method": false,
+	  "args": {
+	     "1": {
+	        "callable": {
+		   "arguments": {
+		      "0": { "typestr": "^v" },
+		      "1": { "typestr": "@" },
+		      "2": { "typestr": "@" }
+		   },
+		   "retval": { "typestr": "v" }
+		}
+	     }
+	  }
+	},
+	{
+          "selector": "geocodePostalAddress:preferredLocale:completionHandler:",
+	  "class_method": false,
+	  "args": {
+	     "2": {
+	        "callable": {
+		   "arguments": {
+		      "0": { "typestr": "^v" },
+		      "1": { "typestr": "@" },
+		      "2": { "typestr": "@" }
+		   },
+		   "retval": { "typestr": "v" }
+		}
+	     }
+	  }
+	},
+        {
+	  "selector": "reverseGeocodeLocation:preferredLocale:completionHandler:",
+	  "class_method": false,
+	  "args": {
+	     "2": {
+	        "callable": {
+		   "arguments": {
+		      "0": { "typestr": "^v" },
+		      "1": { "typestr": "@" },
+		      "2": { "typestr": "@" }
+		   },
+		   "retval": { "typestr": "v" }
+		}
+	     }
+	  }
+	},
+        {
+	  "selector": "reverseGeocodeLocation:completionHandler:",
+	  "class_method": false,
+	  "args": {
+	     "1": {
+	        "callable": {
+		   "arguments": {
+		      "0": { "typestr": "^v" },
+		      "1": { "typestr": "@" },
+		      "2": { "typestr": "@" }
+		   },
+		   "retval": { "typestr": "v" }
+		}
+	     }
+	  }
+	}
+     ]
+   },
+   "CLLocation": {
+    "methods": [
+     {
+      "selector": "initWithCoordinate:altitude:horizontalAccuracy:verticalAccuracy:course:speed:timestamp:",
+      "class_method": false,
+      "args": {
+       "0": {"type_override": "{CLLocationCoordinate2D=dd}"}
+      }
+     },
+     {
+      "args": {
+       "0": {
+        "type_override": "{CLLocationCoordinate2D=dd}"
+       }
+      },
+      "class_method": false,
+      "selector": "initWithCoordinate:altitude:horizontalAccuracy:verticalAccuracy:timestamp:"
+     },
+     {
+      "class_method": false,
+      "retval": {
+       "type_override": "{CLLocationCoordinate2D=dd}"
+      },
+      "selector": "coordinate"
+     }
+    ]
+   },
+   "CLLocationManager": {
+    "methods": [
+     {
+      "class_method": true,
+      "retval": {
+       "type_override": "Z"
+      },
+      "selector": "locationServicesEnabled"
+     },
+     {
+      "class_method": false,
+      "retval": {
+       "type_override": "Z"
+      },
+      "selector": "isAuthorizedForPreciseLocation"
+     },
+     {
+      "class_method": false,
+      "selector": "requestTemporaryPreciseLocationAuthorizationWithPurposeKey:completion:",
+      "args": {
+       "1": {
+        "callable": {
+	 "arguments": {
+	  "0": { "type": "^v" },
+	  "1": { "type": "@" }
+	 },
+	 "retval": { "type": "v" }
+	}
+       }
+      }
+     }
+    ]
+   }
+  },
+  "formal_protocols": {},
+  "functions": {
+   "CLLocationCoordinate2DIsValid": {
+    "retval": {
+     "type_override": "Z"
+    },
+    "args": {
+     "0": { "type_override": "{CLLocationCoordinate2D=dd}" }
+    }
+   },
+   "CLLocationCoordinate2DMake": {
+    "retval": {
+     "type_override": "{CLLocationCoordinate2D=dd}"
+    },
+    "args": {
+     "0": { "type_override": "d" },
+     "1": { "type_override": "d" }
+    }
+   }
+  },
+  "informal_protocols": {}
+ }
+}
