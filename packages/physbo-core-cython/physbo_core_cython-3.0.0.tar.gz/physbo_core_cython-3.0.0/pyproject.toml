@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools", "wheel", "Cython", "numpy"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "physbo-core-cython"
+version = "3.0.0"
+description = "cythonized core modules for physbo"
+readme = { file = "README.md", content-type = "text/markdown" }
+license = "MPL-2.0"
+authors = [ { name = "PHYSBO developers", email = "physbo-dev@issp.u-tokyo.ac.jp" } ]
+
+requires-python = ">=3.9"
+dependencies = [
+    "numpy",
+]
+
+[project.optional-dependencies]
+    cython = ["Cython"]
+
+[project.urls]
+homepage = "https://www.pasums.issp.u-tokyo.ac.jp/physbo/en"
+source = "https://github.com/issp-center-dev/physbo-core-cython"
+
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"physbo_core_cython.misc._src" = ["*.pyx"]
+"physbo_core_cython.gp.cov._src" = ["*.pyx"]
