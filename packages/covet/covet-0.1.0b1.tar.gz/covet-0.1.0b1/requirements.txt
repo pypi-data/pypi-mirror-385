@@ -1,0 +1,46 @@
+# CovetPy - Core Runtime Dependencies
+# ====================================
+#
+# Sprint 1 Remediation: Updated dependencies with security fixes
+# Version: 0.2.0-sprint1
+# Updated: 2025-10-11
+#
+# CORE PHILOSOPHY: Minimal runtime dependencies
+# Only the essential packages required for the core framework to function
+#
+# For development dependencies, see requirements-dev.txt
+# For testing dependencies, see requirements-test.txt
+# For security tools, see requirements-security.txt
+
+# Core Dependencies (Essential)
+# ==============================
+pydantic>=2.12.0,<3.0.0           # Data validation and settings management
+prometheus-client>=0.23.1,<1.0.0  # Metrics and monitoring
+psutil>=7.1.0,<8.0.0              # System and process utilities
+
+# ASGI Server (Production deployment)
+# ====================================
+uvicorn[standard]>=0.37.0,<1.0.0  # High-performance ASGI server
+
+# Database Drivers (Optional - install as needed)
+# ================================================
+# Uncomment the database drivers you need:
+# asyncpg>=0.30.0,<1.0.0          # PostgreSQL async driver
+# aiomysql>=0.2.0,<1.0.0          # MySQL async driver
+# aiosqlite>=0.19.0,<1.0.0        # SQLite async driver
+
+# Security Dependencies (REQUIRED for security features)
+# ========================================================
+# SECURITY FIX: Replaced pycryptodome with cryptography (Sprint 1 - CRITICAL-SEC-001)
+cryptography>=41.0.0,<50.0.0      # Modern cryptographic operations (replaces deprecated PyCrypto)
+# SECURITY FIX: Removed python-jose (unused, causes ecdsa CVE-2024-23342) - code uses PyJWT instead
+passlib[bcrypt]>=1.7.4,<2.0.0     # Secure password hashing
+pyotp>=2.9.0,<3.0.0               # TOTP/HOTP for MFA
+qrcode[pil]>=7.4.2,<8.0.0         # QR code generation for MFA
+
+# Caching (Optional)
+# ===================
+# cachetools>=5.3.0,<6.0.0        # Caching utilities
+
+# NOTE: This represents the MINIMAL runtime dependencies for CovetPy
+# For a full-featured installation, use: pip install covetpy[full]
