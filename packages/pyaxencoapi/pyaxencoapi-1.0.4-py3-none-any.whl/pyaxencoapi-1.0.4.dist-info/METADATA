@@ -1,0 +1,30 @@
+Metadata-Version: 2.4
+Name: pyaxencoapi
+Version: 1.0.4
+Summary: Librairie d'utilisation de l'API REST/Websocket d'Axenco
+Author-email: Léo Periou <leo.periou@axenco.com>
+License: MIT
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: aiohttp>=3.8.0
+Requires-Dist: python-socketio[asyncio_client]>=5.0.0
+Requires-Dist: async-timeout>=4.0.2
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: pytest-asyncio; extra == "dev"
+Requires-Dist: aiohttp; extra == "dev"
+Requires-Dist: aioresponses; extra == "dev"
+Requires-Dist: python-socketio[asyncio_client]; extra == "dev"
+Requires-Dist: coverage; extra == "dev"
+Requires-Dist: pytest-cov; extra == "dev"
+Dynamic: license-file
+
+# PyAxencoAPI
+
+Client Python asynchrone pour interagir avec les dispositifs connectés MyNeomitis via API REST/Websocket.
+
+## Installation
+
+```bash
+pip install pyaxencoapi
