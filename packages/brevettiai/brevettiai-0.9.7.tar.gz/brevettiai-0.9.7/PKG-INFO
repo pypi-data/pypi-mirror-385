@@ -1,0 +1,70 @@
+Metadata-Version: 2.4
+Name: brevettiai
+Version: 0.9.7
+Summary: Brevetti AI library
+License: Apache-2.0
+License-File: LICENSE
+Author: Emil Tyge
+Author-email: emil@brevetti.ai
+Requires-Python: >=3.8,<4.0
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Provides-Extra: cv2
+Provides-Extra: cv2-headless
+Provides-Extra: export-gpu
+Provides-Extra: tf
+Provides-Extra: tfa
+Requires-Dist: backoff (>=1.10)
+Requires-Dist: boto3 (==1.26.146)
+Requires-Dist: cloudpathlib (>=0.14,<0.15)
+Requires-Dist: cryptography (>=36.0.1)
+Requires-Dist: h5py (>=3.6.0,<4.0.0)
+Requires-Dist: importlib-metadata (>=4.1)
+Requires-Dist: minio (>=7.0,<7.1)
+Requires-Dist: mmh3 (>=3.0)
+Requires-Dist: numpy (>=1.21,<2.0)
+Requires-Dist: oauthlib (>=3.2.2,<4.0.0)
+Requires-Dist: onnxruntime (>=1.6.0)
+Requires-Dist: onnxruntime-gpu (>=1.6.0) ; extra == "export-gpu"
+Requires-Dist: opencv-python (>=4.1) ; extra == "cv2"
+Requires-Dist: opencv-python-headless (>=4.1) ; extra == "cv2-headless"
+Requires-Dist: pandas (>=1.5.3)
+Requires-Dist: parse (>=1.19.0,<2.0.0)
+Requires-Dist: protobuf (<3.20) ; extra == "tf"
+Requires-Dist: py7zr (>=0.18.9,<0.21)
+Requires-Dist: pydantic (>=1.9,<2.0,!=1.9.1)
+Requires-Dist: requests (>=2.23)
+Requires-Dist: requests-oauthlib (>=1.3.1,<2.0.0)
+Requires-Dist: semidbm (>=0.5.1,<0.6.0)
+Requires-Dist: shapely (>=2.0)
+Requires-Dist: smart-open (>=6.3.0,<7.0.0)
+Requires-Dist: tensorflow (>=2.7,!=2.9.2,<2.11) ; (sys_platform != "darwin") and (extra == "tf")
+Requires-Dist: tensorflow-io-gcs-filesystem (>=0.31.0,<0.32.0) ; (python_version >= "3.8" and python_version < "3.12") and (extra == "tf")
+Requires-Dist: tensorflow-macos (>=2.8,<3.0) ; (sys_platform == "darwin") and (extra == "tf")
+Requires-Dist: tensorflow-metal (>=0.5,<0.6) ; (sys_platform == "darwin") and (extra == "tf")
+Requires-Dist: tensorflow_addons (>=0.16.1,<0.19) ; extra == "tfa"
+Requires-Dist: tf2onnx (>=1.9.0)
+Requires-Dist: toml (>=0.10.2,<0.11.0)
+Requires-Dist: tqdm (>=4.62)
+Project-URL: Documentation, https://docs.brevetti.ai/
+Project-URL: Homepage, https://platform.brevetti.ai
+Project-URL: Repository, https://bitbucket.org/criterionai/core.git
+Description-Content-Type: text/markdown
+
+# Brevetti AI core library
+The brevettiai library enables integration with the [brevetti.ai](https://brevetti.ai) platform for development of training packages
+
+The library is used as an API through the Job class with a number of utility functions for easy development of models.
+The tools support both local development on linux and windows as well as hosted training on e.g. Amazon Web Services sagemaker platform.
+
+## Contents
+Developer documentation can be found at [docs.brevetti.ai](https://docs.brevetti.ai/) and generated [package documentation](https://s3.eu-west-1.amazonaws.com/public.data.criterion.ai/documentation/brevettiai%200.5.8/index.html) is also available.
+
