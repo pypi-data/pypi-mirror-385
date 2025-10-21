@@ -1,0 +1,84 @@
+Metadata-Version: 2.4
+Name: django-mobile-app-version
+Version: 1.1.0
+Summary: Pluggable app for your Django projects to modify your mobile app versions using your API.
+Home-page: https://github.com/javadnikbakht/django_mobile_app_version
+Author: Mohammad Javad Nikbakht
+Author-email: Mohammad Javad Nikbakht <javadnikbakht@mail.com>
+License: GPL-3.0
+Project-URL: Homepage, https://github.com/javadnikbakht/django_mobile_app_version
+Project-URL: Release Notes, https://github.com/javadnikbakht/django_mobile_app_version/releases
+Project-URL: Source, https://github.com/javadnikbakht/django_mobile_app_version
+Project-URL: Tracker, https://github.com/javadnikbakht/django_mobile_app_version/issues
+Keywords: django,mobile,app,version,api,rest
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Django
+Classifier: Framework :: Django :: 3.0
+Classifier: Framework :: Django :: 3.1
+Classifier: Framework :: Django :: 3.2
+Classifier: Framework :: Django :: 4.0
+Classifier: Framework :: Django :: 4.1
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Topic :: Internet :: WWW/HTTP
+Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
+Classifier: Topic :: Internet :: WWW/HTTP :: WSGI
+Classifier: Topic :: Software Development :: Libraries :: Application Frameworks
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: djangorestframework>=3.14.0
+Requires-Dist: packaging>=21.3
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0.0; extra == "dev"
+Requires-Dist: pytest-django>=4.5.0; extra == "dev"
+Requires-Dist: black>=22.0.0; extra == "dev"
+Requires-Dist: flake8>=5.0.0; extra == "dev"
+Requires-Dist: mypy>=0.990; extra == "dev"
+
+# django-mobile-app-version
+
+A Django app for managing mobile app versions through your API.
+
+## Installation
+
+```sh
+pip install django-mobile-app-version
+```
+
+## Quick Start
+
+1. Add `'mobile_app_version.apps.MobileAppVersionConfig'` to your `INSTALLED_APPS` in _`settings.py`_ module:
+```python
+INSTALLED_APPS = [
+    ...
+    'mobile_app_version.apps.MobileAppVersionConfig',
+]
+```
+
+2. Include the Mobile App Version URLconf in your projects `urls.py` like this:
+```python
+path('app-versions', include('mobile_app_version')),
+```
+
+3. Run migrations to create the database tables:
+```sh
+python manage.py migrate mobile_app_version
+```
+
+If you clone this app directly in your project and have changes to application models, first run:
+```sh
+python manage.py makemigrations mobile_app_version
+python manage.py migrate mobile_app_version
+```
+
+## Contributing
+
+Interested in contributing? Please see our [CONTRIBUTING.md](CONTRIBUTING.md) for development setup instructions and guidelines.
