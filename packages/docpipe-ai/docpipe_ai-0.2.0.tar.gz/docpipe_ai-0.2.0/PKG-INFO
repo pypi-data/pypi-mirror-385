@@ -1,0 +1,24 @@
+Metadata-Version: 2.4
+Name: docpipe-ai
+Version: 0.2.0
+Summary: OpenAI-Compatible & Dynamic-Batch AI post-processor for docpipe-mini
+Requires-Python: >=3.11
+Requires-Dist: docpipe-mini>=0.2.3
+Requires-Dist: langchain-core>=0.3.0
+Requires-Dist: openai>=2.5.0
+Requires-Dist: pydotenv>=0.0.7
+Requires-Dist: pymupdf>=1.26.5
+Requires-Dist: pypdfium2>=4.30.0
+Provides-Extra: anthropic
+Requires-Dist: anthropic>=0.3.22; extra == 'anthropic'
+Requires-Dist: langchain-anthropic>=0.3.22; extra == 'anthropic'
+Provides-Extra: dev
+Requires-Dist: langchain-openai>=0.3.35; extra == 'dev'
+Requires-Dist: mypy>=1.0.0; extra == 'dev'
+Requires-Dist: openai>=1.109.1; extra == 'dev'
+Requires-Dist: pytest-asyncio>=0.21.0; extra == 'dev'
+Requires-Dist: pytest>=8.4.2; extra == 'dev'
+Requires-Dist: ruff>=0.1.0; extra == 'dev'
+Provides-Extra: openai
+Requires-Dist: langchain-openai>=0.3.35; extra == 'openai'
+Requires-Dist: openai>=1.109.1; extra == 'openai'

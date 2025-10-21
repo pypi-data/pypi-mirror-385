@@ -1,0 +1,57 @@
+[project]
+name = "docpipe-ai"
+dynamic = ["version"]
+description = "OpenAI-Compatible & Dynamic-Batch AI post-processor for docpipe-mini"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "docpipe-mini>=0.2.3",
+    "langchain-core>=0.3.0",
+    "openai>=2.5.0",
+    "pydotenv>=0.0.7",
+    "pymupdf>=1.26.5",
+    "pypdfium2>=4.30.0",
+]
+
+[project.optional-dependencies]
+openai = [
+    "openai>=1.109.1",
+    "langchain-openai>=0.3.35",
+]
+anthropic = [
+    "anthropic>=0.3.22",
+    "langchain-anthropic>=0.3.22",
+]
+dev = [
+    "pytest>=8.4.2",
+    "pytest-asyncio>=0.21.0",
+    "mypy>=1.0.0",
+    "ruff>=0.1.0",
+    "openai>=1.109.1",
+    "langchain-openai>=0.3.35",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+path = "src/docpipe_ai/__init__.py"
+
+[[tool.uv.index]]
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+default = true
+
+[project.scripts]
+docpipe-ai-pipe = "docpipe_ai.cli._pipe:main"
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+strict = true
