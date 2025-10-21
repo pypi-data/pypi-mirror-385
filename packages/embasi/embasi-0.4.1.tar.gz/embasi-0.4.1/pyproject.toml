@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "embasi"
+version = "0.4.1"
+authors = [
+        {name="Gabriel Bramley", email="BramleyG@cardiff.ac.uk"},
+]
+description = "A generalised workflow for QM/QM Embedding"
+readme = "README.md"
+license = { file="LICENSE" }
+requires-python = ">=3.9"
+classifiers = [
+            "Programming Language :: Python :: 3",
+            "License :: OSI Approved :: MIT License",
+            "Operating System :: OS Independent",
+]
+dependencies = [
+             "ase==3.24.0",
+	     "asi4py>=1.4.5",
+]
+
+
+[project.urls]
+Homepage = "https://github.com/logsdail/EmbASI"
+Issues = "https://github.com/logsdail/EmbASI/issues"

@@ -1,0 +1,52 @@
+Metadata-Version: 2.4
+Name: embasi
+Version: 0.4.1
+Summary: A generalised workflow for QM/QM Embedding
+Author-email: Gabriel Bramley <BramleyG@cardiff.ac.uk>
+License: MIT License
+        
+        Copyright (c) 2024 Gabriel A. Bramley
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+Project-URL: Homepage, https://github.com/logsdail/EmbASI
+Project-URL: Issues, https://github.com/logsdail/EmbASI/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: ase==3.24.0
+Requires-Dist: asi4py>=1.4.5
+Dynamic: license-file
+
+# EmbASI
+
+EmbASI is a python-based wrapper for QM/QM embedding simulations using the ASI (Atomic Simulation Interface). The wrapper handles communication between QM code library calls through C-based callbacks, and imports/exports relevant matices such as density matrices and hamiltonians required for embedding schemes such as Projection-Based Embedding (PbE). Atomic information is communicated through Atomic Simulation Environment (ASE) atoms objects.
+
+# Supported QM Pakage(s)
+
+- FHI-aims
+
+# Requires
+
+- Python >=3.8
+- ASE >=2.4.0
+- asi4py >=2.4.1
+- Shared-object library for relevant QM driver
