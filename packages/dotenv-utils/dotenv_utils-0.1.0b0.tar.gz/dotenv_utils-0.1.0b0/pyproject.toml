@@ -1,0 +1,67 @@
+[project]
+name = 'dotenv-utils'
+readme = 'README.md'
+requires-python = '>=3.9'
+dynamic = ['description', 'version', 'authors', 'maintainers']
+
+license = "MIT"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+
+[project.optional-dependencies]
+dev = [
+    'autopep8',
+    'isort',
+    'mypy',
+    'myst-parser',
+    'ruff',
+    'sphinx',
+    'sphinx-autodoc-typehints',
+    'sphinxcontrib-relativeinclude',
+]
+
+[project.urls]
+"Repository" = "https://github.com/FynnFreyer/dotenv-utils"
+"Issues" = "https://github.com/FynnFreyer/dotenv-utils/issues"
+
+[build-system]
+requires = ['hatchling']
+build-backend = 'hatchling.build'
+
+[tool.hatch.build]
+packages = ['dotenv-utils']
+
+# Dynamic meta-data sources
+[tool.hatch]
+description = { path = 'dotenv_utils/__about__.py' }
+version = { path = 'dotenv_utils/__about__.py' }
+authors = { path = 'dotenv_utils/__about__.py' }
+maintainers = { path = 'dotenv_utils/__about__.py' }
+
+# Formatting options
+[tool.autopep8]
+max_line_length = 120
+in-place = true
+recursive = true
+jobs = -1
+
+[tool.isort]
+line_length = 120
+
+# Linting options
+[tool.ruff]
+line-length = 120
+show-fixes = true
+
+[tool.ruff.lint]
+select = ['E', 'F', 'B', 'Q']
+ignore = ['B905']
+mccabe = { max-complexity = 5 }
