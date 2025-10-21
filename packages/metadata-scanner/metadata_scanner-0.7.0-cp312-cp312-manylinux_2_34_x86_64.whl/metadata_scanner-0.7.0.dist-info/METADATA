@@ -1,0 +1,322 @@
+Metadata-Version: 2.4
+Name: metadata_scanner
+Version: 0.7.0
+Summary: Fast C++ metadata scanner for disk cache
+Author: Serapheim Dimitropoulos
+Author-email: Serapheim Dimitropoulos <serapheim.dimitropoulos@weka.io>
+License-Expression: MIT
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: C++
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: torch; extra == "dev"
+Dynamic: author
+Dynamic: license-file
+Dynamic: requires-python
+
+# Metadata Scanner C++ Extension
+
+A high-performance C++ extension using Pybind11 to accelerate scanning and reading metadata files from a two-level directory structure. This extension provides up to **9.0x speedup** over the equivalent Python implementation with asyncio.
+
+## Features
+
+- **Two-level parallelism**: Parallelizes both across directories and within directories for optimal thread utilization
+- **Optimized file I/O**: Direct POSIX syscalls with O_NOATIME flag for maximum performance
+- **Configurable thread pool**: Adjustable thread count (default: 32 threads)
+- **Optimized binary metadata reading**: Single-syscall file reading with zero-copy parsing
+- **Filename parsing**: Extracts cache key information from filenames  
+- **Minimal Python overhead**: All scanning happens in native C++, Python objects created only at the end
+- **Low variance**: Highly stable and predictable performance
+
+## Performance
+
+Benchmark results on 345,733 metadata files:
+
+| Implementation | Median Time | Speedup |
+|---------------|-------------|---------|
+| Python (asyncio) | 13,600 ms | 1.0x |
+| **C++ (optimized)** | **1,510 ms** | **9.0x** |
+
+**Optimizations implemented:**
+- Thread pool with two-level parallelism (directory + file level)
+- Direct POSIX read() syscalls instead of std::ifstream
+- Single read() per file (not separate header + shape reads)
+- O_NOATIME flag to skip access time updates
+- Configurable thread count via `max_threads` parameter
+
+## Installation
+
+### Prerequisites
+
+- **C++23 compatible compiler** (GCC 11+, Clang 14+)
+- **Python 3.7+**
+- **pybind11 >= 2.10.0** (automatically installed as build dependency)
+- **Linux** (uses POSIX syscalls: open, read, O_NOATIME)
+
+### Quick Install
+
+```bash
+# Using pip
+pip install .
+
+# Using uv (recommended for faster installs)
+uv pip install .
+```
+
+### Development Install
+
+```bash
+# Editable install for development
+pip install -e .
+# or
+uv pip install -e .
+```
+
+### Build with Makefile
+
+```bash
+# Optimized release build
+make release
+
+# Development build (no optimization, faster compilation)
+make dev
+
+# With debug symbols
+make release-debug
+```
+
+## Usage
+
+### Basic Usage
+
+```python
+import metadata_scanner
+
+# Scan directory for metadata files (uses 32 threads by default)
+results = metadata_scanner.scan_metadata("/path/to/cache/root")
+
+# Each result is a dictionary with:
+# - fmt, model_name, world_size, worker_id, chunk_hash (from filename)
+# - path, size, dtype_idx, shape (from file contents)
+
+for entry in results:
+    print(f"Model: {entry['model_name']}")
+    print(f"Shape: {entry['shape']}")
+    print(f"Path: {entry['path']}")
+```
+
+### Advanced Usage
+
+```python
+import metadata_scanner
+
+# Customize thread count
+results = metadata_scanner.scan_metadata(
+    "/path/to/cache",
+    max_threads=16  # Use 16 threads instead of default 32
+)
+
+# Show detailed timing breakdown
+results = metadata_scanner.scan_metadata(
+    "/path/to/cache",
+    verbose=True  # Prints performance breakdown
+)
+
+# Single-threaded (useful for debugging)
+results = metadata_scanner.scan_metadata(
+    "/path/to/cache",
+    max_threads=1
+)
+```
+
+### Integration Example
+
+See `python_example.py` for a complete integration example with existing Python code including:
+- Converting to `CacheEngineKey` and `DiskCacheMetadata` objects
+- Handling torch dtypes
+- Populating OrderedDict cache structures
+
+## File Format
+
+The scanner expects:
+
+- **Directory structure**: `<root>/<level1>/<level2>/<metadata_files>`
+  - Level 1 and Level 2 directories must be exactly 2 characters
+  - Example: `/mnt/weka/cache/ab/cd/file.weka1.metadata`
+
+- **Filename format**: `<fmt>@<model_name>@<world_size>@<worker_id>@<chunk_hash>.weka1.metadata`
+  - Underscores (`_`) in filenames are converted to slashes (`/`) during parsing
+  - Example: `vllm@meta-llama_Llama-3.1-70B-Instruct@4@0@137ef891ec63db12.weka1.metadata`
+
+- **Binary format**: Little-endian packed structure
+  - Header: `<QQQQ` (version, dtype_idx, size, ndim)
+  - Shape: ndim × `Q` (uint64 each)
+
+## Benchmarking
+
+Run the included benchmark to compare Python vs C++ performance:
+
+```bash
+# Benchmark with default settings (32 threads)
+python benchmark.py /path/to/cache
+
+# Benchmark with custom thread count
+python benchmark.py /path/to/cache --threads 16
+
+# Show detailed timing breakdown
+python benchmark.py /path/to/cache --timing
+
+# Customize number of runs
+python benchmark.py /path/to/cache --runs 5
+
+# Skip OrderedDict conversion for raw C++ speed
+python benchmark.py /path/to/cache --no-fair-comparison
+```
+
+The benchmark will:
+- Run each implementation multiple times (default: 3)
+- Show average, min, and max times
+- Display speedup factor with visual comparison
+- Verify both implementations find the same entries
+- Show breakdown of scan vs object creation time
+
+## Testing
+
+Run the test suite to verify the extension works correctly:
+
+```bash
+python test_scanner.py
+```
+
+This will:
+- Create a temporary test directory structure
+- Generate sample metadata files
+- Verify parsing and reading functionality
+- Clean up test files
+
+## Architecture
+
+### Technical Details
+
+- **Language:** C++23 (requires GCC 11+, Clang 14+)
+- **Platform:** Linux (uses POSIX syscalls: `open`, `read`, `O_NOATIME`)
+- **Python Binding:** Pybind11 >= 2.10.0
+- **Default Threads:** 32 (configurable via `max_threads` parameter)
+
+### Multi-threading Strategy: Two-Level Parallelism
+
+The scanner uses a sophisticated two-level thread pool approach:
+
+**Outer Level (Directory Parallelism):**
+1. Enumerate all level1 directories (e.g., `10/`, `11/`, `12/`)
+2. Assign one thread per level1 directory (e.g., 3 threads for 3 directories)
+
+**Inner Level (File Parallelism):**
+3. Within each directory, parallelize file processing
+4. With 32 threads total and 3 directories: each gets ~10 inner threads
+5. Each thread processes files using atomic work queue
+
+This approach maximizes thread utilization even when `num_directories < num_threads`.
+
+### Performance Optimizations
+
+**File I/O:**
+1. **Direct POSIX read()**: Uses `open()`/`read()` syscalls instead of `std::ifstream`
+2. **Single syscall**: Reads entire file (32-128 bytes) in one call
+3. **O_NOATIME flag**: Skips file access time updates for faster I/O
+4. **Zero-copy parsing**: Parses binary data directly from buffer
+
+**Threading:**
+5. **Thread pool**: Fixed thread count (default 32), not unbounded
+6. **Two-level parallelism**: Parallelizes directories AND files within directories
+7. **Atomic work queue**: Lock-free work distribution
+
+**Memory:**
+8. **Delayed Python object creation**: All scanning in pure C++, Python objects created at end
+9. **Reserved allocations**: Pre-allocate vectors to avoid reallocation
+10. **Move semantics**: Use `std::move` and `emplace_back` to avoid copies
+
+## Development
+
+### Build System
+
+Two build systems are provided:
+
+1. **setuptools** (recommended):
+   ```bash
+   pip install .
+   ```
+
+2. **CMake** (alternative):
+   ```bash
+   mkdir build && cd build
+   cmake ..
+   make
+   ```
+
+### Code Structure
+
+- `metadata_scanner.cpp`: Main C++ implementation
+- `python_example.py`: Integration example
+- `python_scan.py`: Python reference implementation for benchmarking
+- `benchmark.py`: Performance comparison tool
+- `test_scanner.py`: Test suite
+
+## Troubleshooting
+
+### Compilation Errors
+
+If you get filesystem-related errors on older compilers:
+- Ensure you have GCC 8+ or Clang 7+
+- The setup.py includes `-lstdc++fs` for older compilers
+
+### Import Errors
+
+If you get `ImportError: No module named 'metadata_scanner'`:
+- Make sure you built and installed the extension: `pip install .`
+- Check that you're using the correct Python environment
+
+### Runtime Errors
+
+If files aren't being found:
+- Verify the directory structure is exactly two levels deep
+- Check that filenames match the expected format
+- Ensure file permissions allow reading
+- Verify level1 and level2 directory names are exactly 2 characters
+
+## Contributing
+
+When making changes:
+1. Update version in `pyproject.toml` and `metadata_scanner.cpp`
+2. Run tests: `python test_scanner.py`
+3. Run benchmarks: `python benchmark.py /path/to/cache`
+4. Ensure code follows C++23 best practices
+5. Test with various thread counts to verify performance
+
+## License
+
+MIT License - see LICENSE file for details
+
+Copyright (c) 2025 Serapheim Dimitropoulos
+
+## Version
+
+Current version: 0.7.0
+
+**Recent optimizations:**
+- Two-level parallelism for better thread utilization
+- Direct POSIX syscalls for file I/O
+- O_NOATIME flag for faster filesystem access
+- Configurable thread pool (default: 32 threads)
+- Overall: 9.0x faster than Python baseline
