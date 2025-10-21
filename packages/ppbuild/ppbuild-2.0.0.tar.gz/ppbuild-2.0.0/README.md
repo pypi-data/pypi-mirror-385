@@ -1,0 +1,237 @@
+# pp
+
+[![Tests](https://github.com/JoshCap20/pp/actions/workflows/test.yml/badge.svg)](https://github.com/JoshCap20/pp/actions/workflows/test.yml)
+[![CI/CD](https://github.com/JoshCap20/pp/actions/workflows/publish.yml/badge.svg)](https://github.com/JoshCap20/pp/actions/workflows/publish.yml)
+
+**A declarative, language-agnostic task runner and build system.**
+
+Stop memorizing different build tools. Define your commands once in `pp.yaml` and run them anywhere.
+
+```bash
+pp myapp build    # Build your app
+pp myapp test     # Run tests
+pp myapp deploy   # Deploy
+```
+
+Works with any language: Python, Node.js, Rust, Go, Docker, or shell scripts.
+
+## Why pp?
+
+- ✅ **One interface for everything** - Same commands across all projects
+- ✅ **Task dependencies** - Automatic execution ordering (lint → test → build)
+- ✅ **Type-safe parameters** - Validated arguments with defaults and constraints
+- ✅ **Environment management** - Automatic venv activation, env vars, working directories
+- ✅ **Simple & fast** - 1,000 lines of straightforward code, zero dependencies
+
+## Quick Start
+
+**1. Install:**
+
+```bash
+pip install ppbuild
+```
+
+<details>
+<summary>macOS users: click for installation options</summary>
+
+If you get an "externally-managed-environment" error:
+
+```bash
+# Option 1: Use pipx (recommended)
+brew install pipx
+pipx install ppbuild
+
+# Option 2: Use venv
+python3 -m venv ~/.pp-env
+source ~/.pp-env/bin/activate
+pip install ppbuild
+```
+</details>
+
+**2. Create `pp.yaml`:**
+
+```yaml
+applications:
+  myapp:
+    help: "My awesome application"
+    actions:
+      build:
+        help: "Build the project"
+        command: ["cargo", "build", "--release"]
+
+      test:
+        help: "Run tests"
+        command: ["cargo", "test"]
+        depends_on: [build]
+
+      deploy:
+        help: "Deploy to production"
+        command: ["./deploy.sh"]
+        depends_on: [test]
+```
+
+**3. Run:**
+
+```bash
+pp myapp deploy   # Automatically runs: build → test → deploy
+```
+
+## Features
+
+### Task Dependencies
+
+Actions run in the correct order automatically:
+
+```yaml
+actions:
+  deploy:
+    command: ["./deploy.sh"]
+    depends_on: [lint, test, build]  # Runs lint → test → build → deploy
+```
+
+### Typed Parameters
+
+Add validated, type-safe parameters to your commands:
+
+```yaml
+actions:
+  run:
+    parameters:
+      port:
+        type: integer
+        default: 8000
+        min: 1024
+        max: 65535
+      debug:
+        type: boolean
+        default: false
+    command: ["python", "app.py", "--port", "{port}", "{debug:--debug}"]
+```
+
+```bash
+pp myapp run --port 3000 --debug
+```
+
+### Environment Management
+
+Automatic environment setup:
+
+```yaml
+applications:
+  backend:
+    directory: "~/projects/backend"  # Auto-changes directory
+    venv: ".venv"                    # Auto-activates venv
+    env_vars:
+      DATABASE_URL: "postgresql://localhost/db"
+      API_KEY: "${SECRET_API_KEY}"   # Substitutes env vars
+    actions:
+      # ... your actions
+```
+
+### Flexible Configuration
+
+- **Global:** `~/.pp/pp.yaml` for system-wide tools
+- **Project:** `./pp.yaml` for project-specific commands
+- **Environment:** `.pp.env` for secrets and local overrides
+
+## Examples
+
+**Web Development:**
+
+```yaml
+applications:
+  web:
+    directory: "./frontend"
+    actions:
+      dev:
+        command: ["npm", "run", "dev"]
+      build:
+        command: ["npm", "run", "build"]
+      deploy:
+        command: ["vercel", "deploy"]
+        depends_on: [build]
+```
+
+**Python Project:**
+
+```yaml
+applications:
+  api:
+    venv: ".venv"
+    env_vars:
+      PYTHONPATH: "./src"
+    actions:
+      install:
+        command: ["pip", "install", "-r", "requirements.txt"]
+      test:
+        command: ["pytest", "--cov=src"]
+        depends_on: [install]
+      lint:
+        command: ["black", ".", "--check"]
+```
+
+**Multi-Service:**
+
+```yaml
+applications:
+  stack:
+    actions:
+      up:
+        command: ["docker-compose", "up", "-d"]
+      logs:
+        command: ["docker-compose", "logs", "-f"]
+      down:
+        command: ["docker-compose", "down"]
+```
+
+See [examples/](examples/) for more configurations.
+
+## Documentation
+
+- **[TEMPLATE.md](TEMPLATE.md)** - Complete configuration reference
+
+## Development
+
+```bash
+# Clone and install
+git clone https://github.com/JoshCap20/pp.git
+cd pp
+pip install -e .
+
+# Run tests
+pytest                           # Run all tests
+pytest --cov=lib                # With coverage
+
+# Format and lint
+black .
+isort .
+```
+
+## Architecture
+
+Simple, straightforward Python code. No design patterns, no over-engineering.
+
+```
+pp/
+├── pp.py              # Main entry point (144 lines)
+└── lib/               # Core library (~850 lines)
+    ├── config.py      # YAML loading & validation
+    ├── params.py      # Parameter handling
+    ├── execution.py   # Command execution
+    ├── dependencies.py # Dependency resolution
+    └── cli.py         # Argument parser
+```
+
+**Test coverage:** 72% overall, 99% on core logic
+
+## License
+
+MIT License - see [LICENSE](LICENSE)
+
+## Contributing
+
+Contributions welcome! This project values **simplicity** above all else. Before adding features, consider whether they truly need to exist.
+
+---
+
+**Stop context-switching between build tools. Use `pp`.**
