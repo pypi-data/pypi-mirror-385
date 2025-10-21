@@ -1,0 +1,99 @@
+#
+# Visual configs file
+#
+
+# Matpplotlib style sheet
+matplotlib:
+
+  axes.edgecolor: '#686868'
+  axes.labelcolor: '#686868'
+  axes.labelweight: bold
+  axes.prop_cycle_colors:
+  - '#012376'
+  - '#0286ff'
+  - '#90fffd'
+  - '#dab6fc'
+  - '#ffcaaf'
+  axes.spines.right: false
+  axes.spines.top: false
+  axes.titlecolor: '#686868'
+  axes.titlesize: 16
+  axes.titleweight: bold
+
+  figure.dpi: 300
+  figure.figsize:
+  - 16
+  - 9
+  savefig.dpi: 300
+
+  font.family: monospace
+  font.size: 14
+  text.color: '#686868'
+
+  legend.edgecolor: none
+  legend.fontsize: 12
+
+  lines.linewidth: 2
+
+  xtick.color: '#686868'
+  xtick.labelcolor: '#686868'
+  ytick.color: '#686868'
+  ytick.labelcolor: '#686868'
+
+# Plotly style sheet
+plotly:
+
+  data:
+    scatter:
+    - line:
+        width: 3
+  layout:
+    colorway:
+    - '#012376'
+    - '#0286ff'
+    - '#90ffdc'
+    - '#dab6fc'
+    - '#e7bbe3'
+    - '#ffcaaf'
+    font:
+      color: '#686868'
+      family: monospace
+      size: 14
+    title:
+      font:
+        color: '#686868'
+        size: 16
+    xaxis:
+      showgrid: true
+      showline: true
+      showticklabels: true
+      tickfont:
+        color: '#686868'
+      title:
+        font:
+          color: '#686868'
+      zeroline: false
+    yaxis:
+      showgrid: true
+      showline: true
+      showticklabels: true
+      tickfont:
+        color: '#686868'
+      title:
+        font:
+          color: '#686868'
+      zeroline: false
+
+
+# Ensuro colors
+ensuro_colors:
+  blues:
+      - "#012376"
+      - "#0286FF"
+      - "#96B6E5"
+      - "#0066ff"
+      - "#BCDFDF"
+
+  fluo:
+      - "#EAA7FD"
+      - "#A5FF76"
