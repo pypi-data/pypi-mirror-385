@@ -1,0 +1,79 @@
+Metadata-Version: 2.4
+Name: groster
+Version: 0.4.0
+Summary: A tool to fetch and process World of Warcraft guild rosters, identifying player information via the Blizzard API.
+Project-URL: Homepage, https://github.com/sergeyklay/groster
+Project-URL: Repository, https://github.com/sergeyklay/groster
+Project-URL: Issues, https://github.com/sergeyklay/groster/issues
+Project-URL: Download, https://github.com/sergeyklay/groster/releases
+Author-email: Serghei Iakovlev <oss@serghei.pl>
+Maintainer-email: Serghei Iakovlev <oss@serghei.pl>
+License: The MIT License (MIT)
+        
+        Copyright (c) 2025 Serghei Iakovlev.
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy of
+        this software and associated documentation files (the "Software"), to deal in
+        the Software without restriction, including without limitation the rights to
+        use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+        the Software, and to permit persons to whom the Software is furnished to do so,
+        subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+        FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+        COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+        IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+        CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+License-File: LICENSE
+Keywords: game,mmorpg,world-of-warcraft,wow
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Classifier: Programming Language :: Python :: 3.15
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Topic :: Games/Entertainment :: Role-Playing
+Classifier: Topic :: Utilities
+Classifier: Typing :: Typed
+Requires-Python: <4,>=3.12
+Requires-Dist: httpx>=0.28.1
+Requires-Dist: pandas>=2.3.3
+Requires-Dist: python-dotenv>=1.1.1
+Description-Content-Type: text/markdown
+
+# groster
+
+A tool for fetching and processing a World of Warcraft guild roster via the official Blizzard API. Its primary feature is to identify and group alternate characters (_alts_) with their main characters based on shared account-wide data.
+
+## Problem Statement
+
+The standard guild roster from the Blizzard presents a flat list of characters without indicating which ones belong to the same player. Manually tracking mains and alts is tedious and error-prone, making it difficult to understand the true size and composition of a guild's player base.
+
+This tool automates the process by programmatically analyzing character data to uncover these player-character relationships, providing a clear and accurate overview of the guild roster.
+
+## Technology Stack
+
+- Language: Python 3.12+
+- Data Processing: [pandas](https://pandas.pydata.org) - Data processing, analysis and manipulation
+- HTTP Requests: [httpx](https://www.python-httpx.org) - For all interactions with the Blizzard Battle.net REST API
+- Configuration: [python-dotenv](https://pypi.org/project/python-dotenv/) - For managing API credentials securely
+- Linting: [ruff](https://docs.astral.sh/ruff/) - As an all-in-one tool for code linting and formatting, ensuring high code quality
+- Dependency Management: [uv](https://docs.astral.sh/uv/) - The project's required tool for Python dependency management.
+
+## Documentation
+
+- [Coding Standards](./docs/coding-standards.md) - The project's coding standards and guidelines.
+- [Contributing](./CONTRIBUTING.md) - The project's contributing guidelines.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.

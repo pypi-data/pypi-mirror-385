@@ -1,0 +1,154 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["groster"]
+
+[project]
+name = "groster"
+version = "0.4.0"
+description = "A tool to fetch and process World of Warcraft guild rosters, identifying player information via the Blizzard API."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.12, <4"
+authors = [{ name = "Serghei Iakovlev", email = "oss@serghei.pl" }]
+maintainers = [{ name = "Serghei Iakovlev", email = "oss@serghei.pl" }]
+keywords = ["wow", "world-of-warcraft", "game", "mmorpg"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Topic :: Utilities",
+    "Topic :: Games/Entertainment :: Role-Playing",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "License :: OSI Approved :: MIT License",
+    "Typing :: Typed",
+]
+
+# Keep these dependencies in sorted alphabetical order
+dependencies = ["httpx>=0.28.1", "pandas>=2.3.3", "python-dotenv>=1.1.1"]
+
+[project.urls]
+Homepage = "https://github.com/sergeyklay/groster"
+Repository = "https://github.com/sergeyklay/groster"
+Issues = "https://github.com/sergeyklay/groster/issues"
+Download = "https://github.com/sergeyklay/groster/releases"
+
+[project.scripts]
+groster = "groster.cli:cli"
+
+[dependency-groups]
+dev = ["pre-commit>=4.3.0", "chardet>=5.2.0", "ruff>=0.14.0", "jupyter>=1.1.1"]
+testing = ["coverage[toml]>=7.10.6", "pytest>=8.4.2", "pytest-mock>=3.15.1"]
+
+[tool.uv]
+package = true
+
+[tool.pytest.ini_options]
+addopts = "--verbose --durations=25 --no-header"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+]
+# Suppress logging output during tests for cleaner output
+log_cli = false
+log_level = "WARNING"
+log_cli_level = "WARNING"
+
+[tool.coverage.report]
+# Set the number of decimal places in coverage percentage
+precision = 2
+
+# Show lines that were not executed
+show_missing = true
+
+# Skip empty files
+skip_empty = true
+
+# Exclude lines from coverage report
+exclude_lines = ["pragma: no cover", "if TYPE_CHECKING:"]
+
+[tool.coverage.html]
+# Directory for the HTML format report
+directory = "coverage/html"
+
+[tool.coverage.lcov]
+# Filename for the LCOV format report
+output = "coverage/lcov/coverage.lcov"
+
+[tool.coverage.xml]
+# Filename for the XML format report
+output = "coverage/xml/coverage.xml"
+
+[tool.coverage.run]
+# Enable branch coverage (default: False)
+branch = true
+
+# Run tests in parallel (useful when using CI/CD)
+parallel = true
+
+# Filename for storing coverage data
+data_file = "coverage/.coverage"
+
+# Source code directories to include in the coverage report
+source = ["groster"]
+
+# Omit specified files or directories from the report
+omit = [
+    "__init__.py",
+    "*/__pycache__/*",
+    "*/.pytest_cache/*",
+    "*/.ruff_cache/*",
+    "*/.venv/*",
+    "*/build/*",
+    "*/coverage/*",
+    "*/pytest_cache/*",
+    "*/scripts/*",
+    "*/tests/*",
+]
+
+[tool.ruff]
+target-version = "py312"
+extend-exclude = ["build"]
+
+[tool.ruff.lint]
+extend-select = [
+    "I",      # All imports
+    "E",      # All errors
+    "W",      # All warnings
+    "F",      # All false positives
+    "C",      # All complexity
+    "Q",      # All quality
+    "B006",   # Do not use mutable data structures for argument defaults
+    "B904",   # Use `raise ... from err` instead of `raise ...`
+    "B905",   # Specify `strict` when using `zip()`
+    "ERA001", # No commented out code
+    "G004",   # Don't use f-strings for string interpolation in logging
+    "INP001", # Packages have __init__.py files
+    "PERF",   # All performance issues
+    "PLE",    # All pylint errors
+    "PLW",    # All pylint warnings
+    "RET505", # Unnecessary `else` after `return` statement
+    "TID252", # Ban relative imports
+    "UP",     # Auto-upgrade syntax to newer versions of Python
+    "UP006",  # Enforcing the use of PEP 585 syntax
+    "UP007",  # Enforcing the use of PEP 604 syntax
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Modules where it is expected for there to be no __init.py__
+"**/tests/**/" = ["INP001"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["groster"]
+
+[tool.ruff.lint.flake8-tidy-imports]
+# Disallow all relative imports.
+ban-relative-imports = "all"
