@@ -1,0 +1,218 @@
+# splineops/docs/conf.py
+
+# Import necessary modules
+import os
+import sys
+from pathlib import Path
+from sphinx_gallery.sorting import FileNameSortKey
+from datetime import datetime
+
+# ------------------------------------------------------------------
+# Run examples with the native extension and full CPU usage
+# ------------------------------------------------------------------
+os.environ["SPLINEOPS_ACCEL"] = "always"               # force native path if present
+os.environ["OMP_NUM_THREADS"] = str(os.cpu_count() or 1)  # let OpenMP use all cores
+
+# ------------------------------------------------------------------
+# Make sure we import the *installed/editable* package first
+# (has the compiled extension). Fall back to src/ only if needed.
+# ------------------------------------------------------------------
+try:
+    import splineops  # noqa: F401
+except Exception:
+    sys.path.insert(0, str(Path(__file__).parents[1] / "src"))
+
+# Keep custom extensions path
+sys.path.insert(0, os.path.abspath("sphinxext"))
+
+# (Optional) tiny sanity print in the build log
+def _log_native():
+    import importlib.util
+    try:
+        import splineops
+        print("[docs] splineops from:", getattr(splineops, "__file__", "<unknown>"))
+        print("[docs] native present:", importlib.util.find_spec("splineops._lsresize") is not None)
+        print("[docs] OMP_NUM_THREADS:", os.environ.get("OMP_NUM_THREADS"))
+    except Exception as e:
+        print("[docs] import failure:", e)
+_log_native()
+
+# Project information
+project = 'splineops'
+copyright = f'{datetime.now().year}, SplineOps authors'
+release = '0.5.2'
+
+# General configuration
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.autosummary',
+    'sphinx_gallery.gen_gallery',
+    'sphinx-prompt',
+    'sphinx_copybutton',
+    'sphinx_remove_toctrees',
+    'sphinx.ext.napoleon',
+    'sphinx.ext.intersphinx',
+    'sphinx_design',
+    'myst_parser',
+    'jupyterlite_sphinx',
+    'move_gallery_links', # Custom extension located in sphinxext folder
+]
+
+templates_path = ['_templates']
+exclude_patterns = [
+    '_build', 
+    'Thumbs.db', 
+    '.DS_Store', 
+    '**.ipynb_checkpoints',
+    '**sg_execution_times.rst',
+]
+
+# Options for HTML output
+html_theme = 'pydata_sphinx_theme'
+
+html_title = f"{project} Documentation"
+
+# Set html_static_path to an absolute path
+html_static_path = ['_static']
+html_css_files = ['_static/css/custom.css']
+
+sg_examples_dir = "../examples"
+sg_gallery_dir = "auto_examples"
+
+# sphinx-gallery configuration
+sphinx_gallery_conf = {
+    'examples_dirs': [sg_examples_dir],
+    'gallery_dirs': [sg_gallery_dir],
+    'within_subsection_order': FileNameSortKey,
+    'backreferences_dir': 'gen_modules/backreferences',
+    'filename_pattern': '.*',
+    'matplotlib_animations': True,
+    'binder': { # https://sphinx-gallery.github.io/stable/configuration.html#generate-binder-links-for-gallery-notebooks-experimental
+        'org': 'splineops',
+        'repo': 'splineops.github.io',
+        'binderhub_url': 'https://mybinder.org',
+        'branch': 'main',
+        'dependencies': '../.binder/requirements.txt',
+        'notebooks_dir': 'notebooks_binder', # Jupyter notebooks for Binder will be copied to this directory (relative to built documentation root).
+        'use_jupyter_lab': True,
+    },
+    'jupyterlite': { # https://sphinx-gallery.github.io/stable/configuration.html#generate-jupyterlite-links-for-gallery-notebooks-experimental
+        'use_jupyter_lab': True, # Whether JupyterLite links should start Jupyter Lab instead of the Retrolab Notebook interface.
+        'jupyterlite_contents': 'notebooks_jupyterlite', # where to copy the example notebooks (relative to Sphinx source directory)
+    },
+    'remove_config_comments': True,
+}
+
+html_theme_options = {
+    "logo": {
+        "text": "SplineOps",
+    },
+    'navbar_start': ['navbar-logo'],
+    'navbar_center': ['navbar-nav'],
+    'navbar_end': ['theme-switcher', 'navbar-icon-links'],
+    'icon_links': [
+        {
+            'name': '',
+            'url': 'https://github.com/splineops/splineops',
+            'icon': 'fa-brands fa-github',
+            'attributes': {'title': 'GitHub'},
+        },
+        {
+            'name': '',
+            'url': 'https://pypi.org/project/splineops/',
+            'icon': 'fa-brands fa-python',
+            'attributes': {'title': 'PyPI'},
+        },
+    ],
+    'use_edit_page_button': True,
+    # When specified as a dictionary, the keys should follow glob-style patterns, as in
+    # https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-exclude_patterns
+    # In particular, "**" specifies the default for all pages
+    # Use :html_theme.sidebar_secondary.remove: for file-wide removal
+    'secondary_sidebar_items': {'**': ['page-toc', 'sourcelink']},
+}
+
+html_context = {
+    'github_user': 'splineops',
+    'github_repo': 'splineops',
+    'github_version': 'main',
+    'doc_path': 'docs',
+}
+
+# Ensure the paths to logo and favicon are absolute
+html_logo = '_static/logo.png'
+html_favicon = '_static/logo.ico'
+
+# Secondary sidebar configuration for pages generated by sphinx-gallery
+
+# For the index page of the gallery and each nested section, we hide the secondary
+# sidebar by specifying an empty list (no components), because there is no meaningful
+# in-page toc for these pages, and they are generated so "sourcelink" is not useful
+# either.
+
+# For each example page we keep default ["page-toc", "sourcelink"] specified by the
+# "**" key. "page-toc" is wanted for these pages. "sourcelink" is also necessary since
+# otherwise the secondary sidebar will degenerate when "page-toc" is empty, and the
+# script `sphinxext/move_gallery_links.py` will fail (it assumes the existence of the
+# secondary sidebar). The script will remove "sourcelink" in the end.
+
+html_theme_options["secondary_sidebar_items"][f"{sg_gallery_dir}/index"] = []
+for sub_sg_dir in (Path(".") / sg_examples_dir).iterdir():
+    if sub_sg_dir.is_dir():
+        html_theme_options["secondary_sidebar_items"][
+            f"{sg_gallery_dir}/{sub_sg_dir.name}/index"
+        ] = []
+
+# Options for intersphinx extension
+intersphinx_mapping = {
+    "python": ("https://docs.python.org/3", None),
+    "NumPy [stable]": ("https://numpy.org/doc/stable/", None),
+    "CuPy [latest]": ("https://docs.cupy.dev/en/latest/", None),
+    "SciPy [latest]": ("https://docs.scipy.org/doc/scipy/", None),
+    "Pytest [latest]": ("https://docs.pytest.org/en/latest/", None),
+    "Matplotlib [stable]": ("https://matplotlib.org/stable/", None),
+}
+
+# Function to ensure the static directory path is absolute
+def resolve_static_path(app, exception):
+    """
+    Ensure the '_static' directory path is absolute.
+    This function is necessary to avoid the assertion error in the
+    'pydata_sphinx_theme.logo' extension, which requires 'staticdir'
+    to be an absolute path.
+    """
+    staticdir = Path(app.builder.outdir) / "_static"
+    if not staticdir.is_absolute():
+        staticdir = staticdir.resolve()
+    app.builder.outdir = str(staticdir.parent)  # Ensure outdir points to the correct directory
+
+# Function to replace unpicklable objects with their qualified names
+def make_sphinx_gallery_conf_picklable(app, config):
+    """
+    Replace unpicklable objects in 'sphinx_gallery_conf' with their
+    fully qualified names to prevent warnings about unpicklable values.
+    This ensures the configuration can be cached without issues.
+    """
+    new_conf = config.sphinx_gallery_conf.copy()
+    # Replace 'within_subsection_order' with its fully qualified name if it's callable
+    if 'within_subsection_order' in new_conf and callable(new_conf['within_subsection_order']):
+        new_conf['within_subsection_order'] = f"{new_conf['within_subsection_order'].__module__}.{new_conf['within_subsection_order'].__name__}"
+    config.sphinx_gallery_conf = new_conf
+
+# Setup function called by Sphinx to connect event handlers
+def setup(app):
+    # Connect the 'resolve_static_path' function to the 'build-finished' event
+    app.connect('build-finished', resolve_static_path)
+    
+    # Connect the 'make_sphinx_gallery_conf_picklable' function to the 'config-inited' event
+    app.connect('config-inited', make_sphinx_gallery_conf_picklable)
+    
+    # Existing build-finished event setup for debugging
+    def on_build_finished(app, exception):
+        if exception:
+            print(f"Build finished with exception: {exception}")
+            import traceback
+            traceback.print_exc()
+        else:
+            print("Build finished successfully")
+    app.connect('build-finished', on_build_finished)
