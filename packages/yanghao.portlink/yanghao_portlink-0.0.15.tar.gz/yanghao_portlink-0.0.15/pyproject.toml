@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "yanghao.portlink"
+version = "0.0.15"
+authors = [
+  { name="Yang Hao", email="fexeak@163.com" },
+]
+description = "Simple TCP public network tunnel"
+readme = {file = "README.md", content-type = "text/markdown"}
+requires-python = ">=3.7"
+dependencies = [
+    "websockets",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/yahao333/portlink"
+"Bug Tracker" = "https://github.com/yahao333/portlink/issues"
+
+[project.scripts]
+portlink-client = "yanghao.portlink.client:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
