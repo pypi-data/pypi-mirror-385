@@ -1,0 +1,118 @@
+#
+# Tectonic - An academic Cyber Range
+# Copyright (C) 2024 Grupo de Seguridad Informática, Universidad de la República,
+# Uruguay
+#
+# This file is part of Tectonic.
+#
+# Tectonic is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Tectonic is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Tectonic.  If not, see <http://www.gnu.org/licenses/>.
+#
+---
+- name: "Install Caldera (Rocky 9)"
+  hosts: caldera
+  become: true
+  vars_files:
+    - vars/variables.yml
+    
+  tasks:
+    - name: Set hostname
+      ansible.builtin.hostname:
+        name: caldera
+      when: platform != "docker"
+
+    - name: Install node repo
+      ansible.builtin.shell: "curl -sL https://rpm.nodesource.com/setup_18.x | bash"
+
+    - name: Install software
+      ansible.builtin.package:
+        name:
+          - git
+          - python3.12
+          - python3.12-pip
+          - python3.12-cryptography
+          - nodejs
+          - haproxy
+          - gcc
+          - firewalld
+          - jq
+          - nmap
+        state: present
+
+    - name: Update pip
+      ansible.builtin.command: python3.12 -m pip install --upgrade pip
+
+    - name: Download Caldera
+      ansible.builtin.git:
+        repo: https://github.com/mitre/caldera.git
+        dest: /opt/caldera/
+        version: "{{ caldera_version }}"
+        recursive: true
+
+    - name: Install Caldera OT plugins
+      block:
+        - name: "Download Caldera OT plugins"
+          ansible.builtin.git:
+            repo: "https://github.com/mitre/{{ item.name }}.git"
+            dest: "/tmp/ot_plugins/{{ item.name }}/"
+            version: "v{{ item.version }}"
+          loop: "{{ ot_plugins }}"
+        - name: "Download iec61850 payloads"
+          ansible.builtin.get_url:
+            url: "https://github.com/mitre/iec61850-payloads/releases/download/v1.0.0/{{ item }}"
+            dest: /tmp/ot_plugins/iec61850/payloads
+          with_items:
+            - iec61850_actions
+            - iec61850_actions.exe
+            - iec61850_actions_darwin
+        - name: "Install Caldera OT plugins: {{ item.name }}"
+          ansible.builtin.command: "mv /tmp/ot_plugins/{{ item.name }} /opt/caldera/plugins/"
+          loop: "{{ ot_plugins }}"
+        - name: Remove tmp files
+          ansible.builtin.file:
+            path: /tmp/ot_plugins/caldera_ot/
+            state: absent
+      when: caldera_ot_enabled == "True"
+
+    - name: Install Caldera requirements
+      ansible.builtin.command: python3.12 -m pip install -r /opt/caldera/requirements.txt
+
+    - name: Check ig Magma plugin exists
+      ansible.builtin.stat:
+        path: /opt/caldera/plugins/magma
+      register: magma
+
+    - name: Configure Magma
+      block:
+        - name: Adjust Magma URL
+          ansible.builtin.copy:
+            dest: /opt/caldera/plugins/magma/.env
+            content: |
+              VITE_CALDERA_URL=https://
+        - name: Install Magma dependencies
+          community.general.npm:
+            path: /opt/caldera/plugins/magma
+            executable: /usr/bin/npm
+            state: present
+          ignore_errors: true
+        - name: Build Magma
+          ansible.builtin.command: npm run build
+          args:
+            chdir: /opt/caldera/plugins/magma
+      when: magma.stat.exists
+
+    - name: Change SELinux mode
+      ansible.posix.selinux:
+        policy: targeted
+        state: permissive
+      when: platform != "docker"
