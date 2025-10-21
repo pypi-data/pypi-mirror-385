@@ -1,0 +1,154 @@
+# Docker Compose for local testing of code_developer daemon
+# This configuration mimics the GCP Cloud Run environment
+
+version: '3.8'
+
+services:
+  code-developer:
+    build:
+      context: ../..
+      dockerfile: coffee_maker/deployment/Dockerfile
+    container_name: code-developer-daemon
+    ports:
+      - "8080:8080"  # FastAPI control API
+    environment:
+      # API Keys (load from .env file)
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+
+      # Daemon configuration
+      - COFFEE_MAKER_MODE=daemon
+      - COFFEE_MAKER_LOG_LEVEL=INFO
+      - COFFEE_MAKER_AUTO_APPROVE=true
+      - COFFEE_MAKER_CREATE_PRS=true
+      - ROADMAP_PATH=/workspace/docs/roadmap/ROADMAP.md
+
+      # Database connection (local PostgreSQL)
+      - DATABASE_URL=postgresql://coffee_maker:coffee_maker@postgres:5432/coffee_maker
+
+      # GCP emulation (for local testing)
+      - GOOGLE_CLOUD_PROJECT=local-dev
+      - GCS_BUCKET_NAME=local-code-developer
+
+      # API authentication
+      - API_KEY=${COFFEE_MAKER_API_KEY:-dev-api-key-change-me}
+
+    volumes:
+      # Mount project directory (for local development)
+      - ../../:/workspace
+
+      # Mount logs directory
+      - ./logs:/var/log/coffee-maker
+
+      # Mount git config (for commits)
+      - ~/.gitconfig:/home/appuser/.gitconfig:ro
+      - ~/.ssh:/home/appuser/.ssh:ro
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    networks:
+      - coffee-maker-net
+
+    restart: unless-stopped
+
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # PostgreSQL database (replaces local SQLite)
+  postgres:
+    image: postgres:16-alpine
+    container_name: code-developer-db
+    environment:
+      - POSTGRES_USER=coffee_maker
+      - POSTGRES_PASSWORD=coffee_maker
+      - POSTGRES_DB=coffee_maker
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    networks:
+      - coffee-maker-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U coffee_maker"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis (for caching and task queues)
+  redis:
+    image: redis:7-alpine
+    container_name: code-developer-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - coffee-maker-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # MinIO (local S3-compatible storage, mimics GCS)
+  minio:
+    image: minio/minio:latest
+    container_name: code-developer-storage
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"  # S3 API
+      - "9001:9001"  # Web console
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    volumes:
+      - minio-data:/data
+    networks:
+      - coffee-maker-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  postgres-data:
+    driver: local
+  redis-data:
+    driver: local
+  minio-data:
+    driver: local
+
+networks:
+  coffee-maker-net:
+    driver: bridge
+
+# Usage:
+# 1. Create .env file with your API keys:
+#    ANTHROPIC_API_KEY=sk-ant-...
+#    GITHUB_TOKEN=ghp_...
+#    COFFEE_MAKER_API_KEY=your-secure-api-key
+#
+# 2. Start services:
+#    docker-compose up -d
+#
+# 3. View logs:
+#    docker-compose logs -f code-developer
+#
+# 4. Stop services:
+#    docker-compose down
+#
+# 5. Access services:
+#    - API: http://localhost:8080
+#    - PostgreSQL: localhost:5432
+#    - MinIO Console: http://localhost:9001 (minioadmin/minioadmin)

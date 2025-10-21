@@ -1,0 +1,75 @@
+[tool.poetry]
+name = "coffee_maker"
+version = "0.1.5"
+description = "An agent that roast, grind, brew and serve your coffee. or not..."
+authors = ["Bobain and some code agents"]
+license = "Apache 2.0"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.14"
+mcp = {extras = ["cli"], version = "^1.9.0"}
+gradio = {extras = ["mcp"], version = "^5.31.0"}
+python-dotenv = "^1.1.0"
+llama-index = "^0.12.44"
+llama-index-llms-ollama = "^0.6.2"
+llama-index-tools-mcp = "^0.2.5"
+psutil = "^7.0.0"
+gitpython = "^3.1.45"
+pygithub = "^2.8.1"
+langfuse = {version = "^3.5.2", extras = ["langchain"]}
+langchain = {extras = ["anthropic", "community", "core", "google-genai", "openai"], version = "^0.3.27"}
+langchain-core = "^0.3.78"
+google = "^3.0.0"
+prompt-toolkit = "^3.0.47"
+Pygments = "^2.18.0"
+anthropic = "^0.40.0"
+streamlit = "^1.32.0"
+plotly = "^5.18.0"
+pandas = "^2.2.0"
+pyyaml = "^6.0.3"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0"
+pytest-cov = "^6.0"
+pip-audit = "^2.9"
+pre-commit = "^4.0"
+pytest-html = "^4.1.1"
+pdoc = "^15.0.4"
+mypy = "^1.18.2"
+pytest-xdist = "^3.8.0"
+radon = "^6.0.1"
+pylint = "^4.0.1"
+bandit = "^1.7.0"
+safety = "^3.6.2"
+
+
+[tool.poetry.scripts]
+project-manager = "coffee_maker.cli.roadmap_cli:main"
+code-developer = "coffee_maker.autonomous.daemon_cli:main"
+user-listener = "coffee_maker.cli.user_listener:main"
+architect = "coffee_maker.cli.architect_cli:architect"
+code-reviewer = "coffee_maker.autonomous.code_reviewer:main"
+orchestrator = "coffee_maker.cli.orchestrator_cli:main"
+# OLD: team-daemon (DEPRECATED - use 'poetry run user-listener' instead)
+# The new orchestrator-based architecture is started automatically via user-listener
+
+[tool.poetry.urls]
+"Homepage" = "https://github.com/Bobain/MonolithicCoffeeMakerAgent"
+"Repository" = "https://github.com/Bobain/MonolithicCoffeeMakerAgent"
+"Bug Tracker" = "https://github.com/Bobain/MonolithicCoffeeMakerAgent/issues"
+
+
+[tool.pytest.ini_options]
+markers = [
+    "integration: marks tests as integration tests (deselect with '-m \"not integration\"')",
+    "slow: marks tests as slow running tests (deselect with '-m \"not slow\"')",
+    "manual: marks tests as manual-only (never run in CI, only on user demand)",
+]
+# Exclude manual tests from automatic test discovery
+testpaths = ["tests"]
+norecursedirs = ["tests/manual_tests", "*.egg", ".git", ".tox", "dist", "build"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
