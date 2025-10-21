@@ -1,0 +1,50 @@
+
+# Test workflow for benchmarking purposes.
+
+import random
+from random import randint as r
+
+random.seed(12345)
+
+rule stepA:
+    output:
+        "stepA/file_{shard}.out",
+    priority: r(1, 5)
+    threads: r(2, 4)
+    resources:
+        mem_mb=1,
+    shell:
+        "echo {wildcards.shard} > {output}; sleep 1;"
+
+
+rule stepB:
+    input:
+        rules.stepA.output,
+    output:
+        "stepB/file_{shard}.out",
+    priority: r(1, 5)
+    threads: r(2, 4)
+    resources:
+        mem_mb=5,
+    shell:
+        "echo {wildcards.shard} | cat - {input} > {output}; sleep 1;"
+
+
+rule stepC:
+    input:
+        rules.stepA.output,
+        rules.stepB.output,
+    output:
+        "stepC/file_{shard}.out",
+    priority: r(1, 5)
+    threads: r(2, 4)
+    resources:
+        mem_mb=1,
+    shell:
+        "echo {wildcards.shard} | cat - {input} > {output}; sleep 1;"
+
+
+rule all:
+    input:
+        expand(rules.stepC.output, shard=[r(1, 10000000) for i in range(200000)]),
+    default_target: True
