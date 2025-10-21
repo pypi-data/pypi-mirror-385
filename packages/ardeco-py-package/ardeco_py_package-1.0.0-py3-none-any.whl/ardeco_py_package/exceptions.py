@@ -1,0 +1,2 @@
+class ArdecoAPIError(Exception):
+    pass
