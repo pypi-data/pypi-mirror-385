@@ -1,0 +1,36 @@
+[build-system]
+requires = ["maturin>=1.9,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "python-lolhtml"
+requires-python = ">=3.8"
+authors = [
+    {name = "Jayson Fong", email = "jayson.fong@gatech.edu"}
+]
+description = "Python bindings for the lol-html Rust crate"
+readme = "README.md"
+license = { text = "BSD-3-Clause" }
+license-files = ["LICENSE-MIT", "LICENSE-BSD"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Typing :: Stubs Only"
+]
+dynamic = ["version"]
+
+[tool.maturin]
+features = ["pyo3/extension-module"]
+include = ["lolhtml.pyi"]
