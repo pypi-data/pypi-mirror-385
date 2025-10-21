@@ -1,0 +1,41 @@
+process:
+  project_name: "test-project"
+  workflow_type: SIMULATOR # Pick one of the following workflows: SIMULATOR, COMPARATOR, ASSESSOR.
+  evaluation_params:
+    attempts: 1  # Add the number of simulation attempts.
+    batch_size: 5
+
+evaluation:
+  evaluators: # Select from the following: JUDGE, REFERENCE, RAG.
+    - JUDGE
+    - REFERENCE
+  providers:
+    - openai
+    - ionos
+  metrics_map:
+    field_1: EXACT
+    field_2 : LEVENSHTEIN
+
+reference_data:
+  path: "../data/conversation_example_1.json"
+  data:
+
+endpoint:
+  base_url: "http://127.0.0.1:8000"
+  url_path: ''
+  api_key: "<API-KEY>"
+  bearer_token: "<BEARER-TOKEN>"
+  model_id: "meta-llama/Meta-Llama-3.1-8B-Instruct"
+  default_request_payload_template:
+    # Change the user message field name only according to the request payload schema (example: 'prompt' to 'message').
+    prompt: "${user_message}"
+    details: "${request_payload}"  # Rest of the request payload data.
+  default_response_payload_template:
+    # Change the placeholder value only according to the response payload schema (example: ${agent_reply} to ${reply}).
+    generated_reply: "${message}"
+    generated_metadata: "${metadata}"
+
+repository:
+  type: FIRESTORE # Pick one of the following: FIRESTORE, FILESYSTEM
+  project_id: "(default)"
+  database_name: ""
