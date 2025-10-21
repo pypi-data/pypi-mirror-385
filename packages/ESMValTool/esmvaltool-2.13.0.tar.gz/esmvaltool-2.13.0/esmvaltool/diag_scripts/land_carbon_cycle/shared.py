@@ -1,0 +1,124 @@
+"""Provide shared functions for land carbon cycle diagnostic."""
+
+import os
+
+import iris
+import numpy as np
+from iris import NameConstraint
+
+from esmvaltool.diag_scripts.shared import select_metadata
+
+
+def _apply_common_mask(*args):
+    """
+    Apply common mask to all arrays passed as argument.
+
+    Argument:
+    --------
+        arrays
+
+    Return:
+    ------
+        an array with size of nargs x common size of all input arrays
+    """
+    odat = np.stack(args, axis=0)
+    odat = np.ma.masked_array(odat, dtype=np.float64)
+    odat = np.ma.masked_invalid(odat)
+    mask = np.ma.getmaskarray(odat).any(axis=0, keepdims=True)
+    odat = np.ma.masked_where(np.broadcast_to(mask, odat.shape), odat)
+    return odat
+
+
+def _apply_gpp_threshold(gpp_dat, fig_config):
+    """Mask the gpp array below threshold."""
+    # converting gC m-2 yr-1 to kgC m-2 s-1
+    gpp_thres = fig_config["gpp_threshold"] / (86400.0 * 365 * 1000.0)
+    gpp_dat = np.ma.masked_less(gpp_dat, gpp_thres).filled(
+        fig_config["fill_value"]
+    )
+    return gpp_dat
+
+
+def _get_obs_data_zonal(diag_config):
+    """
+    Get and handle the observations of turnover time from Carvalhais 2014.
+
+    Argument:
+    --------
+        diag_config - nested dictionary of metadata
+
+    Return:
+    ------
+        dictionary with observation data with different variables as keys
+    """
+    if not diag_config.get("obs_variable"):
+        raise ValueError(
+            "The observation variable needs to be specified in "
+            "the recipe (see recipe description for details)"
+        )
+    obs_dir = os.path.join(
+        diag_config["auxiliary_data_dir"],
+        diag_config["obs_info"]["obs_data_subdir"],
+    )
+
+    all_data = {}
+    var_list = diag_config.get("obs_variable")
+
+    input_files = []
+    for _var in var_list:
+        var_list = np.append(var_list, f"{_var}_{5:d}")
+        var_list = np.append(var_list, f"{_var}_{95:d}")
+        obs_filename = (
+            f"{_var}_{{frequency}}_{{source_label}}_"
+            f"{{variant_label}}_{{grid_label}}z.nc".format(
+                **diag_config["obs_info"]
+            )
+        )
+        input_files = np.append(
+            input_files, os.path.join(obs_dir, obs_filename)
+        )
+
+    nvars = len(var_list)
+    for v_ind in range(nvars):
+        var_obs = var_list[v_ind]
+        variable_constraint = NameConstraint(var_name=var_obs)
+        cube = iris.load_cube(input_files, constraint=variable_constraint)
+        all_data[var_obs] = cube
+    for coord in cube.coords():
+        all_data[coord.name()] = coord
+    return all_data
+
+
+def _load_variable(metadata, var_name):
+    """
+    Load data for the variable listed in metadata of the diagnostic variable.
+
+    Argument:
+    --------
+        metadata - nested dictionary of metadata
+
+    Return:
+    ------
+        iris cube of the data
+    """
+    candidates = select_metadata(metadata, short_name=var_name)
+    assert len(candidates) == 1
+    filename = candidates[0]["filename"]
+    cube = iris.load_cube(filename)
+    return cube
+
+
+def _remove_invalid(tmp, fill_value=-9999.0):
+    """
+    Remove the invalid non-numeric values from the input array.
+
+    Fill it with fill_value.
+    Remove all large and small values with magnitude
+    beyond 1e15
+    """
+    tmp = np.ma.masked_outside(tmp, -1e15, 1e15).filled(fill_value)
+    where_nan = np.isnan(tmp)
+    tmp[where_nan] = fill_value
+    where_inf = np.isinf(tmp)
+    tmp[where_inf] = fill_value
+    return tmp
