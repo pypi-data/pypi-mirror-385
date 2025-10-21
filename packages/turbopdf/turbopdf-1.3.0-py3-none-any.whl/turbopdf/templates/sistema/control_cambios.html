@@ -1,0 +1,63 @@
+<!-- templates/components/control_cambios.html -->
+<div style="background-color: #303d50; width: 100%; margin: 0;">
+    <p style="font-size: 18px; color: white; font-weight: 700; text-align: center; margin: 0 20px; padding: 10px 0;">
+        {{ control_cambios.titulo }}
+    </p>
+</div>
+<div class="version">
+    <table style="width: 100%; border-collapse: collapse; font-family: 'Roboto', sans-serif;">
+        <!-- Encabezado dinámico -->
+        <thead>
+            <tr>
+                {% for columna in control_cambios.columnas %}
+                    <th style="
+                        text-align: {% if forloop.first or forloop.last %}center{% else %}center{% endif %};
+                        {% if forloop.first %}text-align: left; border-left: none;{% endif %}
+                        {% if forloop.last %}border-right: none;{% endif %}
+                        border-top: none;
+                        padding: 10px 0 10px 10px;
+                        min-width: {% if forloop.counter == 1 or forloop.counter == 4 %}120px{% elif forloop.counter == 3 %}110px{% else %}auto{% endif %};
+                        ">
+                        {{ columna }}
+                    </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <!-- Cuerpo dinámico -->
+        <tbody>
+            {% for fila in control_cambios.filas %}
+                <tr style="{% if not forloop.last %}height: 973px;{% endif %}">
+                    <td style="
+                        text-align: center;
+                        {% if forloop.first %}border-left: none;{% endif %}
+                        {% if not forloop.last %}border-bottom: none;{% endif %}
+                        min-width: 120px;
+                        ">
+                        {{ fila.version_inicial }}
+                    </td>
+                    <td style="
+                        text-align: left;
+                        {% if not forloop.last %}border-bottom: none;{% endif %}
+                        ">
+                        <p>{{ fila.descripcion|linebreaksbr }}</p>
+                    </td>
+                    <td style="
+                        text-align: center;
+                        {% if not forloop.last %}border-bottom: none;{% endif %}
+                        min-width: 110px;
+                        ">
+                        {{ fila.fecha }}
+                    </td>
+                    <td style="
+                        text-align: center;
+                        {% if forloop.last %}border-right: none;{% endif %}
+                        {% if not forloop.last %}border-bottom: none;{% endif %}
+                        min-width: 120px;
+                        ">
+                        {{ fila.version_final }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
