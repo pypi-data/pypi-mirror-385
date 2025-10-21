@@ -1,0 +1,194 @@
+[project]
+name = "mxdev"
+description = "Enable to work with Python projects containing lots of packages, of which you only want to develop some."
+dynamic = ["version", "readme"]
+keywords = ["pip", "vcs", "git", "development"]
+authors = [
+  {name = "MX Stack Developers", email = "dev@bluedynamics.com" }
+]
+requires-python = ">=3.8"
+license = { text = "BSD 2-Clause License" }
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Build Tools",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+dependencies = ["packaging"]
+
+[project.optional-dependencies]
+mypy = []
+test = [
+    "pytest",
+    "pytest-cov",
+    "pytest-mock",
+    "httpretty",
+    "coverage[toml]",
+]
+
+[project.urls]
+Homepage = "https://github.com/mxstack/mxdev"
+"Bug Reports" = "https://github.com/mxstack/mxdev/issues"
+Source = "https://github.com/mxstack/mxdev/"
+
+[project.scripts]
+mxdev = "mxdev.main:main"
+
+[project.entry-points."mxdev.workingcopytypes"]
+svn = "mxdev.vcs.svn:SVNWorkingCopy"
+git = "mxdev.vcs.git:GitWorkingCopy"
+gitsvn = "mxdev.vcs.gitsvn:GitSVNWorkingCopy"
+hg = "mxdev.vcs.mercurial:MercurialWorkingCopy"
+bzr = "mxdev.vcs.bazaar:BazaarWorkingCopy"
+fs = "mxdev.vcs.filesystem:FilesystemWorkingCopy"
+darcs = "mxdev.vcs.darcs:DarcsWorkingCopy"
+
+[build-system]
+requires = ["hatchling", "hatch-vcs", "hatch-fancy-pypi-readme"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "src/mxdev/_version.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/mxdev"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src",
+    "/tests",
+    "/example",
+    "/README.md",
+    "/CONTRIBUTING.md",
+    "/CHANGES.md",
+    "/LICENSE.md",
+    "/RELEASE.md",
+    "/pyproject.toml",
+]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.metadata.hooks.fancy-pypi-readme]
+content-type = "text/markdown"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+path = "README.md"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+text = "\n\n---\n\n"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+path = "CONTRIBUTING.md"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+text = "\n\n---\n\n"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+path = "CHANGES.md"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+text = "\n\n---\n\n"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+path = "LICENSE.md"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+    "tests",
+]
+
+[tool.isort]
+profile = "black"
+force_alphabetical_sort = true
+force_single_line = true
+lines_after_imports = 2
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[tool.flake8]
+# Excludes due to known issues or incompatibilities with black:
+# BLK100: Black would make changes. https://pypi.org/project/flake8-black/
+# W503: https://github.com/psf/black/search?q=W503&unscoped_q=W503
+# E231: https://github.com/psf/black/issues/1202
+ignore = "BLK100,E231,W503,D100,D101,D102,D102,D103,D104,D105,D106,D107,D202,D205"
+statistics = 1
+# black official is 88, but can get longer
+max-line-length = 120
+
+[tool.doc8]
+# TODO: Remove current max-line-lengh ignore in follow-up and adopt black limit.
+# max-line-length = 88
+ignore = "D001"
+
+[tool.coverage.run]
+source = ["src"]
+branch = true
+parallel = true
+relative_files = true
+omit = [
+    "*/tests/*",
+    "*/_version.py",
+    "*/vcs/__init__.py",
+]
+
+[tool.coverage.paths]
+source = [
+    "src",
+    ".tox/*/lib/python*/site-packages",
+    ".tox/*/Lib/site-packages",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if __name__ == .__main__.:",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if TYPE_CHECKING:",
+    "@abstractmethod",
+]
+precision = 2
+show_missing = true
+skip_covered = false
+
+[tool.coverage.html]
+directory = "htmlcov"
+
+[tool.tox]
+requires = ["tox>=4", "tox-uv>=1"]
+env_list = ["lint", "py38", "py39", "py310", "py311", "py312", "py313", "py314"]
+
+[tool.tox.env_run_base]
+description = "Run tests with pytest and coverage"
+runner = "uv-venv-runner"
+uv_resolution = "highest"
+pass_env = ["LC_ALL", "LANG", "HOME"]
+commands = [
+    ["uv", "pip", "install", "-e", ".[test]"],
+    ["coverage", "run", "-m", "pytest", "{posargs:tests}"]
+]
+
+[tool.tox.env.lint]
+description = "Run pre-commit hooks for linting"
+runner = "uv-venv-runner"
+commands = [
+    ["python", "-m", "pre_commit", "run", "{posargs:--all}"]
+]
+deps = ["pre-commit>=1.20.0"]
