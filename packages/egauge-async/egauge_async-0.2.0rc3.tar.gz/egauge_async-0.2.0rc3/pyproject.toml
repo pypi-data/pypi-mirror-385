@@ -1,0 +1,46 @@
+[project]
+name = "egauge-async"
+dynamic = ["version"]
+description = "Async client for eGauge energy monitor (https://www.egauge.net)"
+authors = [{ name = "Nic Eggert", email = "nic@eggert.io" }]
+requires-python = ">=3.11"
+readme = "README.md"
+license = "GPL-3.0-only"
+dependencies = [
+    "httpx>=0.25.1,<1.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/neggert/egauge-async"
+
+[dependency-groups]
+dev = [
+    "pyright>=1.1.406",
+    "pytest-asyncio>=1.2.0",
+    "pytest-cov>=7.0.0",
+    "pytest-mock>=3.15.0",
+    "ruff>=0.14.0",
+]
+examples = [
+    "pandas>=2.0.0",
+    "matplotlib>=3.7.0",
+]
+
+[build-system]
+requires = ["hatchling", "uv-dynamic-versioning"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "uv-dynamic-versioning"
+
+[tool.uv-dynamic-versioning]
+fallback-version = "0.0.0"
+
+[tool.pyright]
+include = ["egauge_async"]
+typeCheckingMode = "strict"
+
+[tool.pytest.ini_options]
+markers = [
+    "integration: marks tests as integration tests (run against real eGauge device)",
+]
