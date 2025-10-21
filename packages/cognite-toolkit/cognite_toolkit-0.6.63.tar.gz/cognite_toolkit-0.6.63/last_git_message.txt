@@ -1,0 +1,37 @@
+[CDF-25921] 🗄 Create data plugin (#2102)
+
+# Description
+
+This PR adds the alpha flag `v07` which we will use to put all `v07`
+features behind. This will make it easy to make the minor PR when the
+time comes.
+
+It also introduce a `data` app and puts `download/upload/purge` behind
+it. I removed download and upload from the entry app as they are both
+alpha, but purge cannot be removed until the actual release is done.
+
+<img width="700" height="294" alt="image"
+src="https://github.com/user-attachments/assets/d9a8ac2b-9455-45a4-88ca-ef6bec384741"
+/>
+
+
+## Changelog
+
+- [x] Patch
+- [ ] Skip
+
+## cdf
+
+### Added
+
+- [alpha] Created new plugin `cdf data` that will hold `cdf data
+download/upload/purge`.
+
+### Removed
+
+- [alpha] The `cdf download/upload` commands have been moved to `cdf
+data download/upload`.
+
+## templates
+
+No changes.
