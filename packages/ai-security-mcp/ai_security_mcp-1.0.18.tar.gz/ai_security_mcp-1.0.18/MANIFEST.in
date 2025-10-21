@@ -1,0 +1,43 @@
+# AI Security MCP - PyPI Package Manifest
+# Specifies additional files to include in the distribution
+
+include README.md
+include LICENSE
+include pyproject.toml
+include requirements-pypi.txt
+
+# Include source code
+recursive-include ai_security_mcp *.py
+
+# Exclude cloud server files (not needed in thin client)
+exclude ai_security_mcp/server.py
+
+# Include agent files
+recursive-include ai_security_mcp/agents *.py
+
+# Include utility files
+recursive-include ai_security_mcp/utils *.py
+
+# Exclude development and build files
+exclude .gitignore
+exclude .github/*
+exclude tests/*
+exclude docs/*
+exclude *.pyc
+exclude __pycache__
+global-exclude *.pyc
+global-exclude __pycache__
+global-exclude .DS_Store
+global-exclude .pytest_cache
+global-exclude .mypy_cache
+
+# Exclude build artifacts
+exclude build/*
+exclude dist/*
+exclude *.egg-info/*
+
+# Exclude development configurations
+exclude .vscode/*
+exclude .idea/*
+exclude *.swp
+exclude *.swo
