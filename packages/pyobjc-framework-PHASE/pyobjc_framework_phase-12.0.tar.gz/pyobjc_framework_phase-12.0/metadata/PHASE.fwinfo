@@ -1,0 +1,140 @@
+// objective.metadata exceptions file, see its document
+// for information on how to update this file.
+{
+ "definitions": {
+  "typed_enum": {
+   "PHASESpatialCategory": { "type": "@", "type_name": "NSString" }
+  },
+  "classes": {
+   "PHASEPullStreamNode": {
+    "methods": [
+     {
+      "selector": "renderBlock",
+      "class_method": false,
+      "retval": {
+       "callable": {
+        "arguments": {
+         "0": { "type": "^v" },
+         "1": { "type": "N^Z" },
+         "2": { "type": "n^{AudioTimeStamp=dQdQ{SMPTETime=ssIIIssss}II}" },
+         "3": { "type": "I" },
+         "4": { "type": "^{AudioBufferList=I[1{AudioBuffer=II^v}]}" }
+        },
+        "retval": { "type": "i" }
+       }
+      }
+     },
+     {
+      "selector": "setRenderBlock:",
+      "class_method": false,
+      "args": {
+       "0": {
+        "callable": {
+         "arguments": {
+          "0": { "type": "^v" },
+          "1": { "type": "N^Z" },
+          "2": { "type": "n^{AudioTimeStamp=dQdQ{SMPTETime=ssIIIssss}II}" },
+          "3": { "type": "I" },
+          "4": { "type": "^{AudioBufferList=I[1{AudioBuffer=II^v}]}" }
+         },
+         "retval": { "type": "i" }
+        }
+       }
+      }
+     }
+    ]
+   },
+   "PHASEAssetRegistry": {
+    "methods": [
+     {
+      "args": {
+       "1": {
+        "type_modifier": "o"
+       }
+      },
+      "class_method": false,
+      "selector": "registerGlobalMetaParameter:error:"
+     },
+     {
+      "args": {
+       "2": {
+        "type_modifier": "o"
+       }
+      },
+      "class_method": false,
+      "selector": "registerSoundEventAssetWithRootNode:identifier:error:"
+     },
+     {
+      "args": {
+       "5": {
+        "type_modifier": "o"
+       }
+      },
+      "class_method": false,
+      "selector": "registerSoundAssetAtURL:identifier:assetType:channelLayout:normalizationMode:error:"
+     },
+     {
+      "args": {
+       "4": {
+        "type_modifier": "o"
+       }
+      },
+      "class_method": false,
+      "selector": "registerSoundAssetWithData:identifier:format:normalizationMode:error:"
+     }
+    ]
+   },
+   "PHASEEngine": {
+    "methods": [
+     {
+      "args": {
+       "0": {
+        "type_modifier": "o"
+       }
+      },
+      "class_method": false,
+      "selector": "startAndReturnError:"
+     }
+    ]
+   },
+   "PHASEObject": {
+    "methods": [
+     {
+      "args": {
+       "1": {
+        "type_modifier": "o"
+       }
+      },
+      "class_method": false,
+      "selector": "addChild:error:"
+     }
+    ]
+   },
+   "PHASESoundEvent": {
+    "methods": [
+     {
+      "args": {
+       "3": {
+        "type_modifier": "o"
+       }
+      },
+      "class_method": false,
+      "selector": "initWithEngine:assetIdentifier:mixerParameters:error:"
+     },
+     {
+      "args": {
+       "2": {
+        "type_modifier": "o"
+       }
+      },
+      "class_method": false,
+      "selector": "initWithEngine:assetIdentifier:error:"
+     }
+    ]
+   }
+  },
+  "formal_protocols": {},
+  "functions": {},
+  "informal_protocols": {}
+ }
+}
