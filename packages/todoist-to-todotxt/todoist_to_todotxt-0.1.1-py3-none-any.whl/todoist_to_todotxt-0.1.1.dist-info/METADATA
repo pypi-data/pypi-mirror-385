@@ -1,0 +1,90 @@
+Metadata-Version: 2.4
+Name: todoist-to-todotxt
+Version: 0.1.1
+Summary: Save tasks from Todoist to todo.txt format
+Author: Anton Larionov
+License: MIT License
+        
+        Copyright (c) 2023 Anton Larionov
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: Homepage, https://github.com/anlar/todoist-to-todotxt
+Project-URL: Repository, https://github.com/anlar/todoist-to-todotxt
+Project-URL: Bug Tracker, https://github.com/anlar/todoist-to-todotxt/issues
+Keywords: todoist,todo.txt
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE.txt
+Requires-Dist: requests
+Dynamic: license-file
+
+# todoist-to-todotxt
+
+![PyPI - Version](https://img.shields.io/pypi/v/todoist-to-todotxt)
+
+Script to save tasks from Todoist to todo.txt format.
+
+It provides support for export of limited set of Todoist's task fields, particularly:
+
+- Priority
+- Creation date
+- Task name and description (merged together into one line)
+- Project and section (merged together)
+- Labels
+- Due date
+- Recurrence date
+- Deadline date
+
+Definitely NOT supported:
+
+- Sub-tasks (all tasks exported in flat list, so there will be no tree-like structure)
+- Completed tasks (it is possible to load only active tasks via API)
+- Due time (only due date part saved)
+- Comments
+- Task order number
+- Creator and assignee (assuming that it is used for personal todo-list)
+- Reminders
+- Location
+
+Above list may be not complete, as there could be features in Todoist I'm not aware of.
+
+## Install
+
+Use `pipx` or `pip` to install:
+
+    $ pipx install todoist-to-todotxt
+
+    $ pip install todoist-to-todotxt
+
+## Usage
+
+Generate API token in your Todoist account [Integrations settings](https://todoist.com/app/settings/integrations/developer).
+
+Launch script with your API token (it will print tasks in todo.txt format to stdout):
+
+    $ todoist-to-todotxt <TODOIST-TOKEN>
+
+## Contributing
+
+Feel free to open bug reports and send pull requests.
+
