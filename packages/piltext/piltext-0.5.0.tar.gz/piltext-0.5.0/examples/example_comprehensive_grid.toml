@@ -1,0 +1,127 @@
+# Comprehensive grid example with plots, dials, squares, and text
+# Demonstrates all visualization types in a single grid layout
+
+[fonts]
+default_size = 12
+directories = ["/usr/share/fonts/truetype/lato"]
+default_name = "Lato-Medium.ttf"
+
+[image]
+width = 1400
+height = 900
+mode = "RGB"
+background = "white"
+
+[grid]
+rows = 3
+columns = 3
+margin_x = 15
+margin_y = 15
+
+# Row 1, Col 1: Line Plot
+[[grid.texts]]
+start = [0, 0]
+
+[grid.texts.plot]
+data = [20, 22, 19, 25, 23, 27, 24, 28, 26]
+type = "line"
+title = "Revenue Trend"
+show_grid = true
+fg_color = "#4CAF50"
+line_width = 2
+
+# Row 1, Col 2: Dial
+[[grid.texts]]
+start = [0, 1]
+
+[grid.texts.dial]
+percentage = 0.75
+size = 250
+bg_color = "white"
+fg_color = "#2196F3"
+track_color = "#e0e0e0"
+thickness = 20
+show_value = true
+show_needle = true
+start_angle = -135
+end_angle = 135
+
+# Row 1, Col 3: Squares
+[[grid.texts]]
+start = [0, 2]
+
+[grid.texts.squares]
+percentage = 0.60
+rows = 12
+columns = 12
+bg_color = "white"
+fg_color = "#FF9800"
+empty_color = "#f0f0f0"
+gap = 2
+border_width = 0
+
+# Row 2, Col 1: Bar Chart
+[[grid.texts]]
+start = [1, 0]
+
+[grid.texts.plot]
+data = [10, 15, 13, 18, 16, 14, 20, 17, 22]
+type = "bar"
+title = "Monthly Sales"
+show_grid = true
+fg_color = "#9C27B0"
+
+# Row 2, Col 2: Text Label
+[[grid.texts]]
+start = [1, 1]
+text = "Dashboard\n2024"
+anchor = "mm"
+font_size = 32
+fill = "#333333"
+
+# Row 2, Col 3: Scatter Plot
+[[grid.texts]]
+start = [1, 2]
+
+[grid.texts.plot]
+data = [[1, 5], [2, 7], [3, 4], [4, 8], [5, 6], [6, 9], [7, 7], [8, 10]]
+type = "scatter"
+title = "Data Points"
+show_grid = true
+fg_color = "#F44336"
+marker_size = 5
+
+# Row 3, Col 1: Text Label
+[[grid.texts]]
+start = [2, 0]
+text = "75% Complete"
+anchor = "mm"
+font_size = 24
+fill = "#2196F3"
+
+# Row 3, Col 2: Multi-Series Plot
+[[grid.texts]]
+start = [2, 1]
+
+[grid.texts.plot]
+type = "line"
+title = "Comparison"
+show_legend = true
+show_grid = true
+line_width = 2
+
+[grid.texts.plot.series.A]
+data = [15, 18, 16, 20, 22, 21, 24]
+color = "#4CAF50"
+
+[grid.texts.plot.series.B]
+data = [10, 12, 14, 13, 15, 17, 16]
+color = "#2196F3"
+
+# Row 3, Col 3: Text Label
+[[grid.texts]]
+start = [2, 2]
+text = "60% Capacity"
+anchor = "mm"
+font_size = 24
+fill = "#FF9800"

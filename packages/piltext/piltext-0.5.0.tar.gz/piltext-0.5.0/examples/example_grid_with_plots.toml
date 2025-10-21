@@ -1,0 +1,90 @@
+# Grid with embedded plots example
+# Demonstrates placing line, bar, and scatter plots in grid cells
+
+[fonts]
+default_size = 12
+directories = ["/usr/share/fonts/truetype/lato"]
+default_name = "Lato-Medium.ttf"
+
+[image]
+width = 1200
+height = 800
+mode = "RGB"
+background = "white"
+
+[grid]
+rows = 2
+columns = 3
+margin_x = 20
+margin_y = 20
+
+# Top-left: Line plot
+[[grid.texts]]
+start = [0, 0]
+
+[grid.texts.plot]
+data = [20, 22, 19, 25, 23, 27, 24, 28]
+type = "line"
+show_grid = false
+show_axis = false
+fg_color = "#4CAF50"
+line_width = 2
+marker_size = 0
+
+# Top-middle: Bar chart
+[[grid.texts]]
+start = [0, 1]
+
+[grid.texts.plot]
+data = [10, 15, 13, 18, 16, 14, 20]
+type = "bar"
+title = "Bar Chart"
+show_grid = true
+fg_color = "#2196F3"
+
+# Top-right: Scatter plot
+[[grid.texts]]
+start = [0, 2]
+
+[grid.texts.plot]
+data = [[1, 5], [2, 7], [3, 4], [4, 8], [5, 6], [6, 9], [7, 7]]
+type = "scatter"
+title = "Scatter Plot"
+show_grid = true
+fg_color = "#FF5722"
+marker_size = 4
+
+# Bottom-left: Text label
+[[grid.texts]]
+start = [1, 0]
+text = "Revenue Trend"
+anchor = "mm"
+font_size = 24
+fill = "#333333"
+
+# Bottom-middle: Multi-series plot
+[[grid.texts]]
+start = [1, 1]
+
+[grid.texts.plot]
+type = "line"
+title = "Temperature vs Humidity"
+show_legend = true
+show_grid = true
+line_width = 2
+
+[grid.texts.plot.series.Temp]
+data = [20, 22, 21, 23, 24, 25, 26]
+color = "#FF5722"
+
+[grid.texts.plot.series.Humid]
+data = [60, 55, 58, 52, 50, 48, 45]
+color = "#2196F3"
+
+# Bottom-right: Text label
+[[grid.texts]]
+start = [1, 2]
+text = "Sales Data"
+anchor = "mm"
+font_size = 24
+fill = "#333333"

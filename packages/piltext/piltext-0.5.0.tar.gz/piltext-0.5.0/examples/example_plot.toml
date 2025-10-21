@@ -1,0 +1,70 @@
+# Plot visualization example
+# Note: Use [plot] for a single plot that can be rendered with CLI
+
+[fonts]
+default_size = 10
+
+# Simple line plot with y-values only (auto-generates x as indices)
+[plot]
+type = "line"
+data = [20, 22, 19, 25, 23, 27, 24]
+data_key = "simple"  # allows: echo '{"simple": [1,2,3,4]}' | jq | piltext render example_plot.toml -a
+width = 400
+height = 300
+title = "Simple Line Plot (Y-Values Only)"
+xlabel = "Index"
+ylabel = "Value"
+show_grid = true
+
+# For more examples, see below (comment out [plot] above and uncomment one):
+
+# Example: Line plot with (x,y) tuples
+# [plot]
+# type = "line"
+# data = [[0, 0], [1, 2], [2, 4], [3, 3], [4, 5], [5, 6]]
+# title = "Line Plot"
+# xlabel = "X Axis"
+# ylabel = "Y Axis"
+# show_grid = true
+
+# Example: Bar chart
+# [plot]
+# type = "bar"
+# data = [[0, 10], [1, 15], [2, 13], [3, 18], [4, 16]]
+# title = "Bar Chart"
+# fg_color = "#2196F3"
+
+# Example: Scatter plot
+# [plot]
+# type = "scatter"
+# data = [[1, 5], [2, 7], [3, 4], [4, 8], [5, 6]]
+# title = "Scatter Plot"
+# marker_size = 5
+# fg_color = "#FF5722"
+
+# Example: Multiple series with custom colors
+# [plot]
+# type = "line"
+# title = "Temperature vs Humidity"
+# xlabel = "Hour"
+# ylabel = "Value"
+# show_legend = true
+# line_width = 2
+# [plot.series.Temperature]
+# data = [[0, 20], [1, 22], [2, 21], [3, 23], [4, 24]]
+# color = "#FF5722"
+# [plot.series.Humidity]
+# data = [[0, 60], [1, 55], [2, 58], [3, 52], [4, 50]]
+# color = "#2196F3"
+
+# Example: Y-values only with multiple series
+# [plot]
+# type = "line"
+# title = "Multiple Series (Y-Values)"
+# show_legend = true
+# [plot.series."Series A"]
+# data = [10, 15, 13, 18, 16]
+# color = "#FF5722"
+# [plot.series."Series B"]
+# data = [8, 12, 15, 14, 17]
+# color = "#2196F3"
