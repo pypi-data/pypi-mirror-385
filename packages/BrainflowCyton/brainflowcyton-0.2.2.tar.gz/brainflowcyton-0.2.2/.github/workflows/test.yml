@@ -1,0 +1,58 @@
+name: Test
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ["3.9", "3.14"]
+        include-audio: [true]
+        # Add one test without audio extra to verify graceful handling
+        include:
+          - os: ubuntu-latest
+            python-version: "3.14"
+            include-audio: false
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v5
+      with:
+        enable-cache: true
+
+    - name: Set up Python ${{ matrix.python-version }}
+      run: uv python install ${{ matrix.python-version }}
+
+    - name: Install system dependencies (Linux)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y portaudio19-dev libportaudio2 libportaudiocpp0
+
+    - name: Install system dependencies (macOS)
+      if: runner.os == 'macOS'
+      run: brew install portaudio
+
+    - name: Install dependencies (with audio)
+      if: matrix.include-audio == true
+      run: uv sync --all-extras --dev
+
+    - name: Install dependencies (without audio)
+      if: matrix.include-audio == false
+      run: uv sync --dev
+
+    - name: Print environment for debugging
+      run: |
+        uv run python --version
+        uv pip list
+
+    - name: Run tests with pytest
+      run: uv run pytest tests/ -v --tb=short
+
+    - name: Test package build
+      run: uv build
