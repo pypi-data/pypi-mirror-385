@@ -1,0 +1,61 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "market-data-core"
+version = "1.2.9"
+description = "Core contracts (protocols, models, errors, settings, telemetry, federation) for market data systems."
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{name="Matt"}]
+dependencies = [
+    # Core has minimal dependencies - only what's needed for contracts
+    "pydantic>=2.7",
+    "python-dotenv>=1.0",  # For settings.from_env()
+    "redis>=5.0,<6",  # Phase 10.0: Redis Streams for event bus
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.2,<9",
+    "pytest-asyncio>=0.23,<1",
+    "ruff>=0.6,<1",
+    "black>=24.8,<25",
+    "mypy>=1.11,<2",
+]
+compat = [
+    # Deprecated/legacy adapters & demo services may rely on these.
+    # These dependencies are isolated from Core contracts.
+    # Will be removed in v2.0 when deprecated modules are fully removed.
+    # Install with: pip install 'market-data-core[compat]'
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "httpx>=0.28,<0.29",
+    "websockets>=12.0",
+    "tenacity>=8.2",
+    "loguru>=0.7",
+    "orjson>=3.10",
+    "prometheus-client>=0.20",
+    "pandas>=2.2.2,<3",
+    "ib_async>=1.0.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E","F","I","UP","B","ARG","C90"]
+exclude = ["venv",".venv",".git","dist","build"]
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+ignore_missing_imports = true
+warn_unused_ignores = true
+disallow_untyped_defs = true
