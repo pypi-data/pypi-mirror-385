@@ -1,0 +1,48 @@
+Metadata-Version: 2.4
+Name: quantizeml
+Version: 1.0.1
+Summary: Base layers and quantization tools
+Home-page: https://doc.brainchipinc.com
+Author: Kevin Tsiknos
+Author-email: ktsiknos@brainchip.com
+Maintainer: Kevin Tsiknos
+Maintainer-email: ktsiknos@brainchip.com
+License: Apache 2.0
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: tf_keras~=2.19.0
+Requires-Dist: onnxruntime==1.19.2
+Requires-Dist: onnxscript~=0.4.0
+Requires-Dist: onnx_ir<=0.1.8
+Requires-Dist: onnxruntime_extensions<0.14.0
+Requires-Dist: scipy
+Provides-Extra: test
+Requires-Dist: pytest; extra == "test"
+Requires-Dist: pytest-rerunfailures; extra == "test"
+Requires-Dist: pytest-console-scripts; extra == "test"
+Requires-Dist: pytest-xdist; extra == "test"
+Requires-Dist: tensorflow_datasets; extra == "test"
+Requires-Dist: keras_hub; extra == "test"
+Provides-Extra: analysis
+Requires-Dist: matplotlib; extra == "analysis"
+Requires-Dist: tensorboardX; extra == "analysis"
+Dynamic: author
+Dynamic: author-email
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: license
+Dynamic: license-file
+Dynamic: maintainer
+Dynamic: maintainer-email
+Dynamic: provides-extra
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+# QuantizeML
+
+Framework for quantizing Deep-learning models.
+
+This supports the quantization using low-bitwidth weights and outputs of CNN models.
