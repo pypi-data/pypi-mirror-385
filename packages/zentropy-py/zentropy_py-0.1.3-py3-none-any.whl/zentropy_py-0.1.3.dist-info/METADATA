@@ -1,0 +1,86 @@
+Metadata-Version: 2.4
+Name: zentropy-py
+Version: 0.1.3
+Summary: A simple client for Zentropy server
+Project-URL: Homepage, https://github.com/mailmug/zentropy-py
+Project-URL: Documentation, https://github.com/mailmug/zentropy-py#readme
+Project-URL: Repository, https://github.com/mailmug/zentropy-py
+Project-URL: Issues, https://github.com/mailmug/zentropy-py/issues
+Author-email: MailMug <info@mailmug.net>
+License: MIT
+Keywords: client,redis,tcp,zentropy,zig
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.8
+Provides-Extra: dev
+Requires-Dist: black>=23.0.0; extra == 'dev'
+Requires-Dist: build>=0.10.0; extra == 'dev'
+Requires-Dist: flake8>=6.0.0; extra == 'dev'
+Requires-Dist: isort>=5.12.0; extra == 'dev'
+Requires-Dist: mypy>=1.0.0; extra == 'dev'
+Requires-Dist: pytest-cov>=4.0.0; extra == 'dev'
+Requires-Dist: pytest-mock>=3.10.0; extra == 'dev'
+Requires-Dist: pytest>=7.0.0; extra == 'dev'
+Requires-Dist: twine>=4.0.0; extra == 'dev'
+Description-Content-Type: text/markdown
+
+# Zentropy Python Client
+
+A lightweight Python client for **[Zentropy](https://github.com/mailmug/zentropy)** — a fast, Redis-like key-value store with authentication, Unix socket support, and a simple text-based protocol.
+
+---
+
+## 🚀 Installation
+
+Install from **PyPI**:
+
+```bash
+pip install zentropy-py
+```
+
+## 🧠 Usage
+### Basic Example
+
+```python
+from zentropy import Client
+
+client = Client(password="testpass")
+
+client.set("foo", "bar")
+print(client.get("foo"))  # Output: bar
+
+client.close()
+```
+
+## 🔐 Authentication
+```python
+client = Client(host='127.0.0.1', port=6383, password='password here')
+```
+
+## ⚙️ Supported Commands
+
+| Method            | Command  | Description                 |
+| ----------------- | -------- | --------------------------- |
+| `auth(password)`  | `AUTH`   | Authenticate the connection |
+| `set(key, value)` | `SET`    | Set a key-value pair        |
+| `get(key)`        | `GET`    | Retrieve a value            |
+| `delete(key)`     | `DELETE` | Remove a key                |
+| `exists(key)`     | `EXISTS` | Check if a key exists       |
+| `ping()`          | `PING`   | Test connectivity           |
+| `close()`         | –        | Close the connection        |
+
+
+## Example
+
+```python
+client.set("hello", "world")
+print(client.exists("hello"))  # True
+print(client.get("hello"))     # "world"
+client.delete("hello")
+```
+
+
+### 🤝 Contributing
+
+Contributions are welcome! 🎉
