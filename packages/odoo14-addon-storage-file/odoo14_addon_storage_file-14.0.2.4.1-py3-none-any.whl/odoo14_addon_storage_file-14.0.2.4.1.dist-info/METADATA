@@ -1,0 +1,59 @@
+Metadata-Version: 2.1
+Name: odoo14-addon-storage_file
+Version: 14.0.2.4.1
+Summary: Storage file in storage backend
+Home-page: https://github.com/OCA/storage
+Author: Akretion, Odoo Community Association (OCA)
+Author-email: support@odoo-community.org
+License: LGPL-3
+Classifier: Programming Language :: Python
+Classifier: Framework :: Odoo
+Classifier: Framework :: Odoo :: 14.0
+Classifier: License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)
+Classifier: Development Status :: 5 - Production/Stable
+Requires-Python: >=3.6
+Requires-Dist: odoo14-addon-storage-backend
+Requires-Dist: odoo<14.1dev,>=14.0a
+Requires-Dist: python-slugify
+
+
+.. image:: https://img.shields.io/badge/licence-LGPL--3-blue.svg
+   :target: http://www.gnu.org/licenses/lgpl-3.0-standalone.html
+   :alt: License: LGPL-3
+
+============
+Storage File
+============
+
+
+External file management depending on Storage Backend module.
+
+It include these features:
+* link to any Odoo model/record
+* store metadata like: checksum, mimetype
+
+Use cases (with help of additionnal modules):
+- store pdf (like invoices) on a file server with high SLA
+- access attachments with read/write on prod environment and only read only on dev / testing
+
+Known issues / Roadmap
+======================
+
+* Update README with the last model of README when migration to v11 in OCA
+* No file deletion / unlink
+
+Credits
+=======
+
+
+Contributors
+------------
+
+* Sebastien Beau <sebastien.beau@akretion.com>
+* Raphaël Reverdy <raphael.reverdy@akretion.com>
+
+
+Maintainer
+----------
+
+* Akretion
