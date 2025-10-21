@@ -1,0 +1,68 @@
+[build-system]
+requires = ["setuptools>=64", "setuptools-scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+version_file = "facadedevice/_version.py"
+
+[project]
+name = "facadedevice"
+dynamic = ["version"]
+authors = [
+  {name = "Vincent Michel", email = "vincent.michel@esrf.fr"},
+]
+maintainers = [
+  {name = "MAX IV KITS Software", email = "kits-sw@maxiv.lu.se"}
+]
+description = "Provide a descriptive interface for reactive high-level Tango devices."
+readme = "README.md"
+dependencies = [
+    "pytango>=9.2.1",
+    "numpy>=1.8",
+]
+requires-python = ">=3.6"
+license = {file = "LICENSE.txt"}
+classifiers = [
+  "Intended Audience :: Developers",
+  "Topic :: Scientific/Engineering",
+  "Topic :: Software Development :: Libraries",
+  "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.6",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+]
+
+[project.optional-dependencies]
+doc = [
+    "sphinx",
+    "sphinx-rtd-theme"
+]
+tests = [
+    "pytest",
+    "pytest-forked",
+    "pytest-cov",
+]
+
+[project.urls]
+Repository = "https://gitlab.com/MaxIV/tango-facadedevice"
+
+[tool.pytest.ini_options]
+addopts = "-v --forked --cov=facadedevice --cov-report term-missing --cov-report html --junitxml=report.xml"
+
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E4",  # Import
+    "E7",  # Statement
+    "E9",  # Runtime
+    # Pyflakes
+    "F",
+    # isort
+    "I",
+]
