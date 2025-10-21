@@ -1,0 +1,56 @@
+Metadata-Version: 2.4
+Name: agent-skills-mcp
+Version: 0.1.2
+Summary: Load Agent Skills for your agents
+Project-URL: Homepage, https://github.com/DiscreteTom/agent-skills-mcp
+Project-URL: Repository, https://github.com/DiscreteTom/agent-skills-mcp
+Project-URL: Issues, https://github.com/DiscreteTom/agent-skills-mcp/issues
+Author-email: DiscreteTom <discrete_tom@outlook.com>
+License: MIT
+License-File: LICENSE
+Keywords: agent-skills,mcp,model-context-protocol,tools
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.13
+Requires-Dist: fastmcp>=2.12.4
+Requires-Dist: python-frontmatter>=1.1.0
+Description-Content-Type: text/markdown
+
+# agent-skills-mcp - Load [Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills) for your agents
+
+[![PyPI - Version](https://img.shields.io/pypi/v/agent-skills-mcp)](https://pypi.org/project/agent-skills-mcp/)
+![Codecov](https://img.shields.io/codecov/c/github/DiscreteTom/agent-skills-mcp)
+
+## Usage
+
+### Installation
+
+[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=skills&config=eyJjb21tYW5kIjoidXZ4IGFnZW50LXNraWxscy1tY3AifQ%3D%3D)
+
+Add to your MCP client configuration:
+
+```json
+{
+  "mcpServers": {
+    "skills": {
+      "command": "uvx",
+      "args": ["agent-skills-mcp"]
+    }
+  }
+}
+```
+
+### Modes
+
+- `system_prompt`: Include skill information in MCP instructions (recommended if your agent regards MCP server instructions)
+- `tool`: Register skills as MCP tools (fallback mode since many agents ignore MCP server instructions)
+
+### Environment Variables
+
+- `SKILL_FOLDER`: Path to folder containing skill markdown files (optional, defaults to `skills`)
+- `MODE`: Operating mode (optional, defaults to `tool`)
+
+## [CHANGELOG](./CHANGELOG.md)
