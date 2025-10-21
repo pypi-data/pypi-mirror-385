@@ -1,0 +1,310 @@
+Metadata-Version: 2.4
+Name: fxconverter
+Version: 1.0.1
+Summary: A modern, production-ready currency converter with live exchange rates
+Author-email: NtohnwiBih <mforbesintohnwi@gmail.com>
+License: MIT
+Project-URL: Homepage, https://github.com/NtohnwiBih/fxconverter
+Project-URL: Documentation, https://github.com/NtohnwiBih/fxconverter#readme
+Project-URL: Repository, https://github.com/NtohnwiBih/fxconverter
+Project-URL: Bug Tracker, https://github.com/NtohnwiBih/fxconverter/issues
+Keywords: currency,converter,exchange,rates,forex,finance
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Office/Business :: Financial
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: requests>=2.25.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.0.0; extra == "dev"
+Requires-Dist: black>=23.0.0; extra == "dev"
+Requires-Dist: flake8>=6.0.0; extra == "dev"
+Requires-Dist: mypy>=1.0.0; extra == "dev"
+Requires-Dist: build>=0.10.0; extra == "dev"
+Requires-Dist: twine>=4.0.0; extra == "dev"
+Dynamic: license-file
+Dynamic: requires-python
+
+# 💱 fxconverter
+
+[![PyPI version](https://badge.fury.io/py/fxconverter.svg)](https://badge.fury.io/py/fxconverter)
+[![Python Support](https://img.shields.io/pypi/pyversions/fxconverter.svg)](https://pypi.org/project/fxconverter/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Tests](https://github.com/NtohnwiBih/fxconverter/workflows/Tests/badge.svg)](https://github.com/NtohnwiBih/fxconverter/actions)
+
+A modern, Python package for currency conversion with live exchange rates.
+
+## ✨ Features
+
+- 🌍 **Live Exchange Rates** - Real-time currency conversion
+- 💾 **Smart Caching** - Thread-safe caching with configurable TTL
+- 🎯 **High Precision** - Decimal arithmetic for accurate calculations
+- 🔌 **Extensible** - Pluggable provider system
+- 🛡️ **Type Safe** - Full type hints support
+- 📦 **Zero Config** - Works out of the box
+- 🧪 **Well Tested** - Comprehensive test coverage
+
+## 📦 Installation
+
+```bash
+pip install fxconverter
+```
+
+## 🚀 Quick Start
+
+```python
+from fxconverter import CurrencyConverter
+
+# Initialize converter
+converter = CurrencyConverter()
+
+# Convert currency
+amount_eur = converter.convert(100, 'USD', 'EUR')
+print(f"100 USD = {amount_eur} EUR")
+
+# Get exchange rate
+rate = converter.get_rate('USD', 'GBP')
+print(f"1 USD = {rate} GBP")
+
+# List supported currencies
+currencies = converter.get_supported_currencies()
+print(f"Supported: {len(currencies)} currencies")
+```
+
+## 📖 Usage Examples
+
+### Basic Conversion
+
+```python
+from fxconverter import CurrencyConverter
+
+converter = CurrencyConverter()
+
+# Simple conversion
+result = converter.convert(100, 'USD', 'EUR')
+print(result)  # Decimal('85.23')
+```
+
+### Custom Configuration
+
+```python
+from fxconverter import CurrencyConverter
+
+# Configure cache TTL and precision
+converter = CurrencyConverter(
+    cache_ttl=1800,  # Cache for 30 minutes
+    precision=4       # 4 decimal places
+)
+
+result = converter.convert(100, 'USD', 'JPY')
+print(result)  # Decimal('11050.2500')
+```
+
+### Disable Caching
+
+```python
+# Fetch fresh rates every time
+result = converter.convert(100, 'USD', 'EUR', use_cache=False)
+```
+
+### Custom Provider
+
+```python
+from fxconverter import CurrencyConverter
+from fxconverter.providers import RateProvider
+
+class MyCustomProvider(RateProvider):
+    def get_rates(self, base_currency: str):
+        # Your implementation
+        return {'EUR': 0.85, 'GBP': 0.73}
+    
+    def get_supported_currencies(self):
+        return {'USD', 'EUR', 'GBP'}
+
+converter = CurrencyConverter(provider=MyCustomProvider())
+```
+
+### Error Handling
+
+```python
+from fxconverter import CurrencyConverter
+from fxconverter.exceptions import InvalidCurrencyError, RateFetchError
+
+converter = CurrencyConverter()
+
+try:
+    result = converter.convert(100, 'USD', 'INVALID')
+except InvalidCurrencyError as e:
+    print(f"Invalid currency: {e}")
+except RateFetchError as e:
+    print(f"Failed to fetch rates: {e}")
+```
+
+## 🔧 API Reference
+
+### `CurrencyConverter`
+
+Main class for currency conversion.
+
+#### Constructor
+
+```python
+CurrencyConverter(
+    provider: Optional[RateProvider] = None,
+    cache_ttl: int = 3600,
+    precision: int = 2
+)
+```
+
+**Parameters:**
+- `provider`: Exchange rate provider (defaults to ExchangeRateAPI)
+- `cache_ttl`: Cache time-to-live in seconds (default: 3600)
+- `precision`: Decimal places for results (default: 2)
+
+#### Methods
+
+**`convert(amount, from_currency, to_currency, use_cache=True)`**
+
+Convert amount from one currency to another.
+
+- **Returns:** `Decimal` - Converted amount
+- **Raises:** `InvalidCurrencyError`, `RateFetchError`
+
+**`get_rate(from_currency, to_currency, use_cache=True)`**
+
+Get exchange rate between two currencies.
+
+- **Returns:** `Decimal` - Exchange rate
+- **Raises:** `InvalidCurrencyError`, `RateFetchError`
+
+**`get_supported_currencies()`**
+
+Get all supported currency codes.
+
+- **Returns:** `set` - Set of currency codes
+
+**`clear_cache()`**
+
+Clear the exchange rate cache.
+
+## 🧪 Development
+
+### Setup Development Environment
+
+```bash
+# Clone repository
+git clone https://github.com/NtohnwiBih/fxconverter.git
+cd fxconverter
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install development dependencies
+pip install -e ".[dev]"
+```
+
+### Running Tests
+
+```bash
+# Run all tests
+pytest
+
+# Run with coverage
+pytest --cov=fxconverter --cov-report=html
+
+# Run specific test file
+pytest tests/test_converter.py
+```
+
+### Code Quality
+
+```bash
+# Format code
+black src/ tests/
+
+# Lint code
+flake8 src/ tests/
+
+# Type checking
+mypy src/
+```
+
+### Building Package
+
+```bash
+# Build distribution
+python -m build
+
+# Check distribution
+twine check dist/*
+```
+
+### Publishing to PyPI
+
+```bash
+# Test PyPI (recommended first)
+twine upload --repository testpypi dist/*
+
+# Production PyPI
+twine upload dist/*
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these guidelines:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+### Contribution Guidelines
+
+- Write tests for new features
+- Maintain code coverage above 90%
+- Follow PEP 8 style guidelines
+- Update documentation
+- Add entries to CHANGELOG.md
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Exchange rates provided by [exchangerate-api.com](https://www.exchangerate-api.com/)
+- Built with modern Python best practices
+
+## 📞 Support
+
+- 📫 Issues: [GitHub Issues](https://github.com/NtohnwiBih/fxconverter/issues)
+- 📧 Email: mforbesintohn@gmail.com
+- 💬 Discussions: [GitHub Discussions](https://github.com/NtohnwiBih/fxconverter/discussions)
+
+## 🗺️ Roadmap
+
+- [ ] Support for additional rate providers
+- [ ] Historical exchange rates
+- [ ] Cryptocurrency support
+- [ ] CLI tool
+- [ ] Async API support
+
+## ⭐ Star History
+
+If you find this package useful, please consider giving it a star on GitHub!
+
+---
+
+Made with ❤️ by [Ntohnwi Bih Mforbesi](https://github.com/NtohnwiBih)
