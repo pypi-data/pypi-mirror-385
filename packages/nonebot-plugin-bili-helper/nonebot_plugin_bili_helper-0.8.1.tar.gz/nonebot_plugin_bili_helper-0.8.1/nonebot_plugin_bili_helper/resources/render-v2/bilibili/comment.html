@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+
+<meta charset="utf-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1"
+/>
+
+<body>
+  <script src="../../libs/template-web.js"></script>
+  <script src="../@libs/jsonp.js"></script>
+  <script src="../@libs/scripts.js"></script>
+  <script src="../@libs/renderer.js"></script>
+  <script src="../@formatters/bilibili.js"></script>
+  <script type="module">
+
+    const {
+      fetchJsonP,
+    } = window.JsonPModule;
+    const {
+      cleanupBeforeRender,
+      loadTemplates,
+      cleanupAfterRender,
+    } = window.ScriptsModule;
+    const {
+      Renderer,
+    } = window.RendererModule;
+    const {
+      numberReadable,
+      bilibiliReplies,
+    } = window.FormatterBilibili;
+
+    class PageComment {
+      templateList = [
+        '/resources/template/bilibili/html/comment.html',
+        '/resources/template/extend/html/default.html',
+      ];
+
+      isPrepared = Promise.resolve(false);
+
+      url;
+      isMock = false;
+
+      constructor() {
+        this.url = new URL(window.location.href);
+        this.isMock = Boolean(this.url.searchParams.get('mock'));
+      }
+
+      async prepare() {
+        if (await this.isPrepared) return;
+        this.isPrepared = new Promise((resolve) => {
+          cleanupBeforeRender();
+          const timeStart = performance.now();
+          console.log('Loading templates...');
+          return loadTemplates(this.templateList, () => {
+            console.log('Templates loaded:', performance.now() - timeStart, 'ms');
+          }).then(() => resolve(true));
+        });
+        return this.isPrepared;
+      }
+
+      async fetchData() {
+        if (this.isMock) {
+          const videoInfo = await fetchJsonP('../../mocks/bilibili-jsonp/video_info.js');
+          const comments = await fetchJsonP('../../mocks/bilibili-jsonp/comments.js');
+          comments.data.replies = comments.data.replies.slice(0, 3);
+          return { videoInfo, comments };
+        } else {
+          const bvid = this.url.searchParams.get('bvid');
+          if (!bvid) throw new Error('bvid is required');
+          const videoInfo = await fetch(`/video_info?bvid=${bvid}`).then(res => res.json());
+          if (videoInfo.code !== 0) throw new Error(`获取视频信息失败: ${videoInfo.message}`);
+          const oid = videoInfo.data.aid;
+          const comments = await fetch(`/comments?oid=${oid}&type=1&next_offset=0`).then(res => res.json());
+          if (comments.code !== 0) throw new Error(`获取评论失败: ${comments.message}`);
+          comments.data.replies = comments.data.replies.slice(0, 3);
+          return { videoInfo, comments };
+        }
+        throw new Error('Not implemented');
+      }
+
+      async render() {
+        await this.prepare();
+
+        const nowHour = new Date().getHours();
+        const defaultTheme = (nowHour >= 7 && nowHour <= 19) ? 'light' : 'dark';
+
+        try {
+          console.log('Rendering page...');
+          const {
+            videoInfo,
+            comments,
+          } = await this.fetchData();
+          const theme = this.url.searchParams.get('theme') || defaultTheme;
+          const shareUrl = `https://b23.tv/${videoInfo.data.bvid}`;
+          const renderer = new Renderer('bilibili/comment', {
+            renderScale: 100,
+          });
+          const data = {
+            // _res_path: `${window.location.origin}/resources/`,
+            _res_path: '../../',
+            Type: '视频',
+            CommentsData: bilibiliReplies(comments, { theme }),
+            CommentLength: numberReadable(videoInfo.data.stat.reply, '无法获取'),
+            share_url: shareUrl,
+            Clarity: '?',
+            VideoSize: '?',
+            ImageLength: 0,
+            shareurl: shareUrl,
+          };
+          console.log('Render data:', data);
+          const html = renderer.render(data, { theme });
+          if (this.isMock) {
+            const replaceScriptQueue = [];
+            const replaceNode = (src, dest) => {
+              const scripts = Array.from(src.querySelectorAll('script'));
+              // console.log('scripts:', scripts);
+              scripts.forEach((s) => {
+                s.parentNode.removeChild(s);
+                replaceScriptQueue.push([src, s]);
+              });
+              dest.replaceWith(src);
+            };
+            const doc = new DOMParser().parseFromString(html, 'text/html');
+            replaceNode(doc.head, document.head);
+            replaceNode(doc.body, document.body);
+            // document.head.replaceWith(doc.head);
+            // document.body.replaceWith(doc.body);
+            // Array.from(doc.head.children).forEach(el => document.head.appendChild(el));
+            // Array.from(doc.body.children).forEach(el => document.body.appendChild(el));
+            const addScript = (p, s) => new Promise((resolve, reject) => {
+              const ns = document.createElement('script');
+              if (s.src) {
+                ns.src = s.src;
+                ns.onload = () => resolve(true);
+                ns.onerror = () => reject(new Error(`Failed to load script: ${ns.src || 'inline script'}`));
+              } else {
+                ns.textContent = s.textContent;
+                setTimeout(() => resolve(true), 0);
+              }
+              p.appendChild(ns);
+            });
+            window.setTimeout(() => {
+              replaceScriptQueue.reduce((p, [t, s]) => p.then(() => addScript(t, s)), Promise.resolve())
+                .then(() => {
+                  window.onload?.();
+                });
+              // scripts.forEach((s) => {
+              //   // src.appendChild(s);
+              // });
+            }, 0);
+          } else {
+            this.createScript('rendered-html', 'html', html);
+            this.createScript('rendered-result', 'json', {
+              code: 0,
+              message: '成功',
+            });
+          }
+          console.log('Page rendered:');
+          console.log(html);
+          if (!this.isMock) {
+            cleanupAfterRender();
+          }
+        } catch (ex) {
+          console.error('Error rendering page:', ex);
+          this.createScript('render-result', 'json', {
+            code: 1,
+            message: ex.message,
+          });
+        }
+      }
+
+      createScript(id, type, data) {
+        const pre = document.createElement('pre');
+        const box = document.createElement('code');
+        box.id = id;
+        box.setAttribute('data-type', type);
+        box.textContent = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
+        pre.appendChild(box);
+        document.body.appendChild(pre);
+      }
+    }
+
+    async function main() {
+      const page = new PageComment();
+      await page.render();
+    }
+
+    main();
+  </script>
+</body>
