@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "halsteadpp"
+version = "0.1.0"
+description = "A Python tool for analyzing C code complexity using Halstead and Cyclomatic metrics."
+readme = "README.md"
+license = { text = "MIT License" }
+authors = [
+    { name = "Arthur Morgado Teixeira", email = "arthurmorgado7751@gmail.com" }
+]
+keywords = ["halstead", "complexity", "metrics", "c-code", "pycparser", "rich"]
+requires-python = ">=3.9"
+
+dependencies = [
+    "pycparser>=2.21",
+    "rich>=13.0.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/Morgadineo/Halsteadpp"
+Issues = "https://github.com/Morgadineo/Halsteadpp/issues"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "black",
+    "flake8"
+]
+
+[project.scripts]
+halsteadpp = "halsteadpp.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["halsteadpp*"]
+
+[tool.black]
+line-length = 88
+target-version = ['py39']
+
