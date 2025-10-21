@@ -1,0 +1,36 @@
+[workspace]
+resolver = "2"
+members = ["patronus", "python"]
+
+[workspace.package]
+edition = "2024"
+authors = ["Kevin Laeufer <laeufer@berkeley.edu>"]
+repository = "https://github.com/cucapra/patronus"
+readme = "Readme.md"
+license = "BSD-3-Clause"
+rust-version = "1.85.0"
+# used by main patronus library and python bindings
+version = "0.34.2"
+
+[workspace.dependencies]
+rustc-hash = "2.x"
+baa = { version = "0.17.1", features = ["rand1"] }
+egg = "0.9.5"
+regex = "1.11.1"
+boolean_expression = "0.4.4"
+clap =  { version = "4.x", features = ["derive"] }
+patronus = {path = "patronus"}
+thiserror = "2.0.6"
+
+# speed up execution of tests using insta
+[profile.dev.package]
+insta.opt-level = 3
+
+# include debug information for profiling
+[profile.release]
+debug = true
+
+# for samply: https://github.com/mstange/samply/?tab=readme-ov-file#turn-on-debug-info-for-full-stacks
+[profile.profiling]
+inherits = "release"
+debug = true
