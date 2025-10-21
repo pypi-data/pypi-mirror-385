@@ -1,0 +1,189 @@
+
+
+Consumpton table first
+
+Track charge: at each time charge = connectivity and bett space (+ space for available)
+discharge =consumption
+
+charger efficiency for network demand?
+
+
+do it per trip
+battery level trigger (below this, will charge)
+
+then max power or spread
+
+How to deal with shift to next day? 
+Trip of prior day might correlate with next day
+    
+
+bank holidays
+holiday trips per year?
+
+
+
+
+
+in requirements.txt
+tomli >= 1.1.0 ; python_version < "3.11" 
+
+ESDL compatibility (+ESSIM?)
+Chapter on working as a provider/with other models (optimisers, e.g.)
+Collection/combination of reference profiles: Can optimiser help choose split?
+Jpurnal of software engineering or other?
+
+
+Advanced CODEC/socio (combine with optimising work?)
+Mopo color palette?
+Use logos (ChaProEV and Mopo in readme)
+
+
+Run weather factors in DB (and pickle?)
+
+SOLAR EFFICIENCY !
+
+            print('Do solar panel efficiency')
+
+            print('Avoid swap by arranging before?')
+            print('And explain/improve in all hourly')
+            print('Clarify what theperature efficiency of vehicles is')
+            print('Test leg.electricity_use_kWh')
+            print('Implement road and hour in day factors')
+            print('Go through class definitions (espcially Trip')
+            print('Day start hour in one place?')
+            print('Fast/station charging')
+            print('Add time fator to location charging price?')
+            print('Connectivity can vary with time? (e.g. due to higher occupancy')
+            print('Max allowed charging time?')
+
+            PV library Sandia (PV-lib)
+
+https://pvpmc.sandia.gov/applications/pv_lib-toolbox/
+
+Charging point efficiency factor per location and impact on from_grib_to_dataframe
+
+Shading + 890 kWh/kWp in Nll rule of thumb+ Temp (ambient+20)-25 --> 0.5% drop per unit_conversions
+Soalr moves: rondomize/spread journeys and such
+
+Where to write computed trip properties (at least non-charge ones, such as location, but maybe also these too)
+In scenario_trips, or elsewhere?
+
+Describe connection to optimisation model
+Share cookbooj=k with ETS team (focus on some functions, such as SQL query writer)
+electricity price: Add (option) for a time correction factor (equal to 1 if not given?)
+
+Density/distribution of building types (houses, work, malls, etc) per zone (e.g.NUTS3)
+
+ESDL in Mopo?
+
+Monte-Carlo/ randomize input (scenarios)
+PV from DTU (and other data, see Matti's presentation)
+
+Reference values DB for people to use in other models (SpineOpt, etc): Maybe add reading functions (or structure, matchin SPINE)
+Charging costs in aggregates
+Have pricing/desirability scaling/flexibility (e.g. charge if need/price reaches a theshold, or use a function, may add desirability to it)
+
+Map plot of kilometrage, charging costs, etc. per country?
+
+Couple to CODEC?
+
+
+Report to Mikael (and/or run results?) for his student
+
+BAG data
+
+home_home
+home_street
+other vehicles
+output 1/1 to 31/12 (option)
+Station users
+speed up using day types only (option)
+QUantities for optimisers
+calendar year (2015 for OPera)
+combine with urban strategy
+case study
+paper
+Modulation 
+every x days
+sun and other prefeence factors for a given day (set in advance?)     
+
+print('Iterate over cases? At least as a separate fucntion')
+    # writing.write_scenario_parameters(scenario)
+    # weather.setup_weather( scenario)
+    # legs, vehicles, legs, trips = define.declare_all_instances(
+    #     scenario)
+
+    # run_trip_probabilities = (
+    #     mobility.get_run_trip_probabilities(scenario)
+    # )
+    # Histograms!
+
+    # Spillover at vans too Or maybe the spillover is also for mobility
+
+    print('Match en required fo next and total')
+    print('Recap DF')
+    print('Sum over locations ofenergy for next?')
+    print('Other vehicles')
+    print('Trips to keep memory')
+    print('Bus percent of time in route at bus stops')
+    print('Other quantities')
+    # print('Label min and max for btt space and energy fro next leg')
+    # print('Aggregates: KMs and cons per trip, day type (?) and total')
+    # print(
+    #     'Aggregates: Stats (mean, min, max) of Charging power (kW),
+    # Driving%, Connected %, Batt space, batt charge level,
+    # Maximal delivered power (kW),
+    # Percentage of maximal delivered power used (%),
+    # Minimal delivered power (kW)'
+    # )
+    # print(
+    #     'Data for Tulipa/COMPETES Connected (%)	Charging Power (kW)
+    # Charging Profile	Energy_demand_for_next_leg (kWh)
+    # Energy_demand_for_next_leg (as percent of total demand)
+    # \Maximal delivered power (kW)
+    # Percentage of maximal power used(%)	Minimal deliverd power (kW) '
+    # )
+    # print(
+    #     'Full data too? Or per location, with one table per,
+    # and have sumtable 9or sum in Table?'
+    # )
+    print('Temperature effect')
+    print('PVs from PVlib')
+    print('Fast chargers')
+    print('Speedup per day type (option if using mob module)')
+    print('recap DF?')
+    print('Check connectivity')
+    print('Clarify charge and power! for drawn')
+    # print(
+    #     'Minimal state of charge = energy for next leg
+    # + lowest acceptabl;e level'
+    # )
+    # print(
+    #     'Charging Power and Charge Drawn as separate tables
+    # and the in percentage and such'
+    # )
+    # print(
+    #     'Split home an-home and home-street (or have it as
+    # separate runs with different powers?)'
+    # )
+    # print('Other vehicles')
+    print('Speed up by using day types only calc as option')
+    print('Chargin strategis (basic, adaptive, price (?))')
+    print('Every x days')
+
+    print('Add spillover?')
+    print('Use departures from and arrivals to for location split')
+    print('Difference with zero is % driving')
+    print('Station users might be an issue')
+    print('Assume evenly distributed and shift proportionally')
+    print('Then consumptions (in other module) for both')
+    print('One gives demand for next leg, other cosumed energy')
+    # NEED percentage driving too! Do it in trip mobility matrix
+    # and propagate into future hours if > 1 hour
+    # (and maybe use the opportunity to do that too for trips<1 hour
+    #  that propagate (but add after check))
+    # e.g. 0.25 will be 0.25 for 0.75 and 0.75-x for last 0.25
+    # with x going into next hour
+    # in mobility: value at
+    # [-1] + arrivals(1-travelling) - departures (1-travelling)
+    # but then need to add spillover0

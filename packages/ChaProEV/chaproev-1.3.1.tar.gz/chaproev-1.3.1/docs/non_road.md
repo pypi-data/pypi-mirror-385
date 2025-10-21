@@ -1,0 +1,213 @@
+# Non-road Profiles
+
+This module computes demand profiles for non-road modes of transport.
+
+
+
+
+## Module
+
+### get_non_road_data
+This is the main function of this module. It runs all the functions of this module.
+
+
+### get_Eurostat_balances
+This function gets the energy balances from Eurostat via
+the [Eurostat Python Package](https://pypi.org/project/eurostat/).
+This function runs a function from the Eurostat package to
+get a table, by using the right table code and saving the
+obatined dataframe. This only runs if the user decides to fetch
+the database from Eurostat. See [the documentation about parameters for more details](#eurostat).
+
+
+### get_reference_year_data
+Processes the DataFrame fetched from Eurostat into a DataFrame for the reference year
+modes, energy carriers we want.
+
+The function runs through each mode (defined [here](#modes)) and gets its
+values from the Eurostat table obatined [here](#get_Eurostat_balances) through
+the [get_mode_reference_values function](#get_mode_reference_values).
+The function also sets [the index](#demand_index) and sorts it. 
+
+The function also saves the resulting  reference historical data.
+
+
+
+### get_mode_reference_values
+This function get historical data from the Eurostat DataFrame for a
+given mode.
+We need to translate the energy carrier into [SIEC codes](#get_siec_code)
+and back into [carrier names](#get_name_from_siec_code).
+In between these translations, we slice the source
+Eurostat year according to the [chosen mode and its carriers](#modes),
+the [unit we want to use](#unit_to_use) (actually, we slice
+with TJs, which we convert to PJs), and [reference historical year](#reference_historical_year).
+
+
+### get_siec_code
+Gets the
+[SIEC (Standard international energy product classification code)](https://dd.eionet.europa.eu/vocabulary/eurostat/siec/view), for an energy carrier using a [translation_file](#code_file).
+
+### get_name_from_siec_code
+Gets the name of an energy carrier from its 
+[SIEC (Standard international energy product classification code)](https://dd.eionet.europa.eu/vocabulary/eurostat/siec/view), using a [translation_file](#code_file).
+
+### get_future_demand_values
+Gets the demand for future years.
+This function takes the reference values from [get_mode_reference_values](#get_mode_reference_values)
+and multiplies them by a [growth table][#growth_factors_file].
+
+### get_non_road_profiles
+This function creates the profiles we need.
+It first [loads the scenarios][#load_scenarios] and then runs
+the [profile getting](#get_profile) function for each scenario
+(see the [general explanation about this](parallel_processing.md) )
+
+
+### get_profile
+
+
+## Configuration (non-road.toml)
+
+#### historical_dataframe_name
+The name of the historical data DataFrame.
+
+#### demand_dataframe_name
+The name of the DataFrame that conatins all th edemand data (historical
+and projected)
+
+#### source_folder
+The folder that contains source/input data for a given
+case (so it is under that case name's subfolder).
+
+
+#### output_folder
+The folder where the output files go (in a case name subfolder).
+
+#### demand_index
+Those are the columns we use for the index of the historical demand
+DataFrame.
+
+#### demand_header
+This is the name of the header/column of the historical demand DataFrame
+
+#### reference_historical_year
+The year for which we extract the Eurostat data.
+
+#### growth_factors_file
+The name of the file (in source_folder/case_name) containing
+the growth factors (relative to the [reference historical year](#reference_historical_year))
+for all country/mode/energy carrier combinations in the historical data.
+
+#### growth_factors_index
+The index columns for the growth factor file.
+
+### modes
+For each mode, you need to provide its code and the
+energy carriers it uses.
+Follow the structure of existing elements (see example below), by copying it
+and replacing the name (in this case international-maritime-bunkers)
+by the name of your mode and by using the right code and energy carriers.
+
+```toml
+[modes.international-maritime-bunkers]
+code = 'INTMARB'
+energy_carriers = [
+    'Natural gas',
+    'Motor gasoline (excluding biofuel portion)',
+    'Kerosene-type jet fuel (excluding biofuel portion)',
+    'Gas oil and diesel oil (excluding biofuel portion)',
+    'Fuel oil',
+    'Lubricants',
+    'Other oil products n.e.c.',
+    'Blended biodiesels',
+    'Pure biodiesels',
+    'Other liquid biofuels'
+
+]
+modified_instances = [2, 4, 12, 26, 47, 48, 49, 50]
+modification_factors = [0.89, 0.89, 0.26, 0.26, 0.26, 0.42, 0.77, 0.89]
+recurring_modifications_starts = [2]
+recurring_modifications = [0.5]
+recurrences_steps = [2]
+amounts_of_recurrences = [0] # If set to zero, repeats for whole run
+```
+#### modified_instances
+These are the instances (week numbers) that differ from the average
+(i.e. when the consumption is higher or lower).
+
+#### modification_factors
+The correction factor for the modified instances
+
+#### recurring_modifications
+This is used if you want to have modifications recur/repeat.
+You need to tell when these modifications start (in a list of starts),
+what the modification factors are, what the steps (interval between modifications),
+and how many of these are (if you put 0, then it goes for the whole run).
+The latter three are lists of the same length as the modification starts.
+
+### progress_bars
+Parameters related to displaying progress bars using [tqdm](https://github.com/tqdm/tqdm).
+#### display_scenario_run
+Set to true if you want to show progress bars
+#### scenario_run_description
+The text to display together with the progress bars
+
+
+### parallel_processing
+Parameters related to  [parallel processing](parallel_processing.md).
+#### set_amount_of_processes
+Set to true if you want to adjust the amount pof processes by hand.
+#### amount_of_processes
+The amount of processes if set by hand.
+
+
+### files
+#### files.dataframe_outputs
+Indicate below if you want to save your Pandas DataFrames in the
+listed formats (put a true if you want to do so, false if you don't).
+This uses the [Save DataFrame](https://tno.github.io/ETS_CookBook/save_dataframe/)
+from the [ETS CookBook](https://github.com/TNO/ETS_CookBook).
+
+
+### Eurostat
+These are parameters for getting data from the Eurostat API,
+using the [Eurostat Python Package](https://pypi.org/project/eurostat/)
+#### fetch
+A boolean to tell the model if it needs to fetch the data from Eurostat.
+Set it to true if you don't have the data yet or if you want to refresh it.
+Set it to false if you want to run with already fetch data (for exmaple if 
+you ant to run offline, or if you just got the data).
+#### table_code
+The table code for complete energy balances is 'nrg_bal_c'.
+Other codes can be obtained with eurostat.get_toc_df().
+See [Eurostat Python Package](https://pypi.org/project/eurostat/)
+for details.
+
+#### table_name
+The name you want to use to save your DataFrame and that you will be using for
+retrieving the Eurostat data.
+
+#### index_headers
+The headers/columns to use as an index (used in the 
+[function getting values per mode][#get_mode_reference_values]).
+#### unit_to_use
+The unit to use for the Eurostat data
+
+### Energy_carriers
+#### code_file
+The location of the file used to translate 
+[SIEC (Standard international energy product classification codes)](https://dd.eionet.europa.eu/vocabulary/eurostat/siec/view).
+#### code_column
+The name of the column conmtaining the SIEC codes
+#### name_column
+The name of the column conatining energy carriers/products names.
+#### status_column
+The column containing the status of that code (if it is still in use , 'it is 'valid').
+
+### run_range
+The year, month, day, hour of the run start and end
+(end should be the first time step that is not included).
+The ferquency string tells us the frequency of the range (and where
+it starts, such as 'W-MON'),
+

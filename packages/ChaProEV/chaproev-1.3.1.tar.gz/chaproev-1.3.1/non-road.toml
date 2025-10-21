@@ -1,0 +1,170 @@
+
+
+
+historical_dataframe_name = 'Reference Historical demand (PJ)'
+demand_dataframe_name = 'Future Yearly demand (PJ)'
+
+
+source_folder = 'non-road'
+output_folder = 'non-road-output'
+
+demand_index = ['Country Code', 'Mode', 'Energy carrier']
+demand_header = ['Demand_PJ']
+
+reference_historical_year = 2018
+growth_factors_file = 'growth_factors.csv'
+growth_factors_index = ['Country Code', 'Mode', 'Energy carrier']
+
+[modes]
+[modes.domestic-aviation]
+code = 'FC_TRA_DAVI_E'
+energy_carriers = [
+    'Kerosene-type jet fuel (excluding biofuel portion)',
+    'Blended bio jet kerosene',
+    'Aviation gasoline',
+]
+
+modified_instances = [2, 4, 12, 26, 47, 48, 49, 50]
+modification_factors = [0.89, 0.89, 0.26, 0.26, 0.26, 0.42, 0.77, 0.89]
+recurring_modifications_starts = [2]
+recurring_modifications = [0.5]
+recurrences_steps = [2]
+amounts_of_recurrences = [0] # If set to zero, repeats for whole run
+
+[modes.international-aviation]
+code = 'INTAVI'
+energy_carriers = [
+    'Kerosene-type jet fuel (excluding biofuel portion)',
+    'Blended bio jet kerosene',
+    'Aviation gasoline',
+]
+
+modified_instances = [2, 4, 12, 26, 47, 48, 49, 50]
+modification_factors = [0.89, 0.89, 0.26, 0.26, 0.26, 0.42, 0.77, 0.89]
+recurring_modifications_starts = [2]
+recurring_modifications = [0.5]
+recurrences_steps = [2]
+amounts_of_recurrences = [0] # If set to zero, repeats for whole run
+
+[modes.international-maritime-bunkers]
+code = 'INTMARB'
+energy_carriers = [
+    'Natural gas',
+    'Motor gasoline (excluding biofuel portion)',
+    'Kerosene-type jet fuel (excluding biofuel portion)',
+    'Gas oil and diesel oil (excluding biofuel portion)',
+    'Fuel oil',
+    'Lubricants',
+    'Other oil products n.e.c.',
+    'Blended biodiesels',
+    'Pure biodiesels',
+    'Other liquid biofuels'
+
+]
+modified_instances = [2, 4, 12, 26, 47, 48, 49, 50]
+modification_factors = [0.89, 0.89, 0.26, 0.26, 0.26, 0.42, 0.77, 0.89]
+recurring_modifications_starts = [2]
+recurring_modifications = [0.5]
+recurrences_steps = [2]
+amounts_of_recurrences = [0] # If set to zero, repeats for whole run
+
+[modes.domestic-navigation]
+code = 'FC_TRA_DNAVI_E'
+energy_carriers = [
+    'Natural gas',
+    'Motor gasoline (excluding biofuel portion)',
+    'Kerosene-type jet fuel (excluding biofuel portion)',
+    'Gas oil and diesel oil (excluding biofuel portion)',
+    'Fuel oil',
+    'Lubricants',
+    'Other oil products n.e.c.',
+    'Blended biodiesels',
+    'Pure biodiesels',
+    'Other liquid biofuels'
+
+]
+modified_instances = [2, 4, 12, 26, 47, 48, 49, 50]
+modification_factors = [0.89, 0.89, 0.26, 0.26, 0.26, 0.42, 0.77, 0.89]
+recurring_modifications_starts = [2]
+recurring_modifications = [0.5]
+recurrences_steps = [2]
+amounts_of_recurrences = [0] # If set to zero, repeats for whole run
+
+[modes.rail]
+code = 'FC_TRA_RAIL_E'
+energy_carriers = [
+    'Solid fossil fuels',
+    'Other bituminous coal',
+    'Liquefied petroleum gases',
+    'Gas oil and diesel oil (excluding biofuel portion)',
+    'Primary solid biofuels',
+    'Pure biodiesels',
+    'Blended biodiesels',
+    'Electricity'
+]
+modified_instances = [2, 4, 12, 26, 47, 48, 49, 50]
+modification_factors = [0.89, 0.89, 0.26, 0.26, 0.26, 0.42, 0.77, 0.89]
+recurring_modifications_starts = [2]
+recurring_modifications = [0.5]
+recurrences_steps = [2]
+amounts_of_recurrences = [0] # If set to zero, repeats for whole run
+
+
+
+[progress_bars]
+display_scenario_run = true
+scenario_run_description =  'Scenarios started'
+display_saving_profiles= true
+saving_run_description =  'Saving profiles'
+
+
+[parallel_processing]
+set_amount_of_processes = true
+amount_of_processes = 4
+use_for_saving = false
+
+[files]
+# Indicate below if you want to save your Pandas DataFrames in the
+# listed formats (put a true if you want to do so, false if you don't)
+[files.dataframe_outputs]
+csv = true
+json = false
+html = false
+latex = false
+xml = false
+clipboard = false  # This saves the file to the local clipboard
+excel = false
+hdf = false
+feather = false
+parquet = false
+stata = false
+pickle = true
+sql = true
+
+[Eurostat]
+
+fetch = false
+table_code = 'nrg_bal_c'
+table_name = 'Eurostat complete energy balances'
+index_headers = ['nrg_bal', 'siec', 'unit', 'geo\TIME_PERIOD']
+unit_to_use = 'TJ'
+
+[Energy_carriers]
+code_file = 'input/siec.csv'
+code_column ='Notation'
+name_column = 'Label'
+status_column = 'Status'
+
+
+[run_range]
+frequency = 'W-MON'
+[run_range.start]
+year = 2018
+month = 1
+day = 1
+hour = 0
+[run_range.end]
+year = 2019
+month = 1
+day = 1
+hour = 0
