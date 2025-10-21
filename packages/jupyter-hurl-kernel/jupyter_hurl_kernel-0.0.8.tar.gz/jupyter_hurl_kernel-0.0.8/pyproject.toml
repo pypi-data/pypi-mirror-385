@@ -1,0 +1,55 @@
+[project]
+name = "jupyter-hurl-kernel"
+version = "0.0.8"
+description = "A Jupyter kernel for running Hurl commands"
+readme = "README.md"
+authors = [
+    { name = "Cédric Couralet", email = "cedric.couralet@insee.fr" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "ipykernel>=6.29.0",
+    "jupyter-client>=8.6.0",
+]
+
+[project.scripts]
+install-hurl-kernel = "jupyter_hurl_kernel:main"
+
+[build-system]
+requires = ["uv_build>=0.9.4,<0.10.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+# Custom build script to include JupyterLab extension
+before-build = ["python build_labextension.py"]
+
+[project.optional-dependencies]
+dev = [
+    "jupyterlab>=4.0.0",
+]
+
+[tool.uv]
+package = true
+
+[tool.uv.sources]
+
+[tool.setuptools]
+# This section is used by uv_build to determine what to include
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["jupyter_hurl_kernel*"]
+
+[tool.setuptools.package-data]
+jupyter_hurl_kernel = [
+    "labextension/**/*",
+    "labextension_src/install.json",
+    "resources/**/*",
+]
+
+[tool.setuptools.data-files]
+"share/jupyter/labextensions/jupyterlab-hurl-extension" = [
+    "src/jupyter_hurl_kernel/labextension/**/*",
+    "src/jupyter_hurl_kernel/labextension_src/install.json",
+]
