@@ -1,0 +1,30 @@
+Metadata-Version: 2.4
+Name: Quadrupy
+Version: 1.0.1
+Summary: Simple library to control the STQ V1 via Bluetooth LE
+Author-email: Jaden Stout-Reason <jadenstoutreason@gmail.com>
+License: Proprietary
+Project-URL: Homepage, https://github.com/JadenStout/Quadrupy
+Keywords: quadruped
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: Other/Proprietary License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=2.00
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pyserial
+Dynamic: license-file
+
+connect an esp32 to an oled display where SDA -> 14, and SCL goes to 15.\
+\
+import quadrupy\
+\
+quadrupy.led(BOOLEAN)\
+quadrupy.writeScreen(STRING)\
+quadrupy.clearScreen(NULL)\
+quadrupy.close()\
+\
+programs should always end in quadrupy.close()\
+programs should always clear the screen before exit.\
+\
+you can also use time.sleep(INT) to wait before each command.\

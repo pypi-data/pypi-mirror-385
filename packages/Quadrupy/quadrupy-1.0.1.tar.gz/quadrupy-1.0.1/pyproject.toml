@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "Quadrupy"
+version = "1.0.1"
+description = "Simple library to control the STQ V1 via Bluetooth LE"
+readme = "README.md"
+requires-python = ">=2.00"
+license = { text = "Proprietary" }
+authors = [
+    { name = "Jaden Stout-Reason", email = "jadenstoutreason@gmail.com" }
+]
+keywords = ["quadruped"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: Other/Proprietary License",
+    "Operating System :: OS Independent"
+]
+dependencies = ["pyserial"]
+
+[project.urls]
+Homepage = "https://github.com/JadenStout/Quadrupy"
