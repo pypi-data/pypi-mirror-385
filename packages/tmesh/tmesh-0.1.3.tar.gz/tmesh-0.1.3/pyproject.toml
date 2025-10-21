@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools >= 77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tmesh"
+version = "0.1.3"
+description = "TensorMesh CLI tool suite"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+dynamic = ["dependencies"]
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements/common.txt"] }
+
+[project.scripts]
+tmesh-cli = "tensormesh.cli.__main__:main"
+
+[tool.setuptools.package-data]
+"tensormesh.cli.benchmark" = ["model_configs.json"]
+
+[tool.setuptools.packages.find]
+where = ["."]
