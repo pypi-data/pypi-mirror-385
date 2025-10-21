@@ -1,0 +1,45 @@
+Metadata-Version: 2.4
+Name: pyenmeval
+Version: 0.1.3
+Summary: A Python implementation of ENMeval for ecological niche model evaluation
+Home-page: https://github.com/ddk1902/PyENMeval_V1.0
+Author: Diego Gómez
+Author-email: tu_email@ejemplo.com
+Project-URL: Bug Tracker, https://github.com/ddk1902/PyENMeval_V1.0/issues
+Project-URL: Source Code, https://github.com/ddk1902/PyENMeval_V1.0
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Scientific/Engineering :: Bio-Informatics
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy
+Requires-Dist: pandas
+Requires-Dist: scikit-learn
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: license-file
+Dynamic: project-url
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+# PyENMeval
+
+**PyENMeval** es una implementación en Python inspirada en el paquete R `ENMeval`.  
+Permite evaluar modelos ecológicos de nicho (MaxEnt u otros) utilizando estrategias de validación cruzada (k-fold), métricas de desempeño y selección de modelos.
+
+## 🚀 Características
+- Validación cruzada K-Fold.
+- Cálculo de métricas como AUC y tasa de omisión.
+- Integración con datos de presencia y fondo ambiental.
+- Basado en `scikit-learn` y `pandas`.
+
+## 📦 Instalación
+```bash
+pip install pyenmeval
