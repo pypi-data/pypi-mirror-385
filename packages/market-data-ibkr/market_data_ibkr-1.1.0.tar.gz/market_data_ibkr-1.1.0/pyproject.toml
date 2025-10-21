@@ -1,0 +1,62 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "market-data-ibkr"
+version = "1.1.0"
+description = "Interactive Brokers provider implementation for market-data-core"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{name = "OpenBB"}]
+license = {text = "MIT"}
+
+dependencies = [
+    # Core contracts
+    "market-data-core>=1.2.9,<2.0",
+    
+    # IBKR API
+    "ib_insync>=1.0,<2.0",
+    
+    # Web server
+    "fastapi>=0.115,<0.116",
+    "uvicorn[standard]>=0.32,<0.33",
+    
+    # Metrics
+    "prometheus-client>=0.21,<0.22",
+    
+    # Utilities
+    "pydantic>=2.7,<3.0",
+    "python-dotenv>=1.0",
+    "loguru>=0.7,<0.8",
+]
+
+[project.urls]
+Homepage = "https://github.com/mjdevaccount/market-data-ibkr"
+Documentation = "https://github.com/mjdevaccount/market-data-ibkr#readme"
+Repository = "https://github.com/mjdevaccount/market-data-ibkr"
+Issues = "https://github.com/mjdevaccount/market-data-ibkr/issues"
+Changelog = "https://github.com/mjdevaccount/market-data-ibkr/releases"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.2",
+    "pytest-asyncio>=0.23",
+    "pytest-mock>=3.12",
+    "ruff>=0.6",
+    "mypy>=1.11",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+ignore_missing_imports = true
+
