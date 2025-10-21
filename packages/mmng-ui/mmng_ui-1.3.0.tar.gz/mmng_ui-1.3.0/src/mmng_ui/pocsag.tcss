@@ -1,0 +1,67 @@
+#app-grid {
+    layout: grid;
+    grid-size: 2;
+    grid-columns: 80% 20%;
+    grid-rows: 80% 20%;
+}
+
+#messages {
+    height: 100%;
+    border: green;
+    column-span: 2;
+    background: black;
+}
+
+#log {
+    height: 100%;
+    border: darkgreen;
+    background: black;
+}
+
+#status {
+    height: 100%;
+    border: greenyellow;
+}
+
+#status-container {
+    layout: grid;
+    grid-size: 1;  /* one columns */
+    grid-rows: 80% 20%;
+}
+
+HelpScreen, FilterScreen {
+    align: center middle;
+}
+
+#help {
+    padding: 0 1;
+    width: 70%;
+    height: 70%;
+    border: thick solid yellow;
+    overflow-y: auto;
+    background: $boost;
+}
+
+#filter {
+    width: 50%;
+    border: thick solid yellow;
+}
+
+AboutScreen {
+    align: center middle;
+}
+
+#about {
+    width: 70%;
+    height: auto;
+    border: thick solid yellow;
+    background: $boost;
+}
+
+.version {
+    width: auto;
+}
+
+Rule {
+    color: goldenrod;
+}
