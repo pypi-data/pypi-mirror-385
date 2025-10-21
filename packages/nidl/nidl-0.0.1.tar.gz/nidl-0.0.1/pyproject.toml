@@ -1,0 +1,137 @@
+[build-system]
+requires = ["setuptools>=61.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nidl"
+readme = "README.rst"
+requires-python = ">=3.9"
+authors = [
+    {name = "Antoine Grigis", email = "antoine.grigis@cea.fr"},
+    {name = "Benoit Dufumier", email="benoit.dufumier@cea.fr"},
+    {name = "Joël Chavas", email="joel.chavas@cea.fr"}
+]
+license = "CECILL-B"
+classifiers = [
+    "Development Status :: 1 - Planning",
+    "Environment :: Console",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Topic :: Scientific/Engineering",
+]
+dependencies = [
+    "torch >=2.1.0, <2.8.0",
+    "pytorch-lightning",
+    "torchvision",
+    "toml",
+    "python-typex",
+    "pandas",
+    "scikit-learn <= 1.7.0",
+    "simpleitk",
+    "nibabel"
+]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+plugins = [
+    "surfify",
+]
+openbhb = ["huggingface_hub"]
+doc = [
+    "docutils>=0.17",
+    "furo>=2024.8.6",
+    "memory_profiler>=0.61.0",
+    "myst-parser>=3.0.1",
+    "numpydoc>=1.8.0",
+    "ruamel.yaml>=0.18.6",
+    "sphinx>=7.4.7",
+    "sphinx-copybutton>=0.5.2",
+    "sphinx-design>=0.6.1",
+    "sphinx-gallery>=0.18.0",
+    "sphinxcontrib-bibtex>=2.6.3",
+    "sphinxext-opengraph>=0.9.1",
+    "sphinxcontrib-mermaid>=1.0.0"
+]
+
+[project.urls]
+Source = "https://github.com/neurospin-deppinsight/nidl"
+Tracker = "https://github.com/neurospin-deppinsight/nidl/issues"
+
+[tool.setuptools]
+platforms = ["Linux", "OSX"]
+include-package-data = true
+
+[tool.setuptools.dynamic]
+version = {attr = "nidl.__version__"}
+
+[tool.setuptools.packages.find]
+exclude = ["doc"]
+namespaces = false
+
+[tool.build_sphinx]
+source-dir = "doc"
+build-dir = "doc/build"
+all_files = "1"
+
+[tool.ruff.lint]
+preview = true
+extend-select = [
+    "E225", # missing whitespace around operator
+    "E261", # at least two spaces before inline comment
+    "E222", # multiple spaces after operator
+    "W291", # trailing whitespace
+    "E501", # `line-too-long` rule
+    "B",    # flake8-bugbear
+    "C4",   # flake8-comprehensions
+    "ISC",  # flake8-implicit-str-concat
+    "PIE",  # flake8-pie
+    "PYI",  # flake8-pyi
+    "SIM",  # flake8-simplify
+    "FLY",  # flynt
+    "I",    # isort
+    "N",    # pep8-naming
+    "PERF", # Perflint
+    "PGH",  # pygrep-hooks
+    "UP",   # pyupgrade
+    "FURB", # refurb
+    "RUF",
+]
+ignore = [
+    "RUF052",   # Local dummy variable `_*` is accessed
+    "FURB101",  # `open` and `read` should be replaced by `Path(path).read_text()`
+    "FURB103",  # `open` and `write` should be replaced by `Path(logfile).write_text(code)`
+    "RUF059",   # Unpacked variable `loss` is never used
+    "FURB189",  # Subclassing `dict` can be error prone, use `collections.UserDict` instead
+    "N803",     # Argument name should be lowercase
+    "N806",     # Variable in function should be lowercase
+    "D100",    # Missing docstring in public module
+    "D102",    # Missing docstring in public method
+    "D104",    # Missing docstring in public package
+    "D107",    # Missing docstring in `__init__`
+    "D205",    # 1 blank line required between summary line and description
+]
+
+[tool.ruff]
+line-length = 79
+extend-exclude = [
+    "tests",
+]
+
+[tool.ruff.lint.pycodestyle]
+max-doc-length = 79
+
+[tool.ruff.lint.per-file-ignores]
+"*/__init__.py" = ["F401"]
+
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "warnings",
+    "pass",
+    "raise NotImplementedError",
+]
+omit = [
+    "nidl/info.py",
+    "nidl/utils/color.py",
+]
