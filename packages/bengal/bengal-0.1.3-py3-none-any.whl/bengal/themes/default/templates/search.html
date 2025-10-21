@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{#
+Search Results Page
+
+Dedicated page for search functionality with full-screen experience.
+Can be accessed directly at /search/ or used as a fallback.
+#}
+
+{% block title %}Search - {{ site.config.title }}{% endblock %}
+
+{% block content %}
+<div class="search-page">
+  <header class="search-page-header">
+    <h1>🔍 Search</h1>
+    <p class="search-page-description">
+      Search through {{ site.pages | length }} pages of documentation, tutorials, and guides.
+    </p>
+  </header>
+
+  {# Search Component #}
+  {% include 'partials/search.html' %}
+
+  {# Search Tips #}
+  <div class="search-tips">
+    <h2>Search Tips</h2>
+
+    <div class="tips-grid">
+      <div class="tip-card">
+        <h3>💡 Keyboard Shortcuts</h3>
+        <ul>
+          <li><kbd>⌘</kbd> + <kbd>K</kbd> - Focus search (Mac)</li>
+          <li><kbd>Ctrl</kbd> + <kbd>K</kbd> - Focus search (Windows/Linux)</li>
+          <li><kbd>Esc</kbd> - Clear search or close</li>
+        </ul>
+      </div>
+
+      <div class="tip-card">
+        <h3>🎯 Search Operators</h3>
+        <ul>
+          <li><code>+python</code> - Must include "python"</li>
+          <li><code>-deprecated</code> - Exclude "deprecated"</li>
+          <li><code>tutorial~2</code> - Fuzzy match (tolerance 2)</li>
+          <li><code>title:bengal</code> - Search in title only</li>
+        </ul>
+      </div>
+
+      <div class="tip-card">
+        <h3>🔍 Advanced Search</h3>
+        <ul>
+          <li>Use filters to narrow results by section, type, or tags</li>
+          <li>Multiple word queries search for all terms</li>
+          <li>Results are ranked by relevance</li>
+          <li>Content includes titles, descriptions, and body text</li>
+        </ul>
+      </div>
+
+      <div class="tip-card">
+        <h3>📚 What's Indexed?</h3>
+        <ul>
+          <li>All documentation pages</li>
+          <li>Blog posts and tutorials</li>
+          <li>API and CLI reference</li>
+          <li>Guides and examples</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  {# Popular Searches (optional - can be customized) #}
+  <div class="popular-searches">
+    <h2>Popular Searches</h2>
+    <div class="popular-search-links">
+      <a href="#" class="popular-search-link" data-query="getting started">Getting Started</a>
+      <a href="#" class="popular-search-link" data-query="configuration">Configuration</a>
+      <a href="#" class="popular-search-link" data-query="template">Templates</a>
+      <a href="#" class="popular-search-link" data-query="markdown">Markdown</a>
+      <a href="#" class="popular-search-link" data-query="api">API Reference</a>
+      <a href="#" class="popular-search-link" data-query="tutorial">Tutorials</a>
+      <a href="#" class="popular-search-link" data-query="optimization">Optimization</a>
+      <a href="#" class="popular-search-link" data-query="deployment">Deployment</a>
+    </div>
+  </div>
+</div>
+
+{# moved to assets/js/search-page.js #}
+
+{# styles are covered by components/search.css and global tokens #}
+{% endblock %}
