@@ -1,0 +1,42 @@
+Metadata-Version: 2.3
+Name: langchain-qaip
+Version: 0.1.5
+Summary: An integration package connecting QAIP and LangChain
+License: MIT
+Requires-Dist: langchain-core>=0.3.45
+Requires-Python: >=3.11.0
+Project-URL: repository, https://github.com/qlonolink/langchain-qaip
+Description-Content-Type: text/markdown
+
+# langChain-qaip
+
+This package contains the LangChain integrations with QAIP.
+
+## Setup
+
+Create an API Key on [QAIP](https://developer.qaip.com/dashboard/apikeys).
+
+We can then set API key as environment variables.
+
+```python
+import os
+
+os.environ["QAIP_API_KEY"] = "<YOUR_API_KEY>"
+```
+
+## Installation
+
+```bash
+pip install langchain-qaip
+```
+
+## Retrievers
+`QAIPRetriever` class provides a retriever to connect with QAIP Search API.
+
+```python
+from langchain_qaip import QAIPRetriever
+
+retriever = QAIPRetriever()
+
+retriever.invoke("What is the meaning of life?")
+```
