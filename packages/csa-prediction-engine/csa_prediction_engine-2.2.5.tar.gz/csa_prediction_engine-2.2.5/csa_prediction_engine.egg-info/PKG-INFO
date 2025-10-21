@@ -1,0 +1,54 @@
+Metadata-Version: 2.4
+Name: csa_prediction_engine
+Version: 2.2.5
+Summary: The csa_prediction_engine library provides a suite of tools and functions for performing relevance-based predictions using the Cambridge Sports Analytics Prediction Engine API. The package is designed to facilitate single and multi-task predictions, allowing for flexible model evaluation and experimentation.
+Author: Cambridge Sports Analytics
+Author-email: prediction@csanalytics.io
+Description-Content-Type: text/markdown
+Requires-Dist: numpy>=2.1
+Requires-Dist: requests
+Requires-Dist: csa_common_lib>=2.2.5
+Dynamic: author
+Dynamic: author-email
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: requires-dist
+Dynamic: summary
+
+# Cambridge Sports Analytics Prediction Engine
+
+The **CSA Prediction Engine** is the official Python client for interacting with the Cambridge Sports Analytics (CSA) API. It enables relevance-based predictions using flexible configurations, including support for batch jobs, grid evaluations, and multi-task prediction workflows.
+
+📦 **Source code**: [github.com/CambridgeSportsAnalytics/csa_prediction_engine](https://github.com/CambridgeSportsAnalytics/csa_prediction_engine)
+
+
+## 🔍 Key Features
+
+- **Single Task Predictions**: Support for predictions with one dependent variable and one set of circumstances.
+- **Multi-y Predictions**: Perform predictions with multiple dependent variables and a single set of circumstances.
+- **Multi-theta Predictions**: Perform predictions with one dependent variable and multiple sets of circumstances.
+- **Relevance-Based Grid Predictions**: Generate optimal predictions by evaluating all thresholds and variable combinations.
+- **Grid Singularity Predictions**: Analyze grid predictions to find the singular optimal solution.
+- **MaxFit Predictions**: Find the best-fit model based on adjusted relevance.
+
+## 🚀 Installation
+
+Install via PyPI:
+
+```bash
+pip install csa-prediction-engine
+```
+Requires Python 3.11
+
+## 📘 Documentation & Examples
+
+For example scripts, OpenAPI specs, and quickstart usage, visit the companion repo:
+👉 [CSA Prediction Engine Quickstart](https://github.com/)
+
+## 🤝 Contributing
+
+We welcome feedback, feature suggestions, and bug reports. Reach out to our team 📧 support@csanalytics.io
+
+## ⚖️ License
+
+Copyright c) 2023 - 2024 Cambridge Prediction Analytics, LLC. All rights reserved.
