@@ -1,0 +1,97 @@
+annotations: include('annotations_schema', required=False)
+masking: include('masking_schema', required=False)
+meta: include('meta_schema', required=False)
+model: include('model_schema', required=False)
+synthesize: include('synthesize_schema', required=False)
+learn: include('learn_schema', required=False)
+rules: include('rules_schema', required=False)
+---
+annotations_schema:
+    address: list(include('default_annotation_schema'), required=False)
+    bank: list(include('default_annotation_schema'), required=False)
+    person: list(include('default_annotation_schema'), required=False)
+    formatted_string: list(include('format_preserving_schema'), required=False)
+    company: list(include('company_schema'), required=False)
+masking_schema:
+    date_shift: list(include('date_shift_schema'), required=False)
+    hashing: list(include('hashing_schema'), required=False)
+    format_preserving: list(include('format_preserving_schema'), required=False)
+    nan: list(include('default_schema'), required=False)
+    redaction: list(include('redaction_schema'), required=False)
+    rounding: list(include('rounding_schema'), required=False)
+    time_extraction: list(include('time_extraction_schema'), required=False)
+    typo: list(include('typo_schema'), required=False)
+meta_schema:
+    string: list(include('default_schema'), required=False)
+    date_time: list(include('default_schema'), required=False)
+    time_delta: list(include('default_schema'), required=False)
+    time_delta_day: list(include('default_schema'), required=False)
+    integer: list(include('default_schema'), required=False)
+    bool: list(include('default_schema'), required=False)
+    integer_bool: list(include('default_schema'), required=False)
+    float: list(include('default_schema'), required=False)
+model_schema:
+    enumeration: list(include('enumeration_schema'), required=False)
+    histogram: list(include('default_schema'), required=False)
+    kernel_density_estimate: list(include('default_schema'), required=False)
+learn_schema:
+    num_steps: any(null(), int(), required=False)
+    latent_size: int(required=False)
+    batch_size: int(required=False)
+synthesize_schema:
+    num_rows: int(required=False)
+    produce_nans: bool(required=False)
+    rebalance: include('rebalance_schema', required=False)
+rules_schema:
+    association: list(list(str()), required=False)
+    allocated_memory: str(required=False)
+---
+default_annotation_schema:
+    name: str(required=True)
+    labels: map(str(), str(), required=True)
+default_schema:
+    name: str(required=True)
+date_shift_schema:
+    name: str(required=True)
+    upper_bound: int(required=False)
+    lower_bound: int(required=False)
+    maintain_diff: bool(required=False)
+    maintain_order: bool(required=False)
+    entity_col: str(required=False)
+    date_format: str(required=False)
+hashing_schema:
+    name: str(required=True)
+    seed: str(required=False)
+format_preserving_schema:
+    name: str(required=True)
+    pattern: str(required=True)
+company_schema:
+    name: str(required=True)
+    labels: map(str(), str(), required=True)
+    locales: list(str(), required=False)
+redaction_schema:
+    name: str(required=True)
+    portion: num(min=0, max=1, required=False)
+    pattern: str(required=False)
+    repl: str(required=False)
+    mask_start: bool(required=False)
+rounding_schema:
+    name: str(required=True)
+    bins: any(str(), int(min=1), list(min=2), required=False)
+time_extraction_schema:
+    name: str(required=True)
+    portion: str(required=False)
+    date_format: str(required=False)
+typo_schema:
+    name: str(required=True)
+    typo_rate: num(min=0, max=1, required=False)
+    seed: int(required=False)
+enumeration_schema:
+    name: str(required=True)
+    start: int(required=False)
+    step: int(required=False)
+rebalance_schema: list(include('rebalance_column_schema'), required=False)
+---
+rebalance_column_schema:
+    name: str(required=True)
+    marginals: map(required=True)
