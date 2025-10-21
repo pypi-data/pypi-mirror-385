@@ -1,0 +1,302 @@
+Metadata-Version: 2.4
+Name: yawp
+Version: 2.2.0
+Summary: Yet Another Word Processor, a Windows/Linux word processor for plain text files, with PDF export
+Author-email: Carlo Alessandro Verre <carlo.alessandro.verre@gmail.com>
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)
+Classifier: Operating System :: POSIX :: Linux
+License-File: LICENSE
+Requires-Dist: FreeSimpleGUI==5.2.0.post1
+Requires-Dist: pdfrw==0.4.0
+Project-URL: Home, https://pypi.org/project/yawp
+
+```
+usage: yawp [-h] [-V] [-H] [-v] [-M USAGE_MODE] [-y TEXT_EDITOR] [-l]
+            [-w CHARS_PER_LINE] [-g] [-b LEFT_BLANKS] [-u LINES_PER_PAGE]
+            [-k ALIGN_PICTURES] [-c CONTENTS_TITLE] [-i INDEX_TITLE]
+            [-f FIGURES_TITLE] [-F CAPTION_PREFIX] [-m CHAPTER_OFFSET]
+            [-p PAGE_HEADERS] [-e EVEN_LEFT] [-E EVEN_RIGHT] [-o ODD_LEFT]
+            [-O ODD_RIGHT] [-n PAGE_OFFSET] [-a] [-s SECOND_LINE]
+            [-X EXPORT_PDF] [-C CORRECT] [-Y PDF_BROWSER] [-P PDF_FILE]
+            [-W CHAR_WIDTH] [-A CHAR_ASPECT] [-S SHEET_SIZE] [-Z]
+            [-L LEFT_MARGIN] [-R RIGHT_MARGIN] [-T TOP_MARGIN]
+            [-B BOTTOM_MARGIN] [-I MULTI_PAGES] [-J MULTI_SHEETS]
+            [text_files ...]
+
+Yet Another Word Processor, a Windows/Linux word processor for plain text files, with PDF export
+
+"YAWP" here means Yet Another Word Processor, and YAWP is a pure-Python Linux-only free
+and  open-source  word  processor  for plain text files, with PDF export. If you really
+need  all  the endless features of a full-fledged WYSIWYG word processor as LibreOffice
+Writer,  YAWP  is  not  for  you.  But  if  you just want to create a draft or a simple
+quick-and-dirty no-frills document, give YAWP a try.
+
+YAWP's main features are:
+
+    • YAWP has a GUI interface, but can be used as a CLI command too
+    • YAWP  processes in place a single plain text file, hereinafter referred to simply
+      as the "text file"
+    • YAWP's  default  editor  allows  you to edit the text file and check its spelling
+      correctness
+    • YAWP  before  rewriting the text file creates a timestamped backup, allowing Undo
+      operation
+    • YAWP justifies text at left and right in:
+        • unindented paragraphs
+        • dot-marked indented paragraphs (as this one)
+    • YAWP  text  processing  is  driven  by the text in the text file and by arguments
+      only, not by commands or tags embedded in text
+    • YAWP  accepts  unjustified pictures (as schemas, tables and code examples) freely
+      intermixed with text
+    • YAWP  performs  automatic  multi-level  renumbering  of  chapters  and inserts an
+      automatic Contents chapter in the text file
+    • YAWP  recognizes relevant subjects (quoted by '"') and inserts an automatic Index
+      chapter in the text file
+    • YAWP performs automatic multi-level renumbering of figure captions and inserts an
+      automatic Figures chapter in the text file
+    • YAWP  cuts  the text file in pages, by inserting two-lines page headers, allowing
+      page numbering control and insertion of initial Roman-numbered pages
+    • YAWP also has some graphics capabilities, you can sketch pictures with horizontal
+      and  vertical  segments  (by  '`')  and arrowheads (by '^'), YAWP redraws them by
+      suitable Unicode graphic characters
+    • pictures can also be left-aligned, centered or right-aligned
+    • YAWP  exports  the  text file in PDF format, with control over character size and
+      page  layout,  and  lets  you browse the generated PDF file, allowing preview and
+      printing
+    • YAWP  can export 2, 4 or 8 pages on each paper sheet side, allowing you to create
+      in folio, in quarto and in octavo booklets
+    • YAWP writes information and error messages on terminal and on the log file of the
+      text file
+    • YAWP  tries  to correct errors made by CUPS-PDF about font size and page margins,
+      you can use default corrections or redefine them by a correction file
+    • YAWP locks text files while they are processed, in order to avoid interference by
+      other concurrent YAWP executions
+    • YAWP in GUI mode keeps a distinct argument file for each text file
+    • YAWP  in  GUI mode saves the name of the last processed text file and restores it
+      at next invocation
+    • YAWP  in  GUI mode saves a list of the 25 most recent processed text files, among
+      which you can select the next current text file
+
+As an example of CLI usage, the YAWP User Manual has been generated as
+
+    'YAWP 2.2.0 User Manual.txt.pdf'
+
+from the text file
+
+    'YAWP 2.2.0 User Manual.txt'
+
+by typing at terminal:
+
+    │ $ yawp -M f -v -w 97 -n -4 -X e -L 3cm 'YAWP 2.2.0 User Manual.txt'
+
+where arguments mean:
+
+    • -M f: run YAWP in CLI Format mode
+    • -v: write messages not only into log file but also on terminal
+    • -w 97: set 97 characters per line
+    • -n -4: first four pages are numbered by Roman numbers
+    • -X e: export in PDF format
+    • -L 3cm: set left margins on odd pages and right margins on even pages to 3 cm
+    • 'YAWP 2.2.0 User Manual.txt': set the text file to process
+
+To install YAWP, if your Linux belongs to the Debian family, type at terminal:
+
+    │ $ sudo apt install kwrite idle atril printer-driver-cups-pdf pipx
+
+On other platforms you will use the specific installer instead, for instance:
+
+    │ $ sudo yum install …        # on RHEL/CentOS/Fedora/Rocky/Alma Linux
+    │ $ sudo emerge -a sys-apps/… # on Gentoo Linux
+    │ $ sudo apk add …            # on Alpine Linux
+    │ $ sudo pacman -S …          # on Arch Linux
+    │ $ sudo zypper install …     # on OpenSUSE Linux
+
+Then run:
+
+    │ $ pipx ensurepath
+    │ $ pipx install yawp
+
+Later you can type:
+
+    │ $ pipx upgrade yawp
+
+in order to upgrade YAWP to a later version.
+
+Now you can close the terminal, open another one, and call YAWP. Syntax is:
+
+    │ $ yawp -h               # show a help message and exit
+    │ $ yawp -V               # show program's version number and exit
+    │ $ yawp -H […arguments…] # browse the PDF YAWP User Manual and exit
+
+    │ $ yawp # run YAWP in GUI mode, text file from last closed session, no arguments
+    │ $ yawp text_file [text_file [...]] # GUI mode, explicit text file[s]
+    │                                    # no other arguments
+
+    │ $ yawp -M c […arguments…] text_file target_file # run YAWP in CLI Copy mode
+    │ $ yawp -M m […arguments…] text_file target_file # run YAWP in CLI Move mode
+    │ $ yawp -M d […arguments…] text_file             # run YAWP in CLI Delete mode
+    │ $ yawp -M e […arguments…] text_file             # run YAWP in CLI Edit mode
+    │ $ yawp -M f […arguments…] text_file             # run YAWP in CLI Format mode
+    │ $ yawp -M n […arguments…] text_file             # run YAWP in CLI Noform mode
+    │ $ yawp -M u […arguments…] text_file             # run YAWP in CLI Undo mode
+
+This is the GUI Main window, with default argument values:
+
+ ┌───┬────────────────────────────────────────────────────────────────────────┬───┬───┐
+ │   │                                 YAWP - Main                            │ _ │ x │
+ ├───┴────────────────────────────────────────────────────────────────────────┴───┴───┤
+ │ Format   -y --text-editor    [kwrite…………]        -l --left-only-text □           ■ │
+ │          -w --chars-per-line [0……] -g --graph-pictures □   -b --left-blanks [1……]  │
+ │          -u --lines-per-page [0……] -k --align-pictures ◎ no ○ left ○ center ○ right│
+ │ Chapters -c --contents-title [Contents……]        -i --index-title    [Index……………]  │
+ │          -f --figures-title  [Figures………]        -F --caption-prefix [Figure…………]  │
+ │          -m --chapter-offset [0……]                                                 │
+ │ Pages    -p --page-headers ○ no ○ fullpage ○ pture ◎ chapter ○ double              │
+ │          -e --even-left      [%n……………………]        -E  --even-right    [%f……………………]  │
+ │          -o --odd-left       [%c……………………]        -O --odd-right      [%n……………………]  │
+ │          -n --page-offset    [0……]               -a --all-pages-E-e  □             │
+ │          -s --second-line ○ no ○ blank ○ points ○ dashes ◎ solid                   │
+ │ Export   -X --export-pdf ◎ no ○ export ○ browse  -C --correct ○ no ◎ default ○ file│
+ │          -Y --pdf-browser    [atril……………]        -P --pdf-file       [%f%e.pdf……]  │
+ │          -W --char-width     [0……]               -A --char-aspect    [3/5]         │
+ │          -S --sheet-size     [A4……………………]        -Z --landscape      □             │
+ │          -L --left-margin    [2cm]               -R --right-margin   [2cm]         │
+ │          -T --top-margin     [2cm]               -B --bottom-margin  [2cm]         │
+ │          -I --multi-pages ◎ 1 ○ 2 ○ 4 ○ 8        -J --multi-sheets   [0……]         │
+ │ Text File ……………………………………………………………………………………………………………………………………………………………………………………………… │
+ │┌───┐┌────┐┌──────┐┌────┐┌────┐┌──────┐┌────┐┌──────┐┌──────┐┌────┐┌───┐┌────┐┌────┐│
+ ││New││Open││Recent││Copy││Move││Delete││Edit││Format││Noform││Undo││Log││Help││Exit││
+ │└───┘└────┘└──────┘└────┘└────┘└──────┘└────┘└──────┘└──────┘└────┘└───┘└────┘└────┘│
+ └────────────────────────────────────────────────────────────────────────────────────┘
+
+These are the 13 buttons in GUI Main window:
+
+    • text file definition:
+        • New: create a new empty text file
+        • Open: browse the file system to select an existing text file
+        • Recent: browse the list of recent files to select an existing text file
+        • Copy: copy the current text file into a new target text file
+        • Move: move or rename the current text file
+        • Delete: permanently delete the current text file
+    • text file processing:
+        • Edit: edit the current text file by the text editor defined by -y
+        • Format: format the current text file and redraw and align pictures and export
+          PDF
+        • Noform:  don't  format  current  text  file but redraw and align pictures and
+          export PDF
+        • Undo: restore the current text file to its previous content
+        • Log:  browse  the log file of current text file by the text editor defined by
+          -y
+    • other actions:
+        • Help:  browse  the YAWP-generated YAWP User Manual by the PDF browser defined
+          by -Y
+        • Exit: quit YAWP
+
+positional arguments:
+  text_files            text file[s] to process, ASCII or UTF-8-encoded
+                        Unicode
+
+options:
+  -h, --help            show this help message and exit
+  -V, --version         show program's version number and exit
+  -H, --browse-manual   browse the YAWP-generated PDF YAWP User Manual and
+                        exit
+  -v, --verbose         write information messages on stdout too (CLI modes
+                        only)
+  -M USAGE_MODE, --usage-mode USAGE_MODE
+                        run YAWP in this usage mode (default: 'g'=GUI, 'c'=CLI
+                        Copy, 'm'=CLI Move, 'd'=CLI Delete, 'e'=CLI Edit,
+                        'f'=CLI Format, 'n'=CLI Noform, 'u'=CLI Undo)
+  -y TEXT_EDITOR, --text-editor TEXT_EDITOR
+                        editor for text files (default: 'kwrite')
+  -l, --left-only-text  justify text lines at left only (default: at left and
+                        right)
+  -w CHARS_PER_LINE, --chars-per-line CHARS_PER_LINE
+                        line width in characters per line (default:
+                        '0'=automatic)
+  -g, --graph_pictures  redraw '`'-segments and '^'-arrowheads
+  -b LEFT_BLANKS, --left-blanks LEFT_BLANKS
+                        left blanks when -k is 'l'=left (default: '1', min:
+                        '1')
+  -u LINES_PER_PAGE, --lines-per-page LINES_PER_PAGE
+                        page height in lines per page (default: '0'=automatic)
+  -k ALIGN_PICTURES, --align-pictures ALIGN_PICTURES
+                        align pictures (default: 'n'=no, 'l'=left, 'c'=center,
+                        'r'=right)
+  -c CONTENTS_TITLE, --contents-title CONTENTS_TITLE
+                        title of Contents chapter (default: 'Contents')
+  -i INDEX_TITLE, --index-title INDEX_TITLE
+                        title of Index chapter (default: 'Index')
+  -f FIGURES_TITLE, --figures-title FIGURES_TITLE
+                        title of Figures chapter (default: 'Figures')
+  -F CAPTION_PREFIX, --caption-prefix CAPTION_PREFIX
+                        first word of figure captions (default: 'Figure')
+  -m CHAPTER_OFFSET, --chapter-offset CHAPTER_OFFSET
+                        numbering offset for level-1 chapters (default: '0',
+                        min: -1)
+  -p PAGE_HEADERS, --page-headers PAGE_HEADERS
+                        insert page headers (default: 'c', 'n'=no, 'f'=on full
+                        page, 'p'=and on broken pictures, 'c'=and on level-1
+                        chapters, 'd'=double if level-1 on even page)
+  -e EVEN_LEFT, --even-left EVEN_LEFT
+                        first line of headers of even pages, left (default:
+                        '%n')
+  -E EVEN_RIGHT, --even-right EVEN_RIGHT
+                        first line of headers of even pages, right (default:
+                        '%f')
+  -o ODD_LEFT, --odd-left ODD_LEFT
+                        first line of headers of odd pages, left (default:
+                        '%c')
+  -O ODD_RIGHT, --odd-right ODD_RIGHT
+                        first line of headers of odd pages, right (default:
+                        '%n')
+  -n PAGE_OFFSET, --page-offset PAGE_OFFSET
+                        numbering offset for pages (default: '0', if negative:
+                        Roman numbers)
+  -a, --all-pages-E-e   put in all page headers -E at left and -e at right
+  -s SECOND_LINE, --second_line SECOND_LINE
+                        second line of page headers (default: 's', 'n'=no,
+                        'b'=blanks, 'p'=points, 'd'=dashes, 's'=solid)
+  -X EXPORT_PDF, --export-pdf EXPORT_PDF
+                        export and browse PDF file (default: 'b', 'n'=no,
+                        'e'=export, 'b'=export and browse)
+  -C CORRECT, --correct CORRECT
+                        correct character size and page margins (default: 'd',
+                        'n'=no, 'd'=by default values, 'f'=by correction file)
+  -Y PDF_BROWSER, --pdf-browser PDF_BROWSER
+                        browser for PDF files (default: 'atril')
+  -P PDF_FILE, --pdf-file PDF_FILE
+                        exported PDF file (default: '%f%e.pdf')
+  -W CHAR_WIDTH, --char-width CHAR_WIDTH
+                        character width (default: '0'=automatic, unit:
+                        pt/in/mm/cm)
+  -A CHAR_ASPECT, --char-aspect CHAR_ASPECT
+                        character aspect ratio=width / height (default: '3/5',
+                        '1'=square chars)
+  -S SHEET_SIZE, --sheet-size SHEET_SIZE
+                        portrait paper size width x height (default:
+                        'A4'≡'210x297mm', unit: pt/in/mm/cm)
+  -Z, --landscape       turn page by 90° (default: portrait)
+  -L LEFT_MARGIN, --left-margin LEFT_MARGIN
+                        left margin (default: '2cm', unit: pt/in/mm/cm)
+  -R RIGHT_MARGIN, --right-margin RIGHT_MARGIN
+                        right margin (default: '2cm', unit: pt/in/mm/cm)
+  -T TOP_MARGIN, --top-margin TOP_MARGIN
+                        top margin (default: '2cm', unit: pt/in/mm/cm)
+  -B BOTTOM_MARGIN, --bottom-margin BOTTOM_MARGIN
+                        bottom margin (default: '2cm', unit: pt/in/mm/cm)
+  -I MULTI_PAGES, --multi-pages MULTI_PAGES
+                        pages on each side of paper sheets (default: '1',
+                        values: 1/2/4/8)
+  -J MULTI_SHEETS, --multi-sheets MULTI_SHEETS
+                        paper sheets gathered together (default: '0'=export
+                        sequentially)
+```
+
