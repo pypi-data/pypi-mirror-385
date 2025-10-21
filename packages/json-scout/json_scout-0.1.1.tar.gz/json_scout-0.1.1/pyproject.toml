@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "json-scout"
+version = "0.1.1"
+description = "⚠️ DEPRECATED: This package has been renamed to 'json-anatomy'. Please use 'json-anatomy' instead."
+readme = "README.md"
+requires-python = ">=3.7"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Chathura Jayalath", email = "chathura@example.com" }]
+maintainers = [{ name = "Chathura Jayalath", email = "chathura@example.com" }]
+keywords = [
+    "json", 
+    "deprecated",
+    "json-anatomy",
+]
+classifiers = [
+    "Development Status :: 7 - Inactive",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+[project.urls]
+Homepage = "https://github.com/deamonpog/json-anatomy"
+Documentation = "https://deamonpog.github.io/json-anatomy/"
+Repository = "https://github.com/deamonpog/json-anatomy"
+"Migration Guide" = "https://github.com/deamonpog/json-anatomy/blob/main/MIGRATION.md"
+"New Package (json-anatomy)" = "https://pypi.org/project/json-anatomy/"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+license-files = ["LICENSE"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
