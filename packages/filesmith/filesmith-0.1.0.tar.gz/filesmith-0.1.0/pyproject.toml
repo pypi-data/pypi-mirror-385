@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "filesmith"
+version = "0.1.0"
+description = "A utility for copying files based on pattern matching"
+authors = [
+    { name = "Eiichi YAMAMOTO", email = "info@yeiichi.com" },
+]
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.9"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Topic :: System :: Filesystems",
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "sphinx>=4.0",
+]
+
+[project.scripts]
+filesmith = "filesmith.core:main"
+
+[project.urls]
+Homepage = "https://github.com/yeiichi/filesmith"
+Repository = "https://github.com/yeiichi/filesmith.git"
+Issues = "https://github.com/yeiichi/filesmith/issues"
