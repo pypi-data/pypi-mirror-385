@@ -1,0 +1,81 @@
+Metadata-Version: 2.4
+Name: pythonny-quest
+Version: 0.1.2
+Summary: An iPython REPL that guides and motivates your quest to learn Python. Augments iPython with hints and CFL-style games to track your progress and avoid villains and pitfalls.
+Author-email: hobs <github@totalgood.com>
+Requires-Python: >=3.11
+Requires-Dist: axiom-py
+Requires-Dist: dotenv>=0.9.9
+Requires-Dist: fuzzywuzzy>=0.18.0
+Requires-Dist: ipython>=9.3.0
+Requires-Dist: jsonlines
+Requires-Dist: lxml>=5.4.0
+Requires-Dist: matplotlib>=3.10.3
+Requires-Dist: pandas>=2.3.0
+Requires-Dist: pyperclip>=1.9.0
+Requires-Dist: pyte>=0.8.2
+Requires-Dist: pytest>=8.4.1
+Requires-Dist: python-levenshtein>=0.27.1
+Requires-Dist: requests>=2.32.4
+Requires-Dist: scikit-learn>=1.7.0
+Requires-Dist: seaborn>=0.13.2
+Provides-Extra: dev
+Requires-Dist: black; extra == 'dev'
+Requires-Dist: build; extra == 'dev'
+Requires-Dist: ipython; extra == 'dev'
+Requires-Dist: jupyter; extra == 'dev'
+Requires-Dist: pip; extra == 'dev'
+Requires-Dist: pytest-coverage; extra == 'dev'
+Requires-Dist: twine; extra == 'dev'
+Requires-Dist: wheel; extra == 'dev'
+Description-Content-Type: text/markdown
+
+# Pythonny Quest
+
+## Quickstart
+
+On Python >= 3.11 you can just `pip install pythonny-quest` and then launch your journey with the `pyquest` command. This should give you an iPython-like console with some hints in comment lines above the prompt.
+
+## Contributing
+
+If you want to contribute or modify the source code, make sure you have `uv` installed. 
+
+### Install `uv`
+
+If you do not have `uv` installed, you can use `curl` or `wget` within [`git-bash`](https://gitforwindows.org):
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+**OR**
+
+```bash
+wget -qO- https://astral.sh/uv/install.sh | sh
+```
+
+You may need to relaunch your `git-bash` terminal before it will recognize your new `uv` command line command.
+
+## Install `pythonny-quest` (`pyquest`)
+
+Download the git repository:
+
+```bash
+git clone git@gitlab.com:hobs/pythonny-quest
+cd pythonny-quest
+```
+
+Create and activate a Python 3.12 virtual environment within the `pythonny-quest/` folder:
+
+```bash
+uv venv -p 3.12
+source .venv/bin/activate
+```
+
+Install pythonny-quest within your virtual environment:
+
+```bash
+uv pip install --editable .
+```
+
+Now whenever you run the `pyquest` command, you will be running the latest source code that you have edited within `src/pyquest/shell.py` starting with the `main()` function there.
