@@ -1,0 +1,71 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = 'trueseeing'
+authors = [
+  {name='Takahiro Yoshimura', email='alterakey@protonmail.com'}
+]
+classifiers = [
+    "Topic :: Security",
+    "Environment :: Console",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: POSIX :: BSD",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: Android",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+]
+readme = "README.md"
+keywords = ['ios', 'android', 'security', 'pentest', 'hacking']
+dependencies = [
+    "lxml~=5.0",
+    "pyyaml~=6.0",
+    "jinja2~=3.1",
+    "pypubsub~=4.0",
+    "termcolor~=2.4",
+    "progressbar2~=4.3",
+    "importlib_metadata~=7.0",
+    "asn1crypto~=1.5",
+    "pyzstd~=0.16",
+    "aiohttp~=3.9",
+    "lief~=0.14",
+    "pyaxmlparser~=0.3",
+    "prompt-toolkit~=3.0",
+    'frida-tools~=13.6',
+]
+requires-python = ">=3.9"
+dynamic = ['version', 'description']
+
+[project.optional-dependencies]
+dev = [
+  "mypy~=1.13",
+  "pyproject-flake8~=7.0",
+  "typing_extensions~=4.12",
+]
+
+[project.urls]
+Source = "https://github.com/alterakey/trueseeing"
+
+[project.scripts]
+trueseeing = "trueseeing.app.shell:entry"
+
+[tool.mypy]
+strict = true
+show_error_codes = true
+enable_error_code = "redundant-expr"
+
+[[tool.mypy.overrides]]
+module = [
+  "lxml.*",
+  "jinja2",
+  "pubsub",
+  "asn1crypto.*",
+  "pyaxmlparser.*",
+]
+ignore_missing_imports = true
+
+# pyproject-flake8 (pflake8)
+[tool.flake8]
+extend-ignore = "E301,E302,E265,E114,E501,E231,E252,E261,E701,E722,E741"
+indent-size = 2
