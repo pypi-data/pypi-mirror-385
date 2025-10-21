@@ -1,0 +1,68 @@
+[build-system]
+requires = ["setuptools>=68.1.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.black]
+line-length = 119
+exclude = '''
+^/(
+  bin/iupred2a
+  | notebooks
+)
+'''
+
+[project]
+name = "picnic_bio"
+version = "1.0.1"
+description = "PICNIC (Proteins Involved in CoNdensates In Cells) is a machine learning-based model that predicts proteins involved in biomolecular condensates."
+readme = {file = "README.md", content-type = "text/markdown"}
+requires-python = ">=3.9,<3.13"
+
+authors = [
+  { name = "Anna Hadarovich", email = "hadarovi@mpi-cbg.de" },
+  { name = "Soumyadeep Ghosh", email = "soumyadeep11194@gmail.com" },
+  { name = "Maxim Scheremetjew", email = "schereme@mpi-cbg.de" },
+]
+maintainers = [
+  {name = "Maxim Scheremetjew", email = "schereme@mpi-cbg.de"}
+]
+license = "BSD-3-Clause"
+
+keywords = ["Biomolecular condensate", "Scientific Annotation Tool", "condensate", "machine learning"]
+
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering :: Bio-Informatics",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Operating System :: Unix",
+  "Operating System :: MacOS",
+]
+dependencies = [
+  "requests ~=2.32.0",
+  "catboost ~=1.2.7",
+  "matplotlib ~=3.9.4",
+  "pandas ~=2.2.3",
+  "Bio ~=1.6.2",
+  "numpy ~=1.26.4",
+]
+
+[project.urls]
+Source = "https://git.mpi-cbg.de/tothpetroczylab/picnic"
+Documentation = "https://git.mpi-cbg.de/tothpetroczylab/picnic/-/blob/main/README.md"
+Funding = "https://picnic.cd-code.org/about-us"
+Homepage = "https://picnic.cd-code.org/"
+Tracker = "https://git.mpi-cbg.de/tothpetroczylab/picnic/-/issues"
+
+[project.entry-points."console_scripts"]
+picnic = "picnic_bio.main:main"
+
+[tool.setuptools]
+package-dir = {"picnic_bio" = "src"}
+package-data = {"picnic_bio" = ["files/models_llps/*", "files/go/*"]}
