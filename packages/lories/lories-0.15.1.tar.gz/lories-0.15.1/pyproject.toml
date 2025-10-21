@@ -1,0 +1,139 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = ['setuptools >= 61.0', 'versioneer[toml]']
+
+[project]
+name = "lories"
+description = """\
+This repository provides a set of core functions for \
+Local Resource Integration by ISC Konstanz e.V."""
+
+authors = [
+    {name = "ISC Konstanz e.V."}
+]
+maintainers = [
+    {name = "Adrian Minde", email = "adrian.minde@isc-konstanz.de"}
+]
+
+urls.author = "https://isc-konstanz.de"
+urls.source = "https://github.com/isc-konstanz/lories/"
+urls.issues = "https://github.com/isc-konstanz/lories/issues"
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Operating System :: OS Independent"
+]
+
+readme = "README.md"
+requires-python = ">= 3.9"
+license = "LGPL-3.0-or-later"
+license-files = ["LICEN[CS]E*"]
+dynamic = ["version"]
+
+dependencies = [
+    "tomli >= 1.1; python_version < '3.11'",
+    "numpy >= 1.21",
+    "pandas >= 1.3",
+    "tzlocal >= 5.1",
+    "requests >= 2.31",
+]
+
+[project.optional-dependencies]
+postgresql = [
+    "sqlalchemy >= 2.0",
+    "psycopg2 >= 2.9",
+]
+mariadb = [
+    "sqlalchemy >= 2.0",
+    "pymysql >= 1.1",
+]
+mysql = [
+    "sqlalchemy >= 2.0",
+    "pymysql >= 1.1",
+]
+influx = [
+    "influxdb-client",
+]
+modbus = [
+    "pymodbus <= 3.9",
+]
+revpi = [
+    "revpimodio2",
+]
+dash = [
+    "dash",
+    "dash-auth",
+    "dash-bootstrap-component",
+    "flask-bcrypt",
+    "flask-login",
+]
+sim = [
+    "openpyxl",
+    "matplotlib",
+    "seaborn",
+    "tqdm",
+]
+doc = [
+    "graphviz",
+    "sphinx",
+    "sphinx-autoapi",
+    "pydata-sphinx-theme",
+    "myst-parser",
+]
+dev = [
+    "pre-commit",
+    "ruff",
+]
+
+[tool.setuptools.package-data]
+lories = [
+    "application/view/assets/*.css",
+    "application/view/assets/*.ico",
+	"application/view/assets/*.jpg",
+	"application/view/assets/*.png"
+]
+
+[tool.setuptools.packages.find]
+namespaces = false
+exclude = [
+    "doc",
+    "data*"
+]
+
+[tool.versioneer]
+VCS = "git"
+style = "pep440"
+versionfile_source = "lories/_version.py"
+versionfile_build = "lories/_version.py"
+parentdir_prefix = "lories-"
+tag_prefix = "v"
+
+[project.scripts]
+lories = "lories.__main__:main"
+
+[tool.ruff]
+indent-width = 4
+line-length = 120
+target-version = "py37"
+exclude = ["lories/_version.py"]
+
+[tool.ruff.lint]
+select = [
+    # "D",  # pydocstyle
+    "E",  # pycodestyle
+    "F",  # pyflakes
+    "I",  # isort
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["E", "I"]
+
+[tool.ruff.lint.isort]
+extra-standard-library = ["dateutil"]
+known-first-party = ["lories", "numpy", "pandas", "pytz"]
