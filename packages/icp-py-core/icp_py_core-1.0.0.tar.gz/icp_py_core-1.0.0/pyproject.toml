@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=71", "wheel", "build"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "icp-py-core"
+version = "1.0.0"
+description = "Core Python SDK for the Internet Computer: agent, candid, identity, principal, certificate."
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [{ name = "eliezhao" }]
+requires-python = ">=3.8"
+
+dependencies = [
+  "httpx>=0.24",
+  "cbor2>=5.6.0",
+  "leb128>=1.0.4",
+  "antlr4-python3-runtime==4.9.3",
+  "ecdsa>=0.18.0",         # for secp256k1
+  "PyNaCl>=1.5.0",         # for ed25519
+]
+
+[project.optional-dependencies]
+bls = ["blst"]  # optional: only needed if you enable certificate verification
+
+[project.urls]
+Homepage = "https://github.com/eliezhao/icp-py-core"
+Repository = "https://github.com/eliezhao/icp-py-core"
+Issues = "https://github.com/eliezhao/icp-py-core/issues"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["icp_core*", "icp_*"]
+exclude = ["tests*", "examples*"]
+
+[tool.setuptools.package-data]
+icp_candid = [
+  "parser/assets/*.g4",
+  "parser/assets/*.jar",
+  "parser/assets/*.sh",
+]

@@ -1,0 +1,14 @@
+include README.md
+include CHANGELOG.md
+include ROADMAP.md
+include LICENSE
+
+recursive-include src/icp_candid/parser/assets *.g4 *.jar *.sh
+
+prune tests
+prune examples
+prune pics
+prune __pycache__
+
+global-exclude __pycache__/*
+global-exclude __pycache__ *.py[cod] *.so .DS_Store
