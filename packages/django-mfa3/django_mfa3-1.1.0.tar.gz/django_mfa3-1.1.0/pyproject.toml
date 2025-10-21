@@ -1,0 +1,61 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "django-mfa3"
+version = "1.1.0"
+description = "multi factor authentication for django"
+readme = "README.md"
+license = "MIT"
+keywords = ["django", "mfa", "two-factor-authentication", "webauthn", "fido2"]
+authors = [
+    {name = "Tobias Bengfort", email = "tobias.bengfort@posteo.de"},
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "pyotp",
+    "fido2>=2.0,<3.0",
+    # https://github.com/lincolnloop/python-qrcode/issues/317
+    "qrcode>=7.1,<7.4",
+    "django>=4.2",
+]
+
+[project.urls]
+Homepage = "https://github.com/xi/django-mfa3"
+
+[tool.setuptools.packages.find]
+include = ["mfa*"]
+
+[tool.setuptools.package-data]
+mfa = [
+    "templates/**/*.html",
+    "templates/**/*.txt",
+    "static/**/*.js",
+    "locale/**/*.po",
+    "locale/**/*.mo",
+]
+
+[tool.ruff]
+exclude = ["migrations"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "C9", "I", "Q", "UP", "RUF"]
+ignore = ["RUF012"]
+
+[tool.ruff.lint.flake8-quotes]
+inline-quotes = "single"
+
+[tool.ruff.lint.isort]
+force-single-line = true
+
+[tool.coverage.run]
+source = ["mfa"]
