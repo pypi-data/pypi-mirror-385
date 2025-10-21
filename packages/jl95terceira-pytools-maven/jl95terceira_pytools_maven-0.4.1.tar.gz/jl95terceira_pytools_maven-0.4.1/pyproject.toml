@@ -1,0 +1,46 @@
+[build-system]
+requires = ["hatchling", "hatch-requirements-txt"]
+build-backend = "hatchling.build"
+[project]
+name = "jl95terceira_pytools_maven"
+version = "0.4.1"
+authors = [
+  { name="Joao Luis Ornelas da Silva", email="jl95terceira@gmail.com" },
+]
+description = "Python command line tools collection - Apache Maven"
+readme = "README.md"
+requires-python = ">=3.12"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dynamic = ["dependencies"]
+
+[project.urls]
+Homepage = "https://github.com/jl95terceira/project-pytools-maven"
+Issues = "https://github.com/jl95terceira/project-pytools-maven/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["project/package"]
+
+[tool.hatch.build.targets.wheel.sources]
+"project/package" = "jl95terceira/pytools"
+
+[tool.hatch.metadata.hooks.requirements_txt]
+files = ["requirements.txt"]
+
+[project.scripts]
+#PPTOML:BEGIN
+#import os
+#import project
+#for file_name in filter(lambda file_name: file_name.endswith('.py'), os.listdir(os.path.join(project.PATH, 'project', 'package',))):
+#  app_name = os.path.splitext(file_name)[0]
+#  padding  = (12-len(app_name))*' '
+#  writeline(f'"jl95terceira-pytools/{app_name}"{padding}="jl95terceira.pytools.{app_name}:main"')
+#PPTOML:END
+"jl95terceira-pytools/maven"       ="jl95terceira.pytools.maven:main"
+"jl95terceira-pytools/mavenaccio"  ="jl95terceira.pytools.mavenaccio:main"
+"jl95terceira-pytools/mavendeployfile"="jl95terceira.pytools.mavendeployfile:main"
+"jl95terceira-pytools/mavengithub" ="jl95terceira.pytools.mavengithub:main"
+#PPTOML:TAIL
