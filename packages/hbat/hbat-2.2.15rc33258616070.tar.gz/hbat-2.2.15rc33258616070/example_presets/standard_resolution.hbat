@@ -1,0 +1,53 @@
+{
+  "format_version": "1.0",
+  "application": "HBAT",
+  "created": "2024-01-15T10:30:00.000000",
+  "description": "HBAT Standard Resolution Preset - Default parameters optimized for typical protein crystal structures (1.5-2.5Å resolution)",
+  "parameters": {
+    "hydrogen_bonds": {
+      "h_a_distance_cutoff": 3.5,
+      "dha_angle_cutoff": 120.0,
+      "d_a_distance_cutoff": 4.0
+    },
+    "weak_hydrogen_bonds": {
+      "h_a_distance_cutoff": 3.6,
+      "dha_angle_cutoff": 150.0,
+      "d_a_distance_cutoff": 3.5
+    },
+    "halogen_bonds": {
+      "x_a_distance_cutoff": 3.9,
+      "dxa_angle_cutoff": 150.0
+    },
+    "pi_interactions": {
+      "h_pi_distance_cutoff": 4.5,
+      "dh_pi_angle_cutoff": 90.0,
+      "ccl_pi_distance_cutoff": 3.8,
+      "ccl_pi_angle_cutoff": 120.0,
+      "cbr_pi_distance_cutoff": 3.9,
+      "cbr_pi_angle_cutoff": 120.0,
+      "ci_pi_distance_cutoff": 4.0,
+      "ci_pi_angle_cutoff": 120.0,
+      "ch_pi_distance_cutoff": 4.5,
+      "ch_pi_angle_cutoff": 120.0,
+      "nh_pi_distance_cutoff": 4.2,
+      "nh_pi_angle_cutoff": 130.0,
+      "oh_pi_distance_cutoff": 4.0,
+      "oh_pi_angle_cutoff": 130.0,
+      "sh_pi_distance_cutoff": 4.3,
+      "sh_pi_angle_cutoff": 120.0
+    },
+    "general": {
+      "covalent_cutoff_factor": 0.85,
+      "analysis_mode": "complete"
+    },
+    "pdb_fixing": {
+      "enabled": false,
+      "method": "pdbfixer",
+      "add_hydrogens": true,
+      "add_heavy_atoms": false,
+      "replace_nonstandard": false,
+      "remove_heterogens": false,
+      "keep_water": true
+    }
+  }
+}
