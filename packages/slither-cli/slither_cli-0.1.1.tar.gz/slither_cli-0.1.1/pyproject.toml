@@ -1,0 +1,42 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "slither-cli"
+version = "0.1.1"
+description = "Display directory structure as a tree in your terminal"
+readme = "README.md"
+requires-python = ">=3.13"
+license = "MIT"
+authors = [
+    { name = "Jesse Hart", email = "jesse@jesshart.com" }
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities",
+]
+dependencies = [
+    "typer>=0.12.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/jesshart/slither-cli"
+Repository = "https://github.com/jesshart/slither-cli"
+Issues = "https://github.com/jesshart/slither-cli/issues"
+
+[project.scripts]
+slither = "slither.cli:app"
+slither-cli = "slither.cli:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["slither"]
+
+[tool.uv]
+package = true
