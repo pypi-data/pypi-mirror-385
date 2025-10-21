@@ -1,0 +1,111 @@
+Metadata-Version: 2.4
+Name: centraldogma-python
+Version: 0.6.0
+Summary: Python client library for Central Dogma
+Author-email: Central Dogma Team <dl_centraldogma@linecorp.com>
+Project-URL: Homepage, https://github.com/line/centraldogma-python
+Project-URL: Documentation, https://line.github.io/centraldogma-python
+Project-URL: Repository, https://github.com/line/centraldogma-python.git
+Project-URL: Issues, https://github.com/line/centraldogma-python/issues
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE.txt
+Requires-Dist: dataclasses-json<0.7.0,>=0.6.7
+Requires-Dist: httpx[http2]<1.0.0,>=0.27.2
+Requires-Dist: marshmallow<4.0.0,>=3.23.0
+Requires-Dist: pydantic<3.0.0,>=2.9.2
+Requires-Dist: python-dateutil<3.0.0,>=2.9.0.post0
+Requires-Dist: tenacity<10.0.0,>=9.0.0
+Provides-Extra: dev
+Requires-Dist: black; extra == "dev"
+Requires-Dist: codecov; extra == "dev"
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: pytest-cov; extra == "dev"
+Requires-Dist: pytest-mock; extra == "dev"
+Requires-Dist: respx; extra == "dev"
+Provides-Extra: docs
+Requires-Dist: sphinx_rtd_theme; extra == "docs"
+Dynamic: license-file
+
+# Central Dogma client in Python
+
+[![PyPI version](https://badge.fury.io/py/centraldogma-python.svg)](https://badge.fury.io/py/centraldogma-python)
+[![PyPI Supported Python Versions](https://img.shields.io/pypi/pyversions/centraldogma-python.svg)](https://pypi.python.org/pypi/centraldogma-python/)
+[![check](https://github.com/line/centraldogma-python/actions/workflows/test.yml/badge.svg)](https://github.com/line/centraldogma-python/actions/workflows/test.yml)
+[![Downloads](https://static.pepy.tech/badge/centraldogma-python/month)](https://pepy.tech/project/centraldogma-python)
+
+Python client library for [Central Dogma](https://line.github.io/centraldogma/).
+
+## Install
+```
+$ pip install centraldogma-python
+```
+
+## Getting started
+Only URL indicating CentralDogma server and access token are required.
+```pycon
+>>> from centraldogma.dogma import Dogma
+>>> dogma = Dogma("https://dogma.yourdomain.com", "token")
+>>> dogma.list_projects()
+[]
+```
+
+It supports client configurations.
+```pycon
+>>> retries, max_connections = 5, 10
+>>> dogma = Dogma("https://dogma.yourdomain.com", "token", retries=retries, max_connections=max_connections)
+```
+
+Please see [`examples` folder](https://github.com/line/centraldogma-python/tree/main/examples) for more detail.
+
+---
+
+## Development
+### Tests
+#### Unit test
+```
+$ pytest
+```
+
+#### Integration test
+1. Run local Central Dogma server with docker-compose
+    ```
+    $ docker-compose up -d
+    ```
+
+2. Run integration tests
+    ```
+    $ INTEGRATION_TEST=true pytest
+    ```
+
+3. Stop the server
+    ```
+    $ docker-compose down
+    ```
+
+### Lint
+- [PEP 8](https://www.python.org/dev/peps/pep-0008)
+    ```
+    $ black .
+    ```
+
+### Documentation
+- [PEP 257](https://www.python.org/dev/peps/pep-0257)
+
+#### To build sphinx at local
+```
+$ pip install sphinx sphinx_rtd_theme
+$ cd docs && make html
+```
