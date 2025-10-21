@@ -1,0 +1,57 @@
+Metadata-Version: 2.4
+Name: invrs_opt
+Version: 0.12.1
+Summary: Algorithms for inverse design
+Author-email: "Martin F. Schubert" <mfschubert@gmail.com>
+Maintainer-email: "Martin F. Schubert" <mfschubert@gmail.com>
+License-Expression: MIT
+Keywords: topology,optimization,jax,inverse design
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: jax>=0.4.27
+Requires-Dist: jaxlib
+Requires-Dist: numpy
+Requires-Dist: requests
+Requires-Dist: optax
+Requires-Dist: scipy>=1.15.0
+Requires-Dist: totypes
+Requires-Dist: types-requests
+Provides-Extra: tests
+Requires-Dist: parameterized; extra == "tests"
+Requires-Dist: pytest; extra == "tests"
+Requires-Dist: pytest-cov; extra == "tests"
+Requires-Dist: pytest-subtests; extra == "tests"
+Provides-Extra: dev
+Requires-Dist: bump-my-version; extra == "dev"
+Requires-Dist: darglint; extra == "dev"
+Requires-Dist: mypy; extra == "dev"
+Requires-Dist: pre-commit; extra == "dev"
+Dynamic: license-file
+
+# invrs-opt - Optimization algorithms for inverse design
+[![Continuous integration](https://github.com/invrs-io/opt/actions/workflows/build-ci.yml/badge.svg)](https://github.com/invrs-io/opt/actions)
+[![PyPI version](https://img.shields.io/pypi/v/invrs-opt)](https://pypi.org/project/invrs-opt/)
+
+## Overview
+
+The `invrs-opt` package defines an optimizer API intended for topology optimization, inverse design, or AI-guided design. It (currently) implements the L-BFGS-B optimization algorithm along with some variants. The API is intended to be general so that new algorithms can be accommodated, and is inspired by the functional optimizer approach used in jax. Example usage is as follows:
+
+```python
+initial_params = ...
+
+optimizer = invrs_opt.lbfgsb()
+state = optimizer.init(initial_params)
+
+for _ in range(steps):
+    params = optimizer.params(state)
+    value, grad = jax.value_and_grad(loss_fn)(params)
+    state = optimizer.update(grad=grad, value=value, params=params, state=state)
+```
+
+Optimizers in `invrs-opt` are compatible with custom types defined in the [totypes](https://github.com/invrs-io/totypes) package. The basic `lbfgsb` optimizer enforces bounds for custom types, while the `density_lbfgsb` optimizer implements a filter-and-threshold operation for `DensityArray2D` types to ensure that solutions have the correct length scale.
+
+## Install
+```
+pip install invrs_opt
+```
