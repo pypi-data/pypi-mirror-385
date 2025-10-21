@@ -1,0 +1,463 @@
+Metadata-Version: 2.4
+Name: genai-otel-instrument
+Version: 0.1.1.dev0
+Summary: Comprehensive OpenTelemetry auto-instrumentation for LLM/GenAI applications
+Author-email: Kshitij Thakkar <kshitijthakkar@rocketmail.com>
+License: Apache-2.0
+Project-URL: Homepage, https://github.com/Mandark-droid/genai_otel_instrument
+Project-URL: Repository, https://github.com/Mandark-droid/genai_otel_instrument
+Project-URL: Documentation, https://github.com/Mandark-droid/genai_otel_instrument#readme
+Project-URL: Issues, https://github.com/Mandark-droid/genai_otel_instrument/issues
+Project-URL: Changelog, https://github.com/Mandark-droid/genai_otel_instrument/blob/main/CHANGELOG.md
+Keywords: opentelemetry,observability,llm,genai,instrumentation,tracing,metrics,monitoring
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: System :: Monitoring
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: opentelemetry-api<2.0.0,>=1.20.0
+Requires-Dist: opentelemetry-sdk<2.0.0,>=1.20.0
+Requires-Dist: opentelemetry-instrumentation>=0.41b0
+Requires-Dist: opentelemetry-semantic-conventions<1.0.0,>=0.45b0
+Requires-Dist: opentelemetry-exporter-otlp>=1.20.0
+Requires-Dist: opentelemetry-instrumentation-requests>=0.41b0
+Requires-Dist: opentelemetry-instrumentation-httpx>=0.41b0
+Requires-Dist: requests>=2.20.0
+Requires-Dist: wrapt>=1.14.0
+Requires-Dist: httpx>=0.23.0
+Requires-Dist: opentelemetry-instrumentation-mysql>=0.41b0
+Requires-Dist: mysql-connector-python<9.0.0,>=8.0.0
+Requires-Dist: opentelemetry-instrumentation-psycopg2>=0.41b0
+Requires-Dist: psycopg2-binary>=2.9.0
+Requires-Dist: opentelemetry-instrumentation-redis>=0.41b0
+Requires-Dist: redis
+Requires-Dist: opentelemetry-instrumentation-pymongo>=0.41b0
+Requires-Dist: pymongo
+Requires-Dist: opentelemetry-instrumentation-sqlalchemy>=0.41b0
+Requires-Dist: sqlalchemy>=1.4.0
+Requires-Dist: opentelemetry-instrumentation-kafka-python>=0.41b0
+Requires-Dist: kafka-python
+Provides-Extra: openinference
+Requires-Dist: openinference-instrumentation==0.1.31; extra == "openinference"
+Requires-Dist: openinference-instrumentation-litellm==0.1.19; extra == "openinference"
+Requires-Dist: openinference-instrumentation-mcp==1.3.0; extra == "openinference"
+Requires-Dist: openinference-instrumentation-smolagents==0.1.11; extra == "openinference"
+Requires-Dist: litellm>=1.0.0; extra == "openinference"
+Provides-Extra: gpu
+Requires-Dist: nvidia-ml-py>=11.495.46; extra == "gpu"
+Requires-Dist: codecarbon>=2.3.0; extra == "gpu"
+Provides-Extra: co2
+Requires-Dist: codecarbon>=2.3.0; extra == "co2"
+Provides-Extra: openai
+Requires-Dist: openai>=1.0.0; extra == "openai"
+Provides-Extra: anthropic
+Requires-Dist: anthropic>=0.18.0; extra == "anthropic"
+Provides-Extra: google
+Requires-Dist: google-generativeai>=0.3.0; extra == "google"
+Provides-Extra: aws
+Requires-Dist: boto3>=1.28.0; extra == "aws"
+Provides-Extra: azure
+Requires-Dist: azure-ai-openai>=1.0.0; extra == "azure"
+Provides-Extra: cohere
+Requires-Dist: cohere>=4.0.0; extra == "cohere"
+Provides-Extra: mistral
+Requires-Dist: mistralai>=0.4.2; extra == "mistral"
+Provides-Extra: together
+Requires-Dist: together>=0.2.0; extra == "together"
+Provides-Extra: groq
+Requires-Dist: groq>=0.4.0; extra == "groq"
+Provides-Extra: ollama
+Requires-Dist: ollama>=0.1.0; extra == "ollama"
+Provides-Extra: replicate
+Requires-Dist: replicate>=0.15.0; extra == "replicate"
+Provides-Extra: langchain
+Requires-Dist: langchain>=0.1.0; extra == "langchain"
+Provides-Extra: llamaindex
+Requires-Dist: llama-index>=0.9.0; extra == "llamaindex"
+Provides-Extra: huggingface
+Requires-Dist: transformers>=4.30.0; extra == "huggingface"
+Provides-Extra: databases
+Requires-Dist: opentelemetry-instrumentation-sqlalchemy>=0.41b0; extra == "databases"
+Requires-Dist: sqlalchemy>=1.4.0; extra == "databases"
+Requires-Dist: opentelemetry-instrumentation-redis>=0.41b0; extra == "databases"
+Requires-Dist: redis; extra == "databases"
+Requires-Dist: opentelemetry-instrumentation-pymongo>=0.41b0; extra == "databases"
+Requires-Dist: pymongo; extra == "databases"
+Requires-Dist: opentelemetry-instrumentation-psycopg2>=0.41b0; extra == "databases"
+Requires-Dist: psycopg2-binary>=2.9.0; extra == "databases"
+Requires-Dist: opentelemetry-instrumentation-mysql>=0.41b0; extra == "databases"
+Requires-Dist: mysql-connector-python<9.0.0,>=8.0.0; extra == "databases"
+Provides-Extra: messaging
+Requires-Dist: opentelemetry-instrumentation-kafka-python>=0.41b0; extra == "messaging"
+Requires-Dist: kafka-python; extra == "messaging"
+Provides-Extra: vector-dbs
+Requires-Dist: pinecone>=3.0.0; extra == "vector-dbs"
+Requires-Dist: weaviate-client>=3.0.0; extra == "vector-dbs"
+Requires-Dist: qdrant-client>=1.0.0; extra == "vector-dbs"
+Requires-Dist: chromadb>=0.4.0; extra == "vector-dbs"
+Requires-Dist: pymilvus>=2.3.0; extra == "vector-dbs"
+Requires-Dist: faiss-cpu>=1.7.0; extra == "vector-dbs"
+Provides-Extra: all-providers
+Requires-Dist: openai>=1.0.0; extra == "all-providers"
+Requires-Dist: anthropic>=0.18.0; extra == "all-providers"
+Requires-Dist: google-generativeai>=0.3.0; extra == "all-providers"
+Requires-Dist: boto3>=1.28.0; extra == "all-providers"
+Requires-Dist: azure-ai-openai>=1.0.0; extra == "all-providers"
+Requires-Dist: cohere>=4.0.0; extra == "all-providers"
+Requires-Dist: mistralai>=0.4.2; extra == "all-providers"
+Requires-Dist: together>=0.2.0; extra == "all-providers"
+Requires-Dist: groq>=0.4.0; extra == "all-providers"
+Requires-Dist: ollama>=0.1.0; extra == "all-providers"
+Requires-Dist: replicate>=0.15.0; extra == "all-providers"
+Requires-Dist: langchain>=0.1.0; extra == "all-providers"
+Requires-Dist: llama-index>=0.9.0; extra == "all-providers"
+Requires-Dist: transformers>=4.30.0; extra == "all-providers"
+Requires-Dist: litellm>=1.0.0; extra == "all-providers"
+Provides-Extra: all-mcp
+Requires-Dist: opentelemetry-instrumentation-sqlalchemy>=0.41b0; extra == "all-mcp"
+Requires-Dist: opentelemetry-instrumentation-redis>=0.41b0; extra == "all-mcp"
+Requires-Dist: opentelemetry-instrumentation-pymongo>=0.41b0; extra == "all-mcp"
+Requires-Dist: opentelemetry-instrumentation-psycopg2>=0.41b0; extra == "all-mcp"
+Requires-Dist: opentelemetry-instrumentation-mysql>=0.41b0; extra == "all-mcp"
+Requires-Dist: opentelemetry-instrumentation-kafka-python>=0.41b0; extra == "all-mcp"
+Requires-Dist: pinecone>=3.0.0; extra == "all-mcp"
+Requires-Dist: weaviate-client>=3.0.0; extra == "all-mcp"
+Requires-Dist: qdrant-client>=1.0.0; extra == "all-mcp"
+Requires-Dist: chromadb>=0.4.0; extra == "all-mcp"
+Requires-Dist: pymilvus>=2.3.0; extra == "all-mcp"
+Requires-Dist: faiss-cpu>=1.7.0; extra == "all-mcp"
+Requires-Dist: sqlalchemy; extra == "all-mcp"
+Provides-Extra: all
+Requires-Dist: openai>=1.0.0; extra == "all"
+Requires-Dist: anthropic>=0.18.0; extra == "all"
+Requires-Dist: google-generativeai>=0.3.0; extra == "all"
+Requires-Dist: boto3>=1.28.0; extra == "all"
+Requires-Dist: azure-ai-openai>=1.0.0; extra == "all"
+Requires-Dist: cohere>=4.0.0; extra == "all"
+Requires-Dist: mistralai>=0.4.2; extra == "all"
+Requires-Dist: together>=0.2.0; extra == "all"
+Requires-Dist: groq>=0.4.0; extra == "all"
+Requires-Dist: ollama>=0.1.0; extra == "all"
+Requires-Dist: replicate>=0.15.0; extra == "all"
+Requires-Dist: langchain>=0.1.0; extra == "all"
+Requires-Dist: llama-index>=0.9.0; extra == "all"
+Requires-Dist: transformers>=4.30.0; extra == "all"
+Requires-Dist: nvidia-ml-py>=11.495.46; extra == "all"
+Requires-Dist: opentelemetry-instrumentation-sqlalchemy>=0.41b0; extra == "all"
+Requires-Dist: opentelemetry-instrumentation-redis>=0.41b0; extra == "all"
+Requires-Dist: opentelemetry-instrumentation-pymongo>=0.41b0; extra == "all"
+Requires-Dist: opentelemetry-instrumentation-psycopg2>=0.41b0; extra == "all"
+Requires-Dist: opentelemetry-instrumentation-mysql>=0.41b0; extra == "all"
+Requires-Dist: opentelemetry-instrumentation-kafka-python>=0.41b0; extra == "all"
+Requires-Dist: pinecone>=3.0.0; extra == "all"
+Requires-Dist: weaviate-client>=3.0.0; extra == "all"
+Requires-Dist: qdrant-client>=1.0.0; extra == "all"
+Requires-Dist: chromadb>=0.4.0; extra == "all"
+Requires-Dist: pymilvus>=2.3.0; extra == "all"
+Requires-Dist: faiss-cpu>=1.7.0; extra == "all"
+Requires-Dist: sqlalchemy; extra == "all"
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.0.0; extra == "dev"
+Requires-Dist: pytest-mock>=3.10.0; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.21.0; extra == "dev"
+Requires-Dist: black>=23.0.0; extra == "dev"
+Requires-Dist: isort>=5.12.0; extra == "dev"
+Requires-Dist: pylint>=2.17.0; extra == "dev"
+Requires-Dist: mypy>=1.0.0; extra == "dev"
+Requires-Dist: build>=0.10.0; extra == "dev"
+Requires-Dist: twine>=4.0.0; extra == "dev"
+Dynamic: license-file
+
+# GenAI OpenTelemetry Auto-Instrumentation
+
+Production-ready OpenTelemetry instrumentation for GenAI/LLM applications with zero-code setup.
+
+## Features
+
+🚀 **Zero-Code Instrumentation** - Just install and set env vars
+🤖 **15+ LLM Providers** - OpenAI, Anthropic, Google, AWS, Azure, and more
+🔧 **MCP Tool Support** - Auto-instrument databases, APIs, caches, vector DBs
+💰 **Cost Tracking** - Automatic cost calculation per request
+🎮 **GPU Metrics** - Real-time GPU utilization, memory, temperature
+📊 **Complete Observability** - Traces, metrics, and rich span attributes
+➕ **Service Instance ID & Environment** - Identify your services and environments
+⏱️ **Configurable Exporter Timeout** - Set timeout for OTLP exporter
+🔗 **OpenInference Instrumentors** - Smolagents, MCP, and LiteLLM instrumentation
+
+## Quick Start
+
+### Installation
+
+```bash
+pip install genai-otel-instrument
+```
+
+### Usage
+
+**Option 1: Environment Variables (No code changes)**
+
+```bash
+export OTEL_SERVICE_NAME=my-llm-app
+export OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318
+python your_app.py
+```
+
+**Option 2: One line of code**
+
+```python
+import genai_otel
+genai_otel.instrument()
+
+# Your existing code works unchanged
+import openai
+client = openai.OpenAI()
+response = client.chat.completions.create(...)
+```
+
+**Option 3: CLI wrapper**
+
+```bash
+genai-instrument python your_app.py
+```
+
+For a more comprehensive demonstration of various LLM providers and MCP tools, refer to `example_usage.py` in the project root. Note that running this example requires setting up relevant API keys and external services (e.g., databases, Redis, Pinecone).
+
+## What Gets Instrumented?
+
+### LLM Providers (Auto-detected)
+- OpenAI, Anthropic, Google AI, AWS Bedrock, Azure OpenAI
+- Cohere, Mistral AI, Together AI, Groq, Ollama
+- Vertex AI, Replicate, Anyscale, HuggingFace
+
+### Frameworks
+- LangChain (chains, agents, tools)
+- LlamaIndex (query engines, indices)
+
+### MCP Tools (Model Context Protocol)
+- **Databases**: PostgreSQL, MySQL, MongoDB, SQLAlchemy
+- **Caching**: Redis
+- **Message Queues**: Apache Kafka
+- **Vector Databases**: Pinecone, Weaviate, Qdrant, ChromaDB, Milvus, FAISS
+- **APIs**: HTTP/REST requests (requests, httpx)
+
+### OpenInference (Optional - Python 3.10+ only)
+- Smolagents
+- MCP
+- LiteLLM
+
+**Note:** OpenInference instrumentors require Python >= 3.10. Install with:
+```bash
+pip install genai-otel-instrument[openinference]
+```
+
+## Collected Telemetry
+
+### Traces
+Every LLM call, database query, API request, and vector search is traced with full context propagation.
+
+### Metrics
+
+**GenAI Metrics:**
+- `gen_ai.requests` - Request counts by provider/model
+- `gen_ai.client.token.usage` - Token usage (prompt/completion)
+- `gen_ai.client.operation.duration` - Request latency histogram (optimized buckets for LLM workloads)
+- `gen_ai.usage.cost` - Total estimated costs in USD
+- `gen_ai.usage.cost.prompt` - Prompt tokens cost (granular)
+- `gen_ai.usage.cost.completion` - Completion tokens cost (granular)
+- `gen_ai.usage.cost.reasoning` - Reasoning tokens cost (OpenAI o1 models)
+- `gen_ai.usage.cost.cache_read` - Cache read cost (Anthropic)
+- `gen_ai.usage.cost.cache_write` - Cache write cost (Anthropic)
+- `gen_ai.client.errors` - Error counts by operation and type
+- `gen_ai.gpu.*` - GPU utilization, memory, temperature (ObservableGauges)
+- `gen_ai.co2.emissions` - CO2 emissions tracking (opt-in)
+- `gen_ai.server.ttft` - Time to First Token for streaming responses (histogram, 1ms-10s buckets)
+- `gen_ai.server.tbt` - Time Between Tokens for streaming responses (histogram, 10ms-2.5s buckets)
+
+**MCP Metrics (Database Operations):**
+- `mcp.requests` - Number of MCP/database requests
+- `mcp.client.operation.duration` - Operation duration histogram (1ms to 10s buckets)
+- `mcp.request.size` - Request payload size histogram (100B to 5MB buckets)
+- `mcp.response.size` - Response payload size histogram (100B to 5MB buckets)
+
+### Span Attributes
+**Core Attributes:**
+- `gen_ai.system` - Provider name (e.g., "openai")
+- `gen_ai.operation.name` - Operation type (e.g., "chat")
+- `gen_ai.request.model` - Model identifier
+- `gen_ai.usage.prompt_tokens` / `gen_ai.usage.input_tokens` - Input tokens (dual emission supported)
+- `gen_ai.usage.completion_tokens` / `gen_ai.usage.output_tokens` - Output tokens (dual emission supported)
+- `gen_ai.usage.total_tokens` - Total tokens
+
+**Request Parameters:**
+- `gen_ai.request.temperature` - Temperature setting
+- `gen_ai.request.top_p` - Top-p sampling
+- `gen_ai.request.max_tokens` - Max tokens requested
+- `gen_ai.request.frequency_penalty` - Frequency penalty
+- `gen_ai.request.presence_penalty` - Presence penalty
+
+**Response Attributes:**
+- `gen_ai.response.id` - Response ID from provider
+- `gen_ai.response.model` - Actual model used (may differ from request)
+- `gen_ai.response.finish_reasons` - Array of finish reasons
+
+**Tool/Function Calls:**
+- `llm.tools` - JSON-serialized tool definitions
+- `llm.output_messages.{choice}.message.tool_calls.{index}.tool_call.id` - Tool call ID
+- `llm.output_messages.{choice}.message.tool_calls.{index}.tool_call.function.name` - Function name
+- `llm.output_messages.{choice}.message.tool_calls.{index}.tool_call.function.arguments` - Function arguments
+
+**Cost Attributes (granular):**
+- `gen_ai.usage.cost.total` - Total cost
+- `gen_ai.usage.cost.prompt` - Prompt tokens cost
+- `gen_ai.usage.cost.completion` - Completion tokens cost
+- `gen_ai.usage.cost.reasoning` - Reasoning tokens cost (o1 models)
+- `gen_ai.usage.cost.cache_read` - Cache read cost (Anthropic)
+- `gen_ai.usage.cost.cache_write` - Cache write cost (Anthropic)
+
+**Streaming Attributes:**
+- `gen_ai.server.ttft` - Time to First Token (seconds) for streaming responses
+- `gen_ai.streaming.token_count` - Total number of chunks/tokens in streaming response
+
+**Content Events (opt-in):**
+- `gen_ai.prompt.{index}` events with role and content
+- `gen_ai.completion.{index}` events with role and content
+
+**Additional:**
+- Database, vector DB, and API attributes from MCP instrumentation
+
+## Configuration
+
+### Environment Variables
+
+```bash
+# Required
+OTEL_SERVICE_NAME=my-app
+OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318
+
+# Optional
+OTEL_EXPORTER_OTLP_HEADERS=x-api-key=secret
+GENAI_ENABLE_GPU_METRICS=true
+GENAI_ENABLE_COST_TRACKING=true
+GENAI_ENABLE_MCP_INSTRUMENTATION=true
+GENAI_GPU_COLLECTION_INTERVAL=5  # GPU metrics collection interval in seconds (default: 5)
+OTEL_SERVICE_INSTANCE_ID=instance-1 # Optional service instance id
+OTEL_ENVIRONMENT=production # Optional environment
+OTEL_EXPORTER_OTLP_TIMEOUT=10.0 # Optional timeout for OTLP exporter
+
+# Semantic conventions (NEW)
+OTEL_SEMCONV_STABILITY_OPT_IN=gen_ai  # "gen_ai" for new conventions only, "gen_ai/dup" for dual emission
+GENAI_ENABLE_CONTENT_CAPTURE=false  # WARNING: May capture sensitive data. Enable with caution.
+
+# Logging configuration
+GENAI_OTEL_LOG_LEVEL=INFO  # DEBUG, INFO, WARNING, ERROR, CRITICAL. Logs are written to 'logs/genai_otel.log' with rotation (10 files, 10MB each).
+
+# Error handling
+GENAI_FAIL_ON_ERROR=false  # true to fail fast, false to continue on errors
+```
+
+### Programmatic Configuration
+
+```python
+import genai_otel
+
+genai_otel.instrument(
+    service_name="my-app",
+    endpoint="http://localhost:4318",
+    enable_gpu_metrics=True,
+    enable_cost_tracking=True,
+    enable_mcp_instrumentation=True
+)
+```
+
+### Sample Environment File (`sample.env`)
+
+A `sample.env` file has been generated in the project root directory. This file contains commented-out examples of all supported environment variables, along with their default values or expected formats. You can copy this file to `.env` and uncomment/modify the variables to configure the instrumentation for your specific needs.
+
+## Example: Full-Stack GenAI App
+
+```python
+import genai_otel
+genai_otel.instrument()
+
+import openai
+import pinecone
+import redis
+import psycopg2
+
+# All of these are automatically instrumented:
+
+# Cache check
+cache = redis.Redis().get('key')
+
+# Vector search
+pinecone_index = pinecone.Index("embeddings")
+results = pinecone_index.query(vector=[...], top_k=5)
+
+# Database query
+conn = psycopg2.connect("dbname=mydb")
+cursor = conn.cursor()
+cursor.execute("SELECT * FROM context")
+
+# LLM call with full context
+client = openai.OpenAI()
+response = client.chat.completions.create(
+    model="gpt-4",
+    messages=[...]
+)
+
+# You get:
+# ✓ Distributed traces across all services
+# ✓ Cost tracking for the LLM call
+# ✓ Performance metrics for DB, cache, vector DB
+# ✓ GPU metrics if using local models
+# ✓ Complete observability with zero manual instrumentation
+```
+
+## Backend Integration
+
+Works with any OpenTelemetry-compatible backend:
+- Jaeger, Zipkin
+- Prometheus, Grafana
+- Datadog, New Relic, Honeycomb
+- AWS X-Ray, Google Cloud Trace
+- Elastic APM, Splunk
+- Self-hosted OTEL Collector
+
+## Project Structure
+
+```bash
+genai-otel-instrument/
+├── setup.py
+├── MANIFEST.in
+├── README.md
+├── LICENSE
+├── example_usage.py
+└── genai_otel/
+    ├── __init__.py
+    ├── config.py
+    ├── auto_instrument.py
+    ├── cli.py
+    ├── cost_calculator.py
+    ├── gpu_metrics.py
+    ├── instrumentors/
+    │   ├── __init__.py
+    │   ├── base.py
+    │   └── (other instrumentor files)
+    └── mcp_instrumentors/
+        ├── __init__.py
+        ├── manager.py
+        └── (other mcp files)
+```
+
+## License
+Apache-2.0 license
