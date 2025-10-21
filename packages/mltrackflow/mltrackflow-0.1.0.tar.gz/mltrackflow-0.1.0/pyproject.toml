@@ -1,0 +1,92 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mltrackflow"
+version = "0.1.0"
+description = "Makine öğrenimi eğitim süreçlerini şeffaf ve izlenebilir hale getiren kapsamlı Python kütüphanesi"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "Your Name", email = "your.email@example.com"}
+]
+keywords = ["machine learning", "experiment tracking", "mlops", "data science"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+
+dependencies = [
+    "numpy>=1.20.0",
+    "pandas>=1.3.0",
+    "scikit-learn>=1.0.0",
+    "matplotlib>=3.4.0",
+    "seaborn>=0.11.0",
+    "plotly>=5.0.0",
+    "joblib>=1.0.0",
+    "pyyaml>=5.4.0",
+    "tqdm>=4.60.0",
+    "tabulate>=0.8.9",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=3.0.0",
+    "black>=22.0.0",
+    "flake8>=4.0.0",
+    "sphinx>=4.0.0",
+    "sphinx-rtd-theme>=1.0.0",
+]
+advanced = [
+    "mlflow>=2.0.0",
+    "optuna>=3.0.0",
+    "shap>=0.41.0",
+    "yellowbrick>=1.4",
+]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/mltrackflow"
+Documentation = "https://mltrackflow.readthedocs.io"
+Repository = "https://github.com/yourusername/mltrackflow"
+"Bug Tracker" = "https://github.com/yourusername/mltrackflow/issues"
+
+[project.scripts]
+mltrackflow = "mltrackflow.cli:main"
+
+[tool.black]
+line-length = 100
+target-version = ['py38', 'py39', 'py310', 'py311']
+include = '\.pyi?$'
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+addopts = "--cov=mltrackflow --cov-report=html --cov-report=term"
+
+[tool.coverage.run]
+source = ["mltrackflow"]
+omit = ["*/tests/*", "*/examples/*"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]
+
+
