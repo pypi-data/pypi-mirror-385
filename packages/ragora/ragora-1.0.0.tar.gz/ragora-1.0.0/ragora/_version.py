@@ -1,0 +1,1 @@
+"""Version information for the ragora package."""\n\n__version__ = "1.0.0"\n__version_info__ = tuple(map(int, __version__.split(".")))\n
