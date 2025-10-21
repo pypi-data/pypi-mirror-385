@@ -1,0 +1,127 @@
+{
+ "definitions": {
+  "expressions": {
+   "kAVB17221EntityPropertyChangedCanChangeMask": { "value": "(AVB17221EntityPropertyChangedTimeToLive | AVB17221EntityPropertyChangedAvailableIndex | AVB17221EntityPropertyChangedGPTPGrandmasterID | AVB17221EntityPropertyChangedGPTPDomainNumber | AVB17221EntityPropertyChangedEntityCapabilities )" },
+   "kAVB17221EntityPropertyChangedShouldntChangeMask": { "value": "(AVB17221EntityPropertyChangedEntityID | AVB17221EntityPropertyChangedVendorID | AVB17221EntityPropertyChangedModelID | AVB17221EntityPropertyChangedTalkerStreamSources | AVB17221EntityPropertyChangedTalkerCapabilities | AVB17221EntityPropertyChangedListenerStreamSinks | AVB17221EntityPropertyChangedListenerCapabilities | AVB17221EntityPropertyChangedControllerCapabilities | AVB17221EntityPropertyChangedMACAddress | AVB17221EntityPropertyChangedAssociationID | AVB17221EntityPropertyChangedEntityType | AVB17221EntityPropertyChangedIdentifyControlIndex | AVB17221EntityPropertyChangedInterfaceIndex)" }
+  },
+  "enum": {
+   "AVB17221ADPControllerCapabilitiesHasLayer3Proxy": { "value": 2, "deprecated": 1200 },
+   "AVB17221AEMCommandTypeAuthenticateAddKey": { "value": 55, "deprecated": 1200 },
+   "AVB17221AEMCommandTypeAuthenticateAddKeyToChain": { "value": 59, "deprecated": 1200 },
+   "AVB17221AEMCommandTypeAuthenticateAddToken": { "value": 63, "deprecated": 1200 },
+   "AVB17221AEMCommandTypeAuthenticateDeleteKey": { "value": 56, "deprecated": 1200 },
+   "AVB17221AEMCommandTypeAuthenticateDeleteKeyFromChain": { "value": 60, "deprecated": 1200 },
+   "AVB17221AEMCommandTypeAuthenticateDeleteToken": { "value": 64, "deprecated": 1200 },
+   "AVB17221AEMCommandTypeAuthenticateGetIdentity": { "value": 62, "deprecated": 1200 },
+   "AVB17221AEMCommandTypeAuthenticateGetKey": { "value": 58, "deprecated": 1200 },
+   "AVB17221AEMCommandTypeAuthenticateGetKeyList": { "value": 57, "deprecated": 1200 },
+   "AVB17221AEMCommandTypeAuthenticateGetKeychainList": { "value": 61, "deprecated": 1200 },
+   "AVB17221AEMCommandTypeSetSampingRateRange": { "value": 78, "deprecated": 1200 }
+  },
+  "classes": {
+   "AVBIPAddress": {
+    "methods": [
+     {
+      "args": {
+       "0": { "type_modifier": "n", "c_array_of_fixed_length": 16 }
+      },
+      "class_method": false,
+      "selector": "initWithIPv6Address:"
+     }
+    ]
+   },
+   "AVB17221ACMPInterface": {
+    "methods": [
+     {
+      "args": {
+       "0": { "type_modifier": "n", "c_array_of_fixed_size": 16 }
+      },
+      "class_method": false,
+      "selector": "initWithIPv6Address:"
+     },
+     {
+      "args": {
+       "1": {
+        "type_modifier": "o"
+       }
+      },
+      "class_method": false,
+      "selector": "sendACMPResponseMessage:error:"
+     }
+    ]
+   },
+   "AVB17221AECPInterface": {
+    "methods": [
+     {
+      "args": {
+       "2": {
+        "type_modifier": "o"
+       }
+      },
+      "class_method": false,
+      "selector": "sendResponse:toMACAddress:error:"
+     }
+    ]
+   },
+   "AVB17221EntityDiscovery": {
+    "methods": [
+     {
+      "args": {
+       "1": {
+        "type_modifier": "o"
+       }
+      },
+      "class_method": false,
+      "selector": "addLocalEntity:error:"
+     },
+     {
+      "args": {
+       "1": {
+        "type_modifier": "o"
+       }
+      },
+      "class_method": false,
+      "selector": "removeLocalEntity:error:"
+     },
+     {
+      "args": {
+       "2": {
+        "type_modifier": "o"
+       }
+      },
+      "class_method": false,
+      "selector": "changeEntityWithEntityID:toNewGPTPGrandmasterID:error:"
+     }
+    ]
+   },
+   "AVBMACAddress": {
+    "methods": [
+     {
+      "args": {
+       "0": { "type_modifier": "n", "c_array_of_fixed_length": 6  }
+      },
+      "class_method": false,
+      "selector": "initWithBytes:"
+     },
+     {
+      "class_method": false,
+      "retval": { "c_array_of_fixed_length": 6 },
+      "selector": "bytes"
+     }
+    ],
+    "properties": [
+     {
+      "attributes": [
+       "assign",
+       "readonly"
+      ],
+      "name": "bytes"
+     }
+    ]
+   }
+  },
+  "formal_protocols": {},
+  "functions": {},
+  "informal_protocols": {}
+ }
+}
