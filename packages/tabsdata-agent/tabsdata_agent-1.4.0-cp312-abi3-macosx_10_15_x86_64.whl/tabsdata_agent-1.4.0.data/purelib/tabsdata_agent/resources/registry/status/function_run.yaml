@@ -1,0 +1,35 @@
+# Function run status
+function_run_status:
+  - label: S
+    name: Scheduled
+    description: The function run is waiting for execution
+  - label: RR
+    name: RunRequested
+    description: The function run has been set for execution and is waiting to start running
+  - label: RS
+    name: ReScheduled
+    description: The function run has been set to scheduled status again
+  - label: R
+    name: Running
+    description: The function run is running
+  - label: D
+    name: Done
+    description: The function run has finished succesfully
+  - label: E
+    name: Error
+    description: The function run has a transient error and will be automatically retried
+  - label: F
+    name: Failed
+    description: The function run has failed and requires external action
+  - label: H
+    name: OnHold
+    description: The function run is waiting to run but an upstream function run is in Failed status
+  - label: C
+    name: Commmitted
+    description: All function runs in the transaction have finished succesfully
+  - label: X
+    name: Canceled
+    description: All function runs in the transaction have been canceled and discarded
+  - label: Y
+    name: Yanked
+    description: All function runs in the transaction have been discarded
