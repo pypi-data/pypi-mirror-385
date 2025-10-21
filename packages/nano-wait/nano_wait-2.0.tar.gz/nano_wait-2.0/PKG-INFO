@@ -1,0 +1,40 @@
+Metadata-Version: 2.4
+Name: nano_wait
+Version: 2.0
+Summary: Waiting Time Calculation for Automations Based on WiFi and PC Processing
+Author: Luiz Filipe Seabra de Marco
+Author-email: luizfilipeseabra@icloud.com
+License: MIT License
+Keywords: automation automação wifi wait
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: psutil
+Requires-Dist: pywifi
+Dynamic: author
+Dynamic: author-email
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: keywords
+Dynamic: license
+Dynamic: license-file
+Dynamic: requires-dist
+Dynamic: summary
+
+# ⚡ Nano-Wait v2.0
+
+**Adaptive smart wait for Python — replaces `time.sleep()` with intelligence.**
+
+---
+
+## 🚀 Features
+- Adjusts wait time based on CPU, RAM, and Wi-Fi quality.
+- Simple API: `wait(2.5, wifi="Office", speed="fast")`
+- CLI support: `nano-wait 2.5 --wifi "Office" --speed fast`
+- Built-in presets: `slow`, `normal`, `fast`, `ultra`
+- Optional logs and verbose mode.
+
+---
+
+## 📦 Installation
+```bash
+pip install nano-wait
