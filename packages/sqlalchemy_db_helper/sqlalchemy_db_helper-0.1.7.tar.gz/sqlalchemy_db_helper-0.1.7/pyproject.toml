@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "sqlalchemy_db_helper"
+version = "0.1.7"
+description = ""
+authors = ["Bakminstof <bakminstof@yandex.ru>"]
+readme = "README.md"
+repository = "https://github.com/Bakminstof/sqlalchemy_db_helper"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+sqlalchemy = "^2.0.43"
+pydantic = "^2.11.9"
+aiosqlite = { version = "^0.21.0", optional = true }
+
+[tool.poetry.extras]
+aiosqlite = ["aiosqlite"]
+all = ["aiosqlite"]
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
