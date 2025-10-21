@@ -1,0 +1,42 @@
+[tool.poetry]
+name = "nonebot_plugin_bili_helper"
+version = "0.8.4"
+description = "Nonebot2 plugin for bilibili sharing detail"
+authors = ["krimeshu <krimeshu@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/krimeshu/nonebot-plugin-bili-helper"
+repository = "https://github.com/krimeshu/nonebot-plugin-bili-helper"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+nonebot2 = "^2.3.0"
+requests = "^2.28.2"
+aiohttp = "^3.12.15"
+nonebot_plugin_htmlrender = "^0.2.0.3"
+playwright = "^1.54.0"
+
+[tool.poetry.group.dev.dependencies]
+nonebot2 = { extras = ["fastapi", "httpx"], version = "^2.3.0" }
+nonebot-adapter-onebot = "^2.2.0"
+
+[tool.nonebot]
+plugins = ["nonebot_plugin_bili_helper"]
+
+[tool.pyright]
+pythonVersion = "3.9"
+pythonPlatform = "All"
+defineConstant = { PYDANTIC_V2 = true }
+typeCheckingMode = "basic"
+
+[tool.ruff]
+line-length = 88
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "UP", "C", "T", "PYI", "PT", "Q"]
+ignore = ["E402", "C901", "UP037"]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
