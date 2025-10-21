@@ -1,0 +1,453 @@
+#!/usr/bin/env python3
+
+from __future__ import print_function
+
+import argparse
+import sys
+import odcs.client.odcs
+import re
+import requests
+import time
+import shutil
+import tempfile
+import openidc_client
+import hawkey
+from datetime import datetime, timedelta
+
+
+class TemporaryDirectory(object):
+    """
+    Context manager for tempfile.mkdtemp() so it's usable with "with"
+    statement.
+    """
+
+    def __enter__(self):
+        self.name = tempfile.mkdtemp()
+        return self.name
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        shutil.rmtree(self.name)
+
+
+def get_oidc_token():
+    if "stg" in odcs_api_url:
+        id_provider = "https://id.stg.fedoraproject.org/openidc/"
+    else:
+        id_provider = "https://id.fedoraproject.org/openidc/"
+
+    # Get the auth token using the OpenID client.
+    oidc = openidc_client.OpenIDCClient(
+        "odcs",
+        id_provider,
+        {"Token": "Token", "Authorization": "Authorization"},
+        "odcs-authorizer",
+        "notsecret",
+    )
+
+    scopes = [
+        "openid",
+        "https://id.fedoraproject.org/scope/groups",
+        "https://pagure.io/odcs/new-compose",
+        "https://pagure.io/odcs/renew-compose",
+        "https://pagure.io/odcs/delete-compose",
+    ]
+    try:
+        token = oidc.get_token(scopes, new_token=True)
+    except requests.exceptions.HTTPError as e:
+        print(e.response.text)
+        raise
+    return token
+
+
+def get_packages_in_repo(repo_url):
+    """
+    Uses "dnf" API to list all packages available in remote repository defined
+    by `repo_url`.
+    """
+    try:
+        import dnf
+    except ImportError:
+        raise ImportWarning("Can't import dnf. Check your OS platform.")
+
+    base = dnf.Base()
+
+    with TemporaryDirectory() as temp_cache_dir:
+        conf = base.conf
+        conf.cachedir = temp_cache_dir
+
+        # get rid of everything to be sure it's a blank slate
+        base.reset(repos=True, goal=True, sack=True)
+
+        # add a new repo requires an id, a conf object, and a baseurl
+        base.repos.add_new_repo("my_test", conf, baseurl=[repo_url])
+        base.fill_sack(load_system_repo=False)
+
+        # Return available packages.
+        return [
+            x.name for x in base.sack.query(flags=hawkey.IGNORE_EXCLUDES).available()
+        ]
+
+
+def check_compose(compose, source_type, source, packages, flags, arches=None):
+    """
+    Checks that the compose defined by compose data `compose` is properly
+    generated for given input values `source_type, `source`, `packages`
+    and `flags`.
+
+    In case of error, this method raises an exception.
+    """
+
+    # Try to get the result_repofile.
+    r = requests.get(compose["result_repofile"])
+    r.raise_for_status()
+
+    assert compose["state_name"] == "done"
+
+    arches = arches or ["x86_64"]
+    for arch in arches:
+        if source_type == "pulp":
+            # For pulp compose, check that the content_sets are
+            # in the resulting repo file.
+            for content_set in source.split(" "):
+                assert content_set in r.text
+
+            # Check that "arches" are set properly.
+            assert arch in compose["arches"]
+
+            # Check that "sigkeys" are set properly.
+            assert compose["sigkeys"] == "FD431D51"
+        elif source_type == "tag":
+            # For Koji tag, try to get list of packages in a repo.
+            baseurl = compose["result_repo"] + "/" + arch + "/os"
+            pkgs = get_packages_in_repo(baseurl)
+            print("Packages in resulting repo (%s): %r" % (arch, pkgs))
+
+            # Check that all requested packages are in a compose
+            for pkg in packages:
+                assert pkg in pkgs
+
+            # In case of "no_deps" flag, no extra packages are allowed in
+            # a compose. In case the flag is not there, there migh be more
+            # packages in a compose because of dependencies of a package.
+            if "no_deps" in flags:
+                assert len(pkgs) == len(packages)
+            else:
+                assert len(pkgs) >= len(packages)
+        elif source_type == "module":
+            # TODO
+            # For Koji tag, try to get list of packages in a repo.
+            baseurl = compose["result_repo"] + "/" + arch + "/os"
+            pkgs = get_packages_in_repo(baseurl)
+            print("Packages in resulting repo: %r" % pkgs)
+            assert len(pkgs) > 0
+
+
+def check_compose_time(compose, time_threshold):
+    """
+    Check the comsumed time of a compose doesn't over the threshold.
+    :param str time_threshold: time threshold for generating a compose,
+        in format of "[0-9]+[s|S|m|M|h|H|d|D]", like "10m".
+    """
+    try:
+        regex = re.compile(r"(?P<num>\d+)[s|S|m|M|h|H|d|D]")
+        m = regex.match(time_threshold)
+        num = int(m.group("num"))
+    except Exception:
+        raise RuntimeError("Unknown format of time threshold: %s" % time_threshold)
+
+    if time_threshold.endswith(("s", "S")):
+        threshold = timedelta(seconds=num)
+    elif time_threshold.endswith(("m", "M")):
+        threshold = timedelta(minutes=num)
+    elif time_threshold.endswith(("h", "H")):
+        threshold = timedelta(hours=num)
+    elif time_threshold.endswith(("d", "D")):
+        threshold = timedelta(days=num)
+
+    time_format = "%Y-%m-%dT%H:%M:%SZ"
+    start_time = datetime.strptime(compose["time_submitted"], time_format)
+    end_time = datetime.strptime(compose["time_done"], time_format)
+    spent_time = end_time - start_time
+    print(
+        "Time spent for generating compose (%s): %ss"
+        % (compose["id"], spent_time.total_seconds())
+    )
+    assert (
+        spent_time <= threshold
+    ), "Spent time (%ss) over threshold (%s) for generating compose %s." % (
+        spent_time.total_seconds(),
+        time_threshold,
+        compose["id"],
+    )
+
+
+def check_new_compose(
+    source_type,
+    source,
+    packages,
+    flags,
+    sigkeys=None,
+    arches=None,
+    expected_state_reason=None,
+    expected_packages=None,
+    **kwargs
+):
+    """
+    Submits new compose and checks the result.
+    """
+    print(
+        "Submitting new compose request: %s %s, %r %r"
+        % (source_type, source, packages, flags)
+    )
+
+    try:
+        compose = client.new_compose(
+            source=source,
+            source_type=source_type,
+            packages=packages,
+            flags=flags,
+            sigkeys=sigkeys,
+            arches=arches,
+            **kwargs
+        )
+    except requests.exceptions.HTTPError as e:
+        assert expected_state_reason in e.response.json()["message"]
+        print("OK (HTTPError expected)")
+        print("")
+        return
+
+    compose = client.wait_for_compose(compose["id"])
+    if expected_state_reason:
+        assert compose["state_name"] == "failed"
+        assert expected_state_reason in compose["state_reason"]
+    else:
+        if not packages and expected_packages:
+            packages = expected_packages
+        check_compose(compose, source_type, source, packages, flags, arches)
+
+    print("OK")
+    print("")
+    return compose["id"]
+
+
+def check_renew_compose(compose_id, source_type, source, packages, flags, arches=None):
+    """
+    Renews the compose and checks the compose is renewed properly.
+    """
+    print("Renewing compose: %s" % compose_id)
+    compose = client.renew_compose(compose_id)
+    compose = client.wait_for_compose(compose["id"])
+    check_compose(compose, source_type, source, packages, flags, arches)
+    print("OK")
+    print("")
+    return compose["id"]
+
+
+def check_delete_compose(compose_id):
+    """
+    Deletes the compose and checks it is deleted properly.
+    """
+    print("Deleting compose: %s" % compose_id)
+    client.delete_compose(compose_id)
+    # Deleting a compose means setting its "time_to_expire" to "now".
+    # The composes are not delete immediatelly, so this method only
+    # checks that "time_to_expire" is set properly and composes are
+    # therefore marked for deletion.
+    for i in range(10):
+        now = datetime.utcnow()
+        compose = client.get_compose(compose_id)
+        time_to_expire = datetime.strptime(
+            compose["time_to_expire"], "%Y-%m-%dT%H:%M:%SZ"
+        )
+        if time_to_expire < now:
+            break
+        time.sleep(1)
+    assert time_to_expire < now
+    print("OK")
+    print("")
+
+
+def check_redhat_deployment(with_large_tag_compose=True):
+    """
+    Checks the Red Hat internal ODCS deployment
+    """
+    # Check "tag".
+    if with_large_tag_compose:
+        # test with a compose with much more packages
+        compose_id = check_new_compose(
+            "tag",
+            "rhos-13.0-rhel-7-container-build",
+            [],
+            [],
+            sigkeys=["37017186", "FD431D51", "DB42A60E", ""],
+            arches=["x86_64", "ppc64le"],
+        )
+        compose = client.get_compose(compose_id)
+        check_compose_time(compose, "10m")
+        check_delete_compose(compose_id)
+        check_renew_compose(
+            compose_id,
+            "tag",
+            "rhos-13.0-rhel-7-container-build",
+            [],
+            [],
+            arches=["x86_64", "ppc64le"],
+        )
+    else:
+        # this is a compose much smaller
+        compose_id = check_new_compose(
+            "tag",
+            "cf-1.0-rhel-5",
+            ["gofer-package"],
+            ["no_deps"],
+            arches=["x86_64", "ppc64"],
+        )
+        compose = client.get_compose(compose_id)
+        check_compose_time(compose, "5m")
+        check_delete_compose(compose_id)
+        check_renew_compose(
+            compose_id,
+            "tag",
+            "cf-1.0-rhel-5",
+            ["gofer-package"],
+            ["no_deps"],
+            ["x86_64", "ppc64"],
+        )
+
+    # Check "tag" with "deps".
+    check_new_compose("tag", "cf-1.0-rhel-5", ["gofer"], [], sigkeys=[""])
+
+    # Check "tag" without "packages" - all packages in tag should be included.
+    check_new_compose(
+        "tag",
+        "cf-1.0-rhel-5",
+        [],
+        [],
+        sigkeys=[""],
+        expected_packages=[
+            "PyPAM",
+            "aeolus-audrey-agent",
+            "facter",
+            "gofer",
+            "gofer-package",
+            "gofer-system",
+            "gofer-virt",
+            "gofer-watchdog",
+            "help2man",
+            "katello-agent",
+            "libdnet",
+            "libdnet-devel",
+            "libdnet-progs",
+            "open-vm-tools",
+            "open-vm-tools-devel",
+            "open-vm-tools-libs",
+            "open-vm-toolsd",
+            "python-argparse",
+            "python-gofer",
+            "python-hashlib",
+            "python-httplib2",
+            "python-oauth2",
+            "python-qpid",
+            "python-saslwrapper",
+            "python-setuptools",
+            "python-ssl",
+            "python-uuid",
+            "rhev-agent",
+            "ruby-gofer",
+            "ruby-saslwrapper",
+            "saslwrapper",
+            "saslwrapper-devel",
+        ],
+    )
+
+    # Check unknown "tag".
+    check_new_compose(
+        "tag",
+        "unknown-tag",
+        ["gofer-package"],
+        [],
+        expected_state_reason="Unknown Koji tag",
+    )
+
+    # Check "tag" with additional builds.
+    compose_id = check_new_compose(
+        "tag",
+        "cf-1.0-rhel-5",
+        ["gofer-package", "tar"],
+        ["no_deps"],
+        sigkeys=[""],
+        arches=["x86_64", "ppc64"],
+        builds=["tar-1.26-29.el7"],
+    )
+
+    # Check "build".
+    compose_id = check_new_compose(
+        "build",
+        "",
+        ["tar"],
+        ["no_deps"],
+        arches=["x86_64", "ppc64"],
+        builds=["tar-1.26-29.el7"],
+    )
+
+    # Check "pulp".
+    check_new_compose("pulp", "rhel-7-server-rpms rhel-server-rhscl-7-rpms", [], [])
+
+    # Check unknown "pulp" content_set.
+    check_new_compose(
+        "pulp",
+        "rhel-7-server-rpms-unknown",
+        [],
+        [],
+        expected_state_reason="Failed to find",
+    )
+
+    # Check "module".
+    check_new_compose("module", "postgresql:10", [], ["no_deps"], [""])
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Test ODCS deployment.")
+    parser.add_argument("odcs_api_url", help="URL of the ODCS instance to test")
+    parser.add_argument("profile", help='can be either "redhat" or "fedora"')
+    parser.add_argument(
+        "--fast-check", action="store_true", help="perform just a single compose check"
+    )
+    args = parser.parse_args()
+
+    odcs_api_url = args.odcs_api_url
+    profile = args.profile
+    fast_check = args.fast_check
+
+    if profile == "redhat":
+        token = None
+        auth_mech = odcs.client.odcs.AuthMech.Kerberos
+    elif profile == "fedora":
+        token = get_oidc_token()
+        auth_mech = odcs.client.odcs.AuthMech.OpenIDC
+    else:
+        print("Unknown profile")
+        sys.exit(2)
+
+    client = odcs.client.odcs.ODCS(
+        odcs_api_url,
+        auth_mech=auth_mech,
+        openidc_token=token,
+    )
+
+    if profile == "redhat":
+        if fast_check:
+            compose_id = check_new_compose(
+                "pulp", "rhel-7-server-rpms rhel-server-rhscl-7-rpms", [], []
+            )
+            sys.exit(0) if compose_id else sys.exit(1)
+
+        with_large_tag_compose = True
+        if ".dev." in odcs_api_url or ".qe." in odcs_api_url:
+            with_large_tag_compose = False
+        check_redhat_deployment(with_large_tag_compose=with_large_tag_compose)
+    else:
+        if fast_check:
+            print("Ignoring --fast-check option. Applicable only for redhat profile.")
+        compose_id = check_new_compose("module", "testmodule-master", [], ["no_deps"])
+        sys.exit(0) if compose_id else sys.exit(1)

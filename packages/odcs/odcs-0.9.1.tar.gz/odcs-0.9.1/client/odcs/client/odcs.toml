@@ -1,0 +1,23 @@
+# ODCS client config file in TOML format.
+
+[redhat]
+
+[redhat.prod]
+url = "https://odcs.engineering.redhat.com"
+id_provider = "https://auth.redhat.com/auth/realms/EmployeeIDP/protocol/openid-connect/"
+oidc_authz_code_client_id = "on-demand-compose-service"
+
+[redhat.stage]
+url = "https://odcs.stage.engineering.redhat.com"
+id_provider = "https://auth.stage.redhat.com/auth/realms/EmployeeIDP/protocol/openid-connect/"
+oidc_authz_code_client_id = "on-demand-compose-service"
+
+[redhat.qa]
+url = "https://odcs.qa.engineering.redhat.com"
+id_provider = "https://auth.stage.redhat.com/auth/realms/EmployeeIDP/protocol/openid-connect/"
+oidc_authz_code_client_id = "on-demand-compose-service-qa"
+
+[redhat.dev]
+url = "https://odcs.dev.engineering.redhat.com"
+id_provider = "https://auth.stage.redhat.com/auth/realms/EmployeeIDP/protocol/openid-connect/"
+oidc_authz_code_client_id = "on-demand-compose-service-dev"

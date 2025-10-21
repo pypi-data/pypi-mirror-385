@@ -1,0 +1,404 @@
+# On Demand Compose Service - ODCS
+
+![logo of ODCS](https://pagure.io/odcs/raw/master/f/logo.png)
+
+## What is ODCS
+
+The main goal of ODCS is to allow generation of temporary composes using the REST API calls. By a compose, we mainly mean RPM repository with packages taken from different sources, but in the future, generation of other output types could be possible too.
+
+ODCS can take RPMs for a compose from multiple sources like Koji tag, module built in Koji or external repository provided by Pulp tool.
+
+## ODCS project future
+
+ODCS is in maintenance mode, so it is not deprecated, and developers address bugs.
+
+Red Hat plans to use ODCS for the time being. Red Hat's future build system is [Konflux](https://konflux-ci.dev/), and ODCS doesn't fit into Konflux, so eventually Red Hat will stop using ODCS internally. At that point ODCS will be fully deprecated.
+
+## Using ODCS - client library
+
+There is client library written in Python which allows easy access to REST API provided by ODCS server.
+
+### Installing the ODCS client
+
+On Fedora:
+
+```
+$ sudo dnf install odcs-client
+```
+
+If you want to install using `pip`, you can run following:
+
+```
+$ sudo pip install odcs[client]
+```
+
+In case you want your python project to depend on ODCS client library and add it to your `requirements.txt`, you can just use following to depend on ODCS client:
+
+```
+odcs[client]
+```
+
+### ODCS authentication system
+
+ODCS server can be configured to authenticate using OpenIDC, Kerberos or SSL. Eventually it can be set in NoAuth mode to support anonymous access. Depending on the ODCS server configuration, you have to set your authentication method when creating ODCS class instance.
+
+#### Using OpenIDC for authentication
+
+To use OpenIDC, you have to provide the OpenIDC token to ODCS client class constructor. To obtain that OpenIDC token, you can either use `python-openidc-client`, or ask the OpenIDC provider for service token which does not have to be refreshed. Once you have the token, you can create the ODCS instance like this:
+
+```
+from odcs.client.odcs import ODCS, AuthMech
+
+odcs = ODCS("https://odcs.fedoraproject.org",
+            auth_mech=AuthMech.OpenIDC,
+            openidc_token="your_openidc_token")
+```
+
+Getting the `openidc_token` using `python-openidc-client` library can be done like this:
+
+```
+import openidc_client
+staging = False
+
+if staging:
+    id_provider = 'https://id.stg.fedoraproject.org/openidc/'
+else:
+    id_provider = 'https://id.fedoraproject.org/openidc/'
+
+# Get the auth token using the OpenID client.
+oidc = openidc_client.OpenIDCClient(
+    'odcs',
+    id_provider,
+    {'Token': 'Token', 'Authorization': 'Authorization'},
+    'odcs-authorizer',
+    'notsecret',
+)
+
+scopes = [
+    'openid',
+    'https://id.fedoraproject.org/scope/groups',
+    'https://pagure.io/odcs/new-compose',
+    'https://pagure.io/odcs/renew-compose',
+    'https://pagure.io/odcs/delete-compose',
+]
+try:
+    token = oidc.get_token(scopes, new_token=True)
+    token = oidc.report_token_issue()
+except requests.exceptions.HTTPError as e:
+    print(e.response.text)
+    raise
+```
+
+#### Using Kerberos for authentication
+
+To use Kerberos, you have to have valid Kerberos ticket or you need to have the Kerberos keytab file. If you want to use ODCS client library with Kerberos keytab, you have to set the `KRB5_CLIENT_KTNAME` environment variable to full path to the keytab file you want to use. You can for example do it like this:
+
+```
+from odcs.client.odcs import ODCS, AuthMech
+from os import environ
+environ["KRB5_CLIENT_KTNAME"] = "/full/path/to/ketab"
+
+odcs = ODCS("https://odcs.fedoraproject.org",
+            auth_mech=AuthMech.Kerberos)
+```
+
+#### Using SSL for authentication
+
+To use SSL, you have to have SSL client certificate and key files. You then have to choose SSL AuthMech and pass the paths to SSL client certificate and key like this:
+
+```
+from odcs.client.odcs import ODCS, AuthMech
+
+odcs = ODCS("https://odcs.fedoraproject.org",
+            auth_mech=AuthMech.SSL,
+            ssl_cert="/path/to/ssl-crt.pem",
+            ssl_key="/path/to/ssl-key.pem")
+```
+
+### Requesting new compose
+
+The general way how to request new ODCS compose is following:
+
+```
+compose = odcs.new_compose(sources, source_type)
+```
+
+Both `sources` and `source_type` are strings. Depending on `source_type` value, the `sources` have following meaning:
+
+| `source_type` | `source` |
+|---------------|----------|
+| tag           | Name of Koji tag to take RPMs from. |
+| module        | White-space separated NAME:STREAM or NAME:STREAM:VERSION of modules to include in compose. |
+| pulp          | White-space separated list of content-sets or repository ids. Repositories will be included in a compose. |
+| raw_config    | String in `name#commit` hash format. The `name` must match one of the raw config locations defined in ODCS server config as `raw_config_urls`. The `commit` is commit hash defining the version of raw config to use. This config is then used as input config for Pungi. |
+| build         | Source should be omitted in the request. The list of Koji builds included in a compose is defined by `builds` attribute. |
+| pungi_compose | URL to variant repository of external compose generated by the Pungi. For example https://kojipkgs.fedoraproject.org/compose/rawhide/latest-Fedora-Rawhide/compose/Server/. The generated compose will contain the same set of RPMs as the given external compose variant. The packages will be taken from the configured Koji instance. |
+
+There are also additional optional attributes you can pass to `new_compose(...)` method:
+
+- `seconds_to_live` - Number of seconds after which the generated compose should expire and will be removed.
+- `packages` - List of packages which should be included in a compose. This is used only when `source_type` is set to `tag` or `build` to further limit the compose repository.
+If the `packages` is not set, all packages in Koji tag or all packages in a `builds` list will be included in a final compose.
+- `flags` - List of flags to further modify the compose output:
+    - `no_deps` - For `tag` `source_type`, do not resolve dependencies between packages and include only packages listed in the `packages` in the compose. For `module` `source_type`, do not resolve dependencies between modules and include only the requested module in the compose.
+    - `include_unpublished_pulp_repos` - For `pulp` `source_type`, include also unpublished repositories for input content-sets.
+    - `check_deps` - When set, abort the compose when some package has broken dependencies.
+    - `no_reuse` - When set, do not try to reuse old compose.
+    - `ignore_absent_pulp_repos` - For `pulp` `source_type`, ignore any content set that does not exist in Pulp
+    - `use_only_compatible_arch` - For `pulp` `source_type` only. When this flag is set, architecture hardcoded in URL returned from Pulp will be replaced with `$basearch` variable. The repository definition will also define `skip_if_unavailable = 1`. This could be useful when multiple content sets are included in the repofile to completly ignore packages from repositories for incompatible architectures.
+- `sigkeys` - List of signature keys IDs. Only packages signed by one of these keys will be included in a compose. If there is no signed version of a package, compose will fail. It is also possible to pass an empty-string in a list meaning unsigned packages are allowed. For example if you want to prefer packages signed by key with ID `123` and also allow unsigned packages to appear in a compose, you can do it by setting sigkeys to `["123", ""]`.
+- `results` - List of additional results which will be generated as part of a compose. Valid keys are:
+    - `iso` - Generates non-installable ISO files with RPMs from a compose.
+    - `boot.iso` - Generates `images/boot.iso` file which is needed to build base container images from resulting compose.
+- `arches` - List of additional Koji arches to build this compose for. By default, the compose is built only for "x86_64" arch.
+- `multilib_arches` - Subset of `arches` for which the multilib should be enabled. For each architecture in the `multilib_arches` list, ODCS will include also packages from other compatible architectures in a compose. For example when "x86_64" is included `multilib_arches`, ODCS will include also "i686" packages in a compose. The set of packages included in a composes is influenced by `multilib_method` list.
+- `multilib_method` - List defining the method used to determine whether consider package as multilib. Defaults to empty list. The list can have following values:
+    - `iso` - Generates non-installable ISO files with RPMs from a compose.
+    - `runtime` - Packages whose name ends with "-devel" or "-static" suffix will be considered as multilib.
+    - `devel` - Packages that install some shared object file "*.so.*" will be considered as multilib.
+    - `all` - All pakages will be considered as multilib.
+- `builds` - List of NVRs defining the Koji builds to include in a compose. Only valid for `tag` and `build` source types. For `tag` source type, the NVRs will be considered
+for inclusion in a compose on top of Koji tag defined by `source`. For `build` source type, only the Koji builds defined by the NVRs will be considered for inclusion. The `packages` still need to be set to include particular packages from the Koji builds in a compose.
+- `lookaside_repos` - List of URLs pointing to RPM repositories with packages which will be used by internal dependency resolver to resolve dependencies. Packages from these repositories will not appear in the resulting ODCS compose, but they are considered while checking whether the RPM dependencies are satisfied in the resulting compose when `check_deps` ODCS flag.
+- `module_defaults_url` - List with URL to git repository with Module defaults data and the branch name or commit hash. For example ["https://pagure.io/releng/fedora-module-defaults.git", "master"]. This is used only when creating modular compose including non-modular RPMs.
+- `modular_koji_tags` - List of Koji tags in which the modular Koji Content Generator builds are tagged. Such builds will be included in a compose.
+
+The `new_compose` method returns `dict` object describing the compose, for example:
+
+```
+{
+    "arches": "x86_64 ppc64",
+    "flags": [
+        "no_deps"
+    ],
+    "id": 1,
+    "owner": "jkaluza",
+    "packages": "gofer-package",
+    "removed_by": null,
+    "result_repo": "https://odcs.fedoraproject.org/composes/latest-odcs-1-1/compose/Temporary",
+    "result_repofile": "https://odcs.fedoraproject.org/composes/latest-odcs-1-1/compose/Temporary/odcs-1.repo",
+    "results": [
+        "repository"
+    ],
+    "sigkeys": "",
+    "source": "f26",
+    "source_type": 1,
+    "state": 3,
+    "state_name": "wait",
+    "time_done": "2017-10-13T17:03:13Z",
+    "time_removed": "2017-10-14T17:00:00Z",
+    "time_submitted": "2017-10-13T16:59:51Z",
+    "time_to_expire": "2017-10-14T16:59:51Z"
+}
+```
+
+The most useful data there is `result_repofile`, which points to the .repo file with URLs for generated compose. Another very important data there is the `state` and `state_name` field. There are following states of a compose:
+
+| `state` | `state_name` | Description |
+|---------|--------------|-------------|
+| 0       | wait         | Compose is waiting in a queue to be generated |
+| 1       | generating   | Compose is being generated |
+| 2       | done         | Compose is generated - done |
+| 3       | removed      | Compose has expired and is removed |
+| 4       | failed       | Compose generation has failed |
+
+As you can see in our example, compose is in `wait` state and therefore we have to wait until the ODCS generates the compose.
+
+### Waiting until the compose is generated
+
+There are two ways how to wait for the compose generation. The preferred one is listening on Fedora messaging bus for `odcs.state.change` message with `done` or `failed` state and another one is using HTTP polling implemented in `wait_for_compose(...)` method.
+
+If your application does not allow listening on the bus for some reason, you can use `wait_for_compose(...)` method like this:
+
+```
+compose = odcs.new_compose(sources, source_type)
+
+# Blocks until the compose is ready, but maximally for 600 seconds.
+compose = odcs.wait_for_compose(compose["id"], timeout=600)
+
+if compose["state_name"] == "done":
+    print "Compose done, URL with repo file", compose["result_repofile"]
+else:
+    print "Failed to generate compose"
+```
+
+### Checking the state of existing ODCS compose
+
+Once you have the compose ready, you might want to check its state later. This can be done using the `get_compose(...)` method like this:
+
+```
+compose = odcs.get_compose(compose["id"])
+```
+
+### Renewing the compose
+
+If the `time_to_expire` for your compose is getting closer and you know you want to continue using the compose, you can increase the `time_to_expire` using the `renew_compose(...)` method. You can also use this method to regenerate an expired compose in the `removed` state. Such compose will have the same versions of packages as the original compose.
+
+```
+compose = odcs.renew_compose(compose["id"])
+```
+
+## Development
+
+### Code Convention
+
+The code must be well formatted via ``black`` and pass ``flake8`` checking.
+
+Run ``tox -e black,flake8`` to do the check.
+
+### Unit-testing
+
+Install packages required by pip to compile some python packages:
+
+```
+$ sudo dnf install -y gcc swig redhat-rpm-config python-devel openssl-devel openldap-devel \
+    zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel tk-devel \
+    git python3-cairo-devel cairo-gobject-devel gobject-introspection-devel
+```
+
+A lot of these dependencies come from the module
+[pygobject](https://pygobject.readthedocs.io/en/latest/devguide/dev_environ.html#fedora-dep).
+
+Run the tests:
+
+```
+$ make check
+```
+
+### Testing local composes from plain RPM repositories
+
+You can test ODCS by generating compose from the `./server/tests/repo` repository using following commands:
+
+```
+$ ./create_sqlite_db
+$ ./start_odcs_from_here
+```
+
+Before executing the command `start_odcs_from_here`, a messaging broker supporting AMQP protocol is required to run locally as well in order to run asynchronous tasks to generate composes. Here is an example to run a RabbitMQ broker:
+
+```
+sudo dnf install -y rabbitmq-server
+sudo systemctl start rabbitmq-server
+```
+
+Add the `repo` source type to the server configuration in `./server/odcs/server/config.py`. (This will cause some tests to fail, so it needs to be reverted back after you are done with your changes!)
+
+And in another terminal, submit a request to frontend:
+
+```
+$ ./submit_test_compose repo `pwd`/server/tests/repo ed
+{
+  "id": 1,
+  "owner": "Unknown",
+  "result_repo": null,
+  "source": "/home/hanzz/code/fedora-modularization/odcs/tests/repo",
+  "source_type": 3,
+  "state": 0,
+  "state_name": "wait",
+  "time_done": null,
+  "time_removed": null,
+  "time_submitted": "2017-06-12T14:18:19Z"
+}
+```
+
+You should then see the backend process generating the compose and once it's done, the resulting compose in `./test_composes/latest-Unknown-1/compose/Temporary` directory.
+
+### Using docker-compose for creating a local setup
+
+You can create test setup for ODCS with the docker-compose file. This yaml file creates docker container for the backend and frontend setup of ODCS and run multiple services together. These services are;
+
+* **rabbitmq** (Handles the communication between backend and frontend)
+* **postgres** (Creates the database where the localy generated composes are stored)
+* **backend** (Backend service of ODCS)
+* **frontend** (Frontend service of ODCS that handles the REST API)
+* **static** (Apache service for making storage available)
+* **cleanup** (Run cleanup tasks)
+
+In addition to these, there are also three docker volumes (`odcs_odcs-composes`, `odcs_odcs-postgres` and `odcs_rabbitmq`) are created. These are providing persistent storage for the services.
+
+This yaml file requires also an **.env** file that specified some enviroment variables for the configuration of frontend and backend. Such an **.env** file should be in the same path with the **docker-compose.yml** file and here are the necessary variables that need to be specified in this file;
+```
+# Pyhton path
+PYTHONPATH=/src/common:/src/server:/src/client
+
+# POSTGRES
+POSTGRES_USER=odcs
+POSTGRES_PASSWORD=password
+
+# PULP CONFIGURATION
+PULP_SERVER_URL=<URL of the pulp server>
+PULP_USERNAME=<Username for the pulp server>
+PULP_PASSWORD=<Credentials for the pulp server>
+RAW_CONFIG_URLS=<Raw config settings in JSON format>
+
+# ODCS CONFIGURATION
+ODCS_CONFIG_SECTION=DevConfiguration
+ODCS_CONFIG_DIR=/src/server/conf/
+ODCS_CELERY_BROKER_URL=amqp://guest:guest@rabbitmq:5672/
+ODCS_DB_URL=postgresql+psycopg2://odcs:password@postgres/odcs
+# Directory where the generated composes are stored. This hast to match
+# location where odcs-composes volume is mounted in frontend and backend
+# containers.
+ODCS_TARGET_DIR=/mnt/odcs
+TARGET_DIR_URL=http://localhost:8080
+
+# FLASK SETTINGS
+# Force flask to reload application on change of source files.
+FLASK_ENV=development
+```
+
+The services can be start with `sudo docker-compose up` command. If you have face an error or something that does not work correctly please use the following steps;
+
+1. Check whether there is already created docker volume.
+
+
+        $ sudo docker volume ls
+        Emulate Docker CLI using podman. Create /etc/containers/nodocker to quiet msg.
+        DRIVER      VOLUME NAME
+
+
+    If the output is like above, it means there isn't any volume yet and it is sufficient to run `sudo docker-compose up` and then `sudo docker-compose down` command. This creates the volumes and if you run the above command again the output becomes as follows;
+
+
+        $ sudo docker volume ls
+        Emulate Docker CLI using podman. Create /etc/containers/nodocker to quiet msg.
+        DRIVER      VOLUME NAME
+        local       odcs_odcs-composes
+        local       odcs_odcs-postgres
+        local       odcs_odcs-rabbitmq
+
+
+2. After this point we need to set the correct permission to `ocds_odcs-composes` volume. In order to find where is the actual location of the volume type the following
+
+
+        $ sudo docker volume inspect odcs_odcs-composes
+        Emulate Docker CLI using podman. Create /etc/containers/nodocker to quiet msg.
+        [
+            {
+                "Name": "odcs_odcs-composes",
+                "Driver": "local",
+                "Mountpoint": "/var/lib/containers/storage/volumes/odcs_odcs-composes/_data",
+                "CreatedAt": "2021-10-04T13:19:36.478636851+02:00",
+                "Labels": {
+                    "io.podman.compose.project": "odcs"
+                },
+                "Scope": "local",
+                "Options": {}
+            }
+        ]
+
+    `"Mountpoint": "/var/lib/containers/storage/volumes/odcs_odcs-composes/_data"` shows the exact location of the corresponding volume.
+
+    Add group write permission to the Mountpoint by
+
+
+        $ sudo chmod 775 /var/lib/containers/storage/volumes/odcs_odcs-composes/_data
+
+
+3. In this step it is sufficient to run `sudo docker-compose up` command to start the services properly.
+
+Here are some REST calls for checking the ODCS.
+
+* `$ curl -s http://localhost:5000/api/1/composes/ | jq .` This call shows all the composes in db.
+* `$ odcs --server http://localhost:5000/ create-pulp <Pulp content set>` This call starts a pulp compose that match the given pulp content set
+* `$ odcs --server http://localhost:5000/ create-raw-config --compose-type test my_raw_config master` This call starts a compose with the configuration defined as my_raw_config

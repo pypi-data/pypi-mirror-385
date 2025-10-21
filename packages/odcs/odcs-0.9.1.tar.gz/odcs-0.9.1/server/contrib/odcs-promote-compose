@@ -1,0 +1,368 @@
+#!/usr/bin/env python3
+
+from __future__ import print_function
+import shutil
+import argparse
+import sys
+import os
+import errno
+import filecmp
+
+from kobo.shortcuts import run
+from productmd.composeinfo import ComposeInfo
+from productmd.rpms import Rpms
+
+
+class ComposeCheckError(Exception):
+    """ "
+    Raised when compose check fails.
+    """
+
+    pass
+
+
+class ComposeCheck(object):
+    """
+    Checks the basic information about compose before promoting it.
+
+    This is not real Compose CI, but rather basic sanity check.
+    """
+
+    def __init__(
+        self,
+        path,
+        target,
+        allow_unsigned=False,
+        allow_finished_incomplete=False,
+        compose_type="production",
+    ):
+        """
+        Creates new ComposeCheck instance.
+
+        :param str path: Path to Compose to check.
+        :param str target: Target path where the promoted compose should be
+            copied into.
+        :param bool allow_unsigned: If True, compose with unsigned packages
+            can be promoted.
+        :param bool allow_finished_incomplete: If True, compose in FINISHED_INCOMPLETE
+            state can be promoted.
+        :param str compose_type: Compose with the type can be promoted.
+        """
+        self.path = path
+        self.target = target
+        self.allow_unsigned = allow_unsigned
+        self.allow_finished_incomplete = allow_finished_incomplete
+        self.compose_type = compose_type
+
+    def check_status(self):
+        """
+        Raises ComposeCheckError if Compose STATUS is not FINISHED.
+        """
+        print("Checking compose STATUS.")
+
+        allowed_statuses = ["FINISHED"]
+        if self.allow_finished_incomplete:
+            allowed_statuses.append("FINISHED_INCOMPLETE")
+
+        status_path = os.path.join(self.path, "STATUS")
+        with open(status_path, "r") as f:
+            status = f.readline()[:-1]
+            if status not in allowed_statuses:
+                err_msg = "Compose is not in %s status." % (
+                    " or ".join(allowed_statuses)
+                )
+                raise ComposeCheckError(err_msg)
+
+    def check_compose_info(self):
+        """
+        Raises ComposeCheckError if Compose type is not "production".
+        """
+        print("Checking compose type.")
+        ci = ComposeInfo()
+        ci.load(os.path.join(self.path, "compose", "metadata", "composeinfo.json"))
+        if ci.compose.type != self.compose_type:
+            raise ComposeCheckError('Compose type is not "%s".' % self.compose_type)
+
+    def check_rpms(self):
+        """
+        Raises ComposeCheckError if there are unsigned packages in the Compose.
+        """
+        if self.allow_unsigned:
+            return
+
+        print("Checking for unsigned RPMs.")
+        rpms = Rpms()
+        rpms.load(os.path.join(self.path, "compose", "metadata", "rpms.json"))
+        for per_arch_rpms in rpms.rpms.values():
+            for per_build_rpms in per_arch_rpms.values():
+                for per_srpm_rpms in per_build_rpms.values():
+                    for rpm in per_srpm_rpms.values():
+                        if not rpm["sigkey"]:
+                            err_msg = "Some RPMs are not signed."
+                            raise ComposeCheckError(err_msg)
+
+    def run(self):
+        """
+        Runs the compose checks. Raises ComposeCheckError in case of failed check.
+        """
+        self.check_status()
+        self.check_compose_info()
+        self.check_rpms()
+
+
+class ComposePromotion(object):
+    """
+    Contains methods and data to promote compose.
+    """
+
+    def __init__(self, compose, target):
+        """
+        Creates new ComposePromotion instance.
+
+        :param str compose: Path to Compose to promote.
+        :param str target: Target path where the promoted compose should be
+            copied into.
+        """
+        self.compose = compose
+        self.target = target
+
+        # Tuple in (symlink_path, hardlink_path) format:
+        #  - symlink_path is full path to symlink in the `compose` tree.
+        #  - hardlink_path is full path to new hardlink in the `target` tree.
+        self.symlinks = []
+
+    def _copytree_ignore(self, path, names):
+        """
+        Helper method for `shutil.copytree` to ignore symlinks when copying compose.
+
+        This method also populates `self.symlinks`.
+        """
+        print("Copying files in %s." % path)
+        ignored = []
+        rel_path = os.path.relpath(path, self.compose)
+        for name in names:
+            file_path = os.path.join(path, name)
+            if os.path.islink(file_path):
+                ignored.append(name)
+                hardlink_path = os.path.join(self.target, rel_path, name)
+                self.symlinks.append((file_path, hardlink_path))
+        return ignored
+
+    def _copytree(
+        self,
+        src,
+        dst,
+        symlinks=True,
+        ignore=None,
+        copy_function=shutil.copy2,
+        ignore_dangling_symlinks=False,
+    ):
+        """Modified version of shutil.copytree that continues if the dest dir exists"""
+
+        names = os.listdir(src)
+        if ignore is not None:
+            ignored_names = ignore(src, names)
+        else:
+            ignored_names = set()
+
+        # Continue if dir exists
+        try:
+            os.makedirs(dst)
+        except OSError as exc:
+            # Ignore existing directories.
+            if exc.errno != errno.EEXIST:
+                raise
+        errors = []
+        for name in names:
+            if name in ignored_names:
+                continue
+            srcname = os.path.join(src, name)
+            dstname = os.path.join(dst, name)
+
+            try:
+                # Symlinks are filtered out via _copytree ignore.
+                # Symlinks that are not filtered out are handled
+                # as symlinks because symlinks=True is set.
+                if os.path.islink(srcname):
+                    linkto = os.readlink(srcname)
+                    if symlinks:
+                        # We can't just leave it to `copy_function` because legacy
+                        # code with a custom `copy_function` may rely on copytree
+                        # doing the right thing.
+                        os.symlink(linkto, dstname)
+                        shutil.copystat(srcname, dstname, follow_symlinks=not symlinks)
+                    else:
+                        # ignore dangling symlink if the flag is on
+                        if not os.path.exists(linkto) and ignore_dangling_symlinks:
+                            continue
+                        # otherwise let the copy occurs. copy2 will raise an error
+                        if os.path.isdir(srcname):
+                            shutil.copytree(
+                                srcname, dstname, symlinks, ignore, copy_function
+                            )
+                        else:
+                            copy_function(srcname, dstname)
+                elif os.path.isdir(srcname):
+                    self._copytree(srcname, dstname, symlinks, ignore, copy_function)
+                else:
+                    # Will raise a SpecialFileError for unsupported file types
+                    # skip is src and dst are the same
+                    if not os.path.isfile(dstname):
+                        copy_function(srcname, dstname)
+                    elif not filecmp.cmp(srcname, dstname, shallow=True):
+                        copy_function(srcname, dstname)
+                    else:
+                        print("Skipping " + dstname)
+                        print(
+                            "File exists and has the same file type, size, and modification time"
+                        )
+
+            # catch the Error from the recursive copytree so that we can
+            # continue with other files
+            except Exception as err:
+                errors.extend(err.args[0])
+            except OSError as why:
+                errors.append((srcname, dstname, str(why)))
+        try:
+            shutil.copystat(src, dst)
+        except OSError as why:
+            # Copying file access times may fail on Windows
+            if getattr(why, "winerror", None) is None:
+                errors.append((src, dst, str(why)))
+        if errors:
+            raise shutil.Error(errors)
+        return dst
+
+    def _replace_symlinks_with_hardlinks(self):
+        """
+        Copy symlinks from `compose` to `target` and replace them with hardlinks.
+        """
+        print("Replacing %d symlinks with hardlinks." % len(self.symlinks))
+        for symlink, hardlink_path in self.symlinks:
+            real_path = os.readlink(symlink)
+            abspath = os.path.normpath(
+                os.path.join(os.path.dirname(symlink), real_path)
+            )
+
+            if os.path.islink(hardlink_path) or os.path.isfile(hardlink_path):
+                print(hardlink_path + " exists")
+                continue
+
+            try:
+                os.link(abspath, hardlink_path)
+            except OSError as ex:
+                if ex.errno == errno.EXDEV:
+                    print("Failed to link " + abspath + " " + hardlink_path)
+                    print(ex)
+                    shutil.copy2(abspath, hardlink_path)
+                else:
+                    raise
+
+    def _run_hardlink(self, target):
+        """Run hardlink on the final destination to save more space.
+
+        This should help with images that are generated in work/ and hardlinked
+        to compose/ during compose process.
+
+        :param str target: the final destination of promoted compose.
+        """
+        # Make sure hardlink command is available and -x option is supported
+        # (the default hardlink command in RHEL7 does not support -x option).
+        hardlink = "/usr/sbin/hardlink"
+        if not os.path.isfile(hardlink):
+            return
+        _, output = run([hardlink, "-h"], can_fail=True)
+        if "-x" not in str(output):
+            return
+
+        cmd = [hardlink, "-c", "-vv", "-x", "^Packages$", target]
+        run(cmd, stdout=True, show_cmd=True)
+
+    def promote(self):
+        """
+        Promotes the compose.
+        """
+
+        # check if this is a continued promote
+        src_compose_id = args.compose + "/COMPOSE_ID"
+        dst_compose_id = args.target + "/COMPOSE_ID"
+
+        if os.path.isdir(args.target):
+            print(
+                "Destination dir",
+                args.target,
+                "exists.\nChecking if this is the same compose.",
+            )
+
+            if not os.path.isfile(dst_compose_id):
+                print("Destination dir exists and is not a compose. exiting.")
+                return False
+
+            if not filecmp.cmp(src_compose_id, dst_compose_id):
+                print("Directories are not the same compose. exiting.")
+                return False
+            else:
+                print("Continuing previous promote.")
+
+        # copy the COMPOSE_ID file first
+        try:
+            os.makedirs(args.target)
+        except OSError as exc:
+            # Ignore existing directories.
+            if exc.errno != errno.EEXIST:
+                raise
+        if not os.path.isfile(dst_compose_id):
+            shutil.copyfile(src_compose_id, dst_compose_id)
+
+        self._copytree(args.compose, args.target, ignore=self._copytree_ignore)
+        self._replace_symlinks_with_hardlinks()
+        self._run_hardlink(args.target)
+
+        return True
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Promote ODCS compose.")
+    parser.add_argument("compose", help="Path to compose to promote.")
+    parser.add_argument("target", help="Path to target location")
+    parser.add_argument(
+        "--allow-unsigned", action="store_true", help="Allow unsigned RPMs."
+    )
+    parser.add_argument(
+        "--allow-finished-incomplete",
+        action="store_true",
+        help="Allow compose in FINISHED_INCOMPLETE state.",
+    )
+    parser.add_argument(
+        "--no-checks",
+        action="store_true",
+        help="WARN: Promote the compose without any checks.",
+    )
+    parser.add_argument(
+        "--compose-type",
+        default="production",
+        help="Allowed compose type, default: production.",
+    )
+    args = parser.parse_args()
+
+    args.compose = os.path.abspath(args.compose)
+    args.target = os.path.abspath(args.target)
+
+    if not args.no_checks:
+        compose_check = ComposeCheck(
+            args.compose,
+            args.target,
+            args.allow_unsigned,
+            args.allow_finished_incomplete,
+            args.compose_type,
+        )
+        try:
+            compose_check.run()
+        except ComposeCheckError as e:
+            print("Compose validation error: %s" % str(e))
+            sys.exit(1)
+
+    print("Promoting compose")
+    compose_promotion = ComposePromotion(args.compose, args.target)
+    if not compose_promotion.promote():
+        sys.exit(1)

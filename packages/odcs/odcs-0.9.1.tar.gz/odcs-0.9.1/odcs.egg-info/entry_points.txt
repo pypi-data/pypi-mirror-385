@@ -1,0 +1,6 @@
+[console_scripts]
+odcs = odcs.client.cli:main [client]
+odcs-credential-helper = odcs.server.credential_helper:main [server]
+odcs-frontend = odcs.server.manage:runssl [server]
+odcs-manager = odcs.server.manage:cli [server]
+odcs-mock-runroot = odcs.server.mock_runroot:mock_runroot_main [server]
