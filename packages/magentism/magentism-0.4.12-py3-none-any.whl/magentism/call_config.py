@@ -1,0 +1,1 @@
+from .magentism.call_config import *

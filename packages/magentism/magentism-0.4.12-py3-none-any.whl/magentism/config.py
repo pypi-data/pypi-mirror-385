@@ -1,0 +1,1 @@
+from .magentism.config import *
