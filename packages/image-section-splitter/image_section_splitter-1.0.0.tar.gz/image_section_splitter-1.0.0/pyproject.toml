@@ -1,0 +1,51 @@
+[project]
+name = "image-section-splitter"
+version = "1.0.0"
+description = "세로로 긴 상세페이지 이미지를 시각적 경계 기준으로 안전하게 섹션 분리"
+authors = [
+    {name = "gandol2", email = "sskim2333@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.13"
+license = {text = "MIT"}
+keywords = ["image", "section", "split", "opencv", "computer-vision"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+dependencies = [
+    "scipy>=1.16.2",
+    "matplotlib>=3.10.7",
+    "pandas>=2.3.3",
+    "opencv-python>=4.12.0.88",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "black>=22.0.0",
+    "ruff>=0.1.0",
+]
+
+[dependency-groups]
+dev = ["ipykernel>=7.0.0"]
+
+[project.urls]
+Homepage = "https://github.com/gandol2/image-section-splitter"
+Repository = "https://github.com/gandol2/image-section-splitter"
+Documentation = "https://github.com/gandol2/image-section-splitter#readme"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/image_section_splitter"]
