@@ -1,0 +1,36 @@
+[project]
+name = "konvigius"
+version = "0.0.1"
+authors = [
+  { name="Rik Roos", email="author@example.com" },
+]
+description = "A library to create an application config object with validation and a CLI parser included."
+readme = "README.md"
+keywords = [
+   "configuration", 
+   "validation",
+   "CLI"
+]
+
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+
+[project.optional-dependencies]
+test = [
+    "pytest"
+]
+
+[project.urls]
+Homepage = "https://github.com/pypa/sampleproject"
+Issues = "https://github.com/pypa/sampleproject/issues"
+
+[tool.hatch.build.targets.sdist]
+include = ["src/**"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/konvigius"]
