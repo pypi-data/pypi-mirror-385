@@ -1,0 +1,14 @@
+An SRP request regarding your {{ ship }} lost at {{ time }} has been {{ status }}.
+
+Request Details:
+Ship Lost: {{ ship }}
+Ship Lost At: {{ time }}
+{% if review_status != "submitted" %}
+Reviewer: {{ reviewer }}
+Reviewed At: {{ reviewed_at }}
+{% endif %}
+{% if comment %}
+Comment:
+{{ comment }}
+{% endif %}
+If you have any questions regarding your SRP request, feel free to contact your request reviewer.

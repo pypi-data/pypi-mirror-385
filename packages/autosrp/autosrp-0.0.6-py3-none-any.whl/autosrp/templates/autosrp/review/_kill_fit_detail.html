@@ -1,0 +1,273 @@
+{% load i18n humanize %}
+<div class="fit-detail-modal mt-1">
+    {% if fit_title %}
+    <div class="h5 mb-2 text-center">{{ fit_title }}</div>
+    {% endif %}
+    <div class="d-flex justify-content-center">
+        <div class="slot-wheel" style="--icon: 50px; --rim: 220px; --gap: 11.25deg; --badge: .8rem;">
+            <div class="ship-center">
+                <img src="https://images.evetech.net/types/{{ ship_type_id }}/render?size=512"
+                 alt="Ship {{ ship_type_id }}" class="ship-render"
+                 onerror="this.onerror=null;this.src='https://images.evetech.net/types/{{ ship_type_id }}/icon?size=256'">
+            </div>
+            <div class="arc arc-high" style="--center: 0deg; --step: var(--gap); --count: {{ slots.high|length|default:0 }};">
+                {% for m in slots.high %}
+                <div class="orbit" style="--i: {{ forloop.counter0 }}; --N: {{ slots.high|length|default:1 }}; --center: 0deg; --step: var(--gap);">
+                    <div class="slot {{ m.status }}" data-bs-toggle="tooltip" data-bs-title="{{ m.name }}">
+                    <img class="icon img-rounded"
+                         src="https://images.evetech.net/types/{{ m.type_id }}/icon?size=64"
+                         alt="{{ m.name }}"
+                         onerror="this.onerror=null;this.src='https://images.evetech.net/types/{{ m.type_id }}/bp?size=64'">
+                    </div>
+                </div>
+                {% empty %}
+                <div class="orbit" style="--i: {{ forloop.counter0 }}; --N: {{ slots.high|length|default:1 }}; --center: 0deg; --step: var(--gap);">{% trans "No highs" %}</div>
+            {% endfor %}
+            </div>
+            <div class="arc arc-mid" style="--center: 90deg; --step: var(--gap); --count: {{ slots.mid|length|default:0 }};">
+                {% for m in slots.mid %}
+                <div class="orbit" style="--i: {{ forloop.counter0 }}; --N: {{ slots.mid|length|default:1 }}; --center: 90deg; --step: var(--gap);">
+                    <div class="slot {{ m.status }}" data-bs-toggle="tooltip" data-bs-title="{{ m.name }}">
+                    <img class="icon img-rounded"
+                         src="https://images.evetech.net/types/{{ m.type_id }}/icon?size=64"
+                         alt="{{ m.name }}"
+                         onerror="this.onerror=null;this.src='https://images.evetech.net/types/{{ m.type_id }}/bp?size=64'">
+                    </div>
+                </div>
+                {% empty %}
+                <div class="orbit" style="--i: {{ forloop.counter0 }}; --N: {{ slots.mid|length|default:1 }}; --center: 90deg; --step: var(--gap);">{% trans "No mids" %}</div>
+                {% endfor %}
+            </div>
+            <div class="arc arc-low" style="--center: 180deg; --step: var(--gap); --count: {{ slots.low|length|default:0 }};">
+                {% for m in slots.low %}
+                <div class="orbit" style="--i: {{ forloop.counter0 }}; --N: {{ slots.low|length|default:1 }}; --center: 180deg; --step: var(--gap);">
+                    <div class="slot {{ m.status }}" data-bs-toggle="tooltip" data-bs-title="{{ m.name }}">
+                    <img class="icon img-rounded"
+                         src="https://images.evetech.net/types/{{ m.type_id }}/icon?size=64"
+                         alt="{{ m.name }}"
+                         onerror="this.onerror=null;this.src='https://images.evetech.net/types/{{ m.type_id }}/bp?size=64'">
+                    </div>
+                </div>
+                {% empty %}
+                <div class="orbit" style="--i: {{ forloop.counter0 }}; --N: {{ slots.low|length|default:1 }}; --center: 180deg; --step: var(--gap);">{% trans "No lows" %}</div>
+                {% endfor %}
+            </div>
+            <div class="arc arc-sub" style="--center: 240deg; --step: var(--gap); --count: {{ slots.sub|length|default:0 }};">
+                {% for m in slots.sub %}
+                <div class="orbit" style="--i: {{ forloop.counter0 }}; --N: {{ slots.sub|length|default:1 }}; --center: 240deg; --step: var(--gap);">
+                    <div class="slot {{ m.status }}" data-bs-toggle="tooltip" data-bs-title="{{ m.name }}">
+                    <img class="icon img-rounded"
+                         src="https://images.evetech.net/types/{{ m.type_id }}/icon?size=64"
+                         alt="{{ m.name }}"
+                         onerror="this.onerror=null;this.src='https://images.evetech.net/types/{{ m.type_id }}/bp?size=64'">
+                    </div>
+                </div>
+                {% empty %}
+                <div class="arc-empty d-none">{% trans "No subsystems" %}</div>
+                {% endfor %}
+            </div>
+            <div class="arc arc-rig" style="--center: 295deg; --step: var(--gap); --count: {{ slots.rig|length|default:0 }};">
+                {% for m in slots.rig %}
+                <div class="orbit" style="--i: {{ forloop.counter0 }}; --N: {{ slots.rig|length|default:1 }}; --center: 295deg; --step: var(--gap);">
+                    <div class="slot {{ m.status }}" data-bs-toggle="tooltip" data-bs-title="{{ m.name }}">
+                    <img class="icon img-rounded"
+                         src="https://images.evetech.net/types/{{ m.type_id }}/icon?size=64"
+                         alt="{{ m.name }}"
+                         onerror="this.onerror=null;this.src='https://images.evetech.net/types/{{ m.type_id }}/bp?size=64'">
+                    </div>
+                </div>
+                {% empty %}
+                <div class="orbit" style="--i: {{ forloop.counter0 }}; --N: {{ slots.rig|length|default:1 }}; --center: 295deg; --step: var(--gap);">{% trans "No rigs" %}</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="mt-3">
+        <h6 class="mb-1">{% trans "Discrepancies (missing / extra modules)" %}</h6>
+        <div class="small text-muted mb-2">
+            {% if penalty_scheme_name %}{% trans "Scheme" %}: {{ penalty_scheme_name }} · {% endif %}
+            {% trans "Total penalty" %}: {{ payout_penalty_pct|floatformat:2 }}%{% if penalty_capped %} ({% trans "capped" %}){% endif %}
+            {% if penalty_wrong_count %} · {% trans "Wrong modules" %}: {{ penalty_wrong_count }}{% endif %}
+        </div>
+        <ul class="list-unstyled mb-0">
+            {% if missing_render %}
+                {% for m in missing_render %}
+                <li class="{% if m.kind == 'missing' %}text-warning{% else %}text-danger{% endif %}">
+                    • {{ m.name }} × {{ m.qty }} {% if m.penalty_pct %}
+                      <span class="text-muted">({% trans "penalty" %} {{ m.penalty_pct|floatformat:2 }}%)</span>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            {% else %}
+                <li class="text-muted">• {% trans "None" %}</li>
+            {% endif %}
+        </ul>
+    </div>
+    <div class="mt-4">
+        <h6 class="mb-2">{% trans "Additional Details" %}</h6>
+
+        {% if kill_comment %}
+        <div class="mb-2">
+            <div class="small text-muted">{% trans "Reviewer Comment" %}</div>
+            <blockquote class="blockquote mb-0" style="font-size: .95rem;">
+                <p class="mb-0">{{ kill_comment }}</p>
+            </blockquote>
+        </div>
+        {% endif %}
+
+        {% if fitcheck_notes %}
+        <div class="mb-2">
+            <div class="small text-muted">{% trans "Fit Check Notes" %}</div>
+            <div class="mb-0" style="font-size: .95rem;">{{ fitcheck_notes }}</div>
+        </div>
+        {% endif %}
+
+        <div class="row g-3">
+            <div class="col-12 col-md-6">
+                <div class="card card-body py-2">
+                    <div class="small text-muted mb-1">{% trans "Loss Values" %}</div>
+                    <div>{% trans "Hull value" %}: <strong>{{ hull_price_isk|floatformat:2|intcomma }}</strong> ISK</div>
+                    <div>{% trans "Fit value" %}: <strong>{{ fit_price_isk|floatformat:2|intcomma }}</strong> ISK</div>
+                    <div class="mt-1">{% trans "Total (hull + fit)" %}: <strong>{{ loss_total_isk|floatformat:2|intcomma }}</strong> ISK</div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="card card-body py-2">
+                    <div class="small text-muted mb-1">{% trans "Payout Calculation" %}</div>
+                    {% if payout_base > 0 %}
+                    <div>{% trans "Base reward" %}: <strong>{{ payout_base|floatformat:2|intcomma }}</strong> ISK</div>
+                    {% endif %}
+                    {% load num %}
+                    <div>
+                      {% trans "Penalty" %}:
+                      <strong>{{ payout_penalty_pct|floatformat:2|intcomma }}%</strong>
+                      (≈ {% if payout_penalty_pct > 0 %}
+                            {% if payout_base > 0 %}
+                              {{ payout_penalty_pct|percent_of:payout_base|floatformat:2|intcomma }}
+                            {% else %}
+                              {{ payout_penalty_pct|percent_of:loss_total_isk|floatformat:2|intcomma }}
+                            {% endif %}
+                          {% else %}0{% endif %} ISK)
+                    </div>
+                    <div>{% trans "Suggested payout" %}: <strong>{{ payout_suggested|floatformat:2|intcomma }}</strong> ISK</div>
+                    {% if payout_override is not None %}
+                    <div>{% trans "Override payout" %}: <strong>{{ payout_override|floatformat:2|intcomma }}</strong> ISK</div>
+                    {% endif %}
+                    {% if payout_actual is not None %}
+                    <div class="mt-1">{% trans "Adjusted Payout" %}: <strong>{{ payout_actual|floatformat:2|intcomma }}</strong> ISK</div>
+                    {% else %}
+                    <div class="mt-1">{% trans "Payout" %}: <strong>{{ payout_final|floatformat:2|intcomma }}</strong> ISK</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.fit-detail-modal { max-width: 100%; overflow-y: hidden; overflow-x: hidden; }
+
+.slot-wheel {
+  position: relative;
+  width: min(100%, 1059px);
+  aspect-ratio: 1/1;
+}
+
+.ship-center {
+  position: absolute;
+  inset: 24% 24%;
+  display: grid; place-items: center;
+  z-index: 0;
+}
+.ship-render {
+  width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
+  filter: drop-shadow(0 2px 10px rgba(0,0,0,.45));
+  background: radial-gradient(ellipse at center, rgba(120,140,160,.25), rgba(30,40,50,.12));
+}
+[data-bs-theme="dark"] .ship-render {
+  background: radial-gradient(ellipse at center, rgba(120,140,160,.18), rgba(10,15,20,.10));
+}
+
+.arc { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+
+.orbit {
+  --angle: calc( (var(--i) - ((var(--N) - 1)/2)) * var(--step) + var(--center) );
+  position: absolute; inset: 0;
+  transform: rotate(var(--angle));
+  transform-origin: 50% 50%;
+  pointer-events: none;
+}
+
+.slot {
+  position: absolute;
+  top: var(--rim);
+  left: 50%;
+  transform: translateX(-50%) rotate(calc(-1 * var(--angle)));
+  transform-origin: 50% 50%;
+  pointer-events: auto;
+}
+
+.icon {
+  width: var(--icon);
+  height: var(--icon);
+  border-radius: 10px;
+  border: 2px solid rgba(255,255,255,.25);
+  box-shadow: 0 2px 8px rgba(0,0,0,.5);
+  background: rgba(0,0,0,.2);
+}
+
+.slot.ok .icon { box-shadow: 0 0 10px rgba(25,135,84,.9), 0 2px 8px rgba(0,0,0,.9); border-color: rgba(25,135,84,.8); }
+.slot.substitute .icon { box-shadow: 0 0 10px rgba(255,193,7,.9), 0 2px 8px rgba(0,0,0,.9); border-color: rgba(255,5,5,.45); }
+.slot.extra .icon { box-shadow: 0 0 10px rgba(255,5,5,.9), 0 2px 8px rgba(0,0,0,.9); border-color: rgba(108,117,125,.5); }
+
+.arc-empty {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  color: #9aa7b6; font-size: .9rem; pointer-events: none;
+}
+
+.fit-detail-modal .h5 { margin-top: .25rem; margin-bottom: .35rem; }
+
+@media (max-width: 576px) {
+  .slot-wheel { width: 100%; }
+}
+
+.slot-wheel {
+  --grid-step: 11.25deg;
+  --grid-line: 0.1deg;
+  --grid-rotate: 0deg;
+  --grid-color: rgba(255,255,255,.35);
+  --grid-mask-inner: 20%;
+}
+
+.slot-wheel .radial-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image: repeating-conic-gradient(
+    from var(--grid-rotate),
+    var(--grid-color) 0 var(--grid-line),
+    transparent var(--grid-line) var(--grid-step)
+  );
+
+  -webkit-mask: radial-gradient(circle at center, transparent 0 var(--grid-mask-inner), black var(--grid-mask-inner) 100%);
+          mask: radial-gradient(circle at center, transparent 0 var(--grid-mask-inner), black var(--grid-mask-inner) 100%);
+}
+
+[data-bs-theme="dark"] .slot-wheel .radial-grid {
+  --grid-color: rgba(255,255,255,.25);
+}
+
+</style>
+
+<script>
+(function () {
+  // Initialize Bootstrap tooltips
+  const root = document.currentScript?.closest('.fit-detail-modal') || document;
+  if (window.bootstrap) {
+    const els = root.querySelectorAll('[data-bs-toggle="tooltip"]');
+    els.forEach(el => { try { new bootstrap.Tooltip(el, { boundary: root }); } catch(e) {} });
+  }
+})();
+</script>

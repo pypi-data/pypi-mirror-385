@@ -1,0 +1,267 @@
+{% extends "autosrp/base.html" %}
+{% load static %}
+{% block title %}New Submission{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <h1 class="mb-3">Create SRP Submission</h1>
+    {% if form.non_field_errors %}
+    <div class="alert alert-danger">
+        {{ form.non_field_errors }}
+    </div>
+    {% endif %}
+    <form method="post" novalidate>
+        {% csrf_token %}
+        <div class="card mb-3">
+            <div class="card-header">
+                <h5 class="mb-0">Automatic Submission</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="id_battle_report_url" class="form-label">{{ form.battle_report_url.label }}</label>
+                    {{ form.battle_report_url }}
+                    {% if form.battle_report_url.help_text %}
+                    <div class="form-text">{{ form.battle_report_url.help_text }}</div>
+                    {% endif %}
+                    {% if form.battle_report_url.errors %}
+                    <div class="text-danger small">{{ form.battle_report_url.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div id="zk-time-window-group" class="mb-3" style="display:none;">
+                    <label for="id_time_window_hours" class="form-label">{{ form.time_window_hours.label }}</label>
+                    {{ form.time_window_hours }}
+                    {% if form.time_window_hours.help_text %}
+                    <div class="form-text">{{ form.time_window_hours.help_text }}</div>
+                    {% endif %}
+                    {% if form.time_window_hours.errors %}
+                    <div class="text-danger small">{{ form.time_window_hours.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="alert alert-info" id="br-help-block">
+                    Paste a zKill “related” link or an EVE Tools BR link to auto-fill systems and times.
+                    For zKill “related” URLs, you can adjust the time window above (default 2 hours).
+                </div>
+
+                <div class="alert alert-warning" id="br-help-block2">
+                    Using the EVE Tools BR link will not work if the BR is not public. The EVE Tools BR is a beta feature and
+                    may result in unexpected behavior.
+                </div>
+            </div>
+        </div>
+        <div class="card mb-3">
+            <div class="card-header">
+                <h5 class="mb-0">Manual Submission</h5>
+            </div>
+            <div class="card-body">
+                <div id="system-lookup-container" class="mt-3">
+                    <label for="system-search" class="form-label">Add systems by name</label>
+                    <div class="input-group">
+                        <input id="system-search" class="form-control" list="system-options"
+                               placeholder="Type system name (e.g. Jita, Amamake)" autocomplete="off"/>
+                        <button id="system-add-btn" type="button" class="btn btn-outline-secondary">Add</button>
+                    </div>
+                    <datalist id="system-options"></datalist>
+                    <div class="form-text">Choose a system and click Add to append its numeric ID to the Systems field.</div>
+                </div>
+                <div class="mb-3">
+                    <label for="id_systems" class="form-label">{{ form.systems.label }}</label>
+                    {{ form.systems }}
+                    {% if form.systems.help_text %}
+                    <div class="form-text">{{ form.systems.help_text }}</div>
+                    {% endif %}
+                    {% if form.systems.errors %}
+                    <div class="text-danger small">{{ form.systems.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="id_start_at" class="form-label">{{ form.start_at.label }}</label>
+                        {{ form.start_at }}
+                        {% if form.start_at.help_text %}
+                        <div class="form-text">{{ form.start_at.help_text }}</div>
+                        {% endif %}
+                        {% if form.start_at.errors %}
+                        <div class="text-danger small">{{ form.start_at.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="id_end_at" class="form-label">{{ form.end_at.label }}</label>
+                        {{ form.end_at }}
+                        {% if form.end_at.help_text %}
+                        <div class="form-text">{{ form.end_at.help_text }}</div>
+                        {% endif %}
+                        {% if form.end_at.errors %}
+                        <div class="text-danger small">{{ form.end_at.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-check mb-3">
+                    {{ form.strict_mode }}
+                    <label for="id_strict_mode" class="form-check-label">{{ form.strict_mode.label }}</label>
+                    <div class="form-text">If enabled, the exact item is checked, meta-variants are not allowed.</div>
+                    {% if form.strict_mode.errors %}
+                    <div class="text-danger small">{{ form.strict_mode.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_org_filter" class="form-label">{{ form.org_filter.label }}</label>
+                    {{ form.org_filter }}
+                    {% if form.org_filter.errors %}
+                    <div class="text-danger small">{{ form.org_filter.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_doctrine_id" class="form-label">{{ form.doctrine_id.label }}</label>
+                    {{ form.doctrine_id }}
+                    {% if form.doctrine_id.help_text %}
+                    <div class="form-text">{{ form.doctrine_id.help_text }}</div>
+                    {% endif %}
+                    {% if form.doctrine_id.errors %}
+                    <div class="text-danger small">{{ form.doctrine_id.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <a href="{% url 'autosrp:my-submissions' %}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    (function() {
+      const textarea = document.querySelector('textarea[name="systems"]');
+      if (!textarea) return;
+
+      const helper = document.getElementById('system-lookup-container');
+
+      const input = document.getElementById('system-search');
+      const datalist = document.getElementById('system-options');
+      const addBtn = document.getElementById('system-add-btn');
+
+      let lastQuery = '';
+      let nameToId = new Map();
+      let typingTimer;
+
+      async function lookupSystems(q) {
+        const url = `{% url 'autosrp:system-lookup' %}?q=${encodeURIComponent(q)}`;
+        const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+        if (!res.ok) return;
+        const data = await res.json();
+        const results = Array.isArray(data) ? data : [];
+
+        nameToId.clear();
+        datalist.innerHTML = '';
+
+        const frag = document.createDocumentFragment();
+        results.forEach(r => {
+          const id = parseInt(r.id, 10);
+          const name = (r.name || '').trim();
+          const region = (r.region || '').trim();
+          if (!id || !name) return;
+          nameToId.set(name, id);
+          const opt = document.createElement('option');
+          opt.value = name;
+          if (region) opt.label = `${name} — ${region}`;
+          opt.setAttribute('data-id', String(id));
+          frag.appendChild(opt);
+        });
+        datalist.appendChild(frag);
+      }
+
+      function appendIdToTextarea(id) {
+        const raw = textarea.value.trim();
+        textarea.value = raw ? `${raw.replace(/\s+/g,'')},${id}` : String(id);
+      }
+
+      function resolveSelectedId() {
+        const val = input.value.trim();
+        if (!val) return null;
+        if (nameToId.has(val)) return nameToId.get(val);
+        const opt = Array.from(datalist.options).find(o => o.value === val);
+        if (opt && opt.dataset.id) return parseInt(opt.dataset.id, 10);
+        return null;
+      }
+
+      input.addEventListener('input', () => {
+        const q = input.value.trim();
+        if (q.length < 2 || q === lastQuery) return;
+        lastQuery = q;
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(() => {
+          lookupSystems(q).catch(() => {});
+        }, 200);
+      });
+
+      addBtn.addEventListener('click', () => {
+        const id = resolveSelectedId();
+        if (id) {
+          appendIdToTextarea(id);
+          input.value = '';
+          input.focus();
+        }
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          addBtn.click();
+        }
+      });
+    })();
+</script>
+<script>
+    (function() {
+      function byId(id) { return document.getElementById(id); }
+
+      const urlInput = byId('id_battle_report_url');
+      const timeGroup = byId('zk-time-window-group');
+
+      function updateZkToggle() {
+        if (!urlInput) return;
+        const v = (urlInput.value || '').trim();
+        const isZkRelated = /^https?:\/\/(?:beta\.)?zkillboard\.com\/related\/\d{6,9}\/\d{12}\/?$/i.test(v);
+        if (timeGroup) {
+          timeGroup.style.display = isZkRelated ? '' : 'none';
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', updateZkToggle);
+      if (urlInput) {
+        urlInput.addEventListener('input', updateZkToggle);
+        urlInput.addEventListener('change', updateZkToggle);
+        urlInput.addEventListener('blur', updateZkToggle);
+      }
+    })();
+</script>
+<script>
+    (function() {
+      document.addEventListener('DOMContentLoaded', function() {
+        var sel = document.getElementById('id_org_filter');
+        if (!sel) return;
+        // If no value is selected, try to pick the default from data-default-id
+        var hasSelection = Array.prototype.some.call(sel.options, function(o){ return o.selected; });
+        if (hasSelection && sel.value) return;
+
+        var defId = sel.getAttribute('data-default-id');
+        if (!defId) return;
+
+        for (var i = 0; i < sel.options.length; i++) {
+          var opt = sel.options[i];
+          if (String(opt.value) === String(defId)) {
+            opt.selected = true;
+            break;
+          }
+        }
+      });
+    })();
+</script>
+{% endblock %}
