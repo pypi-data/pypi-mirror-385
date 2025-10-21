@@ -1,0 +1,34 @@
+Metadata-Version: 2.4
+Name: pylinearfold
+Version: 0.2.1
+Summary: Python bindings for LinearFold and LinearPartition
+Maintainer-Email: Luca Monari <l.monari@zmbh.de>, Dominic Kempf <ssc@uni-heidelberg.de>
+License-File: COPYING.md
+License-File: LICENSE.md
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.10
+Requires-Dist: numpy
+Provides-Extra: tests
+Requires-Dist: pytest; extra == "tests"
+Description-Content-Type: text/markdown
+
+# Welcome to pylinearfold
+
+[![PyPI Release](https://img.shields.io/pypi/v/pylinearfold.svg)](https://pypi.org/project/pylinearfold)
+
+This project provides Python bindings to both [LinearFold](https://github.com/LinearFold/LinearFold) and [LinearPartition](https://github.com/LinearFold/LinearPartition) from one Python package. The package can be installed from
+PyPI as wheels - not requiring any C++ compiler toolchain at the end user.
+
+# Installation
+
+Installing `pylinearfold` should be done directly from PyPI:
+
+```python
+python -m pip install pylinearfold
+```
+
+# License
+
+Please review the licensing terms in LICENSE.md. We provide these bindings under
+the same license as the original code.
