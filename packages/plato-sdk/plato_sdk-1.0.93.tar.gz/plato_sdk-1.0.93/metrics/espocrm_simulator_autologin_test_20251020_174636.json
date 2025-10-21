@@ -1,0 +1,25 @@
+{
+  "test_type": "single_simulator_test",
+  "tested_simulator": "espocrm",
+  "total_simulators": 1,
+  "successful_tests": 0,
+  "failed_tests": 1,
+  "total_duration": 2.4797539710998535,
+  "login_attempts": 0,
+  "successful_logins": 0,
+  "login_success_rate": 0,
+  "overall_success_rate": 0.0,
+  "individual_simulator_metrics": [
+    {
+      "simulator_name": "espocrm",
+      "success": false,
+      "total_duration": 2.477931022644043,
+      "environment_id": null,
+      "steps_timing": {},
+      "tasks_count": 969,
+      "login_attempted": false,
+      "login_successful": false,
+      "error": "HTTP 422: {'detail': [{'type': 'literal_error', 'loc': ['body', 'interface_type'], 'msg': \"Input should be 'browser', 'computer' or 'noop'\", 'input': None, 'ctx': {'expected': \"'browser', 'computer' or 'noop'\"}}]}"
+    }
+  ]
+}
