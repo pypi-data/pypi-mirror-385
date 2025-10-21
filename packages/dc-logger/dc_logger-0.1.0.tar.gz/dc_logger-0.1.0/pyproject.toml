@@ -1,0 +1,75 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "dc_logger"
+version = "0.1.0"
+description = "A flexible logging library with support for cloud providers, multi-tenancy, and structured logging"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Jae Wilson", email = "jaewilson07@gmail.com"}
+]
+keywords = ["logging", "datadog", "cloud", "observability", "structured-logging"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: System :: Logging",
+]
+dependencies = [
+    "pydantic>=2.0.0",
+    "typing-extensions>=4.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "jupyter",
+    "pytest>=7.0.0",
+    "pytest-cov",
+    "ruff",
+    "mypy",
+]
+datadog = [
+    "datadog-api-client>=2.0.0",
+]
+all = [
+    "dc_logger[dev,datadog]",
+]
+
+[project.urls]
+Homepage = "https://github.com/jaewilson07/dc_logger"
+Documentation = "https://jaewilson07.github.io/dc_logger"
+Repository = "https://github.com/jaewilson07/dc_logger"
+Issues = "https://github.com/jaewilson07/dc_logger/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["dc_logger"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py38"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "--cov=dc_logger --cov-report=html --cov-report=term"
