@@ -1,0 +1,15 @@
+Metadata-Version: 2.4
+Name: snowmover
+Version: 0.0.1a0
+Summary: A lightweight Python toolkit for Snowflake data moves: upload local text files with PUT/COPY INTO, row-by-row inserts, extract tables to local files (TXT/CSV/Excel), Snowflake-to-Snowflake transfers, and simple, secure connection helpers.
+Author: Harjinder Sidhu
+License: MIT
+Keywords: Python,open-source,snowflake,snowflake-connector,data-loader,data-pipeline,etl,data-ingestion,data-export,data-engineering,data-warehouse,database-tools
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Dynamic: license-file
+
+# Snowmover
+
+Snowflake Data Loader is a small, pragmatic Python library that streamlines common Snowflake workflows. It lets you ingest external text files using PUT + COPY INTO for fast bulk loads or perform row-by-row inserts when you need granular control. You can export query results to local files in multiple formats (plain text, CSV, or Excel), and even move data between Snowflake accounts/warehouses using stage-based PUT + COPY INTO. The package includes straightforward connection utilities (key-pair or password) so you can go from connect → load → extract in just a few lines of code.
