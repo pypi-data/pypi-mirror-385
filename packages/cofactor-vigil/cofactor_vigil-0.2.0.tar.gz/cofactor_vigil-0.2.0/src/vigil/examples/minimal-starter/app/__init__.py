@@ -1,0 +1,1 @@
+"""Minimal Vigil starter application."""

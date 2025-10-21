@@ -1,0 +1,20 @@
+# Genomics pipeline parameters
+
+filter:
+  min_quality_score: 30.0        # PHRED quality score threshold
+  min_depth: 20                  # Minimum sequencing coverage (reads)
+  min_allele_frequency: 0.01     # Minimum allele frequency (1%)
+  variant_types:
+    - SNV                        # Single nucleotide variants
+    - INDEL                      # Insertions and deletions
+
+annotate:
+  databases:
+    - ensembl                    # Gene annotation
+    - dbsnp                      # Known variants
+    - clinvar                    # Clinical significance
+  annotation_fields:
+    - gene_function
+    - gene_pathway
+    - variant_effect
+    - pathogenicity
