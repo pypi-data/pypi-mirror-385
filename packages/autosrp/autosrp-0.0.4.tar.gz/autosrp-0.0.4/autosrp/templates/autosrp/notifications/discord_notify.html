@@ -1,0 +1,14 @@
+An SRP request regarding your **{{ ship|safe }}** lost at **{{ time }}** has been **{{ status|safe }}**.
+
+__**Request Details:**__
+**Ship Lost:** {{ ship|safe }}
+**Ship Lost At:** {{ time }}
+{% if review_status != "submitted" %}
+**Reviewer:** {{ reviewer|safe }}
+**Reviewed At:** {{ reviewed_at }}
+{% endif %}
+{% if comment %}
+**Comment:**
+{{ comment|safe }}
+{% endif %}
+If you have any questions regarding your SRP request, feel free to contact your request reviewer ({{ reviewer|safe }}).

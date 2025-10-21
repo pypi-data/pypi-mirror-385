@@ -1,0 +1,98 @@
+{% extends 'autosrp/base.html' %}
+{% block content %}
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="m-0">Ignored Modules</h4>
+    <a class="btn btn-outline-secondary btn-sm" href="{% url 'autosrp:admin-home' %}">Back</a>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="mb-2">Search modules to ignore (type at least 2 characters):</div>
+      <div class="input-group">
+        <input id="modSearch" class="form-control" placeholder="e.g. Festival Launcher">
+        <button id="modSearchBtn" class="btn btn-primary btn-sm">Search</button>
+      </div>
+      <div id="modResults" class="list-group list-group-flush mt-2"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">Currently Ignored</div>
+    <div class="card-body p-0">
+      <table class="table table-sm mb-0">
+        <thead>
+          <tr><th>Name</th><th>Type ID</th><th style="width: 90px;"></th></tr>
+        </thead>
+        <tbody>
+        {% for it in items %}
+          <tr>
+            <td>{{ it.name }}</td>
+            <td>{{ it.eve_type_id }}</td>
+            <td class="text-end">
+              <form method="post" action="{% url 'autosrp:ignored-modules' %}">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="delete">
+                <input type="hidden" name="id" value="{{ it.id }}">
+                <button class="btn btn-outline-danger btn-sm" title="Remove">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </form>
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="3" class="text-muted p-3">No ignored modules yet.</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const api = "{% url 'autosrp:api-mod-search' %}";
+  const qInput = document.getElementById("modSearch");
+  const qBtn = document.getElementById("modSearchBtn");
+  const results = document.getElementById("modResults");
+
+  async function searchMods() {
+    const q = (qInput.value || "").trim();
+    results.innerHTML = "";
+    if (q.length < 2) return;
+    try {
+      const resp = await fetch(api + "?q=" + encodeURIComponent(q), {headers: {'X-Requested-With':'XMLHttpRequest'}});
+      const data = await resp.json();
+      const items = Array.isArray(data.items) ? data.items : [];
+      if (!items.length) {
+        results.innerHTML = '<div class="list-group-item text-muted">No results.</div>';
+        return;
+      }
+      items.forEach(it => {
+        const row = document.createElement('div');
+        row.className = "list-group-item d-flex align-items-center justify-content-between";
+        row.innerHTML = `
+          <div><strong>${it.name}</strong> <span class="text-muted">(#${it.id})</span></div>
+          <form method="post" action="{% url 'autosrp:ignored-modules' %}">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="add">
+            <input type="hidden" name="eve_type_id" value="${it.id}">
+            <button class="btn btn-outline-success btn-sm" title="Ignore this module">
+              <i class="fa fa-plus"></i>
+            </button>
+          </form>
+        `;
+        results.appendChild(row);
+      });
+    } catch(e) {
+      results.innerHTML = '<div class="list-group-item text-danger">Search failed.</div>';
+    }
+  }
+
+  qBtn?.addEventListener('click', (e) => { e.preventDefault(); searchMods(); });
+  qInput?.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); searchMods(); }});
+})();
+</script>
+{% endblock %}
+</body>
+</html>
