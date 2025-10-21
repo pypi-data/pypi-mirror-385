@@ -1,0 +1,179 @@
+Metadata-Version: 2.4
+Name: fastwings
+Version: 0.0.18
+Summary: Provides several modules that help improve web application development using FastAPI
+Author-email: Dao Quang Duy <duydaoquang12@gmail.com>
+Maintainer-email: Rabiloo Developers <oss@rabiloo.com>
+License: The MIT License
+Project-URL: Homepage, https://github.com/rabiloo/fastapi-base
+Project-URL: Repository, https://github.com/rabiloo/fastapi-base
+Project-URL: Bug Tracker, https://github.com/rabiloo/fastapi-base/issues
+Keywords: fastwings,fastapi_base,fastapi_utils,fastapi_helper,fastapi
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Development Status :: 2 - Pre-Alpha
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE.txt
+Requires-Dist: loguru==0.7.3
+Requires-Dist: pydantic-settings==2.11.0
+Requires-Dist: inflect==7.5.0
+Requires-Dist: sqlmodel==0.0.27
+Provides-Extra: dev
+Requires-Dist: ruff; extra == "dev"
+Requires-Dist: typos; extra == "dev"
+Requires-Dist: mypy; extra == "dev"
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: coverage; extra == "dev"
+Requires-Dist: pytest-cov; extra == "dev"
+Requires-Dist: pytest-mock; extra == "dev"
+Requires-Dist: pytest-asyncio; extra == "dev"
+Requires-Dist: httpx; extra == "dev"
+Requires-Dist: numpy==2.2.6; extra == "dev"
+Provides-Extra: logger-logstash
+Requires-Dist: python-logstash==0.4.8; extra == "logger-logstash"
+Provides-Extra: logger-ggchat
+Requires-Dist: requests==2.32.5; extra == "logger-ggchat"
+Provides-Extra: logger
+Requires-Dist: fastwings[logger-logstash]; extra == "logger"
+Requires-Dist: fastwings[logger-ggchat]; extra == "logger"
+Provides-Extra: db-pg
+Requires-Dist: SQLAlchemy==2.0.43; extra == "db-pg"
+Requires-Dist: tenacity==9.1.2; extra == "db-pg"
+Requires-Dist: psycopg2-binary==2.9.10; extra == "db-pg"
+Provides-Extra: db-asyncpg
+Requires-Dist: SQLAlchemy==2.0.43; extra == "db-asyncpg"
+Requires-Dist: tenacity==9.1.2; extra == "db-asyncpg"
+Requires-Dist: psycopg2-binary==2.9.10; extra == "db-asyncpg"
+Requires-Dist: asyncpg==0.30.0; extra == "db-asyncpg"
+Provides-Extra: db-my
+Requires-Dist: SQLAlchemy==2.0.43; extra == "db-my"
+Requires-Dist: tenacity==9.1.2; extra == "db-my"
+Requires-Dist: PyMySQL==1.1.2; extra == "db-my"
+Provides-Extra: db-asyncmy
+Requires-Dist: SQLAlchemy==2.0.43; extra == "db-asyncmy"
+Requires-Dist: asyncmy==0.2.10; extra == "db-asyncmy"
+Provides-Extra: db
+Requires-Dist: fastwings[db-pg]; extra == "db"
+Requires-Dist: fastwings[db-asyncpg]; extra == "db"
+Requires-Dist: fastwings[db-my]; extra == "db"
+Requires-Dist: fastwings[db-asyncmy]; extra == "db"
+Provides-Extra: fastapi
+Requires-Dist: fastapi==0.119.0; extra == "fastapi"
+Requires-Dist: fastapi_health==0.4.0; extra == "fastapi"
+Requires-Dist: passlib==1.7.4; extra == "fastapi"
+Requires-Dist: python-multipart==0.0.20; extra == "fastapi"
+Requires-Dist: bcrypt==4.3.0; extra == "fastapi"
+Requires-Dist: python-jose==3.5.0; extra == "fastapi"
+Requires-Dist: uvicorn[standard]==0.37.0; extra == "fastapi"
+Provides-Extra: all
+Requires-Dist: fastwings[logger]; extra == "all"
+Requires-Dist: fastwings[db]; extra == "all"
+Requires-Dist: fastwings[fastapi]; extra == "all"
+Dynamic: license-file
+
+# FastAPI Base
+
+## About FastAPI Base
+
+[FastAPI Base](https://github.com/rabiloo/fastapi-base) is a library based on [FastAPI](https://github.com/tiangolo/fastapi). It provides several modules that help improve web application development using FastAPI
+
+Some module in project
+- Logger module
+- Authentication module
+- Database Connection module
+- CRUD module
+- Encrypt module
+- Common Design Pattern module
+
+## Install
+With using the logger with 3rdParty handlers
+```
+$ pip install fastwings[logger-logstash,logger-ggchat]
+```
+
+# Usage
+## Config middleware, exception_handler, logger with uvicorn
+```
+from fastwings.app import app
+from fastwings.logger import configure_logger, get_uvicorn_configure_logger
+from fastwings.logger.filter import HealthCheckFilter
+from fastwings.logger.formatter import DEFAULT_FORMATTER
+from fastwings.logger.handler.logstash_handler import LogStashHandler
+from fastwings.logger.handler.file_handler import FileHandler
+from fastwings.logger.handler.stdout_handler import StdoutHandler
+from fastwings.middleware.common_handler import timer_middleware
+from fastwings.middleware.exception_handler import business_exception_handler
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.middleware.cors import CORSMiddleware
+
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["*"],
+)
+
+# Add Timer middleware
+app.add_middleware(BaseHTTPMiddleware, dispatch=timer_middleware)
+
+# Add Business Exception Handler
+app.add_exception_handler(BusinessException, business_exception_handler)
+
+configure_logger(
+    handlers=[
+        ("builtin", StdoutHandler(log_format=DEFAULT_FORMATTER)),
+        ("builtin", FileHandler(log_format=DEFAULT_FORMATTER, log_filter=HealthCheckFilter())),
+        ("custom", LogStashHandler(service_name="Test", log_filter=HealthCheckFilter()))
+    ]
+)
+
+
+logger = logging.getLogger(__name__)
+
+
+@app.post('/test')
+async def test(
+    title: str = Form(...),
+    description: str = Form(...),
+) -> ResponseObject:
+    """ doc """
+    logger.info(f"{title}-{description}")
+    return ResponseObject(data=f"{title}-{description}")
+
+
+uvicorn.run(
+    app,
+    host="0.0.0.0",
+    port=3000,
+    workers=1,
+    reload=False,
+    log_config=get_uvicorn_configure_logger()
+)
+```
+
+## Changelog
+
+Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+
+## Contributing
+
+Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
+
+## Security Vulnerabilities
+
+Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
+
+## Credits
+
+- [Dao Quang Duy](https://github.com/duydq12)
+- [All Contributors](../../contributors)
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE) for more information.
