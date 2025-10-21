@@ -1,0 +1,18 @@
+from coocan import Request, Response, MiniSpider
+
+
+class {SpiderClassName}(MiniSpider):
+    start_urls = ["https://github.com/markadc/coocan"]
+    max_requests = 10
+
+    def middleware(self, request: Request):
+        request.headers["Referer"] = "https://github.com"
+
+    def parse(self, response: Response):
+        print(response.status_code)
+        print(response.get_one("//title/text()"))
+
+
+if __name__ == '__main__':
+    s = {SpiderClassName}()
+    s.go()
