@@ -1,0 +1,74 @@
+[build-system]
+requires = ["setuptools>=77.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "reposmith-tol"
+version = "0.4.2"
+description = "Portable Python project bootstrapper with venv, uv, VS Code, and CI integration."
+readme = "README.md"
+requires-python = ">=3.12"
+
+authors = [
+  { name = "Tamer Hamad Faour", email = "info@tameronline.com" }
+]
+
+keywords = [
+  "bootstrap", "venv", "uv", "vscode",
+  "license", "scaffold", "cli", "project-generator"
+]
+
+license = { text = "MIT" }  # Alternative: license = { file = "LICENSE" }
+
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Operating System :: OS Independent",
+  "Topic :: Software Development :: Build Tools",
+  "Topic :: Utilities"
+]
+
+# Keep only the dependencies actually required at runtime
+dependencies = [
+  "python-dotenv>=1.1.1"  # Remove if not imported in runtime
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0",
+  "coverage>=7.6",
+  "ruff>=0.6",
+  "black>=24.8"
+]
+publish = [
+  "build>=1.3.0",
+  "twine>=6.2.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/TamerOnLine/reposmith-init"
+Repository = "https://github.com/TamerOnLine/reposmith-init"
+Issues = "https://github.com/TamerOnLine/reposmith-init/issues"
+Documentation = "https://tameronline.github.io/reposmith-init/"
+Sponsor = "https://github.com/sponsors/TamerOnLine"
+Discussions = "https://github.com/TamerOnLine/reposmith-init/discussions"
+
+[project.scripts]
+reposmith = "reposmith.cli:main"
+on = "on.__main__:main"
+
+[tool.setuptools]
+include-package-data = true
+license-files = ["LICENSE"]
+
+[tool.setuptools.package-data]
+reposmith = ["**/*.ps1", "**/*.sh", "**/*.json"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["reposmith*", "on"]
