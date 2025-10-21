@@ -1,0 +1,182 @@
+Metadata-Version: 2.4
+Name: brizz
+Version: 0.1.3
+Summary: Official Python SDK for Brizz platform
+Author-email: Brizz Team <contact@brizz.ai>
+License: Apache-2.0
+License-File: LICENSE
+Keywords: ai,api,brizz,brizzai,instrumentation,llm,monitoring,observability,opentelemetry,sdk,telemetry,tracing
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: <3.14,>=3.10
+Requires-Dist: httpx>=0.25.0
+Requires-Dist: opentelemetry-api>=1.34.0
+Requires-Dist: opentelemetry-exporter-otlp-proto-http>=1.34.0
+Requires-Dist: opentelemetry-instrumentation-aiohttp-client>=0.55b1
+Requires-Dist: opentelemetry-instrumentation-alephalpha>=0.44.0
+Requires-Dist: opentelemetry-instrumentation-anthropic>=0.30.0
+Requires-Dist: opentelemetry-instrumentation-bedrock>=0.30.0
+Requires-Dist: opentelemetry-instrumentation-chromadb>=0.44.0
+Requires-Dist: opentelemetry-instrumentation-cohere>=0.30.0
+Requires-Dist: opentelemetry-instrumentation-crewai>=0.44.0
+Requires-Dist: opentelemetry-instrumentation-google-generativeai>=0.44.0
+Requires-Dist: opentelemetry-instrumentation-groq>=0.44.0
+Requires-Dist: opentelemetry-instrumentation-httpx>=0.55b1
+Requires-Dist: opentelemetry-instrumentation-lancedb>=0.44.0
+Requires-Dist: opentelemetry-instrumentation-langchain>=0.30.0
+Requires-Dist: opentelemetry-instrumentation-llamaindex>=0.30.0
+Requires-Dist: opentelemetry-instrumentation-logging>=0.55b1
+Requires-Dist: opentelemetry-instrumentation-marqo>=0.44.0
+Requires-Dist: opentelemetry-instrumentation-mcp>=0.44.0
+Requires-Dist: opentelemetry-instrumentation-milvus>=0.44.0
+Requires-Dist: opentelemetry-instrumentation-mistralai>=0.44.0
+Requires-Dist: opentelemetry-instrumentation-ollama>=0.44.0
+Requires-Dist: opentelemetry-instrumentation-openai-agents>=0.44.0
+Requires-Dist: opentelemetry-instrumentation-openai>=0.30.0
+Requires-Dist: opentelemetry-instrumentation-pinecone>=0.44.0
+Requires-Dist: opentelemetry-instrumentation-qdrant>=0.44.0
+Requires-Dist: opentelemetry-instrumentation-redis>=0.55b1
+Requires-Dist: opentelemetry-instrumentation-replicate>=0.44.0
+Requires-Dist: opentelemetry-instrumentation-requests>=0.55b1
+Requires-Dist: opentelemetry-instrumentation-sagemaker>=0.44.0
+Requires-Dist: opentelemetry-instrumentation-sqlalchemy>=0.55b1
+Requires-Dist: opentelemetry-instrumentation-threading>=0.55b1
+Requires-Dist: opentelemetry-instrumentation-together>=0.44.0
+Requires-Dist: opentelemetry-instrumentation-transformers>=0.44.0
+Requires-Dist: opentelemetry-instrumentation-urllib3>=0.55b1
+Requires-Dist: opentelemetry-instrumentation-urllib>=0.55b1
+Requires-Dist: opentelemetry-instrumentation-vertexai>=0.30.0
+Requires-Dist: opentelemetry-instrumentation-watsonx>=0.44.0
+Requires-Dist: opentelemetry-instrumentation-weaviate>=0.44.0
+Requires-Dist: opentelemetry-sdk>=1.34.1
+Requires-Dist: opentelemetry-semantic-conventions-ai>=0.4.0
+Requires-Dist: opentelemetry-semantic-conventions>=0.40b0
+Requires-Dist: pydantic>=2.0.0
+Description-Content-Type: text/markdown
+
+# Brizz SDK
+
+[![Python Version](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+
+Brizz observability SDK for AI applications.
+
+## Installation
+
+```bash
+pip install brizz
+# or
+uv add brizz
+# or
+poetry add brizz
+```
+
+## Quick Start
+
+```python
+from brizz import Brizz
+
+# Initialize
+Brizz.initialize(
+    api_key='your-brizzai-api-key',
+    app_name='my-app',
+)
+```
+
+> **Important**: Initialize Brizz before importing any libraries you want to instrument (e.g.,
+> OpenAI). If using `dotenv`, use `from dotenv import load_dotenv; load_dotenv()` before importing `brizz`.
+
+## PII Masking
+
+Automatically protects sensitive data in traces:
+
+```python
+# Option 1: Enable default masking (simple)
+Brizz.initialize(
+    api_key='your-api-key',
+    masking=True,  # Enables all built-in PII patterns
+)
+
+# Option 2: Custom masking configuration
+from brizz import Brizz, MaskingConfig, SpanMaskingConfig, AttributesMaskingRule
+
+Brizz.initialize(
+    api_key='your-api-key',
+    masking=MaskingConfig(
+        span_masking=SpanMaskingConfig(
+            rules=[
+                AttributesMaskingRule(
+                    attribute_pattern=r'gen_ai\.(prompt|completion)',
+                    mode='partial',  # 'partial' or 'full'
+                    patterns=[r'sk-[a-zA-Z0-9]{32}'],  # Custom regex patterns
+                ),
+            ],
+        ),
+    ),
+)
+```
+
+**Built-in patterns**: emails, phone numbers, SSNs, credit cards, API keys, crypto addresses, and
+more. Use `masking=True` for defaults or `MaskingConfig` for custom rules.
+
+## Session Tracking
+
+Group related operations and traces under a session context. All telemetry within the wrapped
+function will include the session ID:
+
+```python
+from brizz import with_session_id, awith_session_id
+
+
+async def process_user_workflow(chat_id):
+    # All traces, events, and spans within this function
+    # will be tagged with session-123
+    response = await awith_session_id(chat_id, openai.chat.completions.create,
+        model='gpt-4',
+        messages=[{'role': 'user', 'content': 'Hello'}],
+    )
+
+    return response
+
+
+# For synchronous functions
+def sync_workflow(chat_id: str, data: dict):
+    # Process data with session context
+    return with_session_id(chat_id, processed_data, data)
+```
+
+## Event Examples
+
+```python
+from brizz import emit_event
+
+emit_event('user.signup', {'user_id': '123', 'plan': 'pro'})
+emit_event('user.payment', {'amount': 99, 'currency': 'USD'})
+```
+
+## Deployment Environment
+
+Optionally specify the deployment environment for better filtering and organization:
+
+```python
+Brizz.initialize(
+    api_key='your-api-key',
+    app_name='my-app',
+    environment='production',  # Optional: 'dev', 'staging', 'production', etc.
+)
+```
+
+## Environment Variables
+
+```bash
+BRIZZ_API_KEY=your-api-key                  # Required
+BRIZZ_BASE_URL=https://telemetry.brizz.dev  # Optional
+BRIZZ_APP_NAME=my-app                       # Optional
+BRIZZ_ENVIRONMENT=production                # Optional: deployment environment (dev, staging, production)
+```
