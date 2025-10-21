@@ -1,0 +1,27 @@
+include README.md
+include requirements.txt
+include LICENSE
+include CKEDITOR_SETUP.md
+include CKEDITOR_TROUBLESHOOTING.md
+include CKEDITOR_SETTINGS_TEMPLATE.py
+include check_ckeditor_config.py
+include VIEW_COUNTER_SETUP.md
+include DEPLOYMENT_GUIDE.md
+recursive-include blog/templates *
+recursive-include blog/static *
+recursive-include blog/migrations *
+recursive-include blog/templatetags *
+recursive-include blog/middleware *
+global-exclude *.pyc
+global-exclude __pycache__
+global-exclude *.pyo
+global-exclude *.pyd
+global-exclude .DS_Store
+global-exclude *.sqlite3
+global-exclude test_*.py
+global-exclude verify_*.py
+global-exclude deploy_*.sh
+global-exclude *checklist*
+global-exclude *status*
+global-exclude *workflow*
+global-exclude *sample_data*

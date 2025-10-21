@@ -1,0 +1,52 @@
+<!-- Default Header Template -->
+<header class="bg-white shadow-sm border-b border-gray-200">
+    <div class="container mx-auto px-4">
+        <div class="flex items-center justify-between h-16">
+            <!-- Logo -->
+            <div class="flex items-center space-x-3">
+                <a href="{% url 'blog:post_list' %}" class="flex items-center space-x-2 text-xl font-bold text-gray-900 hover:text-primary-600 transition-colors">
+                    <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9m0 0v2m0-2a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                    </svg>
+                    <span>Blog</span>
+                </a>
+            </</span>div>
+
+            <!-- Navigation -->
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="{% url 'blog:post_list' %}" class="text-gray-600 hover:text-primary-600 font-medium transition-colors">Home</a>
+                <a href="{% url 'blog:post_archive' %}" class="text-gray-600 hover:text-primary-600 font-medium transition-colors">Archive</a>
+
+                <!-- Categories Dropdown -->
+                <div class="relative group">
+                    <button class="text-gray-600 hover:text-primary-600 font-medium transition-colors flex items-center">
+                        Categories
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
+                        {% load blog_tags %}
+                        {% get_categories as categories %}
+                        {% for category in categories %}
+                            <a href="{{ category.get_absolute_url }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary-600 transition-colors">
+                                {{ category.name }}
+                            </a>
+                        {% empty %}
+                            <span class="block px-4 py-2 text-sm text-gray-500">No categories</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <a href="{% url 'blog:post_search' %}" class="text-gray-600 hover:text-primary-600 font-medium transition-colors">Search</a>
+            </nav>
+
+            <!-- Mobile menu button -->
+            <button class="md:hidden p-2 rounded-md text-gray-600 hover:text-primary-600 hover:bg-gray-100 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+</header>
