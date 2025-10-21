@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "flashquery"
+version = "0.0.7"
+description = "A custom wrapper for the Langchain Python package with modified response handling"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [
+    { name = "FlashQuery.AI (Planorama Labs)", email = "contact@flashquery.ai" }
+]
+keywords = ["openai", "wrapper", "api", "chatgpt"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent"
+]
+dependencies = [
+    "langchain-anthropic",
+    "langchain-aws",
+    "langchain_openai",
+    "langchain-ibm",
+    "langchain-perplexity"
+]
+urls = { Homepage = "https://bitbucket.org/planorama-design/custom_openai_package" }
+
+[tool.setuptools.packages.find]
+where = ["."]
