@@ -1,0 +1,51 @@
+Metadata-Version: 2.4
+Name: tradeapi
+Version: 0.1.13
+Summary: Python package for Finam API
+Home-page: https://github.com/yourusername/example-pip-package
+Author: Alexander Illyuk
+Author-email: aaillyuk@gmail.com
+License: MIT
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: grpcio>=1.39.0
+Requires-Dist: protobuf>=5.0.0
+Requires-Dist: googleapis-common-protos>=1.53.0
+Requires-Dist: pandas>=1.1.0
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: license
+Dynamic: license-file
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+# TradeApi
+Это библиотека позволит легко взаимодействовать с [API Финама](https://tradeapi.finam.ru/docs/about/). 
+С ее помощью возможно: 
+*   Получать рыночные данные инструментов:
++ Информацию о стакане 
++ Последние сделки 
++ Свечи
+*   Выставлять и контролировать заявки
+*   Получать информацию о состоянии счета
+
+Для начала работы необходимо иметь открытый счет в Финам и получить [токен](https://tradeapi.finam.ru/docs/tokens/)
+## Установка 
+
+Библиотеку можно установить, запустив команду: 
+ `pip install tradeapi`
+
+## Пример 
+
+Примеры доступных функций можно найти тут 
+
+
