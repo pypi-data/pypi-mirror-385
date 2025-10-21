@@ -1,0 +1,71 @@
+Metadata-Version: 2.4
+Name: edwh-robin-plugin
+Version: 0.2.2
+Summary: robin project with a plugin to be discovered from the edwh package
+Project-URL: Documentation, https://github.com/robinvandernoord/edwh-robin-plugin#readme
+Project-URL: Issues, https://github.com/robinvandernoord/edwh-robin-plugin/issues
+Project-URL: Source, https://github.com/robinvandernoord/edwh-robin-plugin
+Author-email: Remco Boerma <remco.b@educationwarehouse.nl>, Robin van der Noord <robin.vdn@educationwarehouse.nl>
+License-Expression: MIT
+License-File: LICENSE.txt
+Keywords: edwh
+Classifier: Development Status :: 4 - Beta
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Programming Language :: Python :: Implementation :: PyPy
+Requires-Python: >=3.11
+Requires-Dist: edwh
+Requires-Dist: edwh-b2-plugin
+Requires-Dist: edwh-bundler-plugin
+Requires-Dist: edwh-devdb-plugin
+Requires-Dist: edwh-files-plugin
+Requires-Dist: edwh-git-plugin
+Requires-Dist: edwh-multipass-plugin
+Requires-Dist: edwh-pipcompile-plugin
+Requires-Dist: edwh-restic-plugin
+Requires-Dist: edwh-server-provisioning-plugin
+Requires-Dist: edwh-uptime-plugin
+Provides-Extra: dev
+Requires-Dist: hatch; extra == 'dev'
+Requires-Dist: python-semantic-release<8; extra == 'dev'
+Description-Content-Type: text/markdown
+
+# edwh-demo-plugin
+
+[![PyPI - Version](https://img.shields.io/pypi/v/edwh-demo-plugin.svg)](https://pypi.org/project/edwh-demo-plugin)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/edwh-demo-plugin.svg)](https://pypi.org/project/edwh-demo-plugin)
+
+-----
+
+**Table of Contents**
+
+- [Installation](#installation)
+- [License](#license)
+
+## USING THIS TEMPLATE REPOSITORY
+1. remove this markdown section;
+2. replace 'demo' in README.md, pyproject.toml and the name of the plugin in `src` to your actual plugin name;
+3. (add your actual plugin code of course);
+4. run `semantic-release publish`, `hatch build -c` and `hatch publish`.
+
+## Installation
+
+```console
+pip install edwh-demo-plugin
+```
+
+But probably you want to install the whole edwh package:
+
+```console
+pipx install edwh[demo]
+# or
+pipx install edwh[plugins,omgeving]
+```
+
+## License
+
+`edwh-demo-plugin` is distributed under the terms of the [MIT](https://spdx.org/licenses/MIT.html) license.
