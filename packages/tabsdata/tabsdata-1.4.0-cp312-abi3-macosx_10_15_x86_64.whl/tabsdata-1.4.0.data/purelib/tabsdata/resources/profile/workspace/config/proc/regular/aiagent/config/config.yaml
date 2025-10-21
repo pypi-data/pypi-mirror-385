@@ -1,0 +1,9 @@
+#
+# Copyright 2025 Tabs Data Inc.
+#
+
+port: 2459
+read_only: false
+ai_providers:
+  openai:
+    api_key: ${env:OPENAI_API_KEY?}
