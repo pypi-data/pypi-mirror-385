@@ -1,0 +1,106 @@
+.. image:: docs/source/res/parrot_logo.png
+   :alt: SCINE Parrot
+
+.. inclusion-marker-do-not-remove
+
+SCINE Parrot: 
+=============
+
+Introduction
+------------
+
+SCINE Parrot is a wrapper for machine learning potentials. It is an interface to
+
+- lifelong machine learning potentials (lMLP)
+- ANI (TorchANI)
+- M3GNet (MatGL)
+- MACE (MACE)
+
+Each method is represented by its own ``Calculator`` and the entire wrapper
+constitutes a SCINE module that can be loaded dynamically at runtime.
+For more information on these concepts see the ``Scine::Core``
+`repository <https://github.com/qcscine/core>`_.
+
+The full list of models includes
+
+- Model("lmlp", "<generalization_setting_file>", "")
+- Model("ani", "ani2x", "")
+- Model("ani", "ani1ccx", "")
+- Model("ani", "ani1x", "")
+- Model("m3gnet", "m3gnet-mp-2021.2.8-pes", "")
+- Model("m3gnet", "m3gnet-mp-2021.2.8-direct-pes", "")
+- Model("mace", "mace-mp_large", "")
+- Model("mace", "mace-mp_medium", "")
+- Model("mace", "mace-mp_small", "")
+- Model("mace", "mace-off_large", "")
+- Model("mace", "mace-off_medium", "")
+- Model("mace", "mace-off_small", "")
+
+License and Copyright Information
+---------------------------------
+
+Parrot is distributed under the BSD 3-clause "New" or "Revised" License.
+For more license and copyright information, see the file ``LICENSE.txt`` in the
+repository.
+
+Prerequisites
+.............
+
+The key requirements for Parrot are the Python packages ``scine_utilities``
+and ``scine_xtb_wrapper``. These packages are available from PyPI and can be
+installed using ``pip``. However, these packages can also be compiled by hand.
+For the latter case, please visit the repositories of each of the packages and
+follow their guidelines.
+
+Installation
+............
+
+Parrot can be installed using pip (pip3) once the repository has been cloned:
+
+.. code-block:: bash
+
+   git clone <parrot-repo>
+   pip install ./parrot
+
+A non super user can install the package using a virtual environment, or
+the ``--user`` flag.
+
+The documentation can be found online, or it can be built using:
+
+.. code-block:: bash
+
+   cd parrot
+   make -C docs html
+
+It is then available at:
+
+.. code-block:: bash
+
+   <browser name> docs/build/html/index.html
+
+In order to build the documentation, you need a few extra Python packages which
+are not installed automatically together with Parrot. In order to install them,
+run
+
+.. code-block:: bash
+
+   cd parrot
+   pip install -r requirements-dev.txt
+
+How to Cite
+-----------
+
+When publishing results obtained with SCINE Parrot, please cite the corresponding
+release as archived on Zenodo (please use the DOI of the respective release).
+In addition, when publishing results obtained with other SCINE modules
+we kindly ask you to cite the appropriate references.
+
+This wrapper should also not be mistaken for the respective actual machine
+learning potential code it wraps. For the latter code and its citations,
+we refer you to the respective publication/webpage.
+
+Support and Contact
+-------------------
+
+In case you should encounter problems or bugs, please write a short message
+to scine@phys.chem.ethz.ch.
