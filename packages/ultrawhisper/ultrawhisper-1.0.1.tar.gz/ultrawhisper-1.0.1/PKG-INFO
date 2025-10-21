@@ -1,0 +1,226 @@
+Metadata-Version: 2.4
+Name: ultrawhisper
+Version: 1.0.1
+Summary: Voice transcription with global hotkeys and LLM correction
+Project-URL: Homepage, https://github.com/casonclagg/ultrawhisper
+Project-URL: Repository, https://github.com/casonclagg/ultrawhisper.git
+Project-URL: Issues, https://github.com/casonclagg/ultrawhisper/issues
+Author-email: Cason Clagg <cason@cason.cc>
+License: MIT
+License-File: LICENSE
+Keywords: hotkey,llm,speech-to-text,transcription,voice,whisper
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: X11 Applications
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Multimedia :: Sound/Audio :: Speech
+Classifier: Topic :: Text Processing :: Linguistic
+Classifier: Topic :: Utilities
+Requires-Python: >=3.10
+Requires-Dist: anthropic>=0.20.0
+Requires-Dist: faster-whisper>=0.10.0
+Requires-Dist: loguru>=0.7.0
+Requires-Dist: numpy>=1.20.0
+Requires-Dist: openai-agents
+Requires-Dist: openai>=1.0.0
+Requires-Dist: platformdirs>=3.0.0
+Requires-Dist: prompt-toolkit>=3.0.0
+Requires-Dist: pynput>=1.7.0
+Requires-Dist: pyperclip>=1.8.0
+Requires-Dist: pyyaml>=6.0
+Requires-Dist: requests>=2.25.0
+Requires-Dist: scipy>=1.7.0
+Requires-Dist: sounddevice>=0.4.0
+Requires-Dist: unidecode>=1.3.0
+Requires-Dist: wavio>=0.0.4
+Provides-Extra: dev
+Requires-Dist: black>=22.0; extra == 'dev'
+Requires-Dist: flake8>=4.0; extra == 'dev'
+Requires-Dist: mypy>=1.0; extra == 'dev'
+Requires-Dist: pytest>=7.0; extra == 'dev'
+Description-Content-Type: text/markdown
+
+# UltraWhisper
+
+**Open-source, context-aware voice transcription for Linux**
+
+An open-source alternative to [SuperWhisper](https://superwhisper.com/) (Mac-only), combining OpenAI's Whisper speech-to-text with LLM-powered intelligence for smart, accurate transcriptions that adapt to your workflow.
+
+![UltraWhisper TUI](docs/ultrawhisper.png)
+
+## What Makes UltraWhisper Different?
+
+UltraWhisper goes beyond basic speech-to-text by understanding **what you're working on** and adapting its transcription accordingly. Whether you're coding in VS Code, browsing GitHub, or working in a terminal, it delivers transcriptions that fit seamlessly into your context.
+
+## Quick Start
+
+### Try It (No Installation Required)
+
+```bash
+# Run directly with uvx - no installation needed!
+
+# Setup your config
+uvx ultrawhisper setup
+
+# Run it
+uvx ultrawhisper
+```
+
+## Key Features
+
+**Context-Aware Transcription**
+- Automatically detects your active application (VS Code, Chrome, terminal, etc.)
+- Adapts transcription to preserve code syntax, technical terms, and domain-specific language
+
+**LLM-Powered Correction**
+- Cleans up Whisper transcription using GPT-4, Claude, or local models
+- Applies application-specific prompts for better accuracy
+- Gracefully degrades to raw Whisper output if LLM is unavailable
+
+**Multi-Provider LLM Support**
+- OpenAI, Anthropic, Local Models (OpenAI-compatible)
+
+**Flexible Input Methods**
+- Double-tap: Quickly tap a key twice to toggle recording
+- Push-to-talk: Hold to record, release to transcribe
+
+**Beautiful Terminal Interface**
+- Interactive TUI built with prompt-toolkit
+- Real-time status display showing LLM connection, context, and system state
+- Live logs and configuration visibility
+
+**Chat Mode (Conversational AI)**
+- Voice conversations with your AI assistant
+- Maintains conversation history across questions
+- Context-aware responses based on your active application
+- TTS support for spoken responses
+- MCP (Model Context Protocol) integration for extended capabilities
+- Web search enabled by default
+
+**Privacy-First**
+- Use local LLMs for complete offline operation
+- No data leaves your machine when using local models
+
+
+
+### Installation
+
+For regular use, install from PyPI:
+
+```bash
+# Install with uv
+uv pip install ultrawhisper
+
+# Or with pip
+pip install ultrawhisper
+
+# Run interactive setup
+ultrawhisper setup
+
+# Run it
+ultrawhisper
+```
+
+### Configuration
+
+Configuration is stored at `~/.config/ultrawhisper/config.yml`. See [config.example.yml](config.example.yml) for a complete example with all options.
+
+## Features in Detail
+
+### Context-Aware Prompts
+
+UltraWhisper dynamically builds LLM prompts by combining:
+- Base prompt from your configuration
+- Application-specific prompts (VS Code, Chrome, terminals, etc.)
+- Pattern matching against window titles (GitHub, Stack Overflow, etc.)
+
+This ensures your transcriptions are corrected appropriately for your current context.
+
+### Mode Switching
+
+Switch between **Transcription Mode** and **Question Mode (soon to be called Chat Mode)**:
+
+## System Requirements
+
+- **Python**: 3.10 or higher
+- **Operating System**: Linux (X11) for full context detection
+- **Optional Dependencies**:
+  - `xdotool` - For advanced context detection
+  - `x11-utils` - For window property detection
+  - `espeak` or `festival` - For system TTS (question mode)
+
+### Installing System Dependencies
+
+```bash
+# Ubuntu/Debian
+sudo apt install xdotool x11-utils espeak
+
+# Arch Linux
+sudo pacman -S xdotool xorg-xprop espeak
+
+# Fedora
+sudo dnf install xdotool xorg-x11-utils espeak
+```
+
+## Development
+
+Want to contribute or modify UltraWhisper? Here's how to set up a development environment:
+
+```bash
+# Clone the repository
+git clone https://github.com/casonclagg/ultrawhisper.git
+cd ultrawhisper
+
+# Install dependencies
+uv sync
+
+# Run from source
+uv run ultrawhisper
+
+# Code formatting
+uv run black src/
+
+# Type checking
+uv run mypy src/
+
+# Linting
+uv run flake8 src/
+
+# Build package
+uv build
+```
+
+## Architecture
+
+UltraWhisper uses an **orchestrator pattern** where `TranscriptionApp` coordinates:
+1. Audio recording via configurable backends
+2. Whisper transcription (local or API)
+3. Context detection from active window
+4. LLM correction with context-aware prompts
+5. Text output to clipboard or active window
+
+## License
+
+MIT License - See [LICENSE](LICENSE) for details
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Author
+
+Cason Clagg - [GitHub](https://github.com/casonclagg)
+
+## Acknowledgments
+
+- Built with [OpenAI Whisper](https://github.com/openai/whisper)
+- Uses [faster-whisper](https://github.com/guillaumekln/faster-whisper) for optimized inference
+- Powered by [OpenAI](https://openai.com) and [Anthropic](https://anthropic.com) LLMs
+- Terminal UI built with [prompt-toolkit](https://github.com/prompt-toolkit/python-prompt-toolkit)
