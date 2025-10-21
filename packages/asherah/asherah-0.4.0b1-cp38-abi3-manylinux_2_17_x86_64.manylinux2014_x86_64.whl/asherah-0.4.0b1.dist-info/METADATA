@@ -1,0 +1,38 @@
+Metadata-Version: 2.4
+Name: asherah
+Version: 0.4.0b1
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Rust
+Classifier: Topic :: Security :: Cryptography
+Classifier: License :: OSI Approved :: Apache Software License
+Summary: Python bindings for Go-compatible Asherah envelope encryption
+Home-Page: https://github.com/awnumar/memcall
+Author: Asherah Maintainers
+License: Apache-2.0
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown; charset=UTF-8; variant=GFM
+Project-URL: Homepage, https://github.com/godaddy/asherah
+Project-URL: Repository, https://github.com/godaddy/asherah
+
+# asherah-py
+
+Python bindings for the Asherah AppEncryption runtime via `pyo3`. The crate
+builds a Python extension module that is distributed with `maturin` as the
+`asherah` package on PyPI.
+
+## Highlights
+
+- Mirrors the Go and Node APIs for session lifecycle, caching, and encryption.
+- Uses `asherah-config` for consistent structured configuration parsing.
+- Ships abi3 wheels targeting Python 3.8+.
+
+## Building
+
+Install `maturin` and run `maturin develop` or use the provided `Makefile` in
+`asherah-py/` to produce distributable wheels.
+
+## License
+
+Licensed under the Apache License, Version 2.0.
+
