@@ -1,0 +1,22 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "flexikit" # Use lowercase and hyphens
+version = "0.1.1"
+authors = [
+  { name="Your Name", email="you@example.com" },
+]
+# FIX: Ensure this line is a complete, single-line string with matching quotes.
+description = "A collection of utility classes for Python projects." 
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+dependencies = [
+    # List any external dependencies here, e.g., "requests>=2.28.1",
+]
+
+[project.urls]
+"Homepage" = "https://your-package-name.example.com"
+"Bug Tracker" = "https://your-package-name.example.com/issues"
