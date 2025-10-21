@@ -1,0 +1,158 @@
+Metadata-Version: 2.1
+Name: kailash-kaizen
+Version: 0.2.0
+Summary: Advanced AI agent framework built on Kailash SDK
+Home-page: https://github.com/Integrum-Global/kailash_python_sdk
+Author: Kailash Team
+Author-email: info@integrum.com
+License: Apache-2.0 WITH Additional-Terms
+Project-URL: Homepage, https://github.com/Integrum-Global/kailash_python_sdk
+Project-URL: Documentation, https://docs.kailash.com/kaizen
+Project-URL: Repository, https://github.com/Integrum-Global/kailash_python_sdk
+Project-URL: Issues, https://github.com/Integrum-Global/kailash_python_sdk/issues
+Keywords: kailash,ai,agents,workflow,automation,signature-programming
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.12
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: kailash>=0.9.26
+Requires-Dist: pydantic>=2.0.0
+Requires-Dist: typing-extensions>=4.5.0
+Requires-Dist: PyJWT>=2.8.0
+Requires-Dist: bcrypt>=4.0.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.21; extra == "dev"
+Requires-Dist: pytest-cov>=4.0; extra == "dev"
+Requires-Dist: black>=23.0; extra == "dev"
+Requires-Dist: isort>=5.12; extra == "dev"
+Requires-Dist: ruff>=0.1.0; extra == "dev"
+Provides-Extra: memory
+Requires-Dist: redis>=4.5.0; extra == "memory"
+Requires-Dist: sqlalchemy>=2.0.0; extra == "memory"
+Provides-Extra: optimization
+Requires-Dist: numpy>=1.20.0; extra == "optimization"
+Requires-Dist: scikit-learn>=1.0.0; extra == "optimization"
+Provides-Extra: dataflow
+Requires-Dist: kailash-dataflow>=0.5.0; extra == "dataflow"
+Provides-Extra: nexus
+Requires-Dist: kailash-nexus>=1.0.6; extra == "nexus"
+Provides-Extra: all
+Requires-Dist: kailash-dataflow>=0.5.0; extra == "all"
+Requires-Dist: kailash-nexus>=1.0.6; extra == "all"
+
+# Kaizen AI Framework
+
+[![PyPI version](https://img.shields.io/pypi/v/kailash-kaizen.svg)](https://pypi.org/project/kailash-kaizen/)
+[![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
+**Signature-based programming framework for enterprise AI workflows**
+
+Kaizen is an AI framework built on the [Kailash SDK](https://github.com/Integrum-Global/kailash_python_sdk) that provides signature-based programming, automatic optimization, and enterprise-grade capabilities.
+
+## Quick Navigation
+
+### 📁 **Project Organization**
+- **[/docs/](docs/)** - Technical documentation, architecture, and implementation guides
+- **[/examples/](examples/)** - Working examples with complete implementations
+- **[/adr/](adr/)** - Architecture Decision Records and technical rationale
+- **[/tracking/](tracking/)** - Implementation progress and gap analysis
+- **[/scripts/](scripts/)** - Development tools and validation utilities
+- **[/src/](src/)** - Source code implementation
+- **[/tests/](tests/)** - Comprehensive test suite
+
+### 🎯 **Key Documents**
+- **[CLAUDE.md](CLAUDE.md)** - Claude Code navigation and agent instructions
+- **[docs/README.md](docs/README.md)** - Documentation hub with organized guides
+- **[Multi-Modal API Reference](docs/reference/multi-modal-api-reference.md)** - Vision, audio, multi-modal APIs (**NEW** ✅)
+- **[Integration Testing Guide](docs/development/integration-testing-guide.md)** - Real model validation best practices (**NEW** ✅)
+- **[examples/README.md](examples/README.md)** - Example categories and usage patterns
+- **[tracking/](tracking/)** - Current implementation status and roadmap
+
+## Features
+
+- **Signature Programming**: Declarative AI workflow definition
+- **Enterprise Ready**: Built on proven Kailash infrastructure
+- **Auto-Optimization**: ML-based prompt and workflow improvement
+- **Multi-Modal AI**: Vision (Ollama/OpenAI), audio (Whisper), unified orchestration (Phases 0-4 ✅)
+- **Production Scale**: Performance and reliability for enterprise use
+- **Cost Tracking**: Monitor and optimize AI API usage with budget management
+
+## Quick Start
+
+```python
+from kaizen import Kaizen
+from kailash.runtime.local import LocalRuntime
+
+# Initialize framework
+kaizen = Kaizen()
+
+# Create AI agent with signature-based programming
+agent = kaizen.create_agent("text_processor", {
+    "model": "gpt-4",
+    "temperature": 0.7
+})
+
+# Execute with Core SDK runtime
+runtime = LocalRuntime()
+results, run_id = runtime.execute(agent.workflow.build())
+```
+
+## Installation
+
+```bash
+pip install kailash-kaizen
+```
+
+For development:
+```bash
+pip install kailash-kaizen[dev]
+```
+
+## Architecture
+
+Kaizen is built ON the Kailash SDK, providing:
+- Signature-based programming layer
+- Enhanced AI nodes with optimization
+- Enterprise memory and security features
+- Seamless integration with DataFlow and Nexus
+
+## Developer Experience
+
+### Documentation Structure
+- **Getting Started**: See [examples/README.md](examples/README.md) for quickstart patterns
+- **Multi-Modal AI**: See [docs/reference/multi-modal-api-reference.md](docs/reference/multi-modal-api-reference.md) for vision, audio, and multi-modal APIs
+- **Integration Testing**: See [docs/development/integration-testing-guide.md](docs/development/integration-testing-guide.md) for real model validation
+- **Technical Details**: See [docs/README.md](docs/README.md) for comprehensive guides
+- **Implementation Status**: See [tracking/](tracking/) for current progress and gaps
+- **Architecture Decisions**: See [adr/](adr/) for design rationale and requirements
+
+### Development Workflow
+1. **Explore Examples**: Start with [examples/1-single-agent/](examples/1-single-agent/) for basic patterns
+2. **Check Implementation**: Review [tracking/KAIZEN_GAPS_ANALYSIS.md](tracking/KAIZEN_GAPS_ANALYSIS.md) for current status
+3. **Read Architecture**: Study [docs/KAIZEN_INTEGRATION_STRATEGY.md](docs/KAIZEN_INTEGRATION_STRATEGY.md) for framework integration
+4. **Run Tests**: Use [scripts/test_examples_implementation.py](scripts/test_examples_implementation.py) for validation
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## Links
+
+- **Repository**: [GitHub](https://github.com/Integrum-Global/kailash_python_sdk)
+- **Documentation**: [Full Documentation](https://github.com/Integrum-Global/kailash_python_sdk/tree/main/apps/kailash-kaizen/docs)
+- **PyPI**: [kailash-kaizen](https://pypi.org/project/kailash-kaizen/)
+- **Issues**: [Bug Reports & Feature Requests](https://github.com/Integrum-Global/kailash_python_sdk/issues)
+
+## License
+
+Apache-2.0 WITH Additional-Terms - See [LICENSE](LICENSE) for details.
