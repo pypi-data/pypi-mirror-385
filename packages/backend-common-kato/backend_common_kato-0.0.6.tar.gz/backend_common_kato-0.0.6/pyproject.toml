@@ -1,0 +1,73 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "backend_common_kato"
+version = "0.0.6"
+description = "Shared common utilities for Python backend services"
+readme = "README.md"
+requires-python = ">=3.12"
+authors = [
+    {name = "Kato", email = "katoo2706@gmail.com"},
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "fastapi>=0.100.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    "sqlalchemy>=2.0.0",
+    "httpx>=0.24.0",
+    "python-jose[cryptography]>=3.3.0",
+    "passlib[bcrypt]>=1.7.4",
+    "python-multipart>=0.0.6",
+    "structlog>=23.0.0",
+    "email-validator>=2.0.0",
+    "pytest>=8.4.2",
+    "asyncpg>=0.30.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
+    "pytest-asyncio>=1.2.0",
+    "pytest-cov>=7.0.0",
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "flake8>=6.0.0",
+    "mypy>=1.0.0",
+    "twine>=6.2.0",
+    "build>=1.3.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/katoo2706/backend-common"
+Repository = "https://github.com/katoo2706/backend-common.git"
+Issues = "https://github.com/Katoo2706/backend-common/issues"
+
+[tool.hatch.version]
+path = "src/backend_common/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/backend_common"]
+
+[tool.black]
+line-length = 79
+target-version = ['py312']
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+line_length = 79
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
