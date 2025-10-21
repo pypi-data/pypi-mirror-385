@@ -1,0 +1,17 @@
+Metadata-Version: 2.1
+Name: alliance-platform-storage
+Version: 0.0.4
+Summary: Alliance Platform Storage
+Author-Email: Alliance Software <support@alliancesoftware.com.au>
+License: BSD-2-Clause
+Requires-Python: >=3.11
+Requires-Dist: alliance-platform-core
+Requires-Dist: Django>=4.2.11
+Requires-Dist: django-allianceutils>=4.0
+Provides-Extra: s3
+Requires-Dist: django-storages[s3]; extra == "s3"
+Provides-Extra: azure
+Requires-Dist: django-storages[azure]; extra == "azure"
+Description-Content-Type: text/markdown
+
+The documentation for this package is hosted on [readthedocs.io](https://alliance-platform.readthedocs.io/projects/storage/latest/)
