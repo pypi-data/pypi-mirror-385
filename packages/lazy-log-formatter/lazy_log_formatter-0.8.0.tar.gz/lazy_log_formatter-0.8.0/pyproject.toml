@@ -1,0 +1,47 @@
+[tool.poetry]
+name = "lazy-log-formatter"
+version = "0.8.0"
+description = "A pre-commit script to make log lines lazzier"
+authors = ["Daniel Marín"]
+license = "Apache-2.0"
+readme = "README.md"
+packages = [{ include = "src" }]
+homepage = "https://github.com/dmar1n/lazy-log-formatter"
+repository = "https://github.com/dmar1n/lazy-log-formatter"
+keywords = [
+    "code-quality",
+    "f-strings",
+    "lazy logging",
+    "linting",
+    "logging",
+    "pre-commit",
+    "pylint",
+    "W1203",
+]
+classifiers = [
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Development Status :: 3 - Alpha",
+    "Topic :: Software Development :: Code Generators",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Utilities",
+]
+
+[tool.poetry.dependencies]
+python = ">=3.10"
+black = "^25.1.0"
+libcst = "^1.8.5"
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^4.2.0"
+pytest = "^8.3.3"
+pytest-cov = "^5.0.0"
+hypothesis = "^6.135.26"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+lazylogformat = "src.cli:main"
