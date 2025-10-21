@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "whitebox-plugin-map"
+version = "0.1.21"
+description = "A plugin for whitebox to display map & GPS data using Leaflet.js"
+authors = ["avilabss <contact@avilabs.net>", "WhiteBox <contact@whitebox.aero>"]
+license = "GNU Affero General Public License v3"
+readme = "README.md"
+include = [
+    { path = "whitebox_test_plugin_map", format = "wheel" }
+]
+
+[tool.poetry.dependencies]
+python = ">=3.10.0"
+requests = "^2.32.5"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.6.5"
+coverage = "^7.6.1"
+
+[tool.poetry.plugins."whitebox.plugin"]
+whitebox_plugin_map = "whitebox_plugin_map.apps:WhiteboxPluginMapConfig"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
