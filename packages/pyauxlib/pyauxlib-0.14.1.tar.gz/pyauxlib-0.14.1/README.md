@@ -1,0 +1,148 @@
+<h1 align="center">pyauxlib</h1>
+
+<br/>
+
+<!-- Project Badges -->
+[![Documentation Status][docs-read-badge]][docs-read-url]
+[![License - BSD-3-Clause][license-badge]][license-url]<br/>
+[![PyPI - Version][pypi-badge]][pypi-url] [![PyPI - Downloads][pypi-downloads]][pypi-url] [![PyPI - Python Version][python-versions]][pypi-url]<br/>
+[![GitHub commit activity][commit-activity]][github-commits] [![GitHub commits since latest release][commits-since-latest]][github-commits] [![GitHub last commit][last-commit]][last-commit-url] [![GitHub Release Date][release-date]][release-date-url]<br/>
+[![CI - Tests][ci-badge]][ci-url] [![CD - Publish][cd-badge]][cd-url] [![GitHub stars][stars-badge]][github-url] [![GitHub forks][forks-badge]][github-url] [![GitHub issues][issues-badge]][issues-url]<br/>
+[![Linting - Ruff][ruff-badge]][ruff-url]
+[![Formatter - Ruff][formatter-ruff-badge]][ruff-url]
+[![Types - Mypy][mypy-badge]][mypy-url]<br/>
+
+<h3 align="center">
+  <a href="https://github.com/psolsfer/pyauxlib">GitHub</a>
+  &middot;
+  <a href="https://pypi.org/project/pyauxlib/">PyPI</a>
+  &middot;
+  <a href="https://pyauxlib.readthedocs.io/en/stable/">Docs</a>
+  &middot;
+  <a href="https://github.com/psolsfer/pyauxlib/issues">Issues</a>
+</h3>
+
+<h3 align="center">
+  Auxiliary library for python.
+</h3>
+
+<br/>
+
+---
+
+## Features
+
+TODO
+
+## Installation
+
+### From PyPI
+
+```bash
+pip install pyauxlib
+```
+
+or
+
+```bash
+uv add pyauxlib
+```
+
+### From Source
+
+```bash
+git clone https://github.com/psolsfer/pyauxlib.git
+cd pyauxlib
+uv sync
+```
+
+## Usage
+
+### Python API
+
+```python
+import pyauxlib
+
+# TODO: Add usage examples
+```
+
+## Development
+
+### Setup
+
+```bash
+git clone https://github.com/psolsfer/pyauxlib.git
+cd pyauxlib
+uv sync
+```
+
+Install the prek git hook
+
+```bash
+uv run prek install
+```
+
+### Running Tests
+```bash
+uv run pytest
+```
+
+### Code Quality
+
+```bash
+uv run ruff check .
+uv run ruff format .
+uv run mypy src/pyauxlib
+```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Credits
+
+This package was created with [Copier](https://github.com/copier-org/copier) and the [Copier PyPackage uv](https://github.com/psolsfer/uvcopier) project template.
+
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[docs-read-badge]: https://readthedocs.org/projects/pyauxlib/badge/?version=stable&style=for-the-badge
+[docs-read-url]: https://pyauxlib.readthedocs.io/en/stable/
+
+[license-badge]: https://img.shields.io/pypi/l/pyauxlib.svg?style=for-the-badge
+[license-url]: https://spdx.org/licenses/BSD-3-Clause.html
+
+[pypi-badge]: https://img.shields.io/pypi/v/pyauxlib.svg?logo=pypi&label=PyPI&logoColor=gold&style=for-the-badge
+[pypi-url]: https://pypi.org/project/pyauxlib/
+
+[commit-activity]: https://img.shields.io/github/commit-activity/t/psolsfer/pyauxlib?logo=github&label=Commits&style=for-the-badge
+[commits-since-latest]: https://img.shields.io/github/commits-since/psolsfer/pyauxlib/latest?logo=github&style=for-the-badge
+[last-commit]: https://img.shields.io/github/last-commit/psolsfer/pyauxlib?logo=github&label=Last%20Commit&style=for-the-badge
+[release-date]: https://img.shields.io/github/release-date/psolsfer/pyauxlib?logo=github&label=Release%20Date&style=for-the-badge
+[last-commit-url]: https://github.com/psolsfer/pyauxlib/commit/main
+[release-date-url]: https://github.com/psolsfer/pyauxlib/releases/latest
+[github-commits]: https://github.com/psolsfer/pyauxlib/commits/main/
+
+[pypi-downloads]: https://img.shields.io/pypi/dm/pyauxlib.svg?color=blue&label=Downloads&logo=pypi&logoColor=gold&style=for-the-badge
+[python-versions]: https://img.shields.io/pypi/pyversions/pyauxlib.svg?logo=python&label=Python&logoColor=gold&style=for-the-badge
+
+[ci-badge]: https://img.shields.io/github/actions/workflow/status/psolsfer/pyauxlib/test-push-pr.yml?style=for-the-badge&label=CI-Build%20%26%20Test
+[ci-url]: https://github.com/psolsfer/pyauxlib/actions/workflows/test-push-pr.yml
+
+[cd-badge]: https://img.shields.io/github/actions/workflow/status/psolsfer/pyauxlib/python-publish.yml?style=for-the-badge&label=Release
+[cd-url]: https://github.com/psolsfer/pyauxlib/actions/workflows/python-publish.yml
+
+[stars-badge]: https://img.shields.io/github/stars/psolsfer/pyauxlib.svg?style=for-the-badge
+[forks-badge]: https://img.shields.io/github/forks/psolsfer/pyauxlib.svg?style=for-the-badge
+
+[issues-badge]: https://img.shields.io/github/issues/psolsfer/pyauxlib.svg?style=for-the-badge
+[issues-url]: https://github.com/psolsfer/pyauxlib/issues
+
+[github-url]: https://github.com/psolsfer/pyauxlib
+
+[ruff-badge]: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v2.json&style=for-the-badge
+[ruff-url]: https://github.com/astral-sh/ruff
+[formatter-ruff-badge]: https://img.shields.io/badge/Ruff%20Formatter-checked-blue.svg?style=for-the-badge
+
+[mypy-badge]: https://img.shields.io/badge/mypy%20-%20checked-blue?style=for-the-badge
+[mypy-url]: https://mypy-lang.org/
