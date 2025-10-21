@@ -1,0 +1,123 @@
+[project]
+name = "anyt"
+version = "0.1.2"
+description = "AI-native task management CLI for coding agents and human developers"
+readme = "README.md"
+requires-python = ">=3.12"
+license = {text = "Proprietary"}
+authors = [
+    {name = "AnyTransformer Inc", email = "contact@anytransformer.com"}
+]
+maintainers = [
+    {name = "AnyTransformer Inc", email = "contact@anytransformer.com"}
+]
+keywords = ["task-management", "cli", "ai", "productivity", "developer-tools"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: Other/Proprietary License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities",
+]
+
+dependencies = [
+    "typer>=0.15.3",
+    "rich>=14.0.0",
+    "httpx>=0.28.1",
+    "keyring>=25.0.0",
+    "tenacity>=9.1.2",
+    "pydantic>=2.11.9",
+    "python-dotenv>=1.0.0",
+    "mcp>=1.17.0",
+    "langchain-anthropic>=0.3.21",
+    "langchain-openai>=0.3.34",
+    "langgraph>=0.6.8",
+    "pyperclip>=1.8.2",
+]
+
+
+[project.urls]
+Homepage = "https://anyt.dev"
+Documentation = "https://anyt.dev/docs/cli"
+Support = "https://anyt.dev/support"
+
+[project.scripts]
+anyt = "cli.main:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/cli", "src/anytask_mcp"]
+
+[tool.uv]
+package = true
+
+[dependency-groups]
+dev = [
+    "mypy>=1.14.1",
+    "pytest>=8.4.2",
+    "pytest-asyncio>=1.2.0",
+    "ruff>=0.13.2",
+    "types-bleach>=6.2.0.20250809",
+    "types-markdown>=3.7",
+    "build>=1.0.0",
+    "twine>=4.0.0",
+]
+
+[tool.pytest.ini_options]
+pythonpath = "src"
+testpaths = ["tests"]
+markers = [
+    "cli: marks tests as CLI command tests",
+    "integration: marks tests as integration tests (require running server)",
+    "e2e: marks tests as end-to-end scenario tests (require running server)",
+]
+
+[tool.mypy]
+mypy_path = "src"
+explicit_package_bases = true
+exclude = ["main.py"]
+python_version = "3.12"
+
+# Check tests directory with same strict settings
+files = ["src", "tests"]
+
+# Strict mode - enables all strict flags
+strict = true
+
+# Additional strict checks not covered by strict mode
+disallow_any_unimported = true
+disallow_any_generics = true
+disallow_subclassing_any = true
+
+# Warnings
+warn_redundant_casts = true
+warn_unused_configs = true
+warn_unreachable = true
+
+# Strictness for untyped code
+check_untyped_defs = true
+
+# Strict equality and concatenation
+strict_equality = true
+
+# Require explicit type ignore comments (no bare "type: ignore")
+# Users must write "# type: ignore[error-code]  # reason"
+warn_unused_ignores = true
+enable_error_code = ["ignore-without-code"]
+
+# TODO: Fix AI command response handling to use model attributes instead of dict access
+[[tool.mypy.overrides]]
+module = "cli.commands.ai"
+disable_error_code = ["attr-defined", "index"]
+
+# Override settings for tests - be less strict to improve developer experience
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+check_untyped_defs = false
