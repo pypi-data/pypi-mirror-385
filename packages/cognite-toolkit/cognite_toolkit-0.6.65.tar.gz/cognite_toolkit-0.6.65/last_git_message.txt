@@ -1,0 +1,22 @@
+[CDF-25989] 🐛Lost deployment aggregate terminal output (#2107)
+
+# Description
+
+In #2072 an unfortunate refactoring caused the deploy print out to be
+lost. This PR fixes the introduced bug.
+
+## Changelog
+
+- [x] Patch
+- [ ] Skip
+
+## cdf
+
+### Fixed
+
+- When running `cdf deploy` the aggregated results table is now printed
+in the terminal. This has been lost since `0.6.55`.
+
+## templates
+
+No changes.
