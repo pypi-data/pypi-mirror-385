@@ -1,0 +1,178 @@
+Metadata-Version: 2.4
+Name: ssh-auto-upgrade
+Version: 1.0.0
+Summary: 自动检测和升级OpenSSH的工具
+Home-page: https://gitee.com/your-repo/ssh-auto-upgrade
+Author: SSH Auto Upgrade Team
+Author-email: SSH Auto Upgrade Team <example@example.com>
+License: MIT
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: System Administrators
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Classifier: Topic :: System :: Systems Administration
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: requests>=2.25.0
+Requires-Dist: beautifulsoup4>=4.9.0
+Dynamic: author
+Dynamic: home-page
+Dynamic: license-file
+Dynamic: requires-python
+
+# SSH自动升级工具
+
+#### 介绍
+一个符合PyPI标准的Python工具包，用于自动检测OpenSSH最新版本并完成升级安装。
+
+#### 软件架构
+采用模块化设计，每个文件只包含一个函数或类：
+
+```
+ssh_auto_upgrade/
+├── __init__.py              # 包初始化文件
+├── version_detector.py      # 版本检测模块
+├── downloader.py           # 下载器模块
+├── installer.py           # 安装器模块
+├── logger.py              # 日志记录器模块
+└── main.py               # 主程序入口
+```
+
+#### 功能特性
+
+- ✅ 自动检测OpenSSH最新版本
+- ✅ 支持多个镜像源
+- ✅ 模块化设计，易于维护
+- ✅ 详细的日志记录
+- ✅ 安装验证和错误处理
+- ✅ 支持模拟运行模式
+- ✅ 符合PyPI包标准
+
+#### 安装教程
+
+##### 方法一：通过pip安装（推荐）
+
+```bash
+# 从本地安装
+pip install .
+
+# 或者从Git仓库安装
+pip install git+https://gitee.com/your-repo/ssh-auto-upgrade.git
+```
+
+##### 方法二：开发模式安装
+
+```bash
+# 开发模式安装，便于修改代码
+pip install -e .
+```
+
+#### 使用说明
+
+##### 基本使用
+
+```bash
+# 自动检测并升级OpenSSH
+ssh-auto-upgrade
+
+# 指定镜像源
+ssh-auto-upgrade --mirror https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/
+
+# 模拟运行（不实际安装）
+ssh-auto-upgrade --dry-run
+
+# 强制升级（即使版本相同）
+ssh-auto-upgrade --force
+```
+
+##### 高级选项
+
+```bash
+# 查看所有选项
+ssh-auto-upgrade --help
+
+# 自定义下载目录和日志目录
+ssh-auto-upgrade --download-dir /tmp/my-downloads --log-dir /var/log/my-logs
+
+# 使用自定义安装脚本
+ssh-auto-upgrade --script-url https://your-domain.com/custom-install.py
+
+# 注册为systemd服务（需要root权限）
+ssh-auto-upgrade --service
+```
+
+##### systemd服务管理
+
+###### 注册为systemd服务
+```bash
+sudo ssh-auto-upgrade --service
+```
+
+###### 服务管理命令
+```bash
+# 启动服务
+sudo systemctl start ssh-auto-upgrade
+
+# 停止服务
+sudo systemctl stop ssh-auto-upgrade
+
+# 查看服务状态
+sudo systemctl status ssh-auto-upgrade
+
+# 启用开机自启
+sudo systemctl enable ssh-auto-upgrade
+
+# 禁用开机自启
+sudo systemctl disable ssh-auto-upgrade
+
+# 查看服务日志
+sudo journalctl -u ssh-auto-upgrade
+```
+
+##### 作为Python模块使用
+
+```python
+from ssh_auto_upgrade import VersionDetector, Downloader, Installer
+
+# 检测最新版本
+detector = VersionDetector()
+version_info = detector.get_latest_version()
+print(f"最新版本: {version_info['version']}")
+
+# 下载安装文件
+downloader = Downloader()
+script_path = downloader.download_install_script()
+
+# 执行安装
+installer = Installer(script_path, version_info['download_url'])
+if installer.install_openssh():
+    print("安装成功!")
+```
+
+#### 依赖要求
+
+- Python 3.6+
+- requests >= 2.25.0
+- beautifulsoup4 >= 4.9.0
+
+#### 参与贡献
+
+1.  Fork 本仓库
+2.  新建 Feat_xxx 分支
+3.  提交代码
+4.  新建 Pull Request
+
+#### 许可证
+
+MIT License
