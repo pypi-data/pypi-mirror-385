@@ -1,0 +1,242 @@
+# AutoCoder RAG SDK for Python
+
+一个便于在Python代码中调用`auto-coder.rag run`功能的SDK，用于文档问答和检索增强生成。
+
+## 特性
+
+- 🚀 **易于使用**: 提供简洁直观的API接口，3行代码即可开始
+- 📡 **流式处理**: 支持实时流式输出答案，即时获取响应
+- 🛠 **完整配置**: 支持所有auto-coder.rag run命令行选项
+- 📦 **零依赖**: 仅依赖Python标准库，无第三方依赖
+- 🐍 **类型提示**: 完整的类型提示支持，IDE友好
+- 🎯 **便捷方法**: 提供 `quick_query()` 等简化接口
+- 🔧 **上下文管理器**: 支持 `with` 语句，自动资源管理
+- 📊 **结构化消息**: 支持 Message 对象，精确控制不同类型的消息
+
+## 前置要求
+
+- Python 3.7+
+- `auto-coder.rag` 命令已安装并在 PATH 中
+
+检查命令是否可用：
+```bash
+which auto-coder.rag
+auto-coder.rag --help
+```
+
+## 安装
+
+```bash
+cd rag-sdks/python
+pip install -e .
+```
+
+## 快速开始
+
+### 基础用法
+
+```python
+from autocoder_rag_sdk import AutoCoderRAGClient
+
+# 方式1: 最简单 - 只提供文档目录
+client = AutoCoderRAGClient(doc_dir="/path/to/docs")
+answer = client.query("如何使用这个项目?")
+print(answer)
+
+# 方式2: 快捷配置 - doc_dir + 其他参数（推荐）⭐
+client = AutoCoderRAGClient(
+    doc_dir="/path/to/docs",
+    agentic=True,
+    timeout=600
+)
+answer = client.quick_query("如何使用?")
+print(answer)
+```
+
+### 流式输出
+
+```python
+from autocoder_rag_sdk import AutoCoderRAGClient
+
+client = AutoCoderRAGClient(doc_dir="/path/to/docs")
+
+# 流式获取答案
+for chunk in client.query_stream("这个项目的主要功能是什么?"):
+    print(chunk, end="", flush=True)
+```
+
+### 结构化消息处理
+
+```python
+from autocoder_rag_sdk import AutoCoderRAGClient, Message, MessageType, StageType
+
+client = AutoCoderRAGClient(doc_dir="/path/to/docs")
+
+# 使用 Message 对象精确控制消息处理
+for message in client.query_messages("如何使用?"):
+    if message.is_content():
+        # 只输出内容
+        print(message.content, end="", flush=True)
+    elif message.is_stage():
+        # 显示处理阶段
+        print(f"\n[{message.stage_type.value}] {message.message}")
+    elif message.is_retrieval_stage():
+        print(f"正在检索: {message.message}")
+    elif message.is_generation_stage():
+        print(f"正在生成: {message.message}")
+```
+
+### 获取上下文信息
+
+```python
+from autocoder_rag_sdk import AutoCoderRAGClient, RAGQueryOptions
+
+client = AutoCoderRAGClient(doc_dir="/path/to/docs")
+
+# 查询并获取上下文
+response = client.query_with_contexts("如何安装?")
+
+print(f"答案: {response.answer}")
+print(f"使用的上下文数量: {len(response.contexts)}")
+for i, ctx in enumerate(response.contexts):
+    print(f"上下文 {i+1}: {ctx[:100]}...")
+```
+
+### 高级配置
+
+```python
+from autocoder_rag_sdk import AutoCoderRAGClient, RAGConfig, RAGQueryOptions
+
+# 详细配置
+config = RAGConfig(
+    doc_dir="/path/to/docs",
+    model="v3_chat",
+    agentic=False,  # 使用 LongContextRAG
+    product_mode="lite",  # lite 模式
+    timeout=600,  # 全局超时10分钟
+    rag_context_window_limit=56000,
+    enable_hybrid_index=True,
+)
+
+client = AutoCoderRAGClient(config=config)
+
+# 查询选项
+options = RAGQueryOptions(
+    output_format="text",
+    agentic=True,  # 本次查询使用 AgenticRAG
+    timeout=900,  # 本次查询超时15分钟
+)
+
+answer = client.query("项目架构是什么?", options)
+print(answer)
+```
+
+### 超时配置
+
+```python
+# 全局超时设置
+config = RAGConfig(doc_dir="./docs", timeout=600)  # 10分钟
+client = AutoCoderRAGClient(config=config)
+
+# 单次查询覆盖超时
+options = RAGQueryOptions(timeout=900)  # 本次15分钟
+answer = client.query("复杂问题", options)
+```
+
+## API 文档
+
+### AutoCoderRAGClient
+
+主要的客户端类。
+
+```python
+class AutoCoderRAGClient:
+    def __init__(self, config: Optional[RAGConfig] = None, doc_dir: Optional[str] = None)
+    def query(self, question: str, options: Optional[RAGQueryOptions] = None) -> str
+    def query_stream(self, question: str, options: Optional[RAGQueryOptions] = None) -> Generator[str, None, None]
+    def query_with_contexts(self, question: str, options: Optional[RAGQueryOptions] = None) -> RAGResponse
+    def get_version(self) -> str
+    def check_availability(self) -> bool
+```
+
+### RAGConfig
+
+全局配置类。
+
+```python
+@dataclass
+class RAGConfig:
+    doc_dir: str  # 文档目录（必需）
+    model: str = "v3_chat"  # 模型名称
+    agentic: bool = False  # 是否使用 AgenticRAG
+    product_mode: str = "lite"  # lite 或 pro
+    rag_context_window_limit: int = 56000
+    full_text_ratio: float = 0.7
+    segment_ratio: float = 0.2
+    # ... 更多参数见源码
+```
+
+### RAGQueryOptions
+
+单次查询选项。
+
+```python
+@dataclass
+class RAGQueryOptions:
+    output_format: str = "text"  # text, json, stream-json
+    agentic: Optional[bool] = None  # 覆盖全局配置
+    product_mode: Optional[str] = None  # 覆盖全局配置
+    model: Optional[str] = None  # 覆盖全局配置
+```
+
+### RAGResponse
+
+查询响应对象。
+
+```python
+@dataclass
+class RAGResponse:
+    success: bool  # 是否成功
+    answer: str  # 答案内容
+    contexts: List[str]  # 使用的上下文
+    error: Optional[str]  # 错误信息
+    metadata: dict  # 元数据
+```
+
+## 示例
+
+查看 `examples/` 目录中的完整示例：
+
+- `basic_usage.py` - 基础用法演示
+- `stream_usage.py` - 流式输出演示
+- `advanced_usage.py` - 高级配置演示
+
+运行示例：
+
+```bash
+python examples/basic_usage.py
+python examples/stream_usage.py
+```
+
+## 错误处理
+
+```python
+from autocoder_rag_sdk import AutoCoderRAGClient, RAGError, ValidationError, ExecutionError
+
+client = AutoCoderRAGClient(doc_dir="/path/to/docs")
+
+try:
+    answer = client.query("问题")
+    print(answer)
+except ValidationError as e:
+    print(f"参数验证失败: {e}")
+except ExecutionError as e:
+    print(f"执行失败: {e} (退出码: {e.exit_code})")
+except RAGError as e:
+    print(f"RAG错误: {e}")
+```
+
+## 许可证
+
+MIT License - 详见 LICENSE 文件。
+

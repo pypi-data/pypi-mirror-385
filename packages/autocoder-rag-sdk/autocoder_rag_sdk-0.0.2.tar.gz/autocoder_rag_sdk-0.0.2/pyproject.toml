@@ -1,0 +1,68 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "autocoder-rag-sdk"
+version = "0.0.2"
+description = "Python SDK for AutoCoder RAG - 便于在Python代码中调用auto-coder.rag run功能"
+readme = "README.md"
+license = {file = "LICENSE"}
+authors = [
+    {name = "AutoCoder Team", email = "support@autocoder.com"},
+]
+maintainers = [
+    {name = "AutoCoder Team", email = "support@autocoder.com"},
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers", 
+    "License :: OSI Approved :: MIT License",    
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Code Generators",
+    "Topic :: Utilities",
+]
+keywords = ["autocoder", "rag", "sdk", "document-qa", "ai", "python", "api"]
+requires-python = ">=3.10"
+dependencies = [
+    "typing_extensions>=3.7.4; python_version<'3.8'",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0.0",
+    "pytest-asyncio>=0.18.0",
+    "black>=21.0.0",
+    "isort>=5.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/allwefantasy/auto-coder"
+Documentation = "https://github.com/allwefantasy/auto-coder/tree/master/rag-sdks/python"
+Repository = "https://github.com/allwefantasy/auto-coder"
+"Bug Tracker" = "https://github.com/allwefantasy/auto-coder/issues"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["autocoder_rag_sdk"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "autocoder_rag_sdk/**/*.py",
+    "README.md",
+    "LICENSE",
+]
+
+[tool.black]
+line-length = 88
+target-version = ['py37']
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
