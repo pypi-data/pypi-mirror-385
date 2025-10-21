@@ -1,0 +1,26 @@
+{
+  "title": "Microscopy Segmentation Starter",
+  "vigilUrl": "vigil://labs.example/acme-lab/imaging-starter@refs/heads/main?img=sha256:58b3e701ed9da8768554a21ffe7fa9afd995702d002b4b5d4798365a79310277&inputs=s3://demo-bucket/microscopy/",
+  "version": "0.1.0",
+  "metrics": [
+    {
+      "name": "f1",
+      "type": "float"
+    }
+  ],
+  "glyphs": [
+    "PIPELINE_TARGET",
+    "PR_PREVIEW"
+  ],
+  "license": "ORL-1.0",
+  "splits": [
+    {
+      "to": "lab:AcmeLab",
+      "pct": 0.7
+    },
+    {
+      "to": "user:you",
+      "pct": 0.3
+    }
+  ]
+}

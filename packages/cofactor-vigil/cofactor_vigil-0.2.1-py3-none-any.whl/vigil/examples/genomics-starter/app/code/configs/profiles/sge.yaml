@@ -1,0 +1,41 @@
+# SGE (Sun Grid Engine) Profile for HPC Genomics Workflows
+# Usage: vigil run --profile sge --cores 100
+
+# Core Snakemake settings
+printshellcmds: true
+reason: true
+show-failed-logs: true
+keep-going: false
+rerun-incomplete: true
+
+# Cluster configuration
+cluster: sge
+cores: 100
+nodes: 10
+local-cores: 2
+
+# Job submission command
+cluster: |
+  qsub \
+    -q {cluster.queue} \
+    -pe smp {threads} \
+    -l h_vmem={cluster.mem} \
+    -l h_rt={cluster.runtime} \
+    -N {rule}.{wildcards} \
+    -o logs/sge/{rule}.{wildcards}.out \
+    -e logs/sge/{rule}.{wildcards}.err \
+    -cwd \
+    -V
+
+# Default resources for all rules
+default-resources:
+  - queue=all.q
+  - mem=8G
+  - runtime=01:00:00
+  - tmpdir=$TMPDIR
+
+# Latency wait (for shared filesystems)
+latency-wait: 60
+
+# Job restart on failure
+restart-times: 3

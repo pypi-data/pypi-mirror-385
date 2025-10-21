@@ -1,0 +1,4 @@
+snakemake:
+  cluster: "sbatch -A $SLURM_ACCOUNT -t 00:30:00 --gres=gpu:1"
+  default-resources: [gpu=1, mem_mb=16000]
+  cores: 4

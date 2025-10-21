@@ -1,0 +1,75 @@
+name: Anchor receipts
+
+on:
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+jobs:
+  anchor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: Install project dependencies
+        run: uv sync --frozen --all-extras --dev
+
+      - name: Generate Merkle proofs
+        run: |
+          uv run python -m vigil.tools.anchor anchor \
+            --receipts app/code/receipts \
+            --state app/code/anchors/state.json \
+            --bundle-dir app/code/anchors/proofs \
+            --manifest app/code/anchors/latest.json \
+            --index app/code/receipts/index.json
+
+      - name: Parse anchor manifest
+        id: manifest
+        run: |
+          python <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          manifest = Path("app/code/anchors/latest.json")
+          data = json.loads(manifest.read_text(encoding="utf-8")) if manifest.exists() else {}
+          root = data.get("root") or ""
+          bundle_path = data.get("bundle_path") or ""
+          with open(os.environ["GITHUB_OUTPUT"], "w", encoding="utf-8") as fh:
+              fh.write(f"root={root}\n")
+              fh.write(f"bundle_path={bundle_path}\n")
+          PY
+
+      - name: Publish Merkle root summary
+        run: |
+          if [ -n "${{ steps.manifest.outputs.root }}" ]; then
+            echo "### Latest Merkle Root" >> "$GITHUB_STEP_SUMMARY"
+            echo "\n\`${{ steps.manifest.outputs.root }}\`" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "No new receipts discovered during this run." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload proof bundle
+        if: ${{ steps.manifest.outputs.bundle_path != '' }}
+        id: upload-proof
+        uses: actions/upload-artifact@v4
+        with:
+          name: receipt-proof-bundle
+          path: |
+            app/code/anchors/latest.json
+            ${{ steps.manifest.outputs.bundle_path }}
+
+      - name: Record proof URL
+        if: ${{ steps.upload-proof.outputs.artifact-url != '' }}
+        run: |
+          uv run python -m vigil.tools.anchor record-proof \
+            "${{ steps.manifest.outputs.bundle_path }}" \
+            --proof-url "${{ steps.upload-proof.outputs.artifact-url }}" \
+            --state app/code/anchors/state.json \
+            --manifest app/code/anchors/latest.json \
+            --index app/code/receipts/index.json
+          echo "Proof bundle uploaded: ${{ steps.upload-proof.outputs.artifact-url }}" >> "$GITHUB_STEP_SUMMARY"

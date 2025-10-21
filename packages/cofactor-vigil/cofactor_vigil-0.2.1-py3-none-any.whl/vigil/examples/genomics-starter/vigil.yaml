@@ -1,0 +1,12 @@
+version: 1
+org: __ORG__
+project: __PROJECT__
+resolverHost: __RESOLVER_HOST__
+capsule:
+  image: ghcr.io/__ORG__/genomics-capsule@sha256:0000000000000000000000000000000000000000000000000000000000000000
+  extensions:
+    - ms-python.python@2024.6.0
+inputs:
+  - s3://genomics-bucket/cohort-2024/variants/
+policies:
+  requireReceipts: true
