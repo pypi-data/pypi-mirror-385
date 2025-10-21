@@ -1,0 +1,284 @@
+# LinguaSQL
+
+[![PyPI version](https://badge.fury.io/py/lingua-sql.svg)](https://badge.fury.io/py/lingua-sql)
+[![Python Versions](https://img.shields.io/pypi/pyversions/lingua-sql.svg)](https://pypi.org/project/lingua-sql/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Downloads](https://static.pepy.tech/badge/lingua-sql)](https://pepy.tech/project/lingua-sql)
+[![GitHub Release](https://img.shields.io/github/v/release/4869-yinxu/lingua_sql)](https://github.com/4869-yinxu/lingua_sql/releases)
+[![GitHub Actions](https://github.com/4869-yinxu/lingua_sql/workflows/测试/badge.svg)](https://github.com/4869-yinxu/lingua_sql/actions)
+[![GitHub stars](https://img.shields.io/github/stars/4869-yinxu/lingua_sql.svg?style=social&label=Star)](https://github.com/4869-yinxu/lingua_sql)
+
+一个面向中文优化的智能文本转 SQL（Text-to-SQL）系统，支持多种大语言模型和向量数据库，提供完整的 Web 界面和 API 服务。
+
+## 项目简介
+LinguaSQL 是一个功能完整的 Text-to-SQL 解决方案，专为中文用户优化。通过自然语言问题自动生成 SQL 查询，支持智能训练、数据库结构自动导入、可视化界面等，适用于数据分析、智能问答、BI 工具等场景。
+
+## 核心特性
+### 🤖 多模型支持
+- **大语言模型**: DeepSeek、OpenAI、通义千问、智谱AI、百度千帆等
+- **向量数据库**: ChromaDB、Qdrant、Milvus、Weaviate、Pinecone 等
+- **数据库**: MySQL、PostgreSQL、SQLite 等
+
+### 🚀 智能功能
+- **自动训练**: 智能生成问答对，支持多种训练策略
+- **结构导入**: 自动分析数据库结构，生成 DDL 和文档
+- **中文优化**: 专为中文问答场景优化，支持中文提示词
+- **持久化存储**: 支持本地和云端向量数据库存储
+
+### 🌐 Web 界面
+- **FastAPI 后端**: 高性能异步 API 服务
+- **现代前端**: 响应式 Web 界面，支持图表可视化
+- **实时交互**: 支持实时 SQL 生成、执行和结果展示
+- **数据导出**: 支持 CSV 下载和图表生成
+
+## 安装方法
+
+### 从 PyPI 安装（推荐）
+```bash
+pip install lingua-sql
+```
+
+### 从源码安装
+```bash
+git clone https://github.com/4869-yinxu/lingua_sql.git
+cd lingua_sql
+pip install -e .
+```
+
+### 环境要求
+- Python 3.12（仅支持 3.12.x）
+- 推荐使用虚拟环境
+
+### 依赖安装
+```bash
+pip install -r requirements.txt
+```
+
+## 快速开始
+
+### 1. 环境配置
+```bash
+# 创建 .env 文件
+cat > .env << EOF
+DEEPSEEK_API_KEY=your_deepseek_api_key
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=your_password
+DB_DATABASE=your_database
+EOF
+```
+
+### 2. 基本用法
+```python
+import os
+from dotenv import load_dotenv
+from lingua_sql import LinguaSQL
+from lingua_sql.config import LinguaSQLConfig, APIConfig, DatabaseConfig
+
+# 加载环境变量
+load_dotenv()
+
+# 使用新配置系统
+config = LinguaSQLConfig(
+    api=APIConfig(
+        api_key=os.getenv("DEEPSEEK_API_KEY"),
+        model="deepseek-chat",
+        client="persistent",
+        path="./chroma_db"  # 向量数据库存储路径
+    ),
+    database=DatabaseConfig(
+        type="mysql",
+        host=os.getenv("DB_HOST", "localhost"),
+        port=3306,
+        user=os.getenv("DB_USER", "root"),
+        password=os.getenv("DB_PASSWORD", ""),
+        database=os.getenv("DB_DATABASE", ""),
+        auto_import_ddl=True
+    )
+)
+
+# 初始化 LinguaSQL
+nl = LinguaSQL(config=config)
+
+# 添加 DDL
+nl.train(ddl="""
+CREATE TABLE customers (
+    id INT PRIMARY KEY,
+    name VARCHAR(100),
+    email VARCHAR(100),
+    created_at TIMESTAMP
+);
+""")
+
+# 添加示例问答
+nl.train(
+    question="查询最近注册的5个客户",
+    sql="SELECT name, email, created_at FROM customers ORDER BY created_at DESC LIMIT 5;"
+)
+
+# 生成 SQL
+question = "查询订单金额最高的前3个客户"
+result = nl.ask(question)
+print(f"问题: {question}")
+print(f"生成的 SQL: {result}")
+```
+
+### 3. 启动 Web 界面
+```bash
+# 方式1：使用命令行工具
+lingua-sql-server --port 8085
+
+# 方式2：使用 Python 代码
+from lingua_sql.fastapi import LinguaSQLFastAPIApp
+app = LinguaSQLFastAPIApp()
+app.run(port=8085)
+
+# 方式3：使用 uvicorn
+uvicorn lingua_sql.fastapi:create_app --factory --host 0.0.0.0 --port 8085
+```
+
+访问 http://localhost:8085 即可使用 Web 界面。
+
+### 4. 智能训练
+```python
+from lingua_sql.config import IntelligentTrainingConfig
+
+# 启用智能训练
+config = LinguaSQLConfig(
+    # ... 其他配置
+    intelligent_training=IntelligentTrainingConfig(
+        enabled=True,
+        max_questions_per_table=30,
+        max_related_fields=3,
+        auto_generate_sql=True,
+        use_sample_data=True
+    )
+)
+
+nl = LinguaSQL(config=config)
+
+# 自动训练所有表
+nl.intelligent_auto_train()
+```
+
+### 5. 数据库结构自动导入
+```python
+# 自动导入数据库结构
+nl.auto_import_schema()
+
+# 或手动导入
+from lingua_sql.database.mysql_connector import MySQLConnector
+
+conn = MySQLConnector(
+    host="localhost",
+    user="root", 
+    password="your_password",
+    database="your_db"
+)
+conn.connect()
+
+# 获取所有表结构并导入
+for table in conn.get_all_tables():
+    ddl = conn.generate_ddl_from_schema(table)
+    nl.train(ddl=ddl)
+conn.disconnect()
+```
+
+## API 文档
+
+### REST API 端点
+- `GET /api/v0/generate_sql?question=问题` - 生成 SQL
+- `GET /api/v0/run_sql?id=会话ID` - 执行 SQL
+- `POST /api/v0/train` - 添加训练数据
+- `GET /api/v0/get_training_data` - 获取训练数据
+- `GET /api/v0/download_csv?id=会话ID` - 下载 CSV
+- `GET /api/v0/generate_plotly_figure?id=会话ID` - 生成图表
+
+### 命令行工具
+```bash
+# 查看帮助
+lingua-sql --help
+
+# 启动服务器
+lingua-sql-server --help
+```
+
+## 高级功能
+
+### 多模型支持
+```python
+# 使用不同的大语言模型
+config = LinguaSQLConfig(
+    api=APIConfig(
+        api_key="your_api_key",
+        model="gpt-4",  # 或 "deepseek-chat", "qwen-plus" 等
+        client="persistent"
+    )
+)
+```
+
+### 自定义向量数据库
+```python
+# 使用不同的向量数据库
+from lingua_sql.chromadb import ChromaDBVectorStore
+from lingua_sql.qdrant import QdrantVectorStore
+
+# ChromaDB（默认）
+vector_store = ChromaDBVectorStore(config)
+
+# Qdrant
+vector_store = QdrantVectorStore(config)
+```
+
+### 智能训练配置
+```python
+# 自定义训练策略
+intelligent_training = IntelligentTrainingConfig(
+    enabled=True,
+    max_questions_per_table=50,  # 每个表最多生成50个问题
+    max_related_fields=5,        # 最多关联5个字段
+    auto_generate_sql=True,      # 自动生成SQL
+    use_sample_data=True,        # 使用样本数据
+    interactive_confirmation=False  # 非交互模式
+)
+```
+
+## 项目结构
+```
+lingua_sql/
+├── src/lingua_sql/
+│   ├── __init__.py              # 主入口
+│   ├── config.py                # 配置管理
+│   ├── fastapi/                 # FastAPI Web 服务
+│   ├── chromadb/                # ChromaDB 向量数据库
+│   ├── database/                # 数据库连接器
+│   ├── intelligent_training.py  # 智能训练
+│   └── prompts/                 # 提示词模板
+├── examples/                    # 使用示例
+├── tests/                       # 测试用例
+└── docs/                        # 文档
+```
+
+## 贡献指南
+欢迎提交 Issue 和 Pull Request！
+
+1. Fork 项目
+2. 创建功能分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 打开 Pull Request
+
+## 许可证
+本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情。
+
+## 联系方式
+- 作者：殷旭
+- 邮箱：2337302325@qq.com
+- GitHub：[https://github.com/4869-yinxu/lingua_sql](https://github.com/4869-yinxu/lingua_sql)
+- PyPI：[https://pypi.org/project/lingua-sql/](https://pypi.org/project/lingua-sql/)
+
+## 更新日志
+- **v0.2.1** - 添加 FastAPI Web 界面，支持智能训练
+- **v0.2.0** - 重构配置系统，支持多模型
+- **v0.1.0** - 初始版本，基础 Text-to-SQL 功能
+
