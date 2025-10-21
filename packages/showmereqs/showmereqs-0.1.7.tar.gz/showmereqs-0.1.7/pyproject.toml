@@ -1,0 +1,51 @@
+[project]
+name = "showmereqs"
+version = "0.1.7"
+description = "A lightweight tool to generate requirements.txt by analyzing import statements"
+requires-python = ">=3.8"
+authors = [
+    {name = "sunandriver"}
+]
+license = {text = "Apache-2.0"}
+readme = "README.md"
+keywords = ["requirements", "dependencies", "package-management"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+dependencies = [
+    "requests>=2.31.0",
+    "click>=8.1.7",
+]
+[dependency-groups]
+dev = [
+    "pytest>=8.3.4",
+    "twine>=6.0.1",
+]
+
+[project.scripts]
+showmereqs = "showmereqs:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/showmereqs"]
+package-data = {showmereqs = ["config/*"]}
+
+[project.urls]
+"Homepage" = "https://github.com/sunandriver/showmereqs"
+"Bug Tracker" = "https://github.com/sunandriver/showmereqs/issues"
