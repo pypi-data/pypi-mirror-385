@@ -1,0 +1,40 @@
+[project]
+name = "pyaxencoapi"
+version = "1.0.3"
+description = "Librairie d'utilisation de l'API REST/Websocket d'Axenco"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [ "aiohttp>=3.8.0", "python-socketio[asyncio_client]>=5.0.0", "async-timeout>=4.0.2",]
+[[project.authors]]
+name = "Léo Periou"
+email = "leo.periou@axenco.com"
+
+[build-system]
+requires = [ "setuptools>=61.0", "wheel",]
+build-backend = "setuptools.build_meta"
+
+[project.license]
+text = "MIT"
+
+[project.optional-dependencies]
+dev = [ "pytest", "pytest-asyncio", "aiohttp", "aioresponses", "python-socketio[asyncio_client]", "coverage", "pytest-cov",]
+
+[tool.mypy]
+strict = true
+
+[tool.isort]
+profile = "black"
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+addopts = "--tb=short -q"
+
+[tool.coverage.run]
+branch = true
+source = [ "pyaxencoapi",]
+
+[tool.setuptools.packages.find]
+where = [ "src",]
