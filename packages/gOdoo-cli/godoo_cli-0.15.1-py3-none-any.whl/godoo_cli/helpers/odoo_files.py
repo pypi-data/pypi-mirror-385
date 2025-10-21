@@ -1,0 +1,37 @@
+"""Functions that operate on Odoos Source Code."""
+
+import logging
+import re
+from pathlib import Path
+
+from ..models import OdooVersion
+from .system import run_cmd
+
+LOGGER = logging.getLogger(__name__)
+
+
+def odoo_bin_get_version(odoo_main_repo_path: Path) -> OdooVersion:
+    """Get Odoo Version by calling 'odoo-bin --version'.
+
+    Parameters
+    ----------
+    odoo_main_repo_path : Path
+        Path to odoo-bin folder
+
+    Returns:
+    -------
+    OdooVersion
+        odoo-bin --version output parsed into Dataclass
+    """
+    odoo_bin_path = odoo_main_repo_path / "odoo-bin"
+    version_out = run_cmd(f"{odoo_bin_path.absolute()} --version", capture_output=True, text=True)
+    vers_match = re.match(r"(?P<text>.*) (?P<major>\d{0,2})\.(?P<minor>\d)", version_out.stdout)
+    if vers_match:
+        return OdooVersion(
+            text=vers_match.group("text"),
+            major=int(vers_match.group("major")),
+            minor=int(vers_match.group("minor")),
+        )
+    msg = f"Could not parse Odoo Version from: '{version_out}'"
+    LOGGER.error(msg)
+    raise ValueError(msg)
