@@ -1,0 +1,59 @@
+#!python
+
+"""Description: Ribo-TISH (Ribo TIS Hunter) main executable.
+Copyright (c) 2016 Peng Zhang <zhpn1024@163.com>
+This code is free software; you can redistribute it and/or modify it
+under the terms of the BSD License (see the file COPYING included with
+the distribution).
+@status: Beta
+@version: 0.2.7
+@author:  Peng Zhang
+@contact: zhpn1024@163.com
+"""
+import os, sys, argparse, time
+from ribotish import __version__ as VERSION
+from ribotish.run import commands
+
+# ------------------------------------
+# Main function
+# ------------------------------------
+def main():
+  """The Main function/pipeline for Ribo-TISH.
+  """
+  # Parse options...
+  argparser = prepare_argparser()
+  #args = argparser.parse_args()
+  if len(sys.argv)==1:
+    argparser.print_help()
+    exit(0)
+  args = argparser.parse_args()
+
+  cmd  = args.subcommand
+  if cmd in commands: # commands.has_key(cmd):
+    start = time.time()
+    commands[cmd].run(args)
+    end = time.time()
+    print('{} Done! Time used: {} s.'.format(time.ctime(), (end - start)))
+
+def prepare_argparser ():
+  """Prepare argparser object.
+  """
+  description = "%(prog)s -- Ribo-TISH"
+  epilog = "For command line options of each command, type: %(prog)s COMMAND -h"
+  #Source code: https://github.com/zhpn1024/"
+  # top-level parser
+  argparser = argparse.ArgumentParser( description = description, epilog = epilog )
+  argparser.add_argument("--version", action="version", version="%(prog)s "+VERSION)
+
+  subparsers = argparser.add_subparsers( dest = 'subcommand' )
+  for cmd in commands:
+    pi=subparsers.add_parser(cmd, help=commands[cmd].help())
+    commands[cmd].set_parser(pi)
+  return argparser
+
+if __name__ == '__main__':
+    #try:
+    main()
+    #except KeyboardInterrupt:
+        #sys.stderr.write("User interrupted me! ;-) Bye!\n")
+        #sys.exit(0)
