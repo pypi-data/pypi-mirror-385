@@ -1,0 +1,22 @@
+[package]
+name = "libbruteforce"
+version = "0.1.0"
+edition = "2021"
+readme = "README.md"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+name = "libbruteforce"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = "0.27.0"
+libbruteforce_rs = { package = "libbruteforce", version = "4.0.1" }
+
+[profile.dev]
+opt-level = 3
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+opt-level = 3
