@@ -1,0 +1,504 @@
+Metadata-Version: 2.4
+Name: scvi-tools
+Version: 1.4.0.post1
+Summary: Deep probabilistic analysis of single-cell omics data.
+Project-URL: Documentation, https://scvi-tools.org
+Project-URL: Source, https://github.com/scverse/scvi-tools
+Project-URL: Home-page, https://scvi-tools.org
+Author: The scvi-tools development team
+Maintainer-email: The scvi-tools development team <ori.kronfeld@weizmann.ac.il>
+License: BSD 3-Clause License
+        
+        Copyright (c) 2025, Yosef Lab, Weizmann Institute of Science
+        
+        All rights reserved.
+        
+        Redistribution and use in source and binary forms, with or without
+        modification, are permitted provided that the following conditions are met:
+        
+        1. Redistributions of source code must retain the above copyright notice, this
+           list of conditions and the following disclaimer.
+        
+        2. Redistributions in binary form must reproduce the above copyright notice,
+           this list of conditions and the following disclaimer in the documentation
+           and/or other materials provided with the distribution.
+        
+        3. Neither the name of the copyright holder nor the names of its
+           contributors may be used to endorse or promote products derived from
+           this software without specific prior written permission.
+        
+        THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+        AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+        IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+        DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+        FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+        DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+        SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+        CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+        OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+        OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+License-File: LICENSE
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Science/Research
+Classifier: Natural Language :: English
+Classifier: Operating System :: MacOS :: MacOS X
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Scientific/Engineering :: Bio-Informatics
+Requires-Python: >=3.11
+Requires-Dist: anndata>=0.11
+Requires-Dist: docrep>=0.3.2
+Requires-Dist: lightning>=2.0
+Requires-Dist: ml-collections
+Requires-Dist: mudata
+Requires-Dist: numba>=0.60.0
+Requires-Dist: numpy
+Requires-Dist: pandas
+Requires-Dist: pyro-ppl
+Requires-Dist: rich
+Requires-Dist: scanpy[skmisc]>=1.10
+Requires-Dist: scikit-learn
+Requires-Dist: scipy
+Requires-Dist: sparse>=0.14.0
+Requires-Dist: tensorboard
+Requires-Dist: torch
+Requires-Dist: torchmetrics
+Requires-Dist: tqdm
+Requires-Dist: xarray
+Provides-Extra: all
+Requires-Dist: biomart; extra == 'all'
+Requires-Dist: biopython>=1.81; extra == 'all'
+Requires-Dist: boto3; extra == 'all'
+Requires-Dist: captum; extra == 'all'
+Requires-Dist: cell2location; extra == 'all'
+Requires-Dist: coverage; extra == 'all'
+Requires-Dist: dask[array]; extra == 'all'
+Requires-Dist: dataloaders; extra == 'all'
+Requires-Dist: docutils!=0.18.*,!=0.19.*,>=0.8; extra == 'all'
+Requires-Dist: dvc[s3]; extra == 'all'
+Requires-Dist: fcswrite; extra == 'all'
+Requires-Dist: flax; extra == 'all'
+Requires-Dist: gdown; extra == 'all'
+Requires-Dist: genomepy; extra == 'all'
+Requires-Dist: huggingface-hub; extra == 'all'
+Requires-Dist: hyperopt>=0.2; extra == 'all'
+Requires-Dist: igraph; extra == 'all'
+Requires-Dist: ipython; extra == 'all'
+Requires-Dist: jax; extra == 'all'
+Requires-Dist: jaxlib; extra == 'all'
+Requires-Dist: jupyter; extra == 'all'
+Requires-Dist: leidenalg; extra == 'all'
+Requires-Dist: matplotlib; extra == 'all'
+Requires-Dist: muon; extra == 'all'
+Requires-Dist: myst-nb; extra == 'all'
+Requires-Dist: myst-parser; extra == 'all'
+Requires-Dist: numpyro; extra == 'all'
+Requires-Dist: optax; extra == 'all'
+Requires-Dist: plotnine; extra == 'all'
+Requires-Dist: pooch; extra == 'all'
+Requires-Dist: pre-commit; extra == 'all'
+Requires-Dist: pynndescent; extra == 'all'
+Requires-Dist: pytest; extra == 'all'
+Requires-Dist: pytest-pretty; extra == 'all'
+Requires-Dist: ray[tune]; extra == 'all'
+Requires-Dist: readfcs; extra == 'all'
+Requires-Dist: scib-metrics; extra == 'all'
+Requires-Dist: scrublet; extra == 'all'
+Requires-Dist: seaborn; extra == 'all'
+Requires-Dist: shap; extra == 'all'
+Requires-Dist: sphinx; extra == 'all'
+Requires-Dist: sphinx-autodoc-typehints; extra == 'all'
+Requires-Dist: sphinx-book-theme>=1.0.1; extra == 'all'
+Requires-Dist: sphinx-copybutton; extra == 'all'
+Requires-Dist: sphinx-design; extra == 'all'
+Requires-Dist: sphinx-hoverxref; extra == 'all'
+Requires-Dist: sphinxcontrib-bibtex; extra == 'all'
+Requires-Dist: sphinxext-opengraph; extra == 'all'
+Requires-Dist: squidpy>=1.6.0; extra == 'all'
+Requires-Dist: umap-learn>=0.5.0; extra == 'all'
+Requires-Dist: zarr<3.0.0; extra == 'all'
+Provides-Extra: autotune
+Requires-Dist: hyperopt>=0.2; extra == 'autotune'
+Requires-Dist: muon; extra == 'autotune'
+Requires-Dist: ray[tune]; extra == 'autotune'
+Requires-Dist: scib-metrics; extra == 'autotune'
+Provides-Extra: cuda
+Requires-Dist: jax[cuda12]; extra == 'cuda'
+Requires-Dist: torchaudio; extra == 'cuda'
+Requires-Dist: torchvision; extra == 'cuda'
+Provides-Extra: dataloaders
+Requires-Dist: cellxgene-census; extra == 'dataloaders'
+Requires-Dist: lamindb>=1.12.1; extra == 'dataloaders'
+Requires-Dist: tiledbsoma; extra == 'dataloaders'
+Requires-Dist: tiledbsoma-ml; extra == 'dataloaders'
+Requires-Dist: torchdata; extra == 'dataloaders'
+Provides-Extra: dev
+Requires-Dist: biopython>=1.81; extra == 'dev'
+Requires-Dist: boto3; extra == 'dev'
+Requires-Dist: captum; extra == 'dev'
+Requires-Dist: coverage; extra == 'dev'
+Requires-Dist: dask[array]; extra == 'dev'
+Requires-Dist: dvc[s3]; extra == 'dev'
+Requires-Dist: fcswrite; extra == 'dev'
+Requires-Dist: flax; extra == 'dev'
+Requires-Dist: gdown; extra == 'dev'
+Requires-Dist: genomepy; extra == 'dev'
+Requires-Dist: huggingface-hub; extra == 'dev'
+Requires-Dist: hyperopt>=0.2; extra == 'dev'
+Requires-Dist: igraph; extra == 'dev'
+Requires-Dist: jax; extra == 'dev'
+Requires-Dist: jaxlib; extra == 'dev'
+Requires-Dist: jupyter; extra == 'dev'
+Requires-Dist: leidenalg; extra == 'dev'
+Requires-Dist: muon; extra == 'dev'
+Requires-Dist: numpyro; extra == 'dev'
+Requires-Dist: optax; extra == 'dev'
+Requires-Dist: pooch; extra == 'dev'
+Requires-Dist: pre-commit; extra == 'dev'
+Requires-Dist: pytest; extra == 'dev'
+Requires-Dist: pytest-pretty; extra == 'dev'
+Requires-Dist: ray[tune]; extra == 'dev'
+Requires-Dist: readfcs; extra == 'dev'
+Requires-Dist: scib-metrics; extra == 'dev'
+Requires-Dist: shap; extra == 'dev'
+Requires-Dist: zarr<3.0.0; extra == 'dev'
+Provides-Extra: docs
+Requires-Dist: docutils!=0.18.*,!=0.19.*,>=0.8; extra == 'docs'
+Requires-Dist: ipython; extra == 'docs'
+Requires-Dist: myst-nb; extra == 'docs'
+Requires-Dist: myst-parser; extra == 'docs'
+Requires-Dist: sphinx; extra == 'docs'
+Requires-Dist: sphinx-autodoc-typehints; extra == 'docs'
+Requires-Dist: sphinx-book-theme>=1.0.1; extra == 'docs'
+Requires-Dist: sphinx-copybutton; extra == 'docs'
+Requires-Dist: sphinx-design; extra == 'docs'
+Requires-Dist: sphinx-hoverxref; extra == 'docs'
+Requires-Dist: sphinxcontrib-bibtex; extra == 'docs'
+Requires-Dist: sphinxext-opengraph; extra == 'docs'
+Provides-Extra: docsbuild
+Requires-Dist: boto3; extra == 'docsbuild'
+Requires-Dist: docutils!=0.18.*,!=0.19.*,>=0.8; extra == 'docsbuild'
+Requires-Dist: dvc[s3]; extra == 'docsbuild'
+Requires-Dist: flax; extra == 'docsbuild'
+Requires-Dist: huggingface-hub; extra == 'docsbuild'
+Requires-Dist: hyperopt>=0.2; extra == 'docsbuild'
+Requires-Dist: igraph; extra == 'docsbuild'
+Requires-Dist: ipython; extra == 'docsbuild'
+Requires-Dist: jax; extra == 'docsbuild'
+Requires-Dist: jaxlib; extra == 'docsbuild'
+Requires-Dist: leidenalg; extra == 'docsbuild'
+Requires-Dist: muon; extra == 'docsbuild'
+Requires-Dist: myst-nb; extra == 'docsbuild'
+Requires-Dist: myst-parser; extra == 'docsbuild'
+Requires-Dist: numpyro; extra == 'docsbuild'
+Requires-Dist: optax; extra == 'docsbuild'
+Requires-Dist: ray[tune]; extra == 'docsbuild'
+Requires-Dist: scib-metrics; extra == 'docsbuild'
+Requires-Dist: sphinx; extra == 'docsbuild'
+Requires-Dist: sphinx-autodoc-typehints; extra == 'docsbuild'
+Requires-Dist: sphinx-book-theme>=1.0.1; extra == 'docsbuild'
+Requires-Dist: sphinx-copybutton; extra == 'docsbuild'
+Requires-Dist: sphinx-design; extra == 'docsbuild'
+Requires-Dist: sphinx-hoverxref; extra == 'docsbuild'
+Requires-Dist: sphinxcontrib-bibtex; extra == 'docsbuild'
+Requires-Dist: sphinxext-opengraph; extra == 'docsbuild'
+Provides-Extra: editing
+Requires-Dist: jupyter; extra == 'editing'
+Requires-Dist: pre-commit; extra == 'editing'
+Provides-Extra: file-sharing
+Requires-Dist: fcswrite; extra == 'file-sharing'
+Requires-Dist: gdown; extra == 'file-sharing'
+Requires-Dist: pooch; extra == 'file-sharing'
+Requires-Dist: readfcs; extra == 'file-sharing'
+Provides-Extra: hub
+Requires-Dist: boto3; extra == 'hub'
+Requires-Dist: dvc[s3]; extra == 'hub'
+Requires-Dist: huggingface-hub; extra == 'hub'
+Requires-Dist: igraph; extra == 'hub'
+Requires-Dist: leidenalg; extra == 'hub'
+Provides-Extra: interpretability
+Requires-Dist: captum; extra == 'interpretability'
+Requires-Dist: shap; extra == 'interpretability'
+Provides-Extra: jax
+Requires-Dist: flax; extra == 'jax'
+Requires-Dist: jax; extra == 'jax'
+Requires-Dist: jaxlib; extra == 'jax'
+Requires-Dist: numpyro; extra == 'jax'
+Requires-Dist: optax; extra == 'jax'
+Provides-Extra: metal
+Requires-Dist: jax-metal; extra == 'metal'
+Requires-Dist: torchaudio; extra == 'metal'
+Requires-Dist: torchvision; extra == 'metal'
+Provides-Extra: optional
+Requires-Dist: biopython>=1.81; extra == 'optional'
+Requires-Dist: boto3; extra == 'optional'
+Requires-Dist: captum; extra == 'optional'
+Requires-Dist: dask[array]; extra == 'optional'
+Requires-Dist: dvc[s3]; extra == 'optional'
+Requires-Dist: fcswrite; extra == 'optional'
+Requires-Dist: flax; extra == 'optional'
+Requires-Dist: gdown; extra == 'optional'
+Requires-Dist: genomepy; extra == 'optional'
+Requires-Dist: huggingface-hub; extra == 'optional'
+Requires-Dist: hyperopt>=0.2; extra == 'optional'
+Requires-Dist: igraph; extra == 'optional'
+Requires-Dist: jax; extra == 'optional'
+Requires-Dist: jaxlib; extra == 'optional'
+Requires-Dist: leidenalg; extra == 'optional'
+Requires-Dist: muon; extra == 'optional'
+Requires-Dist: numpyro; extra == 'optional'
+Requires-Dist: optax; extra == 'optional'
+Requires-Dist: pooch; extra == 'optional'
+Requires-Dist: ray[tune]; extra == 'optional'
+Requires-Dist: readfcs; extra == 'optional'
+Requires-Dist: scib-metrics; extra == 'optional'
+Requires-Dist: shap; extra == 'optional'
+Requires-Dist: zarr<3.0.0; extra == 'optional'
+Provides-Extra: parallel
+Requires-Dist: dask[array]; extra == 'parallel'
+Requires-Dist: zarr<3.0.0; extra == 'parallel'
+Provides-Extra: regseq
+Requires-Dist: biopython>=1.81; extra == 'regseq'
+Requires-Dist: genomepy; extra == 'regseq'
+Provides-Extra: test
+Requires-Dist: biopython>=1.81; extra == 'test'
+Requires-Dist: boto3; extra == 'test'
+Requires-Dist: captum; extra == 'test'
+Requires-Dist: coverage; extra == 'test'
+Requires-Dist: dask[array]; extra == 'test'
+Requires-Dist: dvc[s3]; extra == 'test'
+Requires-Dist: fcswrite; extra == 'test'
+Requires-Dist: flax; extra == 'test'
+Requires-Dist: gdown; extra == 'test'
+Requires-Dist: genomepy; extra == 'test'
+Requires-Dist: huggingface-hub; extra == 'test'
+Requires-Dist: hyperopt>=0.2; extra == 'test'
+Requires-Dist: igraph; extra == 'test'
+Requires-Dist: jax; extra == 'test'
+Requires-Dist: jaxlib; extra == 'test'
+Requires-Dist: leidenalg; extra == 'test'
+Requires-Dist: muon; extra == 'test'
+Requires-Dist: numpyro; extra == 'test'
+Requires-Dist: optax; extra == 'test'
+Requires-Dist: pooch; extra == 'test'
+Requires-Dist: pytest; extra == 'test'
+Requires-Dist: pytest-pretty; extra == 'test'
+Requires-Dist: ray[tune]; extra == 'test'
+Requires-Dist: readfcs; extra == 'test'
+Requires-Dist: scib-metrics; extra == 'test'
+Requires-Dist: shap; extra == 'test'
+Requires-Dist: zarr<3.0.0; extra == 'test'
+Provides-Extra: tests
+Requires-Dist: biopython>=1.81; extra == 'tests'
+Requires-Dist: boto3; extra == 'tests'
+Requires-Dist: captum; extra == 'tests'
+Requires-Dist: coverage; extra == 'tests'
+Requires-Dist: dask[array]; extra == 'tests'
+Requires-Dist: dvc[s3]; extra == 'tests'
+Requires-Dist: fcswrite; extra == 'tests'
+Requires-Dist: flax; extra == 'tests'
+Requires-Dist: gdown; extra == 'tests'
+Requires-Dist: genomepy; extra == 'tests'
+Requires-Dist: huggingface-hub; extra == 'tests'
+Requires-Dist: hyperopt>=0.2; extra == 'tests'
+Requires-Dist: igraph; extra == 'tests'
+Requires-Dist: jax; extra == 'tests'
+Requires-Dist: jaxlib; extra == 'tests'
+Requires-Dist: leidenalg; extra == 'tests'
+Requires-Dist: muon; extra == 'tests'
+Requires-Dist: numpyro; extra == 'tests'
+Requires-Dist: optax; extra == 'tests'
+Requires-Dist: pooch; extra == 'tests'
+Requires-Dist: pytest; extra == 'tests'
+Requires-Dist: pytest-pretty; extra == 'tests'
+Requires-Dist: ray[tune]; extra == 'tests'
+Requires-Dist: readfcs; extra == 'tests'
+Requires-Dist: scib-metrics; extra == 'tests'
+Requires-Dist: shap; extra == 'tests'
+Requires-Dist: zarr<3.0.0; extra == 'tests'
+Provides-Extra: tutorials
+Requires-Dist: biomart; extra == 'tutorials'
+Requires-Dist: biopython>=1.81; extra == 'tutorials'
+Requires-Dist: boto3; extra == 'tutorials'
+Requires-Dist: captum; extra == 'tutorials'
+Requires-Dist: cell2location; extra == 'tutorials'
+Requires-Dist: dask[array]; extra == 'tutorials'
+Requires-Dist: dataloaders; extra == 'tutorials'
+Requires-Dist: dvc[s3]; extra == 'tutorials'
+Requires-Dist: fcswrite; extra == 'tutorials'
+Requires-Dist: flax; extra == 'tutorials'
+Requires-Dist: gdown; extra == 'tutorials'
+Requires-Dist: genomepy; extra == 'tutorials'
+Requires-Dist: huggingface-hub; extra == 'tutorials'
+Requires-Dist: hyperopt>=0.2; extra == 'tutorials'
+Requires-Dist: igraph; extra == 'tutorials'
+Requires-Dist: jax; extra == 'tutorials'
+Requires-Dist: jaxlib; extra == 'tutorials'
+Requires-Dist: jupyter; extra == 'tutorials'
+Requires-Dist: leidenalg; extra == 'tutorials'
+Requires-Dist: matplotlib; extra == 'tutorials'
+Requires-Dist: muon; extra == 'tutorials'
+Requires-Dist: numpyro; extra == 'tutorials'
+Requires-Dist: optax; extra == 'tutorials'
+Requires-Dist: plotnine; extra == 'tutorials'
+Requires-Dist: pooch; extra == 'tutorials'
+Requires-Dist: pynndescent; extra == 'tutorials'
+Requires-Dist: ray[tune]; extra == 'tutorials'
+Requires-Dist: readfcs; extra == 'tutorials'
+Requires-Dist: scib-metrics; extra == 'tutorials'
+Requires-Dist: scrublet; extra == 'tutorials'
+Requires-Dist: seaborn; extra == 'tutorials'
+Requires-Dist: shap; extra == 'tutorials'
+Requires-Dist: squidpy>=1.6.0; extra == 'tutorials'
+Requires-Dist: umap-learn>=0.5.0; extra == 'tutorials'
+Requires-Dist: zarr<3.0.0; extra == 'tutorials'
+Description-Content-Type: text/markdown
+
+<a href="https://scvi-tools.org/">
+  <img
+    src="https://github.com/scverse/scvi-tools/blob/main/docs/_static/scvi-tools-horizontal.svg?raw=true"
+    width="400"
+    alt="scvi-tools"
+  >
+</a>
+
+[![Stars][gh-stars-badge]][gh-stars-link]
+[![PyPI][pypi-badge]][pypi-link]
+[![PyPIDownloads][pepy-badge]][pepy-link]
+[![CondaDownloads][conda-badge]][conda-link]
+[![Docs][docs-badge]][docs-link]
+[![Build][build-badge]][build-link]
+[![Coverage][coverage-badge]][coverage-link]
+
+[scvi-tools] (single-cell variational inference tools) is a package for probabilistic modeling and
+analysis of single-cell omics data, built on top of [PyTorch] and [AnnData].
+
+# Analysis of single-cell omics data
+
+scvi-tools is composed of models that perform many analysis tasks across single-cell, multi, and
+spatial omics data:
+
+- Dimensionality reduction
+- Data integration
+- Automated annotation
+- Factor analysis
+- Doublet detection
+- Spatial deconvolution
+- and more!
+
+In the [user guide], we provide an overview of each model. All model implementations have a
+high-level API that interacts with [Scanpy] and includes standard save/load functions, GPU
+acceleration, etc.
+
+# Rapid development of novel probabilistic models
+
+scvi-tools contains the building blocks to develop and deploy novel probabilistic models. These
+building blocks are powered by popular probabilistic and machine learning frameworks such as
+[PyTorch Lightning] and [Pyro]. For an overview of how the scvi-tools package is structured, you
+may refer to the [codebase overview] page.
+
+We recommend checking out the [skeleton repository] as a starting point for developing and
+deploying new models with scvi-tools.
+
+# Basic installation
+
+For conda,
+
+```bash
+conda install scvi-tools -c conda-forge
+```
+
+and for pip,
+
+```bash
+pip install scvi-tools
+```
+
+Please be sure to install a version of [PyTorch] that is compatible with your GPU (if applicable).
+
+# Resources
+
+- Tutorials, API reference, and installation guides are available in the [documentation].
+- For discussion of usage, check out our [forum].
+- Please use the [issues] to submit bug reports.
+- If you'd like to contribute, check out our [contributing guide].
+- If you find a model useful for your research, please consider citing the corresponding
+    publication.
+
+# Reference
+
+If you use `scvi-tools` in your work, please cite
+
+> **A Python library for probabilistic analysis of single-cell omics data**
+>
+> Adam Gayoso, Romain Lopez, Galen Xing, Pierre Boyeau, Valeh Valiollah Pour Amiri, Justin Hong,
+> Katherine Wu, Michael Jayasuriya, Edouard Mehlman, Maxime Langevin, Yining Liu, Jules Samaran,
+> Gabriel Misrachi, Achille Nazaret, Oscar Clivio, Chenling Xu, Tal Ashuach, Mariano Gabitto,
+> Mohammad Lotfollahi, Valentine Svensson, Eduardo da Veiga Beltrame, Vitalii Kleshchevnikov,
+> Carlos Talavera-López, Lior Pachter, Fabian J. Theis, Aaron Streets, Michael I. Jordan,
+> Jeffrey Regier & Nir Yosef
+>
+> _Nature Biotechnology_ 2022 Feb 07. doi: [10.1038/s41587-021-01206-w](https://doi.org/10.1038/s41587-021-01206-w).
+
+along with the publication describing the model used.
+
+You can cite the scverse publication as follows:
+
+> **The scverse project provides a computational ecosystem for single-cell omics data analysis**
+>
+> Isaac Virshup, Danila Bredikhin, Lukas Heumos, Giovanni Palla, Gregor Sturm, Adam Gayoso,
+> Ilia Kats, Mikaela Koutrouli, Scverse Community, Bonnie Berger, Dana Pe’er, Aviv Regev,
+> Sarah A. Teichmann, Francesca Finotello, F. Alexander Wolf, Nir Yosef, Oliver Stegle &
+> Fabian J. Theis
+>
+> _Nature Biotechnology_ 2023 Apr 10. doi: [10.1038/s41587-023-01733-8](https://doi.org/10.1038/s41587-023-01733-8).
+
+scvi-tools is part of the scverse® project ([website](https://scverse.org),
+[governance](https://scverse.org/about/roles)) and is fiscally sponsored by [NumFOCUS](https://numfocus.org/).
+
+If you like scverse® and want to support our mission, please consider making a tax-deductible
+[donation](https://numfocus.org/donate-to-scverse) to help the project pay for developer time,
+professional services, travel, workshops, and a variety of other needs.
+
+<div align="center">
+<a href="https://numfocus.org/project/scverse">
+  <img
+    src="https://raw.githubusercontent.com/numfocus/templates/master/images/numfocus-logo.png"
+    width="200"
+  >
+</a>
+</div>
+
+Copyright (c) 2025, Yosef Lab, Weizmann Institute of Science
+
+[anndata]: https://anndata.readthedocs.io/en/latest/
+[build-badge]: https://github.com/scverse/scvi-tools/actions/workflows/build.yml/badge.svg
+[build-link]: https://github.com/scverse/scvi-tools/actions/workflows/build.yml/
+[codebase overview]: https://docs.scvi-tools.org/en/stable/user_guide/background/codebase_overview.html
+[conda-badge]: https://img.shields.io/conda/dn/conda-forge/scvi-tools?logo=Anaconda
+[conda-link]: https://anaconda.org/conda-forge/scvi-tools
+[contributing guide]: https://docs.scvi-tools.org/en/stable/contributing/index.html
+[coverage-badge]: https://codecov.io/gh/scverse/scvi-tools/branch/main/graph/badge.svg
+[coverage-link]: https://codecov.io/gh/scverse/scvi-tools
+[docs-badge]: https://readthedocs.org/projects/scvi/badge/?version=latest
+[docs-link]: https://scvi.readthedocs.io/en/stable/?badge=stable
+[documentation]: https://docs.scvi-tools.org/
+[forum]: https://discourse.scvi-tools.org
+[gh-stars-badge]: https://img.shields.io/github/stars/scverse/scvi-tools?style=flat&logo=GitHub&color=blue
+[gh-stars-link]: https://github.com/scverse/scvi-tools/stargazers
+[issues]: https://github.com/scverse/scvi-tools/issues
+[pepy-badge]: https://static.pepy.tech/badge/scvi-tools
+[pepy-link]: https://pepy.tech/project/scvi-tools
+[pypi-badge]: https://img.shields.io/pypi/v/scvi-tools.svg
+[pypi-link]: https://pypi.org/project/scvi-tools
+[pyro]: https://pyro.ai/
+[pytorch]: https://pytorch.org
+[pytorch lightning]: https://lightning.ai/docs/pytorch/stable/
+[scanpy]: http://scanpy.readthedocs.io/
+[scvi-tools]: https://scvi-tools.org/
+[skeleton repository]: https://github.com/scverse/simple-scvi
+[user guide]: https://docs.scvi-tools.org/en/stable/user_guide/index.html
