@@ -1,0 +1,90 @@
+Metadata-Version: 2.1
+Name: tilmedia
+Version: 2025.2
+Summary: Substance properties for incompressible liquids, ideal gases, real fluids and mixtures
+Home-page: https://www.tlk-thermo.com/en/software/tilmedia-suite
+Author: TLK-Thermo GmbH
+Author-email: tilmedia@tlk-thermo.com
+License: BSD
+Keywords: thermophysical thermodynamic fluid properties gas liquid mixtures substances media
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Natural Language :: English
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Scientific/Engineering :: Physics
+Classifier: Topic :: Scientific/Engineering :: Chemistry
+Description-Content-Type: text/x-rst
+License-File: LICENSE.txt
+License-File: Third-Party-License.txt
+Requires-Dist: numpy
+
+TILMedia Suite
+==============
+
+TILMedia Suite provides methods of calculation, which express the thermophysical properties of
+incompressible liquids, ideal gases and real fluids containing a vapor liquid equilibrium (VLEFluid). Methods
+for calculating the properties of mixtures are also included. TILMedia provides a comprehensive
+range of different substances, including our own highly efficient and accurate real-time substance
+property implementations.
+
+(https://www.tlk-thermo.com/en/software/tilmedia-suite)
+
+Example for a gas::
+
+    >>> import tilmedia
+    >>> gas = tilmedia.Gas('VDI4670.DryAir')
+    >>> gas.set_pTxi(1e5, 300)
+    >>> print(round(float(gas.d), 6))
+    1.161034
+    >>> gas.set_Txi(300)
+    >>> print(round(float(gas.cp), 6))
+    1004.990552
+    >>> gas.set(p=1e5, T=300)
+    >>> print(round(float(gas.d), 6))
+    1.161034
+    >>> gas.set_Txi([300, 350, 400])
+    >>> print(gas.cp.round(6))
+    [1004.990552 1008.342171 1013.626381]
+
+Example for a liquid::
+
+    >>> import tilmedia
+    >>> liquid = tilmedia.Liquid('TILMedia.Water')
+    >>> liquid.set_Txi(300)
+    >>> print(round(float(liquid.d), 6))
+    996.425346
+    >>> liquid.set_pTxi(1e5, 300)
+    >>> print(round(float(liquid.s), 6))
+    394.977757
+    >>> liquid.set(p=liquid.p, T=300)
+    >>> print(round(float(liquid.s), 6))
+    394.977757
+    >>> liquid.set_Txi([300, 310, 320])
+    >>> print(liquid.cp.round(6))
+    [4180.308149 4177.312533 4177.805418]
+
+Example for a VLEFluid::
+
+    >>> import tilmedia
+    >>> vleFluid = tilmedia.VLEFluid('TILMedia.R134a')
+    >>> vleFluid.set_pTxi(1e5, 300)
+    >>> print(round(float(vleFluid.d), 6))
+    4.173095
+    >>> print(round(float(vleFluid.vle.T_l), 6))
+    246.788812
+    >>> vleFluid.set_pxi(2e5)
+    >>> print(round(float(vleFluid.vle.T_l), 6))
+    263.073728
+    >>> vleFluid.set(T=vleFluid.sat.T_dew)
+    >>> print(round(float(vleFluid.sat.p_dew), 1))
+    200000.0
+    >>> vleFluid.set_phxi(1e5, [350e3, 360e3, 370e3])
+    >>> print(vleFluid.d.round(6))
+    [6.106462 5.79392  5.511813]
