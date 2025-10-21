@@ -1,0 +1,35 @@
+# auto-generated: explicit re-exports; wrap dataclasses via loader()
+# flake8: noqa
+from k8s_models.loader import loader as __loader
+
+from .v1 import AuditAnnotation, ExpressionWarning, MatchCondition, MatchResources, MutatingWebhook, MutatingWebhookConfiguration, MutatingWebhookConfigurationList, NamedRuleWithOperations, ParamKind, ParamRef, RuleWithOperations, ServiceReference, TypeChecking, ValidatingAdmissionPolicy, ValidatingAdmissionPolicyBinding, ValidatingAdmissionPolicyBindingList, ValidatingAdmissionPolicyBindingSpec, ValidatingAdmissionPolicyList, ValidatingAdmissionPolicySpec, ValidatingAdmissionPolicyStatus, ValidatingWebhook, ValidatingWebhookConfiguration, ValidatingWebhookConfigurationList, Validation, Variable, WebhookClientConfig
+
+AuditAnnotation = __loader(AuditAnnotation)
+ExpressionWarning = __loader(ExpressionWarning)
+MatchCondition = __loader(MatchCondition)
+MatchResources = __loader(MatchResources)
+MutatingWebhook = __loader(MutatingWebhook)
+MutatingWebhookConfiguration = __loader(MutatingWebhookConfiguration)
+MutatingWebhookConfigurationList = __loader(MutatingWebhookConfigurationList)
+NamedRuleWithOperations = __loader(NamedRuleWithOperations)
+ParamKind = __loader(ParamKind)
+ParamRef = __loader(ParamRef)
+RuleWithOperations = __loader(RuleWithOperations)
+ServiceReference = __loader(ServiceReference)
+TypeChecking = __loader(TypeChecking)
+ValidatingAdmissionPolicy = __loader(ValidatingAdmissionPolicy)
+ValidatingAdmissionPolicyBinding = __loader(ValidatingAdmissionPolicyBinding)
+ValidatingAdmissionPolicyBindingList = __loader(ValidatingAdmissionPolicyBindingList)
+ValidatingAdmissionPolicyBindingSpec = __loader(ValidatingAdmissionPolicyBindingSpec)
+ValidatingAdmissionPolicyList = __loader(ValidatingAdmissionPolicyList)
+ValidatingAdmissionPolicySpec = __loader(ValidatingAdmissionPolicySpec)
+ValidatingAdmissionPolicyStatus = __loader(ValidatingAdmissionPolicyStatus)
+ValidatingWebhook = __loader(ValidatingWebhook)
+ValidatingWebhookConfiguration = __loader(ValidatingWebhookConfiguration)
+ValidatingWebhookConfigurationList = __loader(ValidatingWebhookConfigurationList)
+Validation = __loader(Validation)
+Variable = __loader(Variable)
+WebhookClientConfig = __loader(WebhookClientConfig)
+
+__all__ = ['AuditAnnotation', 'ExpressionWarning', 'MatchCondition', 'MatchResources', 'MutatingWebhook', 'MutatingWebhookConfiguration', 'MutatingWebhookConfigurationList', 'NamedRuleWithOperations', 'ParamKind', 'ParamRef', 'RuleWithOperations', 'ServiceReference', 'TypeChecking', 'ValidatingAdmissionPolicy', 'ValidatingAdmissionPolicyBinding', 'ValidatingAdmissionPolicyBindingList', 'ValidatingAdmissionPolicyBindingSpec', 'ValidatingAdmissionPolicyList', 'ValidatingAdmissionPolicySpec', 'ValidatingAdmissionPolicyStatus', 'ValidatingWebhook', 'ValidatingWebhookConfiguration', 'ValidatingWebhookConfigurationList', 'Validation', 'Variable', 'WebhookClientConfig']
+
