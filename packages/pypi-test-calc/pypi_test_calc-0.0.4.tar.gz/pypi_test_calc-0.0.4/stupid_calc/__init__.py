@@ -1,0 +1,1 @@
+from stupid_calc.main import *
