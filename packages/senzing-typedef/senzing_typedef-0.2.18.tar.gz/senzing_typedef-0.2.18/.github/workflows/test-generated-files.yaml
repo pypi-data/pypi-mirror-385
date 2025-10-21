@@ -1,0 +1,93 @@
+name: test generated files
+
+on: [push]
+
+permissions: {}
+
+jobs:
+    test-generated-files:
+        outputs:
+            status: ${{ job.status }}
+        permissions:
+            contents: read
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                python-version: ["3.10", "3.11", "3.12"]
+
+        steps:
+            - uses: actions/checkout@v5
+              with:
+                  persist-credentials: false
+
+            - name: Set up Python ${{ matrix.python-version }}.
+              uses: actions/setup-python@v6
+              with:
+                  python-version: ${{ matrix.python-version }}
+
+            - name: Verify TruthSets.
+              run: |
+                  mkdir -p /tmp/truthsets
+                  curl -X GET --output /tmp/truthsets/customers.jsonl  https://raw.githubusercontent.com/Senzing/truth-sets/refs/heads/main/truthsets/demo/customers.jsonl
+                  curl -X GET --output /tmp/truthsets/reference.jsonl  https://raw.githubusercontent.com/Senzing/truth-sets/refs/heads/main/truthsets/demo/reference.jsonl
+                  curl -X GET --output /tmp/truthsets/watchlist.jsonl  https://raw.githubusercontent.com/Senzing/truth-sets/refs/heads/main/truthsets/demo/watchlist.jsonl
+                  diff --recursive ./testdata/truthsets /tmp/truthsets
+
+            - name: Install jtd-codegen.
+              run: |
+                  curl -X GET --location --output jtd-codegen.zip https://github.com/jsontypedef/json-typedef-codegen/releases/download/v0.4.1/x86_64-unknown-linux-musl.zip
+                  unzip jtd-codegen.zip
+                  chmod +x jtd-codegen
+                  ./jtd-codegen --version
+
+            - name: Verify generated C-sharp code is up-to-date.
+              run: |
+                  mkdir -p /tmp/csharp/Senzing.Typedef
+                  ./jtd-codegen --csharp-system-text-namespace Senzing.Typedef --csharp-system-text-out /tmp/csharp/Senzing.Typedef --root-name senzingsdk senzingsdk-RFC8927.json
+                  for file in /tmp/csharp/Senzing.Typedef/*; do sed -i '2i #pragma warning disable CS8601, CS8618' "$file"; done
+                  diff --recursive ./csharp/Senzing.Typedef  /tmp/csharp/Senzing.Typedef
+
+            - name: Verify generated Go code is up-to-date.
+              run: |
+                  mkdir -p /tmp/go/typedef
+                  ./jtd-codegen --go-out /tmp/go/typedef --go-package typedef --root-name senzingsdk senzingsdk-RFC8927.json
+                  diff ./go/typedef/typedef.go  /tmp/go/typedef/typedef.go
+
+            - name: Verify generated Java code is up-to-date.
+              run: |
+                  mkdir -p /tmp/java/src/main/java/com/senzing/typedef
+                  ./jtd-codegen --java-jackson-out /tmp/java/src/main/java/com/senzing/typedef --java-jackson-package com.senzing.typedef --root-name senzingsdk senzingsdk-RFC8927.json
+                  diff --recursive ./java/src  /tmp/java/src
+
+            - name: Verify generated Python code is up-to-date.
+              run: |
+                  mkdir -p /tmp/python/senzing_typedef
+                  ./jtd-codegen --python-out /tmp/python/senzing_typedef --root-name senzingsdk senzingsdk-RFC8927.json
+                  diff --recursive ./python  /tmp/python
+
+            - name: Verify generated Ruby code is up-to-date.
+              run: |
+                  mkdir -p /tmp/ruby
+                  ./jtd-codegen --root-name senzingsdk --ruby-module SenzingTypedef --ruby-out /tmp/ruby --ruby-sig-module SenzingSig senzingsdk-RFC8927.json
+                  diff --recursive ./ruby  /tmp/ruby
+
+            - name: Verify generated Rust code is up-to-date.
+              run: |
+                  mkdir -p /tmp/rust
+                  ./jtd-codegen --root-name senzingsdk --rust-out /tmp/rust senzingsdk-RFC8927.json
+                  diff --recursive ./rust  /tmp/rust
+
+            - name: Verify generated Typescript code is up-to-date.
+              run: |
+                  mkdir -p /tmp/typescript
+                  ./jtd-codegen --root-name senzingsdk --typescript-out /tmp/typescript senzingsdk-RFC8927.json
+                  diff --recursive ./typescript  /tmp/typescript
+
+    slack-notification:
+        needs: [test-generated-files]
+        if: ${{ always() && contains(fromJSON('["failure", "cancelled"]'), needs.test-generated-files.outputs.status ) && github.ref_name == github.event.repository.default_branch }}
+        secrets:
+            SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        uses: senzing-factory/build-resources/.github/workflows/build-failure-slack-notification.yaml@v3
+        with:
+            job-status: ${{ needs.test-generated-files.outputs.status }}
