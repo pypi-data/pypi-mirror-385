@@ -1,0 +1,47 @@
+[project]
+name = "gandol2-image-ocr-v2"
+version = "2.0.0"
+description = "PaddleOCR 기반의 간단한 이미지 OCR 유틸리티 (GPU/CPU 지원)"
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+license = {text = "MIT"}
+authors = [{name = "gandol2", email = "sskim2333@gmail.com"}]
+keywords = ["ocr", "paddleocr", "image", "gpu", "korean", "text-recognition"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+    "numpy>=2.3.3",
+    "paddleocr>=3.2.0",
+    "paddlepaddle-gpu==3.2.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/gandol2/gandol2-image-ocr-v2"
+Repository = "https://github.com/gandol2/gandol2-image-ocr-v2"
+Issues = "https://github.com/gandol2/gandol2-image-ocr-v2/issues"
+
+[project.scripts]
+gandol2-image-ocr-v2 = "gandol2_image_ocr.cli:main"
+
+[build-system]
+requires = ["setuptools>=80.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.uv.sources]
+paddlepaddle-gpu = { index = "paddle" }
+
+[[tool.uv.index]]
+name = "paddle"
+url = "https://www.paddlepaddle.org.cn/packages/stable/cu126/"
+explicit = true
+
+[tool.setuptools.package-data]
+# 패키지 내 데이터 파일 포함이 필요하다면 여기에 명시
+"gandol2_image_ocr" = []
