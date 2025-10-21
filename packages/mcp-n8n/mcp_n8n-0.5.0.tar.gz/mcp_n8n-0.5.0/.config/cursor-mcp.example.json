@@ -1,0 +1,57 @@
+{
+  "servers": {
+    "mcp-n8n-stable": {
+      "comment": "STABLE: Uses published package from PyPI (for production use)",
+      "type": "stdio",
+      "command": "mcp-n8n",
+      "args": [],
+      "env": {
+        "ANTHROPIC_API_KEY": "your_anthropic_api_key_here",
+        "CODA_API_KEY": "your_coda_api_key_here",
+        "MCP_N8N_LOG_LEVEL": "INFO"
+      }
+    },
+    "mcp-n8n-dev": {
+      "comment": "DEV: Uses local editable install (pip install -e) for development",
+      "type": "stdio",
+      "command": "/Users/victorpiper/code/mcp-n8n/.venv/bin/python",
+      "args": ["-m", "mcp_n8n.gateway"],
+      "cwd": "/Users/victorpiper/code/mcp-n8n",
+      "env": {
+        "ANTHROPIC_API_KEY": "your_anthropic_api_key_here",
+        "CODA_API_KEY": "your_coda_api_key_here",
+        "MCP_N8N_LOG_LEVEL": "DEBUG",
+        "MCP_N8N_DEBUG": "1",
+        "PYTHONPATH": "/Users/victorpiper/code/mcp-n8n/src"
+      }
+    }
+  },
+  "_instructions": {
+    "usage": [
+      "Copy this file to ~/.cursor/mcp.json (or your Cursor config location)",
+      "Enable ONLY ONE server at a time:",
+      "  - For stable: keep mcp-n8n-stable, remove or comment mcp-n8n-dev",
+      "  - For dev: keep mcp-n8n-dev, remove or comment mcp-n8n-stable",
+      "Restart Cursor after configuration changes"
+    ],
+    "paths": {
+      "update_paths": "Update all paths to match your system:",
+      "venv_python": "/Users/YOUR_USER/code/mcp-n8n/.venv/bin/python",
+      "cwd": "/Users/YOUR_USER/code/mcp-n8n",
+      "pythonpath": "/Users/YOUR_USER/code/mcp-n8n/src"
+    },
+    "toggle_to_dev": [
+      "1. Ensure dev install: cd /path/to/mcp-n8n && source .venv/bin/activate && pip install -e .[dev]",
+      "2. Remove mcp-n8n-stable server entry",
+      "3. Keep only mcp-n8n-dev server entry",
+      "4. Update paths to match your system",
+      "5. Restart Cursor"
+    ],
+    "toggle_to_stable": [
+      "1. Remove mcp-n8n-dev server entry",
+      "2. Keep only mcp-n8n-stable server entry",
+      "3. Restart Cursor"
+    ],
+    "verification": "Test with Cursor's MCP inspector or by making a tool call"
+  }
+}

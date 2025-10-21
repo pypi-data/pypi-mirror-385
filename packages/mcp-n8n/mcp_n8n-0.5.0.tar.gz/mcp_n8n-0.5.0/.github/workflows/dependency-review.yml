@@ -1,0 +1,44 @@
+name: Dependency Review
+
+on:
+  pull_request:
+    branches: [main, develop]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  dependency-review:
+    name: Review dependency changes
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v4
+        with:
+          # Fail if any vulnerabilities are found
+          fail-on-severity: moderate
+          # Allow licenses (adjust as needed)
+          allow-licenses: MIT, Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, PSF-2.0
+          # Deny licenses (uncomment and adjust if needed)
+          # deny-licenses: GPL-3.0, AGPL-3.0
+          # Comment on PR with results
+          comment-summary-in-pr: always
+          # Warn on deprecated packages
+          warn-on-deprecated: true
+
+      - name: Comment on vulnerability findings
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '⚠️ **Security Alert**: This PR introduces dependencies with known vulnerabilities. Please review the dependency review results above and update the dependencies before merging.'
+            })
