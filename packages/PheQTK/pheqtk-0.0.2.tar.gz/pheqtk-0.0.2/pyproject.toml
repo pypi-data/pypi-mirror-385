@@ -1,0 +1,28 @@
+[project]
+name = "PheQTK"
+version = "0.0.2"
+authors = [
+  { name="Marjorie Kohn", email="marjoriekohn@icloud.com" },
+]
+description = "A wrapper to the PheTK package."
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+    "PheTK == 0.1.47"
+]
+
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+
+[project.urls]
+Homepage = "https://github.com/marjoriekohn/PheQTK"
+Issues = "https://github.com/marjoriekohn/PheQTK/issues"
+PheTK = "https://github.com/nhgritctran/PheTK"
+
+[project.scripts]
+pheqtk = "PheQTK.main:main"
