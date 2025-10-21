@@ -1,0 +1,17 @@
+[project]
+name = "tunecli"
+version = "0.1.0"
+description = "CLI to play Spotify songs from terminal"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    { name="Shrish Pellakur", email="shrishtg@example.com" }
+]
+license = { text = "MIT" }
+dependencies = [
+    "spotipy>=2.25.1",
+    "click>=8.0"
+]
+
+[project.scripts]
+tune = "tunecli.tune:cli"
