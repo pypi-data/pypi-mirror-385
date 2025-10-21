@@ -1,0 +1,38 @@
+[build-system]
+# We use Setuptools as the build backend
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+# 1. MUST match the PyPI project name you registered (e.g., 'pace-mdgroup')
+name = "pace-mdgroup"
+# 2. Your starting version number
+version = "0.1.0"
+# 3. Short description
+description = "Tools for the pace-mdgroup project."
+
+requires-python = ">=3.9" 
+
+readme = "README.md"
+# 6. Your name and email
+authors = [
+    {name = "Mudit Dixit", email = "dixitmuditg@gmail.com"},
+]
+# 7. Package dependencies
+dependencies = [
+    # Add your dependencies here, e.g.,
+    # "requests>=2.20.0",
+]
+
+license = {text = "MIT"}
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    # Add other relevant classifiers here
+]
+
+[project.urls]
+Homepage = "https://github.com/dixitmudit/PACE"
+Repository = "https://github.com/dixitmudit/PACE"
