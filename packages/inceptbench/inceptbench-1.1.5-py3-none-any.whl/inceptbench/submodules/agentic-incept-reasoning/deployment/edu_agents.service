@@ -1,0 +1,18 @@
+[Unit]
+Description=Incept AIPI
+After=network.target
+
+[Service]
+User=ec2-user
+Group=ec2-user
+WorkingDirectory=/home/ec2-user/agentic-incept-reasoning
+Environment="PATH=/home/ec2-user/agentic-incept-reasoning/.venv/bin:/usr/local/bin:/usr/bin:/bin"
+Environment="PKG_CONFIG_PATH=/usr/lib/pkgconfig:/usr/local/lib/pkgconfig"
+Environment="LD_LIBRARY_PATH=/usr/local/lib:/usr/lib"
+EnvironmentFile=/home/ec2-user/agentic-incept-reasoning/.env
+ExecStart=/home/ec2-user/agentic-incept-reasoning/.venv/bin/gunicorn -c deployment/gunicorn_conf.py edu_agents.api.server:app
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target 
