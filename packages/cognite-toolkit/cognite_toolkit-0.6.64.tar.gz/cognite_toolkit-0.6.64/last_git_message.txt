@@ -1,0 +1,24 @@
+Add *.env to gitignore (#2106)
+
+# Description
+
+Added *.env to template .gitignore file, so that backup_{x}.env files
+created by subsequent cdf auth init commands are not accidently picked
+up by Cursor.
+
+## Changelog
+
+- [x] Patch
+- [ ] Skip
+
+## cdf
+
+### Added
+
+- When running `cdf repo init`, `*.env` is included in the `.gitignore`
+template
+
+## templates
+
+No changes.
+
