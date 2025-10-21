@@ -1,0 +1,23 @@
+include README.md
+include Makefile
+include *.spec
+include *.txt
+include LICENSE
+include VERSION
+include .pylintrc
+recursive-include docs *.rst
+recursive-include docs *.cfg
+recursive-include docs *.csv
+recursive-include docs *.md
+recursive-include docs *.png
+recursive-include docs *.py
+recursive-include docs *.tok
+recursive-include docs *.txt
+recursive-include test *.py
+recursive-include test *.yaml
+recursive-include test *.swix
+exclude Jenkinsfile
+exclude pre-commit.sh
+exclude report
+exclude htmlcov
+recursive-exclude .arista *.yaml
