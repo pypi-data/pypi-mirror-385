@@ -1,0 +1,216 @@
+---
+
+## **Abstract PDFs**
+
+[![PyPI version](https://badge.fury.io/py/abstract-pdfs.svg)](https://badge.fury.io/py/abstract-pdfs)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python Version](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
+
+**Abstract PDFs** is a modular OCR and PDF-processing toolkit built for automation pipelines.
+It provides a structured way to **ingest**, **deduplicate**, **split**, and **extract text** from PDF documents — including **column-aware OCR** through multiple engines (PaddleOCR, EasyOCR, and Tesseract).
+
+Designed to integrate seamlessly with other *Abstract* modules (like `abstract_ocr` and `abstract_utilities`), it forms the foundation for scalable document analysis, digital archiving, and machine learning dataset preparation.
+
+---
+
+### **Table of Contents**
+
+* [Features](#features)
+* [Installation](#installation)
+* [Usage](#usage)
+* [Architecture](#architecture)
+* [Classes](#classes)
+* [Dependencies](#dependencies)
+* [Example Workflow](#example-workflow)
+* [License](#license)
+
+---
+## Architecture
+
+`Architecture
+
+This module is organized in a straightforward way. It consists of two main folders: 'pdf_utils', responsible for various PDF handling operations, and 'imports', managing the necessary import functions.
+
+`
+```bash
+├── home
+│   └── computron
+│       └── Documents
+│           └── pythonTools
+│               └── modules
+│                   └── src
+│                       └── modules
+│                           └── abstract_pdfs
+│                               ├── abstract_pdfs
+│                               │   ├── AbstractPDFManager.py # Primary module for managing PDF operations
+│                               │   ├── SliceManager.py # Module for handling slice operations
+│                               │   ├── imports
+│                               │   │   ├── imports.py # General import functions used across the module
+│                               │   │   ├── manifest_utils.py # Utility functions for manifest handling
+│                               │   ├── pdf_utils
+│                               │   │   ├── imports.py # Import functions for PDF utilities
+│                               │   │   ├── pdf_to_text.py # Converts PDF files to text
+│                               │   │   ├── pdf_tools.py # Utility functions for PDF manipulation
+│                               │   ├── __init__.py # Initializer file for the abstract_pdfs module
+│                               ├── __init__.py # Initializer file for the outer structure
+│
+└── # End of structure
+```
+`The structure provided allows for modularity and separation of concerns. Each Python file serves a specific purpose, like converting PDFs to text, or managing PDF operations. This makes the module easy to maintain and extend.`
+
+---
+
+
+
+## Classes
+
+### Classes & API
+The utilized classes and their key methods in this module are as follows:
+
+1. **AbstractPDFManager:** This class manages various PDF operations.
+   * `convert_pdf_to_image()`: Converts PDF files to images.
+   * `extract_text_from_pdf()`: Extracts text from PDF files.
+   * `split_pdf()`: Splits a PDF into separate pages.
+
+2. **SliceManager:** This class handles slice operations.
+   * `generate_slices()`: Generates slices from an image.
+   * `save_slices()`: Saves the generated slices to a directory.
+
+3. **PDFTools:** This class contains utility functions for PDF manipulation.
+   * `merge_pdfs()`: Merges multiple PDFs into a single PDF.
+   * `rotate_pdf()`: Rotates pages in a PDF.
+   * `resize_pdf()`: Resizes pages in a PDF.
+
+These classes are designed to achieve modularity and separation of concerns, each serving a specific purpose like converting PDFs to text, splitting PDFs into separate pages, or managing slice operations. The methods contained within these classes provide easy access to the available functionalities of the module. The module encourages code reuse and simplifies complex tasks related to PDFs and image processing which ultimately makes it easy to maintain and extend.
+
+---
+
+
+
+
+## Features
+
+- **PDF to Image Conversion:** Convert PDF files to images using the `convert_pdf_to_image()` method, which works with the `PIL` and `pdf2image` libraries.
+- **Text Extraction from PDFs:** Extract text from PDF files with the `extract_text_from_pdf()` method. The package relies on `abstract_ocr` for this functionality.
+- **PDF Manipulation:** Aggregate operations like splitting, merging, rotating, and resizing PDF files are possible using the `split_pdf()`, `merge_pdfs()`, `rotate_pdf()`, and `resize_pdf()` methods.
+- **Slice Management:** Generate and save slices from an image with `generate_slices()` and `save_slices()` methods. This feature is integral to the OCR process.
+- **Modular Architecture:** The architecture of this module is designed to be modular, which promotes code reuse and simplifies complex tasks related to PDFs and image processing. 
+- **Compatibility:** The module requires Python 3.6 or higher, supporting compatibility with modern Python versions.
+
+---
+
+
+
+## Installation
+
+
+### Prerequisites
+
+The `abstract_pdfs` module requires Python 3.6 or higher for working compatibility. Also, make sure you have the following system libraries installed:
+
+- poppler-utils
+- tesseract
+
+### Installation with pip
+
+You can install `abstract_pdfs` via pip.
+
+```bash
+pip install abstract_pdfs
+```
+
+### Installation from source
+
+If you prefer to install from the source, you can clone the repository and use pip to handle the installation:
+
+```bash
+# Clone the repository
+
+git clone https://github.com/AbstractEndeavors/abstract_pdfs.git
+
+# Navigate to the project directory
+
+cd abstract_pdfs
+
+# Install the package
+
+pip install .
+```
+
+---
+
+
+
+
+## License and Summary
+
+The `abstract_pdfs` module is released under the [MIT License](https://opensource.org/licenses/MIT) and is authored by `putkoff`. An abstract endeavor, this module enables powerful and flexible handling of PDF operations, ranging from conversion of PDFs into images, text extraction from PDF files, to a rich variety of aggregate operations like splitting, merging, rotating, and resizing PDF files.
+
+For more information on this module, visit the official repository [here](https://github.com/AbstractEndeavors/abstract_pdfs). For other abstract projects, refer to the [AbstractEndeavors](https://github.com/AbstractEndeavors) Github page.
+
+---
+
+
+
+## Overview
+
+## `abstract_pdfs` - Powerful PDF Handling for the Modern Python Developer - Version 0.0.0.001
+
+Welcome to the documentation for the `abstract_pdfs` Python module. Authored by `putkoff` and maintained by [`AbstractEndeavors`](https://github.com/AbstractEndeavors), this module is a part of a larger ecosystem of Python tools designed for tackling a host of programming challenges.
+
+The primary purpose of `abstract_pdfs` is to provide developers with a powerful, flexible interface for managing PDF files. With dependency packages like `PIL`, `abstract_ocr`, and `abstract_utilities`, this module allows you to convert PDFs to images, extract text from PDFs, and perform various aggregate operations such as splitting, merging, rotating, and resizing PDF files.
+
+The `abstract_pdfs` module fits within the broader Abstract ecosystem as a go-to solution for PDF management. Its functionality synergistically integrates with modules like `abstract_ocr` for optical character recognition, leveraging the power of the Abstract tools collection.
+
+This module is in Alpha stage (Development Status 3) and is ready for integration by developers. It requires Python 3.6 or higher for optimal use. You will find further details on installation and features in the subsequent sections of this README.
+
+---
+
+
+
+## Usage
+
+Here is a basic python sample of how to use the `abstract_pdfs` module.
+
+``` python
+# Import required modules
+from abstract_pdfs import PdfHandler
+
+# Specify the required PDF file
+path_to_pdf = "/path/to/your/pdf"
+
+# Create an instance of PdfHandler
+pdf_handler = PdfHandler(path_to_pdf)
+
+# Now you can perform various operations like
+# Converting PDF to Image
+image_path = pdf_handler.to_image()
+
+# Extract text from PDF
+text = pdf_handler.extract_text()
+
+# The extracted text will be in string format
+print(text)
+```
+
+The `abstract_pdfs` module also comes with built-in support for handling multiple PDF files at once.
+
+```python
+# Import required modules
+from abstract_pdfs import PdfHandler
+
+# Specify a list of PDF files
+paths_to_pdfs = ["/path/to/your/pdf1", "/path/to/your/pdf2", "/path/to/your/pdf3"]
+
+# Create instances of PdfHandler in a single line
+pdf_handlers = [PdfHandler(path) for path in paths_to_pdfs]
+
+# Now you can iterate over pdf_handlers to do various operations. For example:
+for handler in pdf_handlers:
+    # Print the number of pages in each PDF
+    print(handler.number_of_pages)
+```
+
+These are just a few basic usage examples. The `abstract_pdfs` module exposes a rich API for manipulating and interrogating PDF files. Check out the API documentation for a full list of available methods and their descriptions.'
+
+---
