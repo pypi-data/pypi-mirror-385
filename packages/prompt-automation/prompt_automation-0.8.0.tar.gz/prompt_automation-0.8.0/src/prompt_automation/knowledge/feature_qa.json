@@ -1,0 +1,65 @@
+{
+  "version": "1.0",
+  "last_reviewed": "2025-10-03",
+  "default_answers": {
+    "architecture": {
+      "style": "modular",
+      "max_loc_per_file": 400,
+      "max_loc_per_function": 75,
+      "naming_convention": "capability_based",
+      "folder_structure_strategy": "plan_first"
+    },
+    "testing": {
+      "framework": "pytest",
+      "coverage_target": 85,
+      "require_unit_tests": true,
+      "require_integration_tests": true,
+      "tdd_required": true,
+      "max_test_runtime_seconds": 300
+    },
+    "gui": {
+      "framework": "tkinter",
+      "pattern": "single_window",
+      "backport_to_cli": true,
+      "dark_mode_support": true
+    },
+    "rollout": {
+      "feature_flag_default": "off",
+      "require_observability": true,
+      "require_rollback_plan": true,
+      "phased_rollout": true,
+      "kill_switch_required": true
+    },
+    "performance": {
+      "p95_latency_ms": 200,
+      "memory_mb": 512,
+      "cpu_cores": 1,
+      "measurement_required": true
+    },
+    "security": {
+      "no_secrets_in_logs": true,
+      "least_privilege": true,
+      "input_validation": true
+    }
+  },
+  "feature_specific_overrides": {
+    "meta_prompt": {
+      "mcp_integration": true,
+      "model_endpoint": "http://127.0.0.1:8080",
+      "fuzzy_component_detection": true,
+      "temperature_stage_1": 0.7,
+      "temperature_stage_2": 0.3
+    },
+    "workspace_context_gatherer": {
+      "obsidian_mcp_optional": true,
+      "fallback_to_pathlib": true,
+      "max_files": 20,
+      "max_tokens_per_file": 500
+    },
+    "copilot_agent": {
+      "timeout_seconds": 300,
+      "retry_attempts": 3,
+      "fallback_to_qwen": true
+    }
+  }
+}
