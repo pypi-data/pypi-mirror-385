@@ -1,0 +1,75 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "langchain-mcp-m2m"
+version = "0.1.0"
+description = "LangChain-compatible MCP client with OAuth 2.0 Client Credentials (M2M) flow support"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+    {name = "Locus Technologies"},
+]
+keywords = [
+    "mcp",
+    "model-context-protocol",
+    "oauth",
+    "oauth2",
+    "client-credentials",
+    "m2m",
+    "machine-to-machine",
+    "langchain",
+    "anthropic",
+    "cognito",
+    "authentication",
+    "auth",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+dependencies = [
+    "httpx>=0.27.0",
+    "langchain-mcp-adapters>=0.1.0",
+    "mcp>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "black>=24.0.0",
+    "ruff>=0.3.0",
+    "mypy>=1.8.0",
+]
+
+[project.urls]
+Homepage = "https://paywithlocus.com"
+Repository = "https://github.com/LocusTechnologies/langchain-mcp-m2m"
+Issues = "https://github.com/LocusTechnologies/langchain-mcp-m2m/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/langchain_mcp_m2m"]
+
+[tool.black]
+line-length = 88
+target-version = ["py310", "py311", "py312"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
