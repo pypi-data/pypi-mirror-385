@@ -1,0 +1,31 @@
+[project]
+name = "sage-code"
+version = "0.1.2"
+description = "A senior developer in your terminal."
+readme = "README.md"
+authors = [{ name = "Fikresilase W. Abebayew", email = "shitubilbila@gmail.com" }]
+requires-python = ">=3.12"
+license = { text = "MIT" }
+keywords = ["cli", "ai", "assistant", "developer-tools","claude code alternative", "codex alternative", "open source", "productivity"]
+
+dependencies = [
+    "typer>=0.9.0",
+    "rich>=13.0.0",
+    "inquirer>=3.0.0",
+    "openai>=1.0.0",
+    "prompt_toolkit>=3.0.0"
+]
+
+[project.urls]
+homepage = "https://github.com/Fikresilase/sage"
+repository = "https://github.com/Fikresilase/sage"
+bugtracker = "https://github.com/Fikresilase/sage/issues"
+
+[project.scripts]
+sage = "sage.cli:main"
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel", "build"]
+build-backend = "setuptools.build_meta"
+
+
