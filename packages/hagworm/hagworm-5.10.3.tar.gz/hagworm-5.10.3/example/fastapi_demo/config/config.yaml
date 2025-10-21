@@ -1,0 +1,58 @@
+
+Base:
+
+  Port: 8080
+  Debug: True
+  GZip: False
+  Secret: c77db6268da111e9ae1b8c85904d8a96
+  ProcessNum: 1
+  ServerName: test
+
+Cros:
+
+  AllowOrigins: '*'
+  AllowMethods: '*'
+  AllowHeaders: '*'
+  AllowCredentials: True
+
+Log:
+
+  LogLevel: debug
+  LogFilePath:
+  LogFileSplitSize: 500
+  LogFileSplitTime: 00:00
+  LogFileBackups: 7
+
+ThreadPool:
+
+  ThreadPoolMaxWorkers: 64
+
+MySql:
+
+  MySqlMasterServer: 
+  MySqlSlaveServer: 
+  MySqlName: demo
+  MySqlUser: 
+  MySqlPasswd: 
+  MySqlMasterMinConn: 8
+  MySqlMasterMaxConn: 16
+  MySqlSlaveMinConn: 8
+  MySqlSlaveMaxConn: 16
+
+Mongo:
+
+  MongoHost:
+  MongoAuth: admin
+  MongoUser:
+  MongoPasswd:
+  MongoMinConn: 8
+  MongoMaxConn: 16
+
+Redis:
+
+  RedisHost:
+  RedisPasswd:
+  RedisMinConn: 8
+  RedisMaxConn: 16
+  RedisExpire: 3600
+  RedisKeyPrefix: demo
