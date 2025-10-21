@@ -1,0 +1,540 @@
+# RealSQLTool
+
+一个简单易用的 Python 包，用于通过 ODBC 连接和查询 Azure SQL Server。
+
+## ✨ 功能特性
+
+- 🚀 简单易用的 API
+- 🔐 支持多种身份验证方式（SQL Server 身份验证、Windows 身份验证）
+- 📊 支持多种返回格式（DataFrame、字典、元组）
+- ⚡ 批量操作支持
+- 🔍 表结构查询
+- 🛡️ 参数化查询，防止 SQL 注入
+- 📦 上下文管理器支持
+- 💻 命令行工具
+
+## 📦 安装
+
+### 1. 安装 ODBC 驱动
+
+首先需要安装 Microsoft ODBC Driver for SQL Server：
+
+#### Windows
+从 [Microsoft 官网](https://docs.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server) 下载并安装 **ODBC Driver 17 for SQL Server** 或更高版本
+
+#### Linux (Ubuntu/Debian)
+```bash
+curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+curl https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/prod.list | sudo tee /etc/apt/sources.list.d/mssql-release.list
+sudo apt-get update
+sudo ACCEPT_EULA=Y apt-get install -y msodbcsql17
+```
+
+#### macOS
+```bash
+brew tap microsoft/mssql-release https://github.com/Microsoft/homebrew-mssql-release
+brew update
+brew install msodbcsql17
+```
+
+### 2. 安装 RealSQLTool
+
+```bash
+pip install realsqltool
+```
+
+### 3. 验证安装
+
+```bash
+# 列出可用的 ODBC 驱动
+realsqltool drivers
+```
+
+或在 Python 中：
+```python
+from realsqltool.utils import list_odbc_drivers
+print(list_odbc_drivers())
+```
+
+## 🚀 快速开始
+
+### 测试连接
+
+```bash
+realsqltool test -s myserver.database.windows.net -d mydatabase -u myuser -p mypass
+```
+
+### 基本使用
+
+```python
+from realsqltool import AzureSQLConnection, QueryExecutor
+
+# 使用上下文管理器（推荐）
+with AzureSQLConnection(
+    server="myserver.database.windows.net",
+    database="mydatabase",
+    username="myusername",
+    password="mypassword"
+) as conn:
+    executor = QueryExecutor(conn)
+    
+    # 执行查询，返回 pandas DataFrame
+    df = executor.execute_query("SELECT * FROM Users")
+    print(df)
+```
+
+## 📖 使用指南
+
+### 命令行工具
+
+```bash
+# 列出可用的 ODBC 驱动
+realsqltool drivers
+
+# 测试连接
+realsqltool test -s myserver.database.windows.net -d mydatabase -u myuser -p mypass
+
+# 列出数据库中的表
+realsqltool tables -s myserver.database.windows.net -d mydatabase -u myuser -p mypass
+
+# 执行查询
+realsqltool query -s myserver.database.windows.net -d mydatabase -u myuser -p mypass \
+  -q "SELECT * FROM Users"
+
+# 从文件执行查询
+realsqltool query -s myserver.database.windows.net -d mydatabase -u myuser -p mypass \
+  -f query.sql
+```
+
+### 执行查询
+
+```python
+from realsqltool import AzureSQLConnection, QueryExecutor
+
+with AzureSQLConnection(
+    server="myserver.database.windows.net",
+    database="mydatabase",
+    username="myusername",
+    password="mypassword"
+) as conn:
+    executor = QueryExecutor(conn)
+    
+    # 查询并返回 DataFrame
+    df = executor.execute_query("SELECT * FROM Users")
+    
+    # 查询并返回字典列表
+    results = executor.execute_query(
+        "SELECT * FROM Users WHERE Age > ?",
+        params=(18,),
+        return_type="dict"
+    )
+    
+    # 查询并返回元组列表
+    results = executor.execute_query(
+        "SELECT * FROM Users",
+        return_type="tuple"
+    )
+    
+    # 执行标量查询（获取单个值）
+    count = executor.execute_scalar("SELECT COUNT(*) FROM Users")
+    print(f"用户总数: {count}")
+```
+
+### 读取表数据
+
+```python
+# 读取整个表
+df = executor.read_table("Users")
+
+# 读取特定列
+df = executor.read_table(
+    "Users",
+    columns=["Name", "Email", "Age"]
+)
+
+# 带条件查询
+df = executor.read_table(
+    "Users",
+    where_clause="Age >= 18",
+    order_by="Name ASC",
+    limit=100
+)
+```
+
+### 执行非查询语句
+
+```python
+# INSERT
+rows_affected = executor.execute_non_query(
+    "INSERT INTO Users (Name, Email, Age) VALUES (?, ?, ?)",
+    params=("张三", "zhangsan@example.com", 25)
+)
+
+# UPDATE
+rows_affected = executor.execute_non_query(
+    "UPDATE Users SET Age = ? WHERE Name = ?",
+    params=(26, "张三")
+)
+
+# DELETE
+rows_affected = executor.execute_non_query(
+    "DELETE FROM Users WHERE Age < ?",
+    params=(18,)
+)
+```
+
+### 批量操作
+
+```python
+# 批量插入
+params_list = [
+    ("用户1", "user1@example.com", 20),
+    ("用户2", "user2@example.com", 25),
+    ("用户3", "user3@example.com", 30),
+]
+
+total_rows = executor.execute_batch(
+    "INSERT INTO Users (Name, Email, Age) VALUES (?, ?, ?)",
+    params_list,
+    batch_size=1000
+)
+print(f"插入了 {total_rows} 行")
+```
+
+### 获取数据库元数据
+
+```python
+# 列出所有表
+tables = executor.list_tables()
+print("数据库中的表:", tables)
+
+# 列出指定 schema 的表
+tables = executor.list_tables(schema="dbo")
+
+# 获取表结构
+table_info = executor.get_table_info("Users")
+print(table_info)
+```
+
+### 工具函数
+
+```python
+from realsqltool.utils import list_odbc_drivers, test_connection
+
+# 列出可用的 ODBC 驱动
+drivers = list_odbc_drivers()
+print("可用的 ODBC 驱动:", drivers)
+
+# 测试连接
+success, message = test_connection(
+    server="myserver.database.windows.net",
+    database="mydatabase",
+    username="myusername",
+    password="mypassword"
+)
+print(message)
+```
+
+## 📚 API 文档
+
+### AzureSQLConnection
+
+数据库连接管理器类。
+
+#### 参数
+
+| 参数 | 类型 | 说明 | 默认值 |
+|------|------|------|--------|
+| `server` | str | Azure SQL Server 地址 | 必需 |
+| `database` | str | 数据库名称 | 必需 |
+| `username` | str | 用户名 | 可选 |
+| `password` | str | 密码 | 可选 |
+| `driver` | str | ODBC 驱动名称 | "ODBC Driver 17 for SQL Server" |
+| `**kwargs` | dict | 其他连接参数 | - |
+
+#### 方法
+
+- `connect()` - 建立连接
+- `disconnect()` - 断开连接
+- `is_connected()` - 检查连接状态
+- `get_cursor()` - 获取游标（上下文管理器）
+
+#### 示例
+
+```python
+# 基本连接
+conn = AzureSQLConnection(
+    server="myserver.database.windows.net",
+    database="mydatabase",
+    username="myusername",
+    password="mypassword"
+)
+
+# 使用上下文管理器（推荐）
+with AzureSQLConnection(...) as conn:
+    # 连接自动管理
+    pass
+
+# 自定义超时时间
+conn = AzureSQLConnection(
+    server="myserver.database.windows.net",
+    database="mydatabase",
+    username="myusername",
+    password="mypassword",
+    **{"Timeout": "60"}
+)
+```
+
+### QueryExecutor
+
+SQL 查询执行器类。
+
+#### 参数
+
+| 参数 | 类型 | 说明 |
+|------|------|------|
+| `connection` | AzureSQLConnection | 数据库连接实例 |
+
+#### 方法
+
+##### execute_query()
+
+执行 SELECT 查询。
+
+**参数:**
+- `query` (str): SQL 查询语句
+- `params` (tuple, optional): 查询参数
+- `return_type` (str): 返回类型，可选 "dataframe"、"dict"、"tuple"，默认 "dataframe"
+
+**返回:** pandas.DataFrame / list[dict] / list[tuple]
+
+##### execute_scalar()
+
+执行标量查询（返回单个值）。
+
+**参数:**
+- `query` (str): SQL 查询语句
+- `params` (tuple, optional): 查询参数
+
+**返回:** 单个值
+
+##### execute_non_query()
+
+执行非查询语句（INSERT、UPDATE、DELETE）。
+
+**参数:**
+- `query` (str): SQL 语句
+- `params` (tuple, optional): 查询参数
+
+**返回:** int - 受影响的行数
+
+##### execute_batch()
+
+批量执行语句。
+
+**参数:**
+- `query` (str): SQL 语句
+- `params_list` (list[tuple]): 参数列表
+- `batch_size` (int): 批次大小，默认 1000
+
+**返回:** int - 总受影响的行数
+
+##### read_table()
+
+读取表数据。
+
+**参数:**
+- `table_name` (str): 表名
+- `columns` (list[str], optional): 要查询的列
+- `where_clause` (str, optional): WHERE 条件
+- `order_by` (str, optional): 排序条件
+- `limit` (int, optional): 限制返回行数
+
+**返回:** pandas.DataFrame
+
+##### get_table_info()
+
+获取表结构信息。
+
+**参数:**
+- `table_name` (str): 表名
+
+**返回:** pandas.DataFrame - 包含列名、数据类型、是否可空等信息
+
+##### list_tables()
+
+列出数据库中的所有表。
+
+**参数:**
+- `schema` (str): Schema 名称，默认 "dbo"
+
+**返回:** list[str] - 表名列表
+
+## 💡 完整示例
+
+```python
+from realsqltool import AzureSQLConnection, QueryExecutor
+
+# 连接配置
+config = {
+    "server": "myserver.database.windows.net",
+    "database": "mydatabase",
+    "username": "myusername",
+    "password": "mypassword"
+}
+
+# 使用上下文管理器
+with AzureSQLConnection(**config) as conn:
+    executor = QueryExecutor(conn)
+    
+    # 1. 列出所有表
+    tables = executor.list_tables()
+    print(f"数据库包含 {len(tables)} 个表")
+    
+    # 2. 查询数据
+    df = executor.execute_query("""
+        SELECT TOP 10
+            Name,
+            Email,
+            Age
+        FROM Users
+        WHERE Age >= ?
+        ORDER BY Age DESC
+    """, params=(18,))
+    print(df)
+    
+    # 3. 获取统计信息
+    avg_age = executor.execute_scalar("SELECT AVG(Age) FROM Users")
+    print(f"平均年龄: {avg_age:.2f}")
+    
+    # 4. 批量插入数据
+    users = [
+        ("用户1", "user1@example.com", 20),
+        ("用户2", "user2@example.com", 25),
+        ("用户3", "user3@example.com", 30),
+    ]
+    rows = executor.execute_batch(
+        "INSERT INTO Users (Name, Email, Age) VALUES (?, ?, ?)",
+        users
+    )
+    print(f"插入了 {rows} 行")
+    
+    # 5. 更新数据
+    rows = executor.execute_non_query(
+        "UPDATE Users SET Email = ? WHERE Name = ?",
+        params=("newemail@example.com", "用户1")
+    )
+    print(f"更新了 {rows} 行")
+    
+    # 6. 获取表结构
+    table_info = executor.get_table_info("Users")
+    print("\n表结构:")
+    print(table_info)
+```
+
+## ⚠️ 注意事项
+
+1. **ODBC 驱动**: 确保已安装正确版本的 ODBC 驱动程序（推荐 ODBC Driver 17 或更高版本）
+2. **服务器地址**: Azure SQL Database 的服务器地址格式为 `<server-name>.database.windows.net`
+3. **参数化查询**: 始终使用参数化查询（`?` 占位符）来防止 SQL 注入
+4. **上下文管理器**: 使用 `with` 语句可以确保连接正确关闭
+5. **批量操作**: 大批量操作时，建议使用 `execute_batch()` 方法并设置合适的 `batch_size`
+6. **防火墙设置**: 确保 Azure SQL Server 的防火墙允许你的 IP 地址访问
+
+## 🐛 常见问题
+
+### 1. 找不到 ODBC 驱动
+
+**错误信息:**
+```
+pyodbc.Error: ('01000', "[01000] [unixODBC][Driver Manager]Can't open lib 'ODBC Driver 17 for SQL Server'")
+```
+
+**解决方案:**
+- 确保已安装 ODBC 驱动
+- 运行 `realsqltool drivers` 查看可用驱动
+- 在创建连接时指定正确的驱动名称：
+  ```python
+  conn = AzureSQLConnection(
+      server="...",
+      database="...",
+      username="...",
+      password="...",
+      driver="ODBC Driver 18 for SQL Server"  # 使用实际安装的驱动
+  )
+  ```
+
+### 2. 连接超时
+
+**错误信息:**
+```
+pyodbc.OperationalError: ('08001', 'Connection timeout')
+```
+
+**解决方案:**
+```python
+conn = AzureSQLConnection(
+    server="myserver.database.windows.net",
+    database="mydatabase",
+    username="myusername",
+    password="mypassword",
+    **{"Timeout": "60"}  # 增加超时时间到 60 秒
+)
+```
+
+### 3. 防火墙阻止连接
+
+**错误信息:**
+```
+Cannot open server 'xxx' requested by the login
+```
+
+**解决方案:**
+- 在 Azure 门户中配置防火墙规则
+- 添加你的 IP 地址到允许列表
+- 或启用"允许 Azure 服务访问"选项
+
+### 4. 身份验证失败
+
+**错误信息:**
+```
+Login failed for user 'xxx'
+```
+
+**解决方案:**
+- 验证用户名和密码是否正确
+- 确保用户有访问该数据库的权限
+- 对于 Azure SQL，用户名格式可能需要是 `username@servername`
+
+## 📁 项目结构
+
+```
+realsqltool/
+├── src/
+│   └── realsqltool/
+│       ├── __init__.py      # 包初始化
+│       ├── connection.py    # 连接管理
+│       ├── query.py         # 查询执行
+│       ├── utils.py         # 工具函数
+│       └── cli.py           # 命令行工具
+├── examples/                # 示例代码
+│   ├── basic_usage.py
+│   ├── advanced_usage.py
+│   └── sample_query.sql
+├── tests/                   # 单元测试
+├── pyproject.toml           # 项目配置
+├── requirements.txt         # 依赖列表
+└── README.md                # 本文档
+```
+
+## 📄 许可证
+
+MIT License
+
+## 🤝 贡献
+
+欢迎提交 Issue 和 Pull Request！
+
+## 📝 更新日志
+
+查看 [CHANGELOG.md](CHANGELOG.md) 了解版本更新历史。

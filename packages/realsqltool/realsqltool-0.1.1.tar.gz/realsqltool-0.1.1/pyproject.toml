@@ -1,0 +1,23 @@
+[project]
+name = "realsqltool"
+version = "0.1.1"
+description = "A Python package for querying Azure SQL Server via ODBC"
+authors = [
+    {name = "Your Name",email = "you@example.com"}
+]
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "pyodbc>=5.0.0",
+    "pandas>=2.0.0",
+]
+
+[project.scripts]
+realsqltool = "realsqltool.cli:main"
+
+[tool.poetry]
+packages = [{include = "realsqltool", from = "src"}]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
