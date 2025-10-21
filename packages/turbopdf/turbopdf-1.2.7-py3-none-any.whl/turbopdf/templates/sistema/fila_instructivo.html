@@ -1,0 +1,16 @@
+<!-- templates/components/fila_instructivo.html -->
+<tr>
+    <td class="campo-tabla" rowspan="{{ fila.rowspan }}">
+        {{ fila.numero }} {{ fila.titulo }}
+    </td>
+    <td class="info-tabla">
+        <p>{{ fila.parrafos.0|safe }}</p>
+    </td>
+</tr>
+{% for parrafo in fila.parrafos|slice:"1:" %}
+<tr>
+    <td class="info-tabla">
+        <p>{{ parrafo|safe }}</p>
+    </td>
+</tr>
+{% endfor %}
