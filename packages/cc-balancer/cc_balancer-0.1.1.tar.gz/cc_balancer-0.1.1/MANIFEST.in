@@ -1,0 +1,24 @@
+# Include static files for Web Dashboard
+recursive-include cc_balancer/static *
+
+# Include documentation
+include README.md
+include LICENSE
+include CHANGELOG.md
+include PIP_PUBLISH.md
+include WEB_DASHBOARD_GUIDE.md
+include QUICK_REFERENCE.md
+
+# Include configuration examples
+include .env.example
+include config.yaml
+include config.test.yaml
+
+# Exclude unnecessary files
+exclude .gitignore
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
+recursive-exclude tests *
+recursive-exclude frontend *
+recursive-exclude docs *
+recursive-exclude examples *

@@ -1,0 +1,57 @@
+# CC-Balancer Configuration
+# Environment variables can be referenced using ${VAR_NAME} syntax
+
+server:
+  host: "0.0.0.0"
+  port: 8000
+  log_level: "INFO"
+  reload: false  # Set to true for development
+
+routing:
+  strategy: "weighted"  # Options: "round-robin" or "weighted"
+
+cache:
+  enabled: true
+  ttl_seconds: 60
+  max_size: 1000
+
+error_handling:
+  failure_threshold: 3
+  recovery_interval_seconds: 30
+  retry_backoff: [1, 2, 4, 8, 30]
+
+providers:
+  # Example: Anthropic Claude API
+  - name: "anthropic-primary"
+    base_url: "https://api.anthropic.com"
+    auth_type: "api_key"
+    api_key: "${ANTHROPIC_API_KEY}"  # Set ANTHROPIC_API_KEY environment variable
+    weight: 2
+    priority: 1
+    timeout_seconds: 30
+
+  # Example: Backup provider
+  - name: "anthropic-backup"
+    base_url: "https://api.anthropic.com"
+    auth_type: "api_key"
+    api_key: "${ANTHROPIC_BACKUP_KEY}"  # Set ANTHROPIC_BACKUP_KEY environment variable
+    weight: 1
+    priority: 2
+    timeout_seconds: 30
+
+  # Example: OpenAI-compatible provider (if using OpenAI API)
+  # - name: "openai-fallback"
+  #   base_url: "https://api.openai.com"
+  #   auth_type: "api_key"
+  #   api_key: "${OPENAI_API_KEY}"
+  #   weight: 1
+  #   priority: 3
+  #   timeout_seconds: 30
+
+# Notes:
+# - At least one provider must be configured
+# - Provider names must be unique
+# - Set environment variables before starting the application
+# - Higher weight = more requests routed to this provider
+# - Lower priority number = higher priority during failover
+# - auth_type "oauth" support coming in Phase 6 (use "api_key" for MVP)
