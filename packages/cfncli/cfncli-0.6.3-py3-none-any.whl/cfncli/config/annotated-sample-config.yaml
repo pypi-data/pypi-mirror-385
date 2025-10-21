@@ -1,0 +1,44 @@
+Version: 3 # Configuration file version, mandatory. Currently always "3", no legacy formats supported
+
+Blueprints:
+  pbDDBTable:
+    Region: us-east-1
+    StackName: "DDBTable"
+    # Template is typically a local path to a template but can be a s3 location using s3 url. (recognized automatically).
+    Template: https://s3.amazonaws.com/cloudformation-templates-us-east-1/DynamoDB_Table.template
+    Package: False
+    Order: 1
+    StackPolicy: ALLOW_ALL
+    EnableTerminationProtection: false
+    Parameters:
+      HashKeyElementName: foo
+    Tags:
+      Project: Foobar
+      Maintainer: someone@amazon.com
+
+Stages: # Stages - Group of related stacks
+  dev:
+    Config:
+      # Configuration options for this Stage - this is just a subset
+      Order: 1 ## Stage order - total order is <stage_order> then <stack_order> within a stage
+      # Account: "12345678912" # Uncomment to have AWS account checking during deployment
+      StackPrefix: "dev-"
+      Region: "us-east-1"
+      Tags: ## tags for any stack in this stage
+        Environment: "dev"
+    DDBTable:
+      Extends: pbDDBTable ## Stack extends from blueprint
+      Parameters:
+        ReadCapacityUnits: "5"
+        WriteCapacityUnits: "5"
+  prod:
+    Config:
+      Extends: dev # We bring in all config and stacks from the Develop stage, then override whatever we want
+      Order: 2
+      StackPrefix: "prod-"
+      Region: "us-west-2"
+      Tags:
+        Environment: "prod"
+    DDBTable:
+      Parameters:
+        WriteCapacityUnits: "10" ## need more write in prod, rest is same as dev
