@@ -1,0 +1,17 @@
+graft src
+
+include *.rst
+include LICENSE
+
+exclude .codecov.yml
+exclude .readthedocs.yml
+exclude tox.ini
+
+prune docs
+prune developer
+prune tests
+prune data
+
+global-exclude *.py[cod] __pycache__/* *.so *.dylib 
+global-exclude tags
+global-exclude *.swp

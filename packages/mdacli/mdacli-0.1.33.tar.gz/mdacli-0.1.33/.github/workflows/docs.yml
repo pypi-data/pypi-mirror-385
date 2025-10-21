@@ -1,0 +1,53 @@
+name: Documentation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v5
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python
+      uses: actions/setup-python@v6
+      with:
+        python-version: "3.13"
+    - run: pip install tox gitpython
+
+    - name: Build docs
+      run: tox -e docs
+
+    - name: Check for Changelog
+      if: github.event_name == 'pull_request'
+      run: python ./developer/check_changelog.py
+
+    - name: put documentation in the website
+      run: |
+        git clone https://github.com/$GITHUB_REPOSITORY --branch gh-pages gh-pages
+        rm -rf gh-pages/.git
+        cd gh-pages
+
+        REF_KIND=$(echo $GITHUB_REF | cut -d / -f2)
+        if [[ "$REF_KIND" == "tags" ]]; then
+            DOC_KIND="stable"
+        else
+            DOC_KIND="latest"
+        fi
+
+        rm -rf $DOC_KIND
+        mv ../docs/build/html $DOC_KIND
+
+    - name: deploy to gh-pages
+      if: github.event_name == 'push'
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./gh-pages/
+        force_orphan: true
