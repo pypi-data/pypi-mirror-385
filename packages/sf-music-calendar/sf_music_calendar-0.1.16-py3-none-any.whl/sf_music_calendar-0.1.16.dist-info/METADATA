@@ -1,0 +1,51 @@
+Metadata-Version: 2.4
+Name: sf-music-calendar
+Version: 0.1.16
+Summary: Multi-venue music event scraper for San Francisco
+Author-email: Griffin Tarpenning <gtarpenning@gmail.com>
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+Requires-Dist: requests>=2.31.0
+Requires-Dist: beautifulsoup4>=4.12.0
+Requires-Dist: rich>=13.0.0
+Requires-Dist: lxml>=4.9.0
+Requires-Dist: python-dateutil>=2.8.0
+Provides-Extra: dev
+Requires-Dist: black; extra == "dev"
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: build; extra == "dev"
+Requires-Dist: twine; extra == "dev"
+
+# Musiclist
+
+Multi-venue music event scraper for San Francisco.
+
+<img width="1006" height="770" alt="cal" src="https://github.com/user-attachments/assets/21fdbe58-750b-474e-a623-557c9f027281" />
+
+<img width="599" height="348" alt="venue" src="https://github.com/user-attachments/assets/a2e352e8-72ea-4366-9fb6-e52295858e7d" />
+
+
+
+## Install
+```bash
+pip install sf-music-calendar
+```
+
+
+## Usage
+```bash
+music    # Show events for current + next month
+music scrape      # Show all upcoming events, force fetch
+music --help      # Full options
+```
+
+## Development
+```bash
+pip install -e .
+
+make test         # Run tests
+make format       # Format code
+```
+
+
+
