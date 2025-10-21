@@ -1,0 +1,15 @@
+[project]
+name = "dicom-info"
+version = "0.1.0"
+description = "Prints information about DIOCM files."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "pydicom>=3.0.1",
+]
+
+[tool.uv]
+package = true
+
+[project.scripts]
+dicom-info = "dicominfo:main"
