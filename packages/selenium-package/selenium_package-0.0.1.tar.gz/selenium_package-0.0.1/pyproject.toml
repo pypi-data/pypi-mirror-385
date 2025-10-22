@@ -1,0 +1,58 @@
+[project]
+name = "selenium_package"
+version = "0.0.1"
+authors = [
+  { name="João Gabriel Sampaio de Barros", email="jgabrielsb2002@gmail.com"},
+]
+description = "A Python package for Selenium automation with action and executor patterns."
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+dependencies = [
+    "pytest>=8.4.2",
+    "selenium>=4.36.0",
+    "sphinx>=7.4.7",
+]
+
+[project.urls]
+Homepage = "https://github.com/jgabrielsb-sb/selenium-package"
+Issues = "https://github.com/jgabrielsb-sb/selenium-package/issues"
+
+[build-system]
+requires = ["hatchling >= 1.26"]
+build-backend = "hatchling.build"
+
+# 👇 tell Hatchling exactly what to ship in the wheel
+[tool.hatch.build.targets.wheel]
+packages = ["src/selenium_package"]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.0.0",
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "mypy>=1.0.0",
+]
+
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--verbose",
+    "--cov=selenium_package",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    "--cov-report=xml",
+]
+
+
+

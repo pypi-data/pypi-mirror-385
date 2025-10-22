@@ -1,0 +1,104 @@
+Metadata-Version: 2.4
+Name: selenium_package
+Version: 0.0.1
+Summary: A Python package for Selenium automation with action and executor patterns.
+Project-URL: Homepage, https://github.com/jgabrielsb-sb/selenium-package
+Project-URL: Issues, https://github.com/jgabrielsb-sb/selenium-package/issues
+Author-email: João Gabriel Sampaio de Barros <jgabrielsb2002@gmail.com>
+License-Expression: MIT
+License-File: LICENSE
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.9
+Requires-Dist: pytest>=8.4.2
+Requires-Dist: selenium>=4.36.0
+Requires-Dist: sphinx>=7.4.7
+Provides-Extra: dev
+Requires-Dist: black>=23.0.0; extra == 'dev'
+Requires-Dist: isort>=5.12.0; extra == 'dev'
+Requires-Dist: mypy>=1.0.0; extra == 'dev'
+Requires-Dist: pytest-cov>=4.0.0; extra == 'dev'
+Requires-Dist: pytest>=7.4.0; extra == 'dev'
+Description-Content-Type: text/markdown
+
+# Selenium Package
+
+A Python package for Selenium automation with action and executor patterns.
+
+## Features
+
+- **BaseAction**: Abstract base class for creating Selenium actions
+- **BaseExecutor**: Abstract base class for executing actions with conditions and timeouts
+- **Exception Handling**: Custom exceptions for better error handling
+- **Type Hints**: Full type annotation support
+
+## Installation
+
+```bash
+pip install selenium-package
+```
+
+## Usage
+
+### Basic Action
+
+```python
+from selenium_package import BaseAction
+from selenium.webdriver import Chrome
+
+class ClickAction(BaseAction):
+    def _execute_action(self):
+        element = self.web_instance.find_element("id", "my-button")
+        element.click()
+        return "Button clicked successfully"
+
+# Usage
+driver = Chrome()
+action = ClickAction(web_instance=driver)
+result = action.run()
+```
+
+### Basic Executor
+
+```python
+from selenium_package import BaseExecutor
+
+class ClickExecutor(BaseExecutor):
+    def _is_condition_to_stop_met(self, result=None):
+        return result == "Button clicked successfully"
+
+# Usage
+executor = ClickExecutor(
+    action=ClickAction(web_instance=driver),
+    timeout=30,
+    wait_to_verify_condition=1
+)
+result = executor.run()
+```
+
+## Development
+
+### Setup
+
+```bash
+git clone https://github.com/jgabrielsb/selenium-package.git
+cd selenium-package
+pip install -e ".[dev]"
+```
+
+### Running Tests
+
+```bash
+pytest
+```
+
+### Code Formatting
+
+```bash
+black selenium_package tests
+isort selenium_package tests
+```
+
+## License
+
+MIT License - see LICENSE file for details.
