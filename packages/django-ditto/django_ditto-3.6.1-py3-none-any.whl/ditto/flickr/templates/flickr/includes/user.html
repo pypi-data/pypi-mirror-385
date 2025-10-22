@@ -1,0 +1,44 @@
+{% comment %}
+Display information about a Flickr user.
+
+Expects:
+
+* user -- A single Flickr User object.
+* account -- Optional, a Flickr Account object if this user has one.
+* perms -- Optional, Django perms.
+
+{% endcomment %}
+
+{% load l10n %}
+
+<div class="card mb-3 flickr-user">
+    <div class="card-body">
+        <img src="{{ user.avatar_url }}" class="float-left mr-2" alt="user icon" width="48" height="48">
+        <strong>{{ user.name }}</strong>
+    </div>
+    <ul class="list-group list-group-flush flickr-user-about">
+        {% if user.description %}
+            <li class="list-group-item flickr-user-description">{{ user.description }}</li>
+        {% endif %}
+        {% if user.location %}
+            <li class="list-group-item flickr-user-location">{{ user.location }}</li>
+        {% endif %}
+        <li class="list-group-item flickr-user-first-date">First upload: {{ user.photos_first_date|date:"M Y" }}</li>
+        <li class="list-group-item flickr-user-first-date-taken">First photo: {{ user.photos_first_date_taken|date:"M Y" }}</li>
+        {% if account == None or account.is_active %}
+            {% if user.permalink %}
+                <li class="list-group-item flickr-user-link"><a href="{{ user.permalink }}">At Flickr.com</a></li>
+            {% endif %}
+        {% endif %}
+        {% if perms and perms.flickr.can_change_user %}
+            <li class="list-group-item"><a href="{% url 'admin:flickr_user_change' user.id %}" title="Edit this user in the Django Admin">Edit</a></li>
+        {% endif %}
+    </ul>
+</div>
+
+<div class="card mb-3 flickr-user">
+    <ul class="list-group list-group-flush flickr-user-counts">
+        <li class="list-group-item">{{ user.photos_count|localize }} photo{{ user.photos_count|pluralize }}</li>
+        <li class="list-group-item">{{ user.photos_views|localize }} view{{ user.photos_views|pluralize }}</li>
+    </ul>
+</div>

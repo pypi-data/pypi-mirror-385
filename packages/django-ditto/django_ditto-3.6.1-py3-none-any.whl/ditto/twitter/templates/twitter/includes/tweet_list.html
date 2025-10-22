@@ -1,0 +1,35 @@
+{% comment %}
+Displays a list of Tweets, with pagination.
+
+Expects:
+ * tweet_list, a queryset of Tweets.
+ * perms - The Django perms object.
+ * page_obj, optional, a DiggPaginator instance or False (default).
+ * view - optional, 'list' (a generic list, the default), 'detail' or 'day'.
+{% endcomment %}
+
+{% if tweet_list|length > 0 %}
+
+    {% with view=view|default_if_none:'list' %}
+        {% if page_obj and page_obj.number > 1 %}
+            {% include 'ditto/includes/pagination.html' with page_obj=page_obj only %}
+        {% endif %}
+
+        <hr>
+        <div class="twitter-tweets">
+            {% for tweet in tweet_list %}
+                <div class="media twitter-tweet">
+                    {% include 'twitter/includes/tweet.html' with tweet=tweet perms=perms view=view only %}
+                </div>
+                <hr>
+            {% endfor %}
+        </div>
+
+        {% if page_obj|default:False %}
+            {% include 'ditto/includes/pagination.html' with page_obj=page_obj only %}
+        {% endif %}
+    {% endwith %}
+{% else %}
+
+    <p>There are no Tweets to show.</p>
+{% endif %}

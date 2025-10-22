@@ -1,0 +1,8 @@
+{% extends 'ditto/base.html' %}
+
+{% block flickr_nav_active %}active{% endblock %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{% url 'ditto:home' %}">Home</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'flickr:home' %}">Flickr</a></li>
+{% endblock %}

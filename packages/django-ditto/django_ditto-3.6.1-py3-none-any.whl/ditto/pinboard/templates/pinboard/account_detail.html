@@ -1,0 +1,31 @@
+{% extends 'pinboard/base.html' %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{% url 'ditto:home' %}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'pinboard:home' %}">Pinboard</a></li>
+    <li class="breadcrumb-item active">{{ account.username }}</li>
+{% endblock %}
+
+{% block content %}
+
+    <h1 class="my-4">
+        {% block title %}
+            Pinboard bookmarks by {{ account.username }}
+        {% endblock %}
+    </h1>
+
+    <div class="row">
+        <div class="col-md-3">
+            {% include 'pinboard/includes/account.html' with account=account perms=perms only %}
+
+            {% include 'pinboard/includes/annual_bookmark_counts.html' with account=account only %}
+        </div> <!-- .col -->
+
+        <div class="col-md-9">
+            {% include 'pinboard/includes/nav_tabs.html' with account=account active='bookmarks' only %}
+
+            {% include 'pinboard/includes/bookmark_list.html' with bookmark_list=bookmark_list page_obj=page_obj perms=perms only %}
+        </div> <!-- .col -->
+    </div> <!-- .row -->
+
+{% endblock content %}

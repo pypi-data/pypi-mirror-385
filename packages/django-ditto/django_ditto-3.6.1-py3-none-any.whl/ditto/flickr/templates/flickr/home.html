@@ -1,0 +1,49 @@
+{% extends 'flickr/base.html' %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{% url 'ditto:home' %}">Home</a></li>
+    <li class="breadcrumb-item active">Flickr</li>
+{% endblock %}
+
+{% block content %}
+
+    <h1 class="my-4">
+        {% block title %}
+            Flickr
+        {% endblock %}
+    </h1>
+
+    <div class="row">
+        <div class="col-md-3">
+            {% include 'ditto/includes/account_list.html' with account_list=account_list service_name='Flickr' only %}
+
+            {% load l10n %}
+            <div class="card mb-3">
+                <ul class="list-group list-group-flush flickr-user-counts">
+                    <li class="list-group-item">
+                        {{ page_obj.paginator.count|localize }} photo{{ page_obj.paginator.count|pluralize }}
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-body">
+                    <p class="card-text">
+                        <a href="{% url 'flickr:tag_list' %}">The most common tags</a>
+                    </p>
+                </div>
+            </div>
+
+            {% include 'flickr/includes/annual_photo_counts.html' only %}
+        </div> <!-- .col -->
+
+        <div class="col-md-9">
+            {% include 'flickr/includes/nav_tabs.html' with active='photos' only %}
+
+            {% include 'flickr/includes/sorting.html' with request=request order=order only %}
+
+            {% include 'flickr/includes/photo_columns.html' with request=request photo_list=photo_list order=order page_obj=page_obj perms=perms only %}
+        </div> <!-- .col -->
+    </div> <!-- .row -->
+
+{% endblock content %}

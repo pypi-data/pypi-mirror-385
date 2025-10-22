@@ -1,0 +1,40 @@
+{% extends "ditto/base.html" %}
+
+{% block head_title %}Ditto{% endblock %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item active">Home</li>
+{% endblock %}
+
+{% block content %}
+
+    {% block home_banner %}
+        {% block home_banner_title %}
+            <h1 class="display-4 mb-3">
+                {% block home_banner_title_content %}
+                    Ditto
+                {% endblock %}
+            </h1>
+        {% endblock %}
+        {% block home_banner_tagline %}
+            <p class="lead text-muted">
+                {% block home_banner_tagline_content %}
+                {% endblock %}
+            </p>
+        {% endblock %}
+    {% endblock %}
+
+    <div class="row">
+        <div class="col-md-9">
+            {% include 'ditto/includes/item_list.html' %}
+        </div>
+
+        {% block home_sidebar %}
+            <div class="col-md-3">
+                {% block home_sidebar_content %}
+                {% endblock %}
+            </div>
+        {% endblock %}
+    </div> <!-- .row -->
+
+{% endblock %}

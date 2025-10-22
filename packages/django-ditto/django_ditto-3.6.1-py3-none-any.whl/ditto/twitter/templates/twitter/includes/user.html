@@ -1,0 +1,54 @@
+{% comment %}
+Display information about a Twitter user.
+Expects:
+
+* user -- A single Twitter User object.
+* account -- Optional, a Twitter Account object if this user has one.
+* perms -- Optional, Django perms.
+
+{% endcomment %}
+
+{% load l10n %}
+
+<div class="card mb-3 twitter-user">
+    <div class="card-body">
+        <h4 class="card-title mb-0 twitter-user-name">
+            {{ user.name }}
+            <small class="text-muted twitter-user-screenname">{{ user }}</small>
+        </h4>
+    </div>
+    <ul class="list-group list-group-flush twitter-user-about">
+        {% if user.description %}
+            <li class="list-group-item twitter-user-description">{{ user.description_html|safe }}</li>
+        {% endif %}
+        {% if user.location %}
+            <li class="list-group-item twitter-user-location">{{ user.location }}</li>
+        {% endif %}
+        {% if user.url %}
+            <li class="list-group-item twitter-user-url">{{ user.url|cut:"http://"|cut:"https://"|urlizetrunc:15 }}</li>
+        {% endif %}
+        <li class="list-group-item twitter-user-joined">Joined {{ user.created_at|date:"M Y" }}</li>
+        {% if account == None or account.is_active %}
+            <li class="list-group-item twitter-user-link"><a href="{{ user.permalink }}">At Twitter.com</a></li>
+        {% endif %}
+        {% if perms and perms.twitter.can_change_user %}
+            <li class="list-group-item"><a href="{% url 'admin:twitter_user_change' user.id %}" title="Edit this user in the Django Admin">Edit</a></li>
+        {% endif %}
+    </ul>
+</div>
+
+<div class="card mb-3 twitter-user">
+    <ul class="list-group list-group-flush twitter-user-counts">
+        <li class="list-group-item">{{ user.statuses_count|localize }} tweet{{ user.statuses_count|pluralize }}</li>
+        <li class="list-group-item">{{ user.favorites_count|localize }} like{{ user.favorites_count|pluralize }}</li>
+        <li class="list-group-item">{{ user.followers_count|localize }} follower{{ user.followers_count|pluralize }}</li>
+        <li class="list-group-item">Following {{ user.friends_count|localize }}</li>
+        <li class="list-group-item">On {{ user.listed_count|localize }} list{{ user.listed_count|pluralize }}</li>
+        {% load ditto_core %}
+        <li class="list-group-item">
+            <small class="text-muted">
+                As of {% display_time user.fetch_time %}
+            </small>
+        </li>
+    </ul>
+</div>
