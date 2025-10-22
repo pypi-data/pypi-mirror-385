@@ -1,0 +1,86 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "vt-commons"
+version = "0.0.1dev9"
+description = "🔥Reusable common utilities, interfaces and implementations for python projects."
+readme = "README.md"
+authors = [
+    {name = "Suhas Krishna Srivastava", email = "suhas.srivastava@vaastav.tech"}
+]
+maintainers = [
+    {name = "Suhas Krishna Srivastava", email = "suhas.srivastava@vaastav.tech"}
+]
+requires-python = ">=3.12"
+
+classifiers = [
+  "Development Status :: 1 - Planning",
+
+  "Intended Audience :: Developers",
+  "Intended Audience :: Education",
+
+  "Topic :: Education",
+  "Topic :: Software Development :: Libraries",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Utilities",
+
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.15",
+  "Programming Language :: Python :: 3 :: Only",
+
+  "Typing :: Typed"
+]
+license = "Apache-2.0"
+license-files = ["LICEN[CS]E*", "AUTHORS.md"]
+
+[project.urls]
+homepage = "https://github.com/Vaastav-Technologies/py-commons"
+source = "https://github.com/Vaastav-Technologies/py-commons"
+issues = "https://github.com/Vaastav-Technologies/py-commons/issues"
+
+
+[dependency-groups]
+lint = ["ruff"]
+typecheck = ["mypy"]
+dev = [{include-group = "lint"}, {include-group = "typecheck"}]
+test = ["pytest"]
+cover = [{include-group = "test"}, "pytest-cov"]
+multitest = ["tox"]
+doc = ["sphinx", "sphinx-argparse"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+namespaces = true
+
+[tool.tox]
+legacy_tox_ini = """
+    [tox]
+    env_list =
+        py312
+
+    [testenv]
+    deps =
+      pytest
+      sphinx
+      sphinx-argparse
+    commands =
+      python -m pytest --doctest-glob=*.rst --doctest-modules .
+      python -m doctest README.md
+      sphinx-build -q -b doctest docs/source docs/build/doctest
+
+    [testenv:docs]
+    deps =
+      sphinx
+      sphinx-argparse
+    commands =
+      sphinx-build -q -b html docs/source docs/build/html
+"""
+
+[tool.pytest.ini_options]
+addopts = ["--doctest-modules", # Test all the doctests
+    "--doctest-glob=*.md"] # Test doctests included as examples in the md files.
