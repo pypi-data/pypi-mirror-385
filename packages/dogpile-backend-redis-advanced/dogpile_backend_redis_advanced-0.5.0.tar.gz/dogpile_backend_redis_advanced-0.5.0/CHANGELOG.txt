@@ -1,0 +1,101 @@
+v0.5.0
+    working with modern dogpile
+    - drop py3.7, py3.8, py3.9
+    
+    backwards incompatibilities:
+    
+    dogpile had some extensive changes in 1.1.
+    this library is now implemented slightly differently.  
+
+    dogpile now has a concept of a "BytesBackend" that stores serialized forms
+    of the payload.  these types of backends currently pass serialized forms of
+    data through the `wraps`, instead of the raw objects.
+    
+    to get around this contraint, this package now implements redis as
+    non-serialized backend, and encoding is handled via a ProxyBackend instead
+    of in the backend itself.
+    
+    the default lock_prefix has been changed:
+    
+        - _lock
+        - _lok.
+    
+    This "period" makes the name more readable when looking at keys, while the size
+    is preserved by dropping the "c".
+    
+    Because the serializers and locks have changed, users should flush their cache
+    when upgrading this package.
+    
+    renamings:
+        `dogpile_backend_redis_advanced_hstore` is now `dogpile_backend_redis_advanced.hstore`
+        
+    new backend:
+        `dogpile_backend_redis_advanced.already_serialized`
+    
+    packaging updates
+
+v0.4.2
+    missed py.typed
+
+v0.4.1
+    missed py.typed
+
+v0.4.0
+    initial typing support
+    drop py2
+
+v0.3.3
+	improving py3 support
+	some prep for py2/py3 on "dogpile.cache>=1.0"
+
+v0.3.2
+	packaging fixes
+
+v0.3.1 
+	moving ancillary files into /experiments
+	committed some untracked experiments
+
+v0.3.0
+	packaging fixes
+	upgrade black
+	pre-commit
+	updated requirements because 1.0.0 of dogpile.cache is py3 only
+	moved from travis to github actions
+
+v0.2.2
+	2020.06.08 - py2 and py3 tests pass
+	2019.09.19 - black formatting
+	2019.05.31 - standardize imports to use `dogpile.util.compat.pickle` instead of our own detection
+
+v0.2.1
+	2019.04.26
+	undid some aggressive `list()` encapsulating by the 2to3 tool
+
+v0.2.0
+	2019.04.24
+	full Python3 compatibility of tests and demo files.  the core package basically worked before, but now officially does.
+
+2016.11.15
+	adding travis
+
+v 0.1.3
+	improved the previous version with a factory for dumps
+
+v 0.1.2
+	aliased loads/dumps on multi functions into a local variable; on larger lists this may be faster
+	
+v 0.1.1
+	some flake8 cleanup
+	changed the default serializer to a module function instead of a lambda.
+	- this should be easier for inspection and slighter better for memory as it
+	  is now a single global for the package.
+
+v 0.1.0
+	added `lock_class`
+	added `lock_prefix`
+
+v 0.0.2
+	packaging fix
+	
+v 0.0.1
+	initial release
