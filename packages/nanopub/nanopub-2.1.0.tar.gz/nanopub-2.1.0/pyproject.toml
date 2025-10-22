@@ -1,0 +1,88 @@
+[project]
+name = "nanopub"
+description = "Python client for Nanopublications"
+readme = "README.md"
+requires-python = ">=3.12.0,<4.0.0"
+authors = [
+    { name = "Robin Richardson", email = "r.richardson@esciencecenter.nl" },
+    { name = "Djura Smits" },
+    { name = "Sven van den Burg" },
+    { name = "Vincent Emonet", email = "vincent.emonet@gmail.com" }
+]
+keywords = [
+    "Nanopublication",
+    "RDF",
+    "Linked Data",
+    "Publishing"
+]
+classifiers = [
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12"
+]
+dynamic = ["version"]
+
+dependencies = [
+    "rdflib >=6.0.2",
+    "requests",
+    "typer",
+    "yatiml",
+    "pycryptodome >=3.15.0",
+    "SPARQLWrapper",
+    "pyshacl"
+]
+
+[tool.poetry]
+version = "2.1.0" # base version
+
+[dependency-groups]
+test = [
+    "pytest >=7.1.3",
+    "pytest-cov >=3.0.0",
+    "coveralls",
+    "mypy >=0.991",
+    "isort >=5.11.0",
+    "flake8 >=5.0.0",
+    "Flake8-pyproject >=1.2.2",
+    "flaky",
+]
+
+docs = [
+    "mkdocs >=1.4.2",
+    "mkdocs-material >=8.2.7",
+    "mkdocstrings[python] >=0.19.1",
+    "mdx-include >=1.4.1",
+    "mkdocs-markdownextradata-plugin >=0.2.5",
+]
+
+dev = [
+    "pre-commit >=2.17.0,<3.0.0",
+    "autoflake >=1.4.0,<2.0.0",
+    "jupyter",
+    "notebook",
+    "types-requests",
+]
+
+[project.scripts]
+np = "nanopub.__main__:cli"
+
+
+[project.urls]
+Homepage = "https://nanopublication.github.io/nanopub-py/"
+Documentation = "https://nanopublication.github.io/nanopub-py/"
+History = "https://github.com/Nanopublication/nanopub-py/releases"
+Tracker = "https://github.com/Nanopublication/nanopub-py/issues"
+Source = "https://github.com/Nanopublication/nanopub-py"
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+markers = [
+    "no_rsa_key: mark a test as a test only run when there is no nanopub RSA key setup.",
+    "network: mark a test that requires network access.",
+    "flaky: mark test as flaky to rerun it on failure",
+]
