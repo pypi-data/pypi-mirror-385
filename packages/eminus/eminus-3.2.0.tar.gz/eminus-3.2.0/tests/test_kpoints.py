@@ -1,0 +1,242 @@
+# SPDX-FileCopyrightText: 2023 The eminus developers
+# SPDX-License-Identifier: Apache-2.0
+"""Test the k-points functionalities."""
+
+import copy
+import math
+
+import numpy as np
+import pytest
+
+from eminus import backend as xp
+from eminus.data import LATTICE_VECTORS, SPECIAL_POINTS
+from eminus.kpoints import (
+    bandpath,
+    gamma_centered,
+    get_brillouin_zone,
+    KPoints,
+    kpoints2axis,
+    monkhorst_pack,
+)
+from eminus.testing import assert_allclose, assert_array_equal
+
+
+def test_lattice():
+    """Test the setting of lattice."""
+    kpts = KPoints("fcc")
+    print(kpts)  # Test that the object can be printed
+    assert kpts.lattice == "fcc"
+
+
+@pytest.mark.parametrize(
+    ("a", "ref"), [(None, xp.eye(3)), (2, 2 * xp.eye(3)), (xp.ones((3, 3)), xp.ones((3, 3)))]
+)
+def test_a(a, ref):
+    """Test the setting of a."""
+    kpts = KPoints("sc", a).build()
+    assert_array_equal(kpts.a, ref)
+
+
+@pytest.mark.parametrize(("kmesh", "ref"), [(None, None), (2, [2] * 3), ([1, 2, 3], [1, 2, 3])])
+def test_kmesh(kmesh, ref):
+    """Test the setting of kmesh."""
+    kpts = KPoints("fcc")
+    kpts.kmesh = kmesh
+    kpts.build()
+    assert kpts.path is None
+    assert_array_equal(kpts.kmesh, ref)
+    assert_allclose(xp.sum(kpts.wk), 1)
+    assert len(kpts.wk) == kpts.Nk
+    assert len(kpts.k) == kpts.Nk
+
+
+def test_kshift():
+    """Test the setting of kshift."""
+    kpts = KPoints("fcc")
+    kpts.kshift = [1] * 3
+    kpts.build()
+    assert_array_equal(kpts.k, 1)
+
+
+def test_gamma_centered():
+    """Test the setting of gamma_centered."""
+    kpts = KPoints("fcc")
+    kpts.gamma_centered = True
+    kpts.kmesh = 2
+    kpts.build()
+    assert_array_equal(kpts.k[0], 0)
+    kpts.gamma_centered = False
+    kpts.build()
+    assert xp.any(kpts.k[0] != 0)
+
+
+@pytest.mark.parametrize(("path", "ref"), [("G", 0), ("gX", [[0, 0, 0], [0, 2 * math.pi, 0]])])
+def test_path(path, ref):
+    """Test the setting of path."""
+    kpts = KPoints("fcc")
+    kpts.path = path
+    kpts.build()
+    assert kpts.kmesh is None
+    assert_allclose(kpts.k, ref)
+
+
+def test_k_scaled():
+    """Test the setting of k_scaled."""
+    kpts = KPoints("sc")
+    kpts.kmesh = 2
+    kpts.build()
+    assert_allclose(xp.abs(kpts.k_scaled - 1 / 4), 1 / 4)
+
+
+def test_monkhorst_pack_generation():
+    """Test the Monkhorst-Pack mesh generation."""
+    k_points = monkhorst_pack((1, 1, 1))
+    assert_array_equal(k_points, 0)
+    k_points = monkhorst_pack((2, 2, 2))
+    assert_array_equal(xp.abs(k_points), 1 / 4)
+
+
+def test_gamma_centered_generation():
+    """Test the Gamma centered mesh generation."""
+    k_points = gamma_centered((1, 1, 1))
+    assert_array_equal(k_points, 0)
+    k_points = gamma_centered((2, 2, 2))
+    assert_array_equal(k_points[0], 0)
+    assert xp.all(k_points >= 0)
+
+
+def test_bandpath_lgx():
+    """Test a simple band path in the FCC lattice."""
+    s_points = [SPECIAL_POINTS["fcc"]["L"], SPECIAL_POINTS["fcc"]["G"], SPECIAL_POINTS["fcc"]["X"]]
+
+    kpts = KPoints("fcc", LATTICE_VECTORS["fcc"])
+    kpts.path = "LGX"
+    kpts.Nk = 2  # Test that that Nk gets set to 3, since 3 special points are set
+    k_points = bandpath(kpts.build())
+    assert len(k_points) == 3
+    assert_array_equal(k_points, s_points)
+
+    kpts.Nk = 10
+    k_points = bandpath(kpts.build())
+    assert len(k_points) == 10
+    assert_array_equal(k_points[[0, 4, 9]], s_points)
+
+    kpts.Nk = 50
+    k_points = bandpath(kpts.build())
+    assert len(k_points) == 50
+    assert_array_equal(k_points[[0, 23, 49]], s_points)
+
+
+def test_bandpath_xukg():
+    """Test a simple band path in the FCC lattice that includes a jump between special points."""
+    s_points = [
+        SPECIAL_POINTS["fcc"]["X"],
+        SPECIAL_POINTS["fcc"]["U"],
+        SPECIAL_POINTS["fcc"]["K"],
+        SPECIAL_POINTS["fcc"]["G"],
+    ]
+
+    kpts = KPoints("fcc", LATTICE_VECTORS["fcc"])
+    kpts.path = "XU,KG"
+    kpts.Nk = 4
+    k_points = bandpath(kpts.build())
+    assert len(k_points) == 4
+    assert_array_equal(k_points, s_points)
+
+    kpts.Nk = 10
+    k_points = bandpath(kpts.build())
+    assert len(k_points) == 10
+    assert_array_equal(k_points[[0, 3, 4, 9]], s_points)
+
+    kpts.Nk = 50
+    k_points = bandpath(kpts.build())
+    assert len(k_points) == 50
+    assert_array_equal(k_points[[0, 13, 14, 49]], s_points)
+
+
+def test_kpoints2axis_lgx():
+    """Test the k-point axis calculation for a simple band path in the FCC lattice."""
+    kpts = KPoints("fcc", LATTICE_VECTORS["fcc"])
+    kpts.path = "LGX"
+    kpts.Nk = 20
+    kpts.build()
+    k_axis, s_axis, labels = kpoints2axis(kpts)
+    assert labels == ["L", "G", "X"]
+    assert len(s_axis) == 3
+    assert len(k_axis) == 20
+    assert k_axis[0] == 0
+    for s in s_axis:
+        assert s in k_axis
+
+
+def test_kpoints2axis_xukg():
+    """Test the k-point axis calculation for a simple band path that includes a jump between."""
+    kpts = KPoints("fcc", LATTICE_VECTORS["fcc"])
+    kpts.path = "XU,KG"
+    kpts.Nk = 25
+    kpts.build()
+    k_axis, s_axis, labels = kpoints2axis(kpts)
+    assert labels == ["X", "U,K", "G"]
+    assert len(s_axis) == 3
+    assert len(k_axis) == 25
+    assert k_axis[0] == 0
+    assert k_axis[6] == k_axis[7]  # No distance between jumps
+    for s in s_axis:
+        assert s in k_axis
+
+
+def test_get_brillouin_zone():
+    """Test the Brillouin zone generation."""
+    ridges = get_brillouin_zone(xp.eye(3))
+    # The Brillouin zone of a cubic lattice is cubic again
+    assert_allclose(np.abs(ridges), math.pi)
+
+
+def test_trs():
+    """Test time reversal symmetry."""
+    kpts = KPoints("fcc", LATTICE_VECTORS["fcc"])
+    kpts.gamma_centered = False
+    kpts.kmesh = 3
+    kpts.build()
+    old_Nk = kpts.Nk
+    old_k = kpts.k
+    old_wk = kpts.wk
+    kpts.trs()
+    assert old_Nk > kpts.Nk
+    assert len(old_k) > len(kpts.k)
+    assert len(old_wk) > len(kpts.wk)
+    assert_allclose(xp.sum(kpts.wk), 1)
+    # Make sure the Gamma-point included in the symmetrized k-points
+    assert xp.any(xp.isin(kpts.k, xp.asarray([0, 0, 0])))
+
+
+def test_trs_ordering():
+    """Test that the correct weights are adjusted."""
+    kpts = KPoints("sc", 1)
+    kpts.gamma_centered = False
+    kpts.kmesh = 2
+    kpts.build()
+    kpts.wk[2] = 1
+    kpts.wk[5] = 0.5
+    old_wk = copy.deepcopy(kpts.wk)
+    old_k = kpts.k
+    kpts.trs()
+    assert_allclose(old_wk[2] + old_wk[5], kpts.wk[1])
+    assert_allclose(old_k[2], -kpts.k[1])
+
+
+def test_trs_building_and_logging():
+    """Test that k-points are being built and only symmetrized when needed."""
+    kpts = KPoints("sc", 1)
+    kpts.kmesh = 2
+    assert kpts.Nk == 1  # Unbuild
+    kpts.trs()  # This should print a warning
+    assert kpts.Nk == 8  # Build
+
+
+if __name__ == "__main__":
+    import inspect
+    import pathlib
+
+    file_path = pathlib.Path(inspect.stack()[0][1])
+    pytest.main(file_path)
