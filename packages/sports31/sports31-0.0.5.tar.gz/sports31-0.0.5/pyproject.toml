@@ -1,0 +1,62 @@
+[build-system]
+requires = ["setuptools >= 70"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sports31"
+version = "0.0.5"
+# dynamic = ["vers5on"]
+requires-python = ">=3.6"
+authors = [{ name = "Tom", email = "huqh1101@gmail.com" }]
+maintainers = [{ name = "Tom", email = "huqh1101@gmail.com" }]
+dependencies = [
+    'click==8.1.8',
+    'tenacity==9.0.0',
+    "requests==2.32.3",
+    "PyYAML==6.0.2",
+    "tqdm==4.67.1",
+    "timer1101==0.0.3",
+    "coloredlogs==15.0.1",
+    "verboselogs==1.7",
+    "pandas==2.2.3",
+]
+description = "process data"
+keywords = ["sports data", "coros"]
+# readme = { file = "./rs1101/README.md", content-type = "text/markdown" }
+readme = { file = "README.md", content-type = "text/markdown" }
+# readme = { file = "README.rst", content-type = "text/x-rst" }
+license = { text = "MIT License" }
+classifiers = [
+    # How mature is this project? Common values are
+    #   3 - Alpha
+    #   4 - Beta
+    #   5 - Production/Stable
+    "Development Status :: 3 - Alpha",
+
+    # Indicate who your project is intended for
+    "Intended Audience :: Developers",
+    "Topic :: Software Development",
+
+    # Pick your license as you wish (see also "license" above)
+    "License :: OSI Approved :: MIT License",
+
+    # Specify the Python versions you support here.
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+]
+
+[project.optional-dependencies]
+test = ["unittest"]
+
+[project.scripts]
+crawl = "sports31.crawl.cli:cli"
+bmi = "sports31.bmi.bmi_cli:cli"
+
+[tool.setuptools]
+packages = ['sports31', "sports31.crawl", "sports31.bmi"]
+
+# [tool.setuptools.package-dir]
+# rs1101 = './'
+# [tool.setuptools.packages.find]
+# where = ['sports31']
+# exclude = ['venv', 'venv.*']
