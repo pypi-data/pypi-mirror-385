@@ -1,0 +1,256 @@
+Metadata-Version: 2.4
+Name: hidennsim
+Version: 1.0.1
+Summary: Secure MCP server with JAX-based numerical tools
+Home-page: https://github.com/yourusername/hidennsim
+Author: HIDENNSIM Team
+Author-email: HIDENNSIM Team <support@hidennsim.com>
+License: Proprietary
+Project-URL: Homepage, https://github.com/yourusername/hidennsim
+Project-URL: Documentation, https://hidennsim.readthedocs.io
+Project-URL: Issues, https://github.com/yourusername/hidennsim/issues
+Keywords: mcp,jax,numerical,llm,claude
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: mcp>=1.0.0
+Requires-Dist: cryptography>=41.0.0
+Provides-Extra: cpu
+Requires-Dist: jax[cpu]>=0.4.20; extra == "cpu"
+Provides-Extra: cuda
+Requires-Dist: jax[cuda12]>=0.4.20; extra == "cuda"
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0.0; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.21.0; extra == "dev"
+Requires-Dist: black>=23.0.0; extra == "dev"
+Requires-Dist: mypy>=1.0.0; extra == "dev"
+Requires-Dist: cibuildwheel>=2.16.0; extra == "dev"
+Dynamic: author
+Dynamic: home-page
+Dynamic: requires-python
+
+# HIDENNSIM - Secure MCP Server with JAX Integration
+
+A licensed Model Context Protocol (MCP) server providing JAX-based numerical computation tools with hardware-bound license validation.
+
+## Features
+
+- ✅ MCP server with `add_jax` tool for floating-point addition using JAX
+- ✅ Layered security with Cython binary compilation (source code protected)
+- ✅ Hardware-bound license validation system
+- ✅ Cross-platform support (Windows, macOS, Linux)
+- ✅ Available on PyPI - simple `pip install` installation
+- ✅ Integration guides for Claude Desktop, Cursor, and ChatGPT
+
+## Security
+
+HIDENNSIM uses multiple layers of protection:
+
+1. **Cython Compilation**: Core modules compiled to binary (.pyd/.so) for source code protection
+2. **License Validation**: Hardware-bound licenses tied to machine fingerprint
+3. **Encrypted Licensing**: Secure license file encryption with runtime validation
+4. **Legal Protection**: Proprietary license terms and copyright protection
+
+When installed via PyPI, users receive only compiled binaries - source code for security-sensitive modules is not distributed.
+
+## Quick Start
+
+### 1. Create Virtual Environment (Recommended)
+
+Creating a virtual environment isolates HIDENNSIM and its dependencies from your system Python, preventing conflicts with other projects.
+
+**macOS/Linux:**
+```bash
+python3 -m venv hidennsim-env
+source hidennsim-env/bin/activate
+```
+
+**Windows (PowerShell):**
+```powershell
+python -m venv hidennsim-env
+.\hidennsim-env\Scripts\Activate.ps1
+```
+
+**Windows (Command Prompt):**
+```cmd
+python -m venv hidennsim-env
+hidennsim-env\Scripts\activate.bat
+```
+
+> **Note:** Your terminal prompt should now show `(hidennsim-env)` indicating the virtual environment is active.
+
+### 2. Install HIDENNSIM
+
+**Standard Installation (PyPI):**
+
+```bash
+pip install hidennsim
+```
+
+**Alternative: Install from Wheel File**
+
+If you received a wheel file (.whl) directly:
+
+**Windows (PowerShell):**
+```powershell
+pip install C:\Path\To\hidennsim-1.0.0-cp313-cp313-win_amd64.whl
+```
+
+**macOS/Linux:**
+```bash
+pip install /path/to/hidennsim-1.0.0-cp313-cp313-win_amd64.whl
+```
+
+> **Note:** For wheel-based installation details, see [CLIENT_INSTALLATION.md](CLIENT_INSTALLATION.md).
+
+### 3. Install JAX
+
+Choose the appropriate JAX installation for your system:
+
+**CPU-Only:**
+```bash
+pip install "jax[cpu]"
+```
+
+**GPU-Accelerated (NVIDIA GPU with CUDA):**
+```bash
+pip install "jax[cuda12]"
+```
+
+### 4. Get Hardware Fingerprint
+
+```bash
+hidennsim-license hardware
+```
+
+**Example output:**
+```
+🖥️  Hardware Fingerprint:
+   sha256:a1b2c3d4e5f6...
+
+📝 Provide this fingerprint when purchasing a license.
+```
+
+**Important:** Copy this fingerprint - you'll need it to obtain your license.
+
+### 5. Obtain License Key
+
+Contact **sales@hidennsim.com** with:
+- Your email address
+- Hardware fingerprint from Step 4
+- Desired license duration (1 year, 2 years, etc.)
+
+You will receive a `license.key` file via email.
+
+### 6. Activate License
+
+Once you receive your `license.key` file:
+
+```bash
+hidennsim-license activate /path/to/license.key
+```
+
+**Success message:**
+```
+✅ License activated successfully!
+
+📄 License Information:
+   License ID: HNNS-A1B2-C3D4-E5F6-G7H8
+   Issued to:  user@example.com
+   Expires:    2026-10-18
+```
+
+### 7. Configure LLM
+
+#### Claude Desktop Config Location
+
+**macOS:**
+```
+~/Library/Application Support/Claude/claude_desktop_config.json
+```
+
+**Windows:**
+```
+%APPDATA%\Claude\claude_desktop_config.json
+```
+
+**Linux:**
+```
+~/.config/Claude/claude_desktop_config.json
+```
+
+#### Configuration
+
+Add to your Claude Desktop config:
+
+**If virtual environment is active when starting Claude Desktop:**
+```json
+{
+  "mcpServers": {
+    "hidennsim": {
+      "command": "hidennsim",
+      "args": [],
+      "env": {}
+    }
+  }
+}
+```
+
+**OR use full path to virtual environment executable:**
+
+**macOS/Linux:**
+```json
+{
+  "mcpServers": {
+    "hidennsim": {
+      "command": "/full/path/to/hidennsim-env/bin/hidennsim",
+      "args": [],
+      "env": {}
+    }
+  }
+}
+```
+
+**Windows:**
+```json
+{
+  "mcpServers": {
+    "hidennsim": {
+      "command": "C:\\full\\path\\to\\hidennsim-env\\Scripts\\hidennsim.exe",
+      "args": [],
+      "env": {}
+    }
+  }
+}
+```
+
+## Documentation
+
+### User Documentation
+- [Installation Guide](docs/installation.md)
+- [Configuration Guide](docs/configuration.md)
+- [License Activation](docs/license-activation.md)
+- [Troubleshooting](docs/troubleshooting.md)
+- [Client Installation (Wheel-based)](CLIENT_INSTALLATION.md)
+
+### Developer Documentation
+- [PyPI Implementation Complete](PYPI_IMPLEMENTATION_COMPLETE.md) - Implementation summary and quick commands
+- [Cython Security Analysis](CYTHON_PYPI_SECURITY_ANALYSIS.md) - Security architecture and threat model
+- [License Issue Resolution](build_scripts/LICENSE_ISSUE_RESOLUTION.md) - License signature validation troubleshooting
+- [Critical Update Required](CRITICAL_UPDATE_REQUIRED.md) - **IMPORTANT:** PyPI package update status
+
+## System Requirements
+
+- **Python:** 3.10 or higher
+- **Operating System:** Windows 10+, macOS 12+, or Linux (Ubuntu 20.04+)
+- **RAM:** 4GB minimum (8GB recommended for GPU acceleration)
+- **Disk Space:** 1GB for installation
+
+## License
+
+Proprietary - Contact support@hidennsim.com for licensing information.
+
+## Support
+
+- **Email:** support@hidennsim.com
+- **Documentation:** https://hidennsim.readthedocs.io
+- **Issues:** https://github.com/yourusername/hidennsim/issues
