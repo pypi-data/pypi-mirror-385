@@ -1,0 +1,39 @@
+Metadata-Version: 2.4
+Name: packetpy
+Version: 0.1.0
+Summary: Windows raw packet sniffer (TCP/UDP) module
+Home-page: https://github.com/arunsundark01
+Author: Arun Sundar K
+Author-email: karthicksundar2001@gmail.com
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Topic :: System :: Networking
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: license-file
+Dynamic: requires-python
+Dynamic: summary
+
+# PyPacket
+
+Windows raw packet sniffer (TCP/UDP) module.
+
+## Example
+
+## python
+import pypacket
+
+sniffer = pypacket.WinRawSniffer("192.168.1.1", timeout=10)
+callback = pypacket.make_match_callback(sniffer, "8.8.8.8", 443)
+sniffer.start(callback)
+while sniffer.running:
+    pass
+sniffer.stop()
