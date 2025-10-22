@@ -1,0 +1,69 @@
+[build-system]
+requires = ["uv_build>=0.8.14,<0.9.0"]
+build-backend = "uv_build"
+
+[project]
+name = "structflow"
+version = "3.0.1"
+description = "A Python library for programmatic HTML generation with type safety and a clean API"
+readme = "README.md"
+license = "MIT"
+authors = [
+    { name = "Pedro José Mora Gallegos", email = "pedrojosemoragallegos@outlook.de" },
+]
+requires-python = ">=3.10,<3.14"
+keywords = ["html", "generation", "web", "markup", "template", "type-safe"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Text Processing :: Markup :: HTML",
+    "Topic :: Software Development :: Code Generators",
+    "Typing :: Typed",
+]
+
+[project.urls]
+Homepage = "https://github.com/pedrojosemoragallegos/structflow"
+Repository = "https://github.com/pedrojosemoragallegos/structflow"
+
+[tool.mypy]
+strict = true
+warn_unreachable = true
+warn_unused_configs = true
+warn_redundant_casts = true
+warn_no_return = true
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+
+[tool.ruff.lint]
+extend-select = ["I", "D205", "D415"]
+select = ["ALL"]
+ignore = [
+    "D100", # docstring in public module
+    "D101", # docstring
+    "D102", # docstring public method
+    "D103", # docstring in public function
+    "D104", # docstring public packageRuff
+    "D105", # docstring magic function
+    "D107", # docstring __init__
+]
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[dependency-groups]
+dev = ["mypy>=1.18.1", "ruff>=0.13.1", "typing-extensions>=4.15.0"]
