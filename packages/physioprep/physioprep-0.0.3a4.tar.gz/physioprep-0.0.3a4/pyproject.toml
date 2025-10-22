@@ -1,0 +1,29 @@
+[project]
+name = "physioprep"
+description = ""
+authors = [
+    {name = "Your Name",email = "you@example.com"}
+]
+readme = "README.md"
+requires-python = ">=3.10,<4.0"
+dependencies = [
+    "numpy (<2.0)",
+    "pandas (>=2.3.2,<3.0.0)",
+    "jupyter (>=1.1.1,<2.0.0)",
+    "wfdb (>=4.3.0,<5.0.0)",
+    "requests (>=2.32.5,<3.0.0)",
+    "pooch (>=1.8.2,<2.0.0)",
+    "tqdm (>=4.67.1,<5.0.0)",
+]
+
+[tool.poetry]
+version = "0.0.3a4"
+packages = [{include = "physioprep", from = "src"}]
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.4.2"
+pytest-cov = "^7.0.0"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
