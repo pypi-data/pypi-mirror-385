@@ -1,0 +1,24 @@
+from udpa.annotations import status_pb2 as _status_pb2
+from udpa.annotations import versioning_pb2 as _versioning_pb2
+from validate import validate_pb2 as _validate_pb2
+from google.protobuf import descriptor as _descriptor
+from google.protobuf import message as _message
+from typing import ClassVar as _ClassVar, Optional as _Optional
+
+DESCRIPTOR: _descriptor.FileDescriptor
+
+class FilterConfig(_message.Message):
+    __slots__ = ("content_type", "withhold_grpc_frames", "response_size_header")
+    CONTENT_TYPE_FIELD_NUMBER: _ClassVar[int]
+    WITHHOLD_GRPC_FRAMES_FIELD_NUMBER: _ClassVar[int]
+    RESPONSE_SIZE_HEADER_FIELD_NUMBER: _ClassVar[int]
+    content_type: str
+    withhold_grpc_frames: bool
+    response_size_header: str
+    def __init__(self, content_type: _Optional[str] = ..., withhold_grpc_frames: bool = ..., response_size_header: _Optional[str] = ...) -> None: ...
+
+class FilterConfigPerRoute(_message.Message):
+    __slots__ = ("disabled",)
+    DISABLED_FIELD_NUMBER: _ClassVar[int]
+    disabled: bool
+    def __init__(self, disabled: bool = ...) -> None: ...
