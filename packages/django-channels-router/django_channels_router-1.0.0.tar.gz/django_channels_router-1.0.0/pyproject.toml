@@ -1,0 +1,64 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "django-channels-router"
+version = "1.0.0"
+description = "HTTP-style WebSocket routing for Django Channels."
+readme = "README.md"
+requires-python = ">=3.11"
+license-files = ["LICENSE"]
+authors = [
+  { name = "Alireza Tabatabaeian", email = "alireza.tabatabaeian@gmail.com" }
+]
+maintainers = [
+  { name = "Alireza Tabatabaeian", email = "alireza.tabatabaeian@gmail.com" }
+]
+
+keywords = [
+  "django",
+  "channels",
+  "websocket",
+  "router",
+  "async",
+  "real-time",
+  "observable-socket"
+]
+
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Environment :: Web Environment",
+  "Framework :: Django",
+  "Framework :: Django :: 4.2",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Internet :: WWW/HTTP",
+  "Topic :: Software Development :: Libraries :: Python Modules"
+]
+
+dependencies = [
+  "django>=4.2",
+  "channels>=4.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/Alireza-Tabatabaeian/django-channels-router"
+Documentation = "https://github.com/Alireza-Tabatabaeian/django-channels-router"
+Source = "https://github.com/Alireza-Tabatabaeian/django-channels-router"
+Issues = "https://github.com/Alireza-Tabatabaeian/django-channels-router/issues"
+
+[tool.setuptools]
+package-dir = {"" = "."}
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["django_channels_router*"]
+
+[tool.setuptools.dynamic]
+version = {attr = "django_channels_router.__version__"}
