@@ -1,0 +1,12 @@
+include README.md
+include LICENSE
+include *.dll
+include *.so
+include *.dylib
+recursive-include SunnyNet *.dll
+recursive-include SunnyNet *.so
+recursive-include SunnyNet *.dylib
+recursive-include SunnyNet *.py
+global-exclude __pycache__
+global-exclude *.py[co]
+
