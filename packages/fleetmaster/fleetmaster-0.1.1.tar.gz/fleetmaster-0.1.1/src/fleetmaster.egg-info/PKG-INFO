@@ -1,0 +1,63 @@
+Metadata-Version: 2.4
+Name: fleetmaster
+Version: 0.1.1
+Summary: A wrapper to run capytaine in batch from the commandline
+Author-email: Eelco van Vliet <eelco@davelab.nl>
+Project-URL: Homepage, https://eelcovv.github.io/fleetmaster/
+Project-URL: Repository, https://github.com/eelcovv/fleetmaster
+Project-URL: Documentation, https://eelcovv.github.io/fleetmaster/
+Keywords: python
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: <4.0,>=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: capytaine>=2.3.1
+Requires-Dist: click>=8.1.8
+Requires-Dist: h5netcdf>=1.7.0
+Requires-Dist: h5py>=3.15.0
+Requires-Dist: numpy>=2.0.2
+Requires-Dist: pandas>=2.3.3
+Requires-Dist: pydantic>=2.12.2
+Requires-Dist: pyyaml>=6.0.3
+Requires-Dist: rich>=14.2.0
+Requires-Dist: trimesh>=4.8.3
+Requires-Dist: vtk>=9.5.2
+Requires-Dist: xarray>=2025.6.1
+Provides-Extra: gui
+Requires-Dist: pyside6-essentials>=6.10.0; extra == "gui"
+Provides-Extra: dev
+Requires-Dist: pytest>=7.2.0; extra == "dev"
+Requires-Dist: pre-commit>=4.3.0; extra == "dev"
+Requires-Dist: tox-uv>=1.11.3; extra == "dev"
+Requires-Dist: deptry>=0.22.0; extra == "dev"
+Requires-Dist: mypy>=1.18.2; extra == "dev"
+Requires-Dist: pytest-cov>=4.0.0; extra == "dev"
+Requires-Dist: ruff>=0.14.1; extra == "dev"
+Requires-Dist: mkdocs>=1.4.2; extra == "dev"
+Requires-Dist: mkdocs-material>=8.5.10; extra == "dev"
+Requires-Dist: mkdocstrings[python]>=0.26.1; extra == "dev"
+Requires-Dist: types-PyYAML>=6.0.12.12; extra == "dev"
+Requires-Dist: pandas-stubs>=2.3.2.250926; extra == "dev"
+Requires-Dist: pyside6-essentials>=6.10.0; extra == "dev"
+Dynamic: license-file
+
+# fleetmaster
+
+[![Release](https://img.shields.io/github/v/release/eelcovv/fleetmaster)](https://img.shields.io/github/v/release/eelcovv/fleetmaster)
+[![Build status](https://img.shields.io/github/actions/workflow/status/eelcovv/fleetmaster/main.yml?branch=main)](https://github.com/eelcovv/fleetmaster/actions/workflows/main.yml?query=branch%3Amain)
+[![codecov](https://codecov.io/gh/eelcovv/fleetmaster/branch/main/graph/badge.svg)](https://codecov.io/gh/eelcovv/fleetmaster)
+[![Commit activity](https://img.shields.io/github/commit-activity/m/eelcovv/fleetmaster)](https://img.shields.io/github/commit-activity/m/eelcovv/fleetmaster)
+[![License](https://img.shields.io/github/license/eelcovv/fleetmaster)](https://img.shields.io/github/license/eelcovv/fleetmaster)
+
+A wrapper to run capytaine in batch from the commandline
+
+- **Github repository**: <https://github.com/eelcovv/fleetmaster/>
+- **Documentation** <https://eelcovv.github.io/fleetmaster/>
