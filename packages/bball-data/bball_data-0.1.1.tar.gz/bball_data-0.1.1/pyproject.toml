@@ -1,0 +1,34 @@
+[project]
+name = "bball-data"
+version = "0.1.1"
+description = "Data fetching and processing for the bball ecosystem"
+authors = [
+    { name = "Nicholas Cooper", email = "nicholascullencooper@gmail.com" },
+]
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.13"
+keywords = ["nba", "basketball", "analytics", "sports", "data"]
+dependencies = [
+    "bball>=0.1.0",
+    "nba-api>=1.4",
+    "polars>=1.0",
+    "duckdb>=1.0",
+    "httpx>=0.27",
+]
+
+[project.urls]
+Homepage = "https://bball.dev"
+Documentation = "https://docs.bball.dev"
+Repository = "https://github.com/bball-dev/bball"
+Issues = "https://github.com/bball-dev/bball/issues"
+
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/bball_data"]
+
+[tool.uv.sources]
+bball = { workspace = true }
