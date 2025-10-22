@@ -1,0 +1,128 @@
+Metadata-Version: 2.4
+Name: secontrol
+Version: 0.1.4
+Summary: Space Engineers Redis helper utilities
+Author: secontrol contributors
+License: MIT License
+        
+        Copyright (c) 2024 secontrol contributors
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: Homepage, https://www.outenemy.ru/se
+Project-URL: Repository, https://github.com/rootfabric/secontrol
+Project-URL: Issues, https://github.com/rootfabric/secontrol/issues
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Utilities
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: redis>=4.5
+Requires-Dist: python-dotenv>=1.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7; extra == "dev"
+Requires-Dist: build>=1.2; extra == "dev"
+Requires-Dist: twine>=4.0; extra == "dev"
+Dynamic: license-file
+
+# secontrol
+
+`secontrol` — это высокоуровневый клиент для взаимодействия с Redis-шлюзом Space Engineers. Библиотека упрощает получение телеметрии, отправку команд и реализацию автоматизаций, используя устойчивые подписки на ключевые события.
+
+## Возможности
+
+- Подключение к Redis с помощью конфигурации из `.env` или аргументов конструктора.
+- Наблюдение за ключами и каналами с автоматическим восстановлением подписок.
+- Утилиты для получения идентификаторов владельца, игрока и грида.
+- Примеры, демонстрирующие публикацию команд и мониторинг состояний.
+
+## Установка
+
+После публикации на PyPI библиотеку можно будет установить стандартным способом:
+
+```bash
+pip install secontrol
+```
+
+До публикации можно установить пакет из исходников:
+
+```bash
+pip install .
+```
+
+## Быстрый старт
+
+```python
+from secontrol.common import prepare_grid
+
+#Первый грид игрока
+client, grid = prepare_grid()
+#Устройства на гриде
+print(", ".join((d.name or f"{d.device_type}:{d.device_id}") for d in grid.devices.values()) or "(no devices)")
+
+```
+
+### Переменные окружения
+
+| Переменная        | Назначение                                              |
+| ----------------- | ------------------------------------------------------- |
+| `REDIS_URL`       | URL Redis-инстанса (по умолчанию `redis://api.outenemy.ru:6379/0`). |
+| `REDIS_USERNAME`  | Имя пользователя для авторизации.                       |
+| `REDIS_PASSWORD`  | Пароль для подключения.                                 |
+| `SE_PLAYER_ID`    | Идентификатор игрока Space Engineers.                   |
+| `SE_GRID_ID`      | Идентификатор грида. Если не задан, используется первый доступный. |
+
+Переменные можно определить в файле `.env` в корне проекта или системы. Модуль автоматически читает файл с помощью [`python-dotenv`](https://pypi.org/project/python-dotenv/).
+
+## Примеры
+
+Готовые скрипты находятся в каталоге [`sepy/examples`](src/secontrol/examples_direct_connect). Чтобы запустить пример:
+
+```bash
+python -m secontrol.examples_direct_connect.list_grids
+```
+
+## Подключение плагинов
+
+Для работы с дополнительными расширениями, такими как [se-grid-controller](https://github.com/rootfabric/se_grid_controller),
+в репозитории добавлен файл `repositories.yaml`. Он сообщает инструментам разработки, где искать внешние зависимости и
+на какой ветке они находятся.
+
+```yaml
+repositories:
+  - name: se-grid-controller
+    url: git@github.com:rootfabric/se-grid-controller.git
+    branch: main
+```
+
+При необходимости добавьте в этот файл другие плагины в том же формате.
+
+## Лицензия
+
+Проект распространяется по лицензии MIT. См. файл [LICENSE](LICENSE).
+
