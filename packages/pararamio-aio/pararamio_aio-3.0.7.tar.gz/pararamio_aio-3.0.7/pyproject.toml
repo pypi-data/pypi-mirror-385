@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pararamio-aio"
+version = "3.0.7"
+description = "Async Python client library for pararam.io platform"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Pararamio Team"}
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+requires-python = ">=3.11"
+dependencies = [
+    "httpx>=0.25.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.4.2",
+    "pytest-asyncio>=1.2.0",
+    "pytest-cov>=7.0.0",
+    "ruff>=0.13.2",
+    "mypy>=1.18.2",
+]
+
+[project.urls]
+Homepage = "https://gitlab.com/pararam-public/py-pararamio"
+Documentation = "https://gitlab.com/pararam-public/py-pararamio/-/wikis/home"
+Repository = "https://gitlab.com/pararam-public/py-pararamio"
+Issues = "https://gitlab.com/pararam-public/py-pararamio/-/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["pararamio_aio*"]
+
+[tool.uv.sources]

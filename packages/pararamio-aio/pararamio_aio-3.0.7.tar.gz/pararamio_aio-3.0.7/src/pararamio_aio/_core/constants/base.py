@@ -1,0 +1,9 @@
+VERSION = '3.0.7'
+BASE_API_URL = 'https://api.pararam.io'
+FILE_UPLOAD_URL = 'https://file.pararam.io'
+DEFAULT_CONNECTION_NAME = '_default'
+DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%S.%fZ'
+XSRF_HEADER_NAME: str = 'X-Xsrftoken'
+UPLOAD_TIMEOUT = 600
+REQUEST_TIMEOUT = 30
+POSTS_LIMIT = 100
