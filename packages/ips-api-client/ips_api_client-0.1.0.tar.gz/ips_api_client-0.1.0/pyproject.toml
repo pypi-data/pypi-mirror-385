@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ips-api-client"
+version = "0.1.0"
+authors = [
+    {name = "Steve Garrity", email = "sgarrity@gmail.com"}
+]
+description = "Async Python client for IPS Controllers pool monitoring system"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.9"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Home Automation",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+keywords = ["ips", "pool", "chemistry", "monitoring", "home-assistant"]
+dependencies = [
+    "aiohttp>=3.8.0",
+    "beautifulsoup4>=4.11.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/stgarrity/ips-api-client"
+Documentation = "https://github.com/stgarrity/ips-api-client#readme"
+Repository = "https://github.com/stgarrity/ips-api-client"
+Issues = "https://github.com/stgarrity/ips-api-client/issues"
+
+[tool.setuptools.packages.find]
+include = ["ips_api*"]
