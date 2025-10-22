@@ -1,0 +1,64 @@
+Metadata-Version: 2.4
+Name: langchain-qwen3
+Version: 0.1.2
+Summary: An integration package connecting Qwen3-embedding and LangChain
+Project-URL: Repository, https://github.com/Aye10032/langchain-qwen3
+Project-URL: Source Code, https://github.com/langchain-ai/langchain/tree/master/libs/partners/qwen3
+Project-URL: Release Notes, https://github.com/langchain-ai/langchain/releases?q=tag%3A%22qwen3%3D%3D0%22&expanded=true
+Author: Aye10032
+License-Expression: MIT
+License-File: LICENSE
+Requires-Python: <4.0,>=3.10
+Requires-Dist: langchain-core>=1.0.0
+Requires-Dist: modelscope>=1.28.1
+Requires-Dist: torch>=2.7.1
+Requires-Dist: transformers>=4.54.1
+Provides-Extra: codespell
+Requires-Dist: codespell>=2.2.6; extra == 'codespell'
+Provides-Extra: dev
+Requires-Dist: codespell>=2.2.6; extra == 'dev'
+Requires-Dist: langchain-tests>=0.3.5; extra == 'dev'
+Requires-Dist: mypy>=1.10; extra == 'dev'
+Requires-Dist: pytest-asyncio>=0.23.2; extra == 'dev'
+Requires-Dist: pytest-socket>=0.7.0; extra == 'dev'
+Requires-Dist: pytest-watcher>=0.3.4; extra == 'dev'
+Requires-Dist: pytest>=7.4.3; extra == 'dev'
+Requires-Dist: ruff>=0.5; extra == 'dev'
+Provides-Extra: lint
+Requires-Dist: ruff>=0.5; extra == 'lint'
+Provides-Extra: test
+Requires-Dist: langchain-tests>=0.3.5; extra == 'test'
+Requires-Dist: pytest-asyncio>=0.23.2; extra == 'test'
+Requires-Dist: pytest-socket>=0.7.0; extra == 'test'
+Requires-Dist: pytest-watcher>=0.3.4; extra == 'test'
+Requires-Dist: pytest>=7.4.3; extra == 'test'
+Provides-Extra: typing
+Requires-Dist: mypy>=1.10; extra == 'typing'
+Description-Content-Type: text/markdown
+
+# langchain-qwen3
+![PyPI - Version](https://img.shields.io/pypi/v/langchain-qwen3) ![PyPI - Downloads](https://img.shields.io/pypi/dd/langchain-qwen3)
+
+This package contains the LangChain integration with Qwen3
+
+## Installation
+
+```bash
+pip install -U langchain-qwen3
+```
+
+## Embeddings
+
+`Qwen3Embeddings` class exposes embeddings from Qwen3.
+
+```python
+from langchain_qwen3 import Qwen3Embeddings
+
+embeddings = Qwen3Embeddings()
+
+# Each query must come with a one-sentence instruction that describes the task
+task = 'Given a web search query, retrieve relevant passages that answer the query'
+query = embeddings.get_detailed_instruct(task, 'Explain gravity')
+
+embeddings.embed_query(query)
+```
