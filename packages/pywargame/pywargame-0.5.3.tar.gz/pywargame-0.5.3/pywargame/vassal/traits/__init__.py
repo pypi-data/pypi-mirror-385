@@ -1,0 +1,36 @@
+#
+from . area import AreaTrait
+from . basic import BasicTrait
+from . calculatedproperty import CalculatedTrait
+from . clone import CloneTrait
+from . delete import DeleteTrait
+from . globalcommand import GlobalCommandTrait
+from . globalhotkey import GlobalHotkeyTrait
+from . dynamicproperty import *
+from . nostack import *
+from . deselect import *
+from . globalproperty import GlobalPropertyTrait
+from . label import LabelTraitCodes, LabelTrait
+from . layer import LayerTrait
+from . mark import MarkTrait
+from . mask import MaskTrait
+from . moved import MovedTrait
+from . place import PlaceTrait
+from . prototype import PrototypeTrait
+from . report import ReportTrait
+from . restrictaccess import RestrictAccessTrait
+from . restrictcommand import RestrictCommandsTrait
+from . rotate import RotateTrait
+from . sendto import SendtoTrait
+from . stack import StackTrait
+from . submenu import SubMenuTrait
+from . trail import TrailTrait
+from . trigger import TriggerTrait
+from . nonrect import NonRectangleTrait
+from . click import ClickTrait
+from . mat import MatTrait
+from . cargo import CargoTrait
+from . movefixed import MoveFixedTrait
+from . sheet import SheetTrait
+from . hide import HideTrait
+from . retrn import ReturnTrait
