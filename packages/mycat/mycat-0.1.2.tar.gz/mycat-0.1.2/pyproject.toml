@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mycat"
+version = "0.1.2"
+description = "Desctop Cat: GTK Overlay"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [{ name = "yumiaura" }]
+classifiers = [
+  "Environment :: X11 Applications :: GTK",
+  "Intended Audience :: End Users/Desktop",
+  "Programming Language :: Python :: 3",
+  "Operating System :: POSIX :: Linux",
+]
+dependencies = [
+  "PyGObject>=3.40; platform_system != 'Windows'"
+]
+
+# Console script `mycat` → calls mycat.main:main
+[project.scripts]
+mycat = "mycat.main:main"
+
+[tool.setuptools.packages.find]
+include = ["mycat*"]
+
+# Include packaged images inside the wheel
+[tool.setuptools.package-data]
+mycat = ["images/*"]
