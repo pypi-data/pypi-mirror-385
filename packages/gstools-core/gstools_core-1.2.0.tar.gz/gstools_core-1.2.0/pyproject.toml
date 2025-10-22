@@ -1,0 +1,41 @@
+[project]
+name = "gstools-core"
+dependencies = ["numpy>=1.20.0"]
+license = { file = "LICENSE" }
+requires-python = ">=3.8"
+dynamic = ["version"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Education",
+    "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
+    "Natural Language :: English",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: GIS",
+    "Topic :: Scientific/Engineering :: Hydrology",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Utilities",
+]
+
+[project.urls]
+Homepage = "https://geostat-framework.org/#gstools"
+Documentation = "https://github.com/GeoStat-Framework/GSTools-Core"
+Source = "https://github.com/GeoStat-Framework/GSTools-Core"
+Changelog = "https://github.com/GeoStat-Framework/GSTools-Core/commits"
+Tracker = "https://github.com/GeoStat-Framework/GSTools-Core/issues"
+
+[build-system]
+requires = ["maturin>=1.5.1,<2.0"]
+build-backend = "maturin"

@@ -1,0 +1,47 @@
+[package]
+name = "gstools-core"
+version = "1.2.0"
+authors = ["Lennart Schüler <lennart.schueler@ufz.de>"]
+edition = "2021"
+description = "The core functions of GSTools"
+readme = "README.md"
+homepage = "https://geostat-framework.org/#gstools"
+repository = "https://github.com/GeoStat-Framework/GSTools-Core"
+documentation = "https://docs.rs/gstools-core"
+license = "LGPL-3.0-or-later"
+categories = ["science", "mathematics"]
+keywords = ["geostatistics", "srf", "kriging", "variogram", "python"]
+exclude = ["dist/", ".*"]
+
+[lib]
+name = "gstools_core"
+crate-type = ["cdylib", "rlib"]
+bench = false
+
+[profile.release]
+panic = "abort"
+lto = true
+codegen-units = 1
+
+[profile.bench]
+debug = true
+lto = true
+codegen-units = 1
+
+[dependencies]
+pyo3 = { version = "0.21", features = ["abi3-py38", "extension-module"] }
+numpy = "0.21"
+ndarray = { version = "0.15", features = ["rayon", "approx-0_5"] }
+rayon = "1.10"
+
+[dev-dependencies]
+criterion = { version = "0.6", features = ["html_reports"] }
+approx = "0.5"
+ndarray-rand = "0.14"
+
+[[bench]]
+name = "main"
+harness = false
+
+[package.metadata.docs.rs]
+rustdoc-args = ["--html-in-header", "katex-header.html"]
