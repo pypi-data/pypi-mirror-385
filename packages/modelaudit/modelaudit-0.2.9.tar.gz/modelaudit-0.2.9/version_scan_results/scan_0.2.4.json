@@ -1,0 +1,3975 @@
+{
+  "bytes_scanned": 294962192,
+  "issues": [],
+  "checks": [
+    {
+      "name": "Path Exists",
+      "status": "passed",
+      "message": "Path exists",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors"
+      },
+      "timestamp": 1761066305.86627
+    },
+    {
+      "name": "Path Readable",
+      "status": "passed",
+      "message": "Path is readable",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors"
+      },
+      "timestamp": 1761066305.866292
+    },
+    {
+      "name": "File Type Validation",
+      "status": "passed",
+      "message": "File type validation passed",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {},
+      "timestamp": 1761066305.866412
+    },
+    {
+      "name": "File Integrity Hash",
+      "status": "passed",
+      "message": "File integrity hashes calculated",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "md5": "5d228912c417f6abf7732710314ddeed",
+        "sha256": "53aa51172d142c89d9012cce15ae4d6cc0ca6895895114379cacb4fab128d9db",
+        "sha512": "7b6644a1ede4fabd6a004135b12f54a154423daff0727c9dabfc1c893244288c582c76fd78542dc690a6db54c0b3b0634a4fced9dfe8dc221f2c17b7b527fd88",
+        "file_size": 90868376
+      },
+      "timestamp": 1761066306.250166
+    },
+    {
+      "name": "Header Length Validation",
+      "status": "passed",
+      "message": "SafeTensors header length is valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "header_len": 11408
+      },
+      "timestamp": 1761066306.250241
+    },
+    {
+      "name": "Header Format Validation",
+      "status": "passed",
+      "message": "SafeTensors header format is valid JSON",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {},
+      "timestamp": 1761066306.250253
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor embeddings.position_ids offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "embeddings.position_ids",
+        "begin": 0,
+        "end": 4096
+      },
+      "timestamp": 1761066306.259732
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor embeddings.position_ids size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "embeddings.position_ids",
+        "size": 4096
+      },
+      "timestamp": 1761066306.2597709
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor embeddings.LayerNorm.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "embeddings.LayerNorm.bias",
+        "begin": 4096,
+        "end": 5632
+      },
+      "timestamp": 1761066306.259775
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor embeddings.LayerNorm.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "embeddings.LayerNorm.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.259778
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor embeddings.LayerNorm.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "embeddings.LayerNorm.weight",
+        "begin": 5632,
+        "end": 7168
+      },
+      "timestamp": 1761066306.2597811
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor embeddings.LayerNorm.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "embeddings.LayerNorm.weight",
+        "size": 1536
+      },
+      "timestamp": 1761066306.259784
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor embeddings.position_embeddings.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "embeddings.position_embeddings.weight",
+        "begin": 7168,
+        "end": 793600
+      },
+      "timestamp": 1761066306.259786
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor embeddings.position_embeddings.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "embeddings.position_embeddings.weight",
+        "size": 786432
+      },
+      "timestamp": 1761066306.2597902
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor embeddings.token_type_embeddings.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "embeddings.token_type_embeddings.weight",
+        "begin": 793600,
+        "end": 796672
+      },
+      "timestamp": 1761066306.2597928
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor embeddings.token_type_embeddings.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "embeddings.token_type_embeddings.weight",
+        "size": 3072
+      },
+      "timestamp": 1761066306.259796
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor embeddings.word_embeddings.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "embeddings.word_embeddings.weight",
+        "begin": 796672,
+        "end": 47678464
+      },
+      "timestamp": 1761066306.259799
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor embeddings.word_embeddings.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "embeddings.word_embeddings.weight",
+        "size": 46881792
+      },
+      "timestamp": 1761066306.2598011
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.0.attention.output.LayerNorm.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.0.attention.output.LayerNorm.bias",
+        "begin": 47678464,
+        "end": 47680000
+      },
+      "timestamp": 1761066306.259804
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.0.attention.output.LayerNorm.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.0.attention.output.LayerNorm.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.2598069
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.0.attention.output.LayerNorm.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.0.attention.output.LayerNorm.weight",
+        "begin": 47680000,
+        "end": 47681536
+      },
+      "timestamp": 1761066306.259819
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.0.attention.output.LayerNorm.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.0.attention.output.LayerNorm.weight",
+        "size": 1536
+      },
+      "timestamp": 1761066306.2598221
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.0.attention.output.dense.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.0.attention.output.dense.bias",
+        "begin": 47681536,
+        "end": 47683072
+      },
+      "timestamp": 1761066306.259826
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.0.attention.output.dense.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.0.attention.output.dense.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.2598279
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.0.attention.output.dense.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.0.attention.output.dense.weight",
+        "begin": 47683072,
+        "end": 48272896
+      },
+      "timestamp": 1761066306.25983
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.0.attention.output.dense.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.0.attention.output.dense.weight",
+        "size": 589824
+      },
+      "timestamp": 1761066306.2598321
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.0.attention.self.key.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.0.attention.self.key.bias",
+        "begin": 48272896,
+        "end": 48274432
+      },
+      "timestamp": 1761066306.259834
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.0.attention.self.key.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.0.attention.self.key.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.259836
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.0.attention.self.key.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.0.attention.self.key.weight",
+        "begin": 48274432,
+        "end": 48864256
+      },
+      "timestamp": 1761066306.2598379
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.0.attention.self.key.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.0.attention.self.key.weight",
+        "size": 589824
+      },
+      "timestamp": 1761066306.259841
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.0.attention.self.query.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.0.attention.self.query.bias",
+        "begin": 48864256,
+        "end": 48865792
+      },
+      "timestamp": 1761066306.2598422
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.0.attention.self.query.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.0.attention.self.query.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.259844
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.0.attention.self.query.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.0.attention.self.query.weight",
+        "begin": 48865792,
+        "end": 49455616
+      },
+      "timestamp": 1761066306.259847
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.0.attention.self.query.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.0.attention.self.query.weight",
+        "size": 589824
+      },
+      "timestamp": 1761066306.259849
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.0.attention.self.value.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.0.attention.self.value.bias",
+        "begin": 49455616,
+        "end": 49457152
+      },
+      "timestamp": 1761066306.259851
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.0.attention.self.value.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.0.attention.self.value.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.259856
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.0.attention.self.value.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.0.attention.self.value.weight",
+        "begin": 49457152,
+        "end": 50046976
+      },
+      "timestamp": 1761066306.259858
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.0.attention.self.value.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.0.attention.self.value.weight",
+        "size": 589824
+      },
+      "timestamp": 1761066306.25986
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.0.intermediate.dense.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.0.intermediate.dense.bias",
+        "begin": 50046976,
+        "end": 50053120
+      },
+      "timestamp": 1761066306.259934
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.0.intermediate.dense.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.0.intermediate.dense.bias",
+        "size": 6144
+      },
+      "timestamp": 1761066306.2599401
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.0.intermediate.dense.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.0.intermediate.dense.weight",
+        "begin": 50053120,
+        "end": 52412416
+      },
+      "timestamp": 1761066306.259947
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.0.intermediate.dense.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.0.intermediate.dense.weight",
+        "size": 2359296
+      },
+      "timestamp": 1761066306.2599502
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.0.output.LayerNorm.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.0.output.LayerNorm.bias",
+        "begin": 52412416,
+        "end": 52413952
+      },
+      "timestamp": 1761066306.2599528
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.0.output.LayerNorm.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.0.output.LayerNorm.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.259955
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.0.output.LayerNorm.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.0.output.LayerNorm.weight",
+        "begin": 52413952,
+        "end": 52415488
+      },
+      "timestamp": 1761066306.259958
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.0.output.LayerNorm.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.0.output.LayerNorm.weight",
+        "size": 1536
+      },
+      "timestamp": 1761066306.2599602
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.0.output.dense.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.0.output.dense.bias",
+        "begin": 52415488,
+        "end": 52417024
+      },
+      "timestamp": 1761066306.259962
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.0.output.dense.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.0.output.dense.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.259978
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.0.output.dense.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.0.output.dense.weight",
+        "begin": 52417024,
+        "end": 54776320
+      },
+      "timestamp": 1761066306.259988
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.0.output.dense.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.0.output.dense.weight",
+        "size": 2359296
+      },
+      "timestamp": 1761066306.260025
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.1.attention.output.LayerNorm.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.1.attention.output.LayerNorm.bias",
+        "begin": 54776320,
+        "end": 54777856
+      },
+      "timestamp": 1761066306.260035
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.1.attention.output.LayerNorm.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.1.attention.output.LayerNorm.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.2600498
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.1.attention.output.LayerNorm.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.1.attention.output.LayerNorm.weight",
+        "begin": 54777856,
+        "end": 54779392
+      },
+      "timestamp": 1761066306.260053
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.1.attention.output.LayerNorm.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.1.attention.output.LayerNorm.weight",
+        "size": 1536
+      },
+      "timestamp": 1761066306.260056
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.1.attention.output.dense.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.1.attention.output.dense.bias",
+        "begin": 54779392,
+        "end": 54780928
+      },
+      "timestamp": 1761066306.2600582
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.1.attention.output.dense.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.1.attention.output.dense.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.2600598
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.1.attention.output.dense.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.1.attention.output.dense.weight",
+        "begin": 54780928,
+        "end": 55370752
+      },
+      "timestamp": 1761066306.260062
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.1.attention.output.dense.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.1.attention.output.dense.weight",
+        "size": 589824
+      },
+      "timestamp": 1761066306.260065
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.1.attention.self.key.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.1.attention.self.key.bias",
+        "begin": 55370752,
+        "end": 55372288
+      },
+      "timestamp": 1761066306.2600691
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.1.attention.self.key.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.1.attention.self.key.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.2600708
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.1.attention.self.key.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.1.attention.self.key.weight",
+        "begin": 55372288,
+        "end": 55962112
+      },
+      "timestamp": 1761066306.260074
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.1.attention.self.key.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.1.attention.self.key.weight",
+        "size": 589824
+      },
+      "timestamp": 1761066306.2600782
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.1.attention.self.query.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.1.attention.self.query.bias",
+        "begin": 55962112,
+        "end": 55963648
+      },
+      "timestamp": 1761066306.26008
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.1.attention.self.query.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.1.attention.self.query.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.260082
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.1.attention.self.query.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.1.attention.self.query.weight",
+        "begin": 55963648,
+        "end": 56553472
+      },
+      "timestamp": 1761066306.260085
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.1.attention.self.query.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.1.attention.self.query.weight",
+        "size": 589824
+      },
+      "timestamp": 1761066306.26009
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.1.attention.self.value.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.1.attention.self.value.bias",
+        "begin": 56553472,
+        "end": 56555008
+      },
+      "timestamp": 1761066306.260092
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.1.attention.self.value.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.1.attention.self.value.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.260094
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.1.attention.self.value.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.1.attention.self.value.weight",
+        "begin": 56555008,
+        "end": 57144832
+      },
+      "timestamp": 1761066306.260096
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.1.attention.self.value.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.1.attention.self.value.weight",
+        "size": 589824
+      },
+      "timestamp": 1761066306.2601001
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.1.intermediate.dense.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.1.intermediate.dense.bias",
+        "begin": 57144832,
+        "end": 57150976
+      },
+      "timestamp": 1761066306.260103
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.1.intermediate.dense.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.1.intermediate.dense.bias",
+        "size": 6144
+      },
+      "timestamp": 1761066306.260105
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.1.intermediate.dense.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.1.intermediate.dense.weight",
+        "begin": 57150976,
+        "end": 59510272
+      },
+      "timestamp": 1761066306.260108
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.1.intermediate.dense.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.1.intermediate.dense.weight",
+        "size": 2359296
+      },
+      "timestamp": 1761066306.2601101
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.1.output.LayerNorm.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.1.output.LayerNorm.bias",
+        "begin": 59510272,
+        "end": 59511808
+      },
+      "timestamp": 1761066306.2601118
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.1.output.LayerNorm.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.1.output.LayerNorm.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.260114
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.1.output.LayerNorm.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.1.output.LayerNorm.weight",
+        "begin": 59511808,
+        "end": 59513344
+      },
+      "timestamp": 1761066306.2601159
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.1.output.LayerNorm.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.1.output.LayerNorm.weight",
+        "size": 1536
+      },
+      "timestamp": 1761066306.260119
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.1.output.dense.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.1.output.dense.bias",
+        "begin": 59513344,
+        "end": 59514880
+      },
+      "timestamp": 1761066306.260121
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.1.output.dense.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.1.output.dense.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.2601228
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.1.output.dense.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.1.output.dense.weight",
+        "begin": 59514880,
+        "end": 61874176
+      },
+      "timestamp": 1761066306.2601259
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.1.output.dense.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.1.output.dense.weight",
+        "size": 2359296
+      },
+      "timestamp": 1761066306.260128
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.2.attention.output.LayerNorm.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.2.attention.output.LayerNorm.bias",
+        "begin": 61874176,
+        "end": 61875712
+      },
+      "timestamp": 1761066306.2601302
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.2.attention.output.LayerNorm.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.2.attention.output.LayerNorm.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.260133
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.2.attention.output.LayerNorm.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.2.attention.output.LayerNorm.weight",
+        "begin": 61875712,
+        "end": 61877248
+      },
+      "timestamp": 1761066306.260135
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.2.attention.output.LayerNorm.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.2.attention.output.LayerNorm.weight",
+        "size": 1536
+      },
+      "timestamp": 1761066306.2601368
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.2.attention.output.dense.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.2.attention.output.dense.bias",
+        "begin": 61877248,
+        "end": 61878784
+      },
+      "timestamp": 1761066306.260139
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.2.attention.output.dense.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.2.attention.output.dense.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.260142
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.2.attention.output.dense.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.2.attention.output.dense.weight",
+        "begin": 61878784,
+        "end": 62468608
+      },
+      "timestamp": 1761066306.2601442
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.2.attention.output.dense.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.2.attention.output.dense.weight",
+        "size": 589824
+      },
+      "timestamp": 1761066306.260146
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.2.attention.self.key.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.2.attention.self.key.bias",
+        "begin": 62468608,
+        "end": 62470144
+      },
+      "timestamp": 1761066306.260149
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.2.attention.self.key.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.2.attention.self.key.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.2601511
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.2.attention.self.key.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.2.attention.self.key.weight",
+        "begin": 62470144,
+        "end": 63059968
+      },
+      "timestamp": 1761066306.260153
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.2.attention.self.key.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.2.attention.self.key.weight",
+        "size": 589824
+      },
+      "timestamp": 1761066306.260156
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.2.attention.self.query.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.2.attention.self.query.bias",
+        "begin": 63059968,
+        "end": 63061504
+      },
+      "timestamp": 1761066306.260158
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.2.attention.self.query.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.2.attention.self.query.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.26016
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.2.attention.self.query.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.2.attention.self.query.weight",
+        "begin": 63061504,
+        "end": 63651328
+      },
+      "timestamp": 1761066306.260163
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.2.attention.self.query.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.2.attention.self.query.weight",
+        "size": 589824
+      },
+      "timestamp": 1761066306.260166
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.2.attention.self.value.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.2.attention.self.value.bias",
+        "begin": 63651328,
+        "end": 63652864
+      },
+      "timestamp": 1761066306.260171
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.2.attention.self.value.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.2.attention.self.value.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.260173
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.2.attention.self.value.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.2.attention.self.value.weight",
+        "begin": 63652864,
+        "end": 64242688
+      },
+      "timestamp": 1761066306.260176
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.2.attention.self.value.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.2.attention.self.value.weight",
+        "size": 589824
+      },
+      "timestamp": 1761066306.2601779
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.2.intermediate.dense.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.2.intermediate.dense.bias",
+        "begin": 64242688,
+        "end": 64248832
+      },
+      "timestamp": 1761066306.26018
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.2.intermediate.dense.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.2.intermediate.dense.bias",
+        "size": 6144
+      },
+      "timestamp": 1761066306.260183
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.2.intermediate.dense.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.2.intermediate.dense.weight",
+        "begin": 64248832,
+        "end": 66608128
+      },
+      "timestamp": 1761066306.260185
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.2.intermediate.dense.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.2.intermediate.dense.weight",
+        "size": 2359296
+      },
+      "timestamp": 1761066306.260187
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.2.output.LayerNorm.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.2.output.LayerNorm.bias",
+        "begin": 66608128,
+        "end": 66609664
+      },
+      "timestamp": 1761066306.2601888
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.2.output.LayerNorm.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.2.output.LayerNorm.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.260192
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.2.output.LayerNorm.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.2.output.LayerNorm.weight",
+        "begin": 66609664,
+        "end": 66611200
+      },
+      "timestamp": 1761066306.260194
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.2.output.LayerNorm.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.2.output.LayerNorm.weight",
+        "size": 1536
+      },
+      "timestamp": 1761066306.2601972
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.2.output.dense.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.2.output.dense.bias",
+        "begin": 66611200,
+        "end": 66612736
+      },
+      "timestamp": 1761066306.2601988
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.2.output.dense.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.2.output.dense.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.260201
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.2.output.dense.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.2.output.dense.weight",
+        "begin": 66612736,
+        "end": 68972032
+      },
+      "timestamp": 1761066306.260205
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.2.output.dense.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.2.output.dense.weight",
+        "size": 2359296
+      },
+      "timestamp": 1761066306.2602081
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.3.attention.output.LayerNorm.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.3.attention.output.LayerNorm.bias",
+        "begin": 68972032,
+        "end": 68973568
+      },
+      "timestamp": 1761066306.26021
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.3.attention.output.LayerNorm.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.3.attention.output.LayerNorm.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.260213
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.3.attention.output.LayerNorm.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.3.attention.output.LayerNorm.weight",
+        "begin": 68973568,
+        "end": 68975104
+      },
+      "timestamp": 1761066306.260215
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.3.attention.output.LayerNorm.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.3.attention.output.LayerNorm.weight",
+        "size": 1536
+      },
+      "timestamp": 1761066306.2602172
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.3.attention.output.dense.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.3.attention.output.dense.bias",
+        "begin": 68975104,
+        "end": 68976640
+      },
+      "timestamp": 1761066306.2602189
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.3.attention.output.dense.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.3.attention.output.dense.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.2602198
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.3.attention.output.dense.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.3.attention.output.dense.weight",
+        "begin": 68976640,
+        "end": 69566464
+      },
+      "timestamp": 1761066306.260222
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.3.attention.output.dense.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.3.attention.output.dense.weight",
+        "size": 589824
+      },
+      "timestamp": 1761066306.260224
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.3.attention.self.key.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.3.attention.self.key.bias",
+        "begin": 69566464,
+        "end": 69568000
+      },
+      "timestamp": 1761066306.260226
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.3.attention.self.key.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.3.attention.self.key.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.260229
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.3.attention.self.key.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.3.attention.self.key.weight",
+        "begin": 69568000,
+        "end": 70157824
+      },
+      "timestamp": 1761066306.260231
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.3.attention.self.key.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.3.attention.self.key.weight",
+        "size": 589824
+      },
+      "timestamp": 1761066306.260233
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.3.attention.self.query.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.3.attention.self.query.bias",
+        "begin": 70157824,
+        "end": 70159360
+      },
+      "timestamp": 1761066306.260235
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.3.attention.self.query.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.3.attention.self.query.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.2602382
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.3.attention.self.query.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.3.attention.self.query.weight",
+        "begin": 70159360,
+        "end": 70749184
+      },
+      "timestamp": 1761066306.2602398
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.3.attention.self.query.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.3.attention.self.query.weight",
+        "size": 589824
+      },
+      "timestamp": 1761066306.260243
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.3.attention.self.value.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.3.attention.self.value.bias",
+        "begin": 70749184,
+        "end": 70750720
+      },
+      "timestamp": 1761066306.260245
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.3.attention.self.value.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.3.attention.self.value.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.260246
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.3.attention.self.value.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.3.attention.self.value.weight",
+        "begin": 70750720,
+        "end": 71340544
+      },
+      "timestamp": 1761066306.260248
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.3.attention.self.value.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.3.attention.self.value.weight",
+        "size": 589824
+      },
+      "timestamp": 1761066306.26025
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.3.intermediate.dense.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.3.intermediate.dense.bias",
+        "begin": 71340544,
+        "end": 71346688
+      },
+      "timestamp": 1761066306.260252
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.3.intermediate.dense.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.3.intermediate.dense.bias",
+        "size": 6144
+      },
+      "timestamp": 1761066306.260254
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.3.intermediate.dense.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.3.intermediate.dense.weight",
+        "begin": 71346688,
+        "end": 73705984
+      },
+      "timestamp": 1761066306.260257
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.3.intermediate.dense.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.3.intermediate.dense.weight",
+        "size": 2359296
+      },
+      "timestamp": 1761066306.2602592
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.3.output.LayerNorm.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.3.output.LayerNorm.bias",
+        "begin": 73705984,
+        "end": 73707520
+      },
+      "timestamp": 1761066306.260261
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.3.output.LayerNorm.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.3.output.LayerNorm.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.260263
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.3.output.LayerNorm.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.3.output.LayerNorm.weight",
+        "begin": 73707520,
+        "end": 73709056
+      },
+      "timestamp": 1761066306.2602649
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.3.output.LayerNorm.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.3.output.LayerNorm.weight",
+        "size": 1536
+      },
+      "timestamp": 1761066306.260267
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.3.output.dense.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.3.output.dense.bias",
+        "begin": 73709056,
+        "end": 73710592
+      },
+      "timestamp": 1761066306.2602692
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.3.output.dense.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.3.output.dense.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.26027
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.3.output.dense.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.3.output.dense.weight",
+        "begin": 73710592,
+        "end": 76069888
+      },
+      "timestamp": 1761066306.260272
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.3.output.dense.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.3.output.dense.weight",
+        "size": 2359296
+      },
+      "timestamp": 1761066306.260274
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.4.attention.output.LayerNorm.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.4.attention.output.LayerNorm.bias",
+        "begin": 76069888,
+        "end": 76071424
+      },
+      "timestamp": 1761066306.260276
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.4.attention.output.LayerNorm.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.4.attention.output.LayerNorm.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.260278
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.4.attention.output.LayerNorm.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.4.attention.output.LayerNorm.weight",
+        "begin": 76071424,
+        "end": 76072960
+      },
+      "timestamp": 1761066306.2602801
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.4.attention.output.LayerNorm.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.4.attention.output.LayerNorm.weight",
+        "size": 1536
+      },
+      "timestamp": 1761066306.260282
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.4.attention.output.dense.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.4.attention.output.dense.bias",
+        "begin": 76072960,
+        "end": 76074496
+      },
+      "timestamp": 1761066306.260284
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.4.attention.output.dense.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.4.attention.output.dense.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.2602859
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.4.attention.output.dense.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.4.attention.output.dense.weight",
+        "begin": 76074496,
+        "end": 76664320
+      },
+      "timestamp": 1761066306.260288
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.4.attention.output.dense.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.4.attention.output.dense.weight",
+        "size": 589824
+      },
+      "timestamp": 1761066306.2602901
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.4.attention.self.key.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.4.attention.self.key.bias",
+        "begin": 76664320,
+        "end": 76665856
+      },
+      "timestamp": 1761066306.260292
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.4.attention.self.key.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.4.attention.self.key.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.260294
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.4.attention.self.key.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.4.attention.self.key.weight",
+        "begin": 76665856,
+        "end": 77255680
+      },
+      "timestamp": 1761066306.2602959
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.4.attention.self.key.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.4.attention.self.key.weight",
+        "size": 589824
+      },
+      "timestamp": 1761066306.260298
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.4.attention.self.query.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.4.attention.self.query.bias",
+        "begin": 77255680,
+        "end": 77257216
+      },
+      "timestamp": 1761066306.2603
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.4.attention.self.query.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.4.attention.self.query.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.260304
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.4.attention.self.query.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.4.attention.self.query.weight",
+        "begin": 77257216,
+        "end": 77847040
+      },
+      "timestamp": 1761066306.260305
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.4.attention.self.query.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.4.attention.self.query.weight",
+        "size": 589824
+      },
+      "timestamp": 1761066306.2603068
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.4.attention.self.value.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.4.attention.self.value.bias",
+        "begin": 77847040,
+        "end": 77848576
+      },
+      "timestamp": 1761066306.260309
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.4.attention.self.value.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.4.attention.self.value.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.2603111
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.4.attention.self.value.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.4.attention.self.value.weight",
+        "begin": 77848576,
+        "end": 78438400
+      },
+      "timestamp": 1761066306.260313
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.4.attention.self.value.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.4.attention.self.value.weight",
+        "size": 589824
+      },
+      "timestamp": 1761066306.2603142
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.4.intermediate.dense.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.4.intermediate.dense.bias",
+        "begin": 78438400,
+        "end": 78444544
+      },
+      "timestamp": 1761066306.260339
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.4.intermediate.dense.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.4.intermediate.dense.bias",
+        "size": 6144
+      },
+      "timestamp": 1761066306.260341
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.4.intermediate.dense.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.4.intermediate.dense.weight",
+        "begin": 78444544,
+        "end": 80803840
+      },
+      "timestamp": 1761066306.260343
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.4.intermediate.dense.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.4.intermediate.dense.weight",
+        "size": 2359296
+      },
+      "timestamp": 1761066306.260345
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.4.output.LayerNorm.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.4.output.LayerNorm.bias",
+        "begin": 80803840,
+        "end": 80805376
+      },
+      "timestamp": 1761066306.2603462
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.4.output.LayerNorm.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.4.output.LayerNorm.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.2603478
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.4.output.LayerNorm.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.4.output.LayerNorm.weight",
+        "begin": 80805376,
+        "end": 80806912
+      },
+      "timestamp": 1761066306.26035
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.4.output.LayerNorm.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.4.output.LayerNorm.weight",
+        "size": 1536
+      },
+      "timestamp": 1761066306.260352
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.4.output.dense.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.4.output.dense.bias",
+        "begin": 80806912,
+        "end": 80808448
+      },
+      "timestamp": 1761066306.260354
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.4.output.dense.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.4.output.dense.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.260355
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.4.output.dense.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.4.output.dense.weight",
+        "begin": 80808448,
+        "end": 83167744
+      },
+      "timestamp": 1761066306.2603579
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.4.output.dense.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.4.output.dense.weight",
+        "size": 2359296
+      },
+      "timestamp": 1761066306.26036
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.5.attention.output.LayerNorm.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.5.attention.output.LayerNorm.bias",
+        "begin": 83167744,
+        "end": 83169280
+      },
+      "timestamp": 1761066306.260362
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.5.attention.output.LayerNorm.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.5.attention.output.LayerNorm.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.260364
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.5.attention.output.LayerNorm.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.5.attention.output.LayerNorm.weight",
+        "begin": 83169280,
+        "end": 83170816
+      },
+      "timestamp": 1761066306.260365
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.5.attention.output.LayerNorm.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.5.attention.output.LayerNorm.weight",
+        "size": 1536
+      },
+      "timestamp": 1761066306.2603672
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.5.attention.output.dense.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.5.attention.output.dense.bias",
+        "begin": 83170816,
+        "end": 83172352
+      },
+      "timestamp": 1761066306.2603688
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.5.attention.output.dense.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.5.attention.output.dense.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.260371
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.5.attention.output.dense.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.5.attention.output.dense.weight",
+        "begin": 83172352,
+        "end": 83762176
+      },
+      "timestamp": 1761066306.260374
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.5.attention.output.dense.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.5.attention.output.dense.weight",
+        "size": 589824
+      },
+      "timestamp": 1761066306.260376
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.5.attention.self.key.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.5.attention.self.key.bias",
+        "begin": 83762176,
+        "end": 83763712
+      },
+      "timestamp": 1761066306.2603781
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.5.attention.self.key.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.5.attention.self.key.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.2603798
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.5.attention.self.key.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.5.attention.self.key.weight",
+        "begin": 83763712,
+        "end": 84353536
+      },
+      "timestamp": 1761066306.260382
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.5.attention.self.key.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.5.attention.self.key.weight",
+        "size": 589824
+      },
+      "timestamp": 1761066306.260383
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.5.attention.self.query.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.5.attention.self.query.bias",
+        "begin": 84353536,
+        "end": 84355072
+      },
+      "timestamp": 1761066306.2603872
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.5.attention.self.query.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.5.attention.self.query.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.260389
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.5.attention.self.query.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.5.attention.self.query.weight",
+        "begin": 84355072,
+        "end": 84944896
+      },
+      "timestamp": 1761066306.260391
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.5.attention.self.query.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.5.attention.self.query.weight",
+        "size": 589824
+      },
+      "timestamp": 1761066306.260392
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.5.attention.self.value.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.5.attention.self.value.bias",
+        "begin": 84944896,
+        "end": 84946432
+      },
+      "timestamp": 1761066306.260394
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.5.attention.self.value.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.5.attention.self.value.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.260396
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.5.attention.self.value.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.5.attention.self.value.weight",
+        "begin": 84946432,
+        "end": 85536256
+      },
+      "timestamp": 1761066306.260399
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.5.attention.self.value.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.5.attention.self.value.weight",
+        "size": 589824
+      },
+      "timestamp": 1761066306.260401
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.5.intermediate.dense.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.5.intermediate.dense.bias",
+        "begin": 85536256,
+        "end": 85542400
+      },
+      "timestamp": 1761066306.260403
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.5.intermediate.dense.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.5.intermediate.dense.bias",
+        "size": 6144
+      },
+      "timestamp": 1761066306.260405
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.5.intermediate.dense.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.5.intermediate.dense.weight",
+        "begin": 85542400,
+        "end": 87901696
+      },
+      "timestamp": 1761066306.260407
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.5.intermediate.dense.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.5.intermediate.dense.weight",
+        "size": 2359296
+      },
+      "timestamp": 1761066306.260409
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.5.output.LayerNorm.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.5.output.LayerNorm.bias",
+        "begin": 87901696,
+        "end": 87903232
+      },
+      "timestamp": 1761066306.26041
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.5.output.LayerNorm.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.5.output.LayerNorm.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.260412
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.5.output.LayerNorm.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.5.output.LayerNorm.weight",
+        "begin": 87903232,
+        "end": 87904768
+      },
+      "timestamp": 1761066306.260416
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.5.output.LayerNorm.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.5.output.LayerNorm.weight",
+        "size": 1536
+      },
+      "timestamp": 1761066306.260418
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.5.output.dense.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.5.output.dense.bias",
+        "begin": 87904768,
+        "end": 87906304
+      },
+      "timestamp": 1761066306.2604191
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.5.output.dense.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.5.output.dense.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.260421
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor encoder.layer.5.output.dense.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.5.output.dense.weight",
+        "begin": 87906304,
+        "end": 90265600
+      },
+      "timestamp": 1761066306.260423
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor encoder.layer.5.output.dense.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "encoder.layer.5.output.dense.weight",
+        "size": 2359296
+      },
+      "timestamp": 1761066306.2604249
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor pooler.dense.bias offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "pooler.dense.bias",
+        "begin": 90265600,
+        "end": 90267136
+      },
+      "timestamp": 1761066306.260427
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor pooler.dense.bias size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "pooler.dense.bias",
+        "size": 1536
+      },
+      "timestamp": 1761066306.2604291
+    },
+    {
+      "name": "Tensor Offset Validation",
+      "status": "passed",
+      "message": "Tensor pooler.dense.weight offsets are valid",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "pooler.dense.weight",
+        "begin": 90267136,
+        "end": 90856960
+      },
+      "timestamp": 1761066306.26043
+    },
+    {
+      "name": "Tensor Size Consistency Check",
+      "status": "passed",
+      "message": "Tensor pooler.dense.weight size matches dtype/shape",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "tensor": "pooler.dense.weight",
+        "size": 589824
+      },
+      "timestamp": 1761066306.2604318
+    },
+    {
+      "name": "Offset Continuity Check",
+      "status": "passed",
+      "message": "Tensor offsets are continuous without gaps",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "details": {
+        "total_offsets": 104
+      },
+      "timestamp": 1761066306.260442
+    },
+    {
+      "name": "Path Exists",
+      "status": "passed",
+      "message": "Path exists",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/pytorch_model.bin",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/pytorch_model.bin"
+      },
+      "timestamp": 1761066321.39487
+    },
+    {
+      "name": "Path Readable",
+      "status": "passed",
+      "message": "Path is readable",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/pytorch_model.bin",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/pytorch_model.bin"
+      },
+      "timestamp": 1761066321.394891
+    },
+    {
+      "name": "File Type Validation",
+      "status": "passed",
+      "message": "File type validation passed",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/pytorch_model.bin",
+      "details": {},
+      "timestamp": 1761066321.394969
+    },
+    {
+      "name": "File Integrity Hash",
+      "status": "passed",
+      "message": "File integrity hashes calculated",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/pytorch_model.bin",
+      "details": {
+        "md5": "dc04c8aa60eab688ac40e03dea40fb23",
+        "sha256": "c3a85f238711653950f6a79ece63eb0ea93d76f6a6284be04019c53733baf256",
+        "sha512": "e633b6277f254116d380a513afc464aafc2fd1402479a90c3c9f34edc86ea4906676ba8db0b1c8395f237535e581b1cc13af4fcb6a47555d23e2b1daa6ef2967",
+        "file_size": 90888945
+      },
+      "timestamp": 1761066321.772008
+    },
+    {
+      "name": "PyTorch ZIP Format Validation",
+      "status": "passed",
+      "message": "Valid ZIP format detected",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/pytorch_model.bin",
+      "details": {},
+      "timestamp": 1761066321.772087
+    },
+    {
+      "name": "Path Traversal Protection",
+      "status": "passed",
+      "message": "All archive entries have safe paths",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/pytorch_model.bin",
+      "details": {
+        "entries_checked": 106
+      },
+      "timestamp": 1761066321.779644
+    },
+    {
+      "name": "CVE-2025-32434 PyTorch Version Check",
+      "status": "passed",
+      "message": "Could not determine PyTorch version from model file",
+      "severity": "info",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/pytorch_model.bin",
+      "details": {
+        "cve_id": "CVE-2025-32434",
+        "version_detection": "failed",
+        "recommendation": "Verify PyTorch version manually - avoid torch.load(weights_only=True) with untrusted models if using PyTorch ≤2.5.1"
+      },
+      "timestamp": 1761066321.7810922
+    },
+    {
+      "name": "CVE-2025-32434 weights_only=True Safety Warning",
+      "status": "passed",
+      "message": "No dangerous pickle opcodes detected in archive/data.pkl. However, weights_only=True should not be relied upon for security with untrusted models.",
+      "severity": "info",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/pytorch_model.bin:archive/data.pkl",
+      "details": {
+        "cve_id": "CVE-2025-32434",
+        "dangerous_opcodes_found": false,
+        "weights_only_security_note": "Even when no dangerous opcodes are detected, weights_only=True in torch.load() should not be considered a security boundary for untrusted models.",
+        "recommendation": "Use PyTorch 2.6.0+ and prefer SafeTensors format for better security. Always validate model sources and avoid loading untrusted models."
+      },
+      "timestamp": 1761066321.8045068
+    },
+    {
+      "name": "Embedded Secrets Detection",
+      "status": "passed",
+      "message": "No embedded secrets detected",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/pytorch_model.bin:archive/data.pkl",
+      "details": {},
+      "timestamp": 1761066321.794357
+    },
+    {
+      "name": "JIT/Script Code Execution Detection",
+      "status": "passed",
+      "message": "No JIT/Script code execution risks detected",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/pytorch_model.bin:archive/data.pkl",
+      "details": {},
+      "timestamp": 1761066321.800535
+    },
+    {
+      "name": "Network Communication Detection",
+      "status": "passed",
+      "message": "No network communication patterns detected",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/pytorch_model.bin:archive/data.pkl",
+      "details": {},
+      "timestamp": 1761066321.8005419
+    },
+    {
+      "name": "Pickle Protocol Version Check",
+      "status": "passed",
+      "message": "Valid pickle protocol version 2",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/pytorch_model.bin:archive/data.pkl",
+      "details": {
+        "protocol_version": 2
+      },
+      "timestamp": 1761066321.800546
+    },
+    {
+      "name": "Opcode Count Check",
+      "status": "passed",
+      "message": "Opcode count (3214) is within limits",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/pytorch_model.bin:archive/data.pkl",
+      "details": {
+        "opcode_count": 3214,
+        "max_opcodes": 1000000
+      },
+      "timestamp": 1761066321.8021991
+    },
+    {
+      "name": "Stack Depth Validation",
+      "status": "passed",
+      "message": "Maximum stack depth (417) is within safe limits",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/pytorch_model.bin:archive/data.pkl",
+      "details": {
+        "max_depth_reached": 417,
+        "ml_adjusted_limit": 2500,
+        "base_limit": 1000,
+        "ml_context_confidence": 0.315
+      },
+      "timestamp": 1761066321.8032992
+    },
+    {
+      "name": "Global Module Reference Check",
+      "status": "passed",
+      "message": "Safe global reference validated: torch._utils._rebuild_tensor_v2",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/pytorch_model.bin:archive/data.pkl (pos 36)",
+      "details": {
+        "module": "torch._utils",
+        "function": "_rebuild_tensor_v2",
+        "position": 36,
+        "opcode": "GLOBAL",
+        "ml_context_confidence": 0.315
+      },
+      "timestamp": 1761066321.8033128
+    },
+    {
+      "name": "Global Module Reference Check",
+      "status": "passed",
+      "message": "Safe global reference validated: torch.LongStorage",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/pytorch_model.bin:archive/data.pkl (pos 87)",
+      "details": {
+        "module": "torch",
+        "function": "LongStorage",
+        "position": 87,
+        "opcode": "GLOBAL",
+        "ml_context_confidence": 0.315
+      },
+      "timestamp": 1761066321.803318
+    },
+    {
+      "name": "Global Module Reference Check",
+      "status": "passed",
+      "message": "Safe global reference validated: collections.OrderedDict",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/pytorch_model.bin:archive/data.pkl (pos 152)",
+      "details": {
+        "module": "collections",
+        "function": "OrderedDict",
+        "position": 152,
+        "opcode": "GLOBAL",
+        "ml_context_confidence": 0.315
+      },
+      "timestamp": 1761066321.8033228
+    },
+    {
+      "name": "Global Module Reference Check",
+      "status": "passed",
+      "message": "Safe global reference validated: torch.FloatStorage",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/pytorch_model.bin:archive/data.pkl (pos 235)",
+      "details": {
+        "module": "torch",
+        "function": "FloatStorage",
+        "position": 235,
+        "opcode": "GLOBAL",
+        "ml_context_confidence": 0.315
+      },
+      "timestamp": 1761066321.80333
+    },
+    {
+      "name": "Reduce Pattern Analysis",
+      "status": "passed",
+      "message": "No dangerous __reduce__ patterns detected",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/pytorch_model.bin:archive/data.pkl",
+      "details": {
+        "opcode_count": 3214,
+        "ml_context_confidence": 0.315
+      },
+      "timestamp": 1761066321.804163
+    },
+    {
+      "name": "Opcode Sequence Analysis",
+      "status": "passed",
+      "message": "No suspicious opcode sequences detected",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/pytorch_model.bin:archive/data.pkl",
+      "details": {
+        "opcode_count": 3214,
+        "ml_context_confidence": 0.315
+      },
+      "timestamp": 1761066321.804449
+    },
+    {
+      "name": "JIT/Script Code Execution Detection",
+      "status": "passed",
+      "message": "No JIT/Script code execution risks detected",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/pytorch_model.bin",
+      "details": {},
+      "timestamp": 1761066343.628324
+    },
+    {
+      "name": "Network Communication Detection",
+      "status": "passed",
+      "message": "No network communication patterns detected",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/pytorch_model.bin",
+      "details": {},
+      "timestamp": 1761066343.628333
+    },
+    {
+      "name": "Python Code File Detection",
+      "status": "passed",
+      "message": "No Python code files found in model",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/pytorch_model.bin",
+      "details": {},
+      "timestamp": 1761066343.628373
+    },
+    {
+      "name": "Executable File Detection",
+      "status": "passed",
+      "message": "No executable files found in model",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/pytorch_model.bin",
+      "details": {},
+      "timestamp": 1761066343.628375
+    },
+    {
+      "name": "PyTorch Structure Validation",
+      "status": "passed",
+      "message": "PyTorch model has expected structure with data.pkl",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/pytorch_model.bin",
+      "details": {
+        "pickle_files": [
+          "archive/data.pkl"
+        ]
+      },
+      "timestamp": 1761066343.628382
+    },
+    {
+      "name": "Blacklist Pattern Check",
+      "status": "passed",
+      "message": "No blacklist patterns configured for scanning",
+      "severity": "info",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/pytorch_model.bin",
+      "details": {
+        "reason": "no_blacklist_configured",
+        "entries_available": 106
+      },
+      "timestamp": 1761066343.6283891
+    },
+    {
+      "name": "Path Exists",
+      "status": "passed",
+      "message": "Path exists",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_quint8_avx2.onnx",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_quint8_avx2.onnx"
+      },
+      "timestamp": 1761066344.7051148
+    },
+    {
+      "name": "Path Readable",
+      "status": "passed",
+      "message": "Path is readable",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_quint8_avx2.onnx",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_quint8_avx2.onnx"
+      },
+      "timestamp": 1761066344.705133
+    },
+    {
+      "name": "File Type Validation",
+      "status": "passed",
+      "message": "File type validation passed",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_quint8_avx2.onnx",
+      "details": {},
+      "timestamp": 1761066344.705201
+    },
+    {
+      "name": "Path Exists",
+      "status": "passed",
+      "message": "Path exists",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_O2.onnx",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_O2.onnx"
+      },
+      "timestamp": 1761066345.198408
+    },
+    {
+      "name": "Path Readable",
+      "status": "passed",
+      "message": "Path is readable",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_O2.onnx",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_O2.onnx"
+      },
+      "timestamp": 1761066345.198427
+    },
+    {
+      "name": "File Type Validation",
+      "status": "passed",
+      "message": "File type validation passed",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_O2.onnx",
+      "details": {},
+      "timestamp": 1761066345.198501
+    },
+    {
+      "name": "Path Exists",
+      "status": "passed",
+      "message": "Path exists",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_arm64.onnx /Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_avx512.onnx /Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_avx512_vnni.onnx",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_arm64.onnx",
+        "duplicate_files": [
+          "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_arm64.onnx",
+          "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_avx512.onnx",
+          "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_avx512_vnni.onnx"
+        ],
+        "content_hash": "4278337fd0ff3c68bfb6291042cad8ab363e1d9fbc43dcb499fe91c871902474"
+      },
+      "timestamp": 1761066345.742773
+    },
+    {
+      "name": "Path Readable",
+      "status": "passed",
+      "message": "Path is readable",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_arm64.onnx /Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_avx512.onnx /Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_avx512_vnni.onnx",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_arm64.onnx",
+        "duplicate_files": [
+          "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_arm64.onnx",
+          "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_avx512.onnx",
+          "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_avx512_vnni.onnx"
+        ],
+        "content_hash": "4278337fd0ff3c68bfb6291042cad8ab363e1d9fbc43dcb499fe91c871902474"
+      },
+      "timestamp": 1761066345.742791
+    },
+    {
+      "name": "File Type Validation",
+      "status": "passed",
+      "message": "File type validation passed",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_arm64.onnx /Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_avx512.onnx /Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_avx512_vnni.onnx",
+      "details": {
+        "duplicate_files": [
+          "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_arm64.onnx",
+          "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_avx512.onnx",
+          "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_avx512_vnni.onnx"
+        ],
+        "content_hash": "4278337fd0ff3c68bfb6291042cad8ab363e1d9fbc43dcb499fe91c871902474"
+      },
+      "timestamp": 1761066345.742861
+    },
+    {
+      "name": "Path Exists",
+      "status": "passed",
+      "message": "Path exists",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_O3.onnx",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_O3.onnx"
+      },
+      "timestamp": 1761066346.258872
+    },
+    {
+      "name": "Path Readable",
+      "status": "passed",
+      "message": "Path is readable",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_O3.onnx",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_O3.onnx"
+      },
+      "timestamp": 1761066346.258909
+    },
+    {
+      "name": "File Type Validation",
+      "status": "passed",
+      "message": "File type validation passed",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_O3.onnx",
+      "details": {},
+      "timestamp": 1761066346.2589922
+    },
+    {
+      "name": "Path Exists",
+      "status": "passed",
+      "message": "Path exists",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_O4.onnx",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_O4.onnx"
+      },
+      "timestamp": 1761066346.879054
+    },
+    {
+      "name": "Path Readable",
+      "status": "passed",
+      "message": "Path is readable",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_O4.onnx",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_O4.onnx"
+      },
+      "timestamp": 1761066346.879071
+    },
+    {
+      "name": "File Type Validation",
+      "status": "passed",
+      "message": "File type validation passed",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_O4.onnx",
+      "details": {},
+      "timestamp": 1761066346.879137
+    },
+    {
+      "name": "Path Exists",
+      "status": "passed",
+      "message": "Path exists",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model.onnx",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model.onnx"
+      },
+      "timestamp": 1761066347.469839
+    },
+    {
+      "name": "Path Readable",
+      "status": "passed",
+      "message": "Path is readable",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model.onnx",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model.onnx"
+      },
+      "timestamp": 1761066347.469858
+    },
+    {
+      "name": "File Type Validation",
+      "status": "passed",
+      "message": "File type validation passed",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model.onnx",
+      "details": {},
+      "timestamp": 1761066347.469923
+    },
+    {
+      "name": "Path Exists",
+      "status": "passed",
+      "message": "Path exists",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_O1.onnx",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_O1.onnx"
+      },
+      "timestamp": 1761066348.270932
+    },
+    {
+      "name": "Path Readable",
+      "status": "passed",
+      "message": "Path is readable",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_O1.onnx",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_O1.onnx"
+      },
+      "timestamp": 1761066348.270953
+    },
+    {
+      "name": "File Type Validation",
+      "status": "passed",
+      "message": "File type validation passed",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_O1.onnx",
+      "details": {},
+      "timestamp": 1761066348.271025
+    },
+    {
+      "name": "Path Exists",
+      "status": "passed",
+      "message": "Path exists",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/openvino/openvino_model_qint8_quantized.bin",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/openvino/openvino_model_qint8_quantized.bin"
+      },
+      "timestamp": 1761066348.826896
+    },
+    {
+      "name": "Path Readable",
+      "status": "passed",
+      "message": "Path is readable",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/openvino/openvino_model_qint8_quantized.bin",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/openvino/openvino_model_qint8_quantized.bin"
+      },
+      "timestamp": 1761066348.826926
+    },
+    {
+      "name": "File Type Validation",
+      "status": "passed",
+      "message": "File type validation passed",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/openvino/openvino_model_qint8_quantized.bin",
+      "details": {},
+      "timestamp": 1761066348.827011
+    },
+    {
+      "name": "File Integrity Hash",
+      "status": "passed",
+      "message": "File integrity hashes calculated",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/openvino/openvino_model_qint8_quantized.bin",
+      "details": {
+        "md5": "e860ca617923282cd12f74ad534bd218",
+        "sha256": "c92ea4af3c6bc7b4a0f3b3d61b147c850f4dbdd7c9e7beee0c0c70dc12da289b",
+        "sha512": "d48dec679ebf11d0547e46d5f0e19cf211313bc425db40271921a9fcf507ffa1849231ec2bceff115357b23a0f390d153f1b879b524aacd130c004296faded8c",
+        "file_size": 22933664
+      },
+      "timestamp": 1761066348.925787
+    },
+    {
+      "name": "File Size Validation",
+      "status": "passed",
+      "message": "File size is reasonable",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/openvino/openvino_model_qint8_quantized.bin",
+      "details": {
+        "file_size": 22933664
+      },
+      "timestamp": 1761066348.9257998
+    },
+    {
+      "name": "Embedded Code Pattern Detection",
+      "status": "passed",
+      "message": "No suspicious code patterns detected",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/openvino/openvino_model_qint8_quantized.bin",
+      "details": {},
+      "timestamp": 1761066348.934122
+    },
+    {
+      "name": "Path Exists",
+      "status": "passed",
+      "message": "Path exists",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/openvino/openvino_model.bin",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/openvino/openvino_model.bin"
+      },
+      "timestamp": 1761066350.472534
+    },
+    {
+      "name": "Path Readable",
+      "status": "passed",
+      "message": "Path is readable",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/openvino/openvino_model.bin",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/openvino/openvino_model.bin"
+      },
+      "timestamp": 1761066350.472553
+    },
+    {
+      "name": "File Type Validation",
+      "status": "passed",
+      "message": "File type validation passed",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/openvino/openvino_model.bin",
+      "details": {},
+      "timestamp": 1761066350.4726322
+    },
+    {
+      "name": "File Integrity Hash",
+      "status": "passed",
+      "message": "File integrity hashes calculated",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/openvino/openvino_model.bin",
+      "details": {
+        "md5": "3492fa40890ceaa9f530e88ad5385115",
+        "sha256": "8b86cab4722e2aefab310cf96d4d5a9eb3b187f7d9670a082afc55c7fa0d392a",
+        "sha512": "a03c27b2a4159d25a98f899af24361eed53fefc6d4ad51d4e9bc08a0ee8d9478cf9cad4e66bd0dbdee57c88ccddd0c50ad2e1d47207e89de242a1709529c78a0",
+        "file_size": 90265744
+      },
+      "timestamp": 1761066350.847431
+    },
+    {
+      "name": "File Size Validation",
+      "status": "passed",
+      "message": "File size is reasonable",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/openvino/openvino_model.bin",
+      "details": {
+        "file_size": 90265744
+      },
+      "timestamp": 1761066350.8474429
+    },
+    {
+      "name": "Embedded Code Pattern Detection",
+      "status": "passed",
+      "message": "No suspicious code patterns detected",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/openvino/openvino_model.bin",
+      "details": {},
+      "timestamp": 1761066350.854969
+    },
+    {
+      "name": "HuggingFace Cache File Skip",
+      "status": "passed",
+      "message": "HuggingFace cache file skipped (not a model file)",
+      "severity": "info",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/model.safetensors.metadata",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/model.safetensors.metadata",
+        "reason": "huggingface_cache_file"
+      },
+      "timestamp": 1761066355.774094
+    },
+    {
+      "name": "HuggingFace Cache File Skip",
+      "status": "passed",
+      "message": "HuggingFace cache file skipped (not a model file)",
+      "severity": "info",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/tf_model.h5.metadata",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/tf_model.h5.metadata",
+        "reason": "huggingface_cache_file"
+      },
+      "timestamp": 1761066355.785909
+    },
+    {
+      "name": "HuggingFace Cache File Skip",
+      "status": "passed",
+      "message": "HuggingFace cache file skipped (not a model file)",
+      "severity": "info",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/pytorch_model.bin.metadata",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/pytorch_model.bin.metadata",
+        "reason": "huggingface_cache_file"
+      },
+      "timestamp": 1761066355.799361
+    },
+    {
+      "name": "HuggingFace Cache File Skip",
+      "status": "passed",
+      "message": "HuggingFace cache file skipped (not a model file)",
+      "severity": "info",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model_O1.onnx.metadata",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model_O1.onnx.metadata",
+        "reason": "huggingface_cache_file"
+      },
+      "timestamp": 1761066355.810102
+    },
+    {
+      "name": "HuggingFace Cache File Skip",
+      "status": "passed",
+      "message": "HuggingFace cache file skipped (not a model file)",
+      "severity": "info",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model_quint8_avx2.onnx.metadata",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model_quint8_avx2.onnx.metadata",
+        "reason": "huggingface_cache_file"
+      },
+      "timestamp": 1761066355.8218281
+    },
+    {
+      "name": "HuggingFace Cache File Skip",
+      "status": "passed",
+      "message": "HuggingFace cache file skipped (not a model file)",
+      "severity": "info",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model_O2.onnx.metadata",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model_O2.onnx.metadata",
+        "reason": "huggingface_cache_file"
+      },
+      "timestamp": 1761066355.831743
+    },
+    {
+      "name": "HuggingFace Cache File Skip",
+      "status": "passed",
+      "message": "HuggingFace cache file skipped (not a model file)",
+      "severity": "info",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model_qint8_arm64.onnx.metadata",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model_qint8_arm64.onnx.metadata",
+        "reason": "huggingface_cache_file"
+      },
+      "timestamp": 1761066355.841696
+    },
+    {
+      "name": "HuggingFace Cache File Skip",
+      "status": "passed",
+      "message": "HuggingFace cache file skipped (not a model file)",
+      "severity": "info",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model_qint8_avx512_vnni.onnx.metadata",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model_qint8_avx512_vnni.onnx.metadata",
+        "reason": "huggingface_cache_file"
+      },
+      "timestamp": 1761066355.851938
+    },
+    {
+      "name": "HuggingFace Cache File Skip",
+      "status": "passed",
+      "message": "HuggingFace cache file skipped (not a model file)",
+      "severity": "info",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model.onnx.metadata",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model.onnx.metadata",
+        "reason": "huggingface_cache_file"
+      },
+      "timestamp": 1761066355.86416
+    },
+    {
+      "name": "HuggingFace Cache File Skip",
+      "status": "passed",
+      "message": "HuggingFace cache file skipped (not a model file)",
+      "severity": "info",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model_qint8_avx512.onnx.metadata",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model_qint8_avx512.onnx.metadata",
+        "reason": "huggingface_cache_file"
+      },
+      "timestamp": 1761066355.8751879
+    },
+    {
+      "name": "HuggingFace Cache File Skip",
+      "status": "passed",
+      "message": "HuggingFace cache file skipped (not a model file)",
+      "severity": "info",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model_O3.onnx.metadata",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model_O3.onnx.metadata",
+        "reason": "huggingface_cache_file"
+      },
+      "timestamp": 1761066355.887171
+    },
+    {
+      "name": "HuggingFace Cache File Skip",
+      "status": "passed",
+      "message": "HuggingFace cache file skipped (not a model file)",
+      "severity": "info",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model_O4.onnx.metadata",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model_O4.onnx.metadata",
+        "reason": "huggingface_cache_file"
+      },
+      "timestamp": 1761066355.898952
+    },
+    {
+      "name": "HuggingFace Cache File Skip",
+      "status": "passed",
+      "message": "HuggingFace cache file skipped (not a model file)",
+      "severity": "info",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/openvino/openvino_model_qint8_quantized.bin.metadata",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/openvino/openvino_model_qint8_quantized.bin.metadata",
+        "reason": "huggingface_cache_file"
+      },
+      "timestamp": 1761066355.910254
+    },
+    {
+      "name": "HuggingFace Cache File Skip",
+      "status": "passed",
+      "message": "HuggingFace cache file skipped (not a model file)",
+      "severity": "info",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/openvino/openvino_model.bin.metadata",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/openvino/openvino_model.bin.metadata",
+        "reason": "huggingface_cache_file"
+      },
+      "timestamp": 1761066355.9257832
+    },
+    {
+      "name": "HuggingFace Cache File Skip",
+      "status": "passed",
+      "message": "HuggingFace cache file skipped (not a model file)",
+      "severity": "info",
+      "location": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/models--sentence-transformers--all-MiniLM-L6-v2/refs/main",
+      "details": {
+        "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/models--sentence-transformers--all-MiniLM-L6-v2/refs/main",
+        "reason": "huggingface_cache_file"
+      },
+      "timestamp": 1761066355.9359748
+    }
+  ],
+  "files_scanned": 29,
+  "assets": [
+    {
+      "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors",
+      "type": "safetensors",
+      "size": 90868376,
+      "tensors": [
+        "embeddings.position_ids",
+        "embeddings.LayerNorm.bias",
+        "embeddings.LayerNorm.weight",
+        "embeddings.position_embeddings.weight",
+        "embeddings.token_type_embeddings.weight",
+        "embeddings.word_embeddings.weight",
+        "encoder.layer.0.attention.output.LayerNorm.bias",
+        "encoder.layer.0.attention.output.LayerNorm.weight",
+        "encoder.layer.0.attention.output.dense.bias",
+        "encoder.layer.0.attention.output.dense.weight",
+        "encoder.layer.0.attention.self.key.bias",
+        "encoder.layer.0.attention.self.key.weight",
+        "encoder.layer.0.attention.self.query.bias",
+        "encoder.layer.0.attention.self.query.weight",
+        "encoder.layer.0.attention.self.value.bias",
+        "encoder.layer.0.attention.self.value.weight",
+        "encoder.layer.0.intermediate.dense.bias",
+        "encoder.layer.0.intermediate.dense.weight",
+        "encoder.layer.0.output.LayerNorm.bias",
+        "encoder.layer.0.output.LayerNorm.weight",
+        "encoder.layer.0.output.dense.bias",
+        "encoder.layer.0.output.dense.weight",
+        "encoder.layer.1.attention.output.LayerNorm.bias",
+        "encoder.layer.1.attention.output.LayerNorm.weight",
+        "encoder.layer.1.attention.output.dense.bias",
+        "encoder.layer.1.attention.output.dense.weight",
+        "encoder.layer.1.attention.self.key.bias",
+        "encoder.layer.1.attention.self.key.weight",
+        "encoder.layer.1.attention.self.query.bias",
+        "encoder.layer.1.attention.self.query.weight",
+        "encoder.layer.1.attention.self.value.bias",
+        "encoder.layer.1.attention.self.value.weight",
+        "encoder.layer.1.intermediate.dense.bias",
+        "encoder.layer.1.intermediate.dense.weight",
+        "encoder.layer.1.output.LayerNorm.bias",
+        "encoder.layer.1.output.LayerNorm.weight",
+        "encoder.layer.1.output.dense.bias",
+        "encoder.layer.1.output.dense.weight",
+        "encoder.layer.2.attention.output.LayerNorm.bias",
+        "encoder.layer.2.attention.output.LayerNorm.weight",
+        "encoder.layer.2.attention.output.dense.bias",
+        "encoder.layer.2.attention.output.dense.weight",
+        "encoder.layer.2.attention.self.key.bias",
+        "encoder.layer.2.attention.self.key.weight",
+        "encoder.layer.2.attention.self.query.bias",
+        "encoder.layer.2.attention.self.query.weight",
+        "encoder.layer.2.attention.self.value.bias",
+        "encoder.layer.2.attention.self.value.weight",
+        "encoder.layer.2.intermediate.dense.bias",
+        "encoder.layer.2.intermediate.dense.weight",
+        "encoder.layer.2.output.LayerNorm.bias",
+        "encoder.layer.2.output.LayerNorm.weight",
+        "encoder.layer.2.output.dense.bias",
+        "encoder.layer.2.output.dense.weight",
+        "encoder.layer.3.attention.output.LayerNorm.bias",
+        "encoder.layer.3.attention.output.LayerNorm.weight",
+        "encoder.layer.3.attention.output.dense.bias",
+        "encoder.layer.3.attention.output.dense.weight",
+        "encoder.layer.3.attention.self.key.bias",
+        "encoder.layer.3.attention.self.key.weight",
+        "encoder.layer.3.attention.self.query.bias",
+        "encoder.layer.3.attention.self.query.weight",
+        "encoder.layer.3.attention.self.value.bias",
+        "encoder.layer.3.attention.self.value.weight",
+        "encoder.layer.3.intermediate.dense.bias",
+        "encoder.layer.3.intermediate.dense.weight",
+        "encoder.layer.3.output.LayerNorm.bias",
+        "encoder.layer.3.output.LayerNorm.weight",
+        "encoder.layer.3.output.dense.bias",
+        "encoder.layer.3.output.dense.weight",
+        "encoder.layer.4.attention.output.LayerNorm.bias",
+        "encoder.layer.4.attention.output.LayerNorm.weight",
+        "encoder.layer.4.attention.output.dense.bias",
+        "encoder.layer.4.attention.output.dense.weight",
+        "encoder.layer.4.attention.self.key.bias",
+        "encoder.layer.4.attention.self.key.weight",
+        "encoder.layer.4.attention.self.query.bias",
+        "encoder.layer.4.attention.self.query.weight",
+        "encoder.layer.4.attention.self.value.bias",
+        "encoder.layer.4.attention.self.value.weight",
+        "encoder.layer.4.intermediate.dense.bias",
+        "encoder.layer.4.intermediate.dense.weight",
+        "encoder.layer.4.output.LayerNorm.bias",
+        "encoder.layer.4.output.LayerNorm.weight",
+        "encoder.layer.4.output.dense.bias",
+        "encoder.layer.4.output.dense.weight",
+        "encoder.layer.5.attention.output.LayerNorm.bias",
+        "encoder.layer.5.attention.output.LayerNorm.weight",
+        "encoder.layer.5.attention.output.dense.bias",
+        "encoder.layer.5.attention.output.dense.weight",
+        "encoder.layer.5.attention.self.key.bias",
+        "encoder.layer.5.attention.self.key.weight",
+        "encoder.layer.5.attention.self.query.bias",
+        "encoder.layer.5.attention.self.query.weight",
+        "encoder.layer.5.attention.self.value.bias",
+        "encoder.layer.5.attention.self.value.weight",
+        "encoder.layer.5.intermediate.dense.bias",
+        "encoder.layer.5.intermediate.dense.weight",
+        "encoder.layer.5.output.LayerNorm.bias",
+        "encoder.layer.5.output.LayerNorm.weight",
+        "encoder.layer.5.output.dense.bias",
+        "encoder.layer.5.output.dense.weight",
+        "pooler.dense.bias",
+        "pooler.dense.weight"
+      ]
+    },
+    {
+      "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/pytorch_model.bin",
+      "type": "pytorch_zip",
+      "size": 90888945
+    },
+    {
+      "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/tf_model.h5",
+      "type": "unknown"
+    },
+    {
+      "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_quint8_avx2.onnx",
+      "type": "weight_distribution",
+      "size": 23046789
+    },
+    {
+      "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_O2.onnx",
+      "type": "weight_distribution",
+      "size": 90326566
+    },
+    {
+      "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_arm64.onnx",
+      "type": "weight_distribution",
+      "size": 23026053
+    },
+    {
+      "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_avx512.onnx",
+      "type": "weight_distribution",
+      "size": 23026053
+    },
+    {
+      "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_avx512_vnni.onnx",
+      "type": "weight_distribution",
+      "size": 23026053
+    },
+    {
+      "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_O3.onnx",
+      "type": "weight_distribution",
+      "size": 90326497
+    },
+    {
+      "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_O4.onnx",
+      "type": "weight_distribution",
+      "size": 45212349
+    },
+    {
+      "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model.onnx",
+      "type": "weight_distribution",
+      "size": 90405214
+    },
+    {
+      "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_O1.onnx",
+      "type": "weight_distribution",
+      "size": 90360328
+    },
+    {
+      "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/openvino/openvino_model_qint8_quantized.bin",
+      "type": "pytorch_binary",
+      "size": 22933664
+    },
+    {
+      "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/openvino/openvino_model.bin",
+      "type": "pytorch_binary",
+      "size": 90265744
+    },
+    {
+      "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/model.safetensors.metadata",
+      "type": "skipped"
+    },
+    {
+      "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/tf_model.h5.metadata",
+      "type": "skipped"
+    },
+    {
+      "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/pytorch_model.bin.metadata",
+      "type": "skipped"
+    },
+    {
+      "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model_O1.onnx.metadata",
+      "type": "skipped"
+    },
+    {
+      "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model_quint8_avx2.onnx.metadata",
+      "type": "skipped"
+    },
+    {
+      "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model_O2.onnx.metadata",
+      "type": "skipped"
+    },
+    {
+      "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model_qint8_arm64.onnx.metadata",
+      "type": "skipped"
+    },
+    {
+      "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model_qint8_avx512_vnni.onnx.metadata",
+      "type": "skipped"
+    },
+    {
+      "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model.onnx.metadata",
+      "type": "skipped"
+    },
+    {
+      "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model_qint8_avx512.onnx.metadata",
+      "type": "skipped"
+    },
+    {
+      "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model_O3.onnx.metadata",
+      "type": "skipped"
+    },
+    {
+      "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model_O4.onnx.metadata",
+      "type": "skipped"
+    },
+    {
+      "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/openvino/openvino_model_qint8_quantized.bin.metadata",
+      "type": "skipped"
+    },
+    {
+      "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/openvino/openvino_model.bin.metadata",
+      "type": "skipped"
+    },
+    {
+      "path": "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/models--sentence-transformers--all-MiniLM-L6-v2/refs/main",
+      "type": "skipped"
+    }
+  ],
+  "has_errors": false,
+  "scanner_names": [],
+  "file_metadata": {
+    "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/model.safetensors": {
+      "file_size": 90868376,
+      "file_hashes": {
+        "md5": "5d228912c417f6abf7732710314ddeed",
+        "sha256": "53aa51172d142c89d9012cce15ae4d6cc0ca6895895114379cacb4fab128d9db",
+        "sha512": "7b6644a1ede4fabd6a004135b12f54a154423daff0727c9dabfc1c893244288c582c76fd78542dc690a6db54c0b3b0634a4fced9dfe8dc221f2c17b7b527fd88"
+      },
+      "license_info": [],
+      "copyright_notices": [],
+      "license_files_nearby": [],
+      "is_dataset": false,
+      "is_model": true,
+      "risk_score": 0.0,
+      "scan_timestamp": 1761066306.708728,
+      "tensor_count": 104,
+      "tensors": [
+        "embeddings.position_ids",
+        "embeddings.LayerNorm.bias",
+        "embeddings.LayerNorm.weight",
+        "embeddings.position_embeddings.weight",
+        "embeddings.token_type_embeddings.weight",
+        "embeddings.word_embeddings.weight",
+        "encoder.layer.0.attention.output.LayerNorm.bias",
+        "encoder.layer.0.attention.output.LayerNorm.weight",
+        "encoder.layer.0.attention.output.dense.bias",
+        "encoder.layer.0.attention.output.dense.weight",
+        "encoder.layer.0.attention.self.key.bias",
+        "encoder.layer.0.attention.self.key.weight",
+        "encoder.layer.0.attention.self.query.bias",
+        "encoder.layer.0.attention.self.query.weight",
+        "encoder.layer.0.attention.self.value.bias",
+        "encoder.layer.0.attention.self.value.weight",
+        "encoder.layer.0.intermediate.dense.bias",
+        "encoder.layer.0.intermediate.dense.weight",
+        "encoder.layer.0.output.LayerNorm.bias",
+        "encoder.layer.0.output.LayerNorm.weight",
+        "encoder.layer.0.output.dense.bias",
+        "encoder.layer.0.output.dense.weight",
+        "encoder.layer.1.attention.output.LayerNorm.bias",
+        "encoder.layer.1.attention.output.LayerNorm.weight",
+        "encoder.layer.1.attention.output.dense.bias",
+        "encoder.layer.1.attention.output.dense.weight",
+        "encoder.layer.1.attention.self.key.bias",
+        "encoder.layer.1.attention.self.key.weight",
+        "encoder.layer.1.attention.self.query.bias",
+        "encoder.layer.1.attention.self.query.weight",
+        "encoder.layer.1.attention.self.value.bias",
+        "encoder.layer.1.attention.self.value.weight",
+        "encoder.layer.1.intermediate.dense.bias",
+        "encoder.layer.1.intermediate.dense.weight",
+        "encoder.layer.1.output.LayerNorm.bias",
+        "encoder.layer.1.output.LayerNorm.weight",
+        "encoder.layer.1.output.dense.bias",
+        "encoder.layer.1.output.dense.weight",
+        "encoder.layer.2.attention.output.LayerNorm.bias",
+        "encoder.layer.2.attention.output.LayerNorm.weight",
+        "encoder.layer.2.attention.output.dense.bias",
+        "encoder.layer.2.attention.output.dense.weight",
+        "encoder.layer.2.attention.self.key.bias",
+        "encoder.layer.2.attention.self.key.weight",
+        "encoder.layer.2.attention.self.query.bias",
+        "encoder.layer.2.attention.self.query.weight",
+        "encoder.layer.2.attention.self.value.bias",
+        "encoder.layer.2.attention.self.value.weight",
+        "encoder.layer.2.intermediate.dense.bias",
+        "encoder.layer.2.intermediate.dense.weight",
+        "encoder.layer.2.output.LayerNorm.bias",
+        "encoder.layer.2.output.LayerNorm.weight",
+        "encoder.layer.2.output.dense.bias",
+        "encoder.layer.2.output.dense.weight",
+        "encoder.layer.3.attention.output.LayerNorm.bias",
+        "encoder.layer.3.attention.output.LayerNorm.weight",
+        "encoder.layer.3.attention.output.dense.bias",
+        "encoder.layer.3.attention.output.dense.weight",
+        "encoder.layer.3.attention.self.key.bias",
+        "encoder.layer.3.attention.self.key.weight",
+        "encoder.layer.3.attention.self.query.bias",
+        "encoder.layer.3.attention.self.query.weight",
+        "encoder.layer.3.attention.self.value.bias",
+        "encoder.layer.3.attention.self.value.weight",
+        "encoder.layer.3.intermediate.dense.bias",
+        "encoder.layer.3.intermediate.dense.weight",
+        "encoder.layer.3.output.LayerNorm.bias",
+        "encoder.layer.3.output.LayerNorm.weight",
+        "encoder.layer.3.output.dense.bias",
+        "encoder.layer.3.output.dense.weight",
+        "encoder.layer.4.attention.output.LayerNorm.bias",
+        "encoder.layer.4.attention.output.LayerNorm.weight",
+        "encoder.layer.4.attention.output.dense.bias",
+        "encoder.layer.4.attention.output.dense.weight",
+        "encoder.layer.4.attention.self.key.bias",
+        "encoder.layer.4.attention.self.key.weight",
+        "encoder.layer.4.attention.self.query.bias",
+        "encoder.layer.4.attention.self.query.weight",
+        "encoder.layer.4.attention.self.value.bias",
+        "encoder.layer.4.attention.self.value.weight",
+        "encoder.layer.4.intermediate.dense.bias",
+        "encoder.layer.4.intermediate.dense.weight",
+        "encoder.layer.4.output.LayerNorm.bias",
+        "encoder.layer.4.output.LayerNorm.weight",
+        "encoder.layer.4.output.dense.bias",
+        "encoder.layer.4.output.dense.weight",
+        "encoder.layer.5.attention.output.LayerNorm.bias",
+        "encoder.layer.5.attention.output.LayerNorm.weight",
+        "encoder.layer.5.attention.output.dense.bias",
+        "encoder.layer.5.attention.output.dense.weight",
+        "encoder.layer.5.attention.self.key.bias",
+        "encoder.layer.5.attention.self.key.weight",
+        "encoder.layer.5.attention.self.query.bias",
+        "encoder.layer.5.attention.self.query.weight",
+        "encoder.layer.5.attention.self.value.bias",
+        "encoder.layer.5.attention.self.value.weight",
+        "encoder.layer.5.intermediate.dense.bias",
+        "encoder.layer.5.intermediate.dense.weight",
+        "encoder.layer.5.output.LayerNorm.bias",
+        "encoder.layer.5.output.LayerNorm.weight",
+        "encoder.layer.5.output.dense.bias",
+        "encoder.layer.5.output.dense.weight",
+        "pooler.dense.bias",
+        "pooler.dense.weight"
+      ],
+      "content_hash": "53aa51172d142c89d9012cce15ae4d6cc0ca6895895114379cacb4fab128d9db"
+    },
+    "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/pytorch_model.bin": {
+      "file_size": 90888945,
+      "file_hashes": {
+        "md5": "dc04c8aa60eab688ac40e03dea40fb23",
+        "sha256": "c3a85f238711653950f6a79ece63eb0ea93d76f6a6284be04019c53733baf256",
+        "sha512": "e633b6277f254116d380a513afc464aafc2fd1402479a90c3c9f34edc86ea4906676ba8db0b1c8395f237535e581b1cc13af4fcb6a47555d23e2b1daa6ef2967"
+      },
+      "max_stack_depth": 417,
+      "opcode_count": 3214,
+      "suspicious_count": 0,
+      "ml_context": {
+        "frameworks": {
+          "pytorch": {
+            "confidence": 0.315,
+            "indicators": [],
+            "file_patterns": []
+          }
+        },
+        "overall_confidence": 0.315,
+        "is_ml_content": true,
+        "detected_patterns": [
+          "module:torch(3)",
+          "module:collections(1)"
+        ],
+        "optimization_hints": []
+      },
+      "license_info": [],
+      "copyright_notices": [],
+      "license_files_nearby": [],
+      "is_dataset": false,
+      "is_model": false,
+      "risk_score": 0.0,
+      "scan_timestamp": 1761066344.077319,
+      "pickle_files": [
+        "archive/data.pkl"
+      ],
+      "pytorch_archive_version": "3",
+      "pytorch_version_source": "archive/version",
+      "content_hash": "c3a85f238711653950f6a79ece63eb0ea93d76f6a6284be04019c53733baf256"
+    },
+    "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/tf_model.h5": {
+      "license_info": [],
+      "copyright_notices": [],
+      "license_files_nearby": [],
+      "is_dataset": false,
+      "is_model": true,
+      "risk_score": 0.0,
+      "scan_timestamp": 1761066344.592887,
+      "content_hash": "24c06a7429b843d46e40c6b167122053921bf94dce2e5550ea5c07fabc597646"
+    },
+    "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_quint8_avx2.onnx": {
+      "file_size": 23046789,
+      "license_info": [],
+      "copyright_notices": [],
+      "license_files_nearby": [],
+      "is_dataset": false,
+      "is_model": true,
+      "risk_score": 0.0,
+      "scan_timestamp": 1761066344.8253021,
+      "content_hash": "b941bf19f1f1283680f449fa6a7336bb5600bdcd5f84d10ddc5cd72218a0fd21"
+    },
+    "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_O2.onnx": {
+      "file_size": 90326566,
+      "license_info": [],
+      "copyright_notices": [],
+      "license_files_nearby": [],
+      "is_dataset": false,
+      "is_model": true,
+      "risk_score": 0.0,
+      "scan_timestamp": 1761066345.641833,
+      "content_hash": "1de3905029190b398c7d300b530e320cf4b5e7d3dfb9af1429ebd73fd9a16faf"
+    },
+    "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_arm64.onnx": {
+      "file_size": 23026053,
+      "license_info": [],
+      "copyright_notices": [],
+      "license_files_nearby": [],
+      "is_dataset": false,
+      "is_model": true,
+      "risk_score": 0.0,
+      "scan_timestamp": 1761066345.877753,
+      "content_hash": "4278337fd0ff3c68bfb6291042cad8ab363e1d9fbc43dcb499fe91c871902474",
+      "duplicate_files": [
+        "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_arm64.onnx",
+        "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_avx512.onnx",
+        "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_avx512_vnni.onnx"
+      ]
+    },
+    "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_avx512.onnx": {
+      "file_size": 23026053,
+      "license_info": [],
+      "copyright_notices": [],
+      "license_files_nearby": [],
+      "is_dataset": false,
+      "is_model": true,
+      "risk_score": 0.0,
+      "scan_timestamp": 1761066345.880227,
+      "content_hash": "4278337fd0ff3c68bfb6291042cad8ab363e1d9fbc43dcb499fe91c871902474",
+      "duplicate_files": [
+        "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_arm64.onnx",
+        "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_avx512.onnx",
+        "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_avx512_vnni.onnx"
+      ]
+    },
+    "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_avx512_vnni.onnx": {
+      "file_size": 23026053,
+      "license_info": [],
+      "copyright_notices": [],
+      "license_files_nearby": [],
+      "is_dataset": false,
+      "is_model": true,
+      "risk_score": 0.0,
+      "scan_timestamp": 1761066345.8823419,
+      "content_hash": "4278337fd0ff3c68bfb6291042cad8ab363e1d9fbc43dcb499fe91c871902474",
+      "duplicate_files": [
+        "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_arm64.onnx",
+        "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_avx512.onnx",
+        "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_qint8_avx512_vnni.onnx"
+      ]
+    },
+    "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_O3.onnx": {
+      "file_size": 90326497,
+      "license_info": [],
+      "copyright_notices": [],
+      "license_files_nearby": [],
+      "is_dataset": false,
+      "is_model": true,
+      "risk_score": 0.0,
+      "scan_timestamp": 1761066346.691224,
+      "content_hash": "a44f671e364dddbac31f203f07b91be6b0a35e51936e5ebfab65b6d9538b83ff"
+    },
+    "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_O4.onnx": {
+      "file_size": 45212349,
+      "license_info": [],
+      "copyright_notices": [],
+      "license_files_nearby": [],
+      "is_dataset": false,
+      "is_model": true,
+      "risk_score": 0.0,
+      "scan_timestamp": 1761066347.1028101,
+      "content_hash": "1667d7f3ba669048b13a96ee3a44456d5e42c8f44588ae8b603430e16160c485"
+    },
+    "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model.onnx": {
+      "file_size": 90405214,
+      "license_info": [],
+      "copyright_notices": [],
+      "license_files_nearby": [],
+      "is_dataset": false,
+      "is_model": true,
+      "risk_score": 0.0,
+      "scan_timestamp": 1761066347.905184,
+      "content_hash": "6fd5d72fe4589f189f8ebc006442dbb529bb7ce38f8082112682524616046452"
+    },
+    "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/onnx/model_O1.onnx": {
+      "file_size": 90360328,
+      "license_info": [],
+      "copyright_notices": [],
+      "license_files_nearby": [],
+      "is_dataset": false,
+      "is_model": true,
+      "risk_score": 0.0,
+      "scan_timestamp": 1761066348.7030551,
+      "content_hash": "1391c6fc20b5530250bc15cbe1f47578ffeca55ab0551d335cc668b6299a88ec"
+    },
+    "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/openvino/openvino_model_qint8_quantized.bin": {
+      "file_size": 22933664,
+      "file_hashes": {
+        "md5": "e860ca617923282cd12f74ad534bd218",
+        "sha256": "c92ea4af3c6bc7b4a0f3b3d61b147c850f4dbdd7c9e7beee0c0c70dc12da289b",
+        "sha512": "d48dec679ebf11d0547e46d5f0e19cf211313bc425db40271921a9fcf507ffa1849231ec2bceff115357b23a0f390d153f1b879b524aacd130c004296faded8c"
+      },
+      "license_info": [],
+      "copyright_notices": [],
+      "license_files_nearby": [],
+      "is_dataset": false,
+      "is_model": false,
+      "risk_score": 0.0,
+      "scan_timestamp": 1761066350.1126761,
+      "content_hash": "c92ea4af3c6bc7b4a0f3b3d61b147c850f4dbdd7c9e7beee0c0c70dc12da289b"
+    },
+    "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/openvino/openvino_model.bin": {
+      "file_size": 90265744,
+      "file_hashes": {
+        "md5": "3492fa40890ceaa9f530e88ad5385115",
+        "sha256": "8b86cab4722e2aefab310cf96d4d5a9eb3b187f7d9670a082afc55c7fa0d392a",
+        "sha512": "a03c27b2a4159d25a98f899af24361eed53fefc6d4ad51d4e9bc08a0ee8d9478cf9cad4e66bd0dbdee57c88ccddd0c50ad2e1d47207e89de242a1709529c78a0"
+      },
+      "license_info": [],
+      "copyright_notices": [],
+      "license_files_nearby": [],
+      "is_dataset": false,
+      "is_model": false,
+      "risk_score": 0.0,
+      "scan_timestamp": 1761066355.765594,
+      "content_hash": "8b86cab4722e2aefab310cf96d4d5a9eb3b187f7d9670a082afc55c7fa0d392a"
+    },
+    "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/model.safetensors.metadata": {
+      "license_info": [],
+      "copyright_notices": [],
+      "license_files_nearby": [],
+      "is_dataset": false,
+      "is_model": false,
+      "risk_score": 0.0,
+      "scan_timestamp": 1761066355.779506,
+      "content_hash": "e81f940752510a53533c8a15533230bb96f7b63e41a4ebd6de174ee35e8f2c6f"
+    },
+    "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/tf_model.h5.metadata": {
+      "license_info": [],
+      "copyright_notices": [],
+      "license_files_nearby": [],
+      "is_dataset": false,
+      "is_model": false,
+      "risk_score": 0.0,
+      "scan_timestamp": 1761066355.791892,
+      "content_hash": "7f4238788776551bc1664e3eef4ca280446939cfe64432a516216f4376c1f93f"
+    },
+    "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/pytorch_model.bin.metadata": {
+      "license_info": [],
+      "copyright_notices": [],
+      "license_files_nearby": [],
+      "is_dataset": false,
+      "is_model": false,
+      "risk_score": 0.0,
+      "scan_timestamp": 1761066355.804832,
+      "content_hash": "4e3a264ee01a6dcb6b2565ee0b745578868dfb58304df4eee51c9dcc4d0b0ae3"
+    },
+    "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model_O1.onnx.metadata": {
+      "license_info": [],
+      "copyright_notices": [],
+      "license_files_nearby": [],
+      "is_dataset": false,
+      "is_model": false,
+      "risk_score": 0.0,
+      "scan_timestamp": 1761066355.815965,
+      "content_hash": "13658379c20bb4f4ccea2be98289e7526a7a6f90be6b0d2645c2da7ca1536988"
+    },
+    "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model_quint8_avx2.onnx.metadata": {
+      "license_info": [],
+      "copyright_notices": [],
+      "license_files_nearby": [],
+      "is_dataset": false,
+      "is_model": false,
+      "risk_score": 0.0,
+      "scan_timestamp": 1761066355.826348,
+      "content_hash": "cb0268176df6831ceff68546f385d11db7c7939fa572986a69b354d564871365"
+    },
+    "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model_O2.onnx.metadata": {
+      "license_info": [],
+      "copyright_notices": [],
+      "license_files_nearby": [],
+      "is_dataset": false,
+      "is_model": false,
+      "risk_score": 0.0,
+      "scan_timestamp": 1761066355.836831,
+      "content_hash": "d303d4b5362b904aef5bb7f0e25985c24de06fcb075a34b1f53ce134a6e456c8"
+    },
+    "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model_qint8_arm64.onnx.metadata": {
+      "license_info": [],
+      "copyright_notices": [],
+      "license_files_nearby": [],
+      "is_dataset": false,
+      "is_model": false,
+      "risk_score": 0.0,
+      "scan_timestamp": 1761066355.8464792,
+      "content_hash": "95fb8f00f3196045f67968b60a6ce5701cb833212cfd7710beef900959b47e3c"
+    },
+    "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model_qint8_avx512_vnni.onnx.metadata": {
+      "license_info": [],
+      "copyright_notices": [],
+      "license_files_nearby": [],
+      "is_dataset": false,
+      "is_model": false,
+      "risk_score": 0.0,
+      "scan_timestamp": 1761066355.857988,
+      "content_hash": "e279ce783c447d7a3cc57785cf8ecedd5d24f6b740f86445b54bf0c6fb4035da"
+    },
+    "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model.onnx.metadata": {
+      "license_info": [],
+      "copyright_notices": [],
+      "license_files_nearby": [],
+      "is_dataset": false,
+      "is_model": false,
+      "risk_score": 0.0,
+      "scan_timestamp": 1761066355.869447,
+      "content_hash": "1a1a35c6624d4832dcdc12e3c998db4c66a9ce03d6e4857bd4ec3cda312391e0"
+    },
+    "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model_qint8_avx512.onnx.metadata": {
+      "license_info": [],
+      "copyright_notices": [],
+      "license_files_nearby": [],
+      "is_dataset": false,
+      "is_model": false,
+      "risk_score": 0.0,
+      "scan_timestamp": 1761066355.880799,
+      "content_hash": "f4db8dcb6481f8b46a8901a3ddef427a3a6a2506feb6ba0e758c279d023337b3"
+    },
+    "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model_O3.onnx.metadata": {
+      "license_info": [],
+      "copyright_notices": [],
+      "license_files_nearby": [],
+      "is_dataset": false,
+      "is_model": false,
+      "risk_score": 0.0,
+      "scan_timestamp": 1761066355.8926551,
+      "content_hash": "88dd9587a0129cf30cb77a449fd995da203de2165aab0c90142d40d85598cd21"
+    },
+    "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/onnx/model_O4.onnx.metadata": {
+      "license_info": [],
+      "copyright_notices": [],
+      "license_files_nearby": [],
+      "is_dataset": false,
+      "is_model": false,
+      "risk_score": 0.0,
+      "scan_timestamp": 1761066355.904055,
+      "content_hash": "e4b7ec5f1cf62821c4722d80ae98d0c287c88edaf821091d2ceff9d820269ba2"
+    },
+    "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/openvino/openvino_model_qint8_quantized.bin.metadata": {
+      "license_info": [],
+      "copyright_notices": [],
+      "license_files_nearby": [],
+      "is_dataset": false,
+      "is_model": false,
+      "risk_score": 0.0,
+      "scan_timestamp": 1761066355.920075,
+      "content_hash": "900ce57bca5bf942d67b3c0005059a3c9b87a79ccd0bd380a4aabcf52d91cc5a"
+    },
+    "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/.cache/huggingface/download/openvino/openvino_model.bin.metadata": {
+      "license_info": [],
+      "copyright_notices": [],
+      "license_files_nearby": [],
+      "is_dataset": false,
+      "is_model": false,
+      "risk_score": 0.0,
+      "scan_timestamp": 1761066355.9310458,
+      "content_hash": "2994412c5416e8aa376baff932109b0e3c51496efc7c922ccc370c0b3a78d0a8"
+    },
+    "/Users/mdangelo/.modelaudit/cache/huggingface/sentence-transformers/all-MiniLM-L6-v2/models--sentence-transformers--all-MiniLM-L6-v2/refs/main": {
+      "license_info": [],
+      "copyright_notices": [],
+      "license_files_nearby": [],
+      "is_dataset": false,
+      "is_model": false,
+      "risk_score": 0.0,
+      "scan_timestamp": 1761066355.941139,
+      "content_hash": "edb692c300dcf5dd2a56116221d7613e9d360b6f0be22bc3e02e040e095b135b"
+    }
+  },
+  "start_time": 1761066304.738701,
+  "duration": 51.20440697669983,
+  "total_checks": 297,
+  "passed_checks": 289,
+  "failed_checks": 8,
+  "success": true
+}
