@@ -1,0 +1,153 @@
+Metadata-Version: 2.4
+Name: useless-facts-package
+Version: 1.0.0
+Summary: A Python package that returns random useless facts. So useless in fact that it's actually usefull.
+Home-page: https://github.com/yourusername/useless-facts
+Author: Your Name
+Author-email: Your Name <your.email@example.com>
+License: MIT
+Project-URL: Homepage, https://github.com/yourusername/useless-facts
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Dynamic: author
+Dynamic: home-page
+Dynamic: license-file
+Dynamic: requires-python
+
+# Useless Facts
+
+A Python package that returns random useless facts to brighten your day! 🎉
+
+With over **500+ useless facts** across 5 categories, you'll never run out of entertaining trivia!
+
+## Installation
+
+You can install the package using pip:
+
+```bash
+pip install useless-facts
+```
+
+## Usage
+
+### Basic Usage
+
+```python
+from useless_facts import get_random_fact
+
+# Get a random fact
+fact = get_random_fact()
+print(fact)
+# Output: "A group of flamingos is called a 'flamboyance'."
+```
+
+### Get Facts by Category
+
+```python
+from useless_facts import get_random_fact, get_fact_by_category, get_categories
+
+# Get a random fact from a specific category
+animal_fact = get_random_fact("animals")
+print(animal_fact)
+# Output: "Octopuses have three hearts and blue blood."
+
+# Get all facts from a category
+all_animal_facts = get_fact_by_category("animals")
+print(all_animal_facts)
+
+# Get all available categories
+categories = get_categories()
+print(categories)
+# Output: ['animals', 'science', 'history', 'food', 'random']
+```
+
+### Advanced Usage
+
+```python
+from useless_facts import get_all_facts, get_fact_count
+
+# Get all facts organized by category
+all_facts = get_all_facts()
+print(all_facts)
+
+# Get the total number of facts
+total_facts = get_fact_count()
+print(f"Total facts available: {total_facts}")
+```
+
+## Available Categories
+
+- **animals**: Facts about animals and wildlife
+- **science**: Scientific facts and discoveries
+- **history**: Historical facts and events
+- **food**: Food-related facts and trivia
+- **random**: Miscellaneous interesting facts
+
+## API Reference
+
+### Functions
+
+- `get_random_fact(category=None)`: Get a random fact from all categories or a specific category
+- `get_all_facts()`: Get all facts organized by category
+- `get_fact_by_category(category)`: Get all facts from a specific category
+- `get_categories()`: Get all available categories
+- `get_fact_count()`: Get the total number of facts
+
+## Examples
+
+```python
+import useless_facts
+
+# Get a random fact
+print(useless_facts.get_random_fact())
+
+# Get a science fact
+print(useless_facts.get_random_fact("science"))
+
+# Get all animal facts
+animal_facts = useless_facts.get_fact_by_category("animals")
+for fact in animal_facts:
+    print(fact)
+```
+
+## Development
+
+To install the package in development mode:
+
+```bash
+git clone https://github.com/yourusername/useless-facts.git
+cd useless-facts
+pip install -e .
+```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Changelog
+
+### 1.0.0
+- Initial release
+- Added 500+ useless facts across 5 categories
+- Basic API for accessing facts
+- 102 animal facts
+- 100 science facts
+- 98 history facts
+- 103 food facts
+- 102 random facts
