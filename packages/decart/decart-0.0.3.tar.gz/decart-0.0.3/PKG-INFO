@@ -1,0 +1,151 @@
+Metadata-Version: 2.1
+Name: decart
+Version: 0.0.3
+Summary: Decart's Python SDK
+Project-URL: Homepage, https://github.com/decartai/decart-python
+Project-URL: Documentation, https://docs.platform.decart.ai/sdks/python
+Project-URL: Repository, https://github.com/decartai/decart-python
+Project-URL: Issues, https://github.com/decartai/decart-python/issues
+Author-email: Adir Amsalem <adir@decart.ai>
+License: MIT
+Keywords: ai,decart,generation,image,transformation,video
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Requires-Python: >=3.9
+Requires-Dist: aiofiles>=23.0.0
+Requires-Dist: aiohttp>=3.9.0
+Requires-Dist: pydantic>=2.0.0
+Provides-Extra: dev
+Requires-Dist: black>=23.0.0; extra == 'dev'
+Requires-Dist: mypy>=1.0.0; extra == 'dev'
+Requires-Dist: pytest-asyncio>=0.21.0; extra == 'dev'
+Requires-Dist: pytest-cov>=4.0.0; extra == 'dev'
+Requires-Dist: pytest>=7.0.0; extra == 'dev'
+Requires-Dist: ruff>=0.1.0; extra == 'dev'
+Provides-Extra: realtime
+Requires-Dist: aiortc>=1.9.0; extra == 'realtime'
+Requires-Dist: av>=12.0.0; extra == 'realtime'
+Requires-Dist: tenacity>=8.0.0; extra == 'realtime'
+Description-Content-Type: text/markdown
+
+# Decart Python SDK
+
+A Python SDK for Decart's models.
+
+## Installation
+
+### Using UV
+
+```bash
+uv pip install decart
+```
+
+### Using pip
+
+```bash
+pip install decart
+```
+
+## Documentation
+
+For complete documentation, guides, and examples, visit:
+**https://docs.platform.decart.ai/sdks/python**
+
+## Quick Start
+
+### Process Files
+
+```python
+import asyncio
+import os
+from decart import DecartClient, models
+
+async def main():
+    async with DecartClient(api_key=os.getenv("DECART_API_KEY")) as client:
+        # Generate a video from text
+        result = await client.process({
+            "model": models.video("lucy-pro-t2v"),
+            "prompt": "A cat walking in a lego world",
+        })
+
+        # Save the result
+        with open("output.mp4", "wb") as f:
+            f.write(result)
+
+asyncio.run(main())
+```
+
+### Video Transformation
+
+```python
+async with DecartClient(api_key=os.getenv("DECART_API_KEY")) as client:
+    # Transform a video file
+    with open("input.mp4", "rb") as video_file:
+        result = await client.process({
+            "model": models.video("lucy-pro-v2v"),
+            "prompt": "Anime style with vibrant colors",
+            "data": video_file,
+            "enhance_prompt": True,
+        })
+
+    # Save the result
+    with open("output.mp4", "wb") as f:
+        f.write(result)
+```
+
+## Development
+
+### Setup with UV
+
+```bash
+# Clone the repository
+git clone https://github.com/decartai/decart-python
+cd decart-python
+
+# Install UV
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Install all dependencies (including dev dependencies)
+uv sync --all-extras
+
+# Run tests
+uv run pytest
+
+# Run linting
+uv run ruff check decart/
+
+# Format code
+uv run black decart/ tests/ examples/
+
+# Type check
+uv run mypy decart/
+```
+
+### Common Commands
+
+```bash
+# Install dependencies
+uv sync --all-extras
+
+# Run tests with coverage
+uv run pytest --cov=decart --cov-report=html
+
+# Run examples
+uv run python examples/process_video.py
+uv run python examples/realtime_synthetic.py
+
+# Update dependencies
+uv lock --upgrade
+```
+
+## License
+
+MIT
