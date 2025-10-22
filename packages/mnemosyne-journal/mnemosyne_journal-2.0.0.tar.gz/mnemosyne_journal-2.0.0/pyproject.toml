@@ -1,0 +1,48 @@
+[project]
+name = "mnemosyne-journal"
+version = "2.0.0"
+description = "A simple encrypted journaling application that is named after the ancient Greek goddess of memories."
+readme = "README.md"
+requires-python = ">=3.13"
+license = "GPL-3.0-or-later"
+authors = [{ name = "siru", email = "main@codessh.de" }]
+maintainers = [{ name = "siru", email = "main@codessh.de" }]
+keywords = ["journaling"]
+classifiers = [
+  "Development Status :: 1 - Planning",
+  "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+  "Natural Language :: English",
+  "Programming Language :: Python :: 3",
+  "Topic :: Office/Business :: News/Diary",
+  "Typing :: Typed"
+]
+dependencies = [
+    "argon2-cffi>=25.1.0",
+    "pycryptodomex>=3.23.0",
+]
+
+[project.urls]
+documentation = "https://codeberg.org/siru/mnemosyne-journal/wiki"
+homepage = "https://mnemosyne.codessh.de/"
+issues = "https://codeberg.org/siru/mnemosyne-journal/issues"
+source = "https://codeberg.org/siru/mnemosyne-journal"
+
+[project.scripts]
+siru-mnemosyne = "mnemosyne_journal:cli"
+siru-mnemosyne-gui = "mnemosyne_journal.gui:start_tkinter_gui"
+
+[project.optional-dependencies]
+gui = [
+    "pyside6>=6.10.0",
+]
+
+[dependency-groups]
+dev = [
+  "ruff>=0.14.1",
+  "tombi>=0.6.34",
+  "ty>=0.0.1a23",
+]
+
+[build-system]
+requires = ["uv_build>=0.9.0,<0.10.0"]
+build-backend = "uv_build"
