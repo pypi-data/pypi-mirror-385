@@ -1,0 +1,62 @@
+Metadata-Version: 2.4
+Name: geff
+Version: 1.1.2.1.1
+Summary: Reference implementation of the Graph Exchange File Format
+Project-URL: repository, https://github.com/live-image-tracking-tools/geff
+Project-URL: homepage, https://github.com/live-image-tracking-tools/geff
+License-Expression: MIT
+Classifier: Development Status :: 3 - Alpha
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Requires-Python: >=3.10
+Requires-Dist: geff-spec<=1.1
+Requires-Dist: networkx>=3.2.1
+Requires-Dist: numcodecs<0.16,>=0.13; python_version == '3.10'
+Requires-Dist: numcodecs>=0.13
+Requires-Dist: numcodecs>=0.15; python_version >= '3.13'
+Requires-Dist: numpy>=1.24
+Requires-Dist: numpy>=1.26; python_version >= '3.12'
+Requires-Dist: numpy>=2.1; python_version >= '3.13'
+Requires-Dist: pydantic>=2.11
+Requires-Dist: typer>=0.14.0
+Requires-Dist: zarr<4,>=2.18
+Provides-Extra: ctc
+Requires-Dist: dask>=2024.10; extra == 'ctc'
+Requires-Dist: imagecodecs>=2025.3.30; extra == 'ctc'
+Requires-Dist: scikit-image>=0.23.2; extra == 'ctc'
+Requires-Dist: scikit-image>=0.25; (python_version >= '3.13') and extra == 'ctc'
+Requires-Dist: tifffile>=2024.10; extra == 'ctc'
+Provides-Extra: pandas
+Requires-Dist: pandas>=2; extra == 'pandas'
+Requires-Dist: pandas>=2.3; (python_version >= '3.12') and extra == 'pandas'
+Provides-Extra: rx
+Requires-Dist: rustworkx>=0.16.0; extra == 'rx'
+Provides-Extra: spatial-graph
+Requires-Dist: spatial-graph>=0.0.4; extra == 'spatial-graph'
+Description-Content-Type: text/markdown
+
+![](../../docs/images/GEFF_HorizontalLogo_RGB.png)
+
+# Graph Exchange File Format 
+
+[![License](https://img.shields.io/pypi/l/geff.svg?color=green)](https://github.com/live-image-tracking-tools/geff/raw/main/LICENSE)
+[![PyPI](https://img.shields.io/pypi/v/geff.svg?color=green)](https://pypi.org/project/geff)
+[![Python Version](https://img.shields.io/pypi/pyversions/geff.svg?color=green)](https://python.org)
+[![Test geff](https://github.com/live-image-tracking-tools/geff/actions/workflows/ci.yaml/badge.svg)](https://github.com/live-image-tracking-tools/geff/actions/workflows/ci.yaml)
+[![Benchmarks](https://img.shields.io/endpoint?url=https://codspeed.io/badge.json)](https://codspeed.io/live-image-tracking-tools/geff)
+
+GEFF is a specification for a file format for **exchanging** spatial graph data. It is not intended to be mutable, editable, chunked, or optimized for use in an application setting.
+
+The geff python library also includes implementations for writing from and reading to three different Python in-memory graph data structures (`networkx`, `rustworkx` and `spatial-graph`). The library uses semantic versioning, where changes to the specification bump the major or minor versions, and bugfixes for the example implementation bumps the patch version.
+
+Learn more in the [documentation](https://live-image-tracking-tools.github.io/geff/latest/) or check out the [source code](https://github.com/live-image-tracking-tools/geff).
+
+## Installation
+
+```
+pip install geff
+```
