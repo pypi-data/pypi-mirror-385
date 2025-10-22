@@ -1,0 +1,147 @@
+Metadata-Version: 2.4
+Name: lumecode
+Version: 1.0.1
+Summary: AI-powered developer CLI assistant - FREE, open-source, intelligent
+Author-email: Lumecode Contributors <support@lumecode.dev>
+License-Expression: MIT
+Project-URL: Homepage, https://github.com/anonymus-netizien/lumecode
+Project-URL: Documentation, https://github.com/anonymus-netizien/lumecode#readme
+Project-URL: Repository, https://github.com/anonymus-netizien/lumecode
+Project-URL: Bug Tracker, https://github.com/anonymus-netizien/lumecode/issues
+Keywords: ai,cli,developer-tools,code-assistant,llm,groq,openrouter,code-review,test-generation,documentation
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Code Generators
+Classifier: Topic :: Software Development :: Documentation
+Classifier: Topic :: Software Development :: Quality Assurance
+Classifier: Topic :: Software Development :: Testing
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Operating System :: OS Independent
+Classifier: Environment :: Console
+Classifier: Natural Language :: English
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: click>=8.1.0
+Requires-Dist: rich>=13.7.0
+Requires-Dist: httpx>=0.27.0
+Requires-Dist: python-dotenv>=1.0.0
+Requires-Dist: pydantic>=2.6.0
+Requires-Dist: prompt-toolkit>=3.0.0
+Requires-Dist: tiktoken>=0.5.0
+Provides-Extra: dev
+Requires-Dist: pytest>=8.0.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.1.0; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.23.0; extra == "dev"
+Requires-Dist: pytest-mock>=3.12.0; extra == "dev"
+Requires-Dist: pytest-xdist>=3.5.0; extra == "dev"
+Requires-Dist: pytest-timeout>=2.2.0; extra == "dev"
+Requires-Dist: pytest-benchmark>=4.0.0; extra == "dev"
+Requires-Dist: hypothesis>=6.92.0; extra == "dev"
+Requires-Dist: black>=24.0.0; extra == "dev"
+Requires-Dist: isort>=5.13.0; extra == "dev"
+Requires-Dist: flake8>=7.0.0; extra == "dev"
+Dynamic: license-file
+
+# Lumecode
+
+AI-powered developer CLI tool for intelligent code assistance.
+
+[![PyPI version](https://badge.fury.io/py/lumecode.svg)](https://badge.fury.io/py/lumecode)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+
+## Overview
+
+Lumecode is a free, open-source CLI tool that provides AI-powered code assistance directly in your terminal. It supports documentation generation, test creation, code review, refactoring, and natural language queries.
+
+## Features
+
+- Documentation generation and management
+- Automated test creation
+- AI-powered code reviews
+- Code refactoring suggestions
+- Natural language Q&A
+- Multiple AI model support (Groq, OpenRouter)
+- Batch file processing
+- Response caching for faster operations
+
+## Installation
+
+**From PyPI:**
+
+```bash
+pip install lumecode
+```
+
+**From source:**
+
+```bash
+git clone https://github.com/anonymus-netizien/lumecode.git
+cd lumecode
+pip install -e .
+```
+
+## Configuration
+
+Set up your API key for AI providers:
+
+```bash
+# For Groq (recommended, free)
+export GROQ_API_KEY="your-api-key"
+
+# For OpenRouter (optional)
+export OPENROUTER_API_KEY="your-api-key"
+```
+
+## Quick Start
+
+```bash
+# Get help
+lumecode --help
+
+# Generate documentation
+lumecode docs generate src/main.py
+
+# Generate tests
+lumecode test generate src/calculator.py
+
+# Review code
+lumecode review file src/api.py
+
+# Ask questions about your code
+lumecode ask query "How does authentication work?"
+
+# Generate commit messages
+lumecode commit generate
+
+# Refactor code
+lumecode refactor suggest src/legacy.py
+```
+
+## Available Commands
+
+- `docs` - Generate and manage documentation
+- `test` - Generate and improve tests
+- `review` - Get AI-powered code reviews
+- `ask` - Ask questions about your codebase
+- `commit` - Generate smart commit messages
+- `explain` - Explain code and concepts
+- `refactor` - Get refactoring suggestions
+- `cache` - Manage response cache
+
+## Requirements
+
+- Python 3.10 or higher
+- API key from Groq or OpenRouter
+
+## License
+
+MIT License. See LICENSE file for details.
+
+## Contributing
+
+Contributions are welcome! Feel free to submit issues and pull requests.
