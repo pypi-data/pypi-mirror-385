@@ -1,0 +1,15 @@
+global-include *.csv *.py *.dta *.ipynb *.png
+
+recursive-include doc/source *
+recursive-include linearmodels *.pyx
+recursive-include linearmodels/tests *.txt *.csv *.dta
+recursive-include linearmodels/datasets *
+recursive-include examples *
+include linearmodels/_version.py
+include LICENSE.md
+include README.md
+include requirements.txt
+include requirements-dev.txt
+include examples/*.ipynb
+include examples/*.png
+recursive-exclude * __pycache__

@@ -1,0 +1,41 @@
+Verison 5.5
+-----------
+- Full compatibility with NumPy 2, and NumPy 1.22.3+
+- Compatibility with future pandas releases (3.0.0)
+
+Verison 5.4
+-----------
+- Compatibility with NumPy 2
+- Compatibility with recent pandas releases
+
+Version 5.3
+-----------
+- Bumped the minimum formulaic to 0.6.5.
+- Released wheels for Python 3.12.
+
+Version 5.2
+-----------
+* Fixed a bug that affected dropping absorbed regressors when using weights (:issue:`546`).
+* Improved the licensing information (:issue:`545`).
+* Improved compatibility with recent pandas (:issue:`548`).
+
+Version 5.1
+-----------
+* Fixed a bug that affected the counting of the number of entities and time periods
+  in panel models (:issue:`534`).
+
+Version 5.0
+------------
+
+* Increased minimums:
+
+  - Python: 3.9
+  - formulaic: 0.6.1
+  - NumPy: 1.19.0
+  - SciPy: 1.5.0
+  - pandas: 1.1.0
+  - statsmodels: 0.12.0
+
+* Switched variable ordering by default.  Importing ``linearmodels.__future__.ordering``
+  is a no-op, and has no effect.
+* Removed dependence on property-cached in favor of :class:`functools.cached_property`.
