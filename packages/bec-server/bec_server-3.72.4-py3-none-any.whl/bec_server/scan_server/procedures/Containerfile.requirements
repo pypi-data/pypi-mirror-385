@@ -1,0 +1,9 @@
+FROM ghcr.io/bec-project/bec_linux_base AS bec_requirements
+# Install dependencies - BEC release workflow should build this stage and deploy
+# it to the internal container registry
+
+RUN pip install --upgrade pip wheel
+RUN pip install uv
+RUN uv pip install --system -r /bec/bec_lib/pyproject.toml 
+RUN uv pip install --system -r /bec/bec_server/pyproject.toml
+RUN uv pip install --system -r /bec/bec_ipython_client/pyproject.toml
