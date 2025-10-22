@@ -1,0 +1,256 @@
+{% extends "base.html" %}
+
+{% block title %}Inventário de Ativos{% endblock %}
+
+{% block content %}
+<header class="page-header">
+  <h2>Inventário de Ativos de Suporte</h2>
+  <p>Controle equipamentos e recursos que podem estar associados aos tickets.</p>
+</header>
+
+<div class="page-stack">
+  <section class="card form-card">
+    <div class="card-header">
+      <h3>Novo ativo</h3>
+      <p class="muted">Registre rapidamente os itens disponíveis para emprestar ou alocar.</p>
+    </div>
+    <div class="card-body">
+      <form method="POST" class="form-grid">
+        <input type="hidden" name="acao" value="criar">
+        <div class="form-group">
+          <label for="ativo-nome">Nome</label>
+          <input type="text" id="ativo-nome" name="nome" class="form-control" placeholder="Notebook Dell" required>
+        </div>
+        <div class="form-group">
+          <label for="numero_serie">Número de série</label>
+          <input type="text" id="numero_serie" name="numero_serie" class="form-control" placeholder="SN-123456">
+        </div>
+        <div class="form-group">
+          <label for="quantidade">Quantidade</label>
+          <input type="number" id="quantidade" name="quantidade" class="form-control" min="1" value="1" required>
+        </div>
+        <div class="form-group">
+          <label for="categoria_id">Categoria relacionada</label>
+          <select id="categoria_id" name="categoria_id" class="form-control">
+            <option value="">Sem categoria</option>
+            {% for categoria in categorias %}
+              <option value="{{ categoria.id_categoria }}">{{ categoria.nome }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="status_operacional">Status</label>
+          <select id="status_operacional" name="status_operacional" class="form-control">
+            <option value="Em uso">Em uso</option>
+            <option value="Em estoque">Em estoque</option>
+            <option value="Em manutenção">Em manutenção</option>
+            <option value="Em descarte">Em descarte</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="observacoes">Observações</label>
+          <textarea id="observacoes" name="observacoes" class="form-control" rows="2" placeholder="Localização, estado, notas..."></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-soft-success">Adicionar ao inventário</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  {% set total_quantidade = ativos | sum(attribute='quantidade') %}
+  <section class="card table-card">
+    <div class="card-header table-card-header">
+      <div>
+        <h3>Ativos cadastrados</h3>
+        <p class="muted">Centralize seu inventário e acompanhe rapidamente a disponibilidade.</p>
+      </div>
+      <div class="card-insights">
+        <span class="insight-pill">
+          <span class="insight-value">{{ total_quantidade }}</span>
+          <span class="insight-label">Itens totais</span>
+        </span>
+      </div>
+    </div>
+    <div class="card-body">
+      {% if ativos %}
+        <div class="table-section">
+          <table class="table table-lined">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Número de série</th>
+                <th class="col-quantity">Quantidade</th>
+                <th>Categoria</th>
+                <th>Status</th>
+                <th style="width: 200px;">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for ativo in ativos %}
+              <tr data-ativo-row>
+                <form method="POST" action="{{ url_for('gerenciar_ativos') }}">
+                  <input type="hidden" name="acao" value="atualizar">
+                  <input type="hidden" name="id_ativo" value="{{ ativo.id_ativo }}">
+                  <input type="hidden" name="observacoes" value="{{ ativo.observacoes or '' }}">
+                  <td>
+                    <span class="view-value" data-empty="-">{{ ativo.nome }}</span>
+                    <input class="form-control edit-field" type="text" name="nome" value="{{ ativo.nome }}" required style="display:none;" disabled>
+                  </td>
+                  <td>
+                    <span class="view-value" data-empty="—">{{ ativo.numero_serie or '—' }}</span>
+                    <input class="form-control edit-field" type="text" name="numero_serie" value="{{ ativo.numero_serie or '' }}" style="display:none;" disabled>
+                  </td>
+                  <td class="col-quantity">
+                    <span class="view-value" data-empty="1">{{ ativo.quantidade }}</span>
+                    <input class="form-control edit-field" type="number" name="quantidade" min="1" value="{{ ativo.quantidade }}" required style="display:none;" disabled>
+                  </td>
+                  <td>
+                    <span class="view-value" data-empty="Sem categoria">{{ categorias_por_id.get(ativo.categoria_id) if ativo.categoria_id else 'Sem categoria' }}</span>
+                    <select class="form-control select-wide edit-field" name="categoria_id" style="display:none;" disabled>
+                      <option value="">Sem categoria</option>
+                      {% for categoria in categorias %}
+                        <option value="{{ categoria.id_categoria }}" {% if categoria.id_categoria == ativo.categoria_id %}selected{% endif %}>{{ categoria.nome }}</option>
+                      {% endfor %}
+                    </select>
+                  </td>
+                  <td>
+                    <span class="view-value" data-empty="Em uso">{{ ativo.status_operacional }}</span>
+                    <select class="form-control select-compact edit-field" name="status_operacional" style="display:none;" disabled>
+                      {% set status_opcoes = ['Em uso', 'Em estoque', 'Em manutenção', 'Em descarte'] %}
+                      {% for status in status_opcoes %}
+                        <option value="{{ status }}" {% if status == ativo.status_operacional %}selected{% endif %}>{{ status }}</option>
+                      {% endfor %}
+                    </select>
+                  </td>
+                  <td>
+                    <div class="table-actions">
+                      <button type="button" class="btn btn-soft-neutral btn-edit" onclick="startEdit(this)">
+                        <span>Editar</span>
+                      </button>
+                      <button type="submit" class="btn btn-soft-success btn-save" style="display:none;">
+                        <span>Salvar</span>
+                      </button>
+                      <button type="button" class="btn btn-soft-warning btn-cancel" onclick="cancelEdit(this)" style="display:none;">
+                        <span>Cancelar</span>
+                      </button>
+                      <button class="btn btn-soft-danger" type="submit"
+                              formaction="{{ url_for('excluir_ativo', ativo_id=ativo.id_ativo) }}"
+                              formmethod="post"
+                              onclick="return confirm('Remover o ativo {{ ativo.nome }}?');">
+                        <span>Excluir</span>
+                      </button>
+                    </div>
+                  </td>
+                </form>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="empty-state">
+          <h4>Nenhum ativo cadastrado</h4>
+          <p>Cadastre seu primeiro recurso acima para manter a equipe preparada.</p>
+        </div>
+      {% endif %}
+    </div>
+  </section>
+</div>
+
+<script>
+  function syncAtivoRowView(tr) {
+    tr.querySelectorAll('td').forEach(td => {
+      const view = td.querySelector('.view-value');
+      const field = td.querySelector('.edit-field');
+      if (!view || !field) {
+        return;
+      }
+
+      let value = '';
+      if (field.tagName === 'SELECT') {
+        const option = field.options[field.selectedIndex];
+        value = option ? option.text.trim() : '';
+      } else if (field.tagName === 'TEXTAREA') {
+        value = field.value ? field.value.trim() : '';
+      } else {
+        value = field.value ? field.value.trim() : '';
+      }
+
+      const emptyFallback = view.dataset.empty || '-';
+      view.textContent = value !== '' ? value : emptyFallback;
+    });
+  }
+
+  function startEdit(btn) {
+    const tr = btn.closest('tr');
+    if (!tr) return;
+    const form = tr.querySelector('form');
+    if (!form) return;
+
+    tr.classList.add('editing-row');
+
+    tr.querySelectorAll('.view-value').forEach(el => {
+      el.style.display = 'none';
+    });
+
+    tr.querySelectorAll('.edit-field').forEach(el => {
+      el.style.display = '';
+      const field = el.matches('input, textarea, select') ? el : el.querySelector('input, textarea, select');
+      if (field) {
+        field.disabled = false;
+        field.removeAttribute('disabled');
+      }
+    });
+
+    const editBtn = tr.querySelector('.btn-edit');
+    const saveBtn = tr.querySelector('.btn-save');
+    const cancelBtn = tr.querySelector('.btn-cancel');
+    if (editBtn) editBtn.style.display = 'none';
+    if (saveBtn) saveBtn.style.display = '';
+    if (cancelBtn) cancelBtn.style.display = '';
+
+    const firstField = tr.querySelector('.edit-field');
+    if (firstField) {
+      const focusable = firstField.matches('input, textarea, select') ? firstField : firstField.querySelector('input, textarea, select');
+      if (focusable) {
+        focusable.focus();
+      }
+    }
+  }
+
+  function cancelEdit(btn) {
+    const tr = btn.closest('tr');
+    if (!tr) return;
+    const form = tr.querySelector('form');
+    if (!form) return;
+
+    form.reset();
+
+    tr.querySelectorAll('.edit-field').forEach(el => {
+      const field = el.matches('input, textarea, select') ? el : el.querySelector('input, textarea, select');
+      if (field) {
+        field.disabled = true;
+        field.setAttribute('disabled', 'disabled');
+      }
+      el.style.display = 'none';
+    });
+
+    tr.querySelectorAll('.view-value').forEach(el => {
+      el.style.display = '';
+    });
+
+    const editBtn = tr.querySelector('.btn-edit');
+    const saveBtn = tr.querySelector('.btn-save');
+    const cancelBtn = tr.querySelector('.btn-cancel');
+    if (editBtn) editBtn.style.display = '';
+    if (saveBtn) saveBtn.style.display = 'none';
+    if (cancelBtn) cancelBtn.style.display = 'none';
+
+    tr.classList.remove('editing-row');
+    syncAtivoRowView(tr);
+  }
+
+  document.querySelectorAll('tr[data-ativo-row]').forEach(tr => syncAtivoRowView(tr));
+</script>
+{% endblock %}

@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+
+{% block title %}Gerenciar Especialidades{% endblock %}
+
+{% block content %}
+<header class="page-header">
+  <h2>Gerenciar Especialidades</h2>
+  <p>Organize as competências da equipe para direcionar tickets aos agentes corretos.</p>
+</header>
+
+<div class="page-stack">
+  <section class="card form-card">
+    <div class="card-header">
+      <h3>Cadastrar nova especialidade</h3>
+      <p class="muted">Inclua descrições para ajudar a escolher a melhor especialidade durante a triagem.</p>
+    </div>
+    <div class="card-body">
+      <form method="POST" action="{{ url_for('gerenciar_especialidades') }}" class="form-inline-grid">
+        <input type="hidden" name="acao" value="criar">
+        <div class="form-group">
+          <label for="nome">Nome</label>
+          <input type="text" class="form-control" id="nome" name="nome" placeholder="Ex.: Hardware" required>
+        </div>
+        <div class="form-group">
+          <label for="descricao">Descrição</label>
+          <input type="text" class="form-control" id="descricao" name="descricao" placeholder="Uso opcional">
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-soft-success">Adicionar</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section class="card table-card">
+    <div class="card-header table-card-header">
+      <div>
+        <h3>Especialidades cadastradas</h3>
+        <p class="muted">Visualize o portfólio de habilidades disponíveis na operação.</p>
+      </div>
+      <div class="card-insights">
+        <span class="insight-pill">
+          <span class="insight-value">{{ especialidades|length }}</span>
+          <span class="insight-label">Especialidade{% if especialidades|length != 1 %}s{% endif %}</span>
+        </span>
+      </div>
+    </div>
+    <div class="card-body">
+      {% if especialidades %}
+        <div class="table-section">
+          <table class="table table-lined">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Descrição</th>
+                <th>Status</th>
+                <th style="width: 220px;">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for esp in especialidades %}
+              <tr data-especialidade-row class="{% if not esp.ativa %}row-inactive{% endif %}">
+                <form method="POST" action="{{ url_for('gerenciar_especialidades') }}">
+                  <input type="hidden" name="acao" value="atualizar">
+                  <input type="hidden" name="id_especialidade" value="{{ esp.id_especialidade }}">
+                  <td>
+                    <span class="view-value" data-empty="-">{{ esp.nome }}</span>
+                    <input class="form-control edit-field" type="text" name="nome" value="{{ esp.nome }}" required style="display:none;" disabled>
+                  </td>
+                  <td>
+                    <span class="view-value" data-empty="-">{{ esp.descricao if esp.descricao else '-' }}</span>
+                    <input class="form-control edit-field" type="text" name="descricao" value="{{ esp.descricao }}" style="display:none;" disabled>
+                  </td>
+                  <td class="col-status">
+                    <span class="view-value" data-empty="Inativa">{{ 'Ativa' if esp.ativa else 'Inativa' }}</span>
+                    <div class="edit-field" style="display:none;">
+                      <label class="status-toggle">
+                        <input type="checkbox" name="ativa" value="1" {% if esp.ativa %}checked{% endif %}>
+                        <span>Ativa</span>
+                      </label>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="table-actions">
+                      <button type="button" class="btn btn-soft-neutral btn-edit" onclick="startEspecialidadeEdit(this)">
+                        <span>Editar</span>
+                      </button>
+                      <button class="btn btn-soft-success btn-save" type="submit" style="display:none;">
+                        <span>Salvar</span>
+                      </button>
+                      <button type="button" class="btn btn-soft-warning btn-cancel" onclick="cancelEspecialidadeEdit(this)" style="display:none;">
+                        <span>Cancelar</span>
+                      </button>
+                      <button class="btn btn-soft-danger" type="submit"
+                              formaction="{{ url_for('excluir_especialidade', esp_id=esp.id_especialidade) }}"
+                              formmethod="post"
+                              onclick="return confirmarExclusao('{{ esp.nome }}');">
+                        <span>Excluir</span>
+                      </button>
+                    </div>
+                  </td>
+                </form>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="empty-state">
+          <h4>Nenhuma especialidade cadastrada</h4>
+          <p>Utilize o formulário acima para adicionar a primeira especialidade da equipe.</p>
+        </div>
+      {% endif %}
+    </div>
+  </section>
+</div>
+
+<script>
+  function startEspecialidadeEdit(btn) {
+    const tr = btn.closest('tr');
+    if (!tr) return;
+    const form = tr.querySelector('form');
+    if (!form) return;
+
+    tr.classList.add('editing-row');
+
+    tr.querySelectorAll('.view-value').forEach(el => {
+      el.style.display = 'none';
+    });
+
+    tr.querySelectorAll('.edit-field').forEach(el => {
+      el.style.display = '';
+      const field = el.matches('input, textarea, select') ? el : el.querySelector('input, textarea, select');
+      if (field) {
+        field.disabled = false;
+        field.removeAttribute('disabled');
+      }
+    });
+
+    const editBtn = tr.querySelector('.btn-edit');
+    const saveBtn = tr.querySelector('.btn-save');
+    const cancelBtn = tr.querySelector('.btn-cancel');
+    if (editBtn) editBtn.style.display = 'none';
+    if (saveBtn) saveBtn.style.display = '';
+    if (cancelBtn) cancelBtn.style.display = '';
+
+    const firstField = tr.querySelector('.edit-field input, .edit-field textarea, .edit-field select');
+    if (firstField) {
+      firstField.focus();
+    }
+  }
+
+  function cancelEspecialidadeEdit(btn) {
+    const tr = btn.closest('tr');
+    if (!tr) return;
+    const form = tr.querySelector('form');
+    if (!form) return;
+
+    form.reset();
+
+    tr.querySelectorAll('.edit-field').forEach(el => {
+      const field = el.matches('input, textarea, select') ? el : el.querySelector('input, textarea, select');
+      if (field) {
+        field.disabled = true;
+        field.setAttribute('disabled', 'disabled');
+      }
+      el.style.display = 'none';
+    });
+
+    tr.querySelectorAll('.view-value').forEach(el => {
+      el.style.display = '';
+    });
+
+    const editBtn = tr.querySelector('.btn-edit');
+    const saveBtn = tr.querySelector('.btn-save');
+    const cancelBtn = tr.querySelector('.btn-cancel');
+    if (editBtn) editBtn.style.display = '';
+    if (saveBtn) saveBtn.style.display = 'none';
+    if (cancelBtn) cancelBtn.style.display = 'none';
+
+    tr.classList.remove('editing-row');
+  }
+
+  function confirmarExclusao(nome) {
+    return confirm(`Excluir a especialidade "${nome}"? Essa ação não pode ser desfeita.`);
+  }
+</script>
+{% endblock %}

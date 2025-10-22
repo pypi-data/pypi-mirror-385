@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block title %}Gerenciar Categorias{% endblock %}
+
+{% block content %}
+<header class="page-header">
+  <h2>Gerenciar Categorias</h2>
+  <p>Organize os assuntos dos tickets e mantenha os setores responsáveis sempre atualizados.</p>
+</header>
+
+<div class="page-stack">
+  <section class="card form-card">
+    <div class="card-header">
+      <h3>Cadastrar nova categoria</h3>
+      <p class="muted">Defina tópicos claros para facilitar o direcionamento dos chamados.</p>
+    </div>
+    <div class="card-body">
+      <form method="POST" action="{{ url_for('gerenciar_categorias') }}" class="form-inline-grid">
+        <input type="hidden" name="acao" value="criar">
+        <div class="form-group">
+          <label for="nome">Nome</label>
+          <input type="text" class="form-control" id="nome" name="nome" placeholder="Ex.: Hardware" required>
+        </div>
+        <div class="form-group">
+          <label for="setor_responsavel">Setor responsável</label>
+          <input type="text" class="form-control" id="setor_responsavel" name="setor_responsavel" placeholder="Ex.: Suporte ao Usuário" required>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-soft-success" type="submit">Adicionar</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section class="card table-card">
+    <div class="card-header table-card-header">
+      <div>
+        <h3>Categorias cadastradas</h3>
+        <p class="muted">Visualize e atualize rapidamente as áreas responsáveis.</p>
+      </div>
+      <div class="card-insights">
+        <span class="insight-pill">
+          <span class="insight-value">{{ categorias|length }}</span>
+          <span class="insight-label">Categoria{% if categorias|length != 1 %}s{% endif %}</span>
+        </span>
+      </div>
+    </div>
+    <div class="card-body">
+      {% if categorias %}
+        <div class="table-section">
+          <table class="table table-lined">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Setor responsável</th>
+                <th style="width: 200px;">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for c in categorias %}
+              <tr data-categoria-row>
+                <form method="POST" action="{{ url_for('gerenciar_categorias') }}">
+                  <input type="hidden" name="acao" value="atualizar">
+                  <input type="hidden" name="id_categoria" value="{{ c.id_categoria }}">
+                  <td>
+                    <span class="view-value" data-empty="-">{{ c.nome }}</span>
+                    <input class="form-control edit-field" type="text" name="nome" value="{{ c.nome }}" required style="display:none;" disabled>
+                  </td>
+                  <td>
+                    <span class="view-value" data-empty="-">{{ c.setor_responsavel }}</span>
+                    <input class="form-control edit-field" type="text" name="setor_responsavel" value="{{ c.setor_responsavel }}" required style="display:none;" disabled>
+                  </td>
+                  <td>
+                    <div class="table-actions">
+                      <button type="button" class="btn btn-soft-neutral btn-edit" onclick="startCategoriaEdit(this)">
+                        <span>Editar</span>
+                      </button>
+                      <button class="btn btn-soft-success btn-save" type="submit" style="display:none;">
+                        <span>Salvar</span>
+                      </button>
+                      <button type="button" class="btn btn-soft-warning btn-cancel" onclick="cancelCategoriaEdit(this)" style="display:none;">
+                        <span>Cancelar</span>
+                      </button>
+                      <button class="btn btn-soft-danger" type="submit"
+                              formaction="{{ url_for('excluir_categoria', cat_id=c.id_categoria) }}"
+                              formmethod="post"
+                              onclick="return confirmarRemocao('{{ c.nome }}');">
+                        <span>Excluir</span>
+                      </button>
+                    </div>
+                  </td>
+                </form>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="empty-state">
+          <h4>Nenhuma categoria cadastrada</h4>
+          <p>Utilize o formulário acima para criar a primeira categoria.</p>
+        </div>
+      {% endif %}
+    </div>
+  </section>
+</div>
+
+<script>
+  function startCategoriaEdit(btn) {
+    const tr = btn.closest('tr');
+    if (!tr) return;
+    const form = tr.querySelector('form');
+    if (!form) return;
+
+    tr.classList.add('editing-row');
+
+    tr.querySelectorAll('.view-value').forEach(el => {
+      el.style.display = 'none';
+    });
+
+    tr.querySelectorAll('.edit-field').forEach(el => {
+      el.style.display = '';
+      el.disabled = false;
+      el.removeAttribute('disabled');
+    });
+
+    const editBtn = tr.querySelector('.btn-edit');
+    const saveBtn = tr.querySelector('.btn-save');
+    const cancelBtn = tr.querySelector('.btn-cancel');
+    if (editBtn) editBtn.style.display = 'none';
+    if (saveBtn) saveBtn.style.display = '';
+    if (cancelBtn) cancelBtn.style.display = '';
+
+    const firstField = tr.querySelector('.edit-field');
+    if (firstField) {
+      firstField.focus();
+    }
+  }
+
+  function cancelCategoriaEdit(btn) {
+    const tr = btn.closest('tr');
+    if (!tr) return;
+    const form = tr.querySelector('form');
+    if (!form) return;
+
+    form.reset();
+
+    tr.querySelectorAll('.edit-field').forEach(el => {
+      el.disabled = true;
+      el.setAttribute('disabled', 'disabled');
+      el.style.display = 'none';
+    });
+
+    tr.querySelectorAll('.view-value').forEach(el => {
+      el.style.display = '';
+    });
+
+    const editBtn = tr.querySelector('.btn-edit');
+    const saveBtn = tr.querySelector('.btn-save');
+    const cancelBtn = tr.querySelector('.btn-cancel');
+    if (editBtn) editBtn.style.display = '';
+    if (saveBtn) saveBtn.style.display = 'none';
+    if (cancelBtn) cancelBtn.style.display = 'none';
+
+    tr.classList.remove('editing-row');
+  }
+
+  function confirmarRemocao(nome) {
+    return confirm(`Remover a categoria "${nome}"?`);
+  }
+</script>
+{% endblock %}

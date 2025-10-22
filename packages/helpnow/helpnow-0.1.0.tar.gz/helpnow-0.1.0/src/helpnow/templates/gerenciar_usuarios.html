@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+
+{% block title %}Gerenciar Usuários{% endblock %}
+
+{% block content %}
+<header class="page-header">
+  <h2>Gerenciar Usuários</h2>
+  <p>Administre perfis, especialidades e permissões de acesso de toda a equipe.</p>
+</header>
+
+<div class="page-stack">
+  <section class="card table-card">
+    <div class="card-header table-card-header">
+      <div>
+        <h3>Usuários cadastrados</h3>
+        <p class="muted">Atualize dados e mantenha o cadastro sempre organizado.</p>
+      </div>
+      <div class="card-insights">
+        <span class="insight-pill">
+          <span class="insight-value">{{ usuarios|length }}</span>
+          <span class="insight-label">Usuário{% if usuarios|length != 1 %}s{% endif %}</span>
+        </span>
+      </div>
+    </div>
+    <div class="card-body">
+      {% if usuarios %}
+        <div class="table-section">
+          <table class="table table-lined">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Matrícula</th>
+                <th class="col-role">Papel</th>
+                <th class="col-status">Status</th>
+                <th>Último login</th>
+                <th>Especialidade</th>
+                <th style="width: 260px;">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for u in usuarios %}
+              <tr>
+                <form method="POST" action="{{ url_for('editar_usuario', user_id=u.id_usuario) }}">
+                  <td>
+                    <span class="view-value">{{ u.nome_completo }}</span>
+                    <input class="form-control edit-field" type="text" name="nome_completo" value="{{ u.nome_completo }}" required style="display:none;" disabled>
+                  </td>
+                  <td>
+                    <span class="view-value">{{ u.email }}</span>
+                    <input class="form-control edit-field" type="email" name="email" value="{{ u.email }}" required style="display:none;" disabled>
+                  </td>
+                  <td>
+                    <span class="view-value">{{ u.matricula }}</span>
+                    <input class="form-control edit-field" type="text" name="matricula" value="{{ u.matricula }}" required style="display:none;" disabled>
+                  </td>
+                  <td class="col-role">
+                    <span class="view-value">{{ u.tipo_usuario }}</span>
+                    <select name="tipo_usuario" class="form-control select-compact edit-field" style="display:none;" disabled>
+                      <option value="Solicitante" {% if u.tipo_usuario=='Solicitante' %}selected{% endif %}>Solicitante</option>
+                      <option value="Agente" {% if u.tipo_usuario=='Agente' %}selected{% endif %}>Agente</option>
+                      <option value="Admin" {% if u.tipo_usuario=='Admin' %}selected{% endif %}>Admin</option>
+                    </select>
+                  </td>
+                  <td class="col-status">
+                    <span class="view-value">{{ u.status_usuario.value }}</span>
+                    <select name="status_usuario" class="form-control select-compact edit-field" style="display:none;" disabled>
+                      <option value="Ativo" {% if u.status_usuario.value=='Ativo' %}selected{% endif %}>Ativo</option>
+                      <option value="Inativo" {% if u.status_usuario.value=='Inativo' %}selected{% endif %}>Inativo</option>
+                    </select>
+                  </td>
+                  <td>{{ u.ultimo_login.strftime('%d/%m/%Y %H:%M') if u.ultimo_login else '-' }}</td>
+                  <td>
+                    <span class="view-value">{{ u.especialidade if u.especialidade else '-' }}</span>
+                    {% set especialidade_atual = u.especialidade if u.especialidade else '' %}
+                    {% set lista_especialidades = especialidades | map(attribute='nome') | list %}
+                    <select name="especialidade" class="form-control select-wide edit-field" style="display:none;" disabled>
+                      <option value="">Sem especialidade</option>
+                      {% for esp in especialidades %}
+                        <option value="{{ esp.nome }}" {% if esp.nome == especialidade_atual %}selected{% endif %}>{{ esp.nome }}</option>
+                      {% endfor %}
+                      {% if especialidade_atual and especialidade_atual not in lista_especialidades %}
+                        <option value="{{ especialidade_atual }}" selected>{{ especialidade_atual }} (descontinuada)</option>
+                      {% endif %}
+                    </select>
+                  </td>
+                  <td>
+                    <div class="table-actions">
+                      <button type="button" class="btn btn-soft-neutral btn-edit" onclick="startEdit(this)">
+                        <span>Editar</span>
+                      </button>
+                      <button class="btn btn-soft-success btn-save" type="submit" style="display:none;">
+                        <span>Salvar</span>
+                      </button>
+                      <button type="button" class="btn btn-soft-warning btn-cancel" onclick="cancelEdit(this)" style="display:none;">
+                        <span>Cancelar</span>
+                      </button>
+                    </div>
+                  </td>
+                </form>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="empty-state">
+          <h4>Nenhum usuário encontrado</h4>
+          <p>Cadastre novos usuários ou ajuste os filtros de visualização.</p>
+        </div>
+      {% endif %}
+    </div>
+  </section>
+</div>
+<script>
+  function syncRowView(tr) {
+    tr.querySelectorAll('td').forEach(td => {
+      const view = td.querySelector('.view-value');
+      const field = td.querySelector('.edit-field');
+      if (view && field) {
+        if (field.tagName === 'SELECT') {
+          const opt = field.options[field.selectedIndex];
+          view.textContent = opt ? opt.text : '';
+        } else {
+          const val = field.value ? field.value.trim() : '';
+          view.textContent = val !== '' ? val : '-';
+        }
+      }
+    });
+  }
+
+  function updateSpecialtyAvailability(tr) {
+    const tipoSelect = tr.querySelector('select[name="tipo_usuario"]');
+    const especialidadeSelect = tr.querySelector('select[name="especialidade"]');
+    if (!tipoSelect || !especialidadeSelect) return;
+    if (tipoSelect.value === 'Agente') {
+      especialidadeSelect.disabled = false;
+      especialidadeSelect.removeAttribute('disabled');
+    } else {
+      especialidadeSelect.value = '';
+      especialidadeSelect.disabled = true;
+      especialidadeSelect.setAttribute('disabled', 'disabled');
+    }
+  }
+
+  function startEdit(btn){
+    const tr = btn.closest('tr');
+    const fields = tr.querySelectorAll('.edit-field');
+    const views = tr.querySelectorAll('.view-value');
+    views.forEach(el => el.style.display = 'none');
+    fields.forEach(el => {
+      el.style.display = '';
+      el.disabled = false;
+      el.removeAttribute('disabled');
+    });
+    updateSpecialtyAvailability(tr);
+    if (fields.length) {
+      fields[0].focus();
+    }
+    tr.classList.add('editing-row');
+
+    const tipoSelect = tr.querySelector('select[name="tipo_usuario"]');
+    if (tipoSelect) {
+      tipoSelect.onchange = () => updateSpecialtyAvailability(tr);
+    }
+
+    const editBtn = tr.querySelector('.btn-edit');
+    const saveBtn = tr.querySelector('.btn-save');
+    const cancelBtn = tr.querySelector('.btn-cancel');
+    if (editBtn) editBtn.style.display = 'none';
+    if (saveBtn) saveBtn.style.display = '';
+    if (cancelBtn) cancelBtn.style.display = '';
+  }
+
+  function cancelEdit(btn){
+    const tr = btn.closest('tr');
+    const form = tr.querySelector('form');
+    if (form && typeof form.reset === 'function') form.reset();
+    const fields = tr.querySelectorAll('.edit-field');
+    const views = tr.querySelectorAll('.view-value');
+    fields.forEach(el => {
+      el.disabled = true;
+      el.setAttribute('disabled', 'disabled');
+      el.style.display = 'none';
+    });
+    syncRowView(tr);
+    views.forEach(el => el.style.display = '');
+    tr.classList.remove('editing-row');
+
+    const tipoSelect = tr.querySelector('select[name="tipo_usuario"]');
+    if (tipoSelect) {
+      tipoSelect.onchange = null;
+    }
+
+    const editBtn = tr.querySelector('.btn-edit');
+    const saveBtn = tr.querySelector('.btn-save');
+    const cancelBtn = tr.querySelector('.btn-cancel');
+    if (editBtn) editBtn.style.display = '';
+    if (saveBtn) saveBtn.style.display = 'none';
+    if (cancelBtn) cancelBtn.style.display = 'none';
+  }
+</script>
+{% endblock %}

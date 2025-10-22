@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}{{ titulo }}{% endblock %}
+
+{% block content %}
+<header class="page-header">
+    <h2>{{ titulo }}</h2>
+    <p>Visualize os resultados consolidados e exporte os dados conforme necessário.</p>
+</header>
+
+<div class="page-stack">
+    <section class="card table-card">
+        <div class="card-body">
+            <div class="report-output">
+                <pre>{{ relatorio }}</pre>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

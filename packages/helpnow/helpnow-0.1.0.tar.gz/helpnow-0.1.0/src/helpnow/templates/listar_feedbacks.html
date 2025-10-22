@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Feedbacks dos Tickets{% endblock %}
+
+{% block content %}
+{% set total = feedbacks|length %}
+{% if total > 0 %}
+  {% set soma_notas = feedbacks|sum(attribute='nota') %}
+  {% set media = (soma_notas / total) | round(1) %}
+{% endif %}
+
+<header class="page-header">
+  <h2>Feedbacks Recebidos</h2>
+  <p>Monitore a satisfação dos solicitantes e identifique oportunidades de melhoria no atendimento.</p>
+</header>
+
+<div class="page-stack">
+  <section class="card table-card">
+    <div class="card-header table-card-header">
+      <div>
+        <h3>Resumo das avaliações</h3>
+        <p class="muted">Acompanhe notas e comentários registrados pelos usuários.</p>
+      </div>
+      <div class="card-insights">
+        <span class="insight-pill">
+          <span class="insight-value">{{ total }}</span>
+          <span class="insight-label">Feedback{% if total != 1 %}s{% endif %}</span>
+        </span>
+        <span class="insight-pill">
+          <span class="insight-value">{{ media if total > 0 else '—' }}</span>
+          <span class="insight-label">Nota média</span>
+        </span>
+      </div>
+    </div>
+    <div class="card-body">
+      {% if feedbacks %}
+        <div class="table-section">
+          <table class="table table-lined">
+            <thead>
+              <tr>
+                <th>Ticket</th>
+                <th>Solicitante</th>
+                <th>Agente</th>
+                <th>Nota</th>
+                <th>Comentário</th>
+                <th>Data</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for fb in feedbacks %}
+              {% set ticket = tickets.get(fb.ticket_id) %}
+              {% set solicitante = usuarios.get(fb.solicitante_id) %}
+              {% set agente = usuarios.get(fb.agente_id) if fb.agente_id else None %}
+              <tr>
+                <td>
+                  {% if ticket %}
+                    <strong>#{{ ticket.id_ticket[:8] }}...</strong><br>
+                    <span class="text-muted">{{ ticket.assunto }}</span>
+                  {% else %}
+                    Ticket removido
+                  {% endif %}
+                </td>
+                <td>{{ solicitante.nome_completo if solicitante else 'Solicitante removido' }}</td>
+                <td>{{ agente.nome_completo if agente else 'Não atribuído' }}</td>
+                <td>
+                  <span class="status-badge status-feedback">{{ fb.nota }}/5</span>
+                </td>
+                <td>
+                  {% if fb.comentario %}
+                    {{ fb.comentario }}
+                  {% else %}
+                    <span class="text-muted">Sem comentários adicionais</span>
+                  {% endif %}
+                </td>
+                <td>{{ fb.data_criacao.strftime('%d/%m/%Y %H:%M') if fb.data_criacao else '-' }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="empty-state">
+          <h4>Nenhum feedback registrado</h4>
+          <p>Assim que os solicitantes avaliarem os tickets, os resultados aparecerão aqui.</p>
+        </div>
+      {% endif %}
+    </div>
+  </section>
+</div>
+{% endblock %}

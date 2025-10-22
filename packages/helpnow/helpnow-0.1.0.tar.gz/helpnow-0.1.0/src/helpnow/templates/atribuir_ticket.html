@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}Atribuir Ticket{% endblock %}
+
+{% block content %}
+<header class="page-header">
+    <h2>Atribuir Ticket a um Agente</h2>
+    <p>Direcione chamados pendentes para o profissional mais adequado e mantenha o atendimento em dia.</p>
+</header>
+
+<div class="page-stack">
+    <section class="card form-card">
+        <div class="card-header">
+            <h3>Direcionar ticket</h3>
+            <p class="muted">Escolha o agente responsável e o ticket aberto que deve receber atendimento.</p>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('atribuir_ticket') }}" class="form-inline-grid">
+                <div class="form-group">
+                    <label for="agente_id">Selecione o agente</label>
+                    <select class="form-control" id="agente_id" name="agente_id" required>
+                        <option value="" disabled selected>Escolha um agente</option>
+                        {% for agente in agentes %}
+                            <option value="{{ agente.id_usuario }}">{{ agente.nome_completo }} ({{ agente.especialidade or 'Sem especialidade' }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="ticket_id">Selecione o ticket aberto</label>
+                    <select class="form-control" id="ticket_id" name="ticket_id" required>
+                        <option value="" disabled selected>Escolha um ticket</option>
+                        {% for ticket in tickets %}
+                            <option value="{{ ticket.id_ticket }}">{{ ticket.assunto }} (ID: {{ ticket.id_ticket[:8] }}...)</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-soft-success">Atribuir ticket</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <section class="card table-card">
+        <div class="card-header table-card-header">
+            <div>
+                <h3>Agentes disponíveis</h3>
+                <p class="muted">Visualize rapidamente quem pode receber novos chamados.</p>
+            </div>
+            <div class="card-insights">
+                <span class="insight-pill">
+                    <span class="insight-value">{{ agentes|length }}</span>
+                    <span class="insight-label">Agente{% if agentes|length != 1 %}s{% endif %}</span>
+                </span>
+            </div>
+        </div>
+        <div class="card-body">
+            {% if agentes %}
+                <div class="table-section">
+                    <table class="table table-lined">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Especialidade</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for agente in agentes %}
+                            <tr>
+                                <td>{{ agente.nome_completo }}</td>
+                                <td>{{ agente.especialidade or 'Sem especialidade definida' }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <h4>Nenhum agente disponível</h4>
+                    <p>Cadastre novos agentes ou verifique filtros aplicados.</p>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <section class="card table-card">
+        <div class="card-header table-card-header">
+            <div>
+                <h3>Tickets aguardando atribuição</h3>
+                <p class="muted">Detalhes dos chamados que ainda precisam de responsável.</p>
+            </div>
+            <div class="card-insights">
+                <span class="insight-pill">
+                    <span class="insight-value">{{ tickets|length }}</span>
+                    <span class="insight-label">Ticket{% if tickets|length != 1 %}s{% endif %}</span>
+                </span>
+            </div>
+        </div>
+        <div class="card-body">
+            {% if tickets %}
+                <div class="table-section">
+                    <table class="table table-lined">
+                        <thead>
+                            <tr>
+                                <th>Assunto</th>
+                                <th>ID</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ticket in tickets %}
+                            <tr>
+                                <td>{{ ticket.assunto }}</td>
+                                <td>#{{ ticket.id_ticket[:8] }}...</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <h4>Nenhum ticket pendente</h4>
+                    <p>Todos os chamados foram atribuídos. Parabéns!</p>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+</div>
+{% endblock %}
