@@ -1,0 +1,37 @@
+Metadata-Version: 2.4
+Name: jmarkov
+Version: 0.3.8
+Summary: A python package for Markov chain modeling
+Project-URL: homepage, https://github.com/copa-uniandes/jmarkov
+Project-URL: documentation, https:/https://jmarkov.readthedocs.io/en/latest/
+Project-URL: source, https://github.com/copa-uniandes/jmarkov
+Project-URL: download, https://pypi.org/project/jmarkov/
+Project-URL: tracker, https://github.com/copa-uniandes/jmarkov/issues
+Author-email: Juan F Perez <juanfernando.perez@gmail.com>, Maria-Gabriela Urango <m.urango@uniandes.edu.co>
+License-File: LICENSE
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.8
+Requires-Dist: numpy
+Requires-Dist: scipy
+Requires-Dist: typing
+Description-Content-Type: text/markdown
+
+# jmarkov
+jMarkov is a library to simplify the modeling of systems with Markov chains.
+
+With jmarkov it is possible to model
+- Continuous-time Markov chains (CTMCs)
+- Discrete-time Markov chains (DTMCs)
+- Infinite and finite Birth-Death processes (BDs)
+- Queueing systems
+- Markov decision processes (MDPs)
+- Stochastic dynamic programs (SDPs)
+
+To use it you can install it from pypi with the command
+```bash
+pip install jmarkov
+```
+
+You can find the documentation on how to use it [here](https://jmarkov.readthedocs.io/en/latest/)
