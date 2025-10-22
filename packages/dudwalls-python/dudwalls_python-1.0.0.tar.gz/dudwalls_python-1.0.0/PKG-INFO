@@ -1,0 +1,89 @@
+Metadata-Version: 2.4
+Name: dudwalls-python
+Version: 1.0.0
+Summary: Official Python SDK for Dudwalls NoSQL Database
+Home-page: https://github.com/dudwalls/dudwalls-python
+Author: Dudwalls Team
+Author-email: support@dudwalls.com
+Keywords: database nosql dudwalls sdk
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+Requires-Dist: requests>=2.25.0
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: keywords
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+# Dudwalls Python SDK
+
+Official Python SDK for Dudwalls NoSQL Database.
+
+## Installation
+
+```bash
+pip install dudwalls-python
+```
+
+## Quick Start
+
+```python
+from dudwalls import Dudwalls
+import os
+
+# Initialize with your API key
+db = Dudwalls(os.getenv('DUDWALLS_API_KEY'))
+
+# Get a collection
+users = db.collection('myapp', 'users')
+
+# Insert a document
+user = users.insert_one({
+    'name': 'John Doe',
+    'email': 'john@example.com'
+})
+
+# Find documents
+all_users = users.find()
+```
+
+## API Reference
+
+### Constructor
+```python
+Dudwalls(api_key, base_url='https://dudwalls.me/api/dudwalls')
+```
+
+### Methods
+- `get_databases()` - Get all databases
+- `create_database(name)` - Create new database
+- `collection(database, collection)` - Get collection instance
+
+### Collection Methods
+- `find(query=None)` - Find documents
+- `find_one(doc_id)` - Find document by ID
+- `insert_one(document)` - Insert single document
+- `insert_many(documents)` - Insert multiple documents
+- `update_one(doc_id, update)` - Update document
+- `delete_one(doc_id)` - Delete document
+- `count()` - Count documents
+
+## License
+
+MIT
