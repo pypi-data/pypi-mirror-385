@@ -1,0 +1,104 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+# [tool.hatch.metadata]
+# this allows dependencies to be specified with a url
+# allow-direct-references = true
+
+[project]
+name = "bdms-sim"
+authors = [
+  { name="William DeWitt", email="wsdewitt@uw.edu" },
+  { name="Michael Celentano", email="mcelentano@berkeley.edu" },
+  { name="Thanasi Bakis", email="abakis@uci.edu" },
+  { name="Duncan Ralph", email="dkralph@gmail.com" },
+  { name="Sebastian Prillo", email="sprillo@berkeley.edu" },
+  { name="Frederick Matsen", email="ematsen@gmail.com" },
+  { name="Yun Song", email="yss@berkeley.edu" },
+  { name="Volodymyr Minin", email="yss@berkeley.edu" },
+]
+description = "Tree simulator for birth-death-mutation-sampling (BDMS) processes"
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dynamic = ["version"]
+dependencies = [
+  "matplotlib",
+  "numpy",
+  "scipy",
+  "ete3",
+  "pyqt5",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/dewitt-lab/BDMS"
+"Bug Tracker" = "https://github.com/dewitt-lab/BDMS/issues"
+"Documentation" = "https://dewitt-lab.github.io/BDMS"
+
+# NOTE: dev dependencies are handled by hatch
+# [project.optional-dependencies]
+# dev = [
+# ]
+
+[tool.hatch.build.targets.wheel]
+packages = ["bdms"]
+
+[tool.hatch.version]
+path = "bdms/__init__.py"
+
+# this puts hatch envs in a .hatch directory, so vscode can find them
+
+
+# instead of using hatch envs, we put everything
+# in the project dev env for vscode intellesense
+[tool.hatch.envs.default]
+path = ".hatch"
+extra-dependencies = [
+  # default
+  "hatch",
+  "jupyter",
+  "seaborn",
+
+  # style
+  "flake8",
+  "black[jupyter]",
+  "docformatter",
+  "pyright",
+
+  # test
+  "pytest",
+  "nbval",
+
+  # docs
+  "sphinx",
+  "sphinx-autodoc-typehints",
+  "sphinx-copybutton",
+  "sphinx-book-theme",
+  "pandoc",
+  "myst-nb",
+]
+
+[tool.hatch.envs.default.scripts]
+tests = [
+	"pytest",
+	"pytest --doctest-modules",
+	"pytest --nbval docs/notebooks",
+]
+docs = [
+  "make -C docs html",
+]
+lint = [
+  "flake8 .",
+  "black --check .",
+  "docformatter --black --check **/*.py",
+  "pyright bdms/*.py",
+]
+format = [
+  "black .",
+  "docformatter --black --in-place **/*.py",
+]
