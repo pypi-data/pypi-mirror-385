@@ -1,0 +1,56 @@
+[project]
+name = "localcartesian"
+version = "0.1.1"
+description = "Fast GPS to local Cartesian coordinate conversion using GeographicLib"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    { name = "Daniel Pastor", email = "danpasmor@gmail.com" },
+    { name = "Cevat Ustun", email = "custun@beyond.ai"}
+]
+requires-python = ">=3.9"
+keywords = ["gps", "coordinates", "cartesian", "geographic", "geospatial"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: C++",
+    "Topic :: Scientific/Engineering :: GIS",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7", "ruff", "mypy", "cibuildwheel"]
+test = ["pytest>=7.0", "numpy"]
+
+[build-system]
+requires = [
+    "scikit-build-core>=0.10", 
+    "pybind11>=2.12", 
+]
+build-backend = "scikit_build_core.build"
+
+[tool.scikit-build.cmake]
+build-type = "Release"
+source-dir = "cpp"        # <— points to the directory with CMakeLists.txt
+
+[tool.scikit-build]
+# (Optional) if you later want universal2 tags:
+# wheel.expand-macos-universal-tags = true
+# Tell the backend where your Python package lives when building the wheel
+wheel.packages = ["src/localcartesian"]
+
+sdist.include = [
+  "cpp/CMakeLists.txt",
+  "cpp/localcartesian_bindings.cpp",
+  "src/localcartesian/py.typed",
+  "src/localcartesian/_core.pyi",
+  "README.md",
+  "LICENSE",
+]
