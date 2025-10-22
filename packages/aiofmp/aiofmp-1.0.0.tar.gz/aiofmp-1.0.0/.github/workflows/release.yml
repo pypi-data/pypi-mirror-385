@@ -1,0 +1,117 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  quick-test:
+    name: Quick Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          version: "latest"
+
+      - name: Install dependencies
+        run: |
+          uv sync --all-extras
+
+      - name: Run linting
+        run: |
+          uv run ruff check . --no-fix
+          uv run ruff format --check .
+
+      - name: Run critical tests
+        run: |
+          uv run pytest tests/test_mcp_server.py tests/test_mcp_tools.py -v --tb=short
+
+  publish:
+    name: Release
+    runs-on: ubuntu-latest
+    needs: quick-test
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          version: "latest"
+
+      - name: Install dependencies (with extras)
+        run: |
+          uv sync --all-extras
+
+      - name: Run Semantic Release
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          uv run semantic-release --verbose version
+          uv run semantic-release --verbose publish
+          uv run twine upload dist/* --verbose
+
+  release:
+    name: Ensure GitHub Release for Tag
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - name: Checkout (shallow)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Check/Create GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          tag_name="${GITHUB_REF#refs/tags/}"
+          echo "Processing tag: $tag_name"
+          code=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/tags/${tag_name}")
+          if [ "$code" = "200" ]; then
+            echo "GitHub Release already exists for $tag_name; nothing to do."; exit 0
+          fi
+          echo "No existing release; creating one with generated notes.";
+          # gh CLI is pre-installed on ubuntu-latest
+          echo "Generating release..."
+          gh release create "$tag_name" --generate-notes || {
+            echo "Fallback: creating minimal release via API";
+            curl -s -X POST \
+              -H "Authorization: Bearer $GITHUB_TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" \
+              -d "$(jq -n --arg tag "$tag_name" '{tag_name:$tag, name:$tag, body:"Automated release."}')" >/dev/null;
+          }
+          echo "Release ensured for $tag_name"
