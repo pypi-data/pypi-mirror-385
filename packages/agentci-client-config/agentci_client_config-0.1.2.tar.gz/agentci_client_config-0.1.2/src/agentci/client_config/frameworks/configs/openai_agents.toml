@@ -1,0 +1,26 @@
+[framework]
+name = "openai-agents"
+dependencies = ["openai-agents", "agents"]
+
+# Agent Discovery + Execution
+[[agents]]
+path = "agents.Agent"
+type = "constructor"
+args.model = "model"
+args.prompt = "instructions"
+args.tools = "tools"
+execution.method = "run"
+execution.args.prompt = "input"
+
+# Tool Discovery + Execution
+
+# @function_tool decorator (primary tool pattern)
+[[tools]]
+type = "decorator"
+path = "agents.function_tool"
+execution.method = "__call__"
+
+# Plain functions used directly in agents
+[[tools]]
+type = "function"
+execution.method = "__call__"

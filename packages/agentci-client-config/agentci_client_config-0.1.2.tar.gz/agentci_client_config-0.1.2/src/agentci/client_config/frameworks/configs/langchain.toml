@@ -1,0 +1,44 @@
+[framework]
+name = "langchain"
+dependencies = ["langchain", "langchain-core", "langgraph"]
+
+# Agent Discovery + Execution
+[[agents]]
+path = "langgraph.prebuilt.create_react_agent"
+args.model = "model"
+args.prompt = "prompt"
+args.tools = "tools"
+execution.method = "invoke"
+execution.args.prompt = "messages"
+
+[[agents]]
+path = "langchain.agents.create_react_agent"
+args.model = "llm"
+args.prompt = "prompt"
+args.tools = "tools"
+execution.method = "run"
+execution.args.prompt = "input"
+
+[[agents]]
+path = "langchain.agents.initialize_agent"
+args.model = "llm"
+args.tools = "tools"
+execution.method = "run"
+execution.args.prompt = "input"
+
+# Tool Discovery + Execution
+[[tools]]
+type = "decorator"
+path = "langchain_core.tools.tool"
+execution.method = "invoke"
+
+[[tools]]
+type = "constructor"
+path = "langchain_core.tools.StructuredTool.from_function"
+execution.method = "invoke"
+
+[[tools]]
+type = "class"
+path = "langchain_core.tools.BaseTool"
+execution.method = "invoke"
+

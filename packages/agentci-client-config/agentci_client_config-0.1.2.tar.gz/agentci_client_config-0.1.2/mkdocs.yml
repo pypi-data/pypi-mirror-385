@@ -1,0 +1,78 @@
+site_name: AgentCI Client Config
+site_description: Client configuration library for AgentCI - Define evaluations and framework configurations
+site_url: https://agent-ci.com
+repo_url: https://github.com/Agent-CI/client-config
+repo_name: Agent-CI/client-config
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: google
+            show_source: true
+            show_root_heading: true
+            show_symbol_type_heading: true
+            show_symbol_type_toc: true
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - admonition
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - TOML Schema:
+      - Getting Started: guide/getting-started.md
+      - Evaluations:
+          - Overview: guide/evaluations.md
+          - Accuracy: guide/eval-accuracy.md
+          - Performance: guide/eval-performance.md
+          - Safety: guide/eval-safety.md
+          - Consistency: guide/eval-consistency.md
+          - LLM: guide/eval-llm.md
+          - Custom: guide/eval-custom.md
+      - Frameworks:
+          - Schema Reference: guide/frameworks.md
+          - Advanced Guide: guide/frameworks-advanced.md
+  - Python API: python-api.md
+  - API Reference:
+      - Evals: api/evals.md
+      - Frameworks: api/frameworks.md
+      - Config: api/config.md
