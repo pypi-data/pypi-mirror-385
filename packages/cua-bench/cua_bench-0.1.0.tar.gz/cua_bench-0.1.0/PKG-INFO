@@ -1,0 +1,139 @@
+Metadata-Version: 2.4
+Name: cua-bench
+Version: 0.1.0
+Summary: Platform for creating computer-use verifiable environments and training VLM agents to use them.
+Requires-Python: >=3.11
+Requires-Dist: aiofiles>=23.0.0
+Requires-Dist: aiohttp>=3.9.0
+Requires-Dist: anthropic>=0.26.0
+Requires-Dist: beautifulsoup4>=4.14.2
+Requires-Dist: datasets>=4.1.1
+Requires-Dist: dotenv>=0.9.9
+Requires-Dist: gcloud-aio-storage>=9.0.0
+Requires-Dist: google-cloud-batch>=0.17.0
+Requires-Dist: google-cloud-logging>=3.5.0
+Requires-Dist: google-cloud-storage>=2.10.0
+Requires-Dist: grpcio==1.60.1
+Requires-Dist: html5lib>=1.1
+Requires-Dist: icoextract>=0.2.0; sys_platform == 'win32'
+Requires-Dist: jinja2>=3.1.0
+Requires-Dist: pillow>=11.3.0
+Requires-Dist: playwright>=1.40.0
+Requires-Dist: pypiwin32>=223; sys_platform == 'win32'
+Requires-Dist: pyquery>=2.0.1
+Requires-Dist: tqdm>=4.66.0
+Description-Content-Type: text/markdown
+
+# cua-bench
+
+A framework for computer automation machine learning. Features a HTML-based desktop environment with a semantic design system that can visually emulate `macos`, `win11`, `win10`, `ios`, `android`, and more.
+
+## Installation
+
+```bash
+uv pip install -e .
+playwright install chromium
+```
+
+### Docker Setup (for batch processing)
+
+Build the cua-bench Docker image:
+
+```bash
+docker build -t cua-bench:latest .
+```
+
+## Quick Start
+
+### Create an environment
+
+```bash
+td create-task tasks/my_env
+```
+
+Run the environment:
+
+```bash
+td interact tasks/my_env
+```
+
+### CLI Usage
+
+#### Install an environment
+```bash
+td install tasks/click_env
+```
+
+#### List tasks
+```bash
+# List all environments
+td tasks
+
+# List tasks in specific environment
+td tasks tasks/click_env
+```
+
+#### Interact with a task
+
+Interact with a task in the browser. This is useful for debugging and testing.
+
+```bash
+td interact tasks/click_env --task-id 0 --solve --screenshot output.png
+```
+
+#### Run tasks with batch processing
+
+Run a cluster of cua-bench tasks on GCP or locally. For multi-step trajectories, use `td dump-solution`. For single-step trajectories, use `td dump-setup`.
+
+```bash
+# Build Docker image first (required for local batch)
+docker build -t cua-bench:latest .
+
+# Local (Docker) - Run 4 tasks from click_env (setup + solve + evaluate)
+td dump-solution tasks/click_env 4 --local
+
+# Local (Docker) - Run 4 tasks from click_env (setup + evaluate)
+td dump-setup tasks/click_env 4 --local --output-dir ./outputs
+
+# GCP Batch - Run 16 tasks from click_env (setup + solve + evaluate)
+td dump-solution tasks/click_env 16 --parallelism 8
+
+# GCP Batch - Run 16 tasks from click_env (setup + evaluate)
+td dump-setup tasks/click_env 16 --parallelism 8 --output-dir ./outputs
+```
+ 
+#### Process snapshots into a training dataset for UI grounding
+
+Given a directory of snapshots, cua-bench offers a simple way to process them into a dataset for UI grounding using action augmentation.
+
+```bash
+# Process 5 snapshots using 'aguvis' action augmentation
+td process ./outputs 5
+
+# Process all snapshots and push to Hugging Face Hub
+td process ./outputs --push-to-hub --repo-id username/repo
+```
+
+### Programmatic Interface
+
+```python
+import cua_bench as cb
+
+# Create an environment
+env = cb.make("tasks/click_env")
+
+# Setup and get initial screenshot
+screenshot, task_cfg = env.setup()  # optionally pass task_id
+
+# Execute a step
+screenshot = env.step('page.click("#submit")')
+
+# Run the solution
+screenshot = env.solve()
+
+# Evaluate the result
+rewards = env.evaluate()
+
+# Clean up
+env.close()
+```

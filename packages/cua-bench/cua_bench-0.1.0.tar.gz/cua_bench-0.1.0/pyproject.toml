@@ -1,0 +1,50 @@
+[project]
+name = "cua-bench"
+version = "0.1.0"
+description = "Platform for creating computer-use verifiable environments and training VLM agents to use them."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "playwright>=1.40.0",
+    "google-cloud-batch>=0.17.0",
+    "google-cloud-logging>=3.5.0",
+    "google-cloud-storage>=2.10.0",
+    "gcloud-aio-storage>=9.0.0",
+    "grpcio==1.60.1", # fixes annoying logs
+    "aiohttp>=3.9.0",
+    "aiofiles>=23.0.0",
+    "tqdm>=4.66.0",
+    "jinja2>=3.1.0",
+    "pyquery>=2.0.1",
+    "html5lib>=1.1",
+    "beautifulsoup4>=4.14.2",
+    "pillow>=11.3.0",
+    "anthropic>=0.26.0",
+    "datasets>=4.1.1",
+    "dotenv>=0.9.9",
+    "pypiwin32>=223 ; sys_platform == 'win32'",
+    "icoextract>=0.2.0 ; sys_platform == 'win32'",
+]
+
+[project.scripts]
+td = "cua-bench.cli.main:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build]
+include = [
+  "cua_bench/**",
+  "README.md",
+  "LICENSE",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["cua-bench"]
+
+[tool.uv.workspace]
+members = [
+    "tasks/click_env",
+    "tasks/uigen_env",
+]
