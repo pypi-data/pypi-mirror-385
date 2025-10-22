@@ -1,0 +1,486 @@
+Metadata-Version: 2.4
+Name: mcp-excel-supabase
+Version: 1.1.0
+Summary: MCP server for Excel operations with Supabase Storage integration
+Project-URL: Homepage, https://github.com/1126misakp/Excel-MCP-Server-with-Supabase-Storage
+Project-URL: Documentation, https://github.com/1126misakp/Excel-MCP-Server-with-Supabase-Storage/blob/main/docs/README.md
+Project-URL: Repository, https://github.com/1126misakp/Excel-MCP-Server-with-Supabase-Storage
+Project-URL: Issues, https://github.com/1126misakp/Excel-MCP-Server-with-Supabase-Storage/issues
+Author-email: 1126misakp <hikaru_lamperouge@163.com>
+License: MIT
+License-File: LICENSE
+Keywords: automation,excel,mcp,openpyxl,supabase
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Office/Business
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Typing :: Typed
+Requires-Python: >=3.9
+Requires-Dist: formulas>=1.2.0
+Requires-Dist: mcp>=1.0.0
+Requires-Dist: openpyxl>=3.1.0
+Requires-Dist: psutil>=5.9.0
+Requires-Dist: pydantic>=2.0.0
+Requires-Dist: python-dotenv>=1.0.0
+Requires-Dist: supabase>=2.0.0
+Provides-Extra: dev
+Requires-Dist: black>=24.0.0; extra == 'dev'
+Requires-Dist: mypy>=1.8.0; extra == 'dev'
+Requires-Dist: pip-audit>=2.6.0; extra == 'dev'
+Requires-Dist: pytest-asyncio>=0.23.0; extra == 'dev'
+Requires-Dist: pytest-cov>=4.1.0; extra == 'dev'
+Requires-Dist: pytest-mock>=3.12.0; extra == 'dev'
+Requires-Dist: pytest>=8.0.0; extra == 'dev'
+Requires-Dist: ruff>=0.3.0; extra == 'dev'
+Requires-Dist: types-openpyxl; extra == 'dev'
+Requires-Dist: types-psutil; extra == 'dev'
+Description-Content-Type: text/markdown
+
+# Excel MCP Server with Supabase Storage
+
+[![Python Version](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io/)
+
+A powerful MCP (Model Context Protocol) server for Excel operations with seamless Supabase Storage integration. Handle Excel files programmatically without requiring Microsoft Office or WPS installation.
+
+## 🌟 Features
+
+- ✅ **Excel Parsing**: Convert Excel files to JSON with complete formatting information
+- ✅ **Excel Generation**: Create formatted Excel files from JSON data
+- ✅ **Advanced Formatting**: Modify cell styles, merge cells, adjust dimensions
+- ✅ **Formula Support**: Execute and calculate 20+ common Excel formulas
+- ✅ **Multi-Sheet Operations**: Merge multiple Excel files into a single workbook
+- ✅ **Supabase Integration**: Direct read/write operations with Supabase Storage
+- ✅ **Zero Dependencies**: No Microsoft Office or WPS required
+- ✅ **Cross-Platform**: Works on Windows, Linux, and macOS
+
+## 🚀 Quick Start
+
+### Installation
+
+#### Option 1: Install from GitHub (Recommended for now)
+
+```bash
+# Install and run directly
+uvx --from git+https://github.com/1126misakp/Excel-MCP-Server-with-Supabase-Storage mcp-excel-supabase
+```
+
+#### Option 2: Install from PyPI (Coming soon)
+
+```bash
+# Once published to PyPI, you can use:
+uvx mcp-excel-supabase
+```
+
+#### Option 3: Install from local source
+
+```bash
+# Clone the repository
+git clone https://github.com/1126misakp/Excel-MCP-Server-with-Supabase-Storage
+cd Excel-MCP-Server-with-Supabase-Storage
+
+# Install in development mode
+pip install -e .
+
+# Run the server
+mcp-excel-supabase
+```
+
+### Configuration
+
+1. Create a `.env` file in your project directory:
+
+```bash
+cp .env.example .env
+```
+
+2. Edit `.env` and add your Supabase credentials:
+
+```env
+SUPABASE_URL=https://yourproject.supabase.co
+SUPABASE_KEY=your-service-role-key-here
+```
+
+### Claude Desktop Configuration
+
+Add to your Claude Desktop configuration file:
+
+**Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+**macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+**Linux**: `~/.config/Claude/claude_desktop_config.json`
+
+#### If installing from GitHub:
+
+```json
+{
+  "mcpServers": {
+    "excel-supabase": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/1126misakp/Excel-MCP-Server-with-Supabase-Storage",
+        "mcp-excel-supabase"
+      ],
+      "env": {
+        "SUPABASE_URL": "https://yourproject.supabase.co",
+        "SUPABASE_KEY": "your-service-role-key-here"
+      }
+    }
+  }
+}
+```
+
+#### If installing from PyPI:
+
+```json
+{
+  "mcpServers": {
+    "excel-supabase": {
+      "command": "uvx",
+      "args": ["mcp-excel-supabase"],
+      "env": {
+        "SUPABASE_URL": "https://yourproject.supabase.co",
+        "SUPABASE_KEY": "your-service-role-key-here"
+      }
+    }
+  }
+}
+```
+
+### 🌐 Transport Modes
+
+The server supports three transport modes for different use cases:
+
+#### 1. STDIO (Default) - For Claude Desktop and CLI tools
+
+```json
+{
+  "mcpServers": {
+    "excel-supabase": {
+      "command": "uvx",
+      "args": ["mcp-excel-supabase"],
+      "env": {
+        "SUPABASE_URL": "https://yourproject.supabase.co",
+        "SUPABASE_KEY": "your-service-role-key-here"
+      }
+    }
+  }
+}
+```
+
+#### 2. HTTP - For web-based clients (Recommended for Cherry Studio)
+
+```json
+{
+  "mcpServers": {
+    "excel-supabase": {
+      "command": "uvx",
+      "args": ["mcp-excel-supabase"],
+      "env": {
+        "SUPABASE_URL": "https://yourproject.supabase.co",
+        "SUPABASE_KEY": "your-service-role-key-here",
+        "MCP_TRANSPORT": "http",
+        "MCP_HOST": "127.0.0.1",
+        "MCP_PORT": "8000"
+      }
+    }
+  }
+}
+```
+
+Then connect to: `http://127.0.0.1:8000/mcp/`
+
+#### 3. SSE - For legacy SSE clients
+
+```json
+{
+  "mcpServers": {
+    "excel-supabase": {
+      "command": "uvx",
+      "args": ["mcp-excel-supabase"],
+      "env": {
+        "SUPABASE_URL": "https://yourproject.supabase.co",
+        "SUPABASE_KEY": "your-service-role-key-here",
+        "MCP_TRANSPORT": "sse",
+        "MCP_HOST": "127.0.0.1",
+        "MCP_PORT": "8000"
+      }
+    }
+  }
+}
+```
+
+Then connect to: `http://127.0.0.1:8000/sse`
+
+**Environment Variables:**
+- `MCP_TRANSPORT`: Transport mode (`stdio` | `http` | `sse`), default: `stdio`
+- `MCP_HOST`: Server host for HTTP/SSE, default: `127.0.0.1`
+- `MCP_PORT`: Server port for HTTP/SSE, default: `8000`
+
+## 🛠️ Available Tools
+
+This server provides 12 MCP tools for comprehensive Excel operations:
+
+| Tool | Description |
+|------|-------------|
+| `parse_excel_to_json` | Parse Excel files to JSON format |
+| `create_excel_from_json` | Generate Excel files from JSON data |
+| `modify_cell_format` | Edit cell formatting (fonts, colors, borders) |
+| `merge_cells` | Merge cell ranges |
+| `unmerge_cells` | Unmerge cell ranges |
+| `set_row_heights` | Adjust row heights |
+| `set_column_widths` | Adjust column widths |
+| `manage_storage` | Upload/download files to/from Supabase |
+| `set_formula` | Set Excel formulas in cells |
+| `recalculate_formulas` | Recalculate all formulas in a workbook |
+| `manage_sheets` | Create, delete, rename, copy, move sheets |
+| `merge_excel_files` | Merge multiple Excel files |
+
+See [API Reference](docs/api.md) for detailed documentation.
+
+## 📖 Usage Examples
+
+### Parse Excel to JSON
+
+```python
+# Parse a local file
+result = parse_excel_to_json(
+    file_path="data/sales_q1.xlsx",
+    extract_formats=True
+)
+
+# Access parsed data
+workbook = result["workbook"]
+sheets = workbook["sheets"]
+```
+
+### Create Excel from JSON
+
+```python
+# Create a simple Excel file
+workbook_data = {
+    "sheets": [{
+        "name": "Sales",
+        "rows": [
+            {"cells": [
+                {"value": "Product", "row": 1, "column": 1},
+                {"value": "Revenue", "row": 1, "column": 2}
+            ]},
+            {"cells": [
+                {"value": "Product A", "row": 2, "column": 1},
+                {"value": 1000, "row": 2, "column": 2}
+            ]}
+        ]
+    }]
+}
+
+create_excel_from_json(
+    workbook_data=workbook_data,
+    output_path="output/sales.xlsx",
+    apply_formats=True
+)
+```
+
+### Format Cells
+
+```python
+# Format header row
+modify_cell_format(
+    file_path="data/sales.xlsx",
+    sheet_name="Sheet1",
+    cell_range="A1:J1",
+    format_spec={
+        "font": {"name": "Arial", "size": 12, "bold": True, "color": "FFFFFF"},
+        "fill": {"color": "4472C4"},
+        "alignment": {"horizontal": "center", "vertical": "center"}
+    }
+)
+```
+
+### Set Formulas
+
+```python
+# Set a SUM formula
+set_formula(
+    file_path="data/sales.xlsx",
+    sheet_name="Sheet1",
+    cell="D10",
+    formula="=SUM(D2:D9)"
+)
+
+# Recalculate all formulas
+recalculate_formulas(
+    file_path="data/sales.xlsx"
+)
+```
+
+### Merge Excel Files
+
+```python
+# Merge quarterly reports
+merge_excel_files(
+    file_paths=["q1.xlsx", "q2.xlsx", "q3.xlsx", "q4.xlsx"],
+    output_path="annual_report.xlsx",
+    handle_duplicates="rename"  # or "skip" or "overwrite"
+)
+```
+
+### Supabase Storage Operations
+
+```python
+# Upload file to Supabase
+manage_storage(
+    operation="upload",
+    local_path="output/report.xlsx",
+    remote_path="reports/2024/annual.xlsx"
+)
+
+# Download file from Supabase
+manage_storage(
+    operation="download",
+    remote_path="reports/2024/annual.xlsx",
+    local_path="downloads/annual.xlsx"
+)
+
+# List files
+manage_storage(
+    operation="list",
+    remote_path="reports/2024/"
+)
+```
+
+For more examples, see the [Examples Directory](docs/examples/).
+
+## 📚 Documentation
+
+- [Product Requirements Document (PRD)](PRD.md)
+- [API Reference](docs/api.md) - Complete API documentation for all 12 tools
+- [Usage Examples](docs/examples/) - 6 end-to-end examples
+  - [Basic Parsing](docs/examples/01-basic-parsing.md)
+  - [Excel Generation](docs/examples/02-excel-generation.md)
+  - [Cell Formatting](docs/examples/03-formatting-cells.md)
+  - [Formula Operations](docs/examples/04-formula-operations.md)
+  - [File Merging](docs/examples/05-file-merging.md)
+  - [Supabase Integration](docs/examples/06-supabase-integration.md)
+- [Architecture](docs/architecture.md) - System architecture and design patterns
+- [Development Guide](docs/development.md) - Contributing and development workflow
+- [Troubleshooting](docs/troubleshooting.md) - Common issues and solutions
+
+## 🛠️ Development
+
+### Local Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/1126misakp/Excel-MCP-Server-with-Supabase-Storage
+cd Excel-MCP-Server-with-Supabase-Storage
+
+# Install dependencies
+pip install -e ".[dev]"
+
+# Run tests
+pytest
+
+# Run linter
+ruff check .
+
+# Format code
+black .
+```
+
+### Project Structure
+
+```
+Excel-MCP-Server-with-Supabase-Storage/
+├── src/mcp_excel_supabase/      # Source code
+│   ├── excel/                    # Excel operations
+│   ├── storage/                  # Supabase integration
+│   └── utils/                    # Utilities
+├── tests/                        # Test suite
+├── docs/                         # Documentation
+└── PRD.md                        # Product Requirements
+```
+
+## 🧪 Testing
+
+```bash
+# Run all tests
+pytest
+
+# Run with coverage
+pytest --cov
+
+# Run specific test file
+pytest tests/test_parser.py
+```
+
+## 📋 Requirements
+
+- Python 3.9+
+- Supabase account with Storage API access
+- No Microsoft Office or WPS installation required
+
+## 🤝 Contributing
+
+Contributions are welcome! Please see [Development Guide](docs/development.md) for guidelines.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙋 Support
+
+- **Issues**: [GitHub Issues](https://github.com/1126misakp/Excel-MCP-Server-with-Supabase-Storage/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/1126misakp/Excel-MCP-Server-with-Supabase-Storage/discussions)
+
+## 🗺️ Roadmap
+
+### Version 1.0 (Current)
+- ✅ Core Excel parsing and generation
+- ✅ Supabase Storage integration
+- ✅ Basic formatting support
+- ✅ 20+ common formulas
+
+### Version 1.1 (Planned)
+- 📋 Chart generation support
+- 📋 Conditional formatting
+- 📋 Data validation rules
+- 📋 Advanced formula functions
+- 📋 WebUI control panel
+
+## 🌐 Related Projects
+
+- [openpyxl](https://openpyxl.readthedocs.io/) - Excel file operations
+- [Supabase](https://supabase.com/) - Cloud storage backend
+- [MCP Protocol](https://modelcontextprotocol.io/) - Model Context Protocol
+
+## 📊 Performance
+
+Benchmarked on a standard development machine (Intel i5, 8GB RAM):
+
+| Operation | Target | Actual | Status |
+|-----------|--------|--------|--------|
+| Parse 1MB file | <2s | 0.598s | ✅ **3.3x faster** |
+| Generate 1000 rows | <3s | 0.026s | ✅ **115x faster** |
+| Merge 10 files | <8s | 0.117s | ✅ **68x faster** |
+| Batch 20 files | <10s | 0.192s | ✅ **52x faster** |
+| Format 1000 cells | <0.5s | 0.089s | ✅ **5.6x faster** |
+
+**Performance Optimizations:**
+- ✅ LRU caching for parsed files (128 entries)
+- ✅ Thread pool concurrency (8 workers)
+- ✅ Streaming I/O for large files
+- ✅ Memory-efficient processing (5000 rows = +0.04MB)
+
+---
+
+**Made with ❤️ by [1126misakp](https://github.com/1126misakp)**
+
+*This project is actively maintained and welcomes contributions from the community.*

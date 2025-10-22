@@ -1,0 +1,29 @@
+# Include documentation files
+include README.md
+include LICENSE
+include CHANGELOG.md
+include SECURITY.md
+
+# Include configuration examples
+include .env.example
+
+# Include documentation directory
+recursive-include docs *.md
+recursive-include docs/examples *.py *.json *.xlsx
+
+# Exclude development and testing files
+exclude .gitignore
+exclude .env
+exclude push_to_github.sh
+recursive-exclude tests *
+recursive-exclude step-report *
+recursive-exclude Formal-unit-testing *
+recursive-exclude scripts *
+recursive-exclude venv *
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
+recursive-exclude * .pytest_cache
+recursive-exclude * .coverage
+recursive-exclude * htmlcov
+recursive-exclude * logs
+

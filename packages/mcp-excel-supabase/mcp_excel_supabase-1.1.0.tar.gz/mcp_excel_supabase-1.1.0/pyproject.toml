@@ -1,0 +1,86 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mcp-excel-supabase"
+version = "1.1.0"
+description = "MCP server for Excel operations with Supabase Storage integration"
+authors = [
+    {name = "1126misakp", email = "hikaru_lamperouge@163.com"}
+]
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.9"
+keywords = ["mcp", "excel", "supabase", "openpyxl", "automation"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+    "Topic :: Office/Business",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+
+dependencies = [
+    "openpyxl>=3.1.0",
+    "supabase>=2.0.0",
+    "mcp>=1.0.0",
+    "python-dotenv>=1.0.0",
+    "formulas>=1.2.0",
+    "pydantic>=2.0.0",
+    "psutil>=5.9.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.12.0",
+    "black>=24.0.0",
+    "ruff>=0.3.0",
+    "mypy>=1.8.0",
+    "pip-audit>=2.6.0",
+    "types-openpyxl",
+    "types-psutil",
+]
+
+[project.urls]
+Homepage = "https://github.com/1126misakp/Excel-MCP-Server-with-Supabase-Storage"
+Documentation = "https://github.com/1126misakp/Excel-MCP-Server-with-Supabase-Storage/blob/main/docs/README.md"
+Repository = "https://github.com/1126misakp/Excel-MCP-Server-with-Supabase-Storage"
+Issues = "https://github.com/1126misakp/Excel-MCP-Server-with-Supabase-Storage/issues"
+
+[project.scripts]
+mcp-excel-supabase = "mcp_excel_supabase.server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/mcp_excel_supabase"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "--cov=mcp_excel_supabase --cov-report=html --cov-report=term"
+
+[tool.black]
+line-length = 100
+target-version = ["py39", "py310", "py311"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
