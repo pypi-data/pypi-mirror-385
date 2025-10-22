@@ -1,0 +1,58 @@
+[project]
+name = "commonroad-labeling"
+version = "2025.1.2"
+description = "Automatic labeling of CommonRoad scenarios."
+authors = [{name = "Florian Finkeldei", email = "florian.finkeldei@tum.de"}, {name = "Dzan Tabakovic", email ="dzan.tabakovic@tum.de"}]
+readme = "README.md"
+license = "BSD-3-Clause"
+requires-python = ">=3.10"
+dynamic = ["dependencies"]
+
+[project.urls]
+Documentation = "https://cps.pages.gitlab.lrz.de/commonroad/automatic-scenario-labeling"
+
+[tool.poetry]
+packages = [
+  {include = "commonroad_labeling"},
+  {include = "scripts"},
+]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.12" # python constraint is given by commonroad-reactive-planner, which requires python<3.12.
+commonroad-io = ">=2024.3"
+commonroad-route-planner = ">=2025.1.0"
+commonroad-crime = ">=0.4.4"
+commonroad-reactive-planner = "^2025.1"
+pandas = "^2.2.2"
+scikit-learn = "^1.4"
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.3"
+black = "^24.1.1"
+isort = "^5.13.2"
+flake8 = "^7.0.0"
+pre-commit = "^3.6.0"
+
+[tool.poetry.group.docs]
+optional = true
+
+[tool.poetry.group.docs.dependencies]
+mkdocs = "^1.5.3"
+mkdocs-material = "^9.5.14"
+mkdocstrings-python = "^1.9.0"
+
+[tool.poetry.group.test]
+optional = true
+
+[tool.poetry.group.test.dependencies]
+coverage = "^7.4.4"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.coverage.run]
+source = ["commonroad_labeling"]
