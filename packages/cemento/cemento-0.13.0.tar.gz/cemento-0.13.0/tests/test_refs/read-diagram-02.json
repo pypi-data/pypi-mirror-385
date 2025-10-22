@@ -1,0 +1,64 @@
+{
+  "term_dict": {
+    "yE1NTkxh-0s1ADCfzDLe-6": "mds:Employee",
+    "yE1NTkxh-0s1ADCfzDLe-14": "cco:Phase",
+    "aFoWWEtB3FT1Sz6_YX94-4": "mds:GradStudent",
+    "yE1NTkxh-0s1ADCfzDLe-9": "cco:Person",
+    "yE1NTkxh-0s1ADCfzDLe-12": "mds:CollegeStudent",
+    "aFoWWEtB3FT1Sz6_YX94-3": "mds:Student",
+    "yE1NTkxh-0s1ADCfzDLe-3": "\"A person who does science\"@en",
+    "yE1NTkxh-0s1ADCfzDLe-1": "cco:Person",
+    "yE1NTkxh-0s1ADCfzDLe-10": "mds:Teenager",
+    "yE1NTkxh-0s1ADCfzDLe-11": "rdfs:subClassOf",
+    "yE1NTkxh-0s1ADCfzDLe-8": "rdf:type",
+    "yE1NTkxh-0s1ADCfzDLe-4": "skos:definition",
+    "yE1NTkxh-0s1ADCfzDLe-2": "rdfs:subClassOf",
+    "yE1NTkxh-0s1ADCfzDLe-15": "rdfs:subClassOf",
+    "yE1NTkxh-0s1ADCfzDLe-13": "rdf:type",
+    "aFoWWEtB3FT1Sz6_YX94-7": "rdf:type",
+    "yE1NTkxh-0s1ADCfzDLe-7": "rdfs:subClassOf"
+  },
+  "triples": [
+    [
+      "mds:Teenager",
+      "rdfs:subClassOf",
+      "cco:Person"
+    ],
+    [
+      "mds:GradStudent",
+      "rdf:type",
+      "mds:Employee"
+    ],
+    [
+      "mds:Student",
+      "skos:definition",
+      "\"A person who does science\"@en"
+    ],
+    [
+      "mds:Student",
+      "rdfs:subClassOf",
+      "cco:Person"
+    ],
+    [
+      "mds:Teenager",
+      "rdfs:subClassOf",
+      "cco:Phase"
+    ],
+    [
+      "mds:CollegeStudent",
+      "rdf:type",
+      "mds:Teenager"
+    ],
+    [
+      "mds:GradStudent",
+      "rdf:type",
+      "mds:Student"
+    ],
+    [
+      "mds:Employee",
+      "rdfs:subClassOf",
+      "cco:Person"
+    ]
+  ],
+  "output_containers": {}
+}
