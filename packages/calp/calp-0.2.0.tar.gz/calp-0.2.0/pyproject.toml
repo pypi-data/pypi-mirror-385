@@ -1,0 +1,44 @@
+[project]
+name = "calp"
+version = "0.2.0"
+description = "Calamars et Pythons, le jeu de la PyConFR 2025"
+readme = "README.md"
+authors = [{ name = "Vincent Poulailleau", email = "vpoulailleau@gmail.com" }]
+requires-python = ">=3.14"
+dependencies = ["arcade>=3.3,<3.4"]
+
+[project.scripts]
+calp = "calp.main:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+target-version = "py314"
+output-format = "concise"
+fix = true
+
+[tool.ruff.lint]
+preview = true
+select = ["ALL"]
+ignore = [
+    "COM812", # ruff recommends to disable it while using ruff format
+    "CPY",    # do not require copyright notice at top of file
+    "D",      # disable docstring checks
+    "ANN",    # disable missing type annotation checks
+    "TD",     # disable TODOs checks
+    "FIX002", # disable TODOs checks
+    "S311",   # random is not used for cryptographic purposes
+]
+fixable = ["ALL"]
+unfixable = []
+
+[tool.ruff.format]
+preview = true
+quote-style = "double"
+indent-style = "space"
+docstring-code-format = true
+
+[dependency-groups]
+dev = ["pyinstaller>=6.16,<6.17"]
