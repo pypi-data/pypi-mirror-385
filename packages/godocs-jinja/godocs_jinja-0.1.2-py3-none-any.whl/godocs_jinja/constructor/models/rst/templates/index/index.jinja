@@ -1,0 +1,12 @@
+{% set title = options.name or "Class Reference" -%}
+{% set depth = options.toc_depth or "2" -%}
+{{ title }}
+{{ "=" * title | length }}
+
+{{ options.description }}
+
+.. toctree::
+   :maxdepth: {{ depth }}
+   :caption: Contents:
+
+   {{ classes | map(attribute="name") | join("\n   ") }}

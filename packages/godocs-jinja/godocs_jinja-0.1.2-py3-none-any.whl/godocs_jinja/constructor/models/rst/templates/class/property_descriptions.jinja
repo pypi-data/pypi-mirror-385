@@ -1,0 +1,15 @@
+
+Property Descriptions
+{{ "=" * "Property Descriptions"|length }}
+
+{% for property in class.properties %}
+.. _{{ property.name | join_code_member_name(class.name) | make_code_member_label_target(options.ref_prefix) }}:
+
+{%- set signature = property.name | join_code_member_name(class.name) | make_property_signature(property.type, options.ref_prefix, property.default, property.is_static, False) %}
+
+{{ signature }}
+{{ "-" * signature | length }}
+
+{{ property.description }}
+
+{% endfor %}

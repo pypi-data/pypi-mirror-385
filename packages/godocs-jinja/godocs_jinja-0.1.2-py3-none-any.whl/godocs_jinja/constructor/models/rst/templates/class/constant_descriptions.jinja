@@ -1,0 +1,21 @@
+
+{%- set title = title | default("Constant Descriptions") -%}
+{%- set constants = constants | default(class.constants) -%}
+{%- set title_underline = title_underline | default("=") -%}
+{%- set subtitle_underline = subtitle_underline | default("-") -%}
+
+{%- if title is defined and title != '' %}
+{{ title }}
+{{ title_underline * title | length }}
+{% endif -%}
+
+{%- for constant in constants %}
+.. _{{ constant.name | join_code_member_name(class.name) | make_code_member_label_target(options.ref_prefix) }}:
+
+{% set signature = constant.name | join_code_member_name(class.name) | make_property_signature(constant.type, options.ref_prefix, constant.value, False, False) -%}
+{{ signature }}
+{{ subtitle_underline * signature | length }}
+
+{{ constant.description }}
+
+{% endfor %}

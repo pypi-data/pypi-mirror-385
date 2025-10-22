@@ -1,0 +1,9 @@
+{% include "class/heading.jinja" %}
+{% if class.description %}{% include "class/description.jinja" %}{% endif %}
+{% if class.properties %}{% include "class/property_index.jinja" %}{% endif %}
+{% if class.methods %}{% include "class/method_index.jinja" %}{% endif %}
+{% if class.constants %}{% include "class/constant_descriptions.jinja" %}{% endif %}
+{% if class.enums %}{% include "class/enum_descriptions.jinja" %}{% endif %}
+{% if class.signals %}{% include "class/signal_descriptions.jinja" %}{% endif %}
+{% if class.properties %}{% include "class/property_descriptions.jinja" %}{% endif %}
+{% if class.methods %}{% include "class/method_descriptions.jinja" %}{% endif %}

@@ -1,0 +1,13 @@
+
+Method Index
+{{ "=" * "Method Index"|length }}
+
+.. list-table::
+   :header-rows: 1
+
+   * - Return type
+     - Signature
+   {% for method in class.methods -%}
+   * - {{ method.type | make_code_member_type_ref(options.ref_prefix) }}
+     - {{ method.name | join_code_member_name(class.name) | make_method_signature("", options.ref_prefix, method.args, method.is_static) }}
+   {%- endfor %}

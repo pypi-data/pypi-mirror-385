@@ -1,0 +1,18 @@
+
+{% set title = "Enumeration Descriptions" -%}
+{{ title }}
+{{ "=" * title | length }}
+
+{% for enum in class.enums %}
+.. _{{ enum.name | join_code_member_name(class.name) | make_code_member_label_target(options.ref_prefix) }}:
+
+{{ enum.name }}
+{{ "-" * enum.name | length }}
+
+{{ enum.description }}
+
+{% with title="", constants=enum["values"], subtitle_underline="~" -%}
+{% include "constant_descriptions.jinja" with context %}
+{%- endwith %}
+
+{% endfor %}
