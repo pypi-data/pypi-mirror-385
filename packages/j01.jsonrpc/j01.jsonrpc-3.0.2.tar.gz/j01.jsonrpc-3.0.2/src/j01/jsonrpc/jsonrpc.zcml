@@ -1,0 +1,23 @@
+<configure
+    xmlns:zope="http://namespaces.zope.org/zope"
+    xmlns="http://namespaces.zope.org/browser"
+    xmlns:p01="http://namespaces.zope.org/p01"
+    i18n_domain="p01">
+
+  <p01:jsonrpc
+      for="zope.publisher.interfaces.browser.IBrowserPage"
+      class=".jsonrpc.J01LoadContent"
+      methods="j01LoadContent"
+      permission="zope.Public"
+      layer="p01.jsonrpc.layer.IJSONRPCLayer"
+      />
+
+  <p01:jsonrpc
+      for="zope.publisher.interfaces.browser.IBrowserPage"
+      class=".jsonrpc.J01FormProcessor"
+      methods="j01FormProcessor"
+      permission="zope.Public"
+      layer="p01.jsonrpc.layer.IJSONRPCLayer"
+      />
+
+</configure>
