@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "SunnyNet"
+version = "1.5.12"
+description = "SunnyNet网络中间件 - 强大的网络代理和抓包工具"
+readme = "README.md"
+requires-python = ">=3.7"
+license = "MIT"
+authors = [
+    {name = "秦天"}
+]
+keywords = ["network", "proxy", "middleware", "http", "tcp", "udp", "websocket"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Internet :: Proxy Servers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/SunnyNet"
+"Bug Reports" = "https://github.com/yourusername/SunnyNet/issues"
+Source = "https://github.com/yourusername/SunnyNet"
+
+[project.scripts]
+sunnynet = "SunnyNet.cli:main"
+sunnynet-download = "SunnyNet.download_libs:main"
+
+[tool.setuptools]
+packages = ["SunnyNet"]
+include-package-data = true
+
+[tool.setuptools.package-data]
+SunnyNet = ["*.dll", "*.so", "*.dylib"]
+"*" = ["*.dll", "*.so", "*.dylib"]
+
