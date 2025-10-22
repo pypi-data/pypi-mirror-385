@@ -1,0 +1,19 @@
+{% load i18n %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="refresh" content="2; url='{{ context_url }}'" >
+        <title>LTI</title>
+    </head>
+    <body>
+        <p>
+            <b>{% trans "Sending you back to your exam." %}</b>
+        </p>
+        <p>
+            <a href="{{ context_url }}">
+                {% trans "Return to exam." %}
+            </a>
+        </p>
+    </body>
+</html>
