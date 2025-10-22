@@ -1,0 +1,52 @@
+Metadata-Version: 2.4
+Name: audity
+Version: 0.11.0
+Summary: Audit, inspect, and survey data from the terminal.
+Author-email: espehon <espehon@gmail.com>
+Project-URL: Homepage, https://github.com/espehon/audity
+Project-URL: Bug Tracker, https://github.com/espehon/audity/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: Development Status :: 3 - Alpha
+Classifier: Environment :: Console
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Utilities
+Classifier: Topic :: Scientific/Engineering :: Information Analysis
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: colorama>=0.4.6
+Requires-Dist: pandas>=2.3.0
+Requires-Dist: numpy<2.0.0,>=1.26.4
+Requires-Dist: seaborn>=0.12.2
+Requires-Dist: matplotlib>=3.7.1
+Requires-Dist: halo>=0.0.31
+Requires-Dist: questionary>=2.1.0
+Requires-Dist: openpyxl>=3.1.5
+Dynamic: license-file
+
+# Audity
+Audit, inspect, and survey data by generating visuals with matplotlib on the fly. Audity is a CLI tool that loads a data file (csv/xlsx) a offers charting options allowing you to chose x and y axis. Visuals are rendered in a new window and all data manipulation is in memory. 
+
+# Usage
+Just run `audity` in the directory of your data file(s). File selection is handled within audity. Simply use the arrow keys and enter on your desired file. Audity will then load the file as a Pandas Dataframe and then the fun begins.
+
+# Features
+- Directory navigation for file selection
+- Preview or describe Dataframes
+- Edit column names
+- Edit column data types
+- Remove columns
+- Remove outliers (IQR)
+- Render charts (see [Supported Visuals](#Supported-Visuals) below)
+
+# Supported Visuals
+- Box Plot
+- Violin Plot
+- Line Plot
+- Bar Plot
+- Scatter Plot
+- Joint Grid Plot
+- Relation Plot
+- Pair Plot
+
