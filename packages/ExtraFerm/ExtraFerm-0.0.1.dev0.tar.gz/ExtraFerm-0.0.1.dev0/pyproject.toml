@@ -1,0 +1,46 @@
+[build-system]
+requires = ["maturin>=1.0,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "ExtraFerm"
+requires-python = ">=3.11"
+version = "0.0.1.dev"
+description = "Quantum circuit simulator for particle number conserving extended matchgate circuits"
+readme = "README.md"
+license = { file = "LICENSE" }
+
+dependencies = [
+  "numpy",
+  "scipy",
+  "qiskit",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.4.0",
+  "maturin>=1.0",
+  "ffsim>=0.0.60",
+  "ruff",
+]
+
+[tool.maturin]
+features = ["pyo3/extension-module"]
+python-source = "python"
+module-name = "extraferm._lib"
+
+[tool.ruff]
+src = ["python"]
+include = [
+  "pyproject.toml",
+  "python/**/*.py",
+  "python/**/*.pyi",
+  "tests/**/*.py",
+  "tests/**/*.pyi",
+  "docs/**/*.py",
+  "docs/**/*.pyi",
+  "docs/**/*.ipynb",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "NPY", "NPY201"]
