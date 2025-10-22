@@ -1,0 +1,306 @@
+Metadata-Version: 2.4
+Name: NeuraPython
+Version: 2.0.4
+Summary: NeuraPython is a unified framework combining AI, Machine Learning, Data Science, Web Development, Scientific Computation, and Utility tools.
+Home-page: https://github.com/IbrahimShahid7767/neurapython
+Author: Ibrahim Shahid
+Author-email: ibrahimshahid7767@gmail.com
+License: MIT
+Project-URL: Bug Tracker, https://github.com/IbrahimShahid7767/neurapython/issues
+Project-URL: Documentation, https://pypi.org/project/NeuraPython/
+Keywords: AI,Machine Learning,Deep Learning,Data Science,Physics,Chemistry,Math,Flask,Neural Network,Utility,Automation,Computation
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Classifier: Topic :: Software Development :: Libraries
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: numpy
+Requires-Dist: pandas
+Requires-Dist: matplotlib
+Requires-Dist: pygame
+Requires-Dist: opencv-python
+Requires-Dist: pyttsx3
+Requires-Dist: speechrecognition
+Requires-Dist: flask
+Requires-Dist: scikit-learn
+Requires-Dist: pdfplumber
+Requires-Dist: pdf2docx
+Requires-Dist: docx2pdf
+Requires-Dist: fpdf
+Requires-Dist: markdown
+Requires-Dist: beautifulsoup4
+Requires-Dist: sympy
+Requires-Dist: tensorflow
+Requires-Dist: torch
+Requires-Dist: joblib
+Requires-Dist: qrcode
+Requires-Dist: requests
+Requires-Dist: pillow
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: keywords
+Dynamic: license
+Dynamic: project-url
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+
+<div align="center">
+
+# 🧠 **NeuraPython**
+### *The All-in-One AI, ML, Scientific & Utility Framework for Python Developers*
+**Created & Maintained by [Ibrahim Shahid](mailto:ibrahimshahid7767@gmail.com)**  
+
+---
+
+![NeuraPython Banner](https://via.placeholder.com/1000x250?text=NeuraPython+Framework)  
+*Unify AI, Machine Learning, Science, and Web Development — in one module.*
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](#license)
+[![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://www.python.org/)
+[![Framework](https://img.shields.io/badge/Framework-NeuraPython-brightgreen.svg)]()
+[![Developer](https://img.shields.io/badge/Author-Ibrahim%20Shahid-orange.svg)]()
+
+</div>
+
+---
+
+## 🌟 Overview
+
+**NeuraPython** is a **unified powerhouse module** that merges Artificial Intelligence, Machine Learning, Web Development, Data Science, Physics, Chemistry, and Mathematics into a single framework. It’s designed for developers, engineers, students, and researchers who want to explore intelligence, computation, and science without juggling multiple libraries.
+
+This package consolidates commonly used tools — including TensorFlow, PyTorch, Flask, Scikit-learn, OpenCV, Matplotlib, and more — under one unified namespace.
+
+---
+
+## 🔍 Philosophy
+
+> “One Import. Infinite Possibilities.”
+
+NeuraPython aims to make scientific, AI, and data workflows faster, simpler, and smarter — no boilerplate code, no repetitive setup.
+
+---
+
+## 🧩 Core Functionalities
+
+### 🤖 Artificial Intelligence
+- Connect to **Google Gemini API** and **OpenAI ChatGPT API**
+- Universal **Neural Network Engine** supporting both `TensorFlow` and `PyTorch`
+- Dynamic model building with sequential layer architecture
+- Unified training, compilation, and prediction interface
+
+### 🧠 Machine Learning
+- `NeuraPython_ML` simplifies model creation, training, evaluation, and saving.
+- Preprocessing tools: normalization, encoding, standardization, and scaling
+- Prebuilt datasets: Iris, Wine, Digits, Breast Cancer
+- Built-in models:
+  - Linear & Logistic Regression
+  - SVM, KNN, Decision Tree, Random Forest
+  - Gradient Boosting, PCA, KMeans, Naive Bayes
+- Automatic train-test split, cross-validation, and grid search
+
+### 🌐 Web Development
+- Flask-based **WebServer** class with:
+  - Custom route handling
+  - File upload and JSON endpoints
+  - SQLite integration
+  - Health-check routes
+  - Vector plotting endpoints
+
+### 🧮 Advanced Mathematics & Calculus
+- Derivatives, Integrals, Limits, Partial Derivatives
+- Gradient, Curl, Divergence
+- Taylor Series, Summation, Jacobian, Hessian
+- Symbolic computation powered by **Sympy**
+
+### ⚛️ Physics
+- Classical mechanics, Relativity, and Quantum mechanics equations
+- Functions for velocity, acceleration, energy, force, momentum
+- Relativistic mass, Lorentz factor, time dilation
+- Quantum equations (Planck, De Broglie, Heisenberg)
+
+### ⚗️ Chemistry
+- Periodic Table data for 50+ elements
+- Molar, atomic, and gas constant utilities
+- Planck’s relation, photon energy, and quantum constants
+
+### 📊 Data Visualization
+- 2D & 3D visualization using Matplotlib
+- Line, Bar, Scatter, Pie, Polar, and 3D vector plots
+- Built-in Vector2D & Vector3D classes with geometry operations
+
+### 🧾 File Readers & Converters
+- Read: `.pdf`, `.docx`, `.json`, `.xml`, `.csv`, `.xlsx`, `.html`, `.md`, `.txt`
+- Convert between formats:
+  - PDF ↔ DOCX
+  - CSV ↔ Excel ↔ JSON
+  - Markdown → HTML
+  - Text → PDF/DOCX
+- Supports direct **string-to-file** conversion
+
+### 🎤 Speech & Audio
+- Text-to-Speech via `pyttsx3`
+- Voice input recognition using `SpeechRecognition`
+- Audio and video playback through `pygame` and `OpenCV`
+
+### 🧰 Utility Tools
+- **QR Code Generator and Reader**
+- **Calendar printer**
+- **Google, YouTube, WhatsApp search helpers**
+- System utilities for file handling, OS detection, and device info
+
+---
+
+## ⚙️ Installation
+
+### From PyPI
+```bash
+pip install neurapython
+```
+
+### Manual Installation
+```bash
+git clone https://github.com/IbrahimShahid7767/neurapython.git
+cd neurapython
+pip install -r requirements.txt
+```
+
+### Dependencies
+```bash
+pip install numpy pandas scikit-learn flask pyttsx3 pygame pillow opencv-python pdfplumber pdf2docx docx2pdf fpdf markdown beautifulsoup4 sympy tensorflow torch joblib qrcode requests
+```
+
+---
+
+## 💻 Usage Examples
+
+### Example 1 — Quick Math
+```python
+from neurapython import Advanced_Maths
+
+calc = Advanced_Maths()
+print(calc.factorial(6))
+```
+
+### Example 2 — Machine Learning Workflow
+```python
+from neurapython import NeuraPython_ML
+
+ml = NeuraPython_ML()
+X, y = ml.load_builtin_dataset("iris")
+X_train, X_test, y_train, y_test = ml.split(X, y)
+
+model = ml.create_model("svm")
+ml.train("svm", X_train, y_train)
+y_pred = ml.predict("svm", X_test)
+
+print(ml.evaluate(y_test, y_pred))
+```
+
+### Example 3 — Neural Network with Torch
+```python
+from neurapython import NeuralNetwork
+
+nn = NeuralNetwork(backend="torch")
+nn.Sequential([4, 8, 3])
+nn.compile(optimizer="adam", loss="mse")
+nn.fit([[1, 2, 3, 4]], [[0, 1, 0]], epochs=5)
+```
+
+### Example 4 — Web Server
+```python
+from neurapython import WebServer
+
+app = WebServer()
+app.simple_route("/", code="Welcome to NeuraPython Web")
+app.health("/health")
+app.run(port=5200)
+```
+
+### Example 5 — Physics
+```python
+from neurapython import Physics
+
+p = Physics()
+print(p.kinetic_energy(5, 10))
+print(p.mass_energy_equivalence(0.1))
+```
+
+### Example 6 — QR Code
+```python
+from neurapython import QR_Code
+
+QR_Code.generator("https://github.com/IbrahimShahid7767", "neura_qr.png")
+print(QR_Code.reader("neura_qr.png"))
+```
+
+---
+
+## 🧩 Module Summary
+
+| Category | Classes / Functions | Description |
+|:----------|:--------------------|:-------------|
+| **AI** | `AI`, `NeuralNetwork` | Gemini, ChatGPT API, PyTorch & TensorFlow NN |
+| **ML** | `NeuraPython_ML` | Unified Scikit-learn Wrapper |
+| **Maths** | `Advanced_Maths`, `Calculus`, `Matrices` | Arithmetic, calculus, algebra, symbolic computing |
+| **Science** | `Physics`, `Chemistry` | Mechanics, Relativity, Quantum, Periodic Table |
+| **Visualization** | `Visualizer2D`, `Visualizer3D` | Graphs and vector plots |
+| **Media** | `Media` | Image, Audio, Video handling |
+| **Web** | `WebServer` | Flask API automation |
+| **Converters** | `Converter`, `Reader` | File transformation and reading |
+| **Utilities** | `QR_Code`, `Calender` | QR, calendar, web utilities |
+
+---
+
+## 🧠 Vision
+
+> *“NeuraPython isn’t just a library — it’s a platform for computational intelligence.”*  
+It simplifies AI, math, and science workflows into a unified Pythonic experience.
+
+---
+
+## 📂 Project Structure
+```
+neurapython/
+├── __init__.py
+├── ai/
+│   ├── neural.py
+│   ├── ml.py
+│   └── api_clients.py
+├── core/
+│   ├── physics.py
+│   ├── chemistry.py
+│   ├── calculus.py
+│   ├── maths.py
+│   └── matrices.py
+├── utils/
+│   ├── converter.py
+│   ├── reader.py
+│   ├── media.py
+│   ├── webserver.py
+│   └── qrcode_tool.py
+```
+
+---
+
+## 🧾 License
+MIT License © 2025 [Ibrahim Shahid](mailto:ibrahimshahid7767@gmail.com)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software to use, modify, and distribute copies without restriction.
+
+---
+
+<div align="center">
+
+### 🌐 *NeuraPython — Intelligence Simplified.*  
+![Footer](https://via.placeholder.com/800x100?text=Developed+by+Ibrahim+Shahid+%7C+NeuraPython)
+
+</div>
