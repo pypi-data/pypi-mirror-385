@@ -1,0 +1,51 @@
+Metadata-Version: 2.4
+Name: onionprobe
+Version: 1.4.1
+Summary: Test and monitors the status of Tor Onion Services
+Home-page: https://onionservices.torproject.org/apps/web/onionprobe
+Author: Silvio Rhatto
+Author-email: rhatto@torproject.org
+License: GPLv3
+Classifier: Development Status :: 3 - Alpha
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Information Technology
+Classifier: Intended Audience :: System Administrators
+Classifier: License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Topic :: System :: Monitoring
+Classifier: Topic :: Internet
+Classifier: Topic :: Security
+Classifier: Topic :: Security :: Cryptography
+Classifier: Topic :: System :: Networking :: Monitoring
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: requests>=2.27.1
+Requires-Dist: stem>=1.8.0
+Requires-Dist: prometheus-client>=0.14.1
+Requires-Dist: pyyaml>=6.0
+Requires-Dist: pysocks>=1.7.1
+Requires-Dist: cryptography>=3.4.8
+Dynamic: license-file
+
+# Onionprobe
+
+![](docs/assets/logo.jpg "Onionprobe")
+
+Onionprobe is a tool for testing and monitoring the status of
+[Tor Onion Services](https://community.torproject.org/onion-services/) sites.
+
+It can run a single time or continuously to probe a set of onion services
+endpoints and paths, optionally exporting to [Prometheus](https://prometheus.io)
+and with [Grafana](https://grafana.com/) support.
+
+The full documentation is available in the [docs/][] folder and at the
+[Onionprobe website][].
+
+[docs/]: https://gitlab.torproject.org/tpo/onion-services/onionprobe/-/tree/main/docs
+[Onionprobe website]: https://onionservices.torproject.org/apps/web/onionprobe/
