@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=80", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "multi-level-maze"
+version = "0.1.2"
+description = "A hierarchical multi-level maze environment for Gymnasium"
+readme = "README.md"
+authors = [
+  { name = "Ali Jahani", email = "alijahani@gmx.com" }
+]
+license = { text = "GPL-3.0-or-later" }
+requires-python = ">=3.9"
+keywords = ["reinforcement-learning", "gymnasium", "maze", "environment", "hierarchical", "nested", "multi-level"]
+
+dependencies = [
+  "gymnasium>=1.2.1",
+  "numpy>=1.22",
+  "pygame>=2.5"
+]
+
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+  "Operating System :: OS Independent",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence"
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
