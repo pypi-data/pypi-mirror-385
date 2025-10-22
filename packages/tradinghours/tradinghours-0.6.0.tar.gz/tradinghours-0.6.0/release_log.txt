@@ -1,0 +1,68 @@
+## 0.6.0 (2025-10-21)
+Changes:
+  * Removed support for alternative databases
+  * Removed support for is_covered
+  * Added `source` config to change where data.zip is pulled from
+  * Added `auto_import_frequency` config to allow more control over auto-import
+  
+
+## 0.5.2 (2025-10-05)
+Changes:
+  * updated readme
+  * applied error handling to auto-update feature in server mode
+
+## 0.5.1 (2025-10-03)
+Changes:
+  * Readme update
+  * Caching of Market.first- and last_available_date for better performance
+
+
+## 0.5.0 (2025-09-29)
+Changes:
+  * New 'server mode' allowing to run the package as a server.
+  * This changes the configuration of the package, please consult the README.md
+
+## 0.4.2 (2025-01-28)
+Changes:
+  * made the package compatible with python 3.13 by removing class properties
+
+## 0.4.1 (2024-12-11)
+Changes:
+ * fix for first_available_date conflicting with consideration of offset_days
+
+## 0.4.0 (2024-10-03)
+This update completely overhauls the backend of the package:
+ * Instead of using two storages (files and sql), it uses sqlite by default but can be used with a sql connection string to a remote database.
+ * The interface is mostly the same, except that some functionality, outputs, and exceptions have been added or modified.
+ * It is best to consult the README.md and dev-readme.md as if it's the first time you are working with this package.
+
+
+## 0.3.0 (2024-02-16)
+Breaking Changes:
+  * renamed Market.generate_schedules to Market.generate_phases
+  * moved Schedule.list_all to Market.list_schedules
+  * environment variables now take precedence over the .ini file
+
+Other Changes:
+  * updated test_release.yml for non-dev dependency test
+  * updated release.yml to include summary from release_log.txt
+  * added release_log.txt
+  * added dev-readme.md, showing set up for dev environment and CI/CD
+
+
+## 0.2.1
+Changes:
+  * add missing dependency to pyproject.toml
+
+
+## 0.2.0
+Breaking Changes:
+  * imports changed, see readme examples.
+
+Other Changes:
+  * replace pytz with zoneinfo
+  * added automated check for tzdata version
+  * complete migration to pytest
+  * add tests for API access levels
+  * added workflows for releasing
+
