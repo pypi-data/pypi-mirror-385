@@ -1,0 +1,24 @@
+[build-system]
+requires = ["hatchling >= 1.26"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pwp_bench"
+version = "0.0.1"
+authors = [
+  { name="Mazen Alamir", email="mazen.alamir@grenoble-inp.fr" },
+]
+description = "A python module to generate benchmark datasets for parametric anomaly detection in context-dependent industrial relationships"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+
+[project.urls]
+Homepage = "https://github.com/mazenalamir/pwp_bench"
+Issues = "https://github.com/mazenalamir/pwp_bench/issues"
