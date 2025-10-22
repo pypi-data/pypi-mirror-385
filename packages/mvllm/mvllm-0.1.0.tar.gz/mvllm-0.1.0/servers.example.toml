@@ -1,0 +1,22 @@
+[servers]
+servers = [
+    { url = "http://localhost:8801", max_concurrent_requests = 10 },
+    { url = "http://localhost:8802", max_concurrent_requests = 3 },
+    { url = "http://localhost:8803", max_concurrent_requests = 4 },
+]
+
+[config]
+health_check_interval = 10
+config_reload_interval = 30
+request_timeout = 30
+health_check_timeout = 5
+max_retries = 3
+failure_threshold = 2
+auto_recovery_threshold = 60
+
+# 主动健康检查配置
+enable_active_health_check = true
+health_check_max_response_time = 10.0
+health_check_min_success_rate = 0.8
+health_check_window_size = 10
+health_check_consecutive_failures = 3
