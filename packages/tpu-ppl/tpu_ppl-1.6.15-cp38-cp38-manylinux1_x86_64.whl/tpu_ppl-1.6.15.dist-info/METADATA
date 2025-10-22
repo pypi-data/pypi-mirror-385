@@ -1,0 +1,172 @@
+Metadata-Version: 2.1
+Name: tpu_ppl
+Version: 1.6.15
+Summary: A language and compiler for custom Deep Learning operations
+Home-page: https://github.com/sophgo/PPL/
+Author: liang.chen
+Author-email: liang.chen@sophgo.com
+License: 2-Clause BSD
+Keywords: Compiler,Deep Learning
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Build Tools
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Provides-Extra: build
+Requires-Dist: cmake>=3.20; extra == "build"
+Requires-Dist: lit; extra == "build"
+
+## ppl
+Primitive Programming Language
+
+## Build instructions
+
+### Requirements
+- Working C and C++ toolchains(compiler[clang], linker)
+- cmake
+- ninja
+
+### 1. install git lfs
+
+curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
+
+sudo apt-get install git-lfs
+
+#### setting up lfs for the first time
+git lfs install
+
+### 2. clone PPL
+
+#### 2.1 If you had not pull code using the ssh method:
+git config --global http.sslVerify false
+git clone <ppl repo url>
+git config --global http.sslVerify true
+
+#### 2.2 If you had pull code using the ssh method:
+##### Change ssh to http
+git remote set-url origin https://<your_name>@<ppl repo url>
+
+#### 2.3 set up for http
+##### 2.3.1 set http repo
+cd ppl
+
+##### 2.3.2 Disable Locked Authentication
+git config lfs.https://gerrit-ai.so#ph#go.vip/ppl.git/info/lfs.locksverify false
+
+##### 2.3.3 Local disk to save credentials (have security risk, but no need to enter a password every time you interact with the remote library)
+##### note : If you have changed your password, just execute the following statement
+git config --global credential.helper store
+
+##### 2.3.4 Skip ssl certificate verification
+git config http.sslVerify false
+
+##### 2.3.5 When you change the password, you need to execute the statement below to update the locally saved password
+git config --global credential.helper store
+
+### 3. Get the LFS objects contained in the current commit
+git lfs fetch
+git lfs checkout
+or:
+git lfs pull
+
+### 4. If need update runtime
+source envsetup.sh
+git config --global http.sslVerify false (suggested update outside docker)
+git submodule update --init
+git config --global http.sslVerify true
+./update.sh
+
+### 5. How to use git lfs
+refer to: https://wiki.so#ph#go.com/pages/viewpage.action?pageId=127019078
+
+### 6. Install LLVM, MLIR, Clang, and PPL
+
+#### Using LLVM release files
+
+download llvm+mlir-17.0.0-x86_64-linux-gnu-ubuntu-18.04-release.tar.gz to third_party
+``` sh
+cd ppl/third_party
+scp guest@172.22.12.22:/data/ppl_third_party/llvm+mlir-17.0.0-x86_64-linux-gnu-ubuntu-18.04-release.tar.gz .
+(password:123456)
+tar -xvhf llvm+mlir-17.0.0-x86_64-linux-gnu-ubuntu-18.04-release.tar.gz
+ln -sf llvm+mlir-17.0.0-x86_64-linux-gnu-ubuntu-18.04-release llvm_release
+```
+
+### 7. build ppl
+``` sh
+cd ppl
+./build.sh
+# ./build.sh DEBUG (debug mode)
+```
+
+## Push Code
+```
+cd existing_repo
+git pull -r
+git push origin HEAD:refs/for/main
+```
+
+## Run
+
+ppl-compile
+options:
+--function : function need to be converted
+--I : include search path
+--print-debug-info : print loc information
+--print-ir : print ir
+--gen-ref : generate reference groups
+--chip : chip type
+--x : treat input as language
+--O0 : Optimisation level 0: none optimisation
+--O1 : Optimisation level 1: do ppl canonicalize
+--O2 : Optimisation level 2: do ppl pipeline and ppl canonicalize
+--O3 : Optimisation level 3: do all ppl optimisation
+--o : Output path for ir and c files
+--pm-enable-printing : Enable printing of IR before and after all passed
+
+## Test
+You can use the script named ppl_compile.py to test the xx.pl file
+
+For example:
+you can test xx.pl by executing the following command.
+
+ppl_compile.py --src ./examples/matmul/mm2.pl --chip bm1684x --gen_test
+
+## Profiling
+
+### preprare PerfAI tool
+
+download PerfAI tool from FTP:172.28.141.89  /perfAI_release/perfAI_release
+mv PerfAI_Release_xxx.tar.gz to ppl/third_party
+tar -xvhf PerfAI_Release_xxx.tar.gz
+ln -sf PerfAI_Release_xxx.tar.gz PerfAI
+cd PerfAI
+pip install -r requirements.txt
+
+### run
+
+cd ppl/third_party/PerfAI/
+source envsetup.sh
+ppl_compile.py --src examples/sdma/add_c_dual_loop.pl --chip bm1690 --profiling
+
+profiling files will generate in test_add_c_dual_loop/profiling
+
+
+## CI
+git clone ssh://liang.chen@gerrit-ai.so#ph#go.vip:29418/jenkins_pipeline.git
+
+jenkins script
+regression/ppl_ci_test.groovy
+
+dockerfile
+envsetup/docker/ppl_dailybuild.dockerfile
+
+## third-party version
+triton 5df904233c11a65bd131ead7268f84cca7804275
+llvm 2538e550420f
