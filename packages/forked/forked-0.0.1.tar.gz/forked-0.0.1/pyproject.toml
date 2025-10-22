@@ -1,0 +1,75 @@
+[project]
+name = "forked"
+version = "v0.0.1"
+description = "Git-native fork overlay & guard tool"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "Spenquatch", email = "spmcconnell.totaltele@gmail.com" }]
+license = { text = "MIT" }
+keywords = ["git", "cli", "fork", "rebasing", "automation"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Version Control",
+]
+dependencies = [
+    "typer>=0.12",
+    "pyyaml>=6.0",
+    "rich>=13.7",
+    "pathspec>=0.12",
+]
+
+[project.scripts]
+forked = "cli:app"
+
+[project.urls]
+Repository = "https://github.com/Spenquatch/fork"
+Issues = "https://github.com/Spenquatch/fork/issues"
+Documentation = "https://github.com/Spenquatch/fork#readme"
+
+[tool.poetry]
+packages = [{ include = "*", from = "src" }]
+include = ["README.md", "LICENSE"]
+
+[tool.poetry.group.dev.dependencies]
+ruff = ">=0.5"
+mypy = ">=1.10"
+pytest = ">=8.0"
+
+[build-system]
+requires = ["poetry-core>=1.9.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+exclude = [
+    "project-handbook",
+    "scripts",
+    "demo-*",
+    "forked.egg-info",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "B", "I", "UP"]
+ignore = ["E203", "E266", "E501"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+
+[tool.mypy]
+python_version = "3.10"
+files = ["src"]
+strict = false
+ignore_missing_imports = true
+follow_imports = "skip"
+check_untyped_defs = true
