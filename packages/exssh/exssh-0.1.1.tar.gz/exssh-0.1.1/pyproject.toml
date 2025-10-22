@@ -1,0 +1,32 @@
+[project]
+name = "exssh"
+version = "0.1.1"
+description = "Provide automation capability for any ssh client."
+keywords = ["ssh", "mosh", "zssh", "automation", "expect"]
+license = "MIT"
+license-files = ["LICENSE*"]
+readme = "README.md"
+authors = [{ name = "darkclip", email = "darkclip@hanv.dev" }]
+requires-python = ">=3.8"
+dependencies = ["pexpect>=4.9.0"]
+
+[project.optional-dependencies]
+bitwarden = ["exbw>=0.1.0"]
+
+[project.urls]
+homepage = "https://github.com/darkclip/exssh"
+repository = "https://github.com/darkclip/exssh"
+documentation = "https://github.com/darkclip/exssh"
+
+[project.scripts]
+exssh = "exssh:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.setuptools]
+packages = ["exssh"]
+
+[tool.ruff.format]
+quote-style = "single"

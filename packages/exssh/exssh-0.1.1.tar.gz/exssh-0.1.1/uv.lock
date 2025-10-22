@@ -1,0 +1,56 @@
+version = 1
+revision = 1
+requires-python = ">=3.8"
+
+[[package]]
+name = "exbw"
+version = "0.1.0"
+source = { registry = "https://mirrors.nju.edu.cn/pypi/web/simple" }
+dependencies = [
+    { name = "pexpect" },
+]
+sdist = { url = "https://mirrors.nju.edu.cn/pypi/web/packages/f8/6f/1702481dcab443859b5b0cdc3c55ac5c445c79d478179e7f160a9dfcdabd/exbw-0.1.0.tar.gz", hash = "sha256:203b30e387b3b76c66b27c9991b1dee1693298761694cc82a40155601ded94ca" }
+wheels = [
+    { url = "https://mirrors.nju.edu.cn/pypi/web/packages/2d/a0/755abe6517be0813b8e06161e243986206fc35b616bb2a4d67ae5294954e/exbw-0.1.0-py3-none-any.whl", hash = "sha256:54e70e67543b8314bf8307ee71c64cfb34174ded4f0728e88f2feb3ba692e0f9" },
+]
+
+[[package]]
+name = "exssh"
+version = "0.1.0"
+source = { editable = "." }
+dependencies = [
+    { name = "pexpect" },
+]
+
+[package.optional-dependencies]
+bitwarden = [
+    { name = "exbw" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "exbw", marker = "extra == 'bitwarden'", specifier = ">=0.1.0" },
+    { name = "pexpect", specifier = ">=4.9.0" },
+]
+provides-extras = ["bitwarden"]
+
+[[package]]
+name = "pexpect"
+version = "4.9.0"
+source = { registry = "https://mirrors.nju.edu.cn/pypi/web/simple" }
+dependencies = [
+    { name = "ptyprocess" },
+]
+sdist = { url = "https://mirrors.nju.edu.cn/pypi/web/packages/42/92/cc564bf6381ff43ce1f4d06852fc19a2f11d180f23dc32d9588bee2f149d/pexpect-4.9.0.tar.gz", hash = "sha256:ee7d41123f3c9911050ea2c2dac107568dc43b2d3b0c7557a33212c398ead30f" }
+wheels = [
+    { url = "https://mirrors.nju.edu.cn/pypi/web/packages/9e/c3/059298687310d527a58bb01f3b1965787ee3b40dce76752eda8b44e9a2c5/pexpect-4.9.0-py2.py3-none-any.whl", hash = "sha256:7236d1e080e4936be2dc3e326cec0af72acf9212a7e1d060210e70a47e253523" },
+]
+
+[[package]]
+name = "ptyprocess"
+version = "0.7.0"
+source = { registry = "https://mirrors.nju.edu.cn/pypi/web/simple" }
+sdist = { url = "https://mirrors.nju.edu.cn/pypi/web/packages/20/e5/16ff212c1e452235a90aeb09066144d0c5a6a8c0834397e03f5224495c4e/ptyprocess-0.7.0.tar.gz", hash = "sha256:5c5d0a3b48ceee0b48485e0c26037c0acd7d29765ca3fbb5cb3831d347423220" }
+wheels = [
+    { url = "https://mirrors.nju.edu.cn/pypi/web/packages/22/a6/858897256d0deac81a172289110f31629fc4cee19b6f01283303e18c8db3/ptyprocess-0.7.0-py2.py3-none-any.whl", hash = "sha256:4b41f3967fce3af57cc7e94b888626c18bf37a083e3651ca8feeb66d492fef35" },
+]
