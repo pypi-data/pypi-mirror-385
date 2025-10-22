@@ -1,0 +1,85 @@
+[build-system]
+requires = [
+    "setuptools>=69",
+    "wheel>=0.43",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "torch-module-monitor"
+version = "0.1.0"
+description = "Diagnostics for PyTorch model training - monitor activations, parameters, and gradients"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Sebastian Bordt", email = "sbordt@posteo.de" },
+]
+requires-python = ">=3.9"
+dependencies = [
+    "torch>=2.1",
+    "numpy>=1.24",
+    "h5py>=3.8",
+]
+keywords = ["pytorch", "deep-learning", "diagnostics", "monitoring", "training", "mup", "coordinate-check", "activations", "gradients"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+[project.optional-dependencies]
+wandb = [
+    "wandb>=0.16",
+]
+tb = [
+    "tensorboard>=2.15",
+]
+dev = [
+    "pytest>=8.2",
+    "pytest-xdist>=3.6",
+    "pre-commit>=3.7",
+    "black>=24.3",
+    "flake8>=7.0",
+    "mypy>=1.10",
+    "sphinx>=7.2",
+    "sphinx-autoapi>=3.1",
+]
+
+[project.urls]
+Homepage = "https://github.com/tml-tuebingen/torch-module-monitor"
+Source = "https://github.com/tml-tuebingen/torch-module-monitor"
+Issues = "https://github.com/tml-tuebingen/torch-module-monitor/issues"
+Documentation = "https://torch-module-monitor.readthedocs.io"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+torch_module_monitor = ["py.typed"]
+
+[tool.pytest.ini_options]
+addopts = "-ra --strict-markers"
+
+[tool.black]
+line-length = 88
+target-version = ["py39"]
+
+[tool.flake8]
+max-line-length = 120
+exclude = [".git", "__pycache__", "build", "dist"]
+
+[tool.mypy]
+python_version = "3.9"
+check_untyped_defs = true
+plugins = []
