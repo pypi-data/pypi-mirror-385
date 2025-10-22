@@ -1,0 +1,240 @@
+Metadata-Version: 2.4
+Name: barnyard
+Version: 3.0.0
+Summary: Temporary Delete System for Safe Batch Automation and Lead Distribution
+Author: Henry
+Author-email: osas2henry@gmail.com
+License: MIT
+Keywords: automation batch processing deletion safety recovery leads
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: keywords
+Dynamic: license
+Dynamic: license-file
+Dynamic: requires-python
+Dynamic: summary
+
+---
+
+# 🐴 BarnYard: Temporary Delete System for Batch Automation and Distribution
+
+BarnYard is a Python utility that safely distributes leads or records across multiple concurrent automation processes without risking data loss or duplication.
+
+It solves a real-world challenge: how to "delete" a record from a shared source such as SQL **only after** a task is truly complete, even when multiple processes are pulling from the same source.
+
+---
+
+## 🧠 Why BarnYard
+
+In a typical setup, when you pull a lead or task from a shared source like an SQL table, the instinct is to delete it immediately to prevent other processes from touching the same item.
+
+### ❌ The Problem
+
+If you delete a lead right after pulling it, but your process:
+
+* Crashes unexpectedly
+* Gets force stopped
+* Or fails midway through the task
+
+Then that data is lost forever, even though the task was never completed.
+
+This becomes critical when scaling automation across multiple tabs, terminals, or machines. Deleting too early causes data loss. Not deleting causes duplicate processing.
+
+---
+
+### 💡 The BarnYard Solution
+
+BarnYard introduces a smarter pattern known as the **temporary delete**.
+
+Instead of deleting immediately, BarnYard moves the record into a temporary holding area called a **barn**. Think of this like a soft delete or a checkout system.
+
+Based on what happens next:
+
+* If the task completes successfully
+  The lead is **shed** and permanently removed.
+
+* If the task fails or is force stopped
+  The lead is **reinstated** later for retry.
+
+* If multiple tabs or scripts are running
+  Each gets its own unique batch to avoid overlap or conflict.
+
+---
+
+### ✅ The Outcome
+
+With BarnYard, you get:
+
+* Safer automation. No accidental data loss.
+* Easier scaling. Multiple processes can run in parallel.
+* Better recovery. Failed or interrupted tasks are recoverable.
+* Cleaner logic. Delete only when the task is truly complete.
+* Lower costs. No server needed. BarnYard is entirely local and does not rely on third-party systems.
+
+---
+
+### 💸 Philosophy: High Scale. Low Cost.
+
+BarnYard is built with a simple idea. Not every client has the budget for complex infrastructure. You should not need Redis, message queues, or cloud hosting to scale automation safely. BarnYard runs entirely on local resources with zero dependencies, yet gives you parallel-safe, failure-tolerant task distribution that would normally require expensive systems. This tool is part of a larger philosophy: build automation that is affordable, scalable, and tough enough to handle real-world failure.
+
+---
+
+## ℹ️ What is a Lead?
+
+A **lead** in BarnYard is a single unit of work. It is typically represented as a list of values, for example:
+
+```python
+["John Doe", "Grade A", 21]
+```
+
+Each list is treated as one lead or record. BarnYard manages these leads internally with unique integer keys.
+
+---
+
+## Using BarnYard via the `Engine` class
+
+BarnYard exposes a convenient `Engine` class which manages the barn and its lifecycle. Here's how to use it:
+
+---
+
+### 1. Initialize the Engine
+
+```python
+import barnyard
+
+barn = barnyard.Engine("my_barn")  # Create or attach to a barn named "my_barn"
+```
+
+---
+
+### 2. Define a function to fetch leads (without keys)
+
+Your `add` function should return a list of leads (each lead is a list of values). BarnYard will assign unique integer keys internally.
+
+```python
+def fetch_leads():
+    return [
+        ["Alice", "Math", 20],
+        ["Bob", "Science", 22],
+        ["Charlie", "History", 19],
+    ]
+```
+
+---
+
+### 3. Fetch leads with `next()`
+
+`next()` will call your fetch function and return a **dictionary** mapping **integer keys** to leads.
+
+```python
+leads_dict = barn.next(add=fetch_leads, batch=3, expire=30)
+
+print("Leads received:")
+for key, lead in leads_dict.items():
+    print(f"Key: {key}, Lead: {lead}")
+```
+
+Sample output:
+
+```
+Key: 101, Lead: ['Alice', 'Math', 20]
+Key: 102, Lead: ['Bob', 'Science', 22]
+Key: 103, Lead: ['Charlie', 'History', 19]
+```
+
+---
+
+### 4. Process and then delete leads by key using `shed()`
+
+After you successfully process a lead, call `shed()` with the **integer key** to permanently remove it.
+
+```python
+for key, lead in leads_dict.items():
+    # ... process the lead ...
+    barn.shed(key)  # Mark the lead for deletion
+```
+
+---
+
+## Main Functions Summary
+
+| Function                               | Description                                                                                     | Input/Output Types                                                     |
+| -------------------------------------- | ----------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `next(add, *, batch, expire, calls=1)` | Fetches leads in batches and assigns integer keys internally. Returns `{int: lead}` dictionary. | `add`: function returning `list[list]` <br> Returns: `dict[int, list]` |
+| `shed(key)`                            | Deletes a lead by its unique integer key after successful processing.                           | `key`: int                                                             |
+| `info()`                               | Lists all current leads and reinstate records in the barn.                                      | Returns list of `[lead, key]` pairs                                    |
+| `find(keys=None, values=None)`         | Search barn by integer keys or by lead values.                                                  | `keys`: int or list[int] <br> `values`: list or list of lists          |
+| `listdir()`                            | Lists all active barns (excludes reinstate barns).                                              | Returns list of barn names                                             |
+| `remove(barn)`                         | Deletes the specified barn and its reinstate barn if it exists.                                 | `barn`: str                                                            |
+
+---
+
+## Example Full Usage
+
+```python
+import barnyard
+
+# Initialize the BarnYard Engine for your barn
+barn = barnyard.Engine("my_barn")
+
+# Define your lead fetch function (no keys)
+def fetch_leads():
+    return [
+        ["Alice", "Math", 20],
+        ["Bob", "Science", 22],
+        ["Charlie", "History", 19],
+    ]
+
+# Fetch leads, returns dict with integer keys
+leads = barn.next(add=fetch_leads, batch=3, expire=30)
+
+print("Leads received:")
+for key, lead in leads.items():
+    print(f"Key: {key} -> Lead: {lead}")
+
+# Process and then shed leads by key
+for key in leads.keys():
+    # process lead here...
+    barn.shed(key)
+
+print("Processed and deleted leads safely.")
+```
+
+---
+
+## Installation
+
+```bash
+pip install barnyard
+```
+
+---
+
+## Use Case
+
+BarnYard is perfect when:
+
+* You have multiple bots, tabs, or scripts pulling from a single shared SQL source.
+* You need to prevent duplicate processing.
+* You want to safely delay deletion until a task is confirmed complete.
+* You want the ability to recover unfinished tasks after crashes.
+* You want to avoid server costs by keeping everything local and lightweight.
+
+---
+
+## License
+
+MIT License
+
+---
