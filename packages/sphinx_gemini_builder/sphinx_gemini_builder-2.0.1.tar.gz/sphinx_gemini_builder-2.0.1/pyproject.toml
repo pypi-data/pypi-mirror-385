@@ -1,0 +1,99 @@
+[build-system]
+requires = ["flit_core>=3.2"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "sphinx_gemini_builder"
+version = "2.0.1"
+requires-python = ">=3.8"
+dependencies = [
+    "Sphinx>=8.0.0"
+]
+license = {text = "EUPL-1.2"}
+authors = [
+    {name = "Nerv Project ASBL", email = "contact@nerv-project.eu"},
+    {name = "kujiu"},
+    {name = "ptitgnu"}
+]
+maintainers = [
+    {name = "Nerv Project ASBL", email = "contact@nerv-project.eu"},
+    {name = "kujiu"},
+    {name = "ptitgnu"}
+]
+description = "Build gemini blog"
+readme = {file = "README.rst", content-type = "text/x-rst"}
+keywords=["sphinx", "gemini", "gemlog"]
+classifiers=[
+    "Framework :: Sphinx",
+    "Framework :: Sphinx :: Extension",
+    "Development Status :: 5 - Production/Stable",
+    "License :: OSI Approved :: European Union Public Licence 1.2 (EUPL 1.2)",
+    "Environment :: Console",
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Topic :: Documentation",
+    "Topic :: Software Development :: Documentation",
+]
+
+[project.urls]
+homepage = "https://www.nerv-project.eu"
+repository = "https://procrastinator.nerv-project.eu/nerv-project/sphinx_gemini_builder"
+issues = "https://procrastinator.nerv-project.eu/nerv-project/sphinx_gemini_builder/issues"
+editor = "https://www.nerv-project.eu"
+changelog = "https://procrastinator.nerv-project.eu/nerv-project/sphinx_gemini_builder/raw/branch/main/CHANGES.rst"
+
+[project.entry-points."sphinx.builders"]
+gemini = "sphinx_gemini_builder"
+
+[project.optional-dependencies]
+tests = [
+    "pytest",
+    "flake8",
+    "pylint",
+    "pytest-cov"
+]
+setup = [
+    "Sphinx",
+    "pytest-runner",
+    "flake8",
+    "pylint",
+    "babel",
+    "flit",
+]
+
+[project.scripts]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+    "tests",
+]
+
+[tool.babel.extract_messages]
+mapping_file = "babel.cfg"
+output_file = "locale/sphinx.pot"
+keywords = ["_", "__", "l_", "lazy_gettext", "gettext", "ngettext"]
+add_comments = "Translators:"
+
+[tool.babel.init_catalog]
+domain = "sphinx"
+input_file = "locale/sphinx.pot"
+output_dir = "locale/"
+
+[tool.babel.update_catalog]
+domain = "sphinx"
+input_file = "locale/sphinx.pot"
+output_dir = "locale/"
+
+[tool.babel.compile_catalog]
+domain = "sphinx"
+directory = "locale/"
+
+[tool.flit.sdist]
+include = [
+    "*.py",
+]
+

@@ -1,0 +1,73 @@
+Metadata-Version: 2.4
+Name: sphinx_gemini_builder
+Version: 2.0.1
+Summary: Build gemini blog
+Keywords: sphinx,gemini,gemlog
+Author: kujiu, ptitgnu
+Author-email: Nerv Project ASBL <contact@nerv-project.eu>
+Maintainer: kujiu, ptitgnu
+Maintainer-email: Nerv Project ASBL <contact@nerv-project.eu>
+Requires-Python: >=3.8
+Description-Content-Type: text/x-rst
+Classifier: Framework :: Sphinx
+Classifier: Framework :: Sphinx :: Extension
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: License :: OSI Approved :: European Union Public Licence 1.2 (EUPL 1.2)
+Classifier: Environment :: Console
+Classifier: Environment :: Web Environment
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Documentation
+Classifier: Topic :: Software Development :: Documentation
+License-File: LICENSE
+License-File: LICENSE-de
+License-File: LICENSE-fr
+License-File: LICENSE-nl
+Requires-Dist: Sphinx>=8.0.0
+Requires-Dist: Sphinx ; extra == "setup"
+Requires-Dist: pytest-runner ; extra == "setup"
+Requires-Dist: flake8 ; extra == "setup"
+Requires-Dist: pylint ; extra == "setup"
+Requires-Dist: babel ; extra == "setup"
+Requires-Dist: flit ; extra == "setup"
+Requires-Dist: pytest ; extra == "tests"
+Requires-Dist: flake8 ; extra == "tests"
+Requires-Dist: pylint ; extra == "tests"
+Requires-Dist: pytest-cov ; extra == "tests"
+Project-URL: changelog, https://procrastinator.nerv-project.eu/nerv-project/sphinx_gemini_builder/raw/branch/main/CHANGES.rst
+Project-URL: editor, https://www.nerv-project.eu
+Project-URL: homepage, https://www.nerv-project.eu
+Project-URL: issues, https://procrastinator.nerv-project.eu/nerv-project/sphinx_gemini_builder/issues
+Project-URL: repository, https://procrastinator.nerv-project.eu/nerv-project/sphinx_gemini_builder
+Provides-Extra: setup
+Provides-Extra: tests
+
+sphinx_gemini_builder
+#####################
+
+Build `Gemini <https://gemini.circumlunar.space/>`_ blog from
+`Sphinx <https://www.sphinx-doc.org>`_ with
+`ABlog <https://ablog.readthedocs.io/>`_ compatibility.
+
+
+Gemini is a simple protocol between gopher and web. Sphinx is
+a documentation tool. This project builds Gemini capsule from
+Sphinx documentation. It supports ABlog extensions and manage
+Atom feeds.
+
+Installation and use
+--------------------
+
+Install with `python setup.py install` and do `make gemini` in
+your project.
+
+
+You can add a `gemini_footer` in config, formatted under the
+Gemini specification. You need to set `gemini_baseurl` for
+good url in Atom feeds.
+
+
+This project contains some parts of code from Sphinx and from
+ABlog.
+
