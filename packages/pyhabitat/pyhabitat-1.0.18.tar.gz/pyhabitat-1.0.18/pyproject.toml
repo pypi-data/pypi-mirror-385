@@ -1,0 +1,35 @@
+# pyproject.toml
+
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyhabitat"
+version = "1.0.18"
+#dynamic = ["version"] # 
+authors = [
+  { name="George Clayton Bennett", email="george.bennett@memphistn.gov" },
+]
+description = "A lightweight library for detecting system environment, GUI, and build properties."
+readme = "README.md"
+requires-python = ">=3.7"
+license = "MIT" 
+keywords = ["environment", "os-detection", "gui", "build-system"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Topic :: System :: Systems Administration",
+]
+dependencies = []
+
+[project.scripts]
+pyhabitat = "pyhabitat.cli:run_cli"
+
+[tool.setuptools.packages.find]
+where = ["."]  
+include = ["pyhabitat*"] 
+
+[tool.setuptools_scm] 
+# This tells setuptools_scm to look at your git history/tags for the version
+write_to = "pyhabitat/_version.py"
