@@ -1,0 +1,155 @@
+Metadata-Version: 2.4
+Name: nonebot_plugin_bili_helper
+Version: 0.8.9
+Summary: Nonebot2 plugin for bilibili sharing detail
+License: MIT
+License-File: LICENSE
+Author: krimeshu
+Author-email: krimeshu@gmail.com
+Requires-Python: >=3.9,<4.0
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Requires-Dist: aiohttp (>=3.12.15,<4.0.0)
+Requires-Dist: nonebot-adapter-onebot (>=2.0.0,<3.0.0)
+Requires-Dist: nonebot-plugin-htmlrender (>=0.2.0)
+Requires-Dist: nonebot2 (>=2.3.0,<3.0.0)
+Requires-Dist: requests (>=2.28.2,<3.0.0)
+Project-URL: Homepage, https://github.com/krimeshu/nonebot-plugin-bili-helper
+Project-URL: Repository, https://github.com/krimeshu/nonebot-plugin-bili-helper
+Description-Content-Type: text/markdown
+
+<div align="center">
+  <a href="https://v2.nonebot.dev/store"><img src="https://github.com/krimeshu/nonebot-plugin-bili-helper/blob/master/nbp_logo.png" width="180" height="180" alt="NoneBotPluginLogo"></a>
+</div>
+
+<div align="center">
+
+# nonebot-plugin-bili-helper
+
+_✨ NoneBot 插件简单描述 ✨_
+
+
+<a href="./LICENSE">
+    <img src="https://img.shields.io/github/license/krimeshu/nonebot-plugin-bili-helper.svg" alt="license">
+</a>
+<a href="https://pypi.python.org/pypi/nonebot-plugin-bili-helper">
+    <img src="https://img.shields.io/pypi/v/nonebot-plugin-bili-helper.svg" alt="pypi">
+</a>
+<img src="https://img.shields.io/badge/python-3.9+-blue.svg" alt="python">
+
+</div>
+
+这是一个 nonebot2 插件项目，支持对群聊内分享 B 站视频进行相关信息的解析与提取。
+
+> 评论模板来自: [https://github.com/ikenxuan/kkkkkk-10086](https://github.com/ikenxuan/kkkkkk-10086)
+
+<details open>
+<summary>折叠事项</summary>
+
+1. 本插件并不提供视频下载能力（个人觉得群聊里出现大量下载的视频片段挺烦的，经常触发自动下载还占用手机和电脑的空间）。
+2. 只适配和测试了 onebot v11 适配器的场景，其他环境未做处理，不确保可用性。
+
+</details>
+
+> [!NOTE]
+> 模板库中自带了一个发布工作流, 你可以使用此工作流自动发布你的插件到 pypi
+
+<details>
+<summary>配置发布工作流</summary>
+
+1. 前往 https://pypi.org/manage/account/#api-tokens 并创建一个新的 API 令牌。创建成功后不要关闭页面，不然你将无法再次查看此令牌。
+2. 在单独的浏览器选项卡或窗口中，打开 [Actions secrets and variables](./settings/secrets/actions) 页面。你也可以在 Settings - Secrets and variables - Actions 中找到此页面。
+3. 点击 New repository secret 按钮，创建一个名为 `PYPI_API_TOKEN` 的新令牌，并从第一步复制粘贴令牌。
+
+</details>
+
+> [!IMPORTANT]
+> 这个发布工作流需要 pyproject.toml 文件, 并且只支持 [PEP 621](https://peps.python.org/pep-0621/) 标准的 pyproject.toml 文件
+
+<details>
+<summary>触发发布工作流</summary>
+从本地推送任意 tag 即可触发。
+
+创建 tag:
+
+    git tag <tag_name>
+
+推送本地所有 tag:
+
+    git push origin --tags
+
+</details>
+
+## 📖 介绍
+
+这里是插件的详细介绍部分
+
+## 💿 安装
+
+<details open>
+<summary>使用 nb-cli 安装</summary>
+在 nonebot2 项目的根目录下打开命令行, 输入以下指令即可安装
+
+    nb plugin install nonebot-plugin-bili-helper
+
+</details>
+
+<details>
+<summary>使用包管理器安装</summary>
+在 nonebot2 项目的插件目录下, 打开命令行, 根据你使用的包管理器, 输入相应的安装命令
+
+<details>
+<summary>pip</summary>
+
+    pip install nonebot-plugin-bili-helper
+</details>
+<details>
+<summary>pdm</summary>
+
+    pdm add nonebot-plugin-bili-helper
+</details>
+<details>
+<summary>poetry</summary>
+
+    poetry add nonebot-plugin-bili-helper
+</details>
+<details>
+<summary>conda</summary>
+
+    conda install nonebot-plugin-bili-helper
+</details>
+
+打开 nonebot2 项目根目录下的 `pyproject.toml` 文件, 在 `[tool.nonebot]` 部分追加写入
+
+    plugins = ["nonebot_plugin_template"]
+
+</details>
+
+## ⚙️ 配置
+
+在 nonebot2 项目的`.env`文件中添加下表中的必填配置
+
+| 配置项 | 必填 | 默认值 | 说明 |
+|:-----:|:----:|:----:|:----:|
+| analysis_whitelist | 否 | 无 | 触发人白名单（留空时为所有人） |
+| analysis_group_whitelist | 否 | 无 | 目标群组白名单（留空时为所有群组） |
+| analysis_blacklist | 否 | 无 | 触发人黑名单 |
+| analysis_group_blacklist | 否 | 无 | 目标群组黑名单 |
+| analysis_group_strategies | 否 | 无 | 群组策略（格式为 `dict[str, list]`，其中 `list` 为 `'detail', 'link', 'comments'` 组成的数组。如配置 `{ "123": ["comments"] }` 说明对群组 123 仅做评论解析） |
+| bili_helper_tmp_dir | 否 | `./tmp/bili_helper` | 临时文件保存位置 |
+| bili_helper_cookie_path | 否 | `./data/bili_helper_cookie.json` | Cookie保存位置 |
+
+## 🎉 使用
+
+### 指令表
+| 指令 | 权限 | 需要@ | 范围 | 说明 |
+|:-----:|:----:|:----:|:----:|:----:|
+| 设置B站Cookie | 主人 | 否 | 私聊 | 设置请求时的Cookie（以便获得更详细的评论数据） |
+
+
