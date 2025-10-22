@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load custom_tags_and_filters %}
+{% load static %}
+{% load tz %}
+{% block title %}
+    {% if form.instance.id %}
+        Edit publication
+    {% else %}
+        Add publication
+    {% endif %}
+{% endblock %}
+{% block content %}
+    {% with instance_id=form.instance.id %}
+        <h1 class="form-group">
+            {% if instance_id %}
+                Edit publication
+            {% else %}
+                Create publication
+            {% endif %}
+        </h1>
+        <form class="well" action="{% url 'save_publication_metadata' %}" method="post">
+            {% csrf_token %}
+            {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+            <input type="hidden"
+                   id="bibtex"
+                   name="bibtex"
+                   class="form-control"
+                   readonly
+                   value="{{ form.bibtex.value|default_if_none:"" }}">
+            <input type="hidden"
+                   id="json_metadata"
+                   name="json_metadata"
+                   class="form-control"
+                   readonly
+                   value="{{ form.json_metadata.value|default_if_none:"" }}">
+            <div class="row form-group">
+                <div class="col-xs-9 col-sm-10">
+                    <label for="doi">DOI</label>
+                    {% if form.doi.errors %}- <span style="color:red">{{ form.doi.errors|striptags }}</span>{% endif %}
+                    <input type="text"
+                           id="doi"
+                           name="doi"
+                           class="form-control"
+                           readonly
+                           value="{{ form.doi.value|default_if_none:"" }}"
+                           required>
+                </div>
+                <div class="col-xs-3 col-sm-2">
+                    <div style="margin-bottom: 5px">&nbsp;</div>
+                    <button class="btn btn-default form-control"
+                            type="button"
+                            onclick="window.open('{{ form.instance.get_doi_url }}')">Open</button>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-6 col-sm-6">
+                    <label for="title">Title</label>
+                    {% if form.title.errors %}- <span style="color:red">{{ form.title.errors|striptags }}</span>{% endif %}
+                    <input type="text"
+                           id="title"
+                           name="title"
+                           class="form-control"
+                           value="{{ form.title.value|default_if_none:"" }}"
+                           required>
+                </div>
+                <div class="col-md-6 col-sm-6">
+                    <label for="journal">Journal</label>
+                    {% if form.journal.errors %}- <span style="color:red">{{ form.journal.errors|striptags }}</span>{% endif %}
+                    <input type="text"
+                           id="journal"
+                           name="journal"
+                           class="form-control"
+                           value="{{ form.journal.value|default_if_none:"" }}"
+                           required>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-6 col-sm-6">
+                    <label for="month">Month</label>
+                    {% if form.month.errors %}- <span style="color:red">{{ form.month.errors|striptags }}</span>{% endif %}
+                    <select id="month" name="month" class="form-control">
+                        {% for t in form.fields.month.choices %}
+                            <option value="{{ t.0 }}" {% if t.0 == form.month.value|to_int %}selected{% endif %}>{{ t.1|title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6 col-sm-6">
+                    <label for="year">Year</label>
+                    {% if form.year.errors %}- <span style="color:red">{{ form.year.errors|striptags }}</span>{% endif %}
+                    <input type="number"
+                           id="year"
+                           name="year"
+                           class="form-control"
+                           value="{{ form.year.value|default_if_none:"" }}"
+                           required>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-10 col-lg-4">
+                    <label for="image_url">Image URL</label>
+                    {% if form.image_url.errors %}- <span style="color:red">{{ form.image_url.errors|striptags }}</span>{% endif %}
+                    <input type="text"
+                           id="image_url"
+                           name="image_url"
+                           class="form-control"
+                           value="{{ form.image_url.value|default_if_none:"" }}">
+                </div>
+                <div class="col-sm-2">
+                    <div style="margin-bottom: 5px">&nbsp;</div>
+                    <button class="btn btn-default form-control"
+                            type="button"
+                            onclick="if ($('#image_url').val()) {$('#test_image').attr('src', $('#image_url').val()).show()}">
+                        Preview
+                    </button>
+                </div>
+                <div class="col-sm-12 col-lg-6">
+                    <div style="margin-bottom: 5px">&nbsp;</div>
+                    <img class="img-thumbnail" src="" id="test_image" style="display: none" alt="Publication image">
+                </div>
+            </div>
+            <div class="form-group text-right">
+                {% button type="save" value="Save Publication Information" %}
+                {% if user_publication %}
+                    {% url "reject_user_publication" user_publication.id as reject_user_publication_url %}
+                    {% button type="delete" icon="glyphicon-ban-circle" value="Not authored by me" title="Select this if this publication was incorrectly attributed to you" url=reject_user_publication_url %}
+                {% endif %}
+            </div>
+        </form>
+    {% endwith %}
+{% endblock %}

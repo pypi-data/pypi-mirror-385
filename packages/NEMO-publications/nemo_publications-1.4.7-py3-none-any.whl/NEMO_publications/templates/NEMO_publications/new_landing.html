@@ -1,0 +1,51 @@
+{% load static %}
+{% load custom_tags_and_filters %}
+<div id="publication_carousel" style="display: none"></div>
+{% if publication_notifications %}
+    <div id="suggested_publications_waiting" style="display: none">
+        <a href="{% url 'search_publication' %}">
+            <div class="col-lg-12 text-center alert alert-warning">
+                <span class="badge badge-tab-top active"
+                      style="background-color: #eb9316 !important;
+                             float: right;
+                             vertical-align:middle">{{ publication_notifications|length }}</span>
+                <i class="glyphicon glyphicon-alert"></i>
+                You have {{ publication_notifications|length }}
+                {% if publication_notifications|length > 1 %}
+                    publications
+                {% else %}
+                    publication
+                {% endif %}
+                waiting for review
+            </div>
+        </a>
+    </div>
+{% endif %}
+<script>
+	const body_container_jq =  $(".body-container .container");
+	const pub_carousel_jq = $("#publication_carousel");
+	const suggest_pub_waiting_jq = $("#suggested_publications_waiting");
+
+    function refresh_pub_jumbotron()
+	{
+        pub_carousel_jq.load("{% url 'publications_carousel_content' 'leaderboard' %}", undefined, function (response, status)
+		{
+            if (status === "success")
+            {
+                $('.carousel').carousel();
+            }
+        });
+    }
+
+
+	{% if customizations|get_item:"publications_enable_landing_carousel" == "enabled" %}
+		pub_carousel_jq.show();
+		body_container_jq.prepend(pub_carousel_jq);
+		refresh_pub_jumbotron();
+	{% endif %}
+
+	{% if customizations|get_item:"publications_enable_landing_warning_pending_publications" == "enabled" and publication_notifications %}
+		suggest_pub_waiting_jq.show();
+		body_container_jq.prepend(suggest_pub_waiting_jq);
+	{% endif %}
+</script>

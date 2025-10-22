@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load custom_tags_and_filters %}
+{% block title %}Publications{% endblock %}
+{% block content %}
+    <h1 style="margin-top: 0; margin-bottom: 25px">Publications</h1>
+    <ul class="nav nav-tabs">
+        {% url 'publications' as publications_url %}
+        {% url 'publications_leaderboard' as publications_leaderboard_url %}
+        <li class="nav-item{% if publications_leaderboard_url in request.path %} active{% endif %}">
+            <a class="nav-link" href="{{ publications_leaderboard_url }}">Leaderboard</a>
+        </li>
+        <li class="nav-item{% if publications_url in request.path and not publications_leaderboard_url in request.path %} active{% endif %}">
+            <a class="nav-link" href="{{ publications_url }}">
+                All Publications
+                {% if publication_notifications %}
+                    <span class="badge badge-tab-top">{{ publication_notifications|length }}</span>
+                {% endif %}
+            </a>
+        </li>
+    </ul>
+    <div id="publications-panel-content" class="tab-content panel panel-default panel-tab-content">
+        <div class="panel-body">
+            {% block tab_content %}
+                {% block before_pagination %}
+                    <div class="pull-right" style="{% if page %}margin-bottom: 15px;{% endif %}">
+                        {% if user.is_any_part_of_staff %}
+                            {% button type="export" value="Export" url=request.path|concat:"?csv=true" target="_blank" %}
+                        {% endif %}
+                        {% block add_button %}{% endblock %}
+                    </div>
+                {% endblock %}
+                {% if page %}
+                    {% with paginator=page.paginator %}
+                        {% block pagination_header %}
+                            <div class="pagination pull-right" style="clear: both">{% include "pagination/pagination_selector.html" %}</div>
+                        {% endblock %}
+                        <div class="table-responsive" style="width: 100%">
+                            {% block pagination_content %}{% endblock %}
+                        </div>
+                        {% block pagination_footer %}
+                            <div class="pagination pull-right" style="margin-bottom: 0">{% include "pagination/pagination_pages.html" %}</div>
+                        {% endblock %}
+                    {% endwith %}
+                {% else %}
+                    <div class="pull-left form-control-static">
+                        <i>
+                            {% block table_empty_content %}{% endblock %}
+                        </i>
+                    </div>
+                {% endif %}
+                {% block after_pagination %}{% endblock %}
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}

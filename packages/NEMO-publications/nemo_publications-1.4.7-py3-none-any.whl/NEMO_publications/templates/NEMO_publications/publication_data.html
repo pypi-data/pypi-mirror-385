@@ -1,0 +1,316 @@
+{% extends 'base.html' %}
+{% load custom_tags_and_filters %}
+{% load static %}
+{% load tz %}
+{% block title %}
+    {% if form.instance.id %}
+        Edit publication
+    {% else %}
+        Create publication
+    {% endif %}
+{% endblock %}
+{% block content %}
+    {% with instance_id=form.instance.id other_authors=other_users|get_item:"authors" other_tools=other_users|get_item:"tools" other_projects=other_users|get_item:"projects" %}
+        <h1 class="form-group">
+            {% if instance_id %}
+                Edit publication
+            {% else %}
+                Create publication
+            {% endif %}
+        </h1>
+        <div class="well">
+            {% if user.is_staff and not metadata.status %}
+                <div class="pull-right">
+                    <form method="post" style="display: inline" action="{% url 'set_publication_status' metadata.id %}">
+                        {% csrf_token %}
+                        {% button type="save" submit=False name="approve" title="Approve" icon="glyphicon-ok-circle" value="Approve" onclick="confirm_review_dialog(this);" %}
+                        {% button type="delete" submit=False name="reject" title="Reject" icon="glyphicon-ban-circle" value="Reject" onclick="confirm_review_dialog(this);" %}
+                    </form>
+                </div>
+            {% endif %}
+            <h4 style="margin-bottom: 20px;">Publication Information</h4>
+            <div class="row form-group">
+                <div class="col-md-6 col-sm-6">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" class="form-control" disabled value="{{ metadata.title }}">
+                </div>
+                <div class="col-md-6 col-sm-6">
+                    <label for="journal">Journal</label>
+                    <input type="text"
+                           id="journal"
+                           name="journal"
+                           class="form-control"
+                           disabled
+                           value="{{ metadata.journal }}">
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-6 col-sm-6">
+                    <label for="month">Month</label>
+                    <input type="text"
+                           id="month"
+                           name="month"
+                           class="form-control"
+                           disabled
+                           value="{{ metadata.get_month_display|default_if_none:''|title }}">
+                </div>
+                <div class="col-md-6 col-sm-6">
+                    <label for="year">Year</label>
+                    <input type="number" id="year" name="year" class="form-control" disabled value="{{ metadata.year }}">
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="{% if metadata.image_url %}col-sm-4{% else %}col-sm-10{% endif %}">
+                    <label for="doi">DOI</label>
+                    <input type="text" id="doi" name="doi" class="form-control" disabled value="{{ metadata.doi }}">
+                </div>
+                <div class="col-sm-2">
+                    <div style="margin-bottom: 5px">&nbsp;</div>
+                    <button class="btn btn-default form-control"
+                            type="button"
+                            onclick="window.open('{{ metadata.get_doi_url }}')">Open</button>
+                </div>
+                {% if metadata.image_url %}
+                    <div class="col-md-6 col-sm-6">
+                        <div style="margin-bottom: 5px">Image</div>
+                        <img class="img-thumbnail" src="{{ metadata.image_url }}" alt="{{ metadata.title }} image">
+                    </div>
+                {% endif %}
+            </div>
+            {% if metadata.json_metadata %}
+                <div class="row form-group">
+                    <div class="col-md-12 col-sm-12">
+                        <a onclick="toggle_details(this)" data-toggle="collapse" data-target="#metadata-json" class="pointer">
+                            <span class="glyphicon glyphicon-chevron-right chevron"></span>Metadata (JSON)
+                        </a>
+                        <pre id="metadata-json" class="collapse" style="margin-top: 10px;">{{ metadata.json_metadata }}</pre>
+                    </div>
+                </div>
+            {% endif %}
+            {% if user_publication %}
+                <div class="form-group clearfix" style="margin-bottom: 0">
+                    {% url "reject_user_publication" user_publication.id as reject_user_publication_url %}
+                    <div class="pull-right">
+                        {% button type="delete" icon="glyphicon-ban-circle" value="Not authored by me" title="Select this if this publication was incorrectly attributed to you" url=reject_user_publication_url %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <form class="well"
+              action="{% if instance_id %}{% url 'edit_publication' instance_id %}{% else %}{% url 'create_publication' metadata.id %}{% endif %}"
+              method="post">
+            {% csrf_token %}
+            {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+            <input type="hidden" id="metadata_id" name="metadata_id" value="{{ metadata.id }}">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label for="search_authors" class="control-label">Authors</label>
+                        <input id="search_authors"
+                               type="text"
+                               class="form-control"
+                               placeholder="Search for authors to add to the publication"
+                               style="min-width: 250px">
+                        {% if authors_suggestion %}
+                            <small id="authors_suggestion" class="form-text text-muted">
+                                <i class="glyphicon glyphicon-info-sign"></i> Suggested author(s): {{ authors_suggestion }}
+                            </small>
+                        {% endif %}
+                        {% if other_authors.exists %}
+                            <div style="margin-top: 15px; color: rgb(128,128,128);">Other users have added</div>
+                            <ul id="other_authors"
+                                class="form-control form-control-static"
+                                style="height: 100%;
+                                       background-color: rgb(241 241 241)">
+                                {% for author in other_authors.all %}<li style="list-style: none">{{ author }}</li>{% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                    <div class="col-sm-6" id="authors_label" style="display: none">
+                        <div style="margin-bottom: 5px;">Selected Authors</div>
+                        <ul id="authors" class="form-control form-control-static" style="height: 100%">
+                        </ul>
+                    </div>
+                </div>
+                {% if form.authors.errors %}
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <span style="color:red">{{ form.authors.errors|striptags }}</span>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            <hr style="border-color: #d6d6d6;">
+            <div class="help-block italic">
+                Tell us which {{ facility_name }} tools or projects were used in your research for this publication
+            </div>
+            <hr style="border-color: #d6d6d6;">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label for="search_tools" class="control-label">Tools</label>
+                        <input id="search_tools"
+                               type="text"
+                               class="form-control"
+                               placeholder="Search for tools to add to the publication"
+                               style="min-width: 250px">
+                        {% if other_tools.exists %}
+                            <div style="margin-top: 15px; color: rgb(128,128,128);">Other users have added</div>
+                            <ul id="other_tools"
+                                class="form-control form-control-static"
+                                style="height: 100%;
+                                       background-color: rgb(241 241 241)">
+                                {% for tool in other_tools.all %}<li style="list-style: none">{{ tool }}</li>{% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                    <div class="col-sm-6" id="tools_label" style="display: none">
+                        <div style="margin-bottom: 5px;">Selected Tools</div>
+                        <ul id="tools" class="form-control form-control-static" style="height: 100%">
+                        </ul>
+                    </div>
+                </div>
+                {% if form.tools.errors %}
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <span style="color:red">{{ form.tools.errors|striptags }}</span>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            <hr style="border-color: #d6d6d6;">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label for="search_projects" class="control-label">Projects</label>
+                        <input id="search_projects"
+                               type="text"
+                               class="form-control"
+                               placeholder="Search for projects to add to the publication"
+                               style="min-width: 250px">
+                        {% if other_projects.exists %}
+                            <div style="margin-top: 15px; color: rgb(128,128,128);">Other users have added</div>
+                            <ul id="other_projects"
+                                class="form-control form-control-static"
+                                style="height: 100%;
+                                       background-color: rgb(241 241 241)">
+                                {% for project in other_projects.all %}<li style="list-style: none">{{ project }}</li>{% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                    <div class="col-sm-6" id="projects_label" style="display: none">
+                        <div style="margin-bottom: 5px;">Selected Projects</div>
+                        <ul id="projects" class="form-control form-control-static" style="height: 100%">
+                        </ul>
+                    </div>
+                </div>
+                {% if form.projects.errors %}
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <span style="color:red">{{ form.projects.errors|striptags }}</span>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="text-right">{% button type="save" value="Save" %}</div>
+        </form>
+    {% endwith %}
+    <script>
+		function get_item(dataset_name)
+		{
+            return {
+                label_element: $('#' + dataset_name + '_label'),
+				selected_element: $('#' + dataset_name),
+			};
+		}
+
+		function add_item(jquery_event, search_selection, dataset_name)
+		{
+            let item = get_item(dataset_name);
+		    item.label_element.show();
+			$(this).typeahead('val', '').focus();
+			if (!$("input[name='"+ dataset_name +"'][value='"+search_selection.id+"']").length)
+            {
+                item.selected_element.append('<li style="list-style: none"><input type="hidden" name="'+ dataset_name +'" value="' + search_selection.id + '" />' + search_selection.name + ' <a class="grey hover-black" href="javascript:void(0)" onclick="remove_item(this, \''+ dataset_name +'\')"><span class="glyphicon glyphicon-remove-circle"></span></a></li>');
+				// Add PIs to list of users
+                if(dataset_name === 'projects' && search_selection.pis)
+				{
+					for(const pi of search_selection.pis)
+					{
+						add_item(false, { id: pi.id, name: pi.name }, 'authors');
+					}
+				}
+            }
+		}
+
+		function remove_item(item_element, dataset_name)
+		{
+            let item = get_item(dataset_name);
+		    $(item_element).parent().remove();
+		    if (!$("input[name='"+ dataset_name +"']").length)
+            {
+		        item.label_element.hide();
+            }
+		}
+
+		function confirm_review_dialog(review_button)
+        {
+            let decision = review_button.innerText.trim().toLowerCase();
+            let dialog_text = "Are you sure you want to "+decision+" this publication?";
+            if (confirm(dialog_text))
+            {
+                let data = {}
+				data[review_button.name] = review_button.value;
+            	ajax_post('{% url 'set_publication_status' metadata.id %}', data, function (response, status, xml_http_request)
+				{
+					$(review_button.form).hide();
+				});
+            }
+        }
+
+		function on_load()
+		{
+            $('#search_authors').autocomplete('authors', add_item, '{% url 'publication_user_search' %}', true);
+            $('#search_tools').autocomplete('tools', add_item, {{ tools|json_search_base }});
+            $('#search_projects').autocomplete('projects', add_item, {{ projects }});
+
+            {% if not form.instance.id %}
+				// Add the current user to the list of authors if this is a new entry
+				 add_item(false, {'id': '{{ user.id }}', 'name': '{{ user }}' }, 'authors');
+            {% endif %}
+
+
+			{% if form.cleaned_data and form.cleaned_data.authors %}
+				{% for author in form.cleaned_data.authors.all %}
+					add_item(false, {'id': '{{ author.id }}', 'name': '{{ author }}' }, 'authors');
+				{% endfor %}
+			{% elif form.instance.id and form.instance.authors %}
+				{% for author in form.instance.authors.all %}
+					add_item(false, {'id': '{{ author.id }}', 'name': '{{ author }}' }, 'authors');
+				{% endfor %}
+			{% endif %}
+
+			{% if form.cleaned_data and form.cleaned_data.tools %}
+				{% for tool in form.cleaned_data.tools.all %}
+					add_item(false, {'id': '{{ tool.id }}', 'name': '{{ tool }}' }, 'tools');
+				{% endfor %}
+			{% elif form.instance.id and form.instance.tools %}
+				{% for tool in form.instance.tools.all %}
+					add_item(false, {'id': '{{ tool.id }}', 'name': '{{ tool }}' }, 'tools');
+				{% endfor %}
+			{% endif %}
+
+			{% if form.cleaned_data and form.cleaned_data.projects %}
+				{% for project in form.cleaned_data.projects.all %}
+					add_item(false, {'id': '{{ project.id }}', 'name': '{{ project }}' }, 'projects');
+				{% endfor %}
+			{% elif form.instance.id and form.instance.projects %}
+				{% for project in form.instance.projects.all %}
+					add_item(false, {'id': '{{ project.id }}', 'name': '{{ project }}' }, 'projects');
+				{% endfor %}
+			{% endif %}
+		}
+		window.addEventListener('load', on_load, true);
+	
+    </script>
+{% endblock %}

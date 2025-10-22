@@ -1,0 +1,49 @@
+<div class="col-sm-{{ item_grid_size }}">
+    <div class="thumbnail" style="margin-bottom: 0">
+        <div class="caption h4 text-center">
+            <a href="{{ publication.get_doi_url }}">{{ publication.title }}</a>
+        </div>
+        {% if publication.image_url %}
+            <link rel="prefetch" href="{{ publication.image_url }}" />
+            <img class="img-thumbnail"
+                 style="{% if img_max_height %}max-height: {{ img_max_height }}px;
+                        {% endif %}"
+                 src="{{ publication.image_url }}"
+                 alt="{{ publication.title }} image">
+        {% endif %}
+        <div class="caption">
+            {% if show_pub_date %}
+                <div style="font-size: 14px">
+                    <h5 style="display: inline-block; margin-bottom: 0">
+                        <u>Date</u>:
+                    </h5>
+                    {% with pub_date_format=publication.month|yesno:"F Y,Y" %}{{ publication.get_date|date:pub_date_format }}{% endwith %}
+                </div>
+            {% endif %}
+            {% if publication.get_authors and show_pub_authors %}
+                <div style="font-size: 14px">
+                    <h5 style="display: inline-block; margin-bottom: 0">
+                        <u>Authors</u>:
+                    </h5>
+                    {{ publication.get_authors|join:', ' }}
+                </div>
+            {% endif %}
+            {% if publication.get_tools and show_pub_tools %}
+                <div style="font-size: 14px">
+                    <h5 style="display: inline-block; margin-bottom: 0">
+                        <u>Tools</u>:
+                    </h5>
+                    {{ publication.get_tools|join:', ' }}
+                </div>
+            {% endif %}
+            {% if publication.get_projects and show_pub_projects %}
+                <div style="font-size: 14px">
+                    <h5 style="display: inline-block; margin-bottom: 0">
+                        <u>Projects</u>:
+                    </h5>
+                    {{ publication.get_projects|join:', ' }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
