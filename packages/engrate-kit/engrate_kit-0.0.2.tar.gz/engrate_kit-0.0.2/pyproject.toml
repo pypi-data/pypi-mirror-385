@@ -1,0 +1,33 @@
+[project]
+name = "engrate-kit"
+version = "0.0.2"
+description = "Development toolkit to quickly build Engrate plugins."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "aiosqlite>=0.21.0",
+    "alembic>=1.16.5",
+    "fastapi[standard]>=0.118.3",
+    "fastmcp>=2.12.4",
+    "sqlmodel>=0.0.27",
+    "tomli-w>=1.2.0",
+    "docker>=7.1.0",
+    "structlog>=25.4.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/engrate_kit"]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
+    "pytest-asyncio>=1.2.0",
+    "typer>=0.19.2",
+]
+
+[project.scripts]
+engrate-kit = "engrate_kit.cli:app"
