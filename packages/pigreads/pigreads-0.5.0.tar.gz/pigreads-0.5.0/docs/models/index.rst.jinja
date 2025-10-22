@@ -1,0 +1,56 @@
+{% for line in warning.splitlines() -%}
+.. {{ line }}
+{% endfor %}
+
+Models
+======
+
+A so-called model defines the reaction term of the reaction
+diffusion equation. While Pigreads comes with a variety of
+pre-defined models, it is also easily possible to define a
+model.
+
+Defining a model
+----------------
+
+A model can be defined by adding it to the dictionary of available
+models::
+
+    import pigreads as pig
+    from pigreads.schema.model import ModelDefinition
+
+    pig.Models.available["fitzhugh1961impulses"] = ModelDefinition(
+        name="FitzHugh 1961 & Nagumo 1962",
+        description="A 2D simplification of the Hodgkin-Huxley model.",
+        dois=[
+            "https://doi.org/10.1016/S0006-3495(61)86902-6",
+            "https://doi.org/10.1109/JRPROC.1962.288235",
+        ],
+        variables={"u": 1.2, "v": -0.625},
+        diffusivity={"u": 1.0},
+        parameters={"a": 0.7, "b": 0.8, "c": 3.0, "z": 0.0},
+        code="""
+            *_new_u = u + dt * (v + u - u*u*u/3 + z + _diffuse_u);
+            *_new_v = v + dt * (-(u - a + b*v)/c);
+        """,
+    )
+
+The definition must adhere to the schema in :py:class:`pigreads.schema.model.ModelDefinition`.
+
+Pre-defined models
+------------------
+
+.. toctree::
+    :maxdepth: 1
+    :hidden:
+
+{% for key in models %}
+    {{ key }}
+{% endfor %}
+
+.. csv-table::
+    :header: Name, Key, Variables, Parameters
+
+{% for key, model in models.items() %}
+    ":doc:`{{ model.name }} <{{ key }}>`", "``{{ key }}``", {{ model.variables|length }}, {{ model.parameters|length }}
+{% endfor %}
