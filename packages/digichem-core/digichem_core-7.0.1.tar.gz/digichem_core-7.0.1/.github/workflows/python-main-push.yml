@@ -1,0 +1,72 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: Python tests and lint
+
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: write
+
+jobs:
+  Test:
+
+    defaults:
+        run:
+          shell: bash -l {0}
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.9"
+    - name: Install openbabel
+      run: |
+        sudo apt install openbabel libopenbabel-dev
+        sudo ln -s /usr/include/openbabel3 /usr/local/include/openbabel3
+    - name: Install PIP dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 "pytest<8.0" pytest-lazy-fixture
+    - name: Install dependencies
+      run: |
+        sudo apt install swig
+        pip install -e .
+        #if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Install PySOC
+      run: |
+        cd ~/
+        git clone https://github.com/Digichem-Project/pysoc.git
+        pip install -r pysoc/requirements.txt
+        echo "PYTHONPATH=$PYTHONPATH:$HOME/pysoc" >> $GITHUB_ENV
+        echo "$HOME/pysoc/bin" >> $GITHUB_PATH
+    - name: Lint with flake8
+      run: |
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - name: Set last modified
+      run: |
+        new_date=$(date '+%d\/%m\/%Y')
+        sed -E "s/_last_updated_string = \"[0-9]{2}\/[0-9]{2}\/[0-9]{4}\"/_last_updated_string = \"$new_date\"/g" -i digichem/__init__.py
+    - name: Test with pytest
+      run: |
+        export PYTHONPATH="./:$PYTHONPATH"
+        pytest
+    - name: Commit changes
+      continue-on-error: true
+      run: |
+        git config --global user.email "osl@st-andrews.ac.uk"
+        git config --global user.name "Oliver Lee"
+        git add digichem/__init__.py
+        git commit -m "chore: update last modified"
+        git push
+
