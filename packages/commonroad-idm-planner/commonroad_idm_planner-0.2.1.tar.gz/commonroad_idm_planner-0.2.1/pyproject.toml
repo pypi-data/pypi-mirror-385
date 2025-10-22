@@ -1,0 +1,56 @@
+[project]
+name = "commonroad-idm-planner"
+version = "0.2.1"
+description = "CommonRoad Intelligent Driver Model Planner"
+authors = [{name = "Tobias Mascetta", email =  "<tobias.mascetta@tum.de>"}]
+license = "BSD"
+readme = "README.md"
+keywords= ["autonomous", "automated", "vehicles", "driving", "motion", "planning"]
+classifiers = [
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: POSIX :: Linux",
+]
+
+requires-python = ">=3.9, < 3.12"
+dynamic = ["dependencies"]
+
+
+packages = [{include = "commonroad_idm_planner"}]
+
+
+# Dependencies
+[tool.poetry.dependencies]
+python = ">=3.9,<3.12"
+commonroad-io = ">=2022.2, <2025.0.1"
+commonroad-route-planner = ">=2025.0.1, <2026.0.1"
+commonroad-drivability-checker = ">=2025.1.0, <2026.0.0"
+numpy = ">=2.0"
+matplotlib = ">=3.9"
+
+
+
+# test
+[tool.poetry.group.test]
+optional = true
+
+[tool.poetry.group.test.dependencies]
+coverage = {version = "^7.1.0", extras = ["toml"] }
+
+# docs
+[tool.poetry.group.docs]
+optional = true
+
+[tool.poetry.group.docs.dependencies]
+mkdocstrings-python = "^1.8.0"
+mkdocs-material = "^9.5.10"
+
+
+
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
