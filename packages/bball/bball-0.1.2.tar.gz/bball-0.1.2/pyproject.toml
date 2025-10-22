@@ -1,0 +1,187 @@
+# Root package and workspace configuration
+[project]
+name = "bball"
+version = "0.1.2"
+description = "NBA analytics platform with core models and utilities"
+authors = [
+    { name = "Nicholas Cooper", email = "nicholascullencooper@gmail.com" },
+]
+readme = "README.md"
+requires-python = ">=3.13"
+keywords = ["nba", "basketball", "analytics", "sports", "data"]
+
+# Core dependencies
+dependencies = ["pydantic>=2.9", "numpy>=1.26", "pandas>=2.2", "httpx>=0.27"]
+
+[project.urls]
+Homepage = "https://bball.dev"
+Documentation = "https://docs.bball.dev"
+Repository = "https://github.com/bball-dev/bball"
+Issues = "https://github.com/bball-dev/bball/issues"
+
+[project.optional-dependencies]
+# Individual components
+cli = ["bball-cli>=0.1.0"]
+api = ["bball-api>=0.1.0"]
+data = ["bball-data>=0.1.0"]
+strategies = ["bball-strategies>=0.1.0"]
+reports = ["bball-reports>=0.1.0"]
+
+# Convenience groups
+analytics = [
+    "bball-data>=0.1.0",
+    "bball-strategies>=0.1.0",
+    "bball-reports>=0.1.0",
+]
+web = ["bball-api>=0.1.0"]
+all = [
+    "bball-cli>=0.1.0",
+    "bball-api>=0.1.0",
+    "bball-data>=0.1.0",
+    "bball-strategies>=0.1.0",
+    "bball-reports>=0.1.0",
+]
+
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/bball"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src",
+    "/README.md",
+    "/pyproject.toml",
+]
+exclude = [
+    "/.gitignore",
+]
+
+[tool.uv.workspace]
+members = ["packages/*"]
+
+[tool.uv]
+default-groups = ["dev"]
+
+[tool.uv.sources]
+bball-cli = { workspace = true }
+bball-api = { workspace = true }
+bball-data = { workspace = true }
+bball-strategies = { workspace = true }
+bball-reports = { workspace = true }
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "ruff>=0.8",
+    "mypy>=1.13",
+    "build>=1.2",
+    "twine>=5.1",
+    "pyright>=1.1.406",
+]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = [
+    "A",     # builtins (avoid shadowing)
+    "ARG",   # unused arguments
+    "ASYNC", # async best practices
+    "B",     # bugbear (bug-prone patterns)
+    "BLE",   # blind except
+    "C4",    # comprehensions
+    "COM",   # commas
+    "D",     # docstring style (pydocstyle)
+    "DOC",   # docstring quality (pydoclint)
+    "DTZ",   # naive datetime (timezone)
+    "E",     # pycodestyle errors
+    "EM",    # exception messages
+    "F",     # pyflakes (undefined names, etc.)
+    "FAST",  # FastAPI checks
+    "FBT",   # boolean trap
+    "FIX",   # FIXME/TODO markers
+    "FLY",   # prefer f-strings (flynt)
+    "FURB",  # refurb (modernize/cleanups)
+    "G",     # logging format (flake8-logging-format)
+    "I",     # import sorting (isort)
+    "ICN",   # import conventions (names)
+    "INP",   # implicit namespace packages (PEP 420)
+    "ISC",   # implicit string concatenation
+    "LOG",   # logging best practices
+    "N",     # naming conventions (pep8-naming)
+    "NPY",   # NumPy best practices
+    "PD",    # pandas best practices
+    "PERF",  # performance anti-patterns
+    "PGH",   # pygrep-hooks style patterns
+    "PIE",   # flake8-pie (small cleanups)
+    "PL",    # pylint checks
+    "PT",    # pytest style
+    "PTH",   # use pathlib over os.path
+    "PYI",   # stub files (.pyi) rules
+    "Q",     # quotes (single/double)
+    "RET",   # return statement style
+    "RSE",   # raise statement style
+    "RUF",   # ruff-specific rules
+    "S",     # security (bandit)
+    "SIM",   # simplify code
+    "SLF",   # private member access
+    "SLOT",  # __slots__ suggestions
+    "T10",   # debugger statements
+    "TID",   # tidy imports (bans/relative)
+    "TRY",   # exception handling style
+    "UP",    # pyupgrade (modern syntax)
+    "W",     # pycodestyle warnings
+]
+
+ignore = [
+    "D100",    # missing docstring in module
+    "D101",    # missing docstring in class
+    "D102",    # missing docstring in public method
+    "D103",    # missing docstring in function
+    "D104",    # missing docstring in public package
+    "D105",    # missing docstring in magic method
+    "D106",    # missing docstring in nested class
+    "D107",    # missing docstring in __init__
+    "D401",    # first line docstring style (imperative)
+    "PLR0912", # too many branches
+    "PLR0913", # too many arguments to function
+    "PLR2004", # magic value used
+]
+
+[tool.ruff.lint.isort]
+lines-between-types = 1
+known-first-party = [
+    "bball",
+    "bball_cli",
+    "bball_api",
+    "bball_data",
+    "bball_strategies",
+    "bball_reports",
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.pyright]
+include = ["src", "packages"]
+exclude = ["**/__pycache__", "**/.venv", "**/dist", "**/.eggs", "**/*.egg-info"]
+pythonVersion = "3.13"
+typeCheckingMode = "standard"
+reportMissingTypeStubs = false
+reportUnknownMemberType = false
+reportUnknownArgumentType = false
+reportUnknownVariableType = false
+reportUnknownLambdaType = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "packages/*/tests"]
+python_files = ["test_*.py"]
+addopts = "-v --cov=src --cov=packages --cov-report=term-missing"
+
+[tool.coverage.run]
+source = ["src", "packages"]
+omit = ["*/tests/*", "*/__pycache__/*"]
