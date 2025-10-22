@@ -1,0 +1,241 @@
+# Archil Python SDK
+
+An ergonomic Python SDK for the Archil Control Plane.
+
+## Installation
+
+```bash
+pip install archil
+```
+
+## Quick Start
+
+```python
+import archil
+
+# Make a client
+client = archil.Archil()
+
+# Load a disk
+disk = client.disks.get("disk_abc123")
+
+# Create a container on the disk
+container = disk.containers.run(
+    command="python train.py",
+    vcpu_count=4,
+    mem_size_mib=8192
+)
+
+# Wait for completion
+completed = container.wait_for_completion(timeout=600)
+print(f"Exit code: {completed.exit_code}")
+```
+
+## Making a Client
+
+Create a client to interact with the Archil Control Plane:
+
+```python
+import archil
+
+# Simple initialization (uses environment variables)
+client = archil.Archil()
+
+# Or specify API key and region explicitly
+client = archil.Archil(
+    api_key="your-api-key",
+    region="aws-us-east-1"
+)
+```
+
+### Environment Variables
+
+The client reads these environment variables:
+
+- `ARCHIL_API_KEY` - Your API key for authentication (required)
+- `ARCHIL_REGION` - Region to connect to (e.g., "aws-us-east-1")
+
+### Priority
+
+If you provide multiple configuration options, the priority is:
+
+1. Explicit parameters (`api_key=`, `region=`, etc.)
+2. Environment variables (`ARCHIL_API_KEY`, `ARCHIL_REGION`)
+3. Default values (`aws-us-east-1` for region)
+
+### Examples
+
+```python
+# Use environment variable for API key
+# export ARCHIL_API_KEY=your-api-key
+client = archil.Archil()
+
+# Specify region
+client = archil.Archil(region="aws-us-west-2")
+
+# Use custom base URL (advanced)
+client = archil.Archil(base_url="https://control.red.us-east-1.aws.test.archil.com")
+```
+
+## Loading Your Disk
+
+Once you have a client, you can load your disks:
+
+### Get a specific disk
+
+```python
+disk = client.disks.get("disk_abc123")
+print(f"Disk: {disk.name}")
+print(f"Status: {disk.status}")
+```
+
+### List all your disks
+
+```python
+disks = client.disks.list()
+for disk in disks:
+    print(f"{disk.name}: {disk.disk_id}")
+
+# Use the first disk
+disk = disks[0]
+```
+
+## Creating a Container
+
+### Using a disk
+
+The easiest way to create a container is through a disk object:
+
+```python
+# Load your disk
+disk = client.disks.get("disk_abc123")
+
+# Run a container on that disk
+container = disk.containers.run(
+    command="python train.py",
+    vcpu_count=4,
+    mem_size_mib=8192,
+    initialization_script="pip install torch"
+)
+```
+
+### Using the client directly
+
+You can also create containers directly through the client:
+
+```python
+# Create an ArchilMount for your disk
+mount = archil.ArchilMount(
+    disk_id="disk_abc123",
+    env="production"
+)
+
+# Create a container with the mount
+container = client.containers.create(
+    archil_mount=mount,
+    vcpu_count=2,
+    mem_size_mib=512
+)
+```
+
+### Run a command and wait for completion
+
+```python
+# Start a container
+container = disk.containers.run(
+    command="python train.py --epochs 10",
+    vcpu_count=4,
+    mem_size_mib=8192
+)
+
+# Wait for it to complete (timeout in seconds)
+completed = container.wait_for_completion(timeout=600)
+
+# Check the result
+if completed.exit_code == 0:
+    print("Success!")
+else:
+    print(f"Failed with exit code: {completed.exit_code}")
+```
+
+### Container options
+
+All containers support these options:
+
+```python
+container = disk.containers.run(
+    command="python train.py",
+    vcpu_count=4,                      # Number of vCPUs
+    mem_size_mib=8192,                 # Memory in MiB
+    kernel="6.11-slim",                # Kernel: "6.11-slim" or "6.11-full"
+    base_image="ubuntu-22.04",         # Base image
+    initialization_script="pip install torch",  # Setup script
+    env={                              # Environment variables
+        "WANDB_API_KEY": "your-key",
+        "MODEL_VERSION": "v2.0"
+    },
+    shared=True                       # Whether disk mount is shared (True by default)
+)
+```
+
+### Passing files to containers
+
+You can pass files to containers when creating them:
+
+```python
+from pathlib import Path
+from archil import FileContent, Glob
+
+container = disk.containers.run(
+    command="python script.py",
+    files={
+        # Single file
+        "/app/config.json": Path("config.json"),
+
+        # Entire folder
+        "/app": Path("./app_folder"),
+
+        # Glob pattern
+        "/configs": Glob("*.yaml"),
+
+        # Inline content
+        "/app/secret.txt": FileContent("my-secret-key")
+    }
+)
+```
+
+Maximum total file size: 10 MiB across all files.
+
+## Complete Example
+
+```python
+import archil
+
+# 1. Make a client (uses ARCHIL_API_KEY environment variable)
+client = archil.Archil()
+
+# 2. Load your disk
+disks = client.disks.list()
+disk = disks[0]  # Use first disk
+
+# 3. Create a container
+container = disk.containers.run(
+    command="python train.py --epochs 10",
+    vcpu_count=4,
+    mem_size_mib=8192,
+    initialization_script="pip install torch numpy",
+    env={
+        "WANDB_API_KEY": "your-key",
+        "MODEL_VERSION": "v2.0"
+    }
+)
+
+# Wait for completion
+print(f"Container {container.container_id} started...")
+completed = container.wait_for_completion(timeout=600)
+print(f"Completed with exit code: {completed.exit_code}")
+```
+
+## License
+
+MIT
