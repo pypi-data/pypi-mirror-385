@@ -1,0 +1,27 @@
+[Desktop Entry]
+Actions=ProfileFolder;RemoveProfile;
+Categories=Qt;Education;Science;Geography;
+Comment=$description
+Encoding=UTF-8
+Exec=$exec
+GenericName=QGIS
+Icon=$icon_path
+Keywords=gis;map;globe;postgis;wms;wfs;ogc;osgeo;
+MimeType=application/x-qgis-project;application/x-qgis-project-container;application/x-qgis-layer-settings;application/x-qgis-layer-definition;application/x-qgis-composer-template;image/tiff;image/jpeg;image/jp2;application/x-raster-aig;application/x-raster-ecw;application/x-raster-mrsid;application/x-mapinfo-mif;application/x-esri-shape;
+Name=$shortcut_name
+StartupNotify=true
+StartupWMClass=QGIS3
+Terminal=false
+Type=Application
+Version=1.5
+X-MultipleArgs=false
+
+[Desktop Action ProfileFolder]
+Name=Open $profile_name folder
+Exec=xdg-open $profile_folder
+Icon=folder
+
+[Desktop Action RemoveProfile]
+Name=Remove profile $profile_name from QGIS
+Exec=bash -c "zenity --question --title='Confirm QGIS profile removal' --text='Remove $profile_name from QGIS profiles?' && gio -r $profile_folder"
+Icon=edit-delete
