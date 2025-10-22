@@ -1,0 +1,26 @@
+ubox:
+  secret_id: "xxx"
+  secret_key: "xxx"
+  mode: "local"
+
+task:
+  job_id: ""
+  serial_num: "xxx"
+  os_type: "android" # 手机系统
+#  app_name: "TencentVideo_V9.01.65.30262_20563.apk" # 要测试的包名，如果已经安装了的话
+  app_name: "com.tencent.qqlive" # 要测试的包名，如果已经安装了的话
+  auth_code: ""
+
+test:
+  test_name: "自动化测试" # 整个项目的一个整体的测试名字，这个测试下包含n多个case
+  test_description: "自动化测试执行" # 整体测试的描述
+  screenshot_on_failure: true # 断言失败时自动截图
+  screenshot_on_success: true # 断言成功时自动截图
+  # 指定要运行的测试用例名称列表，为空时运行所有测试用例
+  selected_tests: ["视频游戏自动化测试"]
+  # 示例: selected_tests: ["框架示例用例", "视频游戏自动化测试"]
+
+report:
+  report_format: "all" # 指定要输出的报告格式：all代表json和excel
+
+log_level: "INFO"

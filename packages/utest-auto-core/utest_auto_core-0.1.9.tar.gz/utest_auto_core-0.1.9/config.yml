@@ -1,0 +1,29 @@
+ubox:
+  secret_id: "1bfe59641213470ff676531a4b834d7e" # 改成paas平台的secretId和key
+  secret_key: "ede33862e28d3e4845279d0cbe036e30" # 同上 教程文档中有说明如何下载
+  mode: "local" # 不用改
+
+task:
+  job_id: "" # 不用改
+  serial_num: "181QGEYK222E3" # 改成收集串号
+  os_type: "android" # 手机系统
+  app_name: "com.tencent.demo.buglyprodemo" # 要测试的包名，如果已经安装了的话
+#  app_name: "com.tencent.qqlive" # 要测试的包名，如果已经安装了的话
+#  app_name: "APKPure.apk" # 如果手机没安装，可以指定安装包文件名，自动安装
+#  app_name: "TencentVideo_V9.01.65.30262_20563.apk" # 如果手机没安装，可以指定安装包文件名，自动安装
+  auth_code: ""
+
+test:
+  test_name: "自动化测试" # 整个项目的一个整体的测试名字，这个测试下包含n多个case
+  test_description: "自动化测试执行" # 整体测试的A描述
+  screenshot_on_failure: true # 断言失败时自动截图
+  screenshot_on_success: false # 断言成功时自动截图
+  # 指定要运行的测试用例名称列表，为空时运行所有测试用例
+  selected_tests:
+  - UI控件点击测试
+  # 示例: selected_tests: ["Demo1", "视频游戏自动化测试"] 或者 现在的写法 都行
+
+report:
+  report_format: "all" # 指定要输出的报告格式：all代表json和excel
+
+log_level: "INFO"
