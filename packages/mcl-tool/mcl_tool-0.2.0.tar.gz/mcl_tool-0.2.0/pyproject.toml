@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mcl-tool"
+version = "0.2.0"
+description = "My Command Line: A personal generic customizable CLI tool"
+readme = "README.md"
+authors = [{name = "Your Name", email = "your@email.com"}]
+license = {text = "MIT"}
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Development Status :: 3 - Alpha",
+]
+dependencies = [
+    "click>=8.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov",
+    "mypy",
+    "black",
+    "pre-commit",
+    "types-click",
+]
+
+[project.scripts]
+mcl = "mcl.cli:cli"
+
+[project.urls]
+Homepage = "https://github.com/yourusername/mcl-tool"
+Repository = "https://github.com/yourusername/mcl-tool"
+Documentation = "https://github.com/yourusername/mcl-tool/tree/main/docs"
+
+[tool.black]
+line-length = 88
+
+[tool.mypy]
+strict = true
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+no_implicit_optional = true
+check_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = "click"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "pytest"
+ignore_missing_imports = true
