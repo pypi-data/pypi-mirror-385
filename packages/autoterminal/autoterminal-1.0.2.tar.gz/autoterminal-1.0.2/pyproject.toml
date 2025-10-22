@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=64.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "autoterminal"
+version = "1.0.2"
+description = "智能终端工具，基于LLM将自然语言转换为终端命令(create by claude 4 sonnet)"
+readme = "README.md"
+requires-python = ">=3.10"
+
+authors = [
+    {name = "wds2dxh", email = "wdsnpshy@163.com"}
+]
+license = {text = "MIT"}
+keywords = ["terminal", "ai", "llm", "command-line", "automation", "autoterminal"]
+classifiers = [ 
+    "Development Status :: 6 - Mature",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: System :: Systems Administration",
+    "Topic :: Utilities",
+]
+dependencies = [
+    "openai>=1.0.0",
+    "loguru>=0.7.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/wds-dxh/AutoTerminal.git"
+Repository = "https://github.com/wds-dxh/AutoTerminal.git"
+Issues = "https://github.com/wds-dxh/AutoTerminal/issues"
+# Homepage = "http://cloud-home.dxh-wds.top:20100/w/autoterminal"
+# Repository = "http://cloud-home.dxh-wds.top:20100/w/autoterminal"
+# Issues = "http://cloud-home.dxh-wds.top:20100/w/autoterminal/issues"
+
+[project.scripts]
+at = "autoterminal.main:main"
+
+[dependency-groups]
+dev = [
+    "twine>=6.1.0",
+]
