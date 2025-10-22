@@ -1,0 +1,494 @@
+Metadata-Version: 2.4
+Name: Treeed
+Version: 0.3.2.1
+Summary: Библиотека для создания и отображения 3D объектов с помощью PyOpenGL и Pygame
+Home-page: 
+Author: Umar
+Author-email: umarfrost2011@gmail.com
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+Requires-Dist: numpy
+Provides-Extra: opengl
+Requires-Dist: pygame; extra == "opengl"
+Requires-Dist: PyOpenGL; extra == "opengl"
+Requires-Dist: PyOpenGL-accelerate; extra == "opengl"
+Provides-Extra: physics
+Requires-Dist: pybullet; extra == "physics"
+Provides-Extra: qt
+Requires-Dist: PyQt5; extra == "qt"
+Provides-Extra: all
+Requires-Dist: pygame; extra == "all"
+Requires-Dist: PyOpenGL; extra == "all"
+Requires-Dist: PyOpenGL-accelerate; extra == "all"
+Requires-Dist: PyQt5; extra == "all"
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: provides-extra
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+# Py3DGraphics
+
+Библиотека для создания и отображения 3D объектов с двумя версиями движка. Версия 0.3.0.
+
+## Оглавление
+
+- [Выбор версии движка](#выбор-версии-движка)
+- [Особенности](#особенности)
+- [Установка](#установка)
+- [Быстрый старт](#быстрый-старт)
+- [Примеры использования](#примеры-использования)
+  - [Цвета, заливка и управление анимацией](#цвета-заливка-и-управление-анимацией)
+  - [Настраиваемая толщина линий и скорость вращения по осям](#настраиваемая-толщина-линий-и-скорость-вращения-по-осям)
+  - [Управление объектом клавиатурой](#управление-объектом-клавиатурой)
+  - [Ручное создание объектов](#ручное-создание-объектов)
+  - [Загрузка моделей из .obj файлов](#загрузка-моделей-из-obj-файлов)
+  - [Освещение и материалы (только v3)](#освещение-и-материалы-только-v3)
+  - [Управление камерой (только v3)](#управление-камерой-только-v3)
+- [Классы и функции](#классы-и-функции)
+- [Редактор сцен](#редактор-сцен)
+- [Физическая симуляция](#физическая-симуляция)
+- [Документация по версиям](#документация-по-версиям)
+
+## Документация по версиям
+
+Подробная документация по версиям движка доступна в [docs/engine_versions.md](docs/engine_versions.md).
+- [Changelog](#changelog)
+- [Лицензия](#лицензия)
+
+## Выбор версии движка
+
+Библиотека поддерживает две версии движка:
+
+- **Версия 2 (Tkinter)**: Старая версия с рендерингом через Tkinter. Подходит для простых задач, без освещения.
+- **Версия 3 (PyOpenGL)**: Новая версия с GPU-ускорением через PyOpenGL и Pygame. Рекомендуется для производительности, качества и дополнительных функций (освещение, управление камерой).
+
+### Как выбрать версию:
+
+```python
+import os
+
+# Установите переменную окружения ДО импорта библиотеки
+os.environ['PY3D_ENGINE'] = '3'  # Для PyOpenGL (по умолчанию)
+# или
+os.environ['PY3D_ENGINE'] = '2'  # Для Tkinter
+
+from py3dgraphics import *
+```
+
+**Версия 3 (PyOpenGL) рекомендуется** для новых проектов благодаря GPU-ускорению, освещению и управлению камерой.
+
+## Особенности
+
+- Создание 3D объектов с точками, рёбрами и гранями
+- Вращение объектов в реальном времени
+- Z-сортировка для правильного отображения глубины
+- Полигональная заливка граней
+- Управление объектами с клавиатуры
+- Оптимизация производительности с использованием NumPy для векторных операций
+- Настраиваемая толщина линий рёбер
+- Независимая скорость вращения по осям X, Y, Z
+- Встроенный редактор сцен для визуального создания и редактирования объектов
+
+## Установка
+
+### Базовая установка (только Tkinter версия)
+```bash
+pip install treeed
+```
+
+### Полная установка (с PyOpenGL версией)
+```bash
+pip install treeed[all]
+```
+
+### Только PyOpenGL версия
+```bash
+pip install treeed[opengl]
+```
+
+## Быстрый старт
+
+Создайте вращающийся куб в пару строк:
+
+```python
+from py3dgraphics import create_cube, quick_scene
+
+cube = create_cube()  # Куб по умолчанию
+quick_scene(cube)     # Запуск сцены
+```
+
+## Пример использования
+
+```python
+from py3dgraphics import create_cube, quick_scene
+
+# Создание кубов с разными размерами и скоростями
+cube1 = create_cube(size=150, speed=0.02, color=(1.0, 0.0, 0.0))  # Красный, большой, быстрый
+cube2 = create_cube(size=75, speed=0.005, color=(0.0, 0.0, 1.0))  # Синий, маленький, медленный
+
+# Запуск сцены
+quick_scene(cube1, cube2)
+```
+
+## Расширенное использование
+
+```python
+from py3dgraphics import create_cube, Scene3D
+import time
+
+# Создание кубов
+cube = create_cube(size=150, speed=0.009, position=(300, 0, 0))
+cube1 = create_cube(size=120, speed=0.007)
+
+# Создание сцены
+scene = Scene3D()
+scene.add_object(cube)
+scene.add_object(cube1)
+
+# Анимация движения
+xp = 300
+while True:
+    xp += 1
+    cube.set_position(xp, 0, 0)  # Изменение позиции
+    scene.update_scene()  # Обновление сцены
+    time.sleep(0.05)
+```
+
+### Цвета, заливка и управление анимацией
+
+Объекты могут иметь разные цвета. Объекты вращаются только если их `speed > 0`. Для статичных объектов установите `speed=0`.
+
+**Новые возможности кастомизации:**
+- **Заливка граней:** Параметр `fill=True` включает заливку граней цветом, заданным в `color`.
+- **Цвет контура:** Параметр `outline_color` позволяет задать цвет контура граней (по умолчанию (1.0, 1.0, 1.0)).
+- **По умолчанию:** Кубы отображаются только с белыми контурами без заливки, как в предыдущих версиях.
+
+```python
+from py3dgraphics import create_cube, quick_scene
+
+# Создание кубов с разными скоростями и цветами
+cube1 = create_cube(size=150, speed=0.02, color=(1.0, 0.0, 0.0))  # Красный, вращается
+cube2 = create_cube(size=75, speed=0, color=(0.0, 0.0, 1.0))       # Синий, не вращается
+
+# Запуск сцены
+quick_scene(cube1, cube2)
+```
+
+### Настраиваемая толщина линий и скорость вращения по осям
+
+**Новые параметры кастомизации:**
+- **Толщина линий:** Параметр `line_width` задаёт толщину рёбер (по умолчанию 2).
+- **Скорость вращения по осям:** Параметры `speed_x`, `speed_y`, `speed_z` позволяют задать независимую скорость вращения по каждой оси.
+
+```python
+from py3dgraphics import create_cube, quick_scene
+
+# Куб с толстыми линиями и вращением только по оси Y
+cube1 = create_cube(size=150, speed_y=0.02, line_width=5, color=(1.0, 0.0, 0.0))
+
+# Куб с тонкими линиями и вращением по всем осям с разной скоростью
+cube2 = create_cube(size=100, speed_x=0.01, speed_y=0.02, speed_z=0.005, line_width=1, color=(0.0, 0.0, 1.0))
+
+# Запуск сцены
+quick_scene(cube1, cube2)
+```
+
+### Управление объектом клавиатурой
+
+Вы можете управлять одним объектом с помощью клавиатуры (WASDQE для движения по осям X, Y, Z).
+
+```python
+from py3dgraphics import create_cube, quick_scene
+
+cube1 = create_cube(size=150, speed=0.02, color=(1.0, 0.0, 0.0))
+cube2 = create_cube(size=75, speed=0, color=(0.0, 0.0, 1.0))  # Управляемый
+
+# Запуск сцены с управлением вторым кубом
+quick_scene(cube1, cube2, player=cube2)
+```
+
+Или ручное управление:
+
+```python
+from py3dgraphics import create_cube, Scene3D
+
+scene = Scene3D()
+scene.add_object(create_cube())
+scene.add_object(create_cube(size=100, position=(200, 0, 0), speed=0, color=(0.0, 1.0, 0.0)))
+scene.set_player(scene.objects[1])  # Устанавливаем второго объекта как управляемого
+
+scene.run()
+```
+
+### Ручное создание объектов
+
+```python
+from py3dgraphics import Point3D, Object3D, Scene3D
+
+# Создание куба вручную
+CUBE_SIZE = 150
+points = [
+    [-CUBE_SIZE, -CUBE_SIZE, -CUBE_SIZE],
+    [ CUBE_SIZE, -CUBE_SIZE, -CUBE_SIZE],
+    [ CUBE_SIZE,  CUBE_SIZE, -CUBE_SIZE],
+    [-CUBE_SIZE,  CUBE_SIZE, -CUBE_SIZE],
+    [-CUBE_SIZE, -CUBE_SIZE,  CUBE_SIZE],
+    [ CUBE_SIZE, -CUBE_SIZE,  CUBE_SIZE],
+    [ CUBE_SIZE,  CUBE_SIZE,  CUBE_SIZE],
+    [-CUBE_SIZE,  CUBE_SIZE,  CUBE_SIZE]
+]
+edges = [
+    (0, 1), (1, 2), (2, 3), (3, 0),
+    (4, 5), (5, 6), (6, 7), (7, 4),
+    (0, 4), (1, 5), (2, 6), (3, 7)
+]
+faces = [
+    (0, 1, 2, 3),  # Задняя грань
+    (4, 5, 6, 7),  # Передняя грань
+    (0, 4, 7, 3),  # Левая грань
+    (1, 5, 6, 2),  # Правая грань
+    (0, 1, 5, 4),  # Нижняя грань
+    (3, 2, 6, 7)   # Верхняя грань
+]
+
+# Создание объекта с гранями для заливки
+cube = Object3D(points, edges, faces, speed=0.02, color=(1.0, 0.0, 0.0), fill=True, line_width=3)
+scene = Scene3D()
+scene.add_object(cube)
+scene.run()
+```
+
+### Загрузка моделей из .obj файлов
+
+```python
+from py3dgraphics import create_object_from_file, quick_scene
+
+# Загрузка модели из файла с автоматической генерацией рёбер
+model = create_object_from_file("models/cube.obj", speed=0.02, color=(0.0, 0.0, 1.0), fill=False)
+if model:
+    quick_scene(model)
+```
+
+Или с ручным управлением:
+
+```python
+from py3dgraphics import load_obj, generate_edges_from_faces, Object3D, Scene3D
+
+# Ручная загрузка и обработка
+points, faces = load_obj("models/cube.obj")
+edges = generate_edges_from_faces(faces)
+
+# Создание объекта с каркасным режимом
+model = Object3D(points, edges=edges, faces=faces, speed=0.02, fill=False, outline_color=(0.0, 1.0, 0.0))
+scene = Scene3D()
+scene.add_object(model)
+scene.run()
+```
+
+### Освещение и материалы (только v3)
+
+В версии 3 (PyOpenGL) поддерживается освещение и материалы для реалистичного рендеринга.
+
+```python
+from py3dgraphics import create_cube, quick_scene
+
+# Куб с освещением (по умолчанию включено)
+cube = create_cube(size=100, speed=0.01, color=(1.0, 0.5, 0.0), fill=True)
+quick_scene(cube, title="Освещение включено")
+```
+
+### Управление камерой (только v3)
+
+В версии 3 камера поддерживает орбитальное управление мышью и зум колесика.
+
+```python
+from py3dgraphics import create_cube, Scene3D
+
+scene = Scene3D()
+cube = create_cube(size=100, speed=0.01, color=(0.0, 1.0, 0.0), fill=True)
+scene.add_object(cube)
+
+# Управление камерой: зажмите левую кнопку мыши и двигайте для вращения,
+# колесо мыши для зума
+scene.run()
+```
+
+## Классы и функции
+
+### Основные классы
+
+- `Point3D`: Представляет 3D точку.
+- `Object3D(points, edges=None, faces=None, speed=0.01, position=(0, 0, 0), color=(1.0, 1.0, 1.0), fill=False, outline_color=(1.0, 1.0, 1.0), line_width=2, speed_x=None, speed_y=None, speed_z=None)`: Представляет 3D объект с точками, рёбрами и гранями. Поддерживает вращение, позиционирование и кастомизацию внешнего вида.
+- `Scene3D(width=800, height=600, title="3D Сцена", bg=(0.0, 0.0, 0.0))`: Управляет сценой и отображением объектов с поддержкой Z-сортировки и управления клавиатурой.
+
+### Функции создания объектов
+
+- `create_cube(size=150, speed=0.01, position=(0, 0, 0), color=(1.0, 1.0, 1.0), fill=False, outline_color=(1.0, 1.0, 1.0), line_width=2, speed_x=None, speed_y=None, speed_z=None)`: Создаёт куб с заданными параметрами размера, скорости вращения, позиции, цветов и толщины линий.
+
+### Функции сцены
+
+- `quick_scene(*objects, width=800, height=600, title="3D Сцена", bg=(0.0, 0.0, 0.0))`: Быстро создаёт и запускает сцену с объектами. Параметр `player` позволяет назначить управляемый клавиатурой объект.
+
+### Функции загрузки моделей
+
+- `load_obj(filename)`: Загружает 3D модель из .obj файла и возвращает списки точек и граней.
+- `create_object_from_file(filename, **options)`: Загружает модель из .obj файла и создаёт полностью готовый Object3D с автоматически сгенерированными рёбрами для поддержки каркасного режима.
+- `generate_edges_from_faces(faces)`: Создаёт уникальный список рёбер из списка граней.
+
+### Специфичные для версии 3 (PyOpenGL)
+
+- `normalize_color(color)`: Нормализует цвет в формат RGB (0.0-1.0).
+- `COLOR_MAP`: Словарь с предопределёнными цветами.
+
+### Редактор сцен
+
+Библиотека включает встроенный редактор сцен для визуального создания и редактирования 3D объектов.
+
+### Запуск редактора
+
+```python
+from py3dgraphics import run_editor
+
+run_editor()
+```
+
+### Возможности редактора
+
+- **Добавление объектов:** Кнопка "Add Cube" для создания новых кубов в сцене
+- **Удаление объектов:** Выберите объект в списке и нажмите "Delete Object"
+- **Настройка параметров:**
+  - Позиция (X, Y, Z)
+  - Скорость вращения
+  - Цвет (R, G, B)
+- **Предварительный просмотр:** Кнопка "Preview Scene" для запуска сцены с текущими объектами
+- **Сохранение и загрузка:** Сохраняйте сцены в JSON формате и загружайте их обратно
+
+### Пример использования
+
+```python
+from py3dgraphics import run_editor
+
+# Запуск редактора сцен
+run_editor()
+```
+
+Редактор использует Tkinter для совместимости и работает с обеими версиями движка (v2 и v3).
+
+## Физическая симуляция
+
+Библиотека поддерживает физическую симуляцию с использованием PyBullet для реалистичного моделирования столкновений, гравитации и сил.
+
+### Установка
+
+Для использования физической симуляции установите PyBullet:
+
+```bash
+pip install treeed[physics]
+# или
+pip install treeed[all]
+```
+
+### Основные классы
+
+- `PhysicsScene(width=800, height=600, title="Physics Scene", bg=(0.0, 0.0, 0.0), gravity=(0, 0, -9.81), time_step=1/240.0)`: Сцена с поддержкой физической симуляции, наследуется от Scene3D.
+
+### Методы PhysicsScene
+
+- `add_physics_object(obj, mass=1.0, friction=0.5, restitution=0.1)`: Добавляет объект с физическими свойствами
+- `add_cube_physics(size=100, position=(0, 0, 200), mass=1.0, color=(1.0, 0.0, 0.0), friction=0.5, restitution=0.1)`: Создает куб с физическими свойствами
+- `apply_force(obj, force=(0, 0, 0), position=None)`: Применяет силу к объекту
+- `apply_torque(obj, torque=(0, 0, 0))`: Применяет крутящий момент
+- `set_velocity(obj, linear_velocity=(0, 0, 0), angular_velocity=(0, 0, 0))`: Устанавливает скорость
+- `update_physics()`: Обновляет состояние физической симуляции
+- `toggle_pause()`: Переключает паузу симуляции
+- `reset_simulation()`: Сбрасывает симуляцию в начальное состояние
+- `run_physics(max_steps=None)`: Запускает цикл симуляции
+
+### Пример использования
+
+```python
+from py3dgraphics import PhysicsScene
+
+# Создание физической сцены
+scene = PhysicsScene(width=800, height=600, title="Физическая симуляция")
+
+# Создание кубов с разными свойствами
+cube1 = scene.add_cube_physics(size=50, position=(0, 0, 300), mass=1.0, color="red")
+cube2 = scene.add_cube_physics(size=40, position=(100, 0, 350), mass=0.5, color="blue")
+cube3 = scene.add_cube_physics(size=60, position=(-100, 0, 400), mass=2.0, color="green")
+
+# Запуск симуляции
+scene.run_physics()
+```
+
+### Управление симуляцией
+
+- **SPACE**: Пауза/возобновление симуляции
+- **R**: Сброс симуляции
+- **ESC**: Выход из симуляции
+
+Физическая симуляция работает только с PyOpenGL версией (v3) и требует установки PyBullet.
+
+## Changelog
+
+### Версия 0.3.0
+- Добавлена версия движка PyOpenGL (v3) с GPU-ускорением
+- Поддержка освещения и материалов (только v3)
+- Орбитальное управление камерой мышью (только v3)
+- Улучшенная производительность с NumPy
+- Независимая скорость вращения по осям
+- Настраиваемая толщина линий рёбер
+- Загрузка моделей из .obj файлов
+- Backface culling для оптимизации (только v3)
+
+### Версия 0.2.0
+- Старая версия с Tkinter (v2)
+- Базовые функции создания и отображения 3D объектов
+
+## Вклад
+
+Если вы хотите внести вклад в проект:
+1. Форкните репозиторий
+2. Создайте ветку для вашей фичи (`git checkout -b feature/AmazingFeature`)
+3. Зафиксируйте изменения (`git commit -m 'Add some AmazingFeature'`)
+4. Отправьте в ветку (`git push origin feature/AmazingFeature`)
+5. Откройте Pull Request
+
+## Лицензия
+
+MIT License
+
+Copyright (c) 2023 Umar
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
