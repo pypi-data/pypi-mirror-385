@@ -1,0 +1,149 @@
+{% extends "basic/layout.html" %}
+
+{# Silence the sidebar's, relbar's #}
+{% block header %}{% endblock %}
+{% block sidebar1 %}{% endblock %}
+{% block sidebar2 %}{% endblock %}
+{% block relbar1 %}{% endblock %}
+{% block relbar2 %}{% endblock %}
+{% block sidebarsourcelink %}{% endblock %}
+{% block footer %}{% endblock %}
+{%- block linktags %}{% endblock %}
+
+{% if pagename == 'index' %}
+{% set css_files = ['_static/style-player.css',
+                    'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css'
+                    ]
+%}
+{% set script_files = ['_static/bundle.js'] %}
+{% else %}
+{% set script_files = ['_static'+'/petlja.js',
+                       '_static/runestonebase.js',
+                       '_static'+'/skulpt.min.js', 
+                       '_static'+'/skulpt-stdlib.js'
+                      ] + 
+                      script_files +
+                      [
+                        '_static'+'/jquery-ui-1.10.3.custom.min.js',
+                        '_static'+'/jquery-fix.js',
+                        '_static'+'/bootstrap-4.0.0-dist/js/bootstrap.min.js',
+                        '_static'+'/bootstrap-4.0.0-dist/js/bootstrap.bundle.min.js',
+                        '_static'+'/bootstrap-sphinx.js',
+                        '_static'+'/waypoints.min.js',
+                        '_static'+'/rangy-core.js',
+                        '_static'+'/rangy-textrange.js',
+                        '_static'+'/rangy-cssclassapplier.js',
+                        '_static'+'/user-highlights.js',
+                        '_static'+'/jquery.idle-timer.js',
+                        '_static'+'/processing-1.4.1.min.js',
+                        '_static'+'/jquery.hotkey.js',
+                        '_static'+'/jquery-migrate-1.2.1.min.js',
+                        'platform'+ '/petljaRTBundle.js',
+                        '_static'+ '/require.js',
+                      ]
+%}
+
+{% set css_files = css_files + 
+  [
+    '_static'+'/basic.css',
+    '_static'+'/user-highlights.css',
+    'https://use.fontawesome.com/releases/v5.1.1/css/all.css',
+    'https://fonts.googleapis.com/css?family=Source+Sans+Pro',
+    '_static'+'/bootstrap-4.0.0-dist/css/bootstrap.min.css',
+    '_static'+'/flatly.min.css',
+    '_static'+'/petlja-course.css',
+  ]
+%}
+{% endif %}
+
+
+{%- block extrahead %}
+    <link rel="shortcut icon" href="{{pathto('_static/favicon.ico', 1)}}" type="image/ico" />
+  {% if pagename != 'index' %}
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <script type="text/javascript">
+      eBookConfig = {};
+      eBookConfig.host = '{{course_url}}' ? '{{course_url}}' : 'http://127.0.0.1:8000';
+      eBookConfig.app = eBookConfig.host + '/{{appname}}';
+      eBookConfig.ajaxURL = eBookConfig.app + '/ajax/';
+      eBookConfig.course = '{{course_id}}';
+      eBookConfig.logLevel = '{{ loglevel }}';
+      eBookConfig.loginRequired = '{{ login_required }}';
+      eBookConfig.build_info = "{{build_info}}";
+      eBookConfig.isLoggedIn = false;
+      eBookConfig.useRunestoneServices = false;
+      eBookConfig.python3 = true;
+      eBookConfig.basecourse = '{{ basecourse }}';
+      eBookConfig.runestone_version = '{{ runestone_version }}';
+      eBookConfig.imagesDir = '{{ pathto("_images/",1) }}';
+      eBookConfig.staticDir = '{{ pathto("_static/",1) }}';
+      if (typeof (Sk) != "undefined")
+        Sk.imgPath = eBookConfig.imagesDir;
+    </script>
+    {% if meta is defined and meta is not none and meta|length and meta.type is defined and meta.type == 'quiz' %}
+    <script> var lectureType = 'quiz'; </script>
+    {% elif meta is defined and meta is not none and meta|length and meta.type is defined and meta.type == 'reading' %}
+    <script> var lectureType = 'reading'; </script>
+    {% else %}
+    <script> var lectureType = ''; </script>
+    {% endif %}
+  {% endif %}
+{% endblock %}
+
+{%- block content %}
+{% if pagename == 'index' %}
+
+<div id="player-header" class="player-header">
+  <div id="toc-toggle" class="content-toggle">
+    <i class="bi bi-list-task"></i>
+    <p id="content-text">Content</p>
+  </div>
+  <div class="content-title">
+    <div id="course-title" class="course-title"></div>
+    <div id="lecture-title-header" class="lecture-title-header"></div>
+  </div>
+  <div>
+    <div id="font-size" class="content-options">
+      <i class="bi bi-fonts"></i>
+      <span id="font-text" class="no-select"> Font </span>
+    </div>
+    <div id="font-size-modal" class="font-picker hide-element">
+      <button class="no-select" id="smaller-text">-</button>
+      <button class="no-select" id="larger-text">+</button>
+    </div>
+  </div>
+</div>
+<div id="content-nav" class="content-nav"> 
+  <div id="toc" class="table-of-content">
+  </div>
+  <div class="nav-buttons">
+    <button id="previous-activity"><i class="bi bi-chevron-left"></i> </button>
+    <button id="next-activity"> <i class="bi bi-chevron-right"></i></i> </button>
+  </div>
+</div>
+  <div id="main" class="main-content">
+    <div id="course-content" class="course-content">
+      <iframe id="main-iframe" class="content-iframe" data-content-url="."></iframe>
+    </div>
+  </div>
+
+
+{% else %}
+<div class="petljaCourseContainer">
+  <div class="container" style="padding-left: 20px; height: calc(100vh - 115px);">
+    <div id="errors">
+    </div>
+    <div class="lectureContentMaterial" style="overflow-x: visible;">
+      <div id="main-content">
+      {% block body %}
+      {{ super() }}
+      {% endblock %}
+      <button id="finish-activity" class="unfinished-activity"> <i class="fa fa-check" aria-hidden="true"></i> </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+{%- endblock %}

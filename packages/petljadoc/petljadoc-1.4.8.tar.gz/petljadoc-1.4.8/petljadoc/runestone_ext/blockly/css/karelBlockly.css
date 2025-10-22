@@ -1,0 +1,109 @@
+.blocklyToolboxCategory{
+    width: 100%;
+}
+.chat-window{
+    background-color:#f5f0e6;
+    max-width: 780px;
+    min-height: 100px;
+    border: 1px solid gray;
+    padding: 10px;
+    text-align: left !important;
+}
+.chat-message {
+    display: flex !important;
+    flex-direction: row !important;
+    padding: 5px !important;
+    width: fit-content;
+    max-width: 95%;
+    text-align: left !important;
+    margin-left:unset !important;
+}
+.chat-message img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    flex:1;
+}
+.chat-message.right {
+    flex-direction: row-reverse;
+    margin-left:auto;
+}
+.chat-bubble{
+    background-color: white;
+    border-radius: 10px;
+    padding: 7px !important;
+    margin-right: 10px !important;
+    margin-left: 10px !important;
+    min-width: fit-content;
+    height: fit-content;
+    flex:1;
+}
+.send-message{
+    background-color: white;
+    max-width: 780px;
+    height: 30px;
+    border: 1px solid gray;
+    padding: 10px;
+    display: none;
+    flex-direction: row;
+}
+.new-message{
+    width: 85%;
+    flex:1;
+}
+.send-message button {
+    background-color: #18bc9c;
+    border-color: #18bc9c;
+    border-style: solid;
+    margin-left: 10px;
+    color: white;
+    padding: 3px;
+    border-radius: 5px;
+    display: block;
+}
+.karel_action_wrapper{
+    height: auto;
+    overflow: hidden;
+}
+.karel-blockly-wrapper{
+    flex-shrink: 0;
+    padding-top: 15px;
+    height: auto;
+    width: 1000px;
+    min-height: 580px;
+    max-width:none !important;
+} 
+
+.run-karel{
+    width: auto !important;
+}
+
+.reset-karel{
+    margin-bottom: 4px;
+}
+
+.karel-ui{
+    width: 35%;
+    float: left;
+    top: -6px;
+    position: relative;
+}
+.blockly-ui{
+    width: 65%;
+    float: left;
+}
+
+@media only screen and (max-width: 1325px) {
+    .karel-blockly-wrapper{
+        width: 100%;
+    }
+    .karel-ui{
+        width: 100%;
+        float: left;
+    }
+    .blockly-ui{
+        width: 100%;
+        float: left;
+    }
+    
+  }
