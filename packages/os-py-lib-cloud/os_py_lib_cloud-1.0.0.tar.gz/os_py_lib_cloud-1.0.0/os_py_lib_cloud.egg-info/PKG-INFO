@@ -1,0 +1,285 @@
+Metadata-Version: 2.4
+Name: os-py-lib-cloud
+Version: 1.0.0
+Summary: Unified AWS S3 and Azure Blob Storage client for cloud file uploads
+Author-email: Oleg Smirnov <oleg.a.smirnov@gmail.com>
+License: BSD
+Project-URL: Homepage, https://github.com/BestianCode/os.py.lib.cloud
+Project-URL: Repository, https://github.com/BestianCode/os.py.lib.cloud
+Project-URL: Issues, https://github.com/BestianCode/os.py.lib.cloud/issues
+Keywords: aws,s3,azure,blob-storage,cloud-storage
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: boto3>=1.26.0
+Requires-Dist: botocore>=1.29.0
+Requires-Dist: azure-storage-blob>=12.19.0
+Requires-Dist: azure-core>=1.29.0
+Requires-Dist: requests>=2.28.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.0; extra == "dev"
+Requires-Dist: black>=23.0; extra == "dev"
+Requires-Dist: flake8>=6.0; extra == "dev"
+Requires-Dist: mypy>=1.0; extra == "dev"
+Dynamic: license-file
+
+# OS.py Cloud Storage Library
+
+A unified Python library for AWS S3 and Azure Blob Storage operations with built-in retry logic, error handling, and CDN verification.
+
+**Author:** Oleg Smirnov
+**Repository:** https://github.com/BestianCode/os.py.lib.cloud
+
+## Features
+
+- **AWS S3 Support**: Upload files to S3 with automatic retry logic and public URL generation
+- **Azure Blob Storage Support**: Upload to Azure with CDN verification and container management
+- **Unified Interface**: Consistent API for both storage providers
+- **Automatic Retries**: Built-in exponential backoff for resilient uploads
+- **Environment-based Configuration**: Easy setup via environment variables
+- **CDN Integration**: Automatic CDN verification for Azure uploads
+- **Path Management**: Smart path handling for different container types ($web vs. regular containers)
+
+## Installation
+
+### From GitHub
+
+```bash
+pip install git+https://github.com/BestianCode/os.py.lib.cloud.git
+```
+
+### From PyPI (once published)
+
+```bash
+pip install os-py-lib-cloud
+```
+
+### Development Installation
+
+```bash
+git clone https://github.com/BestianCode/os.py.lib.cloud.git
+cd os.py.lib.cloud
+pip install -e .
+```
+
+## Configuration
+
+### AWS S3
+
+Set the following environment variables:
+
+```bash
+export AWS_ACCESS_KEY_ID="your_access_key"
+export AWS_SECRET_ACCESS_KEY="your_secret_key"
+export AWS_REGION="us-east-1"
+export AWS_S3_BUCKET="your-bucket-name"
+```
+
+### Azure Blob Storage
+
+Set the following environment variables:
+
+```bash
+export AZURE_STORAGE_CONNECTION_STRING="your_connection_string"
+export AZURE_CONTAINER_NAME="your-container-name"
+```
+
+## Usage
+
+### Basic Example
+
+```python
+from os_cloud_storage import os_s3, os_azure
+from pathlib import Path
+
+# Initialize S3
+file_backend_url = "https://your-cdn.com"
+s3_initialized = os_s3.initialize_s3(file_backend_url)
+
+if s3_initialized:
+    # Upload a file
+    success, public_url, s3_url = os_s3.upload_to_s3(
+        Path("/path/to/file.mp4"),
+        s3_key="videos/my-video.mp4",
+        max_retries=3
+    )
+
+    if success:
+        print(f"File uploaded successfully!")
+        print(f"Public URL: {public_url}")
+        print(f"S3 URL: {s3_url}")
+```
+
+### Azure Blob Storage Example
+
+```python
+from os_cloud_storage import os_azure
+from pathlib import Path
+
+# Initialize Azure
+file_backend_url = "https://your-cdn.com"
+azure_initialized = os_azure.initialize_azure(file_backend_url)
+
+if azure_initialized:
+    # Upload a file
+    success, public_url, blob_url = os_azure.upload_to_azure(
+        Path("/path/to/file.mp4"),
+        blob_name="videos/my-video.mp4",
+        max_retries=3
+    )
+
+    if success:
+        print(f"File uploaded successfully!")
+        print(f"Public URL: {public_url}")
+        print(f"Blob URL: {blob_url}")
+```
+
+### Using in Your Application
+
+```python
+from os_cloud_storage import os_s3, os_azure
+from pathlib import Path
+
+# Initialize both providers
+file_backend_url = "https://media.example.com"
+s3_initialized = os_s3.initialize_s3(file_backend_url)
+azure_initialized = os_azure.initialize_azure(file_backend_url)
+
+# Get clients for direct access if needed
+s3_client = os_s3.get_s3_client()
+blob_service_client = os_azure.get_blob_service_client()
+container_client = os_azure.get_container_client()
+
+# Upload function with fallback
+def upload_file(file_path):
+    if s3_client:
+        return os_s3.upload_to_s3(Path(file_path))
+    elif blob_service_client:
+        return os_azure.upload_to_azure(Path(file_path))
+    else:
+        return False, None, None
+```
+
+## API Reference
+
+### S3 Module (`os_s3`)
+
+#### Functions
+
+- **`initialize_s3(file_backend_url: str) -> bool`**
+  - Initialize S3 client with environment variables
+  - Returns: True if successful, False otherwise
+
+- **`upload_to_s3(local_file_path: Path, s3_key: str = None, max_retries: int = 3, file_backend_url: str = None) -> Tuple[bool, str, str]`**
+  - Upload a file to S3
+  - Returns: (success, public_url, s3_url)
+
+- **`is_initialized() -> bool`**
+  - Check if S3 is initialized
+
+- **`get_s3_client()`**
+  - Get the boto3 S3 client
+
+- **`get_bucket_name() -> str`**
+  - Get the configured bucket name
+
+- **`get_region() -> str`**
+  - Get the configured AWS region
+
+### Azure Module (`os_azure`)
+
+#### Functions
+
+- **`initialize_azure(file_backend_url: str) -> bool`**
+  - Initialize Azure Blob Storage client with environment variables
+  - Returns: True if successful, False otherwise
+
+- **`upload_to_azure(local_file_path: Path, blob_name: str = None, max_retries: int = 3, file_backend_url: str = None) -> Tuple[bool, str, str]`**
+  - Upload a file to Azure Blob Storage
+  - Returns: (success, public_url, blob_url)
+
+- **`is_initialized() -> bool`**
+  - Check if Azure is initialized
+
+- **`get_blob_service_client()`**
+  - Get the BlobServiceClient
+
+- **`get_container_client()`**
+  - Get the ContainerClient
+
+- **`get_container_name() -> str`**
+  - Get the configured container name
+
+## Features in Detail
+
+### Retry Logic
+
+Both S3 and Azure uploads include automatic retry logic with exponential backoff:
+- Default: 3 retry attempts
+- Exponential backoff: base_delay * (2 ^ attempt_number)
+- Configurable via `max_retries` parameter
+
+### CDN Verification (Azure)
+
+Azure uploads include automatic CDN verification:
+- Checks if the uploaded blob is accessible via CDN
+- Up to 32 retry attempts with 2-second delays
+- Ensures the file is properly cached and accessible
+
+### Path Management
+
+- **Azure $web containers**: Uses flat paths (no date prefixes)
+- **Regular containers**: Automatically adds date-based paths (YYYY/MM/DD)
+- **S3**: Preserves your specified key structure
+
+### Error Handling
+
+All functions return a tuple with:
+1. `success` (bool): Whether the operation succeeded
+2. `public_url` (str): The public-facing URL (using file_backend_url)
+3. `cloud_url` (str): The direct cloud storage URL
+
+## Requirements
+
+- Python >= 3.8
+- boto3 >= 1.26.0
+- botocore >= 1.29.0
+- azure-storage-blob >= 12.19.0
+- azure-core >= 1.29.0
+- requests >= 2.28.0
+
+## License
+
+MIT License - see LICENSE file for details
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Support
+
+For issues and questions, please use the [GitHub Issues](https://github.com/BestianCode/os.py.lib.cloud/issues) page.
+
+## Author
+
+**Oleg Smirnov**
+GitHub: [@BestianCode](https://github.com/BestianCode)
+
+## Changelog
+
+### 0.1.0 (2025-10-20)
+- Initial release
+- AWS S3 support with retry logic
+- Azure Blob Storage support with CDN verification
+- Unified interface for both providers
+- Environment-based configuration
