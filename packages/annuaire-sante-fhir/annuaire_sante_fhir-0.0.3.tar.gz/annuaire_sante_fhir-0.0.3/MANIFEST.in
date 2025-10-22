@@ -1,0 +1,27 @@
+# Include important files
+include README.md
+include LICENSE
+include pyproject.toml
+
+# Include type information
+recursive-include src *.py
+recursive-include src py.typed
+
+# Exclude unnecessary files
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
+recursive-exclude * .DS_Store
+recursive-exclude * .pytest_cache
+recursive-exclude * .mypy_cache
+recursive-exclude * .ruff_cache
+
+# Exclude tests and examples
+exclude tests
+recursive-exclude tests *
+exclude examples
+recursive-exclude examples *
+
+# Exclude development files
+exclude .gitignore
+exclude .python-version
+exclude Makefile
