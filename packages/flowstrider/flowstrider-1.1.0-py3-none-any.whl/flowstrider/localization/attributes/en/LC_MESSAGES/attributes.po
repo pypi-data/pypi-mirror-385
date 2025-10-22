@@ -1,0 +1,453 @@
+# English translations for PROJECT.
+# Copyright (c) 2025, German Aerospace Center (DLR)
+# This file is distributed under the same license as the PROJECT project.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-10-16 12:24+0200\n"
+"PO-Revision-Date: 2025-10-14 13:56+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: src/flowstrider/rules/attributes_dict.py:33
+msgid "Authentication factors"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:35
+msgid ""
+"If authentication is required, which factors will be needed for "
+"authentication. Examples: ['PIN', 'Chip Card', 'OTP'] or ['Digital "
+"Certificate', 'Biometric Data']."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:50
+msgid "Authentication protocol"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:52
+msgid ""
+"Which authentication protocol will be used to ensure integrity. Examples:"
+" 'DH_CHAP' or 'FCPAP'"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:63
+msgid "Requires authentication"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:64
+msgid "Whether any form of authentication is required to access the entity."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:69
+msgid "Encryption method"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:71
+msgid ""
+"Which method of encryption will be used to encrypt the data. Examples: "
+"'AES_128' or 'AES_256'"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:78
+msgid "Given permissions"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:79
+msgid "Actions the actor is priviliged to perform."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:85
+msgid "Handles confidential data"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:86
+msgid "Whether the entity handles confidential data."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:91
+msgid "Handles logs"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:92
+msgid "Whether the DataStore handles protocol logging data."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:97
+msgid "Hash function"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:99
+msgid ""
+"Which function will be used to store hashed data. Examples: 'SHA3_256' or"
+" 'SHA_512_256'."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:117
+#: src/flowstrider/rules/attributes_dict.py:128
+#: src/flowstrider/rules/attributes_dict.py:139
+#: src/flowstrider/rules/attributes_dict.py:150
+#: src/flowstrider/rules/attributes_dict.py:161
+#, python-brace-format
+msgid ""
+"If the HTTP header '{header}' is set appropriately and as restrictive as "
+"possible."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:169
+msgid "Is SAN fabric"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:171
+msgid ""
+"Defines, if the entity is part of the fabric layer of a storage area "
+"network."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:178
+msgid "Input data"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:179
+msgid "All types of handled data. Example: ['Session IDs', 'User Requests']."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:184
+msgid "Input validation"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:185
+msgid "Defines, if the input data is validated."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:190
+msgid "Integrity check"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:192
+msgid ""
+"If an integrity check (such as a check sum) is used, this should note the"
+" specific check. Examples: 'check sum' or 'digital certificate'."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:200
+msgid "Uses proxy"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:201
+msgid "Whether the dataflow is routed through a TLS-proxy"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:206
+msgid "Required permissions"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:207
+msgid "Which priviliges are required to interact with the process."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:212
+msgid "Signature scheme"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:214
+msgid ""
+"If a signature scheme is used, this should note the specific scheme. "
+"Examples:'RSA' or 'ECDSA' or 'LMS'."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:229
+msgid "Stores credentials"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:231
+msgid ""
+"Whether the DataStore stores Login Credentials or other authentication "
+"data."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:239
+msgid "Transport protocol"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:240
+msgid "Which transport protocol the dataflow uses."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:252
+msgid "Informs about data collection"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:254
+msgid ""
+"If this data subject gets informed in detail about which data is being "
+"collected in which way, what is done with collected data and with whom it"
+" is shared."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:262
+msgid "Data lifecycle policy exists"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:264
+msgid ""
+"If a policy is defined that concerns the lifecycle management of data, "
+"including principles for creation, storage, sharing, usage, archival and "
+"destruction of data."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:272
+msgid "Data retention minimized"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:274
+msgid ""
+"If the application stores data only for the time frame necessary to the "
+"core functionality. For example no mail addresses are stored of users who"
+" already unsubscribed a newsletter."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:282
+msgid "Data sharing minimized"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:284
+msgid ""
+"If the application shares data only with services and external parties "
+"who need it for the functionality of the system."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:291
+msgid "Responses disclose information existence"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:293
+msgid ""
+"If the entity discloses the existence of information through status "
+"messages when the query was wrong or not authenticated. E.g. returning a "
+"'wrong password' error message revealing the existence of the account."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:302
+msgid "Handles personal data"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:303
+msgid "Whether the entity handles personal data."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:308
+msgid "Handles user data"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:310
+msgid ""
+"If this entity stores or handles any data from users like messages, "
+"texts, files or full user accounts."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:317
+msgid "Is private network"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:319
+msgid ""
+"If the inside workings of the trust boundary are private and the network "
+"acts like a blackbox sending and receiving data via dedicated interfaces."
+" Internal communication channels would be completely hidden to outside "
+"viewers."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:328
+msgid "Is a user"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:329
+msgid "Whether this interactor node represents human users."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:334
+msgid "Leaves usage traces"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:336
+msgid ""
+"If the application leaves any traces that a user has used the application"
+" like log files, traces of temporary files or size of data changing."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:343
+msgid "Logs access"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:344
+msgid "If the process logs access by users."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:349
+msgid "Logs receipt"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:350
+msgid "If the process logs the receipt of messages."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:355
+msgid "Only necessary data analyzed"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:357
+msgid ""
+"If the application keeps the analysis of its data to a strictly necessary"
+" level and data is not enriched more than it needs to be for the core "
+"functionality."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:365
+msgid "Only necessary data collected"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:367
+msgid ""
+"If the application collects only data that is strictly necessary for its "
+"core functionality. This includes limiting the amount/size of data "
+"collected and the collected data not being more fine-grained than "
+"necessary."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:376
+msgid "Own data access"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:377
+msgid "If data subjects have access to their own personal data."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:382
+msgid "Own data modification"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:384
+msgid ""
+"If data subjects have the ability to correct or delete their own personal"
+" data."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:391
+msgid "Personal data preferences"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:393
+msgid ""
+"Whether or not this data subject is given the option to set their "
+"preferences regarding the collection, handling and sharing of their "
+"personal data."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:401
+msgid "Privacy regulation compliance"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:403
+msgid ""
+"If this entity is compliant with privacy regulations of jurisdictions the"
+" system is used in."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:410
+msgid "Privacy standards compliance"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:412
+msgid ""
+"If the system is compliant with (industry specific) privacy standards and"
+" best practices."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:419
+msgid "Security standards compliance"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:421
+msgid ""
+"If the system is compliant with (industry specific) security standards "
+"and best practices."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:428
+msgid "Stores signed data"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:430
+msgid ""
+"If the data store stores data that has been digitally signed by the "
+"uploader."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:437
+msgid "Stores user associated metadata"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:439
+msgid ""
+"If the data store stores metadata, hidden data or specific patterns that "
+"could relate to specific users."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:446
+msgid "Transmits signed data"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:448
+msgid ""
+"If the dataflow transmits data that has been digitally signed by the "
+"sender. Example: signed emails."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:455
+msgid "Transmits unique user identifier"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:457
+msgid ""
+"If an identifier is transmitted on this dataflow that uniquely "
+"corresponds to one user. Examples: IP-address, email-address, unique "
+"pseudonyms"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:465
+msgid "Transmits user data"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:467
+msgid ""
+"If this dataflow transmits any data directly from users like messages, "
+"texts or files."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:474
+msgid "Transmits user identity"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:476
+msgid ""
+"If this dataflow transmits the clear identity of users such as the full "
+"name."
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:483
+msgid "Transmits user properties"
+msgstr ""
+
+#: src/flowstrider/rules/attributes_dict.py:485
+msgid ""
+"If this dataflow transmits any properties that are dependent on the user "
+"like OS, browser, screen size, language, etc."
+msgstr ""
