@@ -1,0 +1,205 @@
+Metadata-Version: 2.4
+Name: shillelagh-gristapi
+Version: 0.1.6
+Summary: Shillelagh adapter to query Grist documents and tables via SQL.
+Author: Quentin Leroy
+License: MIT License
+        
+        Copyright (c) 2025 Quentin LEROY
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: Homepage, https://github.com/qleroy/shillelagh-gristapi
+Project-URL: Issues, https://github.com/qleroy/shillelagh-gristapi/issues
+Keywords: shillelagh,grist,sql,adapter,superset
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: shillelagh>=1.4.0
+Requires-Dist: requests<3,>=2.32.0
+Provides-Extra: dev
+Requires-Dist: pytest>=8.2; extra == "dev"
+Requires-Dist: pytest-cov>=5.0; extra == "dev"
+Requires-Dist: responses>=0.25.0; extra == "dev"
+Requires-Dist: ruff>=0.6.9; extra == "dev"
+Requires-Dist: mypy>=1.11.2; extra == "dev"
+Requires-Dist: types-requests; extra == "dev"
+Requires-Dist: build; extra == "dev"
+Dynamic: license-file
+
+# shillelagh-gristapi
+
+A **[Shillelagh](https://github.com/betodealmeida/shillelagh) adapter** for the [Grist REST API](https://support.getgrist.com/api/).  
+It lets you query Grist documents and tables with **SQL** via SQLite/SQLAlchemy,  
+ideal for BI tools like [Apache Superset](https://superset.apache.org/).
+
+---
+
+## ✨ Features
+
+- Query Grist documents, tables, and records as if they were **SQL tables**
+- Supports core SQL operations:
+  - `SELECT` statements on Grist tables
+  - Filter pushdown for `=` condition
+  - Server-side sorting and `LIMIT`
+- Built-in discovery helpers:
+  - `grist://` → list all documents
+  - `grist://<doc_id>` → list tables in a document
+  - `grist://<doc_id>/<table_id>` → query rows in a table
+- Flexible usage:
+  - **CLI**: via the `shillelagh` shell or `python -m shillelagh_gristapi ...`
+  - **Python**: connect directly with the `connect()` API
+  - **Superset**: drop-in integration for dashboards
+- **Enforces Grist access rules**:  
+  Your Grist permissions carry over automatically.  
+  If you can only see certain tables, columns, or rows in Grist,  
+  you’ll see exactly the same restrictions through this adapter.
+
+---
+
+## 🚀 Installation
+
+```bash
+pip install shillelagh-gristapi
+# CLI
+pip install 'shillelagh[console]'
+```
+
+Or from source:
+
+```bash
+git clone https://github.com/qleroy/shillelagh-gristapi.git
+cd shillelagh-gristapi
+pip install -e .[dev]
+```
+
+---
+
+## ⚙️ Configuration
+You need a Grist API key. 
+- Fin doou `API_KEY` in your profile settings. See [Grist docs](https://support.getgrist.com/rest-api/).
+- Find your `ORG_ID`  with the [orgs endpoint](https://support.getgrist.com/api/#tag/orgs/operation/listOrgs), e.g. curl -H "Authorization: Bearer <replace-with-your-apy-key> "<replace-with-your-server>/api/orgs/" | jq '.[]|.id',
+
+```yaml
+gristapi:
+  api_key: ${API_KEY} 
+  org_id: ${ORG_ID} 
+  server: ${SERVER} # e.g. https://docs.getgrist.com
+```
+
+---
+
+## 🧑‍💻 Usage
+
+### 🖥️ CLI
+
+Default configuration in `~/.config/shillelagh/shillelagh.yaml`:
+
+```bash
+$ shillelagh
+# List document ids
+# https://support.getgrist.com/api/#tag/workspaces/operation/listWorkspaces
+SELECT * FROM 'grist://';
+
+# List table ids
+# https://support.getgrist.com/api/#tag/tables/operation/listTables
+SELECT * FROM 'grist://<replace-with-a-doc-id>';
+
+# Fetch records
+# https://support.getgrist.com/api/#tag/records
+SELECT * FROM 'grist://<replace-with-a-doc-id>/<replace-with-a-table-id>';
+```
+
+### 🐍 Python
+
+```python
+import os
+
+from shillelagh.backends.apsw.db import connect
+
+connection = connect(
+    ":memory:",
+    adapter_kwargs={
+        "gristapi": {
+            "api_key": os.environ["GRIST_API_KEY"],
+            "org_id": os.environ["GRIST_ORG_ID"],
+            "server": os.environ["GRIST_SERVER"],
+        }
+    },
+)
+cursor = connection.cursor()
+
+# List document ids
+# https://support.getgrist.com/api/#tag/workspaces/operation/listWorkspaces
+query_docs = "SELECT * FROM 'grist://';"
+cursor.execute(query_docs).fetchall()
+
+# List table ids
+# https://support.getgrist.com/api/#tag/tables/operation/listTables
+query_tables = "SELECT * FROM 'grist://<replace-with-a-doc-id>';"
+cursor.execute(query_tables).fetchall()
+
+# Fetch records
+# https://support.getgrist.com/api/#tag/records
+query = "SELECT * FROM 'grist://<replace-with-a-doc-id>/<replace-with-a-table-id>';"
+cursor.execute(query).fetchall()
+```
+
+### 📊 Apache Superset
+
+- Install `shillelagh` + this adapter in your Superset image;
+- Add a Shillelagh database with URI
+```
+shillelagh+safe://
+```
+- Configure the engine parameters
+```json
+{
+  "connect_args":
+    {
+      "adapters":
+        ["gristapi"],
+      "adapter_kwargs":
+        {
+          "gristapi":{
+            "api_key": "<REPLACE_WITH_YOUR_API_KEY>",
+            "org_id": "<REPLACE_WITH_YOUR_ORD_ID>",
+            "server": "<REPLACE_WITH_YOUR_SERVER_URL>",
+          }
+        }
+    }
+}
+```
+- Create a virtual dataset using a Grist URI, e.g.:
+```sql
+select * from 'grist://<doc-id>/<table-id>'
+```
+
+| SqlAlchemy URI | Engine parameters |
+| --- | --- |
+| ![screenshot base](images/screenshot_base.png)| ![screenshot parametres](images/screenshot_parametres.png) | 
+
+| SQL Lab |
+| -- |
+|![screenshot sql lab](images/screenshot_sqllab.png)|
+
+--- 
+
+## 📄 License
+MIT — see (LICENSE)[/LICENSE].
