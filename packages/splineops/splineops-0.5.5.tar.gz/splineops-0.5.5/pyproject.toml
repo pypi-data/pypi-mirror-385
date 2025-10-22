@@ -1,0 +1,103 @@
+# splineops/pyproject.toml
+# https://learn.scientific-python.org/development/guides/packaging-simple/
+
+# splineops/pyproject.toml
+
+[build-system]
+requires = [
+    "scikit-build-core>=0.10",
+    "pybind11>=2.11",
+    "numpy>=1.26",          # build-time headers available if needed
+]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "splineops"
+version = "0.5.5"
+description = "Spline signal processing in N-D with support for GPU computing."
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Dimitris Perdios" },
+    { name = "Pablo Garcia-Amorena" },
+    { name = "Philippe Thévenaz" },
+]
+requires-python = ">=3.10"
+dependencies = [
+    "numpy >=1.26",
+    "scipy >=1.15",
+    "matplotlib >=3.8",
+    "requests >=2.32.3",
+]
+classifiers = [
+    "Topic :: Scientific/Engineering",
+    "Intended Audience :: Science/Research",
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+[project.urls]
+Homepage = "https://splineops.github.io/"
+Source = "https://github.com/splineops/splineops"
+Issues = "https://github.com/splineops/splineops/issues"
+Download = "https://github.com/splineops/splineops.git"
+
+[project.optional-dependencies]
+visualization = [
+    "pooch >= 1.8",
+    "IPython >= 8.26",
+]
+tests = [
+    "tox >=4.13",
+    "pytest >=6.0",
+]
+dev = [
+    "splineops[visualization,tests]",
+    "black >=23.10",
+    "mypy >=1.8",
+    "build",  # local wheel/source builds: python -m build
+]
+dev_cupy = [
+    "splineops[dev]",
+    "cupy >=12.2",
+]
+docs = [
+    "splineops[visualization]",
+    "sphinx >=7.3",
+    "sphinx-gallery >=0.17",
+    "sphinx-prompt >=1.8",
+    "sphinx-copybutton >=0.5",
+    "sphinx-remove-toctrees >=1.0",
+    "sphinx-design >=0.6",
+    "pydata-sphinx-theme >=0.15",
+    "myst-parser >=3.0",
+]
+
+# scikit-build-core configuration
+[tool.scikit-build]
+wheel.packages = ["src/splineops"]
+editable.mode = "redirect"
+sdist.include = [
+  "src/splineops/**",
+  "splineops/cpp/**",
+  "splineops/CMakeLists.txt",
+  "README.md",
+  "LICENSE",
+]
+
+# You can uncomment/tweak these if you want to force options:
+# cmake.minimum-version = "3.20"
+# cmake.build-type = "Release"
+# cmake.args = ["-DLSRESIZE_USE_OPENMP=ON"]
+
+# pytest defaults (so `pytest -q` works everywhere)
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = ["-ra", "--showlocals", "--strict-markers", "--strict-config"]
+xfail_strict = true
+filterwarnings = ["error"]
+log_cli_level = "info"
+testpaths = ["tests"]
