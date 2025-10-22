@@ -1,0 +1,120 @@
+[build-system]
+requires = ["poetry-core>=1.9.0"]
+build-backend = "poetry.core.masonry.api"
+
+[project]
+name = "pytest-allure-host"
+version = "2.1.0"
+changelog = """
+## [2.0.1]
+- Version bump from 2.0.0 to 2.0.1.
+- No functional changes; maintenance release.
+"""
+description = "Publish Allure static reports to private S3 behind CloudFront with history preservation"
+readme = "README.md"
+license = "MIT"
+authors = [ { name = "Allure Hosting Maintainers" } ]
+requires-python = ">=3.9,<4.0"
+keywords = ["allure", "pytest", "aws", "s3", "cloudfront", "reporting"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Testing",
+    "Framework :: Pytest",
+    "Development Status :: 3 - Alpha",
+    "Operating System :: OS Independent"
+]
+
+dependencies = [
+	"boto3>=1.28,<2.0",
+	"PyYAML>=6,<7"
+]
+
+[project.optional-dependencies]
+# (Reserved for runtime extras; dev tooling now uses a Poetry dependency group below.)
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+pytest = ">=7,<9"
+moto = {version = ">=5,<6", extras=["s3"]}
+bandit = ">=1.7,<2.0"
+allure-pytest = ">=2,<3"
+pytest-cov = ">=4,<5"
+ruff = ">=0.5,<1.0"
+pip-audit = ">=2.7,<3.0"
+black = ">=24,<26"
+mkdocs = ">=1.5,<2.0"
+mkdocs-material = ">=9.5,<10.0"
+playwright = ">=1.44,<2.0"  # optional UI interaction tests (RUN_UI=1)
+beautifulsoup4 = "^4.12.3"
+Pillow = ">=10,<11"  # for webp conversion in screenshot helper
+
+[project.scripts]
+publish-allure = "pytest_allure_host.cli:main"
+
+[project.entry-points."pytest11"]
+pytest_allure_host = "pytest_allure_host.plugin"
+
+[project.urls]
+Homepage = "https://github.com/darrenrabbs/allurehosting"
+Repository = "https://github.com/darrenrabbs/allurehosting"
+Documentation = "https://darrenrabbs.github.io/allurehosting/"
+"Bug Tracker" = "https://github.com/darrenrabbs/allurehosting/issues"
+Changelog = "https://darrenrabbs.github.io/allurehosting/changelog/"
+
+## Package include (PEP 621 doesn't specify packages; configure via tool-specific table)
+[tool.poetry]
+package-mode = true
+packages = [{ include = "pytest_allure_host" }]
+exclude = [
+    "tests",
+    "docs",
+    "infra",
+    "reports",
+    "allure-results",
+    "allure-report",
+    "demo_run",
+    "scripts/*.sh",
+    "*.iml",
+]
+## Note: Using PEP 621 [project] metadata exclusively to avoid duplication warnings.
+
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+extend-exclude = [
+    "dev/**",
+    "docs/**",
+    "site/**",
+    "site-internal/**",
+    ".lh/**",
+    ".history/**",
+    "scripts/**",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "S", "W", "C90"]
+ignore = ["E203", "E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101"]  # allow bare asserts in test modules
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "lf"
+
+[tool.black]
+line-length = 100
+target-version = ["py39"]
+skip-string-normalization = false
+color = true
