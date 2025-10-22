@@ -1,0 +1,41 @@
+Metadata-Version: 2.4
+Name: autotwin_bselib
+Version: 0.1.0
+Summary: Battery SoC Estimation Library for Auto-Twin
+License: BSD-3-Clause
+License-File: LICENSE
+Keywords: auto-twin,battery model,SoC estimation
+Author: Yiqi Jia
+Author-email: yiqi.jia@polimi.it
+Requires-Python: >=3.10,<4.0
+Classifier: Development Status :: 1 - Planning
+Classifier: Intended Audience :: Manufacturing
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Classifier: Programming Language :: Python :: 3 :: Only
+Requires-Dist: matplotlib (>=3.10.6,<4.0.0)
+Requires-Dist: neo4j (==5.17.0)
+Requires-Dist: pandas (>=2.3.2,<3.0.0)
+Requires-Dist: scipy (>=1.15.3,<2.0.0)
+Project-URL: Homepage, https://github.com/AutotwinEU/batt-soc-est
+Description-Content-Type: text/markdown
+
+[![PyPI - License](https://img.shields.io/pypi/l/autotwin_bselib)](https://github.com/AutotwinEU/batt-soc-est/blob/main/LICENSE)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/autotwin_bselib)](https://www.python.org/downloads/)
+[![PyPI - Version](https://img.shields.io/pypi/v/autotwin_bselib)](https://pypi.org/project/autotwin_bselib/)
+
+# Battery SoC Estimation Library for Auto-Twin
+
+A lumped-parameter Equivalent Circuit Model (ECM) is developed. It simulates
+battery performance under various working conditions and its parameters are
+continuously updating based on operational data. An algorithm is implemented
+using this model for the hybrid estimation of the battery's State of Charge
+(SOC).
+
+
