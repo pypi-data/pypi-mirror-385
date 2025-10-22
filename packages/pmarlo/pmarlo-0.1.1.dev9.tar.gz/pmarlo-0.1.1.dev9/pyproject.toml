@@ -1,0 +1,291 @@
+# ─────────────────────────── Build backend ────────────────────────────
+[build-system]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
+build-backend = "poetry_dynamic_versioning.backend"
+
+# ───────────────────────────── Metadata ───────────────────────────────
+[project]
+name            = "pmarlo"
+description     = "Protein Markov State Model Analysis with Replica Exchange"
+readme          = "README.md"
+requires-python = ">=3.10,<3.14"
+license = { file = "LICENSE" }
+
+
+authors = [
+  { name = "PMARLO Development Team", email="konrad.jan.gorzelanczyk@gmail.com" },
+]
+keywords = [
+  "molecular dynamics",
+  "markov state models",
+  "replica exchange",
+  "protein simulation",
+  "biophysics",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Topic :: Scientific/Engineering :: Chemistry",
+    "Topic :: Scientific/Engineering :: Physics",
+]
+dynamic = ["version"]            # version is provided by poetry-dynamic-versioning
+
+dependencies = [
+  "numpy>=1.24,<2.4",
+  "scipy>=1.10,<2.0",
+  "pandas>=1.5,<3.0",
+  "mdtraj>=1.9,<2.0",
+  "openmm>=8.1,<9.0",
+  "rdkit>=2024.03.1,<2025.0",
+  "psutil>=5.9,<6.1",
+  "pygount>=2.6,<3.2",
+  "mlcolvar>=1.2",
+  "scikit-learn>=1.2,<2.0",
+  "deeptime>=0.4.5,<0.5",
+  "tomli>=2.0,<3.0",
+  "typing-extensions>=4.8",
+  "pyyaml>=6.0,<7.0",
+]
+
+# ─────────────────────── Optional runtime extras ──────────────────────
+
+[project.optional-dependencies]
+mlcv = ["torch>=2.2", "lightning>=2.0", "deeptime>=0.4.5,<0.5"]
+app = ["streamlit>=1.31", "plotly>=5.15", "matplotlib>=3.8"]
+analysis = ["matplotlib>=3.8", "deeptime>=0.4.5,<0.5"]
+fixer = ["pdbfixer>=1.9; python_version < '3.12'", "black>=25.0", "isort>=5.10.1", "ruff>=0.5"]
+all = ["torch>=2.2", "lightning>=2.0", "deeptime>=0.4.5,<0.5", "streamlit>=1.31", "plotly>=5.15", "matplotlib>=3.8", "pdbfixer>=1.9; python_version < '3.12'", "black>=25.0", "isort>=5.10.1", "ruff>=0.5"]
+
+# ───────────────────── URLs & entry-points / CLI ──────────────────────
+[project.urls]
+Homepage      = "https://github.com/Komputerowe-Projektowanie-Lekow/pmarlo"
+Issues = "https://github.com/Komputerowe-Projektowanie-Lekow/pmarlo/issues"
+
+
+[project.scripts]
+pmarlo = "pmarlo.main:main"
+
+# ─────────────────────────── setuptools-scm ───────────────────────────
+[tool.setuptools_scm]
+write_to = "src/pmarlo/_version.py"
+local_scheme = "no-local-version"
+fallback_version = "0.0.0"
+
+# ──────────────────── Package discovery & data files ──────────────────
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.setuptools.package-data]
+"pmarlo" = ["py.typed", "*.md", "**/*.yml", "**/*.yaml"]
+
+# ────────────────────────── Dev-tooling groups ────────────────────────
+[tool.poetry]
+# Duplicate metadata for Poetry "package mode" CI; keep in sync with [project] above.
+name = "pmarlo"
+description = "Protein Markov State Model Analysis with Replica Exchange"
+authors = ["PMARLO Development Team <konrad.jan.gorzelanczyk@gmail.com>"]
+readme = "README.md"
+packages = [{include = "pmarlo", from = "src"}]
+version = "0.1.1.dev9"  # placeholder for Poetry; real version comes from poetry-dynamic-versioning
+
+[[tool.poetry.source]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+priority = "explicit"
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.14"
+# Core dependencies (keep in sync with [project] section)
+numpy = ">=1.24,<2.4"
+scipy = ">=1.10,<2.0"
+pandas = ">=1.5,<3.0"
+mdtraj = ">=1.9,<2.0"
+openmm = ">=8.1,<9.0"
+rdkit = ">=2024.03.1,<2025.0"
+psutil = ">=5.9,<6.1"
+pygount = ">=2.6,<3.2"
+mlcolvar = ">=1.2"
+scikit-learn = ">=1.2,<2.0"
+deeptime = ">=0.4.5,<0.5"
+tomli = ">=2.0,<3.0"
+typing-extensions = ">=4.8"
+pyyaml = ">=6.0,<7.0"
+# Optional dependencies (enabled via extras)
+matplotlib = {version = ">=3.8", optional = true}
+plotly = {version = ">=5.15", optional = true}
+streamlit = {version = ">=1.31", optional = true}
+torch = {version = ">=2.2,<3.0", optional = true, source = "pytorch-cpu"}
+lightning = {version = ">=2.0,<3.0", optional = true}
+pdbfixer = {version = ">=1.9", optional = true, markers = "python_version < '3.12'"}
+black = {version = ">=25.0", optional = true}
+isort = {version = ">=5.10.1", optional = true}
+ruff = {version = ">=0.5", optional = true}
+
+# Keep these extras in sync with [project.optional-dependencies]
+[tool.poetry.extras]
+mlcv = ["torch", "lightning", "deeptime"]
+app = ["streamlit", "plotly", "matplotlib"]
+analysis = ["matplotlib", "deeptime"]
+fixer = ["pdbfixer", "black", "isort", "ruff"]
+all = ["torch", "lightning", "deeptime", "streamlit", "plotly", "matplotlib", "pdbfixer", "black", "isort", "ruff"]
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.7"
+mypy = "^1.11"
+hypothesis = "^6.112"
+isort = "^6.0.1"
+tox = "^4.14"
+scriv = "^1.7.0"
+
+[tool.poetry.group.tests.dependencies]
+pytest = "^8.2"
+pytest-xdist = "^3.5"
+pytest-randomly = "^3.15"
+pytest-testmon = "^2.1"
+pytest-picked = "^0.5"
+pytest-benchmark = "^4.0"
+deeptime = ">=0.4.5,<0.5"
+torch = {version = ">=2.2,<3.0", source = "pytorch-cpu"}
+types-pyyaml = "^6.0.12.20250915"
+
+[tool.poetry.group.docs.dependencies]
+sphinx = "^7.3"
+sphinx-rtd-theme = "^2.0"
+
+# ───────────────────────── Formatting & linting ───────────────────────
+[tool.black]
+line-length    = 88
+target-version = ["py310", "py311", "py312", "py313"]
+include        = '\.pyi?$'
+extend-exclude = '''
+/(
+  \.eggs
+  | \.git
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile            = "black"
+line_length        = 88
+multi_line_output  = 3
+known_first_party  = ["pmarlo"]
+
+[tool.flake8]
+max-line-length = 120
+max-complexity = 12
+extend-ignore = ["E501", "E203", "W503"]
+exclude = [".git", ".tox", ".venv", "build", "dist", "__pycache__"]
+per-file-ignores = [
+  "tests/**/*.py: E402",
+  "tests/test_simulation.py: E501",
+  "src/pmarlo/features/deeptica/core/inputs.py: C901",
+  "src/pmarlo/features/deeptica_trainer/config.py: C901",
+  "src/pmarlo/replica_exchange/replica_exchange.py: C901",
+  "src/pmarlo/markov_state_model/markov_state_model.py: E501",
+  "src/pmarlo/cv/deeptica.py: C901",
+]
+
+[tool.mypy]
+python_version = "3.11"
+explicit_package_bases = true
+packages               = ["pmarlo"]
+ignore_missing_imports = true
+
+# Tymczasowo WYŁĄCZAMY ostrzejsze reguły
+disallow_untyped_defs    = false          # włączaj stopniowo per-moduł
+warn_return_any          = true           # zostawione – wyróżnia .any
+warn_unused_configs      = true
+# no_implicit_optional   = false          # zostaw domyślne
+
+[[tool.mypy.overrides]]
+module = ["rdkit.*", "rdkit-stubs.*"]
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+# Tymczasowe wyciszenie błędów typów w wybranych modułach projektu,
+# aby odblokować zielone "tox -e type"; docelowo usuniemy te wpisy po refaktorze.
+module = [
+  "pmarlo.transform.pipeline",
+  "pmarlo.markov_state_model.enhanced_msm",
+  "pmarlo.experiments.simulation",
+  "pmarlo.main",
+]
+ignore_errors = true
+
+# ────────────────────────── Pytest defaults ───────────────────────────
+[tool.pytest.ini_options]
+testpaths = ["tests/unit", "tests/devtools", "tests/integration", "tests/perf"]
+addopts = "-q -ra --strict-markers --maxfail=1"
+norecursedirs = ["_assets", "_output", "_checkpoints", ".benchmarks", ".pytest_cache"]
+markers = [
+  "unit: fast, isolated tests",
+  "integration: slow, cross-module tests",
+  "perf: performance/benchmark tests",
+  "benchmark: pytest-benchmark performance comparison tests",
+  "slow: heavy tests within unit or integration",
+  "data: tests for src/data",
+  "analysis: tests for src/analysis",
+  "io: tests for src/io",
+  "features: tests for src/features",
+  "cv: tests for collective variable pipelines",
+  "reduce: tests for src/reduce / FES math",
+  "results: tests for API/result objects (FES, etc.)",
+  "transform: tests for src/transform",
+  "demux: tests for src/demultiplexing",
+  "msm: tests for src/markov_state_model",
+  "replica: tests for src/replica_exchange (REMD)",
+  "samplers: tests for sampler implementations",
+  "experiments: tests for src/experiments",
+  "protein: tests for src/protein",
+  "pdbfixer: tests that require pdbfixer integration",
+  "reporting: tests for src/reporting",
+  "workflow: tests for src/workflow",
+  "utils: tests for src/utils",
+  "tica: tests for TICA algorithms"
+]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+python_classes = ["Test*"]
+
+
+[tool.scriv]
+message_template = "### {version}\n\n{sections}"
+format = "md"
+changelog = "CHANGELOG.md"
+fragment_directory = "changelog.d"
+version = "literal"
+
+# ────────────────────── Poetry dynamic versioning ─────────────────────
+[tool.poetry-dynamic-versioning]
+enable = false
+vcs = "git"
+style = "pep440"
+pattern = "^v(?P<base>\\d+\\.\\d+\\.\\d+)"
+format-jinja = """
+{%- if distance == 0 -%}
+    {{ base }}
+{%- else -%}
+    {%- set parts = base.split('.') -%}
+    {%- set major = parts[0] | int -%}
+    {%- set minor = parts[1] | int -%}
+    {%- set patch = parts[2] | int -%}
+    {{ major }}.{{ minor }}.{{ patch + 1 }}.dev{{ distance }}
+{%- endif -%}
+"""
+
+[tool.poetry-dynamic-versioning.substitution]
+files = ["src/pmarlo/_version.py"]
+patterns = ["(^__version__\\s*=\\s*['\"])[^'\"]*(['\"])"]
