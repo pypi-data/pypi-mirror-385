@@ -1,0 +1,113 @@
+Metadata-Version: 2.4
+Name: digamma_ep
+Version: 0.1.7
+Summary: Symbolic audit engine for divergence detection and structural analysis
+Home-page: https://github.com/Cerene-Salt/Digamma-Prime-Framework
+Author: Cesar Rubio
+Author-email: your@email.com
+License: MIT
+Classifier: Programming Language :: Python :: 3.11
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: sympy
+Requires-Dist: numpy
+Requires-Dist: matplotlib
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+# Digamma Prime (`digamma-ep`)
+
+Sistema simbólico para auditoria de modelos com métricas de divergência estrutural, temporal e algébrica.
+
+Symbolic audit framework for comparing models, tracking divergence, and teaching algebraic structure.
+
+---
+
+## 📦 Instalação / Installation
+
+```bash
+pip install digamma-ep
+
+
+#Basic Usage
+
+from epe_maria import phi, delta_phi, phi_star
+
+f = lambda x: x**2 + 2*x + 1
+g = lambda x: x**2 + x + 1
+
+print(phi(f, g))        # Divergência estrutural
+print(delta_phi(f, g))  # Divergência de taxa
+print(phi_star(f, g))   # Métrica de fusão
+
+#Tests
+
+pytest test_benchmark.py
+pytest test_monitor.py
+
+#Documentation
+See examples and explanations in docs/ep_documentacao
+
+#About
+Created by Cerene Rúbio
+License: MIT
+
+
+# 🔮 Digamma Prime — Symbolic Model Auditing Framework
+
+Digamma Prime is a symbolic framework for comparing machine learning models by their **behavior**, not just their outputs.
+
+It introduces interpretable metrics like:
+
+- **φ** — structural divergence  
+- **Δφ** — rate divergence  
+- **φ*** — fusion metric  
+- **drift** — directional bias  
+- **curvature** — shape sensitivity
+
+---
+
+## 🚀 Features
+
+- Symbolic comparison of models  
+- CLI for drift detection and audits  
+- Visual modules for φ and Δφ  
+- Tutorials and case studies  
+- Ready for CI/CD and dashboards
+
+---
+
+## 📚 Documentation
+
+See the full docs in the `docs/` folder or at [GitHub Pages link once published].
+
+---
+
+## 🧪 Quickstart
+
+```python
+from epe_maria import phi, delta_phi
+phi_val = phi(model_a.predict(X), model_b.predict(X))
+🤝 Contributing
+We welcome contributions in tutorials, metrics, automation, and visualizations. See docs/roadmap.md and docs/style_guide.md to get started.
+
+🧠 Vision
+Digamma Prime aims to become a universal symbolic standard for model auditing, drift detection, and interpretability.
+
+![GitHub last commit](https://img.shields.io/github/last-commit/Cerene-Salt/Digamma-Prime-Framework)
+![GitHub tag](https://img.shields.io/github/v/tag/Cerene-Salt/Digamma-Prime-Framework)
+![License](https://img.shields.io/github/license/Cerene-Salt/Digamma-Prime-Framework)
+
+![Python version](https://img.shields.io/badge/python-3.11+-blue)
+![Build status](https://img.shields.io/github/actions/workflow/status/Cerene-Salt/Digamma-Prime-Framework/test.yml)
+
+
