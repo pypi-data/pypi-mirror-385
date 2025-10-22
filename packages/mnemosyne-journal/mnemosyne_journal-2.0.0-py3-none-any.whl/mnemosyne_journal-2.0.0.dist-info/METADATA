@@ -1,0 +1,43 @@
+Metadata-Version: 2.4
+Name: mnemosyne-journal
+Version: 2.0.0
+Summary: A simple encrypted journaling application that is named after the ancient Greek goddess of memories.
+Keywords: journaling
+Author: siru
+Author-email: siru <main@codessh.de>
+License-Expression: GPL-3.0-or-later
+Classifier: Development Status :: 1 - Planning
+Classifier: License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Office/Business :: News/Diary
+Classifier: Typing :: Typed
+Requires-Dist: argon2-cffi>=25.1.0
+Requires-Dist: pycryptodomex>=3.23.0
+Requires-Dist: pyside6>=6.10.0 ; extra == 'gui'
+Maintainer: siru
+Maintainer-email: siru <main@codessh.de>
+Requires-Python: >=3.13
+Project-URL: documentation, https://codeberg.org/siru/mnemosyne-journal/wiki
+Project-URL: homepage, https://mnemosyne.codessh.de/
+Project-URL: issues, https://codeberg.org/siru/mnemosyne-journal/issues
+Project-URL: source, https://codeberg.org/siru/mnemosyne-journal
+Provides-Extra: gui
+Description-Content-Type: text/markdown
+
+![Static Badge](https://img.shields.io/badge/Python-3.13-brightgreen?logo=python)
+![Static Badge](https://img.shields.io/badge/License-GPLv3-brightgreen)
+
+# Mnemosyne Journaling
+
+A simple encrypted journaling application. Named after the ancient Greek goddess of memories.
+
+## Usage
+
+This app exposes a command line utility at `siru-mnemosyne`. Use `siru-mnemosyne --help` to get more information about available command arguments. Or simply run `siru-mnemosyne` to use the app in an interactive manner.
+
+As for the command name, it is rather long, but this avoids having namespace issues with other apps as it is using a preexisting name. It is always possible to alias this to something quicker to type on the target system. For Windows look into the `doskey` command, and for Unix/Linux/MacOS look into the `alias` command.
+
+## Lastly
+
+To follow in the footsteps of one of my professors, if you actually read this far, please send me a simple picture of a cute otter, and I will be pleasantly surprised that people would actually read all of this.
