@@ -1,0 +1,21 @@
+package:
+    name: pshell
+    version: "{{ load_setup_py_data().version }}"
+
+build:
+  number: 0
+  noarch: python
+
+source:
+    path: ..
+
+requirements:
+    build:
+        - python
+    run:
+        - python
+        - requests
+        - pyzmq
+
+about:
+    summary: "pshell_client is Python a client to PShell REST interface"
