@@ -1,0 +1,9 @@
+[console_scripts]
+heavyedge = heavyedge:main
+
+[heavyedge.commands]
+Edge manipulation = heavyedge.plugins.edge
+Profile processing = heavyedge.plugins.profile
+
+[heavyedge.rawdata]
+csvs = heavyedge:io.RawProfileCsvs
