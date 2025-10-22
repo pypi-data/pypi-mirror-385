@@ -1,0 +1,100 @@
+Metadata-Version: 2.4
+Name: finch-clust
+Version: 0.2.2
+Summary: FINCH - First Integer Neighbor Clustering Hierarchy: A parameter-free fast clustering algorithm.
+Author: Saquib Sarfraz
+Author-email: saquibsarfraz@gmail.com
+Project-URL: Repository, https://github.com/ssarfraz/FINCH-Clustering
+Project-URL: Publication, https://openaccess.thecvf.com/content_CVPR_2019/html/Sarfraz_Efficient_Parameter-Free_Clustering_Using_First_Neighbor_Relations_CVPR_2019_paper.html
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Operating System :: MacOS
+Classifier: Operating System :: Unix
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE.txt
+Requires-Dist: scipy
+Requires-Dist: scikit-learn
+Requires-Dist: numpy
+Provides-Extra: ann
+Requires-Dist: pynndescent; extra == "ann"
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: license-file
+Dynamic: project-url
+Dynamic: provides-extra
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+# First Integer Neighbor Clustering Hierarchy (FINCH) Algorithm
+![alt text](https://raw.githubusercontent.com/ssarfraz/FINCH-Clustering/master/data/toy_data_vis.jpg)
+
+FINCH is a parameter-free fast and scalable clustering algorithm. it stands out for its speed and clustering quality.
+ The algorithm is described in our paper **Efficient Parameter-free Clustering Using First Neighbor Relations** published in CVPR 2019 . [Read Paper](http://openaccess.thecvf.com/content_CVPR_2019/papers/Sarfraz_Efficient_Parameter-Free_Clustering_Using_First_Neighbor_Relations_CVPR_2019_paper.pdf).
+
+
+## Installation
+The project is available in PyPI. To install run:
+
+`pip install finch-clust`  
+
+**Optional**.  Install [PyNNDescent](https://github.com/lmcinnes/pynndescent) to get first neighbours for large data
+
+To install finch with pynndescent run:
+
+`pip install "finch-clust[ann]"`  
+
+
+## Usage:
+
+typically you would run: 
+``` 
+from finch import FINCH
+c, num_clust, req_c = FINCH(data)
+
+```
+You can set options e.g., required number of cluster or distance etc,
+
+```
+c, num_clust, req_c = FINCH(data, initial_rank=None, req_clust=None, distance='cosine', verbose=True)
+```
+
+For more details on meaning of input arguments check README in [finch directory](finch/README.md). 
+
+**Matlab usage**
+
+A minimal correponding Matlab implementation is provided in the [matlab directory](https://github.com/ssarfraz/FINCH-Clustering/tree/master/matlab/README.md).
+
+## Demos
+
+The following demo notebooks are available to see the usage in clustering a dataset.
+
+1. [Basic usage on 2D toy data](https://github.com/ssarfraz/FINCH-Clustering/blob/master/notebooks/Basic_usage.ipynb)
+2. [Clustering STL-10 dataset with FINCH](https://github.com/ssarfraz/FINCH-Clustering/blob/master/notebooks/Clustering_with_FINCH.ipynb)
+
+
+## Relevant tools built on FINCH
+- [h-nne](https://github.com/koulakis/h-nne): See also our [h-nne](https://github.com/koulakis/h-nne) method which uses FINCH for fast dimenionality reduction  and visualization applications.
+
+- [TW-FINCH](https://github.com/ssarfraz/FINCH-Clustering/tree/master/TW-FINCH): Also see our [TW-FINCH](https://github.com/ssarfraz/FINCH-Clustering/tree/master/TW-FINCH) variant which is useful for video segmentation.
+## Citation 
+```
+@inproceedings{finch,
+    author    = {M. Saquib Sarfraz and Vivek Sharma and Rainer Stiefelhagen}, 
+    title     = {Efficient Parameter-free Clustering Using First Neighbor Relations}, 
+    booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+    pages = {8934--8943}
+    year  = {2019}
+}
+
+```
+
+
