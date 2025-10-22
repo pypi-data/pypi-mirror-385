@@ -1,0 +1,401 @@
+{
+  "summary": {
+    "total_files": 17,
+    "tools_tested": [
+      "levox",
+      "semgrep"
+    ],
+    "total_duration": 49.58617949485779
+  },
+  "overall_metrics": {
+    "levox": {
+      "avg_precision": 0.0,
+      "avg_recall": 0.0,
+      "avg_f1_score": 0.0,
+      "avg_scan_duration": 1.148874282836914,
+      "total_files_scanned": 17
+    },
+    "semgrep": {
+      "avg_precision": 0.0,
+      "avg_recall": 0.0,
+      "avg_f1_score": 0.0,
+      "avg_scan_duration": 1.7639661536497229,
+      "total_files_scanned": 17
+    }
+  },
+  "tool_comparison": {
+    "performance": {
+      "levox": {
+        "total_time": 19.53086280822754,
+        "avg_time": 1.148874282836914,
+        "min_time": 1.0715999603271484,
+        "max_time": 1.2089030742645264
+      },
+      "semgrep": {
+        "total_time": 29.987424612045288,
+        "avg_time": 1.7639661536497229,
+        "min_time": 0.6470205783843994,
+        "max_time": 19.098867177963257
+      }
+    },
+    "accuracy": {
+      "levox": {
+        "avg_f1_score": 0.0,
+        "perfect_scores": 0,
+        "failed_scores": 17
+      },
+      "semgrep": {
+        "avg_f1_score": 0.0,
+        "perfect_scores": 0,
+        "failed_scores": 17
+      }
+    },
+    "file_breakdown": {
+      "levox": {
+        "positive": {
+          "total": 13,
+          "passed": 0
+        },
+        "negative": {
+          "total": 4,
+          "passed": 0
+        }
+      },
+      "semgrep": {
+        "positive": {
+          "total": 13,
+          "passed": 0
+        },
+        "negative": {
+          "total": 4,
+          "passed": 0
+        }
+      }
+    }
+  },
+  "results": [
+    {
+      "test_file": "C:\\Users\\Maverick\\Desktop\\Levox\\levox\\tests\\validation\\positives\\hardcoded_password.py",
+      "ground_truth": {},
+      "tool_results": {
+        "levox": {
+          "issues_found": 0,
+          "scan_duration": 1.073296070098877,
+          "errors": []
+        },
+        "semgrep": {
+          "issues_found": 0,
+          "scan_duration": 19.098867177963257,
+          "errors": [
+            "[00.05][WARNING](ca-certs): Ignored 1 trust anchors.\nTraceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\pysemgrep.exe\\__main__.py\", line 7, in <module>\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\console_scripts\\pysemgrep.py\", line 64, in main\n    sys.exit(semgrep.main.main())\n             ^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\main.py\", line 129, in main\n    from semgrep.cli import cli\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\cli.py\", line 10, in <module>\n    from semgrep.commands.ci import ci\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\commands\\ci.py\", line 22, in <module>\n    import semgrep.app.auth as auth\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\app\\auth.py\", line 7, in <module>\n    from semgrep import tracing\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\tracing.py\", line 22, in <module>\n    from opentelemetry.exporter.otlp.proto.http._log_exporter import OTLPLogExporter\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\http\\_log_exporter\\__init__.py\", line 25, in <module>\n    from opentelemetry.exporter.otlp.proto.common._internal import (\nImportError: cannot import name '_create_exp_backoff_generator' from 'opentelemetry.exporter.otlp.proto.common._internal' (C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\common\\_internal\\__init__.py)\n"
+          ]
+        }
+      },
+      "comparison": {}
+    },
+    {
+      "test_file": "C:\\Users\\Maverick\\Desktop\\Levox\\levox\\tests\\validation\\positives\\pii_in_logs.py",
+      "ground_truth": {},
+      "tool_results": {
+        "levox": {
+          "issues_found": 0,
+          "scan_duration": 1.192312240600586,
+          "errors": []
+        },
+        "semgrep": {
+          "issues_found": 0,
+          "scan_duration": 0.6807851791381836,
+          "errors": [
+            "[00.05][WARNING](ca-certs): Ignored 1 trust anchors.\nTraceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\pysemgrep.exe\\__main__.py\", line 7, in <module>\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\console_scripts\\pysemgrep.py\", line 64, in main\n    sys.exit(semgrep.main.main())\n             ^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\main.py\", line 129, in main\n    from semgrep.cli import cli\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\cli.py\", line 10, in <module>\n    from semgrep.commands.ci import ci\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\commands\\ci.py\", line 22, in <module>\n    import semgrep.app.auth as auth\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\app\\auth.py\", line 7, in <module>\n    from semgrep import tracing\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\tracing.py\", line 22, in <module>\n    from opentelemetry.exporter.otlp.proto.http._log_exporter import OTLPLogExporter\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\http\\_log_exporter\\__init__.py\", line 25, in <module>\n    from opentelemetry.exporter.otlp.proto.common._internal import (\nImportError: cannot import name '_create_exp_backoff_generator' from 'opentelemetry.exporter.otlp.proto.common._internal' (C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\common\\_internal\\__init__.py)\n"
+          ]
+        }
+      },
+      "comparison": {}
+    },
+    {
+      "test_file": "C:\\Users\\Maverick\\Desktop\\Levox\\levox\\tests\\validation\\positives\\sql_injection.py",
+      "ground_truth": {},
+      "tool_results": {
+        "levox": {
+          "issues_found": 0,
+          "scan_duration": 1.179079294204712,
+          "errors": []
+        },
+        "semgrep": {
+          "issues_found": 0,
+          "scan_duration": 0.6654796600341797,
+          "errors": [
+            "[00.05][WARNING](ca-certs): Ignored 1 trust anchors.\nTraceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\pysemgrep.exe\\__main__.py\", line 7, in <module>\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\console_scripts\\pysemgrep.py\", line 64, in main\n    sys.exit(semgrep.main.main())\n             ^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\main.py\", line 129, in main\n    from semgrep.cli import cli\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\cli.py\", line 10, in <module>\n    from semgrep.commands.ci import ci\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\commands\\ci.py\", line 22, in <module>\n    import semgrep.app.auth as auth\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\app\\auth.py\", line 7, in <module>\n    from semgrep import tracing\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\tracing.py\", line 22, in <module>\n    from opentelemetry.exporter.otlp.proto.http._log_exporter import OTLPLogExporter\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\http\\_log_exporter\\__init__.py\", line 25, in <module>\n    from opentelemetry.exporter.otlp.proto.common._internal import (\nImportError: cannot import name '_create_exp_backoff_generator' from 'opentelemetry.exporter.otlp.proto.common._internal' (C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\common\\_internal\\__init__.py)\n"
+          ]
+        }
+      },
+      "comparison": {}
+    },
+    {
+      "test_file": "C:\\Users\\Maverick\\Desktop\\Levox\\levox\\tests\\validation\\positives\\weak_crypto.py",
+      "ground_truth": {},
+      "tool_results": {
+        "levox": {
+          "issues_found": 0,
+          "scan_duration": 1.1796624660491943,
+          "errors": []
+        },
+        "semgrep": {
+          "issues_found": 0,
+          "scan_duration": 0.6866662502288818,
+          "errors": [
+            "[00.05][WARNING](ca-certs): Ignored 1 trust anchors.\nTraceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\pysemgrep.exe\\__main__.py\", line 7, in <module>\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\console_scripts\\pysemgrep.py\", line 64, in main\n    sys.exit(semgrep.main.main())\n             ^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\main.py\", line 129, in main\n    from semgrep.cli import cli\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\cli.py\", line 10, in <module>\n    from semgrep.commands.ci import ci\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\commands\\ci.py\", line 22, in <module>\n    import semgrep.app.auth as auth\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\app\\auth.py\", line 7, in <module>\n    from semgrep import tracing\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\tracing.py\", line 22, in <module>\n    from opentelemetry.exporter.otlp.proto.http._log_exporter import OTLPLogExporter\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\http\\_log_exporter\\__init__.py\", line 25, in <module>\n    from opentelemetry.exporter.otlp.proto.common._internal import (\nImportError: cannot import name '_create_exp_backoff_generator' from 'opentelemetry.exporter.otlp.proto.common._internal' (C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\common\\_internal\\__init__.py)\n"
+          ]
+        }
+      },
+      "comparison": {}
+    },
+    {
+      "test_file": "C:\\Users\\Maverick\\Desktop\\Levox\\levox\\tests\\validation\\positives\\xss_vulnerability.js",
+      "ground_truth": {},
+      "tool_results": {
+        "levox": {
+          "issues_found": 0,
+          "scan_duration": 1.091090440750122,
+          "errors": []
+        },
+        "semgrep": {
+          "issues_found": 0,
+          "scan_duration": 0.6622195243835449,
+          "errors": [
+            "[00.05][WARNING](ca-certs): Ignored 1 trust anchors.\nTraceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\pysemgrep.exe\\__main__.py\", line 7, in <module>\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\console_scripts\\pysemgrep.py\", line 64, in main\n    sys.exit(semgrep.main.main())\n             ^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\main.py\", line 129, in main\n    from semgrep.cli import cli\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\cli.py\", line 10, in <module>\n    from semgrep.commands.ci import ci\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\commands\\ci.py\", line 22, in <module>\n    import semgrep.app.auth as auth\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\app\\auth.py\", line 7, in <module>\n    from semgrep import tracing\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\tracing.py\", line 22, in <module>\n    from opentelemetry.exporter.otlp.proto.http._log_exporter import OTLPLogExporter\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\http\\_log_exporter\\__init__.py\", line 25, in <module>\n    from opentelemetry.exporter.otlp.proto.common._internal import (\nImportError: cannot import name '_create_exp_backoff_generator' from 'opentelemetry.exporter.otlp.proto.common._internal' (C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\common\\_internal\\__init__.py)\n"
+          ]
+        }
+      },
+      "comparison": {}
+    },
+    {
+      "test_file": "C:\\Users\\Maverick\\Desktop\\Levox\\levox\\tests\\validation\\positives\\java_security_issues.java",
+      "ground_truth": {},
+      "tool_results": {
+        "levox": {
+          "issues_found": 0,
+          "scan_duration": 1.0715999603271484,
+          "errors": []
+        },
+        "semgrep": {
+          "issues_found": 0,
+          "scan_duration": 0.6789822578430176,
+          "errors": [
+            "[00.04][WARNING](ca-certs): Ignored 1 trust anchors.\nTraceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\pysemgrep.exe\\__main__.py\", line 7, in <module>\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\console_scripts\\pysemgrep.py\", line 64, in main\n    sys.exit(semgrep.main.main())\n             ^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\main.py\", line 129, in main\n    from semgrep.cli import cli\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\cli.py\", line 10, in <module>\n    from semgrep.commands.ci import ci\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\commands\\ci.py\", line 22, in <module>\n    import semgrep.app.auth as auth\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\app\\auth.py\", line 7, in <module>\n    from semgrep import tracing\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\tracing.py\", line 22, in <module>\n    from opentelemetry.exporter.otlp.proto.http._log_exporter import OTLPLogExporter\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\http\\_log_exporter\\__init__.py\", line 25, in <module>\n    from opentelemetry.exporter.otlp.proto.common._internal import (\nImportError: cannot import name '_create_exp_backoff_generator' from 'opentelemetry.exporter.otlp.proto.common._internal' (C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\common\\_internal\\__init__.py)\n"
+          ]
+        }
+      },
+      "comparison": {}
+    },
+    {
+      "test_file": "C:\\Users\\Maverick\\Desktop\\Levox\\levox\\tests\\validation\\positives\\command_injection.py",
+      "ground_truth": {},
+      "tool_results": {
+        "levox": {
+          "issues_found": 0,
+          "scan_duration": 1.1288533210754395,
+          "errors": []
+        },
+        "semgrep": {
+          "issues_found": 0,
+          "scan_duration": 0.6833314895629883,
+          "errors": [
+            "[00.04][WARNING](ca-certs): Ignored 1 trust anchors.\nTraceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\pysemgrep.exe\\__main__.py\", line 7, in <module>\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\console_scripts\\pysemgrep.py\", line 64, in main\n    sys.exit(semgrep.main.main())\n             ^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\main.py\", line 129, in main\n    from semgrep.cli import cli\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\cli.py\", line 10, in <module>\n    from semgrep.commands.ci import ci\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\commands\\ci.py\", line 22, in <module>\n    import semgrep.app.auth as auth\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\app\\auth.py\", line 7, in <module>\n    from semgrep import tracing\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\tracing.py\", line 22, in <module>\n    from opentelemetry.exporter.otlp.proto.http._log_exporter import OTLPLogExporter\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\http\\_log_exporter\\__init__.py\", line 25, in <module>\n    from opentelemetry.exporter.otlp.proto.common._internal import (\nImportError: cannot import name '_create_exp_backoff_generator' from 'opentelemetry.exporter.otlp.proto.common._internal' (C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\common\\_internal\\__init__.py)\n"
+          ]
+        }
+      },
+      "comparison": {}
+    },
+    {
+      "test_file": "C:\\Users\\Maverick\\Desktop\\Levox\\levox\\tests\\validation\\positives\\path_traversal.py",
+      "ground_truth": {},
+      "tool_results": {
+        "levox": {
+          "issues_found": 0,
+          "scan_duration": 1.1242434978485107,
+          "errors": []
+        },
+        "semgrep": {
+          "issues_found": 0,
+          "scan_duration": 0.6964619159698486,
+          "errors": [
+            "[00.05][WARNING](ca-certs): Ignored 1 trust anchors.\nTraceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\pysemgrep.exe\\__main__.py\", line 7, in <module>\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\console_scripts\\pysemgrep.py\", line 64, in main\n    sys.exit(semgrep.main.main())\n             ^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\main.py\", line 129, in main\n    from semgrep.cli import cli\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\cli.py\", line 10, in <module>\n    from semgrep.commands.ci import ci\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\commands\\ci.py\", line 22, in <module>\n    import semgrep.app.auth as auth\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\app\\auth.py\", line 7, in <module>\n    from semgrep import tracing\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\tracing.py\", line 22, in <module>\n    from opentelemetry.exporter.otlp.proto.http._log_exporter import OTLPLogExporter\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\http\\_log_exporter\\__init__.py\", line 25, in <module>\n    from opentelemetry.exporter.otlp.proto.common._internal import (\nImportError: cannot import name '_create_exp_backoff_generator' from 'opentelemetry.exporter.otlp.proto.common._internal' (C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\common\\_internal\\__init__.py)\n"
+          ]
+        }
+      },
+      "comparison": {}
+    },
+    {
+      "test_file": "C:\\Users\\Maverick\\Desktop\\Levox\\levox\\tests\\validation\\positives\\xxe_vulnerability.py",
+      "ground_truth": {},
+      "tool_results": {
+        "levox": {
+          "issues_found": 0,
+          "scan_duration": 1.1435461044311523,
+          "errors": []
+        },
+        "semgrep": {
+          "issues_found": 0,
+          "scan_duration": 0.6699144840240479,
+          "errors": [
+            "[00.04][WARNING](ca-certs): Ignored 1 trust anchors.\nTraceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\pysemgrep.exe\\__main__.py\", line 7, in <module>\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\console_scripts\\pysemgrep.py\", line 64, in main\n    sys.exit(semgrep.main.main())\n             ^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\main.py\", line 129, in main\n    from semgrep.cli import cli\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\cli.py\", line 10, in <module>\n    from semgrep.commands.ci import ci\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\commands\\ci.py\", line 22, in <module>\n    import semgrep.app.auth as auth\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\app\\auth.py\", line 7, in <module>\n    from semgrep import tracing\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\tracing.py\", line 22, in <module>\n    from opentelemetry.exporter.otlp.proto.http._log_exporter import OTLPLogExporter\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\http\\_log_exporter\\__init__.py\", line 25, in <module>\n    from opentelemetry.exporter.otlp.proto.common._internal import (\nImportError: cannot import name '_create_exp_backoff_generator' from 'opentelemetry.exporter.otlp.proto.common._internal' (C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\common\\_internal\\__init__.py)\n"
+          ]
+        }
+      },
+      "comparison": {}
+    },
+    {
+      "test_file": "C:\\Users\\Maverick\\Desktop\\Levox\\levox\\tests\\validation\\positives\\ssrf_vulnerability.py",
+      "ground_truth": {},
+      "tool_results": {
+        "levox": {
+          "issues_found": 0,
+          "scan_duration": 1.2089030742645264,
+          "errors": []
+        },
+        "semgrep": {
+          "issues_found": 0,
+          "scan_duration": 0.6812272071838379,
+          "errors": [
+            "[00.04][WARNING](ca-certs): Ignored 1 trust anchors.\nTraceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\pysemgrep.exe\\__main__.py\", line 7, in <module>\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\console_scripts\\pysemgrep.py\", line 64, in main\n    sys.exit(semgrep.main.main())\n             ^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\main.py\", line 129, in main\n    from semgrep.cli import cli\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\cli.py\", line 10, in <module>\n    from semgrep.commands.ci import ci\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\commands\\ci.py\", line 22, in <module>\n    import semgrep.app.auth as auth\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\app\\auth.py\", line 7, in <module>\n    from semgrep import tracing\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\tracing.py\", line 22, in <module>\n    from opentelemetry.exporter.otlp.proto.http._log_exporter import OTLPLogExporter\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\http\\_log_exporter\\__init__.py\", line 25, in <module>\n    from opentelemetry.exporter.otlp.proto.common._internal import (\nImportError: cannot import name '_create_exp_backoff_generator' from 'opentelemetry.exporter.otlp.proto.common._internal' (C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\common\\_internal\\__init__.py)\n"
+          ]
+        }
+      },
+      "comparison": {}
+    },
+    {
+      "test_file": "C:\\Users\\Maverick\\Desktop\\Levox\\levox\\tests\\validation\\positives\\deserialization.py",
+      "ground_truth": {},
+      "tool_results": {
+        "levox": {
+          "issues_found": 0,
+          "scan_duration": 1.174448013305664,
+          "errors": []
+        },
+        "semgrep": {
+          "issues_found": 0,
+          "scan_duration": 0.6790916919708252,
+          "errors": [
+            "[00.05][WARNING](ca-certs): Ignored 1 trust anchors.\nTraceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\pysemgrep.exe\\__main__.py\", line 7, in <module>\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\console_scripts\\pysemgrep.py\", line 64, in main\n    sys.exit(semgrep.main.main())\n             ^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\main.py\", line 129, in main\n    from semgrep.cli import cli\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\cli.py\", line 10, in <module>\n    from semgrep.commands.ci import ci\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\commands\\ci.py\", line 22, in <module>\n    import semgrep.app.auth as auth\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\app\\auth.py\", line 7, in <module>\n    from semgrep import tracing\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\tracing.py\", line 22, in <module>\n    from opentelemetry.exporter.otlp.proto.http._log_exporter import OTLPLogExporter\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\http\\_log_exporter\\__init__.py\", line 25, in <module>\n    from opentelemetry.exporter.otlp.proto.common._internal import (\nImportError: cannot import name '_create_exp_backoff_generator' from 'opentelemetry.exporter.otlp.proto.common._internal' (C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\common\\_internal\\__init__.py)\n"
+          ]
+        }
+      },
+      "comparison": {}
+    },
+    {
+      "test_file": "C:\\Users\\Maverick\\Desktop\\Levox\\levox\\tests\\validation\\positives\\race_condition.py",
+      "ground_truth": {},
+      "tool_results": {
+        "levox": {
+          "issues_found": 0,
+          "scan_duration": 1.1411490440368652,
+          "errors": []
+        },
+        "semgrep": {
+          "issues_found": 0,
+          "scan_duration": 0.7141904830932617,
+          "errors": [
+            "[00.05][WARNING](ca-certs): Ignored 1 trust anchors.\nTraceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\pysemgrep.exe\\__main__.py\", line 7, in <module>\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\console_scripts\\pysemgrep.py\", line 64, in main\n    sys.exit(semgrep.main.main())\n             ^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\main.py\", line 129, in main\n    from semgrep.cli import cli\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\cli.py\", line 10, in <module>\n    from semgrep.commands.ci import ci\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\commands\\ci.py\", line 22, in <module>\n    import semgrep.app.auth as auth\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\app\\auth.py\", line 7, in <module>\n    from semgrep import tracing\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\tracing.py\", line 22, in <module>\n    from opentelemetry.exporter.otlp.proto.http._log_exporter import OTLPLogExporter\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\http\\_log_exporter\\__init__.py\", line 25, in <module>\n    from opentelemetry.exporter.otlp.proto.common._internal import (\nImportError: cannot import name '_create_exp_backoff_generator' from 'opentelemetry.exporter.otlp.proto.common._internal' (C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\common\\_internal\\__init__.py)\n"
+          ]
+        }
+      },
+      "comparison": {}
+    },
+    {
+      "test_file": "C:\\Users\\Maverick\\Desktop\\Levox\\levox\\tests\\validation\\positives\\prototype_pollution.js",
+      "ground_truth": {},
+      "tool_results": {
+        "levox": {
+          "issues_found": 0,
+          "scan_duration": 1.1542165279388428,
+          "errors": []
+        },
+        "semgrep": {
+          "issues_found": 0,
+          "scan_duration": 0.7217247486114502,
+          "errors": [
+            "[00.05][WARNING](ca-certs): Ignored 1 trust anchors.\nTraceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\pysemgrep.exe\\__main__.py\", line 7, in <module>\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\console_scripts\\pysemgrep.py\", line 64, in main\n    sys.exit(semgrep.main.main())\n             ^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\main.py\", line 129, in main\n    from semgrep.cli import cli\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\cli.py\", line 10, in <module>\n    from semgrep.commands.ci import ci\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\commands\\ci.py\", line 22, in <module>\n    import semgrep.app.auth as auth\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\app\\auth.py\", line 7, in <module>\n    from semgrep import tracing\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\tracing.py\", line 22, in <module>\n    from opentelemetry.exporter.otlp.proto.http._log_exporter import OTLPLogExporter\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\http\\_log_exporter\\__init__.py\", line 25, in <module>\n    from opentelemetry.exporter.otlp.proto.common._internal import (\nImportError: cannot import name '_create_exp_backoff_generator' from 'opentelemetry.exporter.otlp.proto.common._internal' (C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\common\\_internal\\__init__.py)\n"
+          ]
+        }
+      },
+      "comparison": {}
+    },
+    {
+      "test_file": "C:\\Users\\Maverick\\Desktop\\Levox\\levox\\tests\\validation\\negatives\\clean_python.py",
+      "ground_truth": {},
+      "tool_results": {
+        "levox": {
+          "issues_found": 0,
+          "scan_duration": 1.1547083854675293,
+          "errors": []
+        },
+        "semgrep": {
+          "issues_found": 0,
+          "scan_duration": 0.6782670021057129,
+          "errors": [
+            "[00.05][WARNING](ca-certs): Ignored 1 trust anchors.\nTraceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\pysemgrep.exe\\__main__.py\", line 7, in <module>\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\console_scripts\\pysemgrep.py\", line 64, in main\n    sys.exit(semgrep.main.main())\n             ^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\main.py\", line 129, in main\n    from semgrep.cli import cli\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\cli.py\", line 10, in <module>\n    from semgrep.commands.ci import ci\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\commands\\ci.py\", line 22, in <module>\n    import semgrep.app.auth as auth\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\app\\auth.py\", line 7, in <module>\n    from semgrep import tracing\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\tracing.py\", line 22, in <module>\n    from opentelemetry.exporter.otlp.proto.http._log_exporter import OTLPLogExporter\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\http\\_log_exporter\\__init__.py\", line 25, in <module>\n    from opentelemetry.exporter.otlp.proto.common._internal import (\nImportError: cannot import name '_create_exp_backoff_generator' from 'opentelemetry.exporter.otlp.proto.common._internal' (C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\common\\_internal\\__init__.py)\n"
+          ]
+        }
+      },
+      "comparison": {}
+    },
+    {
+      "test_file": "C:\\Users\\Maverick\\Desktop\\Levox\\levox\\tests\\validation\\negatives\\clean_javascript.js",
+      "ground_truth": {},
+      "tool_results": {
+        "levox": {
+          "issues_found": 0,
+          "scan_duration": 1.1486999988555908,
+          "errors": []
+        },
+        "semgrep": {
+          "issues_found": 0,
+          "scan_duration": 0.6795923709869385,
+          "errors": [
+            "[00.05][WARNING](ca-certs): Ignored 1 trust anchors.\nTraceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\pysemgrep.exe\\__main__.py\", line 7, in <module>\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\console_scripts\\pysemgrep.py\", line 64, in main\n    sys.exit(semgrep.main.main())\n             ^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\main.py\", line 129, in main\n    from semgrep.cli import cli\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\cli.py\", line 10, in <module>\n    from semgrep.commands.ci import ci\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\commands\\ci.py\", line 22, in <module>\n    import semgrep.app.auth as auth\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\app\\auth.py\", line 7, in <module>\n    from semgrep import tracing\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\tracing.py\", line 22, in <module>\n    from opentelemetry.exporter.otlp.proto.http._log_exporter import OTLPLogExporter\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\http\\_log_exporter\\__init__.py\", line 25, in <module>\n    from opentelemetry.exporter.otlp.proto.common._internal import (\nImportError: cannot import name '_create_exp_backoff_generator' from 'opentelemetry.exporter.otlp.proto.common._internal' (C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\common\\_internal\\__init__.py)\n"
+          ]
+        }
+      },
+      "comparison": {}
+    },
+    {
+      "test_file": "C:\\Users\\Maverick\\Desktop\\Levox\\levox\\tests\\validation\\negatives\\secure_express.js",
+      "ground_truth": {},
+      "tool_results": {
+        "levox": {
+          "issues_found": 0,
+          "scan_duration": 1.1950340270996094,
+          "errors": []
+        },
+        "semgrep": {
+          "issues_found": 0,
+          "scan_duration": 0.6636025905609131,
+          "errors": [
+            "[00.04][WARNING](ca-certs): Ignored 1 trust anchors.\nTraceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\pysemgrep.exe\\__main__.py\", line 7, in <module>\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\console_scripts\\pysemgrep.py\", line 64, in main\n    sys.exit(semgrep.main.main())\n             ^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\main.py\", line 129, in main\n    from semgrep.cli import cli\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\cli.py\", line 10, in <module>\n    from semgrep.commands.ci import ci\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\commands\\ci.py\", line 22, in <module>\n    import semgrep.app.auth as auth\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\app\\auth.py\", line 7, in <module>\n    from semgrep import tracing\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\tracing.py\", line 22, in <module>\n    from opentelemetry.exporter.otlp.proto.http._log_exporter import OTLPLogExporter\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\http\\_log_exporter\\__init__.py\", line 25, in <module>\n    from opentelemetry.exporter.otlp.proto.common._internal import (\nImportError: cannot import name '_create_exp_backoff_generator' from 'opentelemetry.exporter.otlp.proto.common._internal' (C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\common\\_internal\\__init__.py)\n"
+          ]
+        }
+      },
+      "comparison": {}
+    },
+    {
+      "test_file": "C:\\Users\\Maverick\\Desktop\\Levox\\levox\\tests\\validation\\negatives\\secure_django.py",
+      "ground_truth": {},
+      "tool_results": {
+        "levox": {
+          "issues_found": 0,
+          "scan_duration": 1.170020341873169,
+          "errors": []
+        },
+        "semgrep": {
+          "issues_found": 0,
+          "scan_duration": 0.6470205783843994,
+          "errors": [
+            "[00.05][WARNING](ca-certs): Ignored 1 trust anchors.\nTraceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\pysemgrep.exe\\__main__.py\", line 7, in <module>\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\console_scripts\\pysemgrep.py\", line 64, in main\n    sys.exit(semgrep.main.main())\n             ^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\main.py\", line 129, in main\n    from semgrep.cli import cli\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\cli.py\", line 10, in <module>\n    from semgrep.commands.ci import ci\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\commands\\ci.py\", line 22, in <module>\n    import semgrep.app.auth as auth\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\app\\auth.py\", line 7, in <module>\n    from semgrep import tracing\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\semgrep\\tracing.py\", line 22, in <module>\n    from opentelemetry.exporter.otlp.proto.http._log_exporter import OTLPLogExporter\n  File \"C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\http\\_log_exporter\\__init__.py\", line 25, in <module>\n    from opentelemetry.exporter.otlp.proto.common._internal import (\nImportError: cannot import name '_create_exp_backoff_generator' from 'opentelemetry.exporter.otlp.proto.common._internal' (C:\\Users\\Maverick\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\opentelemetry\\exporter\\otlp\\proto\\common\\_internal\\__init__.py)\n"
+          ]
+        }
+      },
+      "comparison": {}
+    }
+  ]
+}

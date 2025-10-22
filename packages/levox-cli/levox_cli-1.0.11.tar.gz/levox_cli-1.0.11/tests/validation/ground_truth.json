@@ -1,0 +1,323 @@
+{
+  "test_files": {
+    "positives/hardcoded_password.py": {
+      "expected_issues": [
+        {
+          "category": "hardcoded_credentials",
+          "severity": "HIGH",
+          "patterns": ["hardcoded_password", "hardcoded_api_key", "hardcoded_secret"],
+          "min_count": 8,
+          "description": "Should detect multiple hardcoded passwords, API keys, and secrets"
+        }
+      ],
+      "expected_issue_count": {
+        "min": 8,
+        "max": 12
+      },
+      "languages": ["python"],
+      "tags": ["credentials", "passwords", "api_keys", "secrets"]
+    },
+    "positives/pii_in_logs.py": {
+      "expected_issues": [
+        {
+          "category": "pii_logging",
+          "severity": "HIGH",
+          "patterns": ["email_logging", "phone_logging", "ssn_logging", "credit_card_logging"],
+          "min_count": 6,
+          "description": "Should detect PII being logged (emails, phones, SSNs, credit cards)"
+        }
+      ],
+      "expected_issue_count": {
+        "min": 6,
+        "max": 10
+      },
+      "languages": ["python"],
+      "tags": ["pii", "logging", "privacy", "gdpr"]
+    },
+    "positives/sql_injection.py": {
+      "expected_issues": [
+        {
+          "category": "sql_injection",
+          "severity": "CRITICAL",
+          "patterns": ["string_concatenation", "format_string", "dynamic_query"],
+          "min_count": 8,
+          "description": "Should detect SQL injection vulnerabilities through string concatenation and dynamic queries"
+        }
+      ],
+      "expected_issue_count": {
+        "min": 8,
+        "max": 15
+      },
+      "languages": ["python"],
+      "tags": ["sql_injection", "database", "security"]
+    },
+    "positives/weak_crypto.py": {
+      "expected_issues": [
+        {
+          "category": "weak_cryptography",
+          "severity": "HIGH",
+          "patterns": ["md5_hash", "sha1_hash", "weak_iterations", "hardcoded_key"],
+          "min_count": 6,
+          "description": "Should detect weak crypto algorithms, insufficient iterations, and hardcoded keys"
+        }
+      ],
+      "expected_issue_count": {
+        "min": 6,
+        "max": 12
+      },
+      "languages": ["python"],
+      "tags": ["cryptography", "hashing", "encryption", "security"]
+    },
+    "positives/xss_vulnerability.js": {
+      "expected_issues": [
+        {
+          "category": "xss",
+          "severity": "HIGH",
+          "patterns": ["innerHTML", "document_write", "eval", "setTimeout_string", "setInterval_string"],
+          "min_count": 8,
+          "description": "Should detect XSS vulnerabilities through unsafe DOM manipulation and eval usage"
+        }
+      ],
+      "expected_issue_count": {
+        "min": 8,
+        "max": 15
+      },
+      "languages": ["javascript"],
+      "tags": ["xss", "dom", "security", "web"]
+    },
+    "positives/java_security_issues.java": {
+      "expected_issues": [
+        {
+          "category": "hardcoded_credentials",
+          "severity": "HIGH",
+          "patterns": ["hardcoded_password", "hardcoded_api_key", "hardcoded_secret"],
+          "min_count": 5,
+          "description": "Should detect hardcoded credentials in Java code"
+        },
+        {
+          "category": "security_vulnerabilities",
+          "severity": "HIGH",
+          "patterns": ["unsafe_deserialization", "sql_injection", "weak_crypto", "path_traversal"],
+          "min_count": 8,
+          "description": "Should detect various security vulnerabilities in Java code"
+        }
+      ],
+      "expected_issue_count": {
+        "min": 13,
+        "max": 20
+      },
+      "languages": ["java"],
+      "tags": ["java", "security", "vulnerabilities", "credentials"]
+    },
+    "positives/command_injection.py": {
+      "expected_issues": [
+        {
+          "category": "command_injection",
+          "severity": "CRITICAL",
+          "patterns": ["os_system", "subprocess_shell", "os_popen"],
+          "min_count": 10,
+          "description": "Should detect command injection vulnerabilities through unsafe command execution"
+        }
+      ],
+      "expected_issue_count": {
+        "min": 10,
+        "max": 18
+      },
+      "languages": ["python"],
+      "tags": ["command_injection", "os_command", "security", "critical"]
+    },
+    "positives/path_traversal.py": {
+      "expected_issues": [
+        {
+          "category": "path_traversal",
+          "severity": "HIGH",
+          "patterns": ["file_operations", "directory_operations", "zip_extraction", "tar_extraction"],
+          "min_count": 12,
+          "description": "Should detect path traversal vulnerabilities through unsafe file operations"
+        }
+      ],
+      "expected_issue_count": {
+        "min": 12,
+        "max": 20
+      },
+      "languages": ["python"],
+      "tags": ["path_traversal", "file_security", "directory_traversal"]
+    },
+    "positives/xxe_vulnerability.py": {
+      "expected_issues": [
+        {
+          "category": "xml_external_entity",
+          "severity": "HIGH",
+          "patterns": ["xml_parsing", "xml_validation", "xml_transform"],
+          "min_count": 8,
+          "description": "Should detect XXE vulnerabilities through unsafe XML processing"
+        }
+      ],
+      "expected_issue_count": {
+        "min": 8,
+        "max": 15
+      },
+      "languages": ["python"],
+      "tags": ["xxe", "xml", "external_entity", "security"]
+    },
+    "positives/ssrf_vulnerability.py": {
+      "expected_issues": [
+        {
+          "category": "server_side_request_forgery",
+          "severity": "HIGH",
+          "patterns": ["url_fetch", "network_operations", "file_download"],
+          "min_count": 10,
+          "description": "Should detect SSRF vulnerabilities through unsafe URL operations"
+        }
+      ],
+      "expected_issue_count": {
+        "min": 10,
+        "max": 18
+      },
+      "languages": ["python"],
+      "tags": ["ssrf", "url_operations", "network_security"]
+    },
+    "positives/deserialization.py": {
+      "expected_issues": [
+        {
+          "category": "unsafe_deserialization",
+          "severity": "CRITICAL",
+          "patterns": ["pickle_loads", "json_loads", "yaml_load", "marshal_loads"],
+          "min_count": 12,
+          "description": "Should detect unsafe deserialization vulnerabilities"
+        }
+      ],
+      "expected_issue_count": {
+        "min": 12,
+        "max": 20
+      },
+      "languages": ["python"],
+      "tags": ["deserialization", "pickle", "json", "yaml", "security"]
+    },
+    "positives/race_condition.py": {
+      "expected_issues": [
+        {
+          "category": "race_condition",
+          "severity": "MEDIUM",
+          "patterns": ["check_modify", "file_operations", "database_operations"],
+          "min_count": 8,
+          "description": "Should detect race condition vulnerabilities through unsafe concurrent operations"
+        }
+      ],
+      "expected_issue_count": {
+        "min": 8,
+        "max": 15
+      },
+      "languages": ["python"],
+      "tags": ["race_condition", "concurrency", "threading", "security"]
+    },
+    "positives/prototype_pollution.js": {
+      "expected_issues": [
+        {
+          "category": "prototype_pollution",
+          "severity": "HIGH",
+          "patterns": ["object_merge", "property_assignment", "object_spread"],
+          "min_count": 10,
+          "description": "Should detect prototype pollution vulnerabilities through unsafe object operations"
+        }
+      ],
+      "expected_issue_count": {
+        "min": 10,
+        "max": 18
+      },
+      "languages": ["javascript"],
+      "tags": ["prototype_pollution", "object_security", "javascript_security"]
+    },
+    "negatives/clean_python.py": {
+      "expected_issues": [],
+      "expected_issue_count": {
+        "min": 0,
+        "max": 0
+      },
+      "languages": ["python"],
+      "tags": ["clean", "secure", "best_practices"],
+      "description": "Should NOT detect any security issues - this is clean, secure code"
+    },
+    "negatives/clean_javascript.js": {
+      "expected_issues": [],
+      "expected_issue_count": {
+        "min": 0,
+        "max": 0
+      },
+      "languages": ["javascript"],
+      "tags": ["clean", "secure", "best_practices"],
+      "description": "Should NOT detect any security issues - this is clean, secure code"
+    },
+    "negatives/secure_express.js": {
+      "expected_issues": [],
+      "expected_issue_count": {
+        "min": 0,
+        "max": 0
+      },
+      "languages": ["javascript"],
+      "tags": ["clean", "secure", "express", "best_practices"],
+      "description": "Should NOT detect any security issues - this is secure Express.js code"
+    },
+    "negatives/secure_django.py": {
+      "expected_issues": [],
+      "expected_issue_count": {
+        "min": 0,
+        "max": 0
+      },
+      "languages": ["python"],
+      "tags": ["clean", "secure", "django", "best_practices"],
+      "description": "Should NOT detect any security issues - this is secure Django code"
+    }
+  },
+  "validation_config": {
+    "severity_weights": {
+      "CRITICAL": 1.0,
+      "HIGH": 0.8,
+      "MEDIUM": 0.6,
+      "LOW": 0.4
+    },
+    "category_weights": {
+      "sql_injection": 1.0,
+      "xss": 0.9,
+      "hardcoded_credentials": 0.8,
+      "pii_logging": 0.8,
+      "weak_cryptography": 0.7,
+      "path_traversal": 0.7,
+      "command_injection": 0.9,
+      "xml_external_entity": 0.8,
+      "server_side_request_forgery": 0.8,
+      "unsafe_deserialization": 0.9,
+      "race_condition": 0.6,
+      "prototype_pollution": 0.8
+    },
+    "scoring": {
+      "precision_threshold": 0.8,
+      "recall_threshold": 0.8,
+      "f1_threshold": 0.8
+    }
+  },
+  "metadata": {
+    "version": "2.0.0",
+    "created": "2024-01-01",
+    "updated": "2024-01-01",
+    "description": "Enhanced ground truth for Levox validation framework with real-world vulnerabilities",
+    "total_test_files": 20,
+    "positive_tests": 15,
+    "negative_tests": 5,
+    "supported_languages": ["python", "javascript", "java"],
+    "vulnerability_categories": [
+      "hardcoded_credentials",
+      "pii_logging", 
+      "sql_injection",
+      "weak_cryptography",
+      "xss",
+      "command_injection",
+      "path_traversal",
+      "xml_external_entity",
+      "server_side_request_forgery",
+      "unsafe_deserialization",
+      "race_condition",
+      "prototype_pollution"
+    ]
+  }
+}

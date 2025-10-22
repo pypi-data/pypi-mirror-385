@@ -1,0 +1,105 @@
+Metadata-Version: 2.4
+Name: levox-cli
+Version: 1.0.11
+Summary: AI-powered PII/GDPR detection CLI tool. Free for now, paid plans coming soon. Visit levoxserver.vercel.app for details.
+Home-page: https://github.com/levox/levox
+Author: Levox Team
+Author-email: Levox Team <team@levox.ai>
+Maintainer-email: Levox Team <team@levox.ai>
+License-Expression: MIT
+Project-URL: Homepage, https://github.com/levox/levox
+Project-URL: Documentation, https://docs.levox.ai
+Project-URL: Repository, https://github.com/levox/levox
+Project-URL: Issues, https://github.com/levox/levox/issues
+Project-URL: Changelog, https://github.com/levox/levox/blob/main/CHANGELOG.md
+Keywords: pii,gdpr,security,cli,detection,compliance,privacy
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Information Technology
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Security
+Classifier: Topic :: Software Development :: Quality Assurance
+Classifier: Topic :: Text Processing :: Filters
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: click>=8.1
+Requires-Dist: pydantic>=2.5
+Requires-Dist: pyyaml>=6.0
+Requires-Dist: structlog>=24.1
+Requires-Dist: rich>=13.7
+Requires-Dist: xxhash>=3.4
+Requires-Dist: psutil>=5.9
+Requires-Dist: watchdog>=4.0
+Requires-Dist: requests>=2.31.0
+Requires-Dist: pyjwt>=2.8.0
+Requires-Dist: tree-sitter==0.21.*
+Requires-Dist: tree_sitter_languages==1.10.*
+Requires-Dist: tree-sitter-python>=0.20.0
+Requires-Dist: tree-sitter-javascript>=0.20.0
+Requires-Dist: tree-sitter-typescript>=0.20.0
+Requires-Dist: regex>=2024.7.24
+Requires-Dist: xgboost>=2.0
+Requires-Dist: scikit-learn>=1.5
+Requires-Dist: boto3>=1.34
+Requires-Dist: jsonschema>=4.17.0
+Requires-Dist: python-dotenv>=1.0.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.0.0; extra == "dev"
+Requires-Dist: black>=22.0.0; extra == "dev"
+Requires-Dist: isort>=5.0.0; extra == "dev"
+Requires-Dist: flake8>=5.0.0; extra == "dev"
+Requires-Dist: mypy>=1.0.0; extra == "dev"
+Provides-Extra: ml
+Requires-Dist: scikit-learn>=1.2.0; extra == "ml"
+Requires-Dist: tensorflow>=2.12.0; extra == "ml"
+Requires-Dist: torch>=2.0.0; extra == "ml"
+Dynamic: author
+Dynamic: home-page
+Dynamic: license-file
+Dynamic: requires-python
+
+# Levox CLI
+
+**AI-powered PII/GDPR detection CLI tool**
+
+## 🚀 Quick Install
+
+```bash
+pip install levox-cli
+```
+
+## 📖 Usage
+
+```bash
+# Scan your code for PII/GDPR violations
+levox scan
+
+# Show system status
+levox status
+
+# Get help
+levox --help
+```
+
+## 💰 Pricing
+
+- **Currently FREE** - No cost to use
+- **Paid plans coming soon** - Advanced features will require subscription
+- Visit [levox.aifenrix.com](https://levox.aifenrix.com) for pricing details
+
+## 🔗 Links
+
+- **Website**: [levox.aifenrix.com](https://levox.aifenrix.com)
+- **Support**: [aifenrix@gmail.com](mailto:aifenrix@gmail.com)
+
+## 📝 License
+
+MIT License - see LICENSE file for details.

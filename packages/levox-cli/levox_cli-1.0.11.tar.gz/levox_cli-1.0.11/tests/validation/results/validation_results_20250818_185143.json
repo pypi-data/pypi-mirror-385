@@ -1,0 +1,165 @@
+{
+  "summary": {
+    "total_tests": 8,
+    "passed_tests": 3,
+    "failed_tests": 5,
+    "true_positives": 3,
+    "false_positives": 2,
+    "false_negatives": 3,
+    "true_negatives": 0,
+    "precision": 0.6,
+    "recall": 0.5,
+    "f1_score": 0.5454545454545454,
+    "total_duration": 73.2747528553009
+  },
+  "results": [
+    {
+      "file_path": "C:\\Users\\Maverick\\Desktop\\Levox\\levox\\tests\\validation\\positives\\hardcoded_password.py",
+      "expected_issues": 8,
+      "actual_issues": 6,
+      "expected_categories": [
+        "hardcoded_password",
+        "hardcoded_api_key",
+        "hardcoded_secret"
+      ],
+      "detected_categories": [
+        "other"
+      ],
+      "is_positive_test": true,
+      "passed": false,
+      "score": 1.0,
+      "scan_duration": 9.102792024612427,
+      "errors": []
+    },
+    {
+      "file_path": "C:\\Users\\Maverick\\Desktop\\Levox\\levox\\tests\\validation\\positives\\pii_in_logs.py",
+      "expected_issues": 6,
+      "actual_issues": 8,
+      "expected_categories": [
+        "email_logging",
+        "phone_logging",
+        "ssn_logging",
+        "credit_card_logging"
+      ],
+      "detected_categories": [
+        "other"
+      ],
+      "is_positive_test": true,
+      "passed": true,
+      "score": 1.0,
+      "scan_duration": 9.03908371925354,
+      "errors": []
+    },
+    {
+      "file_path": "C:\\Users\\Maverick\\Desktop\\Levox\\levox\\tests\\validation\\positives\\sql_injection.py",
+      "expected_issues": 8,
+      "actual_issues": 13,
+      "expected_categories": [
+        "string_concatenation",
+        "format_string",
+        "dynamic_query"
+      ],
+      "detected_categories": [
+        "other"
+      ],
+      "is_positive_test": true,
+      "passed": true,
+      "score": 1.0,
+      "scan_duration": 9.030776977539062,
+      "errors": []
+    },
+    {
+      "file_path": "C:\\Users\\Maverick\\Desktop\\Levox\\levox\\tests\\validation\\positives\\weak_crypto.py",
+      "expected_issues": 6,
+      "actual_issues": 5,
+      "expected_categories": [
+        "md5_hash",
+        "sha1_hash",
+        "weak_iterations",
+        "hardcoded_key"
+      ],
+      "detected_categories": [
+        "other"
+      ],
+      "is_positive_test": true,
+      "passed": false,
+      "score": 1.0,
+      "scan_duration": 9.015883207321167,
+      "errors": []
+    },
+    {
+      "file_path": "C:\\Users\\Maverick\\Desktop\\Levox\\levox\\tests\\validation\\positives\\xss_vulnerability.js",
+      "expected_issues": 8,
+      "actual_issues": 15,
+      "expected_categories": [
+        "innerHTML",
+        "document_write",
+        "eval",
+        "setTimeout_string",
+        "setInterval_string"
+      ],
+      "detected_categories": [
+        "other"
+      ],
+      "is_positive_test": true,
+      "passed": true,
+      "score": 1.0,
+      "scan_duration": 9.311436176300049,
+      "errors": []
+    },
+    {
+      "file_path": "C:\\Users\\Maverick\\Desktop\\Levox\\levox\\tests\\validation\\positives\\java_security_issues.java",
+      "expected_issues": 13,
+      "actual_issues": 0,
+      "expected_categories": [
+        "hardcoded_password",
+        "hardcoded_api_key",
+        "hardcoded_secret",
+        "unsafe_deserialization",
+        "sql_injection",
+        "weak_crypto",
+        "path_traversal"
+      ],
+      "detected_categories": [],
+      "is_positive_test": true,
+      "passed": false,
+      "score": 0.0,
+      "scan_duration": 9.066871404647827,
+      "errors": []
+    },
+    {
+      "file_path": "C:\\Users\\Maverick\\Desktop\\Levox\\levox\\tests\\validation\\negatives\\clean_python.py",
+      "expected_issues": 0,
+      "actual_issues": 10,
+      "expected_categories": [],
+      "detected_categories": [
+        "other"
+      ],
+      "is_positive_test": false,
+      "passed": false,
+      "score": 0.0,
+      "scan_duration": 9.160359621047974,
+      "errors": []
+    },
+    {
+      "file_path": "C:\\Users\\Maverick\\Desktop\\Levox\\levox\\tests\\validation\\negatives\\clean_javascript.js",
+      "expected_issues": 0,
+      "actual_issues": 10,
+      "expected_categories": [],
+      "detected_categories": [
+        "other"
+      ],
+      "is_positive_test": false,
+      "passed": false,
+      "score": 0.0,
+      "scan_duration": 9.538880825042725,
+      "errors": []
+    }
+  ],
+  "errors": [],
+  "metadata": {
+    "timestamp": "2025-08-18T18:51:43.838263",
+    "levox_version": "Levox v1.0.0 - Beta PII/GDPR Detection Tool",
+    "use_cli": true
+  }
+}

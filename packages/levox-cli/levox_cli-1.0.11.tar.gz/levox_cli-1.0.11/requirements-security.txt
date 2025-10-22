@@ -1,0 +1,45 @@
+# Security-focused requirements with pinned versions
+# This file contains security-hardened versions of dependencies
+
+# Core dependencies with security patches
+click>=8.1.0,<9.0.0
+pydantic>=2.5.0,<3.0.0
+pyyaml>=6.0.0,<7.0.0
+structlog>=24.1.0,<25.0.0
+rich>=13.7.0,<14.0.0
+xxhash>=3.4.0,<4.0.0
+psutil>=5.9.0,<6.0.0
+watchdog>=4.0.0,<5.0.0
+
+# Parser dependencies (pin compatible versions to avoid PyCapsule errors)
+tree-sitter==0.21.*
+tree_sitter_languages==1.10.*
+tree-sitter-python>=0.20.0,<1.0.0
+tree-sitter-javascript>=0.20.0,<1.0.0
+tree-sitter-typescript>=0.20.0,<1.0.0
+regex>=2024.7.24,<2025.0.0
+
+# ML and data processing
+xgboost>=2.0.0,<3.0.0
+scikit-learn>=1.5.0,<2.0.0
+boto3>=1.34.0,<2.0.0
+
+# Configuration and validation
+jsonschema>=4.17.0,<5.0.0
+python-dotenv>=1.0.0,<2.0.0
+
+# Security-focused dependencies
+cryptography>=41.0.0,<42.0.0  # For secure random number generation
+secrets  # Built-in Python module for secure random operations
+
+# Development and testing
+pytest>=7.0.0,<8.0.0
+pytest-cov>=4.0.0,<5.0.0
+black>=22.0.0,<23.0.0
+isort>=5.0.0,<6.0.0
+flake8>=5.0.0,<6.0.0
+mypy>=1.0.0,<2.0.0
+
+# Security scanning tools (optional)
+bandit>=1.7.0,<2.0.0  # Security linter for Python
+safety>=2.0.0,<3.0.0  # Check for known security vulnerabilities

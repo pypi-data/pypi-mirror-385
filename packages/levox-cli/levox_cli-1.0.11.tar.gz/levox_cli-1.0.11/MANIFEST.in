@@ -1,0 +1,44 @@
+# Include package data
+include README.md
+include LICENSE
+include requirements.txt
+include requirements-security.txt
+include pyproject.toml
+include setup.py
+
+# Include configuration files
+recursive-include levox/configs *.json *.yaml *.yml
+recursive-include levox/configs/ml_models *.pkl *.bin *.md
+
+# Include sample files
+recursive-include samples *.py *.js *.java
+
+# Include test files
+recursive-include tests *.py *.json *.md *.ini
+
+# Include documentation
+recursive-include docs *.md *.rst *.txt
+
+# Include scripts
+recursive-include scripts *.py *.sh
+
+# Exclude unnecessary files
+exclude *.pyc
+exclude *.pyo
+exclude __pycache__
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
+recursive-exclude * *.so
+recursive-exclude * .DS_Store
+recursive-exclude * .git*
+recursive-exclude * .vscode
+recursive-exclude * .idea
+recursive-exclude * *.egg-info
+recursive-exclude * build
+recursive-exclude * dist
+recursive-exclude * .pytest_cache
+recursive-exclude * .coverage
+recursive-exclude * htmlcov
+recursive-exclude * .tox
+recursive-exclude * .mypy_cache
+recursive-exclude * .ruff_cache
