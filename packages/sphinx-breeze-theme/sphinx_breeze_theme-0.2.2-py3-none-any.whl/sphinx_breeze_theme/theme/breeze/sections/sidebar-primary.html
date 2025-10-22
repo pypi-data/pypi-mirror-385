@@ -1,0 +1,11 @@
+{% set sidebar_content %}
+  {% for tmpl in theme_sidebar_primary or [] %}
+    {% include tmpl %}
+  {% endfor %}
+{% endset %}
+
+{%- if sidebar_content|trim -%}
+<aside class="bz-sidebar-primary" data-drawer="bz-sidebar-primary">
+  {{ sidebar_content }}
+</aside>
+{%- endif -%}

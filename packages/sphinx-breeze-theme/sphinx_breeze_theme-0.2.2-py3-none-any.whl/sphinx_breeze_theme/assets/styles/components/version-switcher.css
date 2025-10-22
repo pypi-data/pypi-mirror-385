@@ -1,0 +1,32 @@
+.bz-version-switcher {
+  button {
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    line-height: 1;
+    border-radius: var(--bz-border-radius);
+    padding-block: .375rem;
+    padding-inline: calc(var(--bz-spacing) * 2.5);
+    gap: calc(var(--bz-spacing) * 1.5);
+    color: var(--bz-version-switcher-color);
+    font-size: var(--bz-version-switcher-font-size);
+    font-family: var(--bz-version-switcher-font-family);
+    border: 1px solid var(--bz-version-switcher-border-color);
+    background-color: var(--bz-version-switcher-background-color);
+    transition: border-color .1s ease-in-out;
+  }
+
+  &:hover button {
+    border-color: var(--bz-version-switcher-border-color-hover);
+  }
+
+  button::after {
+    content: "";
+    display: block;
+    width: .9rem;
+    height: .9rem;
+    transform: rotate(90deg);
+    background-color: currentColor;
+    mask-image: var(--bz-icon-chevron);
+  }
+}
