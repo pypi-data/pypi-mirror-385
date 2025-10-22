@@ -1,0 +1,48 @@
+# pyhabitat/__init__.py
+
+from .environment import (
+    matplotlib_is_available_for_gui_plotting,
+    matplotlib_is_available_for_headless_image_export,
+    tkinter_is_available,
+    is_termux,
+    is_freebsd,
+    is_linux,
+    is_android,
+    is_windows,
+    is_apple,
+    is_ish_alpine,
+    is_pyinstaller,
+    is_frozen,
+    is_elf,
+    is_pyz,
+    is_windows_portable_executable,
+    is_macos_executable,
+    is_pipx,
+    interactive_terminal_is_available,
+    web_browser_is_available,
+    edit_textfile,
+)
+
+# Optional: Set __all__ for explicit documentation and cleaner imports
+__all__ = [
+    'matplotlib_is_available_for_gui_plotting',
+    'matplotlib_is_available_for_headless_image_export',
+    'tkinter_is_available',
+    'is_termux',
+    'is_freebsd',
+    'is_linux',
+    'is_android',
+    'is_windows',
+    'is_apple',
+    'is_ish_alpine',
+    'is_pyinstaller',
+    'is_frozen',
+    'is_elf',
+    'is_pyz',
+    'is_windows_portable_executable',
+    'is_macos_executable',
+    'is_pipx',
+    'interactive_terminal_is_available',
+    'web_browser_is_available',
+    'edit_textfile',
+]
