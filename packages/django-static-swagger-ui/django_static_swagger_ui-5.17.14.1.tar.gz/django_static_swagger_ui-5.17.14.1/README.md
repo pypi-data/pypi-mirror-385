@@ -1,0 +1,90 @@
+# django-static-swagger-ui
+
+Django application contain swagger-ui static files
+
+## Install
+
+    pip install django-static-swagger-ui
+
+## License
+
+- All resource files of static/swagger-ui are dist folder unzip from swagger-ui-x.xx.x.zip which download from https://github.com/swagger-api/swagger-ui/releases without any changes.
+- All resource files of static/swagger-ui obey swagger-ui License, see details at https://github.com/swagger-api/swagger-ui/blob/master/LICENSE.
+- We don't guarantee the latest swagger-ui version.
+
+## Settings
+
+**pro/settings.py**
+
+```python
+    INSTALLED_APPS = [
+        ...
+        "django_static_swagger_ui",
+        ...
+    ]
+```
+
+## Use static files
+
+**swagger-ui.html**
+
+```html
+
+<!-- HTML for static distribution bundle build -->
+<!DOCTYPE html>{% load staticfiles %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Swagger UI</title>
+    <link rel="stylesheet" type="text/css" href="{% static "swagger-ui/swagger-ui.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "swagger-ui/index.css" %}" />
+    <link rel="icon" type="image/png" href="{% static "swagger-ui/favicon-32x32.png" %}" sizes="32x32" />
+    <link rel="icon" type="image/png" href="{% static "swagger-ui/favicon-16x16.png" %}" sizes="16x16" />
+  </head>
+
+  <body>
+    <div id="swagger-ui"></div>
+    <script src="{% static "swagger-ui/swagger-ui-bundle.js" %}" charset="UTF-8"> </script>
+    <script src="{% static "swagger-ui/swagger-ui-standalone-preset.js" %}" charset="UTF-8"> </script>
+    <script src="{% static "swagger-ui/swagger-initializer.js" %}" charset="UTF-8"> </script>
+  </body>
+</html>
+
+```
+
+## About releases
+
+- The first three number is the same with swagger-ui project's version.
+- The fourth number is our release number, it's optional.
+
+## Releases
+
+
+### v4.14.0.2
+
+- First release.
+- Using swagger-ui v4.14.0.
+
+### v4.19.0.0
+
+- Upgrade to swagger-ui v4.19.0.
+
+### v4.19.1.0
+
+- Upgrade to swagger-ui v4.19.1.
+
+### v5.4.2.0
+
+- Upgrade to swagger-ui v5.4.2.
+
+### v5.6.2.0
+
+- Upgrade to swagger-ui v5.6.2.
+
+## v5.17.14.0
+
+- Upgrade to swagger-ui v5.17.14.
+
+## v5.17.14.1
+
+- Doc update.
