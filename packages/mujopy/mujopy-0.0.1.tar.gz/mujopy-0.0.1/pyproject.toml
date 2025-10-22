@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=63", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mujopy"
+version = "0.0.1"
+description = "Pythonic wrappers for MuJoCo models and Graph representations."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "Lukas Müller", email = "lukasbmueller@gmail.com" }]
+license = "MIT"
+license-files = ["LICENSE"]  # optional but recommended
+dependencies = ["mujoco>=3.3.6", "numpy>=2.3.3", "networkx>=3.5", "pyyaml>=6.0.3"]
+optional-dependencies = { test = ["pytest>=7"] }
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+]
+keywords = ["mujoco", "robotics", "graph"]
+
+[tool.pytest.ini_options]
+addopts = "-ra --strict-markers"
+testpaths = ["tests"]
+
+[tool.setuptools.packages.find]
+include = ["mujopy*"]
+exclude = ["tests*", "tests.*"]
