@@ -1,0 +1,173 @@
+Metadata-Version: 2.4
+Name: causalif
+Version: 0.1.6
+Summary: LLM assisted causal reasoning with JAX and RAG
+Home-page: https://github.com/bossubhr/Causalif-private
+Author: Subhro Bose
+Author-email: bossubhr@amazon.co.uk
+Project-URL: Bug Reports, https://github.com/bossubhr/Causalif-private/issues
+Project-URL: Source, https://github.com/bossubhr/Causalif-private
+Project-URL: Documentation, https://github.com/bossubhr/Causalif-private/blob/feature-Subhro/README.md
+Keywords: causal reasoning,machine learning,nlp,rag,jax,networkx,causal inference,genai,llm
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Classifier: Topic :: Scientific/Engineering :: Information Analysis
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+License-File: NOTICE
+Requires-Dist: jax>=0.4.0
+Requires-Dist: jaxlib>=0.4.0
+Requires-Dist: pandas>=1.3.0
+Requires-Dist: networkx>=2.6.0
+Requires-Dist: plotly>=5.0.0
+Requires-Dist: langchain-core>=0.1.0
+Requires-Dist: numpy>=1.21.0
+Requires-Dist: scikit-learn>=1.0.0
+Requires-Dist: nest-asyncio>=1.5.0
+Provides-Extra: dev
+Requires-Dist: pytest>=6.0; extra == "dev"
+Requires-Dist: pytest-cov>=2.0; extra == "dev"
+Requires-Dist: black>=21.0; extra == "dev"
+Requires-Dist: flake8>=3.8; extra == "dev"
+Requires-Dist: mypy>=0.800; extra == "dev"
+Provides-Extra: jupyter
+Requires-Dist: nest-asyncio>=1.5.0; extra == "jupyter"
+Requires-Dist: jupyter>=1.0.0; extra == "jupyter"
+Requires-Dist: ipywidgets>=7.0.0; extra == "jupyter"
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: keywords
+Dynamic: license-file
+Dynamic: project-url
+Dynamic: provides-extra
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+# Causal Inference Framework for AWS (causalif)
+
+LLM assisted causal reasoning library built with JAX and RAG. Designed primarily for agentic LLM applications, this library can also be used standalone in Jupyter notebooks with access to Bedrock.
+
+github: https://github.com/awslabs/causalif  
+pypi: https://pypi.org/project/causalif/
+
+# Architecture and usage in applications
+
+![Library architecture:](docs/library_integrations.png)
+![Overall design where causalif integrates with agentic applciations:](docs/overall_design.png)
+
+# Example usage
+
+example notebook: https://github.com/awslabs/causalif/blob/subhro/bug_fix/examples/causalif.ipynb
+
+# Prerequisites
+
+This library is based on RAG; it requires a knowledgebase to be ready before using this library. Below steps are required to be performed before using this library.
+
+### Step-1:
+
+You can set up a bedrock knowledgebase following the [instructions](https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base-create.html).
+
+### Step-2:
+
+After setting up a knowledgebase, you can create a retriever tool like the following:
+
+<pre>```python
+from langchain_aws.retrievers import AmazonKnowledgeBasesRetriever
+from langchain.tools.retriever import create_retriever_tool
+
+retriever = AmazonKnowledgeBasesRetriever(
+    knowledge_base_id="<knowledge-base-id>",
+    retrieval_config={
+        "vectorSearchConfiguration": {
+            "numberOfResults": 20 #it could be any of your desired number
+        }
+    },
+)
+
+retriever_tool = create_retriever_tool(
+    retriever,
+    "<name of the retriever tool>",
+    "<Description of the retriever tool>",
+)```</pre>
+
+# Installation
+
+<pre>```bash
+pip install causalif
+```</pre>
+
+# QuickStart
+
+<pre>```python
+from causalif import set_causalif_engine, causalif_tool, visualize_causalif_results
+from langchain_aws import ChatBedrock
+```</pre>
+
+## Configure the engine
+
+<pre>```python
+set_causalif_engine(
+model=your_model,       #Bedrock or any other provider. Please import the provider if it is other than Bedrock.
+retriever_tool=retriever_tool,      # retriever_tool from prerequisites.
+dataframe=your_dataframe,       # if you want all columns of your dataframe to be considered in causal analysis. Otherwise, leave it as 'None'.
+factors = list of factors,      # list of your factors, e.g., ['water', 'food', 'exercise'].
+domains = list of domains,      # list of your domains, e.g., ['life', 'health', 'well being'].
+max_degrees=1,      # degrees of relationships that you wish to check.
+max_parallel_queries=10         # it could be between 4 to 50 but it depends on the model throughput.
+)
+```</pre>
+
+## Use the tool
+
+<pre>```python
+result = causalif_tool("Why is water so low in body after we wake up?")
+```</pre>
+
+<pre>```python
+"""
+Allowed formation of enqueries (<\target_factor> is the column or factor whose dependencies with other variables we want to analyze):
+
+1. why (is|are) <\target_factor> so (low|high|poor|bad|good),
+2. what (causes|affects|influences) <\target_factor>,
+3. <\target_factor> (is|are) too (low|high)",
+4. analyze the causes (of|for) <\target_factor>,
+5. dependencies (of|for) <\target_factor>,
+6. factors (affecting|influencing) <\target_factor>
+"""
+```</pre>
+
+## Visualize results
+
+<pre>```python
+fig = visualize_causalif_results(result)
+fig.show()
+```</pre>
+
+## Security
+
+See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
+
+## License
+
+This project is licensed under the Apache-2.0 License.
+
+## version updates
+
+v 0.1.4 -> base version
+v 0.1.5 -> readme update
+v 0.1.6 -> removed directed graph dependecies from engine.py and added an example notebook
