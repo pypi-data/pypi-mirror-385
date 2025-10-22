@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkray_dashboard_client=self.webpackChunkray_dashboard_client||[]).push([[630],{26630:(e,a,r)=>{r.r(a),r.d(a,{PieModule:()=>s.F,createPieServices:()=>s.l});var s=r(8213);r(74707)}}]);
