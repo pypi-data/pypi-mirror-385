@@ -1,0 +1,29 @@
+{
+  "gateway": {
+    "name": "mcp-n8n",
+    "version": "0.4.0",
+    "config": {
+      "log_level": "INFO",
+      "debug": false,
+      "backend_timeout": 30
+    },
+    "event_monitoring": {
+      "enabled": true,
+      "webhook_configured": false
+    }
+  },
+  "backends": {
+    "chora-composer": {
+      "status": "running",
+      "namespace": "chora",
+      "tool_count": 17,
+      "resource_count": 0,
+      "prompt_count": 0
+    }
+  },
+  "capabilities": {
+    "tools": 19,
+    "resources": 0,
+    "prompts": 0
+  }
+}

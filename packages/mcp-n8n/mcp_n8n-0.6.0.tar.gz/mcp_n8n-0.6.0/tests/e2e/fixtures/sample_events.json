@@ -1,0 +1,75 @@
+[
+  {
+    "type": "gateway.started",
+    "timestamp": "2025-10-21T14:00:00.123Z",
+    "trace_id": "gateway_start_abc123",
+    "status": "success",
+    "data": {
+      "version": "0.4.0",
+      "backend_count": 1,
+      "event_monitoring_enabled": true
+    }
+  },
+  {
+    "type": "gateway.backend_registered",
+    "timestamp": "2025-10-21T14:00:00.456Z",
+    "trace_id": "gateway_start_abc123",
+    "status": "success",
+    "data": {
+      "backend_name": "chora-composer",
+      "namespace": "chora",
+      "capabilities": ["content_generation", "artifact_assembly"]
+    }
+  },
+  {
+    "type": "gateway.tool_call",
+    "timestamp": "2025-10-21T14:05:00.789Z",
+    "trace_id": "call_xyz789",
+    "status": "success",
+    "data": {
+      "tool_name": "chora:list_generators",
+      "backend": "chora-composer",
+      "namespace": "chora",
+      "duration_ms": 245
+    }
+  },
+  {
+    "type": "gateway.tool_call",
+    "timestamp": "2025-10-21T14:10:00.123Z",
+    "trace_id": "call_fail_123",
+    "status": "failure",
+    "data": {
+      "tool_name": "chora:generate_content",
+      "backend": "chora-composer",
+      "namespace": "chora",
+      "error": "Template not found",
+      "error_code": "template_not_found",
+      "duration_ms": 150
+    }
+  },
+  {
+    "type": "chora.content_generated",
+    "timestamp": "2025-10-21T14:15:00.456Z",
+    "trace_id": "generate_abc456",
+    "status": "success",
+    "data": {
+      "generator_id": "simple-readme",
+      "content_length": 1234,
+      "generation_time_ms": 3500
+    }
+  },
+  {
+    "type": "workflow.triggered",
+    "timestamp": "2025-10-21T14:20:00.789Z",
+    "trace_id": "workflow_xyz",
+    "status": "success",
+    "data": {
+      "workflow_id": "error-alert-workflow",
+      "trigger_event_type": "gateway.tool_call",
+      "matched_pattern": {
+        "type": "gateway.tool_call",
+        "status": "failure"
+      }
+    }
+  }
+]

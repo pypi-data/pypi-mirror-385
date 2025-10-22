@@ -1,0 +1,71 @@
+name: Dependabot Auto-merge
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  dependabot:
+    name: Auto-merge safe Dependabot PRs
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
+
+    steps:
+      - name: Fetch Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v1
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Check if PR can be auto-merged
+        id: check
+        run: |
+          # Auto-merge criteria:
+          # 1. Update type is version-update:semver-minor or version-update:semver-patch
+          # 2. Dependency is not a security update (handle those manually)
+          # 3. Tests must pass (enforced by branch protection)
+
+          UPDATE_TYPE="${{ steps.metadata.outputs.update-type }}"
+
+          if [[ "$UPDATE_TYPE" == "version-update:semver-minor" ]] || [[ "$UPDATE_TYPE" == "version-update:semver-patch" ]]; then
+            echo "auto_merge=true" >> $GITHUB_OUTPUT
+            echo "✅ Safe to auto-merge: $UPDATE_TYPE"
+          else
+            echo "auto_merge=false" >> $GITHUB_OUTPUT
+            echo "⚠️ Requires manual review: $UPDATE_TYPE"
+          fi
+
+      - name: Auto-approve PR
+        if: steps.check.outputs.auto_merge == 'true'
+        run: |
+          gh pr review --approve "${{ github.event.pull_request.html_url }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Enable auto-merge
+        if: steps.check.outputs.auto_merge == 'true'
+        run: |
+          gh pr merge --auto --squash "${{ github.event.pull_request.html_url }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Comment on PR
+        if: steps.check.outputs.auto_merge == 'true'
+        run: |
+          gh pr comment "${{ github.event.pull_request.html_url }}" \
+            --body "🤖 Auto-merging this ${{ steps.metadata.outputs.update-type }} update after tests pass."
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Label for manual review
+        if: steps.check.outputs.auto_merge == 'false'
+        run: |
+          gh pr comment "${{ github.event.pull_request.html_url }}" \
+            --body "⚠️ This is a ${{ steps.metadata.outputs.update-type }} update and requires manual review."
+          gh pr edit "${{ github.event.pull_request.html_url }}" --add-label "needs-review"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,78 @@
+{
+  "type": "content",
+  "id": "daily-report",
+  "schemaRef": {
+    "id": "content-schema",
+    "version": "3.1"
+  },
+  "metadata": {
+    "description": "Daily engineering report aggregating git commits and gateway events",
+    "version": "1.0.0",
+    "output_format": "markdown",
+    "author": "mcp-n8n",
+    "tags": ["report", "daily", "engineering", "commits", "events"]
+  },
+  "generation": {
+    "patterns": [
+      {
+        "id": "daily-report-generation",
+        "type": "jinja2",
+        "template": "daily-report.md.j2",
+        "generation_config": {
+          "context": {
+            "date": {
+              "source": "runtime",
+              "description": "Report date (YYYY-MM-DD format)",
+              "required": true
+            },
+            "generated_at": {
+              "source": "runtime",
+              "description": "Timestamp when report was generated (ISO format)",
+              "required": true
+            },
+            "since_hours": {
+              "source": "runtime",
+              "description": "Number of hours to look back for commits and events",
+              "default": 24
+            },
+            "commits": {
+              "source": "runtime",
+              "description": "List of git commits with hash, author, message, timestamp",
+              "required": true,
+              "type": "array"
+            },
+            "events": {
+              "source": "runtime",
+              "description": "List of gateway events",
+              "required": true,
+              "type": "array"
+            },
+            "stats": {
+              "source": "runtime",
+              "description": "Aggregated statistics from events",
+              "required": true,
+              "type": "object",
+              "fields": [
+                "total_events",
+                "tool_calls",
+                "backend_status_events",
+                "success_count",
+                "error_count",
+                "success_rate",
+                "by_backend",
+                "avg_duration_ms",
+                "min_duration_ms",
+                "max_duration_ms"
+              ]
+            }
+          }
+        }
+      }
+    ]
+  },
+  "storage": {
+    "type": "ephemeral",
+    "retention_days": 7,
+    "path_template": "reports/daily-{{ date }}.md"
+  }
+}

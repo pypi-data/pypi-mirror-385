@@ -1,0 +1,59 @@
+# Test Event Mappings for E2E Testing
+#
+# This is a sample configuration for testing event-to-workflow routing.
+# Use this as a reference or copy to config/ for testing.
+
+mappings:
+  # Test 1: Error alert workflow
+  - event_pattern:
+      type: "gateway.tool_call"
+      status: "failure"
+    workflow:
+      id: "test-error-alert"
+      namespace: "n8n"
+      parameters:
+        error: "{{ event.data.error }}"
+        tool: "{{ event.data.tool_name }}"
+        trace_id: "{{ event.trace_id }}"
+        timestamp: "{{ event.timestamp }}"
+
+  # Test 2: Success logging
+  - event_pattern:
+      type: "gateway.tool_call"
+      status: "success"
+    workflow:
+      id: "test-success-logger"
+      namespace: "n8n"
+      parameters:
+        tool: "{{ event.data.tool_name }}"
+        duration: "{{ event.data.duration_ms }}"
+
+  # Test 3: Backend monitoring
+  - event_pattern:
+      type: "gateway.backend_status"
+    workflow:
+      id: "test-backend-monitor"
+      namespace: "n8n"
+      parameters:
+        backend: "{{ event.data.backend_name }}"
+        status: "{{ event.data.status }}"
+
+  # Test 4: Content generation tracking
+  - event_pattern:
+      type: "chora.content_generated"
+    workflow:
+      id: "test-content-tracker"
+      namespace: "n8n"
+      parameters:
+        generator: "{{ event.data.generator_id }}"
+        length: "{{ event.data.content_length }}"
+
+  # Test 5: Catch-all for testing
+  - event_pattern:
+      type: "test.event"
+    workflow:
+      id: "test-catch-all"
+      namespace: "n8n"
+      parameters:
+        event_type: "{{ event.type }}"
+        trace: "{{ event.trace_id }}"
