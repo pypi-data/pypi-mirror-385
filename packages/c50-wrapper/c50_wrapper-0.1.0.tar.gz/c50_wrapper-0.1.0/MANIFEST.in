@@ -1,0 +1,11 @@
+include requirements.txt
+include MANIFEST.in
+include bin/c5.0
+include bin/report
+include c50/templates/*
+
+exclude c50-copy.py
+recursive-exclude c50-src *
+recursive-exclude data *
+recursive-exclude outputs *
+recursive-exclude notebooks *

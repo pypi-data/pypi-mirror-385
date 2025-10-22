@@ -1,0 +1,122 @@
+[build-system]
+requires = ["setuptools>=65.6.2"]
+# requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+# All the following settings are optional:
+where = ["."]  # ["."] by default
+include = ["*"]  # ["*"] by default
+exclude = ["*tests"]  # empty by default
+namespaces = true  # true by default
+
+[tool.setuptools]
+# This is already the default behaviour if your are using
+# pyproject.toml to configure your build.
+# You can deactivate that with `include-package-data = false`
+include-package-data = true
+
+[tool.setuptools.package-data]
+"*" = ["*.txt", "*.rst", "*.md", "*.json", "*.zip"]
+
+
+# [tool.setuptools.dynamic]
+# version = {attr = "m4_utils.VERSION"}
+# version = {attr = "VERSION"}
+# readme = {file = ["README.rst", "USAGE.rst"]}
+
+[project]
+name = "c50-wrapper"
+version = "0.1.0"
+authors = [{name = "SERVICE PREVENTION", email="anti-fraud@bemobi.com"}]
+description = "A python wrapper fot the C5.0 algorithm that works on linux applications; \nWith the wrapper developers can train decision tree models in pure python and pandas;"
+readme = "README.md"
+requires-python = ">=3.8"
+keywords=["Decision Tree", "C5.0", "Machine Learning"]
+dependencies=[
+    "pyparsing>=3.1",
+    "jinja2>=3.1",
+    "pandas>=2.0",
+    "pyyaml>=6.0",
+    "numpy>=1.22",
+    "scipy>=1.11"
+]
+# dynamic = ["version"]
+
+[project.optional-dependencies]
+dev = [
+    "pylint",
+    "black",
+    "mypy",
+    "flake8",
+    "pyflakes",
+    "pycodestyle",
+    "pydocstyle",
+    "pre-commit",
+    "sphinx",
+    "twine",
+    "matplotlib",
+    "jupyterlab"
+]
+
+[tool.isort]
+profile = "black"
+line_length = 79
+src_paths = "src/"
+
+[tool.black]
+line-length = 79
+target-version = ['py38']
+include = '\.pyi?$'
+exclude = '''
+
+(
+  /(
+      \.eggs         # exclude a few common directories in the
+    | \.git          # root of the project
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+  )/
+  | foo.py           # also separately exclude a file named foo.py in
+                     # the root of the project
+)
+'''
+
+[tool.flake8]
+extend-ignore = 'E203,W291'
+
+[tool.mypy]
+implicit_optional = true
+no_silence_site_packages = false
+allow_untyped_globals= true
+# --------------------------------- #
+disallow_any_generics = true
+disallow_incomplete_defs = true
+disallow_untyped_calls = false
+disallow_untyped_decorators = true
+disallow_untyped_defs = false
+follow_imports = "normal"
+no_implicit_reexport = true
+show_error_codes = true
+show_error_context = true
+strict_equality = true
+strict_optional = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unused_ignores = true
+disable_error_code = [
+    "import",
+    "attr-defined",
+    "valid-type",
+    "type-arg"
+]
+
+
+# [project.scripts]
+# my-script = "my_package.module:function"
