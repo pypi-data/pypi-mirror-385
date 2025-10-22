@@ -1,0 +1,56 @@
+Metadata-Version: 2.4
+Name: rfscope
+Version: 0.1.1
+Summary: RF Scope Utilities
+Author-email: Yeison Cardona <yencardonaal@unal.edu.co>
+Maintainer-email: Yeison Cardona <yencardonaal@unal.edu.co>
+License: BSD-2-Clause
+Project-URL: Repository, https://github.com/dunderlab/python-rfscope
+Classifier: Development Status :: 3 - Alpha
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy
+Provides-Extra: dev
+Requires-Dist: colorama; extra == "dev"
+Provides-Extra: docs
+Requires-Dist: matplotlib; extra == "docs"
+Provides-Extra: testing
+Requires-Dist: pytest; extra == "testing"
+Dynamic: license-file
+
+# RF-Scope
+
+## Overview
+RF-Scope is a Python tool for analyzing and processing Radio Frequency signals. This tool provides capabilities for signal processing, visualization, and analysis of RF data.
+
+## Features
+- Signal processing and analysis
+- Real-time visualization
+- Data import/export capabilities
+- Spectrum analysis tools
+
+## Installation
+
+### Prerequisites
+- Python 3.11+
+- Virtual environment (recommended)
+
+
+
+### Install from PyPI
+```python
+pip install rfscope
+```
