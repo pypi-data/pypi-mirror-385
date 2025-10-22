@@ -1,0 +1,50 @@
+[build-system]
+requires = ["hatchling >= 1.26"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build]
+include = [
+    "Tyradex",
+    "metadata.json",
+    "hatch_plugin.py"
+]
+
+[project]
+dynamic = ["name", "version", "authors", "description"]
+keywords = ["Pokémon", "API", "Tyradex"]
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Topic :: Games/Entertainment",
+    "Topic :: Software Development :: Libraries",
+    "Development Status :: 5 - Production/Stable",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3 :: Only",
+]
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+
+dependencies = [
+    'requests',
+    'pratik',
+]
+
+[project.urls]
+Homepage = "https://github.com/LassaInora/Tyradex"
+Repository = "https://github.com/LassaInora/Tyradex.git"
+Issues = "https://github.com/LassaInora/Tyradex/issues"
+
+[tool.hatch.metadata.hooks.custom]
+path = "hatch_plugin.py"
+
+[tool.hatch.build.hooks.custom]
+path = "hatch_plugin.py"
+
