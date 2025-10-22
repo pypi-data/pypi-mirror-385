@@ -1,0 +1,134 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyprestascan"
+version = "1.7.3"
+description = "Scanner SEO professionale per PrestaShop con fix AI-powered (DeepSeek/GPT/Claude), export Excel e API integration - GUI e CLI"
+authors = [{name = "Andrea Piani", email = "info@andreapiani.com"}]
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.8"
+keywords = ["seo", "prestashop", "ecommerce", "crawler", "analysis"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+dependencies = [
+    "httpx[brotli]>=0.25.0",
+    "aiolimiter>=1.1.0",
+    "selectolax>=0.3.17",
+    "lxml>=4.9.3",
+    "urllib3>=2.0.0",
+    "protego>=0.3.0",
+    "jinja2>=3.1.2",
+    "rich>=13.7.0",
+    "pydantic>=2.5.0",
+    "pandas>=2.1.0",
+    "aiosqlite>=0.19.0",
+    "click>=8.1.7",
+    "xlsxwriter>=3.0.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.1",
+    "pytest-cov>=4.1.0",
+    "black>=23.9.0",
+    "flake8>=6.1.0",
+    "mypy>=1.6.0",
+    "pyinstaller>=6.0.0"
+]
+gui = [
+    "PySide6>=6.6.0"
+]
+
+[project.scripts]
+pyprestascan = "pyprestascan.__main__:main"
+pyprestascan-gui = "pyprestascan.gui.app:main"
+
+[project.urls]
+Homepage = "https://github.com/andreapianidev/pyprestascan"
+Repository = "https://github.com/andreapianidev/pyprestascan"
+Issues = "https://github.com/andreapianidev/pyprestascan/issues"
+Documentation = "https://github.com/andreapianidev/pyprestascan#readme"
+Author = "https://linktr.ee/andreapianidev"
+
+[tool.setuptools.packages.find]
+include = ["pyprestascan*"]
+
+[tool.black]
+line-length = 100
+target-version = ["py311", "py312"]
+exclude = '''
+/(
+    \.git
+  | \.venv
+  | build
+  | dist
+  | __pycache__
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 100
+skip_gitignore = true
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+exclude = [
+    ".git",
+    ".venv",
+    "__pycache__",
+    "build",
+    "dist",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+]
+ignore = [
+    "E501",  # line too long (handled by black)
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex (we handle complexity ourselves)
+]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+no_strict_optional = true
+exclude = ["tests/", "scripts/"]
+
+[tool.bandit]
+exclude_dirs = ["tests/", "scripts/", ".venv/"]
+skips = ["B101"]  # Skip assert warnings in tests
+
+[tool.pydocstyle]
+convention = "google"
+add_ignore = ["D100", "D104", "D107"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+# Coverage disabilitato temporaneamente - installare pytest-cov per abilitare
+# addopts = "--cov=pyprestascan --cov-report=term-missing"
