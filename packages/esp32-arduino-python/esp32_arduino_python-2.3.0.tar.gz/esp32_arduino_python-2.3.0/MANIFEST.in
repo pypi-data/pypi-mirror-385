@@ -1,0 +1,26 @@
+# 包含额外文件
+include README.md
+include LICENSE
+include requirements.txt
+include 项目总结.md
+include ESP32_使用指南.md
+
+# 包含示例文件
+recursive-include examples *.py
+recursive-include examples *.md
+
+# 包含esp32_arduino包内固件文件
+recursive-include esp32_arduino/firmware *
+
+# 包含固件文件
+recursive-include esp32-rk3588-sensor-system *.cpp *.h *.ini *.md
+
+# 包含文档
+recursive-include docs *.md
+
+# 排除不需要的文件
+exclude *.pyc
+exclude .git*
+exclude .DS_Store
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]

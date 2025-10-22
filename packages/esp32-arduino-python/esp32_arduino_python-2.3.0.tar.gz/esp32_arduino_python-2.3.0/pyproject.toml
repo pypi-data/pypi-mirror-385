@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "esp32-arduino-python"
+version = "2.3.0"
+description = "ESP32 Arduino风格Python控制库 v2.3 - 修复传感器数据读取，完整支持DHT11温湿度传感器"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "王海涛", email = "haitaowang926@gmail.com"}
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: System :: Hardware",
+    "Topic :: Scientific/Engineering",
+]
+requires-python = ">=3.7"
+dependencies = [
+    "pyserial>=3.5"
+]
+
+[project.urls]
+Homepage = "https://gitee.com/haitaowang926/esp32-arduino-python"
+Repository = "https://gitee.com/haitaowang926/esp32-arduino-python"
+Issues = "https://gitee.com/haitaowang926/esp32-arduino-python/issues"
+
+[project.scripts]
+esp32-test = "esp32_arduino.examples.test:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["esp32_arduino*"]
+
+[tool.setuptools.package-data]
+esp32_arduino = ["examples/*.py"]
