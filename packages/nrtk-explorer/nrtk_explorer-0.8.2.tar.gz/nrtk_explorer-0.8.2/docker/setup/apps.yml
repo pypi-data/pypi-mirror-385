@@ -1,0 +1,17 @@
+trame:
+    www_modules:
+      - nrtk_explorer.module
+    cmd:
+        - nrtk-explorer
+        - --session-id
+        - ${id}
+        - --host
+        - ${host}
+        - --port
+        - ${port}
+        - --authKey
+        - ${secret}
+        - --server
+        - --banner
+        - --dataset
+        - /data/coco-od-2017/mini_val2017.json
