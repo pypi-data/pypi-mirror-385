@@ -1,0 +1,220 @@
+{% extends 'flickr/base.html' %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{% url 'ditto:home' %}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'flickr:home' %}">Flickr</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'flickr:user_detail' nsid=flickr_user.nsid %}">{{ flickr_user }}</a></li>
+    <li class="breadcrumb-item active">Photo</li>
+{% endblock %}
+
+{% block content %}
+
+    {% load ditto_core %}
+
+    <h1 class="my-4">
+        {% block title %}
+            {{ photo.title }}
+        {% endblock %}
+    </h1>
+
+    <div class="row">
+        <div class="col-md-9 flickr-photo">
+            {% load l10n %}
+            {% if photo.media == 'video' %}
+                {% if photo.site_mp4_width %}
+                    <video {% width_height photo.site_mp4_width photo.site_mp4_height 867 600 %} poster="{{ photo.medium_640_url }}" controls preload="metadata" class="img-fluid mb-3">
+                        {% if photo.site_mp4_url %}
+                            <source src="{{ photo.site_mp4_url }}" type="video/mp4">
+                        {% elif photo.mobile_mp4_url %}
+                            <source src="{{ photo.mobile_mp4_url }}" type="video/mp4">
+                        {% endif %}
+                    </video>
+                {% else %}
+                    <p class="text-muted"><small>[A video, but no video URL found. <a href="{{ photo.permalink }}">Try on Flickr.com</a>.]</small></p>
+                {% endif %}
+            {% endif %}
+            {% if photo.media == 'photo' or not photo.site_mp4_width %}
+                <p class="flickr-photo-img">
+                    {% if photo.medium_800_width %}
+                        <img src="{{ photo.medium_800_url }}" {% width_height photo.medium_800_width photo.medium_800_height 867 600 %} alt="" class="img-fluid">
+                    {% else %}
+                        <img src="{{ photo.medium_640_url }}" {% width_height photo.medium_640_width photo.medium_640_height 867 600 %} alt="" class="img-fluid">
+                    {% endif %}
+                </p>
+            {% endif %}
+
+            {% if photo.description %}
+                <div class="flickr-photo-description mb-4">
+                    {{ photo.description|safe|linebreaks }}
+                </div>
+            {% endif %}
+
+            {% load ditto_flickr %}
+            <dl class="dl-horizontal row photo-times">
+                <dt class="col-sm-3">Taken time</dt>
+                <dd class="col-sm-9">
+                    {% if photo.taken_unknown %}
+                        Unknown
+                    {% else %}
+                        {% display_time photo.taken_time link_to_day=True granularity=photo.taken_granularity case='capfirst' %}
+                    {% endif %}
+                </dd>
+
+                {% if photo.geo_is_private == False %}
+                    {% if photo.location_str %}
+                        <dt class="col-sm-3">Location</dt>
+                        <dd class="col-sm-9">{{ photo.location_str }}</dd>
+                    {% endif %}
+
+                    {% if photo.location_accuracy >= 16 %}
+                        <dt class="col-sm-3">Lat/long</dt>
+                        <dd class="col-sm-9">
+                            <a href="https://maps.google.com/maps?ll={{ photo.latitude}},{{ photo.longitude }}&q={{ photo.latitude }},{{ photo.longitude }}&hl=en&t=m&z=15" title="See on Google Maps">{{ photo.latitude }}, {{ photo.longitude }}</a>
+                        </dd>
+                    {% endif %}
+                {% endif %}
+
+                <dt class="col-sm-3">Tags</dt>
+                <dd class="col-sm-9">
+                    {% if photo.tags.all|length %}
+                        <ul class="list-inline mb-0 flickr-photo-tags">
+                            {% for tag in photo.tags.all %}
+                                <li class="list-inline-item flickr-photo-tag">
+                                    <a class="badge badge-pill badge-primary" href="{% url 'flickr:user_tag_detail' nsid=photo.user.nsid tag_slug=tag.slug %}" title="See all photos by {{ photo.user.name }} tagged with '{{ tag.name }}'">{{ tag.name }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        None
+                    {% endif %}
+                </dd>
+
+                <dt class="col-sm-3">Uploaded time</dt>
+                <dd class="col-sm-9">{% display_time photo.post_time link_to_day=True granularity=photo.taken_granularity %}</dd>
+
+            </dl>
+
+            <dl class="dl-horizontal row photo-about">
+                <dt class="col-sm-3">Views on Flickr</dt>
+                <dd class="col-sm-9">{{ photo.view_count }}</dd>
+
+                <dt class="col-sm-3">Comments</dt>
+                <dd class="col-sm-9">{{ photo.comment_count }}</dd>
+
+                <dt class="col-sm-3">License</dt>
+                <dd class="col-sm-9">{% photo_license photo.license %}</dd>
+
+                <dt class="col-sm-3">Safety level</dt>
+                <dd class="col-sm-9">{{ photo.safety_level_str }}</dd>
+            </dl>
+
+            {% if photo.has_exif %}
+                <dl class="dl-horizontal row photo-exif">
+                    {% if photo.exif_camera %}
+                        <dt class="col-sm-3">Camera</dt>
+                        <dd class="col-sm-9">{{ photo.exif_camera }}</dd>
+                    {% endif %}
+                    {% if photo.exif_lens_model %}
+                        <dt class="col-sm-3">Lens model</dt>
+                        <dd class="col-sm-9">{{ photo.exif_lens_model }}</dd>
+                    {% endif %}
+                    {% if photo.exif_focal_length %}
+                        <dt class="col-sm-3">Focal length</dt>
+                        <dd class="col-sm-9">{{ photo.exif_focal_length }}</dd>
+                    {% endif %}
+                    {% if photo.exif_iso %}
+                        <dt class="col-sm-3">ISO</dt>
+                        <dd class="col-sm-9">{{ photo.exif_iso }}</dd>
+                    {% endif %}
+                    {% if photo.exif_exposure %}
+                        <dt class="col-sm-3">Exposure</dt>
+                        <dd class="col-sm-9">{{ photo.exif_exposure }}</dd>
+                    {% endif %}
+                    {% if photo.exif_aperture %}
+                        <dt class="col-sm-3">Aperture</dt>
+                        <dd class="col-sm-9">{{ photo.exif_aperture }}</dd>
+                    {% endif %}
+                    {% if photo.exif_flash %}
+                        <dt class="col-sm-3">Flash</dt>
+                        <dd class="col-sm-9">{{ photo.exif_flash }}</dd>
+                    {% endif %}
+                </dl>
+            {% endif %}
+
+        </div> <!-- .col -->
+
+        <div class="col-md-3">
+            <div class="card mb-3 flickr-user">
+                <div class="card-body">
+                    <a href="{{ photo.user.get_absolute_url }}"><img src="{{ photo.user.avatar_url }}" class="float-left mr-2" alt="user icon" width="48" height="48"></a>
+                    <a href="{{ photo.user.get_absolute_url }}"><strong>{{ photo.user.name }}</strong></a>
+                </div>
+            </div>
+
+            {% with photo.get_previous as previous_photo %}
+                {% with photo.get_next as next_photo %}
+                    {% if previous_photo or next_photo %}
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                {% if previous_photo %}
+                                    <a class="card-link" href="{% url 'flickr:photo_detail' nsid=previous_photo.user.nsid flickr_id=previous_photo.flickr_id %}" title="{{ previous_photo.title }}">
+                                        &larr; Previous
+                                    </a>
+                                {% endif %}
+                                {% if next_photo %}
+                                    <a class="card-link float-right" href="{% url 'flickr:photo_detail' nsid=next_photo.user.nsid flickr_id=next_photo.flickr_id %}" title="{{ next_photo.title }}">
+                                        Next &rarr;
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endwith %}
+            {% endwith %}
+
+            {% if photo.photosets|length > 0 %}
+                <div class="card mb-3 photo-photosets">
+                    <div class="card-body">
+                        <h4 class="h6 card-title">Albums</h4>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        {% for photoset in photo.photosets.all %}
+                            <li class="list-group-item">
+                                <a href="{% url 'flickr:photoset_detail' nsid=photoset.user.nsid flickr_id=photoset.flickr_id %}">
+                                    {{ photoset.title }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            <div class="card mb-3 photo-meta">
+                <ul class="list-group list-group-flush">
+                    {% if photo.account and photo.account.is_active %}
+                        <li class="list-group-item">
+                            <a href="{{ photo.permalink }}">At Flickr.com</a>
+                        </li>
+                    {% endif %}
+                    {% if perms.flickr.can_change_photo %}
+                        <li class="list-group-item">
+                            <a href="{% url 'admin:flickr_photo_change' photo.id %}" title="Edit this photo in the Django Admin">Edit</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+
+            <div class="card mb-3 flickr-user">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item text-muted">
+                        <small>Last updated on Flickr at {% display_time photo.last_update_time link_to_day=True %}</small>
+                    </li>
+                    <li class="list-group-item text-muted">
+                        <small>As of {% display_time photo.fetch_time link_to_day=True %}</small>
+                    </li>
+                </ul>
+            </div>
+        </div> <!-- .col -->
+    </div> <!-- .row -->
+
+{% endblock content %}

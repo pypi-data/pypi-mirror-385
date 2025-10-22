@@ -1,0 +1,55 @@
+{% extends 'pinboard/base.html' %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{% url 'ditto:home' %}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'pinboard:home' %}">Pinboard</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'pinboard:account_detail' username=bookmark.account.username %}">{{ bookmark.account.username }}</a></li>
+    <li class="breadcrumb-item active">Bookmark</li>
+{% endblock %}
+
+{% block content %}
+
+    <h1 class="my-4">
+        {% block title %}
+            {{ bookmark.title|truncatewords:10 }}
+        {% endblock %}
+    </h1>
+
+    <div class="row">
+        <div class="col-md-9">
+
+            <hr>
+            <div class="media mt-0 pinboard-bookmark pinboard-bookmark-detail">
+                {% include 'pinboard/includes/bookmark.html' with bookmark=bookmark view='detail' perms=perms only %}
+            </div>
+            <hr>
+
+            <nav>
+                <p>
+                    {% with bookmark.get_previous as previous_bookmark %}
+                        {% with bookmark.get_next as next_bookmark %}
+                            {% if previous_bookmark or next_bookmark %}
+                                {% if previous_bookmark %}
+                                    <a href="{% url 'pinboard:bookmark_detail' username=previous_bookmark.account.username hash=previous_bookmark.url_hash %}" title="Previous bookmark" class="btn btn-outline-primary">
+                                        &larr; Previous
+                                    </a>
+                                {% endif %}
+                                {% if next_bookmark %}
+                                    <a href="{% url 'pinboard:bookmark_detail' username=next_bookmark.account.username hash=next_bookmark.url_hash %}" title="Next bookmark" class="btn btn-outline-primary float-right">
+                                        Next &rarr;
+                                    </a>
+                                {% endif %}
+                            {% endif %}
+                        {% endwith %}
+                    {% endwith %}
+                </p>
+            </nav>
+
+        </div> <!-- .col -->
+
+        <div class="col-md-3">
+            {% include 'pinboard/includes/account.html' with account=bookmark.account perms=perms only %}
+        </div> <!-- .col -->
+    </div>
+
+{% endblock content %}

@@ -1,0 +1,47 @@
+{% extends 'pinboard/base.html' %}
+{% load l10n %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{% url 'ditto:home' %}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'pinboard:home' %}">Pinboard</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'pinboard:account_detail' username=account.username %}">{{ account.username }}</a></li>
+    <li class="breadcrumb-item active">{{ tag.name }}</li>
+{% endblock %}
+
+{% block content %}
+
+    <h1 class="my-4">
+        {% block title %}
+            Bookmarks by {{ account.username }} tagged with “{{ tag.name }}”
+        {% endblock %}
+    </h1>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <p class="card-text">
+                        {{ page_obj.paginator.count|localize }} bookmark{{ page_obj.paginator.count|pluralize }}
+                    </p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <a href="{% url 'pinboard:account_detail' username=account.username %}">All {{ account.username }}’s bookmarks</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="{% url 'pinboard:tag_detail' slug=tag.slug %}">All bookmarks tagged with “{{ tag.name }}”</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="{% url 'pinboard:tag_list' %}">The most common tags</a>
+                    </li>
+                </ul>
+            </div>
+        </div> <!-- .col -->
+
+        <div class="col-md-9">
+            {% include 'pinboard/includes/bookmark_list.html' with bookmark_list=bookmark_list page_obj=page_obj perms=perms only %}
+        </div> <!-- .col -->
+    </div> <!-- .row -->
+
+
+{% endblock content %}

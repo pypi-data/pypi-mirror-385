@@ -1,0 +1,59 @@
+{% extends 'pinboard/base.html' %}
+{% load l10n %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{% url 'ditto:home' %}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'pinboard:home' %}">Pinboard</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'pinboard:tag_list' %}">Tags</a></li>
+    <li class="breadcrumb-item active">{{ tag.name }}</li>
+{% endblock %}
+
+{% block content %}
+
+    <h1 class="my-4">
+        {% block title %}
+            Bookmarks tagged with “{{ tag.name}}”
+        {% endblock %}
+    </h1>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <p class="card-text">
+                        {{ page_obj.paginator.count|localize }} bookmark{{ page_obj.paginator.count|pluralize }}
+                        {% if account_list|length == 1 %}
+                            by <a href="{% url 'pinboard:account_tag_detail' username=account_list.0.username tag_slug=tag.slug %}" title="Bookmarks by {{ account_list.0.username }} tagged with “{{ tag.slug }}”">{{ account_list.0.username }}</a>
+                        {% else %}
+                            by {{ account_list|length }}&nbsp;user{{ account_list|length|pluralize }}:
+                        {% endif %}
+                    </p>
+                </div>
+
+                {% if account_list|length > 1 %}
+                    <ul class="list-group list-group-flush">
+                        {% for account in account_list %}
+                            <li class="list-group-item">
+                                <a class="card-link" href="{% url 'pinboard:account_tag_detail' username=account.username tag_slug=tag.slug %}">
+                                    {{ account.username }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <p class="card-text">
+                        <a href="{% url 'pinboard:tag_list' %}">The most common tags</a>
+                    </p>
+                </div>
+            </div>
+        </div> <!-- .col -->
+
+        <div class="col-md-9">
+            {% include 'pinboard/includes/bookmark_list.html' with bookmark_list=bookmark_list page_obj=page_obj view='list' perms=perms only %}
+        </div> <!-- .col -->
+    </div> <!-- .row -->
+
+{% endblock content %}

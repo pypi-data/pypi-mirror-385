@@ -1,0 +1,10 @@
+include LICENSE
+include README.md
+recursive-include src/ditto *.html *.py *.sh
+recursive-include src/ditto/core/static *
+
+recursive-exclude docs *
+recursive-exclude screenshots *
+recursive-exclude tests *
+
+recursive-exclude * *.pyc *.pyo *.sw* *.sv* *.un~ *.DS_Store

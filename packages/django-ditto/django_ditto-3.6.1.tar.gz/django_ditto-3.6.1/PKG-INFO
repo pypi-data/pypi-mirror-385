@@ -1,0 +1,113 @@
+Metadata-Version: 2.4
+Name: django-ditto
+Version: 3.6.1
+Summary: A Django app to copy stuff from your accounts on Flickr, Last.fm, Pinboard and Twitter.
+Author-email: Phil Gyford <phil@gyford.com>
+License: The MIT License (MIT)
+        
+        Copyright (c) 2015-2025 Phil Gyford
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: Changelog, https://github.com/philgyford/django-ditto/blob/main/CHANGELOG.md
+Project-URL: Documentation, https://django-ditto.readthedocs.io/
+Project-URL: Issues, https://github.com/philgyford/django-ditto/issues
+Project-URL: Source Code, https://github.com/philgyford/django-ditto
+Keywords: ditto,twitter,flickr,pinboard,last.fm
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Django
+Classifier: Framework :: Django :: 4.2
+Classifier: Framework :: Django :: 5.1
+Classifier: Framework :: Django :: 5.2
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Internet :: WWW/HTTP
+Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: django-imagekit<6.0,>=4.0
+Requires-Dist: django-sortedm2m<5.0,>=4.0
+Requires-Dist: django-taggit<7.0,>=5.0.0
+Requires-Dist: flickrapi<2.5,>=2.4
+Requires-Dist: pillow<12.0,>=10.0.0
+Requires-Dist: twitter-text-python<1.2,>=1.1.1
+Requires-Dist: twython<3.10,>=3.7.0
+Dynamic: license-file
+
+# Django Ditto
+
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/django-ditto)
+[![image](https://github.com/philgyford/django-ditto/actions/workflows/tests.yml/badge.svg)](https://github.com/philgyford/django-ditto/actions/workflows/tests.yml "Tests status")
+[![codecov](https://codecov.io/gh/philgyford/django-ditto/branch/main/graph/badge.svg?token=T7TMMDS64A)](https://codecov.io/gh/philgyford/django-ditto)
+[![image](https://readthedocs.org/projects/django-ditto/badge/?version=stable)](https://django-ditto.readthedocs.io/en/stable/?badge=stable "Documentation status")
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
+
+A collection of Django apps for copying things from third-party sites and services. Requires Python 3.9 to 3.13, and Django 4.2, 5.1 or 5.2.
+
+[Read the documentation.](http://django-ditto.readthedocs.io/en/latest/)
+
+[See screenshots of a site using the supplied templates.](https://github.com/philgyford/django-ditto/tree/main/screenshots)
+
+Install using [pip](https://pip.pypa.io/en/stable/):
+
+    $ pip install django-ditto
+
+NOTE 1: It will install [Pillow](http://pillow.readthedocs.io/en/latest/), among other things, which has prerequisites of its own, such as libjpeg and zlib. Sorry.
+
+NOTE 2: As of 2023 I'm unsure how well the Twitter integration still works given the state of its API etc.
+
+Currently, Ditto can copy these things from these services:
+
+- [Flickr](https://flickr.com/)
+  - Photos
+  - Photosets
+  - Original image and video files
+  - Users
+- [Last.fm](https://www.last.fm/)
+  - Scrobbles (Artist, Track and Album)
+- [Pinboard](https://pinboard.in/)
+  - Bookmarks
+- [Twitter](https://twitter.com/)
+  - Tweets
+  - Favorites/Likes
+  - Images and Animated GIFs (but not videos)
+  - Users
+
+The Ditto apps provide:
+
+- Models
+- Admin
+- Management commands to fetch the data/files
+- Views and URLs
+- Templates (that use [Bootstrap 4](https://getbootstrap.com))
+- Template tags for common things (eg, most recent Tweets, or Flickr photos uploaded on a particular day)

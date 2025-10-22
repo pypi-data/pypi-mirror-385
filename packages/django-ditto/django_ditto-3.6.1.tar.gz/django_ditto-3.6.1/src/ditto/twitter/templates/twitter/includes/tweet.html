@@ -1,0 +1,94 @@
+{% comment %}
+A single Tweet as the contents of a Bootstrap media object.
+
+Expects:
+ * tweet, a Tweet object.
+ * view, one of 'list' (a generic list), 'detail' (tweet's own page) or 'day'.
+ * perms - The Django perms object.
+{% endcomment %}
+
+{% if tweet %}
+    <img class="d-flex mr-3 twitter-tweet-avatar" src="{{ tweet.user.avatar_url }}" alt="{{ tweet.user.screen_name }}’s avatar" width="48" height="48">
+    <div class="media-body">
+        <p class="{% if not tweet.get_retweeted_tweet %}mb-0 {% endif %}twitter-tweet-about">
+            <a href="{% url 'twitter:user_detail' screen_name=tweet.user.screen_name %}" title="More Tweets by this person">
+                <strong class="twitter-tweet-name">{{ tweet.user.name }}</strong>
+                <small class="twitter-tweet-screenname">{{ tweet.user }}</small>
+            </a>
+            <small class="text-muted">
+                •
+                {% load ditto_core %}
+                {% if view == 'day' %}
+                    {% display_time tweet.post_time link_to_day=False %}
+                {% else %}
+                    {% display_time tweet.post_time link_to_day=True %}
+                {% endif %}
+
+                {% if tweet.is_reply %}
+                    • <a href="{{ tweet.in_reply_to_url }}" title="See their Tweet">In reply to…</a>
+                {% endif %}
+
+                {% if view != 'detail' %}
+                    • <a href="{{ tweet.get_absolute_url }}" title="See only this Tweet">#</a>
+                {% endif %}
+
+                {% if view == 'detail' %}
+                    {% if tweet.account and tweet.account.is_active %}
+                        • <a href="{{ tweet.permalink }}" title="See on Twitter">At Twitter</a>
+                    {% elif tweet.account == None %}
+                        {# A favorited tweet; always link to it. #}
+                        • <a href="{{ tweet.permalink }}" title="See on Twitter">At Twitter</a>
+                    {% endif %}
+                {% endif %}
+
+                {% if perms.twitter.can_change_tweet %}
+                    • <a href="{% url 'admin:twitter_tweet_change' tweet.id %}">Edit</a>
+                {% endif %}
+            </small>
+        </p>
+
+        {% if tweet.get_retweeted_tweet %}
+            {# This Tweet is just retweeting another; so display that. #}
+
+            {% include 'twitter/includes/tweet.html' with tweet=tweet.get_retweeted_tweet view=view perms=perms only %}
+
+        {% else %}
+
+            <p class="{% if tweet.media_count == 0 %}mb-0{% endif %}{% if view == 'detail' %} lead{% endif %} twitter-tweet-text">
+                {{ tweet.text_html|safe }}
+            </p>
+
+            {% if tweet.get_quoted_tweet %}
+                <div class="media mt-3 twitter-tweet-quoted">
+                    {% include 'twitter/includes/tweet.html' with tweet=tweet.get_quoted_tweet view=view perms=perms only %}
+                </div>
+            {% endif %}
+
+            {% if tweet.media_count > 0 %}
+                {% include 'twitter/includes/media.html' with tweet=tweet view=view %}
+            {% endif %}
+
+            {% if tweet.place %}
+                <p class="mb-0 text-muted twitter-tweet-place">
+                    <small>
+                        {% if tweet.latitude %}
+                            <a href="https://maps.google.com/maps/place/{{ tweet.latitude }},{{ tweet.longitude }}/@{{ tweet.latitude }},{{ tweet.longitude }},14z" title="See on Google Maps">{{ tweet.place }}</a>
+                        {% else %}
+                            {{ tweet.place }}
+                        {% endif %}
+                    </small>
+                </p>
+            {% endif %}
+
+            {% if view == 'detail' %}
+                <p class="mb-0 text-muted twitter-tweet-meta"><small>
+                    {{ tweet.retweet_count }} Retweet{{ tweet.retweet_count|pluralize }}
+                    • {{ tweet.favorite_count }} Like{{ tweet.favorite_count|pluralize }}
+                    • As of {% display_time tweet.fetch_time %}
+                </small></p>
+            {% endif %}
+
+        {% endif %}
+
+    </div><!-- .media-body -->
+{% endif %}

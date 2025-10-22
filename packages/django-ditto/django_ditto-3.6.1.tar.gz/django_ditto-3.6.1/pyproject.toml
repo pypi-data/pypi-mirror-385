@@ -1,0 +1,125 @@
+# project ######################################################################
+[project]
+authors = [{ "name" = "Phil Gyford", "email" = "phil@gyford.com" }]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Environment :: Web Environment",
+  "Framework :: Django",
+  "Framework :: Django :: 4.2",
+  "Framework :: Django :: 5.1",
+  "Framework :: Django :: 5.2",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Natural Language :: English",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Internet :: WWW/HTTP",
+  "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+  "Topic :: Software Development :: Libraries",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+  "django-imagekit>=4.0,<6.0",
+  "django-sortedm2m>=4.0,<5.0",
+  "django-taggit>=5.0.0,<7.0",
+  "flickrapi>=2.4,<2.5",
+  "pillow>=10.0.0,<12.0",
+  "twitter-text-python>=1.1.1,<1.2",
+  "twython>=3.7.0,<3.10",
+]
+description = "A Django app to copy stuff from your accounts on Flickr, Last.fm, Pinboard and Twitter."
+dynamic = ["version"]
+keywords = ["ditto", "twitter", "flickr", "pinboard", "last.fm"]
+license = { file = "LICENSE" }
+name = "django-ditto"
+readme = "README.md"
+requires-python = ">=3.9"
+
+[project.urls]
+"Changelog" = "https://github.com/philgyford/django-ditto/blob/main/CHANGELOG.md"
+"Documentation" = "https://django-ditto.readthedocs.io/"
+"Issues" = "https://github.com/philgyford/django-ditto/issues"
+"Source Code" = "https://github.com/philgyford/django-ditto"
+
+# dependency-groups ############################################################
+
+[dependency-groups]
+dev = [
+  "coverage[toml]",
+  "factory-boy",
+  "freezegun",
+  "pre-commit",
+  "responses",
+  "ruff",
+  "unittest-parametrize",
+  "sphinx",
+  "sphinx-rtd-theme",
+]
+
+# coverage #####################################################################
+
+[tool.coverage.paths]
+# Reduce length of paths in the report
+# via https://hynek.me/articles/testing-packaging/
+source = ["src", ".tox/py*/**/site-packages"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+
+[tool.coverage.run]
+branch = true
+parallel = true
+omit = ["*/migrations/*.py"]
+source = ["ditto"]
+
+# ruff #########################################################################
+
+[tool.ruff]
+extend-exclude = ["*/migrations/*"]
+line-length = 88
+target-version = "py39"
+
+[tool.ruff.lint]
+ignore = []
+select = [
+  # Reference: https://docs.astral.sh/ruff/rules/
+  "B",      # flake8-bugbear
+  "E",      # pycodestyle
+  "F",      # Pyflakes
+  "G",      # flake8-logging-format
+  "I",      # isort
+  "N",      # pip8-naming
+  "Q",      # flake8-quotes
+  "BLE",    # flake8-blind-except
+  "DJ",     # flake8-django
+  "DTZ",    # flake8-datetimez
+  "EM",     # flake8-errmsg
+  "INP",    # flake8-no-pep420
+  "FBT",    # flake8-boolean-trap
+  "PIE",    # flake8-pie
+  "RSE",    # flake-raise
+  "SIM",    # flake8-simplify
+  "T20",    # flake8-print
+  "TID",    # flake8-tidy-imports
+  "UP",     # pyupgrade
+  "RUF100", # unused-noqa
+  "RUF200", # invalid-pyproject-toml
+]
+
+# setuptools ###################################################################
+
+[tool.setuptools.dynamic]
+version = { attr = "src.ditto.__version__" }
+
+# uv ###########################################################################
+
+[tool.uv]
+# Ensure Tox always gets a fresh package.
+reinstall-package = ["ditto"]
