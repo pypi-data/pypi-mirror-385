@@ -1,0 +1,21 @@
+DEFAULT_MODEL = "gpt-5-mini"  # gpt-5-mini because it free and without usage limit
+
+GITHUB_BASE_URL = "https://github.com"
+GITHUB_CLIENT_ID = "Iv1.b507a08c87ecfe98"
+GITHUB_APP_SCOPES = ["read:user"]
+
+COPILOT_VERSION = "0.32.3"
+EDITOR_PLUGIN_VERSION = f"copilot-chat/${COPILOT_VERSION}"
+USER_AGENT = f"GitHubCopilotChat/${COPILOT_VERSION}"
+API_VERSION = "2025-04-01"
+
+__all__ = [
+    "API_VERSION",
+    "COPILOT_VERSION",
+    "DEFAULT_MODEL",
+    "EDITOR_PLUGIN_VERSION",
+    "GITHUB_APP_SCOPES",
+    "GITHUB_BASE_URL",
+    "GITHUB_CLIENT_ID",
+    "USER_AGENT",
+]
