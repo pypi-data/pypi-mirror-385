@@ -1,0 +1,131 @@
+{
+  "key_properties": [
+    "name"
+  ],
+  "metadata": [
+    {
+      "breadcrumb": [
+        "properties",
+        "branch_id"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "name"
+      ],
+      "metadata": {
+        "inclusion": "automatic"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "password"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "protected"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "created_at"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "updated_at"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [],
+      "metadata": {
+        "inclusion": "available",
+        "selected": true,
+        "selected-by-default": true,
+        "table-key-properties": [
+          "name"
+        ]
+      }
+    }
+  ],
+  "replication_method": "FULL_TABLE",
+  "schema": {
+    "properties": {
+      "branch_id": {
+        "description": "The ID of the branch to which the role belongs\n",
+        "pattern": "^[a-z0-9-]{1,60}$",
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "created_at": {
+        "description": "A timestamp indicating when the role was created\n",
+        "format": "date-time",
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "name": {
+        "description": "The role name\n",
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "password": {
+        "description": "The role password\n",
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "protected": {
+        "description": "Whether or not the role is system-protected\n",
+        "type": [
+          "boolean",
+          "null"
+        ]
+      },
+      "updated_at": {
+        "description": "A timestamp indicating when the role was last updated\n",
+        "format": "date-time",
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "branch_id",
+      "name",
+      "created_at",
+      "updated_at"
+    ],
+    "type": "object"
+  },
+  "stream": "roles",
+  "tap_stream_id": "roles"
+}

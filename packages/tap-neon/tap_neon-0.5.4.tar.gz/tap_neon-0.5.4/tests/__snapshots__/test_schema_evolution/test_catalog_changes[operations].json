@@ -1,0 +1,277 @@
+{
+  "key_properties": [
+    "id"
+  ],
+  "metadata": [
+    {
+      "breadcrumb": [
+        "properties",
+        "id"
+      ],
+      "metadata": {
+        "inclusion": "automatic"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "project_id"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "branch_id"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "endpoint_id"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "action"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "status"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "error"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "failures_count"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "retry_at"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "created_at"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "updated_at"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "total_duration_ms"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [],
+      "metadata": {
+        "inclusion": "available",
+        "selected": true,
+        "selected-by-default": true,
+        "table-key-properties": [
+          "id"
+        ]
+      }
+    }
+  ],
+  "replication_method": "FULL_TABLE",
+  "schema": {
+    "properties": {
+      "action": {
+        "description": "The action performed by the operation",
+        "enum": [
+          "create_compute",
+          "create_timeline",
+          "start_compute",
+          "suspend_compute",
+          "apply_config",
+          "check_availability",
+          "delete_timeline",
+          "create_branch",
+          "import_data",
+          "tenant_ignore",
+          "tenant_attach",
+          "tenant_detach",
+          "tenant_reattach",
+          "replace_safekeeper",
+          "disable_maintenance",
+          "apply_storage_config",
+          "prepare_secondary_pageserver",
+          "switch_pageserver",
+          "detach_parent_branch",
+          "timeline_archive",
+          "timeline_unarchive",
+          "start_reserved_compute",
+          "sync_dbs_and_roles_from_compute",
+          "apply_schema_from_branch",
+          "timeline_mark_invisible",
+          "prewarm_replica",
+          "promote_replica",
+          "set_storage_non_dirty"
+        ],
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "branch_id": {
+        "description": "The branch ID",
+        "pattern": "^[a-z0-9-]{1,60}$",
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "created_at": {
+        "description": "A timestamp indicating when the operation was created",
+        "format": "date-time",
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "endpoint_id": {
+        "description": "The endpoint ID",
+        "pattern": "^[a-z0-9-]{1,60}$",
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "error": {
+        "description": "The error that occurred",
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "failures_count": {
+        "description": "The number of times the operation failed",
+        "format": "int32",
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "id": {
+        "description": "The operation ID",
+        "format": "uuid",
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "project_id": {
+        "description": "The Neon project ID",
+        "pattern": "^[a-z0-9-]{1,60}$",
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "retry_at": {
+        "description": "A timestamp indicating when the operation was last retried",
+        "format": "date-time",
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "status": {
+        "description": "The status of the operation",
+        "enum": [
+          "scheduling",
+          "running",
+          "finished",
+          "failed",
+          "error",
+          "cancelling",
+          "cancelled",
+          "skipped"
+        ],
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "total_duration_ms": {
+        "description": "The total duration of the operation in milliseconds",
+        "format": "int32",
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "updated_at": {
+        "description": "A timestamp indicating when the operation status was last updated",
+        "format": "date-time",
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "id",
+      "project_id",
+      "action",
+      "status",
+      "failures_count",
+      "created_at",
+      "updated_at",
+      "total_duration_ms"
+    ],
+    "type": "object"
+  },
+  "stream": "operations",
+  "tap_stream_id": "operations"
+}

@@ -1,0 +1,39 @@
+version: 1
+send_anonymous_usage_stats: false
+project_id: tap-neon
+default_environment: dev
+environments:
+- name: dev
+plugins:
+  extractors:
+  - name: tap-neon
+    label: Neon Serverless Postgres
+    namespace: neon
+    description: Neon is a serverless open-source alternative to AWS Aurora Postgres
+    repo: https://github.com/reservoir-data/tap-neon
+    docs: https://github.com/reservoir-data/tap-neon#readme
+    logo_url: https://neon.tech/static/logo-black-5ca02e6d7a42cba35e7d0ea79b29c816.svg
+    pip_url: -e .
+    capabilities:
+    - state
+    - catalog
+    - discover
+    - about
+    - stream-maps
+    settings_group_validation:
+    - [api_key]
+    settings:
+    - name: api_key
+      kind: password
+      label: Neon API Key
+      description: API Key for Neon Serverless Postgres
+    - name: start_date
+      kind: date_iso8601
+      label: Start Date
+      description: Earliest datetime to get data from
+    config:
+      start_date: "2022-08-27"
+  loaders:
+  - name: target-jsonl
+    variant: andyh1203
+    pip_url: target-jsonl

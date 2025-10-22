@@ -1,0 +1,41 @@
+name: Update Catalog for neon.tech
+
+on:
+  workflow_dispatch:
+  schedule:
+  # Daily at noon
+  - cron: '0 12 * * *'
+
+env:
+  FORCE_COLOR: "1"
+  # renovate: datasource=pypi depName=uv
+  UV_VERSION: 0.9.0
+
+jobs:
+  update_openapi_specification:
+    name: Update Catalog
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+    - uses: actions/create-github-app-token@67018539274d69449ef7c02e8e71183d1719ab42 # v2.1.4
+      id: generate-token
+      with:
+        app-id: ${{ vars.APP_ID }}
+        private-key: ${{ secrets.APP_PRIVATE_KEY }}
+    - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+    - uses: astral-sh/setup-uv@eb1897b8dc4b5d5bfe39a428a8f2304605e0983c # v7.0.0
+      with:
+        version: ${{ env.UV_VERSION }}
+    - run: uv run scripts/update_openapi.py
+    - run: uv run pytest --snapshot-update tests/test_schema_evolution.py
+    - id: check_snapshot_changes
+      continue-on-error: true
+      run: git diff --quiet tests/__snapshots__
+    - uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7.0.8
+      if: steps.check_snapshot_changes.outcome == 'failure'
+      with:
+        title: 'fix: Update catalog'
+        token: ${{ steps.generate-token.outputs.token }}
+        signoff: true

@@ -1,0 +1,600 @@
+{
+  "key_properties": [
+    "id"
+  ],
+  "metadata": [
+    {
+      "breadcrumb": [
+        "properties",
+        "host"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "id"
+      ],
+      "metadata": {
+        "inclusion": "automatic"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "name"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "project_id"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "branch_id"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "autoscaling_limit_min_cu"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "autoscaling_limit_max_cu"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "region_id"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "type"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "current_state"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "pending_state"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "settings"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "settings",
+        "properties",
+        "pg_settings"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "settings",
+        "properties",
+        "pgbouncer_settings"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "settings",
+        "properties",
+        "preload_libraries"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "settings",
+        "properties",
+        "preload_libraries",
+        "properties",
+        "use_defaults"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "settings",
+        "properties",
+        "preload_libraries",
+        "properties",
+        "enabled_libraries"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "pooler_enabled"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "pooler_mode"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "disabled"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "passwordless_access"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "last_active"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "creation_source"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "created_at"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "updated_at"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "started_at"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "suspended_at"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "proxy_host"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "suspend_timeout_seconds"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "provisioner"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [
+        "properties",
+        "compute_release_version"
+      ],
+      "metadata": {
+        "inclusion": "available"
+      }
+    },
+    {
+      "breadcrumb": [],
+      "metadata": {
+        "inclusion": "available",
+        "selected": true,
+        "selected-by-default": true,
+        "table-key-properties": [
+          "id"
+        ]
+      }
+    }
+  ],
+  "replication_method": "FULL_TABLE",
+  "schema": {
+    "properties": {
+      "autoscaling_limit_max_cu": {
+        "description": "The maximum number of Compute Units\n",
+        "minimum": 0.25,
+        "type": [
+          "number",
+          "null"
+        ]
+      },
+      "autoscaling_limit_min_cu": {
+        "description": "The minimum number of Compute Units\n",
+        "minimum": 0.25,
+        "type": [
+          "number",
+          "null"
+        ]
+      },
+      "branch_id": {
+        "description": "The ID of the branch that the compute endpoint is associated with\n",
+        "pattern": "^[a-z0-9-]{1,60}$",
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "compute_release_version": {
+        "description": "Attached compute's release version number.\n",
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "created_at": {
+        "description": "A timestamp indicating when the compute endpoint was created\n",
+        "format": "date-time",
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "creation_source": {
+        "description": "The compute endpoint creation source\n",
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "current_state": {
+        "description": "The state of the compute endpoint\n",
+        "enum": [
+          "init",
+          "active",
+          "idle"
+        ],
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "disabled": {
+        "description": "Whether to restrict connections to the compute endpoint.\nEnabling this option schedules a suspend compute operation.\nA disabled compute endpoint cannot be enabled by a connection or\nconsole action.\n",
+        "type": [
+          "boolean",
+          "null"
+        ]
+      },
+      "host": {
+        "description": "The hostname of the compute endpoint. This is the hostname specified when connecting to a Neon database.\n",
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "id": {
+        "description": "The compute endpoint ID. Compute endpoint IDs have an `ep-` prefix. For example: `ep-little-smoke-851426`\n",
+        "pattern": "^[a-z0-9-]{1,60}$",
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "last_active": {
+        "description": "A timestamp indicating when the compute endpoint was last active\n",
+        "format": "date-time",
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "name": {
+        "description": "Optional name of the compute endpoint\n",
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "passwordless_access": {
+        "description": "Whether to permit passwordless access to the compute endpoint\n",
+        "type": [
+          "boolean",
+          "null"
+        ]
+      },
+      "pending_state": {
+        "description": "The state of the compute endpoint\n",
+        "enum": [
+          "init",
+          "active",
+          "idle"
+        ],
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "pooler_enabled": {
+        "description": "Whether connection pooling is enabled for the compute endpoint\n",
+        "type": [
+          "boolean",
+          "null"
+        ]
+      },
+      "pooler_mode": {
+        "description": "The connection pooler mode. Neon supports PgBouncer in `transaction` mode only.\n",
+        "enum": [
+          "transaction",
+          "READ_ONLY"
+        ],
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "project_id": {
+        "description": "The ID of the project to which the compute endpoint belongs\n",
+        "pattern": "^[a-z0-9-]{1,60}$",
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "provisioner": {
+        "description": "The Neon compute provisioner.\nSpecify the `k8s-neonvm` provisioner to create a compute endpoint that supports Autoscaling.\n\nProvisioner can be one of the following values:\n* k8s-pod\n* k8s-neonvm\n\nClients must expect, that any string value that is not documented in the description above should be treated as a error. UNKNOWN value if safe to treat as an error too.\n",
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "proxy_host": {
+        "description": "DEPRECATED. Use the \"host\" property instead.\n",
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "region_id": {
+        "description": "The region identifier\n",
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "settings": {
+        "description": "A collection of settings for a compute endpoint",
+        "properties": {
+          "pg_settings": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "A raw representation of Postgres settings",
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "pgbouncer_settings": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "A raw representation of PgBouncer settings",
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "preload_libraries": {
+            "description": "The shared libraries to preload into the project's compute instances.\n",
+            "properties": {
+              "enabled_libraries": {
+                "items": {
+                  "type": "string"
+                },
+                "type": [
+                  "array",
+                  "null"
+                ]
+              },
+              "use_defaults": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              }
+            },
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        },
+        "type": [
+          "object",
+          "null"
+        ]
+      },
+      "started_at": {
+        "description": "A timestamp indicating when the compute endpoint was last started\n",
+        "format": "date-time",
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "suspend_timeout_seconds": {
+        "description": "Duration of inactivity in seconds after which the compute endpoint is\nautomatically suspended. The value `0` means use the default value.\nThe value `-1` means never suspend. The default value is `300` seconds (5 minutes).\nThe minimum value is `60` seconds (1 minute).\nThe maximum value is `604800` seconds (1 week). For more information, see\n[Scale to zero configuration](https://neon.tech/docs/manage/endpoints#scale-to-zero-configuration).\n",
+        "format": "int64",
+        "maximum": 604800,
+        "minimum": -1,
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "suspended_at": {
+        "description": "A timestamp indicating when the compute endpoint was last suspended\n",
+        "format": "date-time",
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "type": {
+        "description": "The compute endpoint type. Either `read_write` or `read_only`.\n",
+        "enum": [
+          "read_only",
+          "read_write"
+        ],
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "updated_at": {
+        "description": "A timestamp indicating when the compute endpoint was last updated\n",
+        "format": "date-time",
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "host",
+      "id",
+      "project_id",
+      "branch_id",
+      "region_id",
+      "autoscaling_limit_max_cu",
+      "autoscaling_limit_min_cu",
+      "type",
+      "current_state",
+      "pooler_enabled",
+      "pooler_mode",
+      "disabled",
+      "passwordless_access",
+      "creation_source",
+      "created_at",
+      "updated_at",
+      "settings",
+      "proxy_host",
+      "suspend_timeout_seconds",
+      "provisioner"
+    ],
+    "type": "object"
+  },
+  "stream": "endpoints",
+  "tap_stream_id": "endpoints"
+}
