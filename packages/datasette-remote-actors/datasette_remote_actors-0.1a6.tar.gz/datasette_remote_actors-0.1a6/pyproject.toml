@@ -1,0 +1,28 @@
+[project]
+name = "datasette-remote-actors"
+version = "0.1a6"
+description = "Datasette plugin for fetching details of actors from a remote endpoint"
+readme = "README.md"
+authors = [{name = "Simon Willison"}]
+license = {text = "Apache-2.0"}
+classifiers = [
+    "License :: OSI Approved :: Apache Software License",
+    "Framework :: Datasette",
+]
+dependencies = [
+    "datasette==1.0a19",
+    "cachetools",
+    "httpx",
+]
+
+[project.urls]
+Homepage = "https://github.com/datasette/datasette-remote-actors"
+Changelog = "https://github.com/datasette/datasette-remote-actors/releases"
+Issues = "https://github.com/datasette/datasette-remote-actors/issues"
+CI = "https://github.com/datasette/datasette-remote-actors/actions"
+
+[project.entry-points.datasette]
+remote_actors = "datasette_remote_actors"
+
+[project.optional-dependencies]
+test = ["pytest", "pytest-httpx", "pytest-asyncio", "datasette-profiles>=0.1a3"]
