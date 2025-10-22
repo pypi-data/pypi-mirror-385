@@ -1,0 +1,46 @@
+[project]
+name = "lib-x17-log"
+version = "0.0.1"
+description = "SNT cloud development library for distributed logging"
+readme = "README.md"
+authors = [
+    { name = "Xing Xing", email = "x17.quant@gmail.com" }
+]
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.11"
+
+dependencies = [
+    "dataclasses"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "ruff",
+    "twine",
+]
+
+[build-system]
+requires = [
+    "setuptools",
+    "wheel",
+    "build"
+]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["xlog"]
+include-package-data = true
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+fix = true
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+ignore = ["E501"]
+
+[tool.ruff.lint.isort]
+force-single-line = false
