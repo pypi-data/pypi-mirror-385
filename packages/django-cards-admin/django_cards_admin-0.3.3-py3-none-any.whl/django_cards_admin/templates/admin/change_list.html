@@ -1,0 +1,40 @@
+{% extends "admin/change_list.html" %}
+{% load django_simple_tags %}
+
+{% block content_title %}
+{% if result_list_show_in_cards_flag and cl.result_list|length <= result_card_modeladmin.max_result_cards_number %}
+    <h1>{% sprintf title_template cl.opts.verbose_name|add_string_gap:" " %}</h1>
+{% else %}
+    {{block.super}}
+{% endif %}
+{% endblock %}
+
+{% block result_list %}
+{% if result_list_show_in_cards_flag and cl.result_list|length <= result_card_modeladmin.max_result_cards_number %}
+    <div class="results result-cards">
+        {% for item in cl.result_list %}
+        <div class="result-card" style="width: {{result_card_width_in_percent}}%; min-width: {{result_card_body_min_width}}px;">
+            <div class="result-card-inner">
+                <h3 class="result-card-title">
+                    {% block result-card-title %}
+                    {% model_select_include item result_card_modeladmin.result_card_title_template cl=cl item=item %}
+                    {% endblock %}
+                </h3>
+                <div class="result-card-body" style="height: {{result_card_modeladmin.result_card_body_height}}px;">
+                    {% block result-card-body %}
+                    {% model_select_include item result_card_modeladmin.result_card_body_template cl=cl item=item %}
+                    {% endblock %}
+                </div>
+                <div class="result-card-footer">
+                    {% block result-card-footer" %}
+                    {% model_select_include item result_card_modeladmin.result_card_footer_template cl=cl item=item result_card_modeladmin=result_card_modeladmin%}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>    
+{% else %}
+    {{block.super}}
+{% endif %}
+{% endblock %}
