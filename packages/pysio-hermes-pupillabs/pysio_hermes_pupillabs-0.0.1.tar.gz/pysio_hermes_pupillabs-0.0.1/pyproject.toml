@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pysio-hermes-pupillabs"
+version = "0.0.1"
+requires-python = ">=3.7"
+authors = [
+  { name="Maxim Yudayev", email="maxim.yudayev@gmail.com" },
+  { name="e-Media Research Lab @ KU Leuven" },
+]
+description = "A Pupil Labs smartglasses support module for HERMES"
+keywords = ["embedded ai", "wearables", "sensors", "eye tracking", "smartglasses", "ego vision", "pupil labs", "streaming", "realtime processing", "physiology"]
+readme = { file = "README.md", content-type = "text/markdown" }
+license = "MIT"
+license-files = ["LICENSE"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Operating System :: OS Independent",
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Healthcare Industry",
+  "Intended Audience :: Education",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Topic :: Scientific/Engineering :: Medical Science Apps.",
+  "Topic :: System :: Distributed Computing"
+]
+dependencies = [
+  "pysio-hermes",
+]
+
+[project.urls]
+Homepage = "https://maximyudayev.github.io/hermes"
+Documentation = "https://maximyudayev.github.io/hermes"
+Repository = "https://github.com/maximyudayev/hermes-pupillabs.git"
+Issues = "https://github.com/maximyudayev/hermes/issues"
+Changelog = "https://github.com/maximyudayev/hermes-pupillabs/blob/main/CHANGELOG.md"
