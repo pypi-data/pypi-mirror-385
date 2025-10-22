@@ -1,0 +1,32 @@
+name: CI
+
+permissions:
+  contents: read
+
+on:
+  - pull_request
+  - push
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - run: python -m pip install --upgrade pipenv wheel
+    - run: pipenv install --deploy --dev
+    - run: pipenv run coverage
+    - run: pipenv run lint
+    - run: pipenv run type_checker
+    - run: pipenv run cyclomatic_complexity
+    - run: pipenv run maintainability_index
+    - run: pipenv run security_scan
+
+    - name: Upload coverage reports to Codacy
+      if: |
+          github.event.pull_request.head.repo.fork == false &&
+          github.actor != 'dependabot[bot]'
+      env:
+        CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
+      run: |
+        bash <(curl -Ls https://coverage.codacy.com/get.sh) \
+        report -r coverage.xml

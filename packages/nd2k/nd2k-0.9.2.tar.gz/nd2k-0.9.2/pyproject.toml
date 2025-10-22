@@ -1,0 +1,27 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name    = "nd2k"
+authors = [{name = "thiagoalessio", email = "thiagoalessio@me.com"}]
+readme  = "README.md"
+dynamic = ["version", "description"]
+license = "MIT"
+requires-python = ">=3.10"
+
+[project.urls]
+Source  = "https://github.com/thiagoalessio/nd2k"
+Tracker = "https://github.com/thiagoalessio/nd2k/issues"
+
+[project.scripts]
+nd2k = "nd2k.main:main"
+
+[tool.coverage.report]
+exclude_lines = ["@abstractmethod"]
+
+[tool.mypy]
+strict = true
+
+[tool.bandit]
+skips = ["B101"]
