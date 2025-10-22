@@ -1,0 +1,400 @@
+Metadata-Version: 2.4
+Name: privacy-similarity
+Version: 0.1.2
+Summary: Privacy-preserving similarity search for massive DataFrames with PII
+Home-page: https://github.com/alexandernicholson/python-similarity
+Author: Alexander Nicholson
+Author-email: Alexander Nicholson <alexander@example.com>
+License-Expression: MIT
+Project-URL: Homepage, https://github.com/alexandernicholson/python-similarity
+Project-URL: Documentation, https://github.com/alexandernicholson/python-similarity/tree/main/docs
+Project-URL: Repository, https://github.com/alexandernicholson/python-similarity
+Project-URL: Issues, https://github.com/alexandernicholson/python-similarity/issues
+Project-URL: Changelog, https://github.com/alexandernicholson/python-similarity/blob/main/CHANGELOG.md
+Keywords: privacy,similarity-search,differential-privacy,pii,embeddings,faiss,deduplication
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Classifier: Topic :: Security :: Cryptography
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy>=1.20.0
+Requires-Dist: pandas>=1.3.0
+Requires-Dist: scikit-learn>=1.0.0
+Requires-Dist: sentence-transformers>=2.2.0
+Requires-Dist: faiss-cpu>=1.7.0
+Requires-Dist: pycryptodome>=3.15.0
+Requires-Dist: mmh3>=3.0.0
+Provides-Extra: gpu
+Requires-Dist: faiss-gpu>=1.7.4; extra == "gpu"
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0.0; extra == "dev"
+Requires-Dist: pytest-cov>=3.0.0; extra == "dev"
+Requires-Dist: black>=22.0.0; extra == "dev"
+Requires-Dist: flake8>=4.0.0; extra == "dev"
+Requires-Dist: mypy>=0.950; extra == "dev"
+Requires-Dist: bump2version>=1.0.0; extra == "dev"
+Requires-Dist: build>=0.7.0; extra == "dev"
+Requires-Dist: twine>=4.0.0; extra == "dev"
+Dynamic: author
+Dynamic: home-page
+Dynamic: license-file
+Dynamic: requires-python
+
+# Privacy-Preserving Similarity Search
+
+A Python package for privacy-preserving similarity search on massive DataFrames containing PII (Personally Identifiable Information). Perfect for finding duplicate customers, similar purchase histories, and entity resolution while maintaining strong privacy guarantees.
+
+## Features
+
+- **Multiple Privacy Modes**: Differential Privacy, Homomorphic Encryption, Secure Hashing
+- **Scalable Search**: Built on FAISS for billion-scale vector similarity search
+- **Advanced Embeddings**: Deep learning-based embeddings using Sentence Transformers
+- **Smart Blocking**: LSH and clustering-based candidate generation
+- **Flexible API**: Easy-to-use interface for DataFrame operations
+- **Production-Ready**: Based on research from Amazon, Meta, Google, and Microsoft
+
+## Architecture
+
+The package implements a multi-layered architecture:
+
+1. **Privacy Protection Layer**: Transforms sensitive data using DP, HE, or secure hashing
+2. **Embedding Generation**: Converts text and structured data into dense vector representations
+3. **Blocking/Filtering**: Reduces search space using LSH or clustering techniques
+4. **Similarity Search**: FAISS-based approximate nearest neighbor search
+5. **Post-Processing**: Refinement and deduplication
+
+### Component Diagram
+
+```mermaid
+graph TB
+    subgraph Input["Input Layer"]
+        DF[DataFrame with PII]
+    end
+
+    subgraph Privacy["Privacy Protection Layer"]
+        DP[Differential Privacy<br/>DP-MinHash, DP-OPH]
+        HE[Homomorphic Encryption<br/>Secure Inner Products]
+        SH[Secure Hashing<br/>Bloom Filters, k-Anonymity]
+    end
+
+    subgraph Embeddings["Embedding Generation Layer"]
+        TE[Text Embeddings<br/>Sentence Transformers]
+        PII[PII Tokenizer<br/>Name/Email/Address]
+        NF[Numeric Features<br/>Scaling, Encoding]
+    end
+
+    subgraph Blocking["Blocking/Filtering Layer"]
+        LSH[LSH Blocking<br/>Random Projection, MinHash]
+        CLUSTER[Clustering<br/>K-Means, Canopy]
+        DYNAMIC[Dynamic Bucketing<br/>Adaptive Radius]
+    end
+
+    subgraph Search["Similarity Search Layer"]
+        FLAT[FAISS Flat<br/>Exact Search]
+        HNSW[FAISS HNSW<br/>Graph-based ANN]
+        IVF[FAISS IVF<br/>Quantized Search]
+    end
+
+    subgraph Output["Output Layer"]
+        RESULTS[Search Results<br/>Top-k Neighbors]
+        DUPES[Duplicate Groups<br/>Connected Components]
+    end
+
+    DF --> Privacy
+    DP --> Embeddings
+    HE --> Embeddings
+    SH --> Embeddings
+
+    Embeddings --> TE
+    Embeddings --> PII
+    Embeddings --> NF
+
+    TE --> Blocking
+    PII --> Blocking
+    NF --> Blocking
+
+    LSH --> Search
+    CLUSTER --> Search
+    DYNAMIC --> Search
+
+    FLAT --> Output
+    HNSW --> Output
+    IVF --> Output
+
+    RESULTS --> USER[User Application]
+    DUPES --> USER
+
+    style Privacy fill:#e1f5ff
+    style Embeddings fill:#fff3cd
+    style Blocking fill:#d4edda
+    style Search fill:#f8d7da
+    style Output fill:#d1ecf1
+```
+
+### Data Flow
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant API as Core API
+    participant P as Privacy Layer
+    participant E as Embeddings
+    participant B as Blocking
+    participant S as FAISS Search
+
+    U->>API: fit(df, sensitive_columns)
+    API->>P: apply_privacy(sensitive_data)
+    P-->>API: protected_data
+    API->>E: generate_embeddings(data)
+    E-->>API: vectors
+    API->>B: create_blocks(vectors)
+    B-->>API: candidate_sets
+    API->>S: build_index(vectors)
+    S-->>API: index
+    API-->>U: fitted_model
+
+    U->>API: search(query_df, k=10)
+    API->>P: apply_privacy(query_data)
+    P-->>API: protected_query
+    API->>E: generate_embeddings(query)
+    E-->>API: query_vectors
+    API->>B: filter_candidates(query_vectors)
+    B-->>API: candidate_ids
+    API->>S: search(query_vectors, k)
+    S-->>API: neighbors, distances
+    API-->>U: results_df
+```
+
+## Installation
+
+### From PyPI (Recommended)
+
+```bash
+pip install privacy-similarity
+```
+
+### From Source
+
+```bash
+git clone https://github.com/alexandernicholson/python-similarity.git
+cd python-similarity
+pip install -r requirements.txt
+pip install -e .
+```
+
+### GPU Support
+
+For GPU acceleration (5-10x faster on large datasets):
+```bash
+pip install privacy-similarity
+pip install faiss-gpu
+```
+
+## Quick Start
+
+```python
+from privacy_similarity import PrivacyPreservingSimilaritySearch
+import pandas as pd
+
+# Create sample DataFrame with customer data
+df = pd.DataFrame({
+    'customer_id': [1, 2, 3, 4, 5],
+    'name': ['John Smith', 'Jon Smith', 'Jane Doe', 'John A. Smith', 'Alice Johnson'],
+    'email': ['john@example.com', 'jon@example.com', 'jane@example.com', 'jsmith@example.com', 'alice@example.com'],
+    'address': ['123 Main St', '123 Main Street', '456 Oak Ave', '123 Main St.', '789 Pine Rd'],
+    'interests': ['sports, technology', 'tech, sports', 'reading, cooking', 'technology, sports', 'cooking, travel']
+})
+
+# Initialize with privacy and search parameters
+searcher = PrivacyPreservingSimilaritySearch(
+    privacy_mode='differential_privacy',  # or 'homomorphic', 'secure_hashing'
+    epsilon=1.0,  # Differential privacy parameter
+    embedding_model='sentence-transformers/all-MiniLM-L6-v2',
+    index_type='HNSW',  # or 'IVF-HNSW', 'IVF-PQ' for larger datasets
+    use_gpu=False
+)
+
+# Fit the model on your data
+searcher.fit(
+    df,
+    sensitive_columns=['name', 'email', 'address'],
+    embedding_columns=['interests'],
+    id_column='customer_id'
+)
+
+# Find duplicates
+duplicates = searcher.find_duplicates(threshold=0.85)
+print(f"Found {len(duplicates)} duplicate groups")
+
+# Search for similar records
+query_df = pd.DataFrame({
+    'name': ['Jonathan Smith'],
+    'email': ['j.smith@example.com'],
+    'address': ['123 Main Street'],
+    'interests': ['sports and tech']
+})
+
+results = searcher.search(query_df, k=3, similarity_threshold=0.7)
+print(results)
+```
+
+## Privacy Modes
+
+### Differential Privacy (Recommended)
+- **Overhead**: 1.5-2x
+- **Use Case**: Statistical privacy guarantees for analytics
+- **Parameters**: `epsilon` (privacy budget, lower = more private)
+
+```python
+searcher = PrivacyPreservingSimilaritySearch(
+    privacy_mode='differential_privacy',
+    epsilon=1.0  # Standard: 0.1 (high privacy) to 10.0 (low privacy)
+)
+```
+
+### Homomorphic Encryption
+- **Overhead**: 10-100x
+- **Use Case**: Cryptographic guarantees for sensitive data
+- **Parameters**: `encryption_key_size`
+
+```python
+searcher = PrivacyPreservingSimilaritySearch(
+    privacy_mode='homomorphic',
+    encryption_key_size=2048
+)
+```
+
+### Secure Hashing
+- **Overhead**: 1x
+- **Use Case**: Internal use, public data
+- **Parameters**: `salt` (random string for security)
+
+```python
+searcher = PrivacyPreservingSimilaritySearch(
+    privacy_mode='secure_hashing',
+    salt='your-random-salt-string'
+)
+```
+
+## Index Types
+
+- **HNSW**: Best for <10M records, excellent accuracy and speed
+- **IVF-HNSW**: Best for 10M-1B records, balanced performance
+- **IVF-PQ**: Best for 1B+ records with memory constraints
+
+## Performance Characteristics
+
+| Index Type | Dataset Size | QPS | Recall | Memory |
+|-----------|--------------|-----|--------|---------|
+| HNSW | <10M | 10^4-10^5 | >95% | High |
+| IVF-HNSW | 10M-1B | 10^3-10^4 | >90% | Medium |
+| IVF-PQ | 1B+ | 10^2-10^3 | >85% | Low |
+
+## Use Cases
+
+### Customer Deduplication
+```python
+# Find duplicate customer records
+duplicates = searcher.find_duplicates(
+    threshold=0.9,
+    max_cluster_size=100
+)
+
+# Get detailed match information
+for group in duplicates:
+    print(f"Duplicate group: {group['ids']}")
+    print(f"Confidence: {group['similarity']}")
+```
+
+### Similar Customer Discovery
+```python
+# Find customers with similar interests or purchase history
+similar = searcher.search(
+    query_df,
+    k=10,
+    similarity_threshold=0.75,
+    return_distances=True
+)
+```
+
+### Privacy-Preserving Analytics
+```python
+# Perform analytics on sensitive data without exposing PII
+searcher = PrivacyPreservingSimilaritySearch(
+    privacy_mode='differential_privacy',
+    epsilon=0.1  # High privacy
+)
+```
+
+## Advanced Features
+
+### Custom Embeddings
+```python
+# Use your own embedding model
+from sentence_transformers import SentenceTransformer
+
+custom_model = SentenceTransformer('your-model-name')
+searcher = PrivacyPreservingSimilaritySearch(
+    embedding_model=custom_model
+)
+```
+
+### Batch Processing
+```python
+# Process large datasets in batches
+searcher.fit_batch(
+    df,
+    batch_size=10000,
+    n_jobs=-1  # Use all CPU cores
+)
+```
+
+### Incremental Updates
+```python
+# Add new records to existing index
+searcher.add_records(new_df)
+```
+
+## Research Background
+
+This package is built on state-of-the-art research from:
+
+- **Meta/Facebook**: FAISS library for billion-scale vector search
+- **Amazon**: Semantic product search and entity resolution
+- **Airbnb**: Real-time personalization using embeddings
+- **Academic Research**: Differential privacy, homomorphic encryption, LSH
+
+Key papers implemented:
+- FAISS: A library for efficient similarity search (Meta AI)
+- Differential Privacy for MinHash and LSH
+- Privacy-Preserving Text Embeddings with Homomorphic Encryption
+- Neural LSH for Entity Blocking
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+MIT License
+
+## Citation
+
+If you use this package in your research, please cite:
+
+```bibtex
+@software{privacy_similarity,
+  title={Privacy-Preserving Similarity Search},
+  author={Alexander Nicholson},
+  year={2025},
+  url={https://github.com/alexandernicholson/python-similarity}
+}
+```
