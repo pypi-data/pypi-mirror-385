@@ -1,0 +1,73 @@
+Metadata-Version: 2.4
+Name: pytest-tui-runner
+Version: 1.0.1
+Summary: Textual-based terminal UI for running pytest tests
+Author-email: Jan Málek <176jenda@gmail.com>
+License: MIT License
+        
+        Copyright (c) 2025 Jan Málek
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+Project-URL: Repository, https://github.com/JanMalek03/pytest-tui-runner
+Keywords: pytest,gui,tui,plugin
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Framework :: Pytest
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: click>=8.2.1
+Requires-Dist: loguru>=0.7.3
+Requires-Dist: pydantic>=2.11.9
+Requires-Dist: pytest>=8.3.5
+Requires-Dist: pytest-json-report>=1.5.0
+Requires-Dist: pyyaml>=6.0.2
+Requires-Dist: textual>=3.0.0
+Dynamic: license-file
+
+# pytest-tui-runner
+
+**Textual-based terminal UI for running pytest tests**
+
+`pytest-tui-runner` is a plugin and standalone tool that provides an interactive **Textual User Interface (TUI)** for configuring and running Python tests using [pytest](https://pytest.org/).  
+It allows developers to easily filter, parametrize, and execute tests directly from the terminal in a clear, interactive environment.
+
+---
+
+## Installation
+
+You can install the package from PyPI:
+
+```bash
+pip install pytest-tui-runner
+```
+
+---
+
+
+## Usage
+```bash
+pytest-tui run
+```
+
+Or you can run it with specific path to tests
+```bash
+pytest-tui run /path/to/your/tests
+```
+
+---
+
+## Configuration
+
+`pytest-tui-runner` is configured in the pytest_tui_runner folder, which you have to create in the whole project at the ROOT level.
+In that folder, create a default_test.ya file and define your required test structure according to the template.
+
+---
+
+## License
+
+This project is licensed under the **[MIT License]** - see the `LICENSE' file for more details..
