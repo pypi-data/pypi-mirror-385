@@ -1,0 +1,36 @@
+Metadata-Version: 2.4
+Name: python-agents
+Version: 0.2.0
+Summary: Easy to use and powerful AI Agent development framework.
+Author-email: Michael Anckaert <michael@sinax.be>
+Maintainer-email: Michael Anckaert <michael@sinax.be>
+License-Expression: Apache-2.0
+Project-URL: Repository, https://github.com/MichaelAnckaert/python-agents
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Requires-Python: >=3.12
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: mcp>=1.18.0
+Requires-Dist: openai>=2.5.0
+Provides-Extra: dev
+Requires-Dist: ruff>=0.14.1; extra == "dev"
+Provides-Extra: docs
+Requires-Dist: sphinx>=7.0.0; extra == "docs"
+Requires-Dist: sphinx-rtd-theme>=2.0.0; extra == "docs"
+Requires-Dist: sphinx-autodoc-typehints>=2.0.0; extra == "docs"
+Dynamic: license-file
+
+# python-agents
+[Documentation](https://python-agents.readthedocs.io/en/latest/)
+
+python-agents is an easy to use and powerful AI Agent development framework that implements the REACT (Reasoning and Acting) pattern for building agents with tool-calling capabilities.
+
+The library provides a minimal but powerful abstraction for creating agents that can reason step-by-step and use tools to accomplish complex tasks.
+
+## Features
+
+- **REACT Agent Pattern**: Step-by-step reasoning with tool calling
+- **Simple Tool Integration**: Convert Python functions to agent tools automatically
+- **Async-First Design**: Built on async/await for efficient concurrent operations
+- **OpenRouter Compatible**: Works with any OpenAI-compatible API endpoint

@@ -1,0 +1,50 @@
+[project]
+name = "python-agents"
+version = "0.2.0"
+description = "Easy to use and powerful AI Agent development framework."
+readme = "README.md"
+authors = [
+    {name="Michael Anckaert", email="michael@sinax.be"},
+]
+maintainers = [
+    {name="Michael Anckaert", email="michael@sinax.be"},
+]
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+]
+requires-python = ">=3.12"
+dependencies = [
+    "mcp>=1.18.0",
+    "openai>=2.5.0",
+]
+
+[project.urls]
+Repository = "https://github.com/MichaelAnckaert/python-agents"
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.14.1",
+]
+docs = [
+    "sphinx>=7.0.0",
+    "sphinx-rtd-theme>=2.0.0",
+    "sphinx-autodoc-typehints>=2.0.0",
+]
+
+[dependency-groups]
+dev = [
+    "isort>=7.0.0",
+    "mypy>=1.18.2",
+    "ruff>=0.14.1",
+]
+docs = [
+    "sphinx>=7.0.0",
+    "sphinx-rtd-theme>=2.0.0",
+    "sphinx-autodoc-typehints>=2.0.0",
+]
+
+[tool.ruff]
+line-length = 120
