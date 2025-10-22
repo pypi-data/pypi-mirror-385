@@ -1,0 +1,84 @@
+[tool.poetry]
+name = "cmem-cmempy"
+version = "25.4.0"
+license = "Apache-2.0"
+description = "API for eccenca Corporate Memory"
+authors = ["eccenca GmbH <cmempy-developer@eccenca.com>"]
+maintainers = ["Sebastian Tramp <sebastian.tramp@eccenca.com>"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Testing",
+    "Topic :: Database",
+    "Topic :: Utilities"
+]
+homepage = "https://eccenca.com/go/cmempy"
+readme = "README-public.md"
+packages = [
+    { include = "cmem" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+certifi = ">=2023.7.22"
+pyparsing = "^3.2.3"
+rdflib = "^7.1.4"
+requests = "^2.32.4"
+requests-toolbelt = "^1.0.0"
+
+[tool.poetry.group.dev.dependencies]
+bandit = "^1.7.2"
+black = "^24.3.0"
+coverage = "^6.3.2"
+coverage-badge = "^1.1.0"
+defusedxml = "^0.7.1"
+flake8 = "^6.0.0"
+genbadge = "^1.1.1"
+mypy = "^1.9.0"
+pylint = "^2" # https://github.com/rasjani/pylint-junit/issues/1
+pylint-junit = "==0.3.2" # https://github.com/rasjani/pylint-junit/issues/2
+pytest = "^7.0"
+pytest-cov = "^4.0.0"
+pytest-memray = { version = "^1.7.0",  markers = "platform_system != 'Windows'" }
+safety = "^1.10.3"
+types-requests = "^2.28.11.5"
+wheel = "^0.38.4"
+wrapt = { version = "*", python = "==3.9" } # not sure why this is needed for 3.9
+pip = "^25.2"
+
+[build-system]
+requires = ["poetry-core>=1.2.0", "poetry-dynamic-versioning"]
+build-backend = "poetry_dynamic_versioning.backend"
+
+[tool.poetry-dynamic-versioning]
+enable = false
+vcs = "git"
+dirty = true
+
+[tool.pylint.MASTER]
+load-plugins="pylint_junit"
+
+[tool.pylint.General]
+ignore = "version.py"
+
+[tool.pylint.'MESSAGES CONTROL']
+extension-pkg-whitelist = "pydantic"
+disable = "fixme"
+
+# https://black.readthedocs.io/en/stable/guides/using_black_with_other_tools.html#pylint
+[tool.pylint.messages_control]
+disable = "R0903, E1101"
+
+[tool.pylint.format]
+max-line-length = "120"
+min-similarity-lines=10
+
+[tool.mypy]
+warn_return_any = true
+ignore_missing_imports = true
