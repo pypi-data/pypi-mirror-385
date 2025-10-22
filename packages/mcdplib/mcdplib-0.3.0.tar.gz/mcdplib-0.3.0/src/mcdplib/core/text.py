@@ -1,0 +1,1 @@
+TextLike = str | list | dict
