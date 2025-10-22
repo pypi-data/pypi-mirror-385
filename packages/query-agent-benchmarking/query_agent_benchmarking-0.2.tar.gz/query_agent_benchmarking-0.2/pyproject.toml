@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=70", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "query-agent-benchmarking"
+version = "0.2"
+description="A Python library for benchmarking Weaviate's Query Agent!"
+readme="README.md"
+requires-python = ">=3.9"
+dependencies = [
+  "dspy>=2.6.27",
+  "sentence-transformers>=5.0.0",
+  "weaviate-client[agents]>=4.15.4",
+  "weaviate-agents>=1.0.0",
+  "pandas>=2.3.1",
+  "datasets>=4.0.0",
+  "ir-datasets>=0.5.11",
+  "pip>=25.2",
+  "setuptools>=80.9.0",
+  "wheel>=0.45.1",
+  "twine>=6.2.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["query_agent_benchmarking*"]
+exclude = ["notebooks*", "results*", "locust*", "ci*"]
