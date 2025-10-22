@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "coaxial-wakesleepmanager"
+version = "0.1.0"
+description = "A cross-platform tool to manage wake and sleep states of network devices"
+authors = [{name = "Petter"}]
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.6"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "wakeonlan>=2.1.0",
+    "paramiko>=3.3.1",
+    "click>=8.1.7",
+    "rich>=13.7.0",
+    "python-dotenv>=1.0.0",
+    "ping3>=4.0.4",
+]
+
+[project.scripts]
+wakesleepmanager = "coaxial_wakesleepmanager.cli:cli"
+wake = "coaxial_wakesleepmanager.cli:cli"
+sleep = "coaxial_wakesleepmanager.cli:cli"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["coaxial_wakesleepmanager*"]

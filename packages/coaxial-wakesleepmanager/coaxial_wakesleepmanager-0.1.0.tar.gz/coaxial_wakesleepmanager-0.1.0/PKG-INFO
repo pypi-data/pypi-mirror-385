@@ -1,0 +1,156 @@
+Metadata-Version: 2.4
+Name: coaxial-wakesleepmanager
+Version: 0.1.0
+Summary: A cross-platform tool to manage wake and sleep states of network devices
+Author: Petter
+License: MIT
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+Requires-Dist: wakeonlan>=2.1.0
+Requires-Dist: paramiko>=3.3.1
+Requires-Dist: click>=8.1.7
+Requires-Dist: rich>=13.7.0
+Requires-Dist: python-dotenv>=1.0.0
+Requires-Dist: ping3>=4.0.4
+Dynamic: requires-python
+
+# Coaxial WakeSleepManager
+
+A powerful cross-platform tool to manage wake and sleep states of network devices.
+
+## Features
+
+- **Wake devices** remotely using Wake-on-LAN
+- **Sleep devices** remotely via SSH
+- **Check status** of devices on your network with color-coded display
+- **Manage device list** with easy add/edit/remove operations
+- **Interactive setup menu** for device management
+- **Cross-platform compatibility** for macOS, Linux, and Windows
+- **Automatic OS detection** for proper sleep commands
+- **Enhanced SSH key support** with automatic detection
+- **Smart uninstall** that preserves user settings
+
+## Installation
+
+```bash
+pip install coaxial-wakesleepmanager
+```
+
+## Uninstallation
+
+### Standard Uninstall
+```bash
+pip uninstall coaxial-wakesleepmanager
+```
+
+### Smart Uninstall (Preserves Settings)
+```bash
+python uninstall.py
+```
+
+The smart uninstall script will:
+- Ask if you want to keep your device configurations
+- Preserve settings if you plan to reinstall later
+- Optionally delete all settings for a clean removal
+
+## Quick Start
+
+```bash
+# Wake up a device
+wake mypc
+
+# Put a device to sleep
+sleep mypc
+
+# Check status of all devices (with color-coded status)
+wake check
+
+# Add a new device
+wake add device
+
+# Interactive setup menu
+wakesleepmanager -s
+# or
+wakesleepmanager --setup
+```
+
+## Command Reference
+
+### Primary Commands
+- `wake <subcommand>` - Main command for all functionality
+- `awake <subcommand>` - Alternative to `wake`, functions identically
+- `wsleep <device>` - Direct command to put a device to sleep
+
+### Wake/Awake Subcommands
+- `wake up <device>` - Wake up a specific device
+- `wake sleep <device>` - Put a specific device to sleep
+- `wake check` - Check status of all devices (color-coded: green=awake, red=sleeping)
+- `wake list` - List all configured devices
+- `wake add device` - Add a new device
+- `wake config` - Show configuration file location and status
+
+### Examples
+```bash
+# Wake up a device
+wake up mypc
+# or
+awake up mypc
+
+# Put a device to sleep
+wake sleep mypc
+# or
+awake sleep mypc
+# or
+wsleep mypc
+
+# Check status of all devices (color-coded)
+wake check
+# or
+awake check
+```
+
+## Requirements
+
+- Python 3.6+
+- Network connectivity to target devices
+- Wake-on-LAN enabled on target devices for wake functionality
+- SSH access to target devices for sleep functionality
+
+## Configuration
+
+On first run, the application will create a configuration file in your home directory at `~/.config/wakesleepmanager/devices.json`.
+
+## Security & Privacy
+
+### Data Storage
+- **Configuration**: Stored locally in `~/.config/wakesleepmanager/devices.json`
+- **SSH Credentials**: Stored locally in the same JSON file
+- **SSH Keys**: References to existing SSH keys in `~/.ssh/` (keys are not copied)
+- **No Cloud Storage**: All data remains on your local machine
+
+### SSH Key Support
+The tool supports both password and SSH key authentication:
+- **Automatic Detection**: Scans `~/.ssh/` for existing keys matching the device
+- **SSH Config Integration**: Reads existing `~/.ssh/config` entries
+- **Manual Configuration**: Option to specify custom key paths
+
+### Security Considerations
+- **Local Storage Only**: No data is sent to external servers
+- **SSH Key References**: Only stores paths to existing keys, never copies them
+- **Password Storage**: Passwords are stored in plain text in the local config file
+- **File Permissions**: The config directory is created with appropriate permissions
+
+### Safe for Public Distribution
+✅ **Safe to upload to PyPI and GitHub** because:
+- No sensitive data is included in the source code
+- All credentials are stored locally on user's machine
+- SSH keys are referenced, not embedded
+- Configuration files are in `.gitignore` by default
+- Smart uninstall script preserves user settings
+
+## License
+
+MIT License
