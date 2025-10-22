@@ -1,0 +1,162 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+#
+#    py-ard
+#    Copyright (c) 2023 Be The Match operated by National Marrow Donor Program. All Rights Reserved.
+#
+#    This library is free software; you can redistribute it and/or modify it
+#    under the terms of the GNU Lesser General Public License as published
+#    by the Free Software Foundation; either version 3 of the License, or (at
+#    your option) any later version.
+#
+#    This library is distributed in the hope that it will be useful, but WITHOUT
+#    ANY WARRANTY; with out even the implied warranty of MERCHANTABILITY or
+#    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+#    License for more details.
+#
+#    You should have received a copy of the GNU Lesser General Public License
+#    along with this library;  if not, write to the Free Software Foundation,
+#    Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA.
+#
+#    > http://www.fsf.org/licensing/licenses/lgpl.html
+#    > http://www.opensource.org/licenses/lgpl-license.php
+#
+import argparse
+import pathlib
+import sys
+
+import pyard
+from pyard import db, data_repository
+from pyard.misc import get_data_dir
+
+
+def get_imgt_version(version_number):
+    if version_number:
+        version_no_digit = version_number.replace(".", "")
+        if version_no_digit.isdigit():
+            return version_no_digit
+        raise RuntimeError(
+            f"{version_number} is not a valid IMGT database version number"
+        )
+    return "Latest"
+
+
+def get_v2_v3_mapping(v2_v3_mapping):
+    if v2_v3_mapping:
+        import pandas as pd
+
+        path = pathlib.Path(v2_v3_mapping)
+        if not path.exists() or not path.is_file():
+            raise RuntimeError(f"{data_dir} is not a valid file")
+        df = pd.read_csv(path, names=["v2", "v3"])
+        return df.set_index("v2")["v3"].to_dict()
+    return None
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="""
+        py-ard tool to generate reference SQLite database.
+        Allows updating db with custom V2 to V3 mappings.
+        Displays the list of available IMGT database versions.
+        """,
+    )
+    parser.add_argument(
+        "--list",
+        dest="show_versions",
+        action="store_true",
+        help="Show Versions of available IMGT Databases",
+    )
+    parser.add_argument(
+        "-i",
+        "--imgt-version",
+        dest="imgt_version",
+        help="Import supplied IMGT_VERSION DB Version",
+    )
+    parser.add_argument(
+        "-d",
+        "--data-dir",
+        dest="data_dir",
+        help="Data directory to store imported data",
+    )
+    parser.add_argument(
+        "--v2-to-v3-mapping", dest="v2_v3_mapping", help="V2 to V3 mapping CSV file"
+    )
+    parser.add_argument(
+        "--refresh-mac",
+        dest="refresh_mac",
+        action="store_true",
+        help="Only refresh MAC data",
+    )
+    parser.add_argument(
+        "--re-install",
+        dest="reinstall",
+        action="store_true",
+        help="reinstall a fresh version of database",
+    )
+    parser.add_argument(
+        "--skip-mac",
+        dest="skip_mac",
+        action="store_true",
+        help="Skip creating MAC mapping",
+    )
+    args = parser.parse_args()
+
+    if args.show_versions:
+        versions = pyard.db_versions()
+        print("Available IMGT Versions:")
+        for version in versions:
+            print(f"  {version}")
+        sys.exit(0)
+
+    imgt_version = get_imgt_version(args.imgt_version)
+    # print(imgt_version)
+
+    data_dir = get_data_dir(args.data_dir)
+    # print(data_dir)
+
+    v2_to_v3_dict = get_v2_v3_mapping(args.v2_v3_mapping)
+    # print(len(v2_to_v3_dict))
+
+    if args.reinstall:
+        print(f"Reinstalling Version: {imgt_version}")
+        db_fullname = pathlib.Path(f"{data_dir}/pyard-{imgt_version}.sqlite3")
+        if db_fullname.exists():
+            print(f"Removing {db_fullname}")
+            db_fullname.unlink(missing_ok=True)
+
+    print(f"Importing IMGT database version: {imgt_version}")
+    if args.skip_mac:
+        load_mac = False
+        print(f"Skipping MAC tables creation")
+    else:
+        load_mac = True
+
+    try:
+        ard = pyard.init(
+            imgt_version=imgt_version, data_dir=data_dir, load_mac=load_mac
+        )
+    except ValueError as e:
+        print(f"Error importing version {imgt_version}:", e)
+        sys.exit(1)
+    print(f"Import complete for database version: {imgt_version}")
+    # We don't need ard object anymore
+    del ard
+
+    if v2_to_v3_dict:
+        db_connection, _ = db.create_db_connection(data_dir, imgt_version, ro=False)
+        db.save_dict(
+            db_connection,
+            table_name="v2_mapping",
+            dictionary=v2_to_v3_dict,
+            columns=("v2", "v3"),
+        )
+        print(
+            f"Updated v2_mapping table with '{args.v2_v3_mapping}' mapping file for {imgt_version} IMGT database."
+        )
+
+    if args.refresh_mac:
+        print(f"Updating MACs")
+        db_connection, _ = db.create_db_connection(data_dir, imgt_version, ro=False)
+        data_repository.generate_mac_codes(db_connection, refresh_mac=True)
+        print(f"Updated MACs for {imgt_version} IMGT database.")
