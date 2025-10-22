@@ -1,0 +1,25 @@
+result:
+  errors:
+  - - package
+    - from package.b import *; does not have an __all__
+  - - package.d
+    - from package import *; is a circular import
+  - - package.d
+    - '''p'' is unknown'
+  - - package
+    - from other import *; is unknown
+  - - package
+    - '''unknown'' is unknown'
+  resolved:
+    a1: package.a.a1
+    alias: package.a.c.ac1
+    p: package.p
+    something: unknown.something
+warnings:
+- 'package.d: package.d: from package import *; is a circular import'
+- 'package.d: package.d: ''p'' is unknown'
+- 'package: package: from package.b import *; does not have an __all__'
+- 'package: package.d: from package import *; is a circular import'
+- 'package: package.d: ''p'' is unknown'
+- 'package: package: from other import *; is unknown'
+- 'package: package: ''unknown'' is unknown'
