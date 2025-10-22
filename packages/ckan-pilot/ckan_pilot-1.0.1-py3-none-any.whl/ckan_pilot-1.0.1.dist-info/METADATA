@@ -1,0 +1,72 @@
+Metadata-Version: 2.4
+Name: ckan-pilot
+Version: 1.0.1
+Summary: ckan-pilot enables users to create and manage CKAN projects
+Author-email: Keitaro Inc <info@keitaro.com>
+License: Apache-2.0
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: auto-click-auto>=0.1.5
+Requires-Dist: click>=8.1.8
+Requires-Dist: click-log>=0.4.0
+Requires-Dist: copier>=9.6.0
+Requires-Dist: docker>=7.1.0
+Requires-Dist: pyfiglet>=1.0.2
+Requires-Dist: python-dotenv>=1.1.0
+Requires-Dist: requests>=2.32.3
+Requires-Dist: rich>=13.9.4
+
+# 🛰️ CKAN Pilot
+
+**A CLI tool to manage CKAN projects with ease.**
+Manage CKAN **project development, operations and maintenance** with a state-of-the-art command-line interface (**CLI**) and modern toolset.
+
+![CKAN Pilot logotype](CKAN-Pilot-logo.webp "CKAN Pilot logotype")
+
+---
+
+## 📄 Installation guide
+
+- [Installation](https://github.com/keitaroinc/ckan-pilot/wiki/Installation)
+
+
+## 🚀 Quickstart
+
+1. **Initialize a new project:**
+
+```bash
+ckan-pilot init <project_dir>
+```
+
+> Once the project is initialized run all commands from the project directory.
+
+2. **Build a distribution of the project:**
+
+```bash
+ckan-pilot dist build
+```
+
+3. **Start CKAN stack:**
+
+```bash
+ckan-pilot start --dev
+```
+
+> Run any command with `--help` to see its options.
+> To stop the CKAN instance crtl+c in the terminal where it is running.
+
+## 📚 Documentation
+
+For detailed documentation, visit the [CKAN Pilot Documentation](https://github.com/keitaroinc/ckan-pilot/wiki).
+
+---
+
+## 🙌 Contributing
+
+Pull requests and issues are welcome!  
+To contribute:
+
+1. Fork the repo  
+2. Create a branch  
+3. Commit your changes  
+4. Open a pull request
