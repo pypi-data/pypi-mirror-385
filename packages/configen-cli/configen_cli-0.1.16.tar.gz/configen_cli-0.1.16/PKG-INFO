@@ -1,0 +1,97 @@
+Metadata-Version: 2.3
+Name: configen-cli
+Version: 0.1.16
+Summary: Configen cli
+Author: kostyarypta
+Author-email: kostya.rypta@gmail.com
+Requires-Python: >=3.12,<4.0
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Requires-Dist: backoff (>=2.2.1,<3.0.0)
+Requires-Dist: fastapi (>=0.115.0,<0.116.0)
+Requires-Dist: httpx (>=0.27.0,<0.28.0)
+Requires-Dist: openai (>=1.30.1,<2.0.0)
+Requires-Dist: pexpect (>=4.9.0,<5.0.0)
+Requires-Dist: platformdirs (>=4.3.1,<5.0.0)
+Requires-Dist: psutil (>=5.9.8,<6.0.0)
+Requires-Dist: python-dotenv (>=1.0.1,<2.0.0)
+Requires-Dist: rich (>=13.7.1,<14.0.0)
+Requires-Dist: tqdm (>=4.66.4,<5.0.0)
+Requires-Dist: typer (>=0.12.3,<0.13.0)
+Description-Content-Type: text/markdown
+
+# Configen CLI
+
+This is the CLI tool for **Configen**, built with **Typer**, **Rich**, and **OpenAI**.
+
+### 1. Install Pyenv
+```
+brew update
+```
+```
+brew install pyenv
+```
+```
+cat << 'EOF' >> ~/.zshrc
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+EOF
+```
+```
+source ~/.zshrc
+```
+```
+pyenv --version
+```
+```
+pyenv install 3.12.3
+```
+```
+pyenv local 3.12.3
+```
+```
+which python
+```
+```
+python --version
+```
+
+### 2. Create new Poetry project
+```
+poetry new configen-{project}
+```
+```
+cd /configen-{project}
+```
+```
+poetry install
+```
+```
+poetry run pytest
+```
+```
+poetry env info --path
+```
+
+### 3. Install/uninstall CLI from source code
+```
+pip install -e .
+```
+```
+pip uninstall configen-cli
+```
+
+### 4. Deploy CLI to PyPI
+```
+poetry version patch
+```
+```
+poetry build
+```
+```
+poetry run twine upload --repository testpypi dist/* --verbose
+```
+```
+poetry run twine upload --repository pypi dist/* --verbose
+```
