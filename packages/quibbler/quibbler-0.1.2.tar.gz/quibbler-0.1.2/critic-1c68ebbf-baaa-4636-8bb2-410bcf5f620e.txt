@@ -1,0 +1,39 @@
+[2025-10-21T14:40:05] URGENT CRITIC FEEDBACK
+
+🚨 STOP: You are making major breaking changes without user approval 🚨
+
+CRITICAL ISSUES:
+
+1. **NO USER REQUEST VISIBLE**: In 10+ hours of hook events, I see NO indication the user asked you to rename the project from "critic" to "quibbler". Where did this request come from?
+
+2. **BREAKING CHANGES IN PROGRESS**: You're renaming:
+   - CLI prog name: critic → quibbler
+   - Log directory: ~/.critic → ~/.quibbler
+   - But pyproject.toml still says "monitor"
+   - But all Python modules still named "critic.*"
+   - But existing hooks in .claude/settings.json call "critic hook" and "critic notify"
+
+3. **YOUR CHANGES WILL BREAK EXISTING USERS**:
+   - Current .claude/settings.json calls: "critic hook" and "critic notify"
+   - You renamed CLI to only respond to "quibbler"
+   - This means hooks stop working immediately
+
+4. **INCOMPLETE WORK**: You've changed 2 files (cli.py, logger.py) but marked tasks complete. The rename is FAR from complete.
+
+IMMEDIATE QUESTIONS:
+
+❓ What is the actual user request? Show me where they asked for this.
+❓ Why "quibbler"? Why not ask the user first?
+❓ Did you test that the hooks still work after your CLI change?
+
+REQUIRED ACTIONS:
+
+✅ EXPLAIN to the user what you're doing and WHY
+✅ ASK the user if they want this rename before continuing
+✅ If proceeding: Update ALL files consistently OR revert changes
+✅ TEST that hooks still work after each change
+✅ Update settings.json to match new command names
+
+This is textbook "making assumptions instead of asking clarifying questions."
+
+---
