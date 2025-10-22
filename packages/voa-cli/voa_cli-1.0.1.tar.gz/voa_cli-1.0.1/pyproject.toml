@@ -1,0 +1,9 @@
+[project]
+name = "voa-cli"
+version = "1.0.1"
+description = "Internal Secret Manager CLI"
+requires-python = ">=3.8"
+dependencies = ["click", "requests"]
+
+[project.scripts]
+voa = "main:cli"
