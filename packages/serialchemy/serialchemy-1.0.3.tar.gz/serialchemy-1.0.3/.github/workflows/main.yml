@@ -1,0 +1,134 @@
+name: build
+
+on:
+  push:
+    branches:
+      - master
+      - rb-*
+    tags:
+      - v*
+
+  pull_request:
+
+jobs:
+  test:
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["310", "311", "312", "313"]
+        sqlalchemy: ["14", "20"]
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: prefix-dev/setup-pixi@v0.9.1
+        with:
+          pixi-version: v0.49.0
+      - name: Test
+        run: pixi run -e py${{ matrix.python }}-sqla${{ matrix.sqlalchemy }} test-cov
+      - name: Upload codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
+
+  lint:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: prefix-dev/setup-pixi@v0.9.1
+        with:
+          pixi-version: v0.49.0
+      - name: Test
+        run: pixi run lint
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    needs: test
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: prefix-dev/setup-pixi@v0.9.1
+        with:
+          pixi-version: v0.49.0
+      - name: Build package
+        run: |
+          pixi run -e build build
+      - name: Archive build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: |
+            dist
+
+  test-build:
+    name: Test build files
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Load build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: |
+            dist
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
+      - name: Install local package
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install dist/serialchemy*.whl
+      - name: Test local package
+        run: |
+          python -c "import serialchemy"
+
+  pypi-publish:
+
+    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
+
+    name: Publish package PyPI
+    runs-on: ubuntu-latest
+    needs: test-build
+    environment:
+      name: pypi
+      url: https://pypi.org/p/serialchemy
+    permissions:
+      id-token: write
+    steps:
+      - name: Load build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: |
+            dist
+
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+
+  sonarcloud:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        # Disabling shallow clone is recommended for improving relevancy of reporting
+        fetch-depth: 0
+    - name: SonarCloud Scan
+      uses: sonarsource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

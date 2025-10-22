@@ -1,0 +1,65 @@
+[build-system]
+requires = [
+  "setuptools>=77.0.3",
+  "setuptools_scm[toml]>=8",
+  "wheel",
+]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools_scm]
+version_file = "src/serialchemy/_version.py"
+local_scheme = "no-local-version"
+
+[tool.setuptools_scm.scm.git]
+pre_parse = "fail_on_missing_submodules"
+describe_command = "git describe --dirty --tags --long --match v*"
+
+
+[project]
+name = "serialchemy"
+dynamic = ["version"]
+authors = [
+  { name="ESSS", email="foss@esss.co" },
+]
+description = "Serializers for SQLAlchemy models."
+readme = "README.rst"
+keywords=["serialchemy", "serializer", "sqlalchemy"]
+requires-python = ">=3.10"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+dependencies = ["sqlalchemy>=1.4,<3.0"]
+
+[project.optional-dependencies]
+docs=["sphinx >= 1.4", "sphinx_rtd_theme", "sphinx-autodoc-typehints", "typing_extensions"]
+testing=[
+    "codecov",
+    "mypy",
+    "pytest",
+    "pytest-cov",
+    "pytest-regressions",
+    "pytest-freezegun",
+    "pre-commit",
+    "setuptools",
+    "sqlalchemy_utils",
+    "tox",
+]
+
+[project.urls]
+Repository = "https://github.com/ESSS/serialchemy"
+Issues = "https://github.com/ESSS/serialchemy/issues"
+
+
+[tool.black]
+line-length = 100
+skip-string-normalization = true

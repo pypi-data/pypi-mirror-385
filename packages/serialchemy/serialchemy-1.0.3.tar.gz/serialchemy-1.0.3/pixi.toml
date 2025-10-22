@@ -1,0 +1,65 @@
+[workspace]
+authors = ["ESSS <foss@esss.co>"]
+channels = ["conda-forge"]
+name = "serialchemy"
+platforms = ["linux-64", "win-64"]
+
+[tasks]
+test="pytest"
+test-cov="pytest --cov=src/serialchemy --cov-report=xml"
+setup="pre-commit install -f"
+lint="pre-commit run --all --show-diff-on-failure"
+build="python -m build"
+
+[feature.test.dependencies]
+pytest="*"
+pytest-cov="*"
+pytest-datadir="*"
+pytest-mock=">=1.10"
+pytest-regressions=">=1.0.0"
+pytest-freezegun=">=0.4.2"
+sqlalchemy-utc=">=0.10"
+sqlalchemy-utils=">=0.33"
+
+[feature.lint.dependencies]
+black=">=19.3b0"
+mypy="*"
+pre-commit="*"
+
+[feature.build.pypi-dependencies]
+build="*"
+
+[feature.python310.dependencies]
+python="3.10.*"
+
+[feature.python311.dependencies]
+python="3.11.*"
+
+[feature.python312.dependencies]
+python="3.12.*"
+
+[feature.python313.dependencies]
+python="3.13.*"
+
+[feature.sqla14.dependencies]
+sqlalchemy="1.4.*"
+
+[feature.sqla20.dependencies]
+sqlalchemy="2.0.*"
+
+
+[environments]
+default = { features=["python310", "sqla14", "test", "lint", "build"]}
+build  = { features=["python312", "build"]}
+
+py310-sqla14 = { features=["test", "python310", "sqla14"]}
+py310-sqla20 = { features=["test", "python310", "sqla20"]}
+
+py311-sqla14 = { features=["test", "python311", "sqla14"]}
+py311-sqla20 = { features=["test", "python311", "sqla20"]}
+
+py312-sqla14 = { features=["test", "python312", "sqla14"]}
+py312-sqla20 = { features=["test", "python312", "sqla20"]}
+
+py313-sqla14 = { features=["test", "python313", "sqla14"]}
+py313-sqla20 = { features=["test", "python313", "sqla20"]}
