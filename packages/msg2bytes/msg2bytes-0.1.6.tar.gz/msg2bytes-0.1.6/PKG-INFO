@@ -1,0 +1,128 @@
+Metadata-Version: 2.4
+Name: msg2bytes
+Version: 0.1.6
+Summary: MessageToBytes(msg2bytes) is an efficient binary serialization format. It lets you exchange data among multiple languages like JSON. But it's faster and smaller.
+Author: rRR0VrFP
+Maintainer: rRR0VrFP
+License: MIT
+Keywords: msg2bytes
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: python-dateutil
+Dynamic: author
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: keywords
+Dynamic: license
+Dynamic: license-file
+Dynamic: maintainer
+Dynamic: requires-dist
+Dynamic: summary
+
+# msg2bytes
+
+MessageToBytes(msg2bytes) is an efficient binary serialization format. It lets you exchange data among multiple languages like JSON. But it's faster and smaller.
+
+## Install
+
+```
+pip install msg2bytes
+```
+
+## Data Types
+
+```
+LIST = bytes([1])
+SET = bytes([2])
+TUPLE = bytes([3])
+DICT = bytes([4])
+
+NONE = bytes([5])
+BOOLEAN = bytes([6])
+TRUE = bytes([7])
+FALSE = bytes([8])
+
+STR = bytes([9])
+BYTES = bytes([10])
+DATETIME = bytes([11])
+DECIMAL = bytes([12])
+FILE = bytes([13])
+DATE = bytes([14])  # v0.1.3引入
+TIME = bytes([15])  # v0.1.3引入
+
+INT = bytes([20])  # 抽象类型。实际不会使用的编码code。
+INT8 = bytes([21])
+INT16 = bytes([22])
+INT32 = bytes([23])
+INT64 = bytes([24])
+UINT8 = bytes([25])
+UINT16 = bytes([26])
+UINT32 = bytes([27])
+UINT64 = bytes([28])
+BIGINT = bytes([29])
+FLOAT = bytes([30])  # 抽象类型。实际不会使用的编码code。
+SINGLE = bytes([31])
+DOUBLE = bytes([32])
+BIGFLOAT = bytes([33])
+```
+
+## Usage
+
+```
+In [1]: import datetime
+   ...: import msg2bytes
+   ...: 
+
+In [2]: data1 = {
+   ...:     "id": 12,
+   ...:     "username": "ceshi",
+   ...:     "name": "测试",
+   ...:     "mobiles": ["12345678901", "12345678902"],
+   ...:     "add_time": datetime.datetime(2023, 4, 25, 18, 12, 32),
+   ...:     "mod_time": datetime.datetime.now(),
+   ...: }
+
+In [3]: print(data1)
+{'id': 12, 'username': 'ceshi', 'name': '测试', 'mobiles': ['12345678901', '12345678902'], 'add_time': datetime.datetime(2023, 4, 25, 18, 12, 32), 'mod_time': datetime.datetime(2023, 4, 26, 13, 2, 5, 293796)}
+
+In [4]: data2 = msg2bytes.dumps(data1)
+
+In [5]: print(data2)
+b'\x04\x06\x0b\x02id\x15\x0c\x0b\x08username\x0b\x05ceshi\x0b\x04name\x0b\x06\xe6\xb5\x8b\xe8\xaf\x95\x0b\x07mobiles\x01\x02\x0b\x0b12345678901\x0b\x0b12345678902\x0b\x08add_time\r\x132023-04-25T18:12:32\x0b\x08mod_time\r\x1a2023-04-26T13:02:05.293796'
+
+In [6]: data3 = msg2bytes.loads(data2)
+
+In [7]: print(data3)
+{'id': 12, 'username': 'ceshi', 'name': '测试', 'mobiles': ['12345678901', '12345678902'], 'add_time': datetime.datetime(2023, 4, 25, 18, 12, 32), 'mod_time': datetime.datetime(2023, 4, 26, 13, 2, 5, 293796)}
+```
+
+## Releases
+
+### v0.1.2
+
+- First release.
+
+### v0.1.3
+
+- Use more friendly exception names.
+- Add datetime.date codec.
+- Add datetime.time codec.
+
+### v0.1.4
+
+- Fixed async keyword missing before virtual method problem. This wasn't actually cause any problems.
+
+### v0.1.5
+
+- Doc update.
+
+### v0.1.6
+
+- Doc update.

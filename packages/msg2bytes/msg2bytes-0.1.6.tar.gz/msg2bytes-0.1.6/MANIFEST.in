@@ -1,0 +1,8 @@
+include MANIFEST.in
+include LICENSE
+include README.md
+include requirements.txt
+graft zenutils
+exclude tests
+global-exclude __pycache__
+global-exclude *.py[co]
