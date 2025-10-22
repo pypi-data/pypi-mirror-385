@@ -1,0 +1,283 @@
+# File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+
+from __future__ import annotations
+
+from typing_extensions import Literal
+
+import httpx
+
+from ...types import outreach_trigger_call_params
+from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
+from ..._utils import maybe_transform, async_maybe_transform
+from ..._compat import cached_property
+from ..._resource import SyncAPIResource, AsyncAPIResource
+from ..._response import (
+    to_raw_response_wrapper,
+    to_streamed_response_wrapper,
+    async_to_raw_response_wrapper,
+    async_to_streamed_response_wrapper,
+)
+from .sites.sites import (
+    SitesResource,
+    AsyncSitesResource,
+    SitesResourceWithRawResponse,
+    AsyncSitesResourceWithRawResponse,
+    SitesResourceWithStreamingResponse,
+    AsyncSitesResourceWithStreamingResponse,
+)
+from ..._base_client import make_request_options
+from .patient_campaigns import (
+    PatientCampaignsResource,
+    AsyncPatientCampaignsResource,
+    PatientCampaignsResourceWithRawResponse,
+    AsyncPatientCampaignsResourceWithRawResponse,
+    PatientCampaignsResourceWithStreamingResponse,
+    AsyncPatientCampaignsResourceWithStreamingResponse,
+)
+from .campaigns.campaigns import (
+    CampaignsResource,
+    AsyncCampaignsResource,
+    CampaignsResourceWithRawResponse,
+    AsyncCampaignsResourceWithRawResponse,
+    CampaignsResourceWithStreamingResponse,
+    AsyncCampaignsResourceWithStreamingResponse,
+)
+from ...types.outreach_trigger_call_response import OutreachTriggerCallResponse
+
+__all__ = ["OutreachResource", "AsyncOutreachResource"]
+
+
+class OutreachResource(SyncAPIResource):
+    @cached_property
+    def campaigns(self) -> CampaignsResource:
+        return CampaignsResource(self._client)
+
+    @cached_property
+    def patient_campaigns(self) -> PatientCampaignsResource:
+        return PatientCampaignsResource(self._client)
+
+    @cached_property
+    def sites(self) -> SitesResource:
+        return SitesResource(self._client)
+
+    @cached_property
+    def with_raw_response(self) -> OutreachResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/TriallyAI/web-recruitment-sdk#accessing-raw-response-data-eg-headers
+        """
+        return OutreachResourceWithRawResponse(self)
+
+    @cached_property
+    def with_streaming_response(self) -> OutreachResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/TriallyAI/web-recruitment-sdk#with_streaming_response
+        """
+        return OutreachResourceWithStreamingResponse(self)
+
+    def trigger_call(
+        self,
+        *,
+        call_data: outreach_trigger_call_params.CallData,
+        conversation_flow: Literal["study_qualification", "lead_warmer"] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> OutreachTriggerCallResponse:
+        """
+        Trigger a phone call to a patient using LiveKit
+
+        Args:
+          call_data: Class to store call data from client requests (without tenant_db_name).
+
+          conversation_flow: Represents the flow of a conversation.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._post(
+            "/outreach/make-call",
+            body=maybe_transform(
+                {
+                    "call_data": call_data,
+                    "conversation_flow": conversation_flow,
+                },
+                outreach_trigger_call_params.OutreachTriggerCallParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=OutreachTriggerCallResponse,
+        )
+
+
+class AsyncOutreachResource(AsyncAPIResource):
+    @cached_property
+    def campaigns(self) -> AsyncCampaignsResource:
+        return AsyncCampaignsResource(self._client)
+
+    @cached_property
+    def patient_campaigns(self) -> AsyncPatientCampaignsResource:
+        return AsyncPatientCampaignsResource(self._client)
+
+    @cached_property
+    def sites(self) -> AsyncSitesResource:
+        return AsyncSitesResource(self._client)
+
+    @cached_property
+    def with_raw_response(self) -> AsyncOutreachResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/TriallyAI/web-recruitment-sdk#accessing-raw-response-data-eg-headers
+        """
+        return AsyncOutreachResourceWithRawResponse(self)
+
+    @cached_property
+    def with_streaming_response(self) -> AsyncOutreachResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/TriallyAI/web-recruitment-sdk#with_streaming_response
+        """
+        return AsyncOutreachResourceWithStreamingResponse(self)
+
+    async def trigger_call(
+        self,
+        *,
+        call_data: outreach_trigger_call_params.CallData,
+        conversation_flow: Literal["study_qualification", "lead_warmer"] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> OutreachTriggerCallResponse:
+        """
+        Trigger a phone call to a patient using LiveKit
+
+        Args:
+          call_data: Class to store call data from client requests (without tenant_db_name).
+
+          conversation_flow: Represents the flow of a conversation.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return await self._post(
+            "/outreach/make-call",
+            body=await async_maybe_transform(
+                {
+                    "call_data": call_data,
+                    "conversation_flow": conversation_flow,
+                },
+                outreach_trigger_call_params.OutreachTriggerCallParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=OutreachTriggerCallResponse,
+        )
+
+
+class OutreachResourceWithRawResponse:
+    def __init__(self, outreach: OutreachResource) -> None:
+        self._outreach = outreach
+
+        self.trigger_call = to_raw_response_wrapper(
+            outreach.trigger_call,
+        )
+
+    @cached_property
+    def campaigns(self) -> CampaignsResourceWithRawResponse:
+        return CampaignsResourceWithRawResponse(self._outreach.campaigns)
+
+    @cached_property
+    def patient_campaigns(self) -> PatientCampaignsResourceWithRawResponse:
+        return PatientCampaignsResourceWithRawResponse(self._outreach.patient_campaigns)
+
+    @cached_property
+    def sites(self) -> SitesResourceWithRawResponse:
+        return SitesResourceWithRawResponse(self._outreach.sites)
+
+
+class AsyncOutreachResourceWithRawResponse:
+    def __init__(self, outreach: AsyncOutreachResource) -> None:
+        self._outreach = outreach
+
+        self.trigger_call = async_to_raw_response_wrapper(
+            outreach.trigger_call,
+        )
+
+    @cached_property
+    def campaigns(self) -> AsyncCampaignsResourceWithRawResponse:
+        return AsyncCampaignsResourceWithRawResponse(self._outreach.campaigns)
+
+    @cached_property
+    def patient_campaigns(self) -> AsyncPatientCampaignsResourceWithRawResponse:
+        return AsyncPatientCampaignsResourceWithRawResponse(self._outreach.patient_campaigns)
+
+    @cached_property
+    def sites(self) -> AsyncSitesResourceWithRawResponse:
+        return AsyncSitesResourceWithRawResponse(self._outreach.sites)
+
+
+class OutreachResourceWithStreamingResponse:
+    def __init__(self, outreach: OutreachResource) -> None:
+        self._outreach = outreach
+
+        self.trigger_call = to_streamed_response_wrapper(
+            outreach.trigger_call,
+        )
+
+    @cached_property
+    def campaigns(self) -> CampaignsResourceWithStreamingResponse:
+        return CampaignsResourceWithStreamingResponse(self._outreach.campaigns)
+
+    @cached_property
+    def patient_campaigns(self) -> PatientCampaignsResourceWithStreamingResponse:
+        return PatientCampaignsResourceWithStreamingResponse(self._outreach.patient_campaigns)
+
+    @cached_property
+    def sites(self) -> SitesResourceWithStreamingResponse:
+        return SitesResourceWithStreamingResponse(self._outreach.sites)
+
+
+class AsyncOutreachResourceWithStreamingResponse:
+    def __init__(self, outreach: AsyncOutreachResource) -> None:
+        self._outreach = outreach
+
+        self.trigger_call = async_to_streamed_response_wrapper(
+            outreach.trigger_call,
+        )
+
+    @cached_property
+    def campaigns(self) -> AsyncCampaignsResourceWithStreamingResponse:
+        return AsyncCampaignsResourceWithStreamingResponse(self._outreach.campaigns)
+
+    @cached_property
+    def patient_campaigns(self) -> AsyncPatientCampaignsResourceWithStreamingResponse:
+        return AsyncPatientCampaignsResourceWithStreamingResponse(self._outreach.patient_campaigns)
+
+    @cached_property
+    def sites(self) -> AsyncSitesResourceWithStreamingResponse:
+        return AsyncSitesResourceWithStreamingResponse(self._outreach.sites)
