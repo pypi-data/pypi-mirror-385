@@ -1,0 +1,104 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "market-data-core"
+version = "1.2.12"
+description = "Core contracts (protocols, models, errors, settings, telemetry, federation) for market data systems."
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = ">=3.11"
+authors = [{name="Matt"}]
+# Core dependencies: truly minimal - contracts-only
+dependencies = [
+    "pydantic>=2.7,<3",
+    "python-dotenv>=1.0,<2",
+]
+license = "MIT"
+license-files = ["LICENSE"]
+keywords = ["market-data", "schemas", "contracts", "telemetry"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Typing :: Typed",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.2,<9",
+    "pytest-asyncio>=0.23,<1",
+    "ruff>=0.6,<1",
+    "black>=24.8,<25",
+    "mypy>=1.11,<2",
+]
+# Optional: Redis Streams for event bus (Phase 10.0 Pulse)
+bus = [
+    "redis>=5.0,<6",
+]
+# Optional: FastAPI service endpoints (deprecated in v2.0)
+api = [
+    "fastapi>=0.115,<0.116",
+    "uvicorn[standard]>=0.30,<0.33",
+    "httpx>=0.28,<0.29",
+    "websockets>=12,<13",
+]
+# Optional: Observability and metrics
+observability = [
+    "tenacity>=8.2,<9",
+    "loguru>=0.7,<0.8",
+    "prometheus-client>=0.20,<0.21",
+    "orjson>=3.10,<4",
+]
+# Optional: Pandas support for data handling
+pandas = [
+    "pandas>=2.2.2,<3",
+    "orjson>=3.10,<4",
+]
+# Optional: IBKR adapter (deprecated - use market-data-ibkr package)
+ibkr = [
+    "ib_async>=1.0.0",
+]
+# Convenience superset: all optional features
+compat = [
+    "fastapi>=0.115,<0.116",
+    "uvicorn[standard]>=0.30,<0.33",
+    "httpx>=0.28,<0.29",
+    "websockets>=12,<13",
+    "tenacity>=8.2,<9",
+    "loguru>=0.7,<0.8",
+    "prometheus-client>=0.20,<0.21",
+    "orjson>=3.10,<4",
+    "pandas>=2.2.2,<3",
+    "ib_async>=1.0.0",
+    "redis>=5.0,<6",
+]
+
+# Ensure packages and typing marker are included
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["market_data_core*"]
+
+[tool.setuptools.package-data]
+market_data_core = ["py.typed"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E","F","I","UP","B","ARG","C90"]
+exclude = ["venv",".venv",".git","dist","build"]
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+ignore_missing_imports = true
+warn_unused_ignores = true
+disallow_untyped_defs = true
