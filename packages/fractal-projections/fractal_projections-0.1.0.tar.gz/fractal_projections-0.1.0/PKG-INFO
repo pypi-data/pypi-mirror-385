@@ -1,0 +1,255 @@
+Metadata-Version: 2.4
+Name: fractal-projections
+Version: 0.1.0
+Summary: A comprehensive projection system for defining how data should be shaped, aggregated, grouped, ordered, and limited in database queries
+Keywords: database,query,projection,aggregation,sql,mongodb,firestore,elasticsearch
+Author-email: Douwe van der Meij <douwe@karibu-online.nl>
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Database
+License-File: LICENSE
+Requires-Dist: fractal-specifications
+Requires-Dist: psycopg2-binary>=2.9.0 ; extra == "all"
+Requires-Dist: pymongo>=4.0.0 ; extra == "all"
+Requires-Dist: google-cloud-firestore>=2.0.0 ; extra == "all"
+Requires-Dist: elasticsearch>=8.0.0 ; extra == "all"
+Requires-Dist: pytest>=7.0.0 ; extra == "dev"
+Requires-Dist: pytest-cov>=4.0.0 ; extra == "dev"
+Requires-Dist: black>=23.0.0 ; extra == "dev"
+Requires-Dist: ruff>=0.1.0 ; extra == "dev"
+Requires-Dist: mypy>=1.0.0 ; extra == "dev"
+Requires-Dist: isort>=5.13.2 ; extra == "dev"
+Requires-Dist: elasticsearch>=8.0.0 ; extra == "elasticsearch"
+Requires-Dist: google-cloud-firestore>=2.0.0 ; extra == "firestore"
+Requires-Dist: pymongo>=4.0.0 ; extra == "mongo"
+Requires-Dist: psycopg2-binary>=2.9.0 ; extra == "postgres"
+Project-URL: Documentation, https://github.com/Fractal-Forge/fractal-projections#readme
+Project-URL: Homepage, https://github.com/Fractal-Forge/fractal-projections
+Project-URL: Issues, https://github.com/Fractal-Forge/fractal-projections/issues
+Project-URL: Repository, https://github.com/Fractal-Forge/fractal-projections
+Provides-Extra: all
+Provides-Extra: dev
+Provides-Extra: elasticsearch
+Provides-Extra: firestore
+Provides-Extra: mongo
+Provides-Extra: postgres
+
+# Fractal Projections
+
+> A comprehensive projection system for defining how data should be shaped, aggregated, grouped, ordered, and limited in database queries.
+
+[![PyPI Version][pypi-image]][pypi-url]
+[![Build Status][build-image]][build-url]
+
+<!-- Badges -->
+
+[pypi-image]: https://img.shields.io/pypi/v/fractal-projections
+[pypi-url]: https://pypi.org/project/fractal-projections/
+[build-image]: https://github.com/Fractal-Forge/fractal-projections/actions/workflows/build.yml/badge.svg
+[build-url]: https://github.com/Fractal-Forge/fractal-projections/actions/workflows/build.yml
+
+This library complements [fractal-specifications](https://pypi.org/project/fractal-specifications/) (which handles filtering) by providing database-agnostic data shaping capabilities.
+
+## Features
+
+- **Database-Agnostic**: Write projections once, use them across different databases
+- **Type-Safe**: Fully typed Python API for better IDE support and fewer errors
+- **Flexible**: Support for field selection, aggregations, grouping, ordering, and limiting
+- **Multi-Database Support**: Built-in builders for:
+  - PostgreSQL
+  - MongoDB
+  - Firestore
+  - Elasticsearch
+
+## Installation
+
+```bash
+pip install fractal-projections
+```
+
+For specific database support:
+
+```bash
+# PostgreSQL
+pip install fractal-projections[postgres]
+
+# MongoDB
+pip install fractal-projections[mongo]
+
+# Firestore
+pip install fractal-projections[firestore]
+
+# Elasticsearch
+pip install fractal-projections[elasticsearch]
+
+# All databases
+pip install fractal-projections[all]
+```
+
+## Quick Start
+
+```python
+from fractal_projections import (
+    QueryProjection,
+    FieldProjection,
+    ProjectionList,
+    OrderingProjection,
+    LimitProjection,
+)
+from fractal_projections.builders import PostgresProjectionBuilder
+from fractal_specifications.generic.operators import EqualsSpecification
+
+# Define a database-agnostic projection
+query = QueryProjection(
+    filter=EqualsSpecification("status", "active"),
+    projection=ProjectionList([
+        FieldProjection("id"),
+        FieldProjection("name"),
+        FieldProjection("created_at"),
+    ]),
+    ordering=OrderingProjection("created_at", descending=True),
+    limit=LimitProjection(10),
+)
+
+# Convert to database-specific query
+builder = PostgresProjectionBuilder("users")
+sql, params = builder.build(query)
+print(sql)
+# SELECT id, name, created_at FROM users WHERE status = $1 ORDER BY created_at DESC LIMIT 10
+```
+
+## Core Concepts
+
+### Field Projection
+
+Select specific fields from your data:
+
+```python
+from fractal_projections import FieldProjection, ProjectionList
+
+projection = ProjectionList([
+    FieldProjection("user_id"),
+    FieldProjection("email"),
+])
+```
+
+### Aggregation
+
+Perform aggregations like COUNT, SUM, AVG:
+
+```python
+from fractal_projections import AggregateProjection, AggregateFunction
+
+projection = AggregateProjection(
+    field="revenue",
+    function=AggregateFunction.SUM,
+    alias="total_revenue"
+)
+```
+
+### Grouping
+
+Group results by one or more fields:
+
+```python
+from fractal_projections import GroupingProjection
+
+grouping = GroupingProjection(["organization_id", "status"])
+```
+
+### Ordering
+
+Sort results by fields:
+
+```python
+from fractal_projections import OrderingProjection, OrderingList
+
+ordering = OrderingList([
+    OrderingProjection("created_at", descending=True),
+    OrderingProjection("name", descending=False),
+])
+```
+
+### Limiting
+
+Limit and offset results:
+
+```python
+from fractal_projections import LimitProjection
+
+limit = LimitProjection(limit=20, offset=10)
+```
+
+## Architecture
+
+The library follows a builder pattern:
+
+1. **Projections**: Database-agnostic definitions of how data should be shaped
+2. **Builders**: Database-specific converters that translate projections into native queries
+
+```
+QueryProjection (agnostic)
+    ↓
+PostgresProjectionBuilder → SQL
+MongoProjectionBuilder → MongoDB Pipeline
+FirestoreProjectionBuilder → Firestore Query
+ElasticsearchProjectionBuilder → ES Query DSL
+```
+
+This separation allows you to:
+- Write business logic once
+- Switch databases without changing application code
+- Get optimized native queries for each backend
+
+## Advanced Usage
+
+See the [examples.py](fractal_projections/examples.py) file for comprehensive examples including:
+- Complex aggregations with grouping
+- Multi-field ordering
+- Combining filters with projections
+- Database-specific optimizations
+
+## Development
+
+```bash
+# Clone the repository
+git clone https://github.com/Fractal-Forge/fractal-projections.git
+cd fractal-projections
+
+# Install development dependencies
+pip install -e ".[dev]"
+
+# Run tests
+pytest
+
+# Format code
+black .
+isort .
+ruff check --fix .
+
+# Lint code
+ruff check .
+mypy fractal_projections
+```
+
+## License
+
+MIT License - see LICENSE file for details
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Related Projects
+
+- [fractal-projections](https://github.com/Fractal-Forge/fractal-projections) - Database-agnostic filtering system
