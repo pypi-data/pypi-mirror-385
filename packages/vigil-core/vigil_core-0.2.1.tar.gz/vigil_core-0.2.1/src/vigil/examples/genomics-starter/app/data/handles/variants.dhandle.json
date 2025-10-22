@@ -1,0 +1,32 @@
+{
+  "uri": "s3://genomics-bucket/cohort-2024/variants/variants.vcf.gz",
+  "format": "vcf",
+  "offline_fallback": "app/data/samples/variants.csv",
+  "schema": {
+    "chromosome": "string",
+    "position": "integer",
+    "ref_allele": "string",
+    "alt_allele": "string",
+    "quality_score": "float",
+    "depth": "integer",
+    "allele_frequency": "float",
+    "genotype": "string",
+    "gene": "string",
+    "variant_type": "string",
+    "patient_id": "string"
+  },
+  "metadata": {
+    "description": "Somatic variants from cancer patient cohort",
+    "sequencing_platform": "Illumina NovaSeq",
+    "genome_build": "GRCh38",
+    "caller": "GATK HaplotypeCaller",
+    "total_samples": 22
+  },
+  "consent": {
+    "type": "broad",
+    "irb_protocol": "2024-GEN-001",
+    "consent_date": "2024-01-15"
+  },
+  "pii": false,
+  "sensitive": true
+}
