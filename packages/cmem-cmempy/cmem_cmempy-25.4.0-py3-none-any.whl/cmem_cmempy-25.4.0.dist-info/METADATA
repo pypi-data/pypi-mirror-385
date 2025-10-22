@@ -1,0 +1,59 @@
+Metadata-Version: 2.4
+Name: cmem-cmempy
+Version: 25.4.0
+Summary: API for eccenca Corporate Memory
+License: Apache-2.0
+License-File: LICENSE
+Author: eccenca GmbH
+Author-email: cmempy-developer@eccenca.com
+Maintainer: Sebastian Tramp
+Maintainer-email: sebastian.tramp@eccenca.com
+Requires-Python: >=3.9,<4.0
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: Intended Audience :: System Administrators
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Classifier: Topic :: Database
+Classifier: Topic :: Software Development :: Testing
+Classifier: Topic :: Utilities
+Requires-Dist: certifi (>=2023.7.22)
+Requires-Dist: pyparsing (>=3.2.3,<4.0.0)
+Requires-Dist: rdflib (>=7.1.4,<8.0.0)
+Requires-Dist: requests (>=2.32.4,<3.0.0)
+Requires-Dist: requests-toolbelt (>=1.0.0,<2.0.0)
+Project-URL: Homepage, https://eccenca.com/go/cmempy
+Description-Content-Type: text/markdown
+
+# cmempy
+
+cmempy is a Python API wrapper for [eccenca Corporate Memory](https://documentation.eccenca.com/).
+
+## Installation
+
+To install the Python library run:
+
+    pip install cmem-cmempy
+
+You may consider installing the package only for the current user:
+
+    pip install cmem-cmempy --user
+
+## Configuration and Usage
+
+cmempy is intended for Linked Data Experts to interface with the eccenca Corporate Memory backend components DataIntegration and DataPlatform.
+
+The cmempy manual including basic usage patterns and configuration is available at:
+
+[https://eccenca.com/go/cmempy](https://eccenca.com/go/cmempy)
+
+cmempy is tests with python 3.9 and 3.11.
+
+
