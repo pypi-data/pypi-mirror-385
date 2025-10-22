@@ -1,0 +1,32 @@
+Metadata-Version: 2.4
+Name: tsme
+Version: 0.0.7
+Summary: A package that provides estimation methods for differential equations of dynamical systems based on timeseries data.
+Home-page: https://nonlinear-physics.zivgitlabpages.uni-muenster.de/ag-kamps/tsme/
+Author: Oliver Mai
+Author-email: oliver.mai@wwu.de
+License: GPL
+Platform: any
+Classifier: Programming Language :: Python
+Classifier: Development Status :: 3 - Alpha
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Scientific/Engineering :: Physics
+License-File: LICENSE
+Requires-Dist: numpy
+Requires-Dist: findiff
+Requires-Dist: matplotlib
+Requires-Dist: tabulate
+Requires-Dist: tqdm
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: home-page
+Dynamic: license
+Dynamic: license-file
+Dynamic: platform
+Dynamic: requires-dist
+Dynamic: summary
+
+The ``tsme`` package provides estimation methods for ODE or PDE systems using timeseries data. It also includes basic time simulation capabilities by wrapping scipy's initial value problem solver, either using finite differences or pseudo-spectral methods for spatial derivatives.
