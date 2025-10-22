@@ -1,0 +1,27 @@
+[project]
+name = "monkeybrain"
+version = "0.2.2"
+description = "A CLI-Tool for launching TouchDesigner projects."
+readme = "README.md"
+license="MIT"
+authors = [
+    { name = "Wieland Hilker", email = "Wieland@PlusPlus.One" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "python-dotenv>=1.1.1",
+]
+
+[tool.touchdesigner]
+enforce-version="latest-version"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/monkeybrain"]
+
+[project.scripts]
+"mb"   = "monkeybrain:entry"
