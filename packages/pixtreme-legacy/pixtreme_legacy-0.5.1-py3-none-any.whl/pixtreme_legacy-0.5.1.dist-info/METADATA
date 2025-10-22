@@ -1,0 +1,93 @@
+Metadata-Version: 2.4
+Name: pixtreme-legacy
+Version: 0.5.1
+Summary: Legacy compatibility functions for pixtreme (_cp functions)
+Author-email: minamik <mia@sync.dev>
+License-Expression: MIT
+Classifier: Development Status :: 7 - Inactive
+Classifier: Environment :: GPU :: NVIDIA CUDA :: 12
+Classifier: Intended Audience :: Developers
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Multimedia :: Graphics
+Requires-Python: >=3.10
+Requires-Dist: pixtreme>=0.5.1
+Description-Content-Type: text/markdown
+
+# pixtreme-legacy
+
+**⚠️ Legacy Compatibility Package**: This package provides `_cp` functions removed from pixtreme v0.5.1+.
+
+## Status
+
+- **Current Version**: 0.5.1
+- **Maintenance Mode**: Functions migrated from main pixtreme package in v0.5.1
+- **Recommendation**: Migrate to standard functions (without `_cp` suffix) when possible
+
+## Purpose
+
+This package provides backward compatibility for `_cp` functions that were removed from the main `pixtreme` package in v0.5.1. It contains the following functions:
+
+- `apply_lut_cp` - Apply 3D LUT with CuPy implementation
+- `uyvy422_to_ycbcr444_cp` - Convert UYVY422 to YCbCr444
+- `ndi_uyvy422_to_ycbcr444_cp` - Convert NDI UYVY422 to YCbCr444
+- `yuv420p_to_ycbcr444_cp` - Convert YUV420 to YCbCr444
+- `yuv422p10le_to_ycbcr444_cp` - Convert YUV422p10le to YCbCr444
+
+## Installation
+
+```bash
+pip install pixtreme-legacy
+```
+
+## Usage
+
+```python
+from pixtreme_legacy import apply_lut_cp
+
+# No warnings - clean compatibility layer
+result = apply_lut_cp(image, lut)
+```
+
+**Note**: This package depends on `pixtreme>=0.5.1` for common utilities (`to_float32`, `resize`, etc.).
+
+## Migration Guide
+
+Replace `_cp` functions with their standard equivalents:
+
+### Before (deprecated)
+```python
+from pixtreme import apply_lut_cp
+result = apply_lut_cp(image, lut, interpolation=0)
+```
+
+### After (recommended)
+```python
+from pixtreme import apply_lut
+result = apply_lut(image, lut, interpolation=0)
+```
+
+## Why were _cp functions deprecated?
+
+The `_cp` suffix originally indicated "CuPy native" implementations, as opposed to CUDA kernel implementations. However:
+
+1. **Redundancy**: Both implementations exist in the main functions now
+2. **Confusion**: Users don't need to choose between implementations
+3. **Maintenance**: Duplicate APIs increase maintenance burden
+
+The standard functions (without `_cp`) now automatically select the best implementation.
+
+## Timeline
+
+- **v0.4.0**: `_cp` functions available without warnings
+- **v0.5.0**: `_cp` functions deprecated with warnings, `pixtreme-legacy` package created
+- **v0.5.1**: `_cp` functions **removed from main package**, migrated to `pixtreme-legacy` without warnings
+- **v0.6.0** (Future): Main `pixtreme` package will split into modular packages (`pixtreme-core`, `pixtreme-color`, etc.)
+
+## License
+
+MIT License (same as pixtreme)
