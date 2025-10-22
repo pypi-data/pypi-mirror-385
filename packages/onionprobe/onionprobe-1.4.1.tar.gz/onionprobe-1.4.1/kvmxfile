@@ -1,0 +1,35 @@
+#
+# Sample kvmx file - https://0xacab.org/rhatto/kvmx
+#
+
+# Hostname
+hostname="onionprobe"
+
+# Which base box you should use. Leave unconfigured to use kvmx-create instead.
+#basebox="bookworm"
+basebox="dev"
+
+# Set this is you want to be able to share a single folder between host and guest.
+# Needs ssh_support set to "y" and a workable SSH connection to the guest.
+shared_folder="."
+shared_folder_mountpoint="/srv/shared"
+
+# Absolute path for a provision script located inside the guest.
+# Needs ssh_support set to "y" and a workable SSH connection to the guest.
+provision_command="/usr/local/share/kvmx/provision/debian/development"
+provision_command="$provision_command && /srv/shared/scripts/provision"
+
+# Set additional hostfwd mappings
+port_mapping="hostfwd=tcp:127.0.0.1:9090-:9090"               # Prometheus Dashboard
+port_mapping="$port_mapping,hostfwd=tcp:127.0.0.1:9935-:9935" # Onionprobe Prometheus exporter
+port_mapping="$port_mapping,hostfwd=tcp:127.0.0.1:9093-:9093" # Alertmanager Dashboard
+port_mapping="$port_mapping,hostfwd=tcp:127.0.0.1:3000-:3000" # Grafana Dashboard
+
+# Use basebox image as a backing file for overlay images
+# See https://wiki.archlinux.org/index.php/QEMU#Overlay_storage_images
+#backing_file="1"
+
+# Enables remote administration using SSH. With this configuration enabled,
+# kvmx will be able to administer a running virtual machine using SSH access
+# inside the virtual machine.
+ssh_support="y"

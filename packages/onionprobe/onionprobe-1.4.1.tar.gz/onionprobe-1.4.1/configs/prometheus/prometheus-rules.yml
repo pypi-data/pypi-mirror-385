@@ -1,0 +1,95 @@
+---
+# Sample Prometheus rule file to be used with Docker Compose.
+#
+# Copyright (C) 2025 The Tor Project, Inc.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published
+# by the Free Software Foundation, either version 3 of the License,
+# or any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+groups:
+- name: Onionprobe
+  rules:
+    - alert: Onionprobe not responding
+      expr: sum(onionprobe_state OR on() vector(0)) == 0
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: >
+          Onionprobe is unreachable
+        description: >
+          Unable to determine Onionprobe state
+        troubleshooting: 'https://onionservices.torproject.org/apps/web/onionprobe/troubleshooting/#onionprobe-not-responding'
+
+- name: Onion Services
+  rules:
+    - alert: Onion Service unreachable
+      expr: onion_service_reachable != 1
+      for: 30m
+      labels:
+        severity: critical
+      annotations:
+        summary: >
+          Onion Service unreachable: {{ $labels.address }}
+        description: >
+          Onionprobe was unable to connect to the Onion Service: {{ $labels.address }}
+        troubleshooting: 'https://onionservices.torproject.org/apps/web/onionprobe/troubleshooting/#onion-service-unreachable'
+
+    - alert: Onion Service descriptor unreachable
+      expr: onion_service_descriptor_reachable != 1
+      for: 30m
+      labels:
+        severity: critical
+      annotations:
+        summary: >
+          Onion Service descriptor unreachable: {{ $labels.address }}
+        description: >
+          The Onion Service descriptor for {{ $labels.address}} has become
+          unreachable from Onionprobe.
+        troubleshooting: 'https://onionservices.torproject.org/apps/web/onionprobe/troubleshooting/#onion-service-descriptor-unreachable'
+
+    - alert: Invalid TLS certificate for the Onion Service
+      expr: onion_service_valid_certificate != 1
+      labels:
+        severity: critical
+      annotations:
+        summary: >
+          Invalid TLS certificate for the Onion Service: {{ $labels.address }}
+        description: >
+          The TLS certificate for the Onion Service {{ $labels.address }} is invalid
+        troubleshooting: 'https://onionservices.torproject.org/apps/web/onionprobe/troubleshooting/#invalid-tls-certificate-for-the-onion-service'
+
+    - alert: Expiring TLS certificate for the Onion Service
+      expr: onion_service_certificate_expiry_seconds < 86400 * 7
+      labels:
+        severity: page
+      annotations:
+        summary: >
+          Expiring TLS certificate for the Onion Service: {{ $labels.address }}
+        description: >
+          The TLS certificate for the Onion Service {{ $labels.address }} will
+          expie in less than a week.
+        troubleshooting: 'https://onionservices.torproject.org/apps/web/onionprobe/troubleshooting/#expiring-tls-certificate-for-the-onion-service'
+
+    - alert: Unexpected HTTP status code
+      expr: onion_service_unexpected_status_code == 1
+      for: 30m
+      labels:
+        severity: critical
+      annotations:
+        summary: >
+          Unexpected HTTP status code for Onion Service: {{ $labels.address }}
+        description: >
+          Onionprobe got an unexpected HTTP status code when trying to connect
+          to {{ $labels.address }}
+        troubleshooting: 'https://onionservices.torproject.org/apps/web/onionprobe/troubleshooting/#unexpected-http-status-code'

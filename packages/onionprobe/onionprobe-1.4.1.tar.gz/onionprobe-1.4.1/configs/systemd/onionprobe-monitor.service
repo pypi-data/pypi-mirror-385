@@ -1,0 +1,49 @@
+#
+# Systemd service file to run the Onionprobe monitoring node
+#
+# Copyright (C) 2022 The Tor Project, Inc.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published
+# by the Free Software Foundation, either version 3 of the License,
+# or any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+[Unit]
+Description=Onionprobe monitoring node service
+After=network.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+
+# User, groups and dirs
+User=onionprobe
+Group=onionprobe
+RuntimeDirectory=onionprobe
+WorkingDirectory=/var/lib/onionprobe
+
+#ExecStartPre=-/usr/bin/docker-compose pull --quiet
+#ExecStart=/usr/bin/docker-compose up -d --remove-orphans
+ExecStart=/var/lib/onionprobe/onionprobe-monitor up
+
+#ExecStop=/usr/bin/docker-compose down
+ExecStart=/var/lib/onionprobe/onionprobe-monitor down
+
+# Reload
+#ExecReload=/usr/bin/docker-compose restart
+#ExecReload=/usr/bin/docker-compose pull --quiet
+#ExecReload=/usr/bin/docker-compose build
+#ExecReload=/usr/bin/docker-compose up -d --remove-orphans
+ExecStart=/var/lib/onionprobe/onionprobe-monitor reload
+
+[Install]
+WantedBy=multi-user.target

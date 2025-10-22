@@ -1,0 +1,65 @@
+---
+name: GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    container:
+      image: debian-bullseye
+
+    concurrency:
+      group: ci-${{ github.ref }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+          fetch-depth: 1
+
+      - name: Provision
+        run: scripts/provision-docs-build
+
+      - name: Build
+        run: make compile
+
+      #
+      # GitHub Action: Deploy to GitHub Pages
+      # https://github.com/marketplace/actions/deploy-to-github-pages
+      #
+      - name: Install rsync
+        run: |
+          apt-get update && apt-get install -y rsync
+
+      - name: Disable Jekyll
+        run: |
+          touch public/.nojekyll
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: public
+
+      #
+      # GitHub Action: GitHub Pages action
+      # https://github.com/marketplace/actions/github-pages-action
+      #
+      #- name: Deploy
+      #  uses: peaceiris/actions-gh-pages@v3
+      #  # If you're changing the branch from main,
+      #  # also change the `main` in `refs/heads/main`
+      #  # below accordingly.
+      #  if: ${{ github.ref == 'refs/heads/main' }}
+      #  with:
+      #    github_token: ${{ secrets.GITHUB_TOKEN }}
+      #    publish_dir: ./build

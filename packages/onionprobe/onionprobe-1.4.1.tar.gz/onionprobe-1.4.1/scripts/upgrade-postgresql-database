@@ -1,0 +1,106 @@
+#!/usr/bin/env bash
+#
+# Helper script to upgrade the PostgreSQL service container
+#
+
+# Parameters
+DIRNAME="`dirname $0`"
+BASENAME="`basename $0`"
+BASEPATH="$DIRNAME/.."
+TMP="${TMP:-/tmp}"
+WORK="`mktemp -d -p $TMP`"
+CONTAINER="${1:-onionprobe_postgres}"
+CONTAINER_RUNTIME="${CONTAINER_RUNTIME:-docker}"
+PGUSER="${PGUSER:-grafana}"
+
+# Abort on any error
+set +e
+
+# Load the environment file if available
+[ -f "$BASEPATH/.env" ] && source $BASEPATH/.env
+
+# Determine the volumes' folder
+if [ "$CONTAINER_RUNTIME" == "podman" ]; then
+  VOLUMES="/var/lib/containers/storage"
+else
+  VOLUMES="/var/lib/docker/volumes"
+fi
+
+# Check for version data
+if ! sudo ls "$VOLUMES/$CONTAINER/_data/PG_VERSION" &> /dev/null; then
+  echo "$BASENAME: cannot find $VOLUMES/$CONTAINER/_data/PG_VERSION, aborting."
+  exit 1
+fi
+
+# Set versions
+OLD="`sudo cat $VOLUMES/$CONTAINER/_data/PG_VERSION`"
+NEW="`grep 'image: docker.io/postgres:' $BASEPATH/docker-compose.yaml | cut -d : -f 3`"
+
+if [ -z "$OLD" ] || [ -z "$NEW" ]; then
+  echo "$BASENAME: cannot set old and new PostgreSQL versions, aborting."
+  exit 1
+fi
+
+# Check syntax
+if [ "$OLD" == "$NEW" ]; then
+  echo "$BASENAME: old and new version are the same ($OLD), aborting."
+  exit 1
+fi
+
+# Initialize
+echo "Creating the basic directory structure for the migration..."
+mkdir -p $WORK
+cd $WORK
+mkdir $OLD
+mkdir -p $NEW/data
+chmod 700 $NEW/data
+
+# Download
+echo "Downloading the needed images..."
+$CONTAINER_RUNTIME pull "postgres:$OLD"
+$CONTAINER_RUNTIME pull "postgres:$NEW"
+
+# Copy
+echo "Copying data from $VOLUMES/$CONTAINER/_data into $OLD/data..."
+sudo cp -a $VOLUMES/$CONTAINER/_data/ $OLD/data
+
+# Upgrade
+echo "Running the upgrade image..."
+$CONTAINER_RUNTIME run --rm \
+  -e PGUSER=$PGUSER -e POSTGRES_INITDB_ARGS=--username=$PGUSER \
+  -v "$WORK":/var/lib/postgresql \
+  "tianon/postgres-upgrade:$OLD-to-$NEW" \
+  --link
+$CONTAINER_RUNTIME rm postgres-upgrade-testing
+
+# Test
+# See https://github.com/tianon/docker-postgres-upgrade/issues/70
+echo "Running a test PostgreSQL $NEW container..."
+$CONTAINER_RUNTIME run -dit \
+  -e PGUSER=$PGUSER -e POSTGRES_INITDB_ARGS=--username=$PGUSER \
+  --name postgres-upgrade-testing \
+  -e POSTGRES_PASSWORD=password \
+  -v "$WORK/$NEW/data":/var/lib/postgresql/data \
+"postgres:$NEW"
+sleep 5
+$CONTAINER_RUNTIME logs --tail 100 postgres-upgrade-testing
+$CONTAINER_RUNTIME stop postgres-upgrade-testing
+$CONTAINER_RUNTIME rm postgres-upgrade-testing
+
+# Configure
+# See https://github.com/tianon/docker-postgres-upgrade/issues/1
+echo "Updating $NEW/data/pg_hba.conf..."
+echo "host all all all scram-sha-256" | sudo tee -a $NEW/data/pg_hba.conf
+
+# Backup
+echo "Backing up the old $VOLUMES/$CONTAINER/_data..."
+echo "Copying the migrated data into $VOLUMES/$CONTAINER/_data..."
+sudo mv $VOLUMES/$CONTAINER/_data $VOLUMES/$CONTAINER/_data.`date +%Y%m%d`
+sudo cp -a $NEW/data $VOLUMES/$CONTAINER/_data
+
+# Further instructions
+echo "Now please check if everything went right."
+echo "If everything is OK, you may want to remove the following folders:"
+echo ""
+echo "  - $VOLUMES/$CONTAINER/_data.`date +%Y%m%d`"
+echo "  - $WORK"

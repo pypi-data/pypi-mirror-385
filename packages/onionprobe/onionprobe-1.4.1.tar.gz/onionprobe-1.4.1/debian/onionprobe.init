@@ -1,0 +1,76 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          onionprobe
+# Required-Start:    $network $named $remote_fs $syslog
+# Required-Stop:     $network $named $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Onionprobe
+# Description:       The Onionprobe service regularly probes for Tor Onion
+#                    Service endpoints.
+### END INIT INFO
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DAEMON=/usr/bin/onionprobe
+DAEMON_OPTS=""
+CONFIG="/etc/onionprobe/onionprobe.yaml"
+NAME="onionprobe"
+DESC="onionprobe"
+USER="_$NAME"
+GROUP="_$NAME"
+PIDFILE="/run/onionprobe/${NAME}.pid"
+
+test -x $DAEMON || exit 0
+
+[ -r /etc/default/onionprobe ] && . /etc/default/onionprobe
+
+. /lib/lsb/init-functions
+
+reload_onionprobe() {
+        start-stop-daemon --stop --quiet --signal HUP --pidfile $PIDFILE
+}
+
+start_onionprobe() {
+    start-stop-daemon --start --quiet --pidfile $PIDFILE \
+        --user $USER --group $GROUP \
+        --startas $DAEMON -- $NAME -c $CONFIG $DAEMON_OPTS
+}
+
+stop_onionprobe() {
+        start-stop-daemon --stop --retry TERM/10/KILL/5 --quiet --oknodo --pidfile $PIDFILE
+}
+
+status_onionprobe() {
+        status_of_proc -p "${PIDFILE}" "${DAEMON}" "${NAME}"
+}
+
+case "$1" in
+    start)
+        log_begin_msg "Starting $DESC"
+        start_onionprobe
+        log_end_msg $?
+        ;;
+    stop)
+        log_begin_msg "Stopping $DESC"
+        stop_onionprobe
+        log_end_msg $?
+        ;;
+    reload)
+        log_begin_msg "Reloading $DESC"
+        reload_onionprobe
+        log_end_msg $?
+        ;;
+    status)
+        status_onionprobe
+        ;;
+    restart|force-reload)
+        log_begin_msg "Restarting $DESC"
+        stop_onionprobe
+        start_onionprobe
+        log_end_msg $?
+        ;;
+  *)
+        echo "Usage: $0 {start|stop|status|restart|force-reload|reload}" >&2
+        exit 1
+        ;;
+esac

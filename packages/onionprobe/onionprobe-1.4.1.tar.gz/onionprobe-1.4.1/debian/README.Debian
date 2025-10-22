@@ -1,0 +1,37 @@
+# Notes about Debian packaging of Onionprobe
+
+These are notes specific for the Debian package.
+
+For the full documentation, check /usr/share/doc/onionprobe/README.md.gz or the
+upstream docs at https://gitlab.torproject.org/tpo/onion-services/onionprobe
+
+## System-wide service
+
+The Onionprobe package for Debian comes with a system-wide service.
+It is disabled by default, since Onionprobe should not be opinionated about how
+the user wants to run it -- whether as a standalone tool or a service.
+
+### Systemd
+
+When using systemd, it can be enabled using
+
+    sudo systemctl enable onionprobe
+    sudo service onionprobe start
+
+### Other init systems
+
+The package comes with a /etc/init.d/onionprobe script suited
+for other init systems.
+
+Please consult your init system documentation on how to enable it.
+
+### Service configuration
+
+By default it uses the /etc/onionprobe/onionprobe.yaml.
+This file comes with a very basic configuration an can be customized as needed.
+
+It's also possible to specify another configuration
+file by setting the CONFIG variable at /etc/default/onionprobe.
+
+Make sure to restart the onionprobe service after editing any
+of these configuration files.

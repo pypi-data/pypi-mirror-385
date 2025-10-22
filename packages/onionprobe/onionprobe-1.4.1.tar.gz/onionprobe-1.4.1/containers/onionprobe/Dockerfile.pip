@@ -1,0 +1,59 @@
+#
+# Dockerfile for Onionprobe which uses the package available from PyPI.
+#
+# Copyright (C) 2022 The Tor Project, Inc.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published
+# by the Free Software Foundation, either version 3 of the License,
+# or any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+FROM debian:bookworm
+MAINTAINER Silvio Rhatto <rhatto@torproject.org>
+
+ENV APP="onionprobe"
+ENV APP_BASE="/srv/"
+ENV SHELL="/bin/bash"
+
+# Use the default configuration from the pip install
+# This is somehow not being included in the pip installation
+#ENV ONIONPROBE_CONFIG="/usr/local/share/onionprobe/onionprobe/configs/tor.yaml"
+
+# Use the default configuration from the Onionprobe repository
+ENV ONIONPROBE_CONFIG="/srv/onionprobe/configs/tor.yaml"
+
+# Use this to use custom configuration
+#ENV ONIONPROBE_CONFIG="/srv/onionprobe/configs/my-custom-config.yaml"
+
+# Set the PYTHONPATH in the container
+ENV PYTHONPATH="/usr/local/share/onionprobe"
+
+RUN apt-get update && \
+    apt-get install -y \
+    python3-pip tor \
+    && rm -rf /var/lib/apt/lists/*
+
+# If --upgrade is used, then somehow the Onionprobe modules aren't installed,
+# but only the configs and the examples. Removing the --upgrade does install
+# the scripts but not configs and examples, and also leads to a WARNING.
+# Maybe a bug upsteam?
+#RUN pip install onionprobe --upgrade -t ${PYTHONPATH}
+RUN pip install onionprobe -t ${PYTHONPATH}
+
+WORKDIR ${APP_BASE}/${APP}
+
+# Copy the contents of the current folder into the container's /srv/onionprobe
+COPY . ${APP_BASE}/${APP}
+
+USER debian-tor
+
+ENTRYPOINT exec /usr/local/share/onionprobe/bin/onionprobe -c ${ONIONPROBE_CONFIG}

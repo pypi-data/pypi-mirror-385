@@ -1,0 +1,193 @@
+---
+#
+# CI configuration for Onionprobe
+#
+
+#
+# General
+#
+
+# Templates
+include:
+  # GitLab pages
+  - local: '.gitlab-ci-pages.yml'
+
+  # Slide deck building
+  - local: '.gitlab-ci-slides.yml'
+
+  # APT configuration
+  - project: tpo/tpa/ci-templates
+    file: scripts/apt.yml
+
+  # Debian packaging
+  - project: tpo/onion-services/ci-templates
+    file: onion-services/debian.yml
+
+  # Python packaging
+  - project: tpo/onion-services/ci-templates
+    file: onion-services/python.yml
+
+  # GitLab releases
+  - project: tpo/onion-services/ci-templates
+    file: onion-services/release.yml
+
+#
+# Python
+#
+
+python:
+  !reference [.python]
+
+#
+# Debian
+#
+
+debian_stable:
+  !reference [.debian-stable]
+
+debian_sid:
+  !reference [.debian-sid]
+
+ubuntu_lts:
+  !reference [.ubuntu-lts]
+
+lintian:
+  !reference [.lintian]
+
+piuparts:
+  !reference [.piuparts]
+
+#
+# Configuration
+#
+
+configs:
+  image: containers.torproject.org/tpo/tpa/base-images/debian:sid
+  stage: build
+  before_script:
+    - !reference [.apt-init]
+  script:
+    - apt-get update
+    - apt-get install -y git
+    - git submodule sync
+    - git submodule update --init --recursive --depth 1
+    - scripts/provision-onionprobe
+    - make configs
+    - mkdir -p dist
+    - cp configs/*.yaml dist
+  artifacts:
+    paths:
+      - dist
+  #only:
+  #  - main
+
+#
+# Documentation
+#
+
+#manpage:
+#  image: containers.torproject.org/tpo/tpa/base-images/debian:sid
+#  stage: build
+#  before_script:
+#    - !reference [.apt-init]
+#  script:
+#    - apt-get update
+#    - apt-get install -y git
+#    - git submodule sync
+#    - git submodule update --init --recursive --depth 1
+#    - scripts/provision-onionprobe
+#    - make manpage
+#    - mkdir -p dist
+#    - cp docs/man/onionprobe.1.md dist
+#  artifacts:
+#    paths:
+#      - dist
+#  only:
+#    - main
+
+#
+# Run tests
+#
+
+.run_onionprobe:
+  - onionprobe --log_level debug -e http://2gzyxa5ihm7nsggfxnu52rck2vv4rvmdlkiu3zzui5du4xyclen53wid.onion
+  - onionprobe --log_level debug -e https://v236xhqtyullodhf26szyjepvkbv6iitrhjgrqj4avaoukebkk6n6syd.onion
+
+run_source:
+  image: containers.torproject.org/tpo/tpa/base-images/debian:sid
+  stage: test
+  # Retry twice, since Onionprobe might fail due to Tor bootrapping/network errors
+  retry: 2
+  before_script:
+    - !reference [.apt-init]
+  script:
+    - scripts/provision-onionprobe
+    - export PATH=.:$PATH
+    - !reference [.run_onionprobe]
+
+run_python:
+  image: containers.torproject.org/tpo/tpa/base-images/debian:sid
+  stage: test
+  # Retry twice, since Onionprobe might fail due to Tor bootrapping/network errors
+  retry: 2
+  needs:
+    - job: python
+      artifacts: true
+  before_script:
+    - !reference [.apt-init]
+  script:
+    - apt-get update
+    - apt-get install -y python3-pip tor
+    - pip install --break-system-packages dist/onionprobe*.whl
+    - pip show onionprobe
+    - !reference [.run_onionprobe]
+
+run_sid:
+  image: containers.torproject.org/tpo/tpa/base-images/debian:sid
+  stage: test
+  # Retry twice, since Onionprobe might fail due to Tor bootrapping/network errors
+  retry: 2
+  needs:
+    - job: debian_sid
+      artifacts: true
+  before_script:
+    - !reference [.apt-init]
+  script:
+    # Install dependencies
+    - apt-get update
+    - apt-get install -y onionprobe
+    - apt-get remove onionprobe
+
+    # Install the built package
+    - dpkg -i dist/onionprobe_*.deb
+
+    # Test
+    - !reference [.run_onionprobe]
+
+#
+# Prometheus
+# Thanks https://gitlab.torproject.org/tpo/tpa/prometheus-alerts
+#
+
+pint:
+  stage: test
+  image: ghcr.io/cloudflare/pint
+  script:
+    - pint lint configs/prometheus/*rules*
+
+promtool:
+  stage: test
+  image:
+    #name: docker.io/prom/prometheus:v3.2.1
+    name: quay.io/prometheus/prometheus:v3.6.0
+    entrypoint: [""]
+  script:
+    - promtool check config configs/prometheus/prometheus.yml
+    - promtool test rules configs/prometheus/prometheus-tests.yml
+
+#
+# Release
+#
+
+release:
+  !reference [.release-gitlab]

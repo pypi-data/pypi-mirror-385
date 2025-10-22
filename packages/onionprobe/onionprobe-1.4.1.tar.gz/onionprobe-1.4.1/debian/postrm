@@ -1,0 +1,25 @@
+#!/bin/sh
+#
+# Post-removal script for Onionprobe
+#
+
+# Parameters
+# User name should begin with an underscore, see
+# https://www.debian.org/doc/debian-policy/ch-opersys.html#introduction
+NAME="onionprobe"
+USERNAME="_$NAME"
+MODE="$1"
+
+# Ensure that the scripts abort in case of any errors
+set -e
+
+if [ "$MODE" = "purge" ]; then
+  # Remove all remaining Onionprobe files
+  rm -rf /var/lib/$NAME
+
+  # Remove Onionprobe user and group
+  userdel $USERNAME
+fi
+
+# Include automatic generated code by debhelper(7)
+#DEBHELPER#

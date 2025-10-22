@@ -1,0 +1,49 @@
+#
+# Containerized Tor daemon configuration for Onionprobe.
+#
+# This is a sample Tor configuration for a containerized service to be used
+# along with Onionprobe to access a Grafana Dashboard via an Onion Service and
+# to optionally route Onionprobe's traffic via a persistent daemon.
+#
+# Copyright (C) 2022 The Tor Project, Inc.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published
+# by the Free Software Foundation, either version 3 of the License,
+# or any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Ensure Tor does not fork into the background, otherwise the container service
+# is finished
+RunAsDaemon 0
+
+# Setup an Onion Service for the Prometheus Dashboard
+HiddenServiceDir /var/lib/tor/prometheus
+HiddenServicePort 80 prometheus:9090
+
+# Setup an Onion Service for the Alertmanager Dashboard
+HiddenServiceDir /var/lib/tor/alertmanager
+HiddenServicePort 80 alertmanager:9093
+
+# Setup an Onion Service for the Grafana Dashboard
+HiddenServiceDir /var/lib/tor/grafana
+HiddenServicePort 80 grafana:3000
+
+# Setup an Onion Service for the Prometheus Exporter
+HiddenServiceDir /var/lib/tor/onionprobe
+HiddenServicePort 80 onionprobe:9935
+
+# Use this configuration to make Onionprobe use the Tor daemon from the container service
+# This is not needed by default as Onionprobe already use it's own Tor process
+# Do not use this in production as the HashedControlPassword below is related
+# to a publicly known password
+#SocksPort 9050
+#ControlPort 9051
+#HashedControlPassword 16:B26845599A0B016A60F729DB6CBEDD9530B7627B13AFE55D267D7DABBE

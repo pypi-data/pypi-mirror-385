@@ -1,0 +1,246 @@
+---
+#
+# Docker Compose configuration for the Onionprobe Standalone Monitoring node.
+# See docs/standalone.md for details.
+#
+version: '3'
+
+services:
+  prometheus:
+    #image: docker.io/prom/prometheus:v3.2.1
+    image: quay.io/prometheus/prometheus:v3.6.0
+
+    volumes:
+      - ./${PROMETHEUS_CONFIG:-configs/prometheus/prometheus.yml}:/etc/prometheus/prometheus.yml
+      - ./${PROMETHEUS_RULES:-configs/prometheus/prometheus-rules.yml}:/etc/prometheus/prometheus-rules.yml
+      - ./${PROMETHEUS_TESTS:-configs/prometheus/prometheus-tests.yml}:/etc/prometheus/prometheus-tests.yml
+      - prometheus:/prometheus
+
+    networks:
+      - onionprobe
+
+      # Use a static network IP to allow Prometheus to collect MetricsPort data
+      # from onionprobe's Tor process. This allows specifying a more restricted
+      # metrics_port_policy at the Onionprobe configuration.
+      #- onionprobe:
+      #  ipv4_address: 172.19.0.100
+
+    ports:
+      # By default, restrict access only to localhost, so this service is not
+      # accidentally exposed to the internet
+      - ${ONIONPROBE_LISTEN_ADDR:-127.0.0.1}:9090:9090
+
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - '--web.enable-admin-api'
+      - '--web.enable-lifecycle'
+      - '--web.external-url=${PROMETHEUS_WEB_EXTERNAL_URL:-http://hostname:9090}'
+
+    healthcheck:
+      test    : ["CMD-SHELL", "/bin/wget http://localhost:9090/-/healthy -q -O - | /bin/grep -q 'Prometheus Server is Healthy'"]
+      interval: 10s
+      timeout : 30s
+      retries : 50
+
+    restart: always
+
+    # Profiles
+    # This needs a newer Docker Compose (>= 1.28) or Podman Compose (>= 1.1.0)
+    #profiles: ["prometheus", "all"]
+
+  alertmanager:
+    #image: docker.io/prom/alertmanager:v0.28.1
+    image: quay.io/prometheus/alertmanager:v0.28.1
+
+    volumes:
+      - ./${ALERTMANAGER_CONFIG:-configs/alertmanager/alertmanager.yml}:/etc/alertmanager/alertmanager.yml
+      - alertmanager:/alertmanager
+
+    networks:
+      - onionprobe
+
+    ports:
+      # By default, restrict access only to localhost, so this service is not
+      # accidentally exposed to the internet
+      - ${ONIONPROBE_LISTEN_ADDR:-127.0.0.1}:9093:9093
+
+    command:
+      - "--config.file=/etc/alertmanager/alertmanager.yml"
+      - "--storage.path=/alertmanager"
+
+    restart: always
+
+    # Profiles
+    # This needs a newer Docker Compose (>= 1.28) or Podman Compose (>= 1.1.0)
+    #profiles: ["alertmanager", "all"]
+
+  postgres:
+    image: docker.io/postgres:17
+
+    environment:
+      POSTGRES_USER: grafana
+      POSTGRES_DB: grafana
+      POSTGRES_PASSWORD: ${GRAFANA_DATABASE_PASSWORD:-unsafe-password-please-change}
+
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+    networks:
+      - onionprobe
+
+    restart: always
+
+    # Profiles
+    # This needs a newer Docker Compose (>= 1.28) or Podman Compose (>= 1.1.0)
+    #profiles: [ "grafana", "all" ]
+
+  grafana:
+    image: docker.io/grafana/grafana:12.2.1
+
+    volumes:
+      - ./${GRAFANA_PROVISIONING:-configs/grafana/provisioning}:/etc/grafana/provisioning
+      - ./${GRAFANA_HOME_DASHBOARD:-configs/grafana/home.json}:${GRAFANA_DASHBOARDS_DEFAULT_HOME_DASHBOARD:-/etc/grafana/home.json}
+      - grafana:/var/lib/grafana
+
+    environment:
+      GF_DATABASE_TYPE: postgres
+      GF_DATABASE_HOST: postgres
+      GF_DATABASE_NAME: grafana
+      GF_DATABASE_USER: grafana
+      GF_DATABASE_PASSWORD: ${GRAFANA_DATABASE_PASSWORD:-unsafe-password-please-change}
+      GF_SMTP_ENABLED: ${GRAFANA_SMTP_ENABLED:-false}
+      GF_SMTP_HOST: ${GRAFANA_SMTP_HOST:-localhost:25}
+      GF_SMTP_USER: ${GRAFANA_SMTP_USER:-}
+      GF_SMTP_PASSWORD: ${GRAFANA_SMTP_PASSWORD:-}
+      GF_SMTP_STARTTLS_POLICY: ${GRAFANA_SMTP_STARTTLS_POLICY:-}
+      GF_SERVER_DOMAIN: ${GRAFANA_SERVER_DOMAIN:-}
+      GF_SERVER_ROOT_URL: ${GRAFANA_SERVER_ROOT_URL:-}
+      GF_ANALYTICS_REPORTING_ENABLED: ${GRAFANA_ANALYTICS_REPORTING_ENABLED:-false}
+      GF_ANALYTICS_CHECK_FOR_UPDATES: ${GRAFANA_ANALYTICS_CHECK_FOR_UPDATES:-false}
+      GF_ANALYTICS_CHECK_FOR_PLUGIN_UPDATES: ${GRAFANA_ANALYTICS_CHECK_FOR_UPDATES:-false}
+      GF_PLUGINS_ENABLE_ALPHA: ${GRAFANA_PLUGNS_ENABLE_ALPHA:-false}
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: ${GRAFANA_DASHBOARDS_DEFAULT_HOME_DASHBOARD:-/etc/grafana/home.json}
+
+    networks:
+      - onionprobe
+
+    ports:
+      # By default, restrict access only to localhost, so this service is not
+      # accidentally exposed to the internet
+      - ${ONIONPROBE_LISTEN_ADDR:-127.0.0.1}:3000:3000
+
+    restart: always
+
+    depends_on:
+      - prometheus
+      - postgres
+
+    # Profile
+    # This needs a newer Docker Compose (>= 1.28) or Podman Compose (>= 1.1.0)
+    #profiles: ["grafana", "all"]
+
+  tor:
+    image: "onionprobe/tor:1.4.1"
+
+    build:
+      context: .
+      dockerfile: containers/tor/Dockerfile
+
+    volumes:
+      - ./scripts/generate-auth-keys-for-all-onion-services:/usr/local/bin/generate-auth-keys-for-all-onion-services
+      - tor:/var/lib/tor
+
+    networks:
+      - onionprobe
+
+    restart: always
+
+    # Profile
+    # This needs a newer Docker Compose (>= 1.28) or Podman Compose (>= 1.1.0)
+    #profiles: ["tor", "all"]
+
+  # Service that periodically compiles an Onionprobe configuration
+  configurator:
+    image: "onionprobe/onionprobe:1.4.1"
+
+    build:
+      context: .
+      dockerfile: containers/onionprobe/Dockerfile
+
+    tty: true
+    stdin_open: true
+
+    volumes:
+      - .:/srv/onionprobe
+
+    networks:
+      - onionprobe
+
+    entrypoint: "/srv/onionprobe/${CONFIGURATOR_ENTRYPOINT:-packages/tpo.py}"
+    command: "${CONFIGURATOR_PARAMS:---loop --wait 240 --config_overrides rounds=20 --config_template /srv/onionprobe/configs/tor.yaml --output_folder /srv/onionprobe/contrib}"
+    user: "${CONTAINER_UID:-1000}:${CONTAINER_GID:-1000}"
+    restart: always
+
+    # Profile
+    # This needs a newer Docker Compose (>= 1.28) or Podman Compose (>= 1.1.0)
+    #profiles: ["configurator", "all"]
+
+  onionprobe:
+    image: "onionprobe/onionprobe:1.4.1"
+
+    build:
+      context: .
+      dockerfile: containers/onionprobe/Dockerfile
+
+    tty: true
+    stdin_open: true
+
+    volumes:
+      - .:/srv/onionprobe
+
+    networks:
+      - onionprobe
+
+    ports:
+      # Onionprobe Prometheus exporter
+      #
+      # By default, restrict access only to localhost, so this service is not
+      # accidentally exposed to the internet
+      - ${ONIONPROBE_LISTEN_ADDR:-127.0.0.1}:9935:9935
+
+      # Tor Metrics Prometheus exporter
+      #
+      # By default, restrict access only to localhost, so this service is not
+      # accidentally exposed to the internet
+      - ${ONIONPROBE_LISTEN_ADDR:-127.0.0.1}:9936:9936
+
+    environment:
+      ONIONPROBE_CONFIG: /srv/onionprobe/${ONIONPROBE_CONFIG:-contrib/tpo.yaml}
+
+    restart: always
+
+    depends_on:
+      - configurator
+
+    # Profile
+    # This needs a newer Docker Compose (>= 1.28) or Podman Compose (>= 1.1.0)
+    #profiles: ["onionprobe", "all"]
+
+volumes:
+  prometheus: {}
+  alertmanager: {}
+  postgres: {}
+  grafana: {}
+  tor: {}
+
+networks:
+  onionprobe:
+    # Use a static network range to allow Prometheus to collect MetricsPort data
+    # from onionprobe's Tor process. This allows specifying a more restricted
+    # metrics_port_policy at the Onionprobe configuration.
+    #ipam:
+    #  config:
+    #    - subnet: 172.19.0.0/24

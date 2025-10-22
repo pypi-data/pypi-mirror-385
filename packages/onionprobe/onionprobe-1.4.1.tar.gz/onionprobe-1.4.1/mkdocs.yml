@@ -1,0 +1,26 @@
+#
+# Onion MkDocs configuration
+#
+
+# Inherit the base config
+# Check https://github.com/mkdocs/mkdocs/blob/master/docs/user-guide/configuration.md#configuration-inheritance
+INHERIT: vendors/onion-mkdocs/onion-mkdocs.yml
+
+site_name: Onionprobe
+repo_url : https://gitlab.torproject.org/tpo/onion-services/onionprobe
+edit_uri : ''
+
+plugins:
+  mkdocstrings:
+    default_handler: python
+    handlers:
+      python:
+        # Somehow docs are not correctly indexed when path is set to
+        # [packages]
+        paths: [.]
+        options:
+          docstring_style: sphinx
+          show_submodules: true
+
+  awesome-pages:
+    collapse_single_pages: true

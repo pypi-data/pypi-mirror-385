@@ -1,0 +1,68 @@
+---
+#
+# Test configuration for Onionprobe.
+#
+# WARNING: this configuration is meant only for research, development and
+# testing, not for production, as it contains non-recommended configurations.
+#
+# Content may vary and endpoints selected usually have descriptor or connection
+# errors.
+#
+
+# General parameters
+circuit_stream_timeout: 60
+control_port: 19051
+descriptor_max_retries: 5
+descriptor_timeout: 30
+http_connect_timeout: 30
+http_read_timeout: 30
+interval: 5
+launch_tor: true
+log_level: debug
+loop: true
+new_circuit: false
+randomize: true
+shuffle: true
+sleep: 5
+socks_port: 19050
+tor_address: 127.0.0.1
+
+# Prometheus
+prometheus_exporter: true
+prometheus_exporter_port: 9935
+
+# Tor Metrics port
+# Enable this if you want to export metrics from the Tor probing process.
+#
+# WARNING: Before enabling this, it is important to understand that exposing
+# tor metrics publicly is dangerous to the Tor network users. Please take extra
+# precaution and care when opening this port. Set a very strict access policy
+# with `metrics_port_policy` and consider using your operating systems firewall
+# features for defense in depth.
+#
+# We recommend, for the prometheus format, that the only address that can
+# access this port should be the Prometheus server itself. Remember that the
+# connection is unencrypted (HTTP) hence consider using a tool like stunnel to
+# secure the link from this port to the server.
+#
+# The folloing should work by default for a local network, including local
+# Docker containers (not recommended):
+metrics_port: '0.0.0.0:9936'
+metrics_port_policy: 'accept 192.168.0.0/16,accept 10.0.0.0/8,accept 172.16.0.0/12'
+
+# Endpoint configuration
+# Usually includes Onion Services with miscellaneous errors.
+endpoints:
+  Impffrei.work:
+    address: 5sh6hmyvnm4nux5hibm7i3eakhzhdrs647ntv3ekuys2exskmtire4id.onion
+    paths:
+      - path: /
+    port: 443
+    protocol: https
+  "Alexander F\xE6r\xF8y":
+    address: lxwu7pwyszfevhglxfgaukjqjdk2belosfvsl2ekzx3vrboacvewc7qd.onion
+    paths:
+      - path: /
+        allowed_statuses: [ 200 ]
+    port: 443
+    protocol: https

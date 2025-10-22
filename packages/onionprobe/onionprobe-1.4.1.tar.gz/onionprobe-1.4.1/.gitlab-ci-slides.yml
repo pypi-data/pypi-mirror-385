@@ -1,0 +1,17 @@
+slides:
+  image: containers.torproject.org/tpo/tpa/base-images/debian:stable
+  stage: build
+  script:
+    - apt-get update
+    - apt-get install -y git
+    - git submodule sync
+    - git submodule update --init --recursive --depth 1
+    - vendors/onion-tex-slim/scripts/onion-tex-slim-provision-build
+    - make -C docs/slides all
+    - mkdir slides
+    - rsync -av --prune-empty-dirs --include='*/' --include='*.pdf' --exclude='*' docs/slides/ slides/
+  artifacts:
+    paths:
+      - slides
+  #only:
+  #  - main

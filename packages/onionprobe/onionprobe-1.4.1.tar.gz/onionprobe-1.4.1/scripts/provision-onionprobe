@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+#
+# Helper script to setup an environment for developing, testing and running
+# Onionprobe
+#
+
+# Parameters
+DIRNAME="`dirname $0`"
+BASEPATH="$DIRNAME/.."
+REQUIREMENTS="ca-certificates apt-transport-https wget gnupg make"
+DEPENDENCIES="python3-prometheus-client python3-stem python3-cryptography python3-yaml python3-requests python3-socks"
+DEPENDENCIES="$DEPENDENCIES deb.torproject.org-keyring tor pandoc"
+
+# Check for sudo
+if [ "`whoami`" != "root" ]; then
+  SUDO="sudo"
+fi
+
+# Install basic requirements
+$SUDO apt-get update
+$SUDO apt-get upgrade -y
+$SUDO apt-get install -y $REQUIREMENTS
+
+# Configure Tor's Debian repository and keyring
+$SUDO $BASEPATH/scripts/get-tor-debian-key /usr/share/keyrings/tor-archive-keyring.gpg || exit 1
+$SUDO cp $BASEPATH/configs/apt/tor.list /etc/apt/sources.list.d/tor.list
+$SUDO apt-get update
+
+# Install dependencies
+$SUDO apt-get install -y $DEPENDENCIES

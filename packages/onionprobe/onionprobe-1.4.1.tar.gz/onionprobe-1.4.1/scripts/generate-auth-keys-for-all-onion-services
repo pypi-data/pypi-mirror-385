@@ -1,0 +1,100 @@
+#!/usr/bin/env bash
+#
+# Generate a Client Authorization keypair and apply to all Onion Services.
+#
+# Based on https://community.torproject.org/onion-services/advanced/client-auth/
+# See also https://gist.github.com/mtigas/9c2386adf65345be34045dace134140b
+#
+# Copyright (C) 2022 The Tor Project, Inc.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published
+# by the Free Software Foundation, either version 3 of the License,
+# or any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Parameters
+ONION_SERVICE_BASEDIR="/var/lib/tor"
+TMP_DIR="`mktemp -d`"
+KEY_PREFIX="${1:-admin}"
+GENERATED_KEY="$TMP_DIR/$KEY_PREFIX.private.pem"
+PRIVATE_KEY="$TMP_DIR/$KEY_PREFIX.private.key"
+PUBLIC_KEY="$TMP_DIR/$KEY_PREFIX.private.pub"
+AUTH_FILE="$TMP_DIR/$KEY_PREFIX.auth"
+
+# Basic checks
+for tool in openssl base64pem base32; do
+  if ! which $tool &> /dev/null; then
+    echo "Cannot find $tool too, aborting."
+    exit 1
+  fi
+done
+
+# Ensure files exists with the proper permissions
+touch     $GENERATED_KEY $PRIVATE_KEY $PUBLIC_KEY $AUTH_FILE
+chmod 600 $GENERATED_KEY $PRIVATE_KEY $PUBLIC_KEY $AUTH_FILE
+
+# Generate the private keypair
+openssl genpkey -algorithm x25519 -out $GENERATED_KEY
+
+# Write the private key in a separate file
+cat $GENERATED_KEY       | \
+  grep -v " PRIVATE KEY" | \
+  base64pem -d           | \
+  tail --bytes=32        | \
+  base32                 | \
+  sed 's/=//g' > $PRIVATE_KEY
+
+# Write the public key in a separate file
+cat $GENERATED_KEY                      | \
+openssl pkey -in $GENERATED_KEY -pubout | \
+  grep -v " PUBLIC KEY"                 | \
+  base64pem -d                          | \
+  tail --bytes=32                       | \
+  base32                                | \
+  sed 's/=//g' > $PUBLIC_KEY
+
+# Write the public key in Tor's Client Authorization format
+echo "descriptor:x25519:`cat $PUBLIC_KEY`" > $AUTH_FILE
+
+# Configure each Onion Service with the authorization key
+if [ -d "$ONION_SERVICE_BASEDIR" ]; then
+  for file in `ls $ONION_SERVICE_BASEDIR`; do
+    if [ -d "$ONION_SERVICE_BASEDIR/$file" ] && [ -d "$ONION_SERVICE_BASEDIR/$file/authorized_clients" ]; then
+      echo "Processing Onion Service $file..."
+
+      # Put the key in the Onion Service config
+      echo "Installing public key at $ONION_SERVICE_BASEDIR/$file/authorized_clients/$KEY_PREFIX.auth..."
+      cp -a $AUTH_FILE $ONION_SERVICE_BASEDIR/$file/authorized_clients/$KEY_PREFIX.auth
+
+      # Save the private key somewhere so admins can get the credential to access the service.
+      #
+      # This step is optional and not desirable in most configurations, but here we are
+      # auto-generating the keys in a service container so we need to save this info somewhere.
+      #
+      # Alternatives:
+      #
+      # 1. Display this information only once.
+      #
+      # 2. Throw away the private key, so the admin is forced to generate another key, which
+      #    is not very handy but already protects the Onion Services from unwanted access.
+      #
+      # Here we are in-between: generate an access credential that can be access at least
+      # temporarily.
+      echo "Leaving a copy of the private key at $ONION_SERVICE_BASEDIR/$file/authorized_clients/$KEY_PREFIX.priv..."
+      cp -a $PRIVATE_KEY $ONION_SERVICE_BASEDIR/$file/authorized_clients/$KEY_PREFIX.priv
+    fi
+  done
+
+  echo "Please make sure to restart the tor daemon so the changes can take effect."
+fi
+
+# Teardown
+rm -rf $TMP_DIR

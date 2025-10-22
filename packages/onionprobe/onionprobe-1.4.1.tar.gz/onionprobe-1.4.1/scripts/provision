@@ -1,0 +1,85 @@
+#!/usr/bin/env bash
+#
+# Helper script to setup a development environment
+#
+
+# Parameters
+DIRNAME="`dirname $0`"
+BASEPATH="$DIRNAME/.."
+TORRC="/etc/tor/torrc"
+CONTAINER_RUNTIME="${CONTAINER_RUNTIME:-docker}"
+
+# Load the environment file if available
+[ -f "$BASEPATH/.env" ] && source $BASEPATH/.env
+
+# Check for sudo
+if [ "`whoami`" != "root" ]; then
+  SUDO="sudo"
+fi
+
+# Update submodules
+git -C $BASEPATH submodule update --init --recursive
+
+# Make sure the  vendors folder is available
+mkdir -p $BASEDIR/vendors
+
+# Provision Onionprobe requirements
+$DIRNAME/provision-onionprobe
+
+# Configure Tor
+# This is mainly intended to test Onionprobe using a system-wide Tor daemon,
+# i.e., when not using the built-in Tor process handling.
+if ! grep -q "^ControlPort" $TORRC; then
+  control_pass="$(grep "^control_password" $BASEPATH/configs/tor.yaml | cut -d "'" -f 2)"
+
+  # Ensure a control password
+  if [ -z "$control_pass" ]; then
+    control_pass="`head -c 20 /dev/urandom | base64`"
+  fi
+
+  hashed_pass="`tor --hash-password $control_pass`"
+
+  echo "SocksPort   19050"                  | $SUDO tee -a $TORRC > /dev/null
+  echo "ControlPort 19051"                  | $SUDO tee -a $TORRC > /dev/null
+  echo "HashedControlPassword $hashed_pass" | $SUDO tee -a $TORRC > /dev/null
+
+  $SUDO service tor restart
+fi
+
+# System upgrade
+$SUDO apt-get update
+$SUDO apt-get upgrade -y
+
+# Podman
+if [ "$CONTAINER_RUNTIME" == "podman" ]; then
+  $SUDO apt-get install -y podman podman-compose
+
+  mkdir -p $HOME/.config/containers/containers.conf.d/
+  cp $BASEDIR/configs/podman/containers.conf $HOME/.config/containers/containers.conf.d/
+else
+  # Docker and docker-compose from distribution
+  $SUDO apt-get install -y docker.io docker-compose
+
+  # Put the regular user into docker group
+  $SUDO usermod -a -G docker $(whoami)
+fi
+
+# Fetch an up-to-date Onion MkDocs codebase
+if [ ! -e "vendors/onion-mkdocs" ]; then
+  git clone https://gitlab.torproject.org/tpo/web/onion-mkdocs.git $BASEDIR/vendors/onion-mkdocs
+else
+  git -C $BASEDIR/vendors/onion-mkdocs pull
+fi
+
+# Provision documentation requirements
+$BASEPATH/vendors/onion-mkdocs/scripts/onion-mkdocs-provision-build
+$BASEPATH/vendors/onion-tex-slim/scripts/onion-tex-slim-provision-build
+
+# Provision Python packaging requirements
+$DIRNAME/provision-packaging-python
+
+# Provision Debian packaging requirements
+$DIRNAME/provision-packaging-debian
+
+# Provision Debian packaging requirements: sbuild
+$DIRNAME/provision-packaging-sbuild

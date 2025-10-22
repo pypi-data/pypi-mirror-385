@@ -1,0 +1,44 @@
+---
+# Sample Prometheus configuration to be used with Docker Compose.
+#
+# Copyright (C) 2022 The Tor Project, Inc.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published
+# by the Free Software Foundation, either version 3 of the License,
+# or any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  # The Onionprobe metrics exporter
+  - job_name: 'onionprobe'
+    static_configs:
+      - targets: ['onionprobe:9935']
+
+  # The Tor metrics exporter from the onionprobe tor process
+  #
+  # This will only be effective if metrics_port and metrics_port_policy
+  # parameters are properly configured at your Onionprobe config, otherwise
+  # it will only show a harmless error on the targets status page in at the
+  # Prometheus dashboard.
+  - job_name: 'tor'
+    static_configs:
+      - targets: ['onionprobe:9936']
+
+alerting:
+  alertmanagers:
+    - static_configs:
+      - targets: ['alertmanager:9093']
+
+rule_files:
+  - prometheus-rules.yml

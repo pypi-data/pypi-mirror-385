@@ -1,0 +1,17 @@
+---
+include:
+  - project: tpo/web/onion-mkdocs
+    file: .gitlab-ci-base.yml
+
+pages:
+  stage: build
+  extends: .onion-mkdocs-clone
+  after_script:
+    - $ONION_MKDOCS_LOCATION/scripts/onion-mkdocs-provision-build
+    - scripts/provision-onionprobe
+    - make docs
+  artifacts:
+    paths:
+      - public
+  #only:
+  #  - main

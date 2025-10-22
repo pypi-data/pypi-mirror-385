@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+#
+# Helper script to setup a Debian packaging environment
+#
+
+# Parameters
+DIRNAME="`dirname $0`"
+BASEPATH="$DIRNAME/.."
+DEPENDENCIES_PACKAGING_SBUILD="sbuild-debian-developer-setup"
+
+# Check for sudo
+if [ "`whoami`" != "root" ]; then
+  SUDO="sudo"
+fi
+
+# Ensure a non-interactive package installation
+export DEBIAN_FRONTEND=noninteractive
+
+# Debian packaging
+$SUDO apt-get update
+$SUDO apt-get upgrade -y
+$SUDO apt-get install -y $DEPENDENCIES_PACKAGING_SBUILD
+
+# Sbuild chroot for unstable
+if [ ! -e "/srv/chroot/unstable-amd64-sbuild" ]; then
+  #$SUDO sbuild-debian-developer-setup --distribution=unstable
+  $SUDO sbuild-createchroot  --include=eatmydata,gnupg unstable /srv/chroot/unstable-amd64-sbuild http://deb.debian.org/debian
+fi
+
+# Sbuild chroot for stable
+#if [ ! -e "/srv/chroot/stable-amd64-sbuild" ]; then
+#  $SUDO sbuild-createchroot --include=eatmydata,gnupg stable   /srv/chroot/stable-amd64-sbuild   http://deb.debian.org/debian
+#  $SUDO sbuild-debian-developer-setup --distribution=stable
+#fi
+
+$SUDO sbuild-adduser $LOGNAME
+
+if [ ! -e "$HOME/.sbuildrc" ]; then
+  cp /usr/share/doc/sbuild/examples/example.sbuildrc $HOME/.sbuildrc
+fi
+
+# This allows one to build Debian packages inside a KVMX virtual machine
+#if [ -d "/srv/onionprobe" ]; then
+#  $SUDO chown user. /srv/onionprobe
+#fi
