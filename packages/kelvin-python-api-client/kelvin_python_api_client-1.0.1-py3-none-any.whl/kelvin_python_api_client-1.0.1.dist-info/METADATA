@@ -1,0 +1,42 @@
+Metadata-Version: 2.4
+Name: kelvin-python-api-client
+Version: 1.0.1
+Summary: Kelvin Python API Client
+Author-email: Kelvin Inc <engineering@kelvininc.com>
+Project-URL: Homepage, https://kelvin.ai/
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Requires-Python: <3.14,>=3.9
+Description-Content-Type: text/markdown
+Requires-Dist: PyYAML==6.*
+Requires-Dist: pydantic-settings==2.*
+Requires-Dist: pydantic[email]==2.11.*
+Requires-Dist: python-keycloak==5.*
+Requires-Dist: httpx[http2]==0.28.*
+Requires-Dist: structlog==23.*
+Requires-Dist: typing-extensions==4.*
+Requires-Dist: typing-inspect==0.9.*
+Requires-Dist: tzlocal==5.2.*
+Requires-Dist: kelvin-krn<0.2,>=0.1.1
+Provides-Extra: dataframe
+Requires-Dist: pandas==2.*; extra == "dataframe"
+Requires-Dist: numpy==1.*; extra == "dataframe"
+
+# kelvin-python-api-client
+
+Access platform data with the python **kelvin-python-api-client**.
+
+# License
+
+See the [License](https://www.kelvininc.com/license-sdk) for more information.
+
+
+# Development
+
+Script connects to alpha to fetch the spec version and build the client:
+
+```sh
+export KELVIN_USER={KELVIN_USER}
+export KELVIN_PASS={KELVIN_PASS}
+make build
+```
