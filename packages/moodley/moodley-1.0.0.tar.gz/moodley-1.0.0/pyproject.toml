@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "moodley"
+version = "1.0.0"
+authors = [
+  { name = "Faheem12005", email = "mohdfaheem.1205@gmail.com" },
+]
+# Dependencies
+dependencies = [
+    "google-api-python-client",
+    "google-auth",
+    "google-auth-oauthlib",
+    "requests",
+    "pydantic",
+    "questionary",
+    "keyring",
+    "platformdirs",
+    "beautifulsoup4"
+]
+
+description = "Moodley CLI — Sync Moodle assignment deadlines to Google Calendar"
+readme = "README.md"
+requires-python = ">=3.10"
+keywords = ["LMS", "VITOL", "Google Calendar", "CLI", "VIT"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+# CLI entry point
+[project.scripts]
+moodley = "moodley.main:main"
+
+# Project URLs
+[project.urls]
+Homepage = "https://github.com/Faheem12005/moodley"
+Issues = "https://github.com/Faheem12005/moodley/issues"
+Documentation = "https://github.com/Faheem12005/moodley#readme"
+Source = "https://github.com/Faheem12005/moodley"
