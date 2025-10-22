@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=61.0", "setuptools_scm>=6"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "spin-hmi"
+dynamic = ["version"]
+authors = [
+    {name = "Georg Brandl", email = "g.brandl@fz-juelich.de"},
+    {name = "Enrico Faulhaber", email = "enrico.faulhaber@frm2.tum.de"},
+    {name = "Alexander Zaft", email = "a.zaft@fz-juelich.de"},
+]
+description = "Control box monitoring system"
+readme = "README.rst"
+requires-python = ">= 3.9"
+license = {text = "GPL-2.0-or-later"}
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Human Machine Interfaces",
+]
+dependencies = [
+    "aiohttp",
+    "mlzlog",
+    "zapf",
+]
+
+[project.optional-dependencies]
+tango = [
+    "pytango>=9.3",
+]
+
+[project.scripts]
+spin = "spin.server:main"
+
+[tool.setuptools.packages.find]
+include = ["spin*"]
+
+[tool.setuptools.package-data]
+spin = ["assets/*", "plugins/*/*"]
+
+[tool.setuptools_scm]
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = ["ANN", "D1", "D203", "D213", "EM1", "FIX", "INP001",
+          "PERF203", "PLR09", "PLR2004", "S311",
+          "TD", "TRY003", "TRY400", "TRY401"]
+flake8-quotes.inline-quotes = "single"
+flake8-quotes.multiline-quotes = "single"
+mccabe.max-complexity = 20

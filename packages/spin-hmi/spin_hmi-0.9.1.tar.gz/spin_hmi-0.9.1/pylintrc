@@ -1,0 +1,122 @@
+[MAIN]
+jobs=0
+source-roots=.
+ignore=.git,res_qt5.py,res_qt6.py
+extension-pkg-allow-list=PyQt5,PyQt6,sip
+ignored-modules=
+#init-hook=
+
+
+[BASIC]
+argument-naming-style=snake_case
+attr-naming-style=snake_case
+class-attribute-naming-style=any
+class-const-naming-style=UPPER_CASE
+class-naming-style=PascalCase
+const-naming-style=UPPER_CASE
+function-naming-style=snake_case
+good-names=i,
+           j,
+           k,
+           ex,
+           _
+good-names-rgxs=
+method-naming-style=snake_case
+module-naming-style=snake_case
+
+
+[CLASSES]
+exclude-protected=_asdict,_fields,_replace,_source,_make,os._exit
+
+
+[DESIGN]
+exclude-too-few-public-methods=
+ignored-parents=
+max-args=10
+max-attributes=20
+max-bool-expr=6
+max-branches=25
+max-locals=30
+max-parents=7
+max-public-methods=30
+max-returns=12
+max-statements=150
+min-public-methods=0
+max-positional-arguments=10
+
+
+[EXCEPTIONS]
+overgeneral-exceptions=
+
+
+[FORMAT]
+ignore-long-lines=^\s*(# )?<?https?://\S+>?$
+max-line-length=100
+max-module-lines=2000
+
+
+[IMPORTS]
+allow-any-import-level=
+
+
+[LOGGING]
+logging-format-style=old
+logging-modules=logging
+
+
+[MESSAGES CONTROL]
+confidence=HIGH,
+           CONTROL_FLOW,
+           INFERENCE,
+           INFERENCE_FAILURE,
+           UNDEFINED
+disable=raw-checker-failed,
+        bad-inline-option,
+        locally-disabled,
+        file-ignored,
+        suppressed-message,
+        useless-suppression,
+        deprecated-pragma,
+        use-symbolic-message-instead,
+        attribute-defined-outside-init,
+        fixme,
+        missing-function-docstring
+enable=c-extension-no-member
+
+
+[REPORTS]
+evaluation=max(0, 0 if fatal else 10.0 - ((float(5 * error + warning + refactor + convention) / statement) * 10))
+msg-template={path}:{line}: [{msg_id}({symbol}), {obj}] {msg}
+output-format=text
+reports=no
+score=no
+
+
+[SIMILARITIES]
+ignore-comments=yes
+ignore-docstrings=yes
+ignore-imports=yes
+ignore-signatures=yes
+min-similarity-lines=10
+
+
+[SPELLING]
+max-spelling-suggestions=4
+spelling-dict=
+spelling-ignore-comment-directives=fmt: on,fmt: off,noqa:,noqa,nosec,isort:skip,mypy:
+spelling-ignore-words=
+
+
+[STRING]
+check-quote-consistency=yes
+check-str-concat-over-line-jumps=no
+
+
+[TYPECHECK]
+ignore-none=yes
+ignore-on-opaque-inference=yes
+
+
+[VARIABLES]
+dummy-variables-rgx=_+$|(_[a-zA-Z0-9_]*[a-zA-Z0-9]+?$)|dummy|^ignored_|^unused_
+ignored-argument-names=_.*|^ignored_|^unused_

@@ -1,0 +1,60 @@
+Metadata-Version: 2.4
+Name: spin-hmi
+Version: 0.9.1
+Summary: Control box monitoring system
+Author-email: Georg Brandl <g.brandl@fz-juelich.de>, Enrico Faulhaber <enrico.faulhaber@frm2.tum.de>, Alexander Zaft <a.zaft@fz-juelich.de>
+License: GPL-2.0-or-later
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Scientific/Engineering :: Human Machine Interfaces
+Requires-Python: >=3.9
+Description-Content-Type: text/x-rst
+Requires-Dist: aiohttp
+Requires-Dist: mlzlog
+Requires-Dist: zapf
+Provides-Extra: tango
+Requires-Dist: pytango>=9.3; extra == "tango"
+
+|pip| |pypi| |license|
+
+SPanish INquisition (spin)
+==========================
+
+.. image:: https://forge.frm2.tum.de/public/doc/spin/master/_static/logo.png
+    :width: 100px
+    :class: float-right
+
+A web-based tool for showing information obtained from things on a rack
+(i.e. usually devices connected to control boxes).
+
+Requirements
+------------
+
+Spin requires the ``aiohttp`` and ``mlzlog`` Python packages.  For accessing
+Tango and PILS devices, ``pytango`` and ``zapf`` are required, respectively.
+
+Demo
+----
+
+There is a configuration for testing in the ``demo`` directory.  It connects to
+all supported backends, exercises most features of the frontend and also
+provides a custom plugin example.
+
+Running ``bin/spin`` from a Git checkout will use that configuration instead of
+looking in ``/etc/spin`` by default.
+
+Documentation
+-------------
+
+The built version of the documentatin in ``doc`` `can be found here
+<https://forge.frm2.tum.de/public/doc/spin/master/>`_.
+
+.. |pip| image:: https://img.shields.io/badge/spin-hmi?label=pip%20install&color=green
+.. |pypi| image:: https://img.shields.io/pypi/v/spin-hmi.svg
+.. |license| image:: https://img.shields.io/badge/GPL-2.0%2B?label=license

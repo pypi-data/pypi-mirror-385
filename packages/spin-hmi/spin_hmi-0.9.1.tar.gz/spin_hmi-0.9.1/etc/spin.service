@@ -1,0 +1,13 @@
+[Unit]
+Description=Spin daemon
+After=entangle.target frappy.target
+
+[Service]
+Type=simple
+EnvironmentFile=-/etc/default/spin
+ExecStart=/usr/bin/spin
+Restart=on-abnormal
+RestartForceExitStatus=3
+
+[Install]
+WantedBy=multi-user.target
