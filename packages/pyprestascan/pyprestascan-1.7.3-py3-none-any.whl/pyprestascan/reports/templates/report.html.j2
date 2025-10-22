@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PyPrestaScan Report - {{ site_name }} - {{ generated_at }}</title>
+
+    <!-- CSS da CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --info-color: #17a2b8;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .header-banner {
+            background: linear-gradient(135deg, var(--primary-color), #2980b9);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .kpi-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .kpi-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 0;
+        }
+        
+        .kpi-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin: 0;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+        }
+        
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            overflow-x: auto;
+        }
+        
+        .severity-critical { color: var(--danger-color); font-weight: bold; }
+        .severity-warning { color: var(--warning-color); font-weight: bold; }
+        .severity-info { color: var(--info-color); }
+        
+        .score-excellent { color: var(--success-color); font-weight: bold; }
+        .score-good { color: #27ae60; }
+        .score-warning { color: var(--warning-color); }
+        .score-poor { color: var(--danger-color); font-weight: bold; }
+        
+        .page-type-badge {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .badge-product { background-color: #e3f2fd; color: #1976d2; }
+        .badge-category { background-color: #f3e5f5; color: #7b1fa2; }
+        .badge-cms { background-color: #e8f5e8; color: #388e3c; }
+        .badge-other { background-color: #fafafa; color: #616161; }
+        
+        .nav-tabs .nav-link {
+            border-radius: 8px 8px 0 0;
+            margin-right: 0.5rem;
+        }
+        
+        .nav-tabs .nav-link.active {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .chart-wrapper {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header-banner">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="mb-2">🔍 PyPrestaScan Report</h1>
+                    <h3 class="mb-2">{{ site_name }}</h3>
+                    <p class="mb-0">Analisi SEO PrestaShop - Generato il {{ generated_at }}</p>
+                    <p class="mb-0"><small><a href="{{ site_url }}" target="_blank" style="color: rgba(255,255,255,0.8);">{{ site_url }}</a></small></p>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <div class="badge badge-light fs-6">v{{ tool_version }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container-fluid">
+        <!-- KPI Overview -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <h3 class="kpi-value text-primary">{{ total_pages }}</h3>
+                <p class="kpi-label">Pagine Totali</p>
+            </div>
+            
+            <div class="kpi-card">
+                <h3 class="kpi-value text-success">{{ success_rate }}%</h3>
+                <p class="kpi-label">Tasso Successo (2xx)</p>
+            </div>
+            
+            <div class="kpi-card">
+                <h3 class="kpi-value text-warning">{{ pages_with_issues }}</h3>
+                <p class="kpi-label">Pagine con Issues ({{ pages_with_issues_pct }}%)</p>
+            </div>
+            
+            <div class="kpi-card">
+                <h3 class="kpi-value text-danger">{{ images_no_alt }}</h3>
+                <p class="kpi-label">Immagini senza ALT</p>
+            </div>
+            
+            <div class="kpi-card">
+                <h3 class="kpi-value 
+                    {% if avg_score >= 80 %}text-success
+                    {% elif avg_score >= 60 %}text-info
+                    {% elif avg_score >= 40 %}text-warning
+                    {% else %}text-danger{% endif %}">{{ avg_score }}</h3>
+                <p class="kpi-label">Score SEO Medio</p>
+            </div>
+            
+            <div class="kpi-card">
+                <h3 class="kpi-value text-info">{{ product_pages }}</h3>
+                <p class="kpi-label">Pagine Prodotto</p>
+                <small class="text-muted">Cat: {{ category_pages }} | CMS: {{ cms_pages }}</small>
+            </div>
+        </div>
+        
+        <!-- Charts Row -->
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="chart-container">
+                    <h4 class="mb-3">📊 Distribuzione Status Code</h4>
+                    <div class="chart-wrapper">
+                        <canvas id="statusChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="chart-container">
+                    <h4 class="mb-3">⚠️ Issues per Severity</h4>
+                    <div class="chart-wrapper">
+                        <canvas id="issuesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="chart-container">
+                    <h4 class="mb-3">🖼️ Status ALT Text</h4>
+                    <div class="chart-wrapper">
+                        <canvas id="altTextChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="chart-container">
+                    <h4 class="mb-3">📈 Distribuzione Score SEO</h4>
+                    <div class="chart-wrapper">
+                        <canvas id="scoreChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Detailed Tables -->
+        <div class="row">
+            <div class="col-12">
+                <div class="table-container">
+                    <ul class="nav nav-tabs" id="detailTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="issues-tab" data-bs-toggle="tab" 
+                                    data-bs-target="#issues-pane" type="button" role="tab">
+                                Top Issues
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="pages-tab" data-bs-toggle="tab"
+                                    data-bs-target="#pages-pane" type="button" role="tab">
+                                Pagine Problematiche
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="images-tab" data-bs-toggle="tab"
+                                    data-bs-target="#images-pane" type="button" role="tab">
+                                🖼️ Immagini senza ALT
+                            </button>
+                        </li>
+                    </ul>
+                    
+                    <div class="tab-content" id="detailTabContent">
+                        <!-- Top Issues Tab -->
+                        <div class="tab-pane fade show active" id="issues-pane" role="tabpanel">
+                            <div class="mt-3">
+                                <h5>🔍 Issues più Frequenti</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-hover" id="topIssuesTable">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Severity</th>
+                                                <th>Codice</th>
+                                                <th>Descrizione</th>
+                                                <th>Occorrenze</th>
+                                                <th>Pagine Coinvolte</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for issue in top_issues %}
+                                            <tr>
+                                                <td>
+                                                    <span class="severity-{{ issue.severity.lower() }}">
+                                                        {% if issue.severity == 'CRITICAL' %}🔴
+                                                        {% elif issue.severity == 'WARNING' %}🟡
+                                                        {% else %}🔵{% endif %}
+                                                        {{ issue.severity }}
+                                                    </span>
+                                                </td>
+                                                <td><code>{{ issue.code }}</code></td>
+                                                <td>{{ issue.message }}</td>
+                                                <td><strong>{{ issue.count }}</strong></td>
+                                                <td>{{ issue.affected_pages }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Low Score Pages Tab -->
+                        <div class="tab-pane fade" id="pages-pane" role="tabpanel">
+                            <div class="mt-3">
+                                <h5>📉 Pagine con Score SEO più Basso</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-hover" id="lowScorePagesTable">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>URL</th>
+                                                <th>Title</th>
+                                                <th>Score</th>
+                                                <th>Status</th>
+                                                <th>Tipo</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for page in low_score_pages %}
+                                            <tr>
+                                                <td>
+                                                    <a href="{{ page.url }}" target="_blank" class="text-decoration-none">
+                                                        {{ page.url|truncate(50) }}
+                                                        <i class="fas fa-external-link-alt ms-1 text-muted"></i>
+                                                    </a>
+                                                </td>
+                                                <td>{{ page.title|truncate(40) or 'N/A' }}</td>
+                                                <td>
+                                                    <span class="
+                                                        {% if page.score >= 80 %}score-excellent
+                                                        {% elif page.score >= 60 %}score-good
+                                                        {% elif page.score >= 40 %}score-warning
+                                                        {% else %}score-poor{% endif %}">
+                                                        {{ page.score }}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span class="badge
+                                                        {% if page.status_code < 300 %}bg-success
+                                                        {% elif page.status_code < 400 %}bg-warning
+                                                        {% else %}bg-danger{% endif %}">
+                                                        {{ page.status_code }}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    {% if page.is_product %}
+                                                        <span class="page-type-badge badge-product">Prodotto</span>
+                                                    {% elif page.is_category %}
+                                                        <span class="page-type-badge badge-category">Categoria</span>
+                                                    {% else %}
+                                                        <span class="page-type-badge badge-other">Altro</span>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Images without ALT Tab -->
+                        <div class="tab-pane fade" id="images-pane" role="tabpanel">
+                            <div class="mt-3">
+                                <h5>🖼️ Immagini senza ALT Text (Top 100)</h5>
+                                <p class="text-muted mb-3">
+                                    <small>Elenco dettagliato delle immagini con testo ALT mancante o vuoto.
+                                    Aggiungi descrizioni appropriate per migliorare l'accessibilità e la SEO.</small>
+                                </p>
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-sm" id="imagesIssuesTable">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Pagina</th>
+                                                <th>Immagine (src)</th>
+                                                <th>ALT Text</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for img in images_issues %}
+                                            <tr>
+                                                <td style="max-width: 300px;">
+                                                    <a href="{{ img.page_url }}" target="_blank" class="text-decoration-none" style="font-size: 0.85rem;">
+                                                        {{ img.page_url|truncate(60) }}
+                                                    </a>
+                                                </td>
+                                                <td style="max-width: 350px;">
+                                                    <code style="font-size: 0.75rem;">{{ img.image_src|truncate(80) }}</code>
+                                                </td>
+                                                <td>
+                                                    {% if img.alt_text %}
+                                                        <span class="text-muted" style="font-size: 0.85rem;">{{ img.alt_text|truncate(40) }}</span>
+                                                    {% else %}
+                                                        <em class="text-danger">vuoto</em>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {% if img.alt_status == 'MISSING' %}
+                                                        <span class="badge bg-danger">MANCANTE</span>
+                                                    {% elif img.alt_status == 'EMPTY' %}
+                                                        <span class="badge bg-warning text-dark">VUOTO</span>
+                                                    {% elif img.alt_status == 'GENERIC' %}
+                                                        <span class="badge bg-secondary">GENERICO</span>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                {% if images_issues|length == 0 %}
+                                <div class="alert alert-success text-center" role="alert">
+                                    <strong>🎉 Ottimo lavoro!</strong> Nessuna immagine senza ALT trovata.
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="text-center py-4 text-muted">
+            <hr>
+            <p class="mb-1">
+                🤖 Generato da <strong>PyPrestaScan v{{ tool_version }}</strong> - 
+                CLI per analisi SEO PrestaShop
+            </p>
+            <p class="mb-0">
+                <small>
+                    Report disponibili anche in formato 
+                    <a href="pages.csv">CSV</a> e 
+                    <a href="report.json">JSON</a>
+                </small>
+            </p>
+        </div>
+    </div>
+    
+    <!-- JS Locali -->
+    <!-- JavaScript da CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    
+    <script>
+        // Dati per i grafici
+        const chartData = {{ chart_data | tojson | safe }};
+        
+        // Configurazione colori
+        const colors = {
+            primary: '#3498db',
+            success: '#2ecc71', 
+            warning: '#f39c12',
+            danger: '#e74c3c',
+            info: '#17a2b8',
+            secondary: '#6c757d'
+        };
+        
+        // Inizializza grafici
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharts();
+            initializeTables();
+        });
+        
+        function initializeCharts() {
+            // Status Chart
+            const statusCtx = document.getElementById('statusChart').getContext('2d');
+            new Chart(statusCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: chartData.status.labels,
+                    datasets: [{
+                        data: chartData.status.data,
+                        backgroundColor: [colors.success, colors.warning, colors.danger, colors.secondary],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+            
+            // Issues by Severity Chart  
+            const issuesCtx = document.getElementById('issuesChart').getContext('2d');
+            new Chart(issuesCtx, {
+                type: 'bar',
+                data: {
+                    labels: chartData.issues_by_severity.labels,
+                    datasets: [{
+                        label: 'Issues',
+                        data: chartData.issues_by_severity.data,
+                        backgroundColor: [colors.danger, colors.warning, colors.info],
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+            
+            // ALT Text Status Chart
+            const altTextCtx = document.getElementById('altTextChart').getContext('2d');
+            new Chart(altTextCtx, {
+                type: 'pie',
+                data: {
+                    labels: chartData.alt_text_status.labels,
+                    datasets: [{
+                        data: chartData.alt_text_status.data,
+                        backgroundColor: [colors.danger, colors.warning, colors.secondary, colors.success],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+            
+            // Score Distribution Chart
+            const scoreCtx = document.getElementById('scoreChart').getContext('2d');
+            new Chart(scoreCtx, {
+                type: 'bar',
+                data: {
+                    labels: chartData.score_distribution.labels,
+                    datasets: [{
+                        label: 'Pagine',
+                        data: chartData.score_distribution.data,
+                        backgroundColor: [colors.danger, colors.warning, colors.info, colors.primary, colors.success],
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+        
+        function initializeTables() {
+            // Inizializza DataTables (se disponibile)
+            if (typeof DataTable !== 'undefined') {
+                $('#topIssuesTable').DataTable({
+                    pageLength: 10,
+                    order: [[3, 'desc']], // Ordina per occorrenze
+                    responsive: true
+                });
+
+                $('#lowScorePagesTable').DataTable({
+                    pageLength: 15,
+                    order: [[2, 'asc']], // Ordina per score crescente
+                    responsive: true
+                });
+
+                $('#imagesIssuesTable').DataTable({
+                    pageLength: 25,
+                    order: [[0, 'asc']], // Ordina per pagina
+                    responsive: true,
+                    language: {
+                        search: "Cerca:",
+                        lengthMenu: "Mostra _MENU_ righe",
+                        info: "Visualizzate _START_ - _END_ di _TOTAL_ immagini",
+                        infoEmpty: "Nessuna immagine trovata",
+                        infoFiltered: "(filtrate da _MAX_ totali)",
+                        paginate: {
+                            first: "Primo",
+                            last: "Ultimo",
+                            next: "Successivo",
+                            previous: "Precedente"
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>
