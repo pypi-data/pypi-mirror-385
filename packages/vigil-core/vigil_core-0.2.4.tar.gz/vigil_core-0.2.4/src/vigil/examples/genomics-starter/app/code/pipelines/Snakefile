@@ -1,0 +1,71 @@
+"""Genomics analysis pipeline with variant filtering, annotation, and QC metrics."""
+
+import json
+from pathlib import Path
+
+# Load configuration
+configfile: "app/code/configs/params/default.yaml"
+
+# Define paths
+INPUT_DATA = "app/data/samples/variants.csv"
+FILTERED_VARIANTS = "app/code/artifacts/filtered_variants.parquet"
+ANNOTATED_VARIANTS = "app/code/artifacts/annotated_variants.parquet"
+METRICS_JSON = "app/code/artifacts/variant_metrics.json"
+SCIENCECAST_JSON = "app/notes/sciencecast/main_pipeline_replay.json"
+
+# Serialize filter parameters for passing to steps
+FILTER_PARAMS = json.dumps(config.get("filter", {}))
+ANNOTATE_PARAMS = json.dumps(config.get("annotate", {}))
+
+rule all:
+    input:
+        FILTERED_VARIANTS,
+        ANNOTATED_VARIANTS,
+        METRICS_JSON,
+        SCIENCECAST_JSON
+
+rule filter:
+    input:
+        INPUT_DATA
+    output:
+        FILTERED_VARIANTS
+    params:
+        params=FILTER_PARAMS
+    shell:
+        """
+        python app/code/lib/steps/filter.py {input} {output} '{params.params}'
+        """
+
+rule annotate:
+    input:
+        FILTERED_VARIANTS
+    output:
+        ANNOTATED_VARIANTS
+    params:
+        params=ANNOTATE_PARAMS
+    shell:
+        """
+        python app/code/lib/steps/annotate.py {input} {output} '{params.params}'
+        """
+
+rule metrics:
+    input:
+        ANNOTATED_VARIANTS
+    output:
+        METRICS_JSON
+    shell:
+        """
+        python app/code/lib/steps/metrics.py {input} {output}
+        """
+
+rule sciencecast:
+    input:
+        FILTERED_VARIANTS,
+        ANNOTATED_VARIANTS,
+        METRICS_JSON
+    output:
+        SCIENCECAST_JSON
+    shell:
+        """
+        python app/code/tools/sciencecast.py {output}
+        """
