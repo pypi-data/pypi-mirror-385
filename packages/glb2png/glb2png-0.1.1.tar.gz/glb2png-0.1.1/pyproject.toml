@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "glb2png"
+version = "0.1.1"
+description = "Convert GLB files to PNG previews"
+authors = [
+    {name = "imme37c_", email = "dodoimc@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "trimesh",
+    "pyrender",
+    "numpy",
+    "Pillow",   
+    "click"
+]
+
+[project.scripts]
+glb2png = "glb2png_pkg.cli:glb2png_command"
+glbf2png = "glb2png_pkg.cli:glbf2png_command"
