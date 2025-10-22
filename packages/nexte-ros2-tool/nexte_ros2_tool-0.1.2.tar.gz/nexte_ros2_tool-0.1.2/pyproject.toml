@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]  # 指定构建依赖
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nexte-ros2-tool"  # 包名，在PyPI上必须唯一
+version = "0.1.2"              # 版本号
+description = "NEXT E ros2 tools" # 简短描述
+readme = "README.md"            # 详细说明文件
+authors = [{ name = "ZiYu", email = "ziyedeyuu@163.com" }]
+license = { text = "MIT" }      # 许可证
+keywords = ["cli", "ros2", "NEXT E"]
+requires-python = ">=3.8"      # Python版本要求
+
+# 项目依赖，pip install时会自动安装
+dependencies = [
+    "argparse",
+    # 其他依赖...
+]
+
+# 如果你的应用包含命令行入口点，在此声明
+# 格式为：命令名 = "包.模块:函数"
+[project.scripts]
+nrt = "nrt.nrt:main"
+
+# 项目相关的URL
+# [project.urls]
+# Homepage = "https://github.com/yourusername/your-repo"
+# Repository = "https://github.com/yourusername/your-repo"
+
+# 指导构建工具在src目录下查找包
+[tool.setuptools.packages.find]
+where = ["src"]
+
+# 告诉setuptools在打包时包含非Python文件
+[tool.setuptools.package-data]
+"nrt.rapc" = ["rapc_templates/*"]
