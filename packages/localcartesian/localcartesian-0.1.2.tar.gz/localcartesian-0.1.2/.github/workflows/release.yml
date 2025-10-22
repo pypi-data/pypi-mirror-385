@@ -1,0 +1,66 @@
+name: Wheels
+on:
+  push:
+    tags: ["v*.*.*"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-22.04, macos-13, macos-14]  # keep one Linux; you had two
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+
+      - name: Install tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install uv
+
+      - name: Build wheels with cibuildwheel
+        env:
+          CIBW_BUILD: "cp39-* cp310-* cp311-* cp312-*"
+          CIBW_SKIP: "pp* *-musllinux_*"
+          CIBW_ARCHS_MACOS: "x86_64 arm64"
+          MACOSX_DEPLOYMENT_TARGET: "11.0"
+        run: uvx cibuildwheel --output-dir dist
+
+      # Build sdist once (on the Linux job)
+      - name: Build sdist
+        if: startsWith(matrix.os, 'ubuntu-')
+        run: python -m pip install build && python -m build --sdist
+
+      # Give each matrix job a unique artifact name
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ matrix.os }}
+          path: dist/*
+          if-no-files-found: error
+          compression-level: 6
+          overwrite: false
+
+  publish:
+    needs: build
+    runs-on: ubuntu-22.04
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      # Download all artifacts whose names start with "dist-" and MERGE them
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: dist-*
+          merge-multiple: true
+          path: dist
+
+      - name: Show what we will publish
+        run: ls -l dist
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages_dir: dist
