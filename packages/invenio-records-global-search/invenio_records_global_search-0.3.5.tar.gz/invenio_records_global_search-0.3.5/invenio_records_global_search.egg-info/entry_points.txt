@@ -1,0 +1,29 @@
+[flask.commands]
+global-search = invenio_records_global_search.cli:global_search
+
+[invenio_assets.webpack]
+invenio_records_global_search = invenio_records_global_search.webpack:theme
+
+[invenio_base.api_apps]
+invenio_records_global_search = invenio_records_global_search:InvenioRecordsGlobalSearch
+
+[invenio_base.api_blueprints]
+invenio_records_global_search = invenio_records_global_search.views:create_record_bp
+
+[invenio_base.apps]
+invenio_records_global_search = invenio_records_global_search:InvenioRecordsGlobalSearch
+
+[invenio_base.blueprints]
+invenio_records_global_search = invenio_records_global_search.views:create_blueprint
+
+[invenio_base.finalize_app]
+invenio_records_global_search = invenio_records_global_search.ext:finalize_app
+
+[invenio_db.models]
+invenio_records_global_search_model = invenio_records_global_search.records.models
+
+[invenio_jsonschemas.schemas]
+global-search = invenio_records_global_search.records.jsonschemas
+
+[invenio_search.mappings]
+global-search = invenio_records_global_search.records.mappings

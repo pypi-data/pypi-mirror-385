@@ -1,0 +1,29 @@
+# -*- coding: utf-8 -*-
+#
+# Copyright (C) 2023-2025 Graz University of Technology.
+#
+# invenio-records-global-search is free software; you can redistribute it and/or
+# modify it under the terms of the MIT License; see LICENSE file for more
+# details.
+
+[build-system]
+requires = ["setuptools", "wheel", "babel>2.8"]
+build-backend = "setuptools.build_meta"
+
+[tool.ruff]
+exclude = ["docs"]
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+  "D203", "D211", "D212", "D213",
+  "E501",
+  "FA102",
+  "RUF022",
+  "TC001", "TC002",
+  "TID252",
+  "UP009",
+]
+
+[tool.mypy]
+ignore_missing_imports = true
