@@ -1,0 +1,33 @@
+Metadata-Version: 2.4
+Name: bball-api
+Version: 0.1.1
+Summary: REST/GraphQL API server for the bball ecosystem
+Project-URL: Homepage, https://bball.dev
+Project-URL: Documentation, https://docs.bball.dev
+Project-URL: Repository, https://github.com/bball-dev/bball
+Project-URL: Issues, https://github.com/bball-dev/bball/issues
+Author-email: Nicholas Cooper <nicholascullencooper@gmail.com>
+License: MIT
+Keywords: analytics,basketball,data,nba,sports
+Requires-Python: >=3.13
+Requires-Dist: bball>=0.1.0
+Requires-Dist: fastapi>=0.115
+Requires-Dist: pydantic>=2.9
+Requires-Dist: strawberry-graphql>=0.240
+Requires-Dist: uvicorn>=0.30
+Description-Content-Type: text/markdown
+
+# bball-api
+
+REST/GraphQL API server for NBA analytics.
+
+## Installation
+
+```bash
+pip install bball-api
+```
+
+Or as part of the bball ecosystem:
+```bash
+pip install bball[api]
+```
