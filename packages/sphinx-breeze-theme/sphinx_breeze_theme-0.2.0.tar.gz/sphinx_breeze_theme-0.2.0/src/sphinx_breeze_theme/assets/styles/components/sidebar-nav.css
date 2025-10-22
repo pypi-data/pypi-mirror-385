@@ -1,0 +1,91 @@
+.bz-sidebar-nav {
+  font-size: var(--bz-sidebar-nav-font-size);
+  font-family: var(--bz-sidebar-nav-font-family);
+
+  > p {
+    display: flex;
+    align-items: center;
+    text-transform: uppercase;
+    gap: calc(var(--bz-spacing) * 2);
+    margin-top: calc(var(--bz-spacing) * 8);
+    margin-bottom: calc(var(--bz-spacing) * 2);
+    padding-inline: calc(var(--bz-spacing) * 3);
+    color: var(--bz-sidebar-nav-caption-color);
+    font-size: var(--bz-sidebar-nav-caption-font-size);
+    font-family: var(--bz-sidebar-nav-caption-font-family);
+
+    &:first-of-type {
+      margin-top: 0;
+    }
+  }
+
+  ul ul {
+    padding-left: calc(var(--bz-spacing) * 4);
+  }
+
+  li {
+    position: relative;
+
+    &:not(:has(a.current)) a {
+      color: var(--bz-sidebar-nav-color);
+    }
+  }
+
+  a {
+    display: block;
+    border-radius: var(--bz-border-radius);
+    text-decoration: none;
+    font-weight: 400;
+    margin-inline: calc(var(--bz-spacing) * 1);
+    padding-inline: calc(var(--bz-spacing) * 2.5);
+    padding-block: calc(var(--bz-spacing) * 0.75);
+    color: var(--bz-sidebar-nav-color-active);
+    transition: background-color ease-in-out .15s, text-shadow ease-in-out .15s;
+
+    &:hover {
+      color: var(--bz-sidebar-nav-color-hover) !important;
+      background-color: var(--bz-sidebar-nav-background-color-hover);
+    }
+
+    &.current {
+      text-shadow: 0.03em 0 0 currentColor, -0.03em 0 0 currentColor;
+    }
+  }
+
+  details:open > summary::after {
+    transform: rotate(90deg);
+  }
+
+  summary {
+    cursor: pointer;
+    list-style: none;
+
+    &::after, &::before {
+      content: "";
+      position: absolute;
+      height: 1.25em;
+      width: 1.25em;
+      top: 0.25em;
+      right: calc(var(--bz-spacing) * -6);
+      border-radius: calc(var(--bz-border-radius) / 2);
+    }
+
+    &::after {
+      mask-image: var(--bz-icon-chevron);
+      background-color: var(--bz-sidebar-nav-color);
+      transition: transform ease-in-out .15s;
+    }
+
+    &:hover::before {
+      background-color: var(--bz-sidebar-nav-background-color-hover);
+    }
+
+    &:hover::after {
+      background-color: var(--bz-sidebar-nav-color-hover);
+    }
+
+    &:focus-visible::before {
+      outline: 1px solid;
+    }
+  }
+}
