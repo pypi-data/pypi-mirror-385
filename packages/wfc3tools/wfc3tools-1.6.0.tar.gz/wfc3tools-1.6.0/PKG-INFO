@@ -1,0 +1,91 @@
+Metadata-Version: 2.4
+Name: wfc3tools
+Version: 1.6.0
+Summary: Python Tools for HST WFC3 Data
+Author: STScI
+Project-URL: Homepage, http://wfc3tools.readthedocs.io/
+Project-URL: Bug Reports, https://github.com/spacetelescope/wfc3tools/issues/
+Project-URL: Source, https://github.com/spacetelescope/wfc3tools/
+Project-URL: Help, https://hsthelp.stsci.edu
+Classifier: Intended Audience :: Science/Research
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Topic :: Scientific/Engineering :: Astronomy
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.9
+Description-Content-Type: text/x-rst
+License-File: LICENSE.txt
+Requires-Dist: astropy>=4.2.0
+Requires-Dist: numpy>=1.21.0
+Requires-Dist: matplotlib>=3.5.1
+Requires-Dist: stsci.tools>=4.0.1
+Requires-Dist: scipy>=1.8.0
+Provides-Extra: tests
+Requires-Dist: pytest; extra == "tests"
+Requires-Dist: astroquery; extra == "tests"
+Provides-Extra: docs
+Requires-Dist: sphinx; extra == "docs"
+Requires-Dist: sphinx-automodapi; extra == "docs"
+Requires-Dist: sphinx-rtd-theme; extra == "docs"
+Dynamic: license-file
+
+WFC3TOOLS
+=========
+
+.. image:: https://readthedocs.org/projects/wfc3tools/badge/?version=latest
+    :target: http://wfc3tools.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
+
+.. image:: http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat
+    :target: http://www.astropy.org
+    :alt: Powered by Astropy Badge
+
+
+For more information please see the `online documentation <http://wfc3tools.readthedocs.io/>`_.
+
+You can also display the docs locally after install, import ``wfc3tools`` and then issue the following command to display the help docs in your local browser:
+
+::
+
+    wfc3tools.display_help()
+
+To install using pip:
+
+::
+
+    pip install wfc3tools
+
+    pip install --upgrade wfc3tools # if you already have an older version installed
+
+
+
+Contributing
+------------
+
+Please open a new issue or new pull request for bugs, feedback, or new features
+you would like to see.   If there is an issue you would like to work on, please
+leave a comment and we will be happy to assist.   New contributions and
+contributors are very welcome!
+
+New to github or open source projects?  If you are unsure about where to start
+or haven't used github before, please feel free to contact `HST Help Desk <https://stsci.service-now.com/hst>`_.
+
+Feedback and feature requests?   Is there something missing you would like
+to see?  Please open an issue or contact `HST Help Desk <https://stsci.service-now.com/hst>`_.
+
+``wfc3tools`` follows the `Astropy Code of Conduct`_ and strives to provide a
+welcoming community to all of our users and contributors.
+
+Want more information about how to make a contribution?  Take a look at
+the the astropy `contributing`_ and `developer`_ documentation.
+
+
+License
+-------
+
+``wfc3tools`` is licensed under a 3-clause BSD style license (see the ``LICENSE.txt`` file).
+
+.. _AstroPy: http://www.astropy.org/
+.. _contributing: http://docs.astropy.org/en/stable/index.html#contributing
+.. _developer: http://docs.astropy.org/en/stable/index.html#developer-documentation
+.. _Astropy Code of Conduct:  http://www.astropy.org/about.html#codeofconduct

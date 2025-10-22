@@ -1,0 +1,14 @@
+include README.rst
+include CHANGES.rst
+include LICENSE.txt
+include pyproject.toml
+
+recursive-include docs *
+recursive-include wfc3tools *
+
+global-exclude *.pyc *.o
+
+prune docs/_build
+prune docs/api
+prune build
+prune dist
