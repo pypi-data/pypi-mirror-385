@@ -1,0 +1,24 @@
+import pytest
+
+from dataclasses import dataclass
+
+
+
+@pytest.fixture(name="fixture_data", scope="module")
+def _fixture_dataclass():
+    full_token = {'access_token': 'eyJhbGciOiJSUzI1NiIsImtpZCI6ImM2OWM5NWIwNGEzZTNjNmRmYWQ0NzgwYTU3YWQ5NDAwIiwidHlwIjoiSldUIn0.eyJpc3MiOiJodHRwOi8vc2VydmVyOjkwMDAvYXBwbGljYXRpb24vby9tbGZsb3cvIiwic3ViIjoiY2FkZGVmYmNkODQ2MDlkMzk2NzQzMzEyOWJlOWU2ZTcyMDU3ZjRmZWE2YmFmMDIxMDkwMWU0ZmZkNzNkODg2NyIsImF1ZCI6IlY0bFV6TXBEYU04Q25yT3dYNDZHN1pwdHlvQW5tYTJzdmpCakpDM3giLCJleHAiOjE3NjEwNzk3MjksImlhdCI6MTc2MTA3NjEyOSwiYXV0aF90aW1lIjoxNzYxMDU0NTIwLCJhY3IiOiJnb2F1dGhlbnRpay5pby9wcm92aWRlcnMvb2F1dGgyL2RlZmF1bHQiLCJhbXIiOlsicHdkIl0sIm5vbmNlIjoiak9xTnFYTG1oWXc5YXJ6dTZYM1AiLCJzaWQiOiIxZWUwMjMyZDkwMmE1YWVkMmZhMzYzYzhlMmYwYTYxMWRjNzMxNzBmNDJiMTZmZGZlYjkyYTI4MThiMzZkYTgwIiwiZW1haWwiOiJhZG1pbkBsYW1vZGEubG9jYWwiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6ImF1dGhlbnRpayBEZWZhdWx0IEFkbWluIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiYWthZG1pbiIsImdyb3VwcyI6ImdfeWNfZGFfcmVzZWFyY2hfbWxmbG93X3JlYWQiLCJhenAiOiJWNGxVek1wRGFNOENuck93WDQ2RzdacHR5b0FubWEyc3ZqQmpKQzN4IiwidWlkIjoiVnJVN1FKcDJuZ2g4YXNsYXR4VW5hMUJkVTN5dGxVTkNkY2s3T2x6MCJ9.0iN6uH8BdbUhgXUeFETC2AHxoCxKAG5LuB64MFzlritp-HYsppyedvJH5oo7Ea0v-ODDj3iTBhTyBxFj0kgy_b0tc3a-ix2WaktsOxCDyt8zjwe3Nw51x4JmInQF1OAGMKxgxhg4VO-k4T1rbgukHjrnwPaCdCrDPixfDhpuZvlRVwYJbFmDTmBMBWDE7K_maIJ-SbwpEwS9f4RoGctmdHDg55aKcCsXmzY-h8GYkONVYQx0I8gNmjSdRUfeQpw4rLnj917AUPAzvIGvWwkHR4n1Q-BuRjGGoZ5JLMObyLjQnz2zpd8LcW2P0dfFKPqJNJo-5gYh8_-wYQGoeWiW32J-TdSi9AjrPk8O-I9bquzu_plBu-4U8UoAKlV_z4pnQbnPqOCkhg7FsJpevlOArDbTorGnino6VJHpBTIMaQz5v95GdqgA4FbWeCbOT5Moe-LlWP_1X1wi0YY83LyZDpjxDfOAgFhNu1cQjC2KVRCeFWa5sarESbWq_EnbznXtM-91t6ew0eNCLOs-vGPxZ44RpSTJslj_kQsm0NvlftPt3x6_bkO719MBL9Cg0eppIEOQXyArZ_Hg4srGJlUQ2QRulTCUtpOeBJjBxnrp_76YtN1gH-92BwPfW7v929On27M3WPO1_TMUSB_AKgdtyht6dSWk9DzOVzeKHKTQO5Q', 'token_type': 'Bearer', 'scope': 'openid profile email', 'expires_in': 3600, 'id_token': 'eyJhbGciOiJSUzI1NiIsImtpZCI6ImM2OWM5NWIwNGEzZTNjNmRmYWQ0NzgwYTU3YWQ5NDAwIiwidHlwIjoiSldUIn0.eyJpc3MiOiJodHRwOi8vc2VydmVyOjkwMDAvYXBwbGljYXRpb24vby9tbGZsb3cvIiwic3ViIjoiY2FkZGVmYmNkODQ2MDlkMzk2NzQzMzEyOWJlOWU2ZTcyMDU3ZjRmZWE2YmFmMDIxMDkwMWU0ZmZkNzNkODg2NyIsImF1ZCI6IlY0bFV6TXBEYU04Q25yT3dYNDZHN1pwdHlvQW5tYTJzdmpCakpDM3giLCJleHAiOjE3NjEwNzk3MjksImlhdCI6MTc2MTA3NjEyOSwiYXV0aF90aW1lIjoxNzYxMDU0NTIwLCJhY3IiOiJnb2F1dGhlbnRpay5pby9wcm92aWRlcnMvb2F1dGgyL2RlZmF1bHQiLCJhbXIiOlsicHdkIl0sIm5vbmNlIjoiak9xTnFYTG1oWXc5YXJ6dTZYM1AiLCJzaWQiOiIxZWUwMjMyZDkwMmE1YWVkMmZhMzYzYzhlMmYwYTYxMWRjNzMxNzBmNDJiMTZmZGZlYjkyYTI4MThiMzZkYTgwIiwiZW1haWwiOiJhZG1pbkBsYW1vZGEubG9jYWwiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6ImF1dGhlbnRpayBEZWZhdWx0IEFkbWluIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiYWthZG1pbiIsImdyb3VwcyI6ImdfeWNfZGFfcmVzZWFyY2hfbWxmbG93X3JlYWQifQ.Na2W4DvNro8JWFuuaT4x4KMvyWf9dWD7e44hG4LdDQRPTIK__NxLRBGRDLtDlPwb6FyK91oFOVYj8jqaGpnEqTVrU1c5sON-0phItzoKbg-HKex3DmhwpTygVEMdxfddbG71XoWYLWOjXMqdX6Yg9TSX6P5cETFt8bOwqF_aR8aGEYlnFVyQ88CucTmkATzMVRNhIYFLj2YSWhHEp_kZIG97Ra0Q1Qomfw7lFGf3PYjBLshgm7pEy1OAL-MMVMHNlLp4q5eKyd4MxhAvEhSLcthXqEzr3b-rDCG8tcu0H3TueGjpz5SiCFMpdyURfIL7d-Xp5LDkHGJFC--4tFnRQ_SPzQyzLaXCeqqvsZRIk84MFOika8BYKK6rcUQzT5BbjxIPzmyyQwovCZyLSKvZvGsCvPZGPfu-ONey1ILW4Gs7JXwk81ZkNgb1HV7GPh2FXNPTluxVV48y-U9676J_W9wTMcsLdCn_oI1Rw-IK3Kk6OFvixQVQqR7XZYgcDPumagnOka7cN6EhB0NuVhpY1D8GksGiOW3gziAaDkpOfmv3wQpweiOaSeUsnRh17e3vR9xTZ7-AQWHyUvI2iLMQc7YRToVoXZRlMjZa5ySW7iz-c3rePi8hKQ7q0y0qJ8le42rK9NIFr88ZPjxjUvoJyRpZn8vS4mEFkp4nhjub0n4', 'expires_at': 1761079729, 'userinfo': {'iss': 'http://server:9000/application/o/mlflow/', 'sub': 'caddefbcd84609d3967433129be9e6e72057f4fea6baf0210901e4ffd73d8867', 'aud': 'V4lUzMpDaM8CnrOwX46G7ZptyoAnma2svjBjJC3x', 'exp': 1761079729, 'iat': 1761076129, 'auth_time': 1761054520, 'acr': 'goauthentik.io/providers/oauth2/default', 'amr': ['pwd'], 'nonce': 'jOqNqXLmhYw9arzu6X3P', 'sid': '1ee0232d902a5aed2fa363c8e2f0a611dc73170f42b16fdfeb92a2818b36da80', 'email': 'admin@lamoda.local', 'email_verified': True, 'name': 'authentik Default Admin', 'preferred_username': 'akadmin', 'groups': 'g_yc_da_research_mlflow_read'}}
+
+    @dataclass
+    class Data():
+        full_token: dict
+        
+        token_groups = "g_yc_da_research_mlflow_read"
+        groups_expect = ["g_yc_da_research_mlflow_read"]
+        
+        def __post_init__(self):
+            self.access_token = self.full_token["access_token"]
+            self.groups = self.full_token["userinfo"]["groups"]
+
+            self.decoded_token = self.full_token["userinfo"]
+
+    return Data(full_token=full_token)
