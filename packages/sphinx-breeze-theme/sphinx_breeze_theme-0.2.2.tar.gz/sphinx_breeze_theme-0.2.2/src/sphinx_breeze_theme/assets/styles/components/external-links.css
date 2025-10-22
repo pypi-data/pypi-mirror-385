@@ -1,0 +1,26 @@
+.bz-external-links {
+  display: flex;
+  position: relative;
+  align-items: center;
+  gap: calc(var(--bz-spacing) * 3);
+  font-size: var(--bz-external-links-font-size);
+  font-family: var(--bz-external-links-font-family);
+
+  svg {
+    display: block;
+    height: 1.1875rem;
+  }
+
+  a {
+    color: var(--bz-external-links-color);
+    transition: color .1s ease-in-out;
+
+    &:hover {
+      color: var(--bz-external-links-color-hover);
+    }
+  }
+}
+
+.bz-footer .bz-external-links svg {
+  height: 1.5rem;
+}

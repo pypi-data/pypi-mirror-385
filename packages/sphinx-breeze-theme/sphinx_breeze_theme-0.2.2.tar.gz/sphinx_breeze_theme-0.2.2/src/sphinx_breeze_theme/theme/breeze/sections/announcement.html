@@ -1,0 +1,7 @@
+{% if theme_announcement -%}
+<aside class="bz-announcement">
+  {% block announcement %}
+    {{ theme_announcement }}
+  {% endblock announcement %}
+</aside>
+{%- endif %}

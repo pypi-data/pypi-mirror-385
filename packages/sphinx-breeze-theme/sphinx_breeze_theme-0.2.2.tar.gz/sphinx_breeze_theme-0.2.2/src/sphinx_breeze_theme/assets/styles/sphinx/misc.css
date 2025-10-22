@@ -1,0 +1,65 @@
+img, figure, object, .figure {
+  display: inline-block;
+  margin-block: calc(var(--bz-spacing) * 1.5);
+
+  &.align-left {
+    clear: left;
+    float: left;
+    margin-right: calc(var(--bz-spacing) * 4);
+  }
+
+  &.align-right {
+    clear: right;
+    float: right;
+    margin-left: calc(var(--bz-spacing) * 4);
+  }
+
+  img, figure, object, .figure {
+    margin-block: 0;
+  }
+}
+
+.reference img {
+  vertical-align: middle;
+  display: inline-block;
+}
+
+.guilabel {
+  font-size: 0.8em;
+  font-weight: 500;
+  border-radius: calc(var(--bz-border-radius) / 2);
+  color: var(--bz-guilabel-color);
+  border: 1px solid var(--bz-guilabel-border-color);
+  background-color: var(--bz-guilabel-background-color);
+  padding: calc(var(--bz-spacing) * 0.5) calc(var(--bz-spacing) * 1.5);
+}
+
+p.rubric {
+  color: var(--bz-rubric-color);
+  font-size: var(--bz-rubric-font-size);
+  font-family: var(--bz-rubric-font-family);
+  border-bottom: 1px solid var(--bz-rubric-border-color);
+  padding-block: calc(var(--bz-spacing) * 2);
+  margin-top: calc(var(--bz-spacing) * 6);
+}
+
+a.reference.download::before {
+  content: "";
+  mask-image: var(--bz-icon-download);
+  background-color: currentColor;
+  display: inline-block;
+  vertical-align: middle;
+  height: 1.25rem;
+  width: 1.25rem;
+}
+
+span.highlighted {
+  background-color: var(--bz-target-background-color);
+}
+
+[type="button"]:not(:disabled),
+[type="reset"]:not(:disabled),
+[type="submit"]:not(:disabled),
+button:not(:disabled) {
+  cursor: pointer;
+}
