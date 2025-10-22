@@ -1,0 +1,131 @@
+Metadata-Version: 2.4
+Name: quickstock
+Version: 1.0.1
+Summary: QuickStock SDK - 现代化的金融数据获取SDK，提供统一的股票、基金、指数数据访问接口
+Home-page: https://github.com/quickstock/quickstock-sdk
+Author: QuickStock Team
+Author-email: quickstock@example.com
+Project-URL: Bug Reports, https://github.com/quickstock/quickstock-sdk/issues
+Project-URL: Source, https://github.com/quickstock/quickstock-sdk
+Project-URL: Documentation, https://quickstock-sdk.readthedocs.io/
+Keywords: stock,finance,data,sdk,baostock,eastmoney,tonghuashun,股票,金融数据
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Financial and Insurance Industry
+Classifier: Topic :: Office/Business :: Financial
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pandas>=1.3.0
+Requires-Dist: numpy>=1.20.0
+Requires-Dist: requests>=2.25.0
+Requires-Dist: aiohttp>=3.8.0
+Requires-Dist: pyyaml>=5.4.0
+Requires-Dist: python-dateutil>=2.8.0
+Provides-Extra: dev
+Requires-Dist: pytest>=6.0.0; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.18.0; extra == "dev"
+Requires-Dist: pytest-cov>=2.12.0; extra == "dev"
+Requires-Dist: pytest-mock>=3.6.0; extra == "dev"
+Requires-Dist: black>=21.0.0; extra == "dev"
+Requires-Dist: flake8>=3.9.0; extra == "dev"
+Requires-Dist: mypy>=0.910; extra == "dev"
+Requires-Dist: isort>=5.9.0; extra == "dev"
+Requires-Dist: pre-commit>=2.15.0; extra == "dev"
+Provides-Extra: baostock
+Requires-Dist: baostock>=0.8.0; extra == "baostock"
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: keywords
+Dynamic: license-file
+Dynamic: project-url
+Dynamic: provides-extra
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+# QuickStock SDK
+
+QuickStock SDK是一个现代化的金融数据获取SDK，提供统一的股票、基金、指数数据访问接口。
+
+## 特性
+
+- 🚀 支持多数据源集成（东方财富、同花顺、Baostock）
+- 💾 多级缓存系统（内存缓存 + SQLite持久化）
+- 🔄 异步数据获取支持
+- 📊 标准化数据格式
+- 🛡️ 完善的错误处理和重试机制
+- ⚙️ 灵活的配置管理系统
+- 📈 性能优化和内存管理
+
+## 安装
+
+```bash
+pip install quickstock
+```
+
+可选依赖：
+
+```bash
+# 安装Baostock支持
+pip install quickstock[baostock]
+
+# 安装开发依赖
+pip install quickstock[dev]
+```
+
+## 快速开始
+
+```python
+from quickstock import QuickStockClient
+
+# 创建客户端
+client = QuickStockClient()
+
+# 获取股票基础信息
+stocks = client.stock_basic()
+
+# 获取股票日线数据
+daily_data = client.stock_daily('000001.SZ')
+
+# 获取分钟级数据
+minute_data = client.stock_minute('000001.SZ', freq='1min')
+
+# 获取指数数据
+indices = client.index_basic()
+index_data = client.index_daily('000001.SH')
+
+# 获取基金数据
+funds = client.fund_basic()
+nav_data = client.fund_nav('000001.OF')
+
+# 交易日历
+trade_cal = client.trade_cal()
+is_trade = client.is_trade_date('20240115')
+```
+
+## 系统要求
+
+- Python >= 3.7
+- pandas >= 1.3.0
+- numpy >= 1.20.0
+- requests >= 2.25.0
+- aiohttp >= 3.8.0
+- pyyaml >= 5.4.0
+
+## 许可证
+
+MIT License
