@@ -1,0 +1,8 @@
+include MANIFEST.in
+include README.md
+include requirements.txt
+graft django_cards_admin
+exclude django_cards_admin_demo
+exclude django_cards_admin_example
+global-exclude __pycache__
+global-exclude *.py[co]

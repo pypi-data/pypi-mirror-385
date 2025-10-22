@@ -1,0 +1,7 @@
+{% load django_simple_tags %}
+
+{% call_method result_card_modeladmin "result_card_link" item=item as url %}
+{% call_method result_card_modeladmin "result_card_link_title" item=item as title %}
+{% call_method result_card_modeladmin "result_card_link_target" item=item as target %}
+
+<a {% if target %}target="{{target}}"{% endif %} href="{{url}}">{{title}}</a>
