@@ -1,0 +1,32 @@
+Metadata-Version: 2.4
+Name: exbw
+Version: 0.1.1
+Summary: Wrapper for bitwarden cli client.
+Project-URL: homepage, https://github.com/darkclip/exbw
+Project-URL: repository, https://github.com/darkclip/exbw
+Project-URL: documentation, https://github.com/darkclip/exbw
+Author-email: darkclip <darkclip@hanv.dev>
+License-Expression: MIT
+License-File: LICENSE
+Keywords: bitwarden
+Requires-Python: >=3.8
+Requires-Dist: pexpect>=4.9.0
+Description-Content-Type: text/markdown
+
+# exbw
+
+Wrapper for bitwarden cli client.
+
+Retrieve specified item field of bitwarden.
+**NOTICE: Require Bitwarden CLI Installed**
+
+## Install
+
+`pip install exbw`
+
+## Usage
+
+- `ITEM` vault item name
+- `FIELD` item field name (default: password)
+
+`python3 -m exbw ITEM [-f FIELD]`

@@ -1,0 +1,29 @@
+[project]
+name = "exbw"
+version = "0.1.1"
+description = "Wrapper for bitwarden cli client."
+keywords = ["bitwarden"]
+license = "MIT"
+license-files = ["LICENSE*"]
+readme = "README.md"
+authors = [{ name = "darkclip", email = "darkclip@hanv.dev" }]
+requires-python = ">=3.8"
+dependencies = ["pexpect>=4.9.0"]
+
+[project.urls]
+homepage = "https://github.com/darkclip/exbw"
+repository = "https://github.com/darkclip/exbw"
+documentation = "https://github.com/darkclip/exbw"
+
+[project.scripts]
+exbw = "exbw:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.setuptools]
+packages = ["exbw"]
+
+[tool.ruff.format]
+quote-style = "single"
