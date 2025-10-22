@@ -1,0 +1,51 @@
+[project]
+name = "__PROJECT__"
+version = "1.0.0"
+description = "__DESCRIPTION__"
+authors = [
+    {name = "__AUTHOR_NAME__", email = "__AUTHOR_EMAIL__"}
+]
+license = {text = "__LICENSE__"}
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "vigil-core>=0.2.0",
+    "pandas>=2.2.0",
+    "pyarrow>=15.0.0",
+    "pyyaml>=6.0",
+    "snakemake>=8.4.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "mypy>=1.8.0",
+    "ruff>=0.2.0",
+    "pandas-stubs>=2.1.4.231227",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "TCH"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+
+[tool.pytest.ini_options]
+testpaths = ["app/code/tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_functions = ["test_*"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
