@@ -1,0 +1,41 @@
+Metadata-Version: 2.4
+Name: pypus
+Version: 1.5.2
+Summary: Octopus cli toolkit
+License: MIT
+License-File: LICENSE
+Author: Michael MacKenna
+Author-email: mmackenna@unitedfiregroup.com
+Requires-Python: >=3.9,<4.0
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Requires-Dist: click (>=8.0.0,<9.0.0)
+Requires-Dist: pyyaml (>=6.0.1,<7.0.0)
+Requires-Dist: requests (>=2.25.1,<3.0.0)
+Requires-Dist: termcolor (>=1.1.0,<2.0.0)
+Description-Content-Type: text/markdown
+
+# Pypus
+
+Pypus is a cli tool for Octopus Deploy API tasks.
+
+## Install
+
+```bash
+$ pip install pypus
+```
+
+## Display a project's deployment process
+
+```bash
+$ export OCTOPUS_API_KEY=API-EXAMPLE1234567890
+$ export OCTOPUS_SERVER_URI=https://deploys.example.com/api
+$ pypus get-process MySpace "My Project"
+```
+

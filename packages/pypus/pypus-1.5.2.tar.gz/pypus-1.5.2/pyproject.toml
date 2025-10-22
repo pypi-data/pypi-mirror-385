@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "pypus"
+version = "1.5.2"
+description = "Octopus cli toolkit"
+authors = ["Michael MacKenna <mmackenna@unitedfiregroup.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+requests = "^2.25.1"
+click = "^8.0.0"
+termcolor = "^1.1.0"
+pyyaml = "^6.0.1"
+
+[tool.poetry.scripts]
+pypus = 'pypus.cli:main'
+
+[tool.poetry.group.dev.dependencies]
+keyring = "^23.0.1"
+mdv = "^1.7.4"
+pylint = "^2.8.2"
+pytest = "^7.4.0"
+ipython = "^8.14.0"
+mkdocs = "^1.5.1"
+mkdocs-click = "^0.8.0"
+
+
+[[tool.poetry.source]]
+name = "PyPI"
+priority = "primary"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
