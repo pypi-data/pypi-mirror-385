@@ -1,0 +1,127 @@
+Metadata-Version: 2.3
+Name: esc_mini_tools_lib
+Version: 0.1.6
+Summary: A reusable library of mini-tools with Pydantic-based APIs, designed for multi-platform deployment in web apps, serverless functions, and AI systems.
+License: AGPL-3.0-or-later
+Author: Sanhe Hu
+Author-email: sanhehu@easyscalecloud.com
+Maintainer: Sanhe Hu
+Maintainer-email: sanhehu@easyscalecloud.com
+Requires-Python: >=3.10,<4.0
+Classifier: License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Provides-Extra: auto
+Provides-Extra: dev
+Provides-Extra: doc
+Provides-Extra: test
+Requires-Dist: Sphinx (>=7.4.7,<8.0.0) ; extra == "doc"
+Requires-Dist: atlas_doc_parser (>=0.1.2,<1.0.0)
+Requires-Dist: boltons (>=25.0.0,<26.0.0)
+Requires-Dist: boto-session-manager (>=1.8.1,<2.0.0)
+Requires-Dist: boto3 (>=1.35.99,<2.0.0)
+Requires-Dist: build (>=1.2.1,<2.0.0) ; extra == "dev"
+Requires-Dist: docfly (==3.0.0) ; extra == "doc"
+Requires-Dist: docpack (>=0.1.5,<1.0.0)
+Requires-Dist: func-args (>=1.0.1,<2.0.0)
+Requires-Dist: furo (==2024.8.6) ; extra == "doc"
+Requires-Dist: ipython (>=8.18.1,<8.19.0) ; extra == "doc"
+Requires-Dist: nbsphinx (>=0.8.12,<1.0.0) ; extra == "doc"
+Requires-Dist: pydantic (>=2.12.0,<3.0.0)
+Requires-Dist: pygments (>=2.18.0,<3.0.0) ; extra == "doc"
+Requires-Dist: pytest (>=8.2.2,<9.0.0) ; extra == "test"
+Requires-Dist: pytest-cov (>=6.0.0,<7.0.0) ; extra == "test"
+Requires-Dist: rich (>=13.8.1,<14.0.0) ; extra == "dev"
+Requires-Dist: rstobj (==1.2.1) ; extra == "doc"
+Requires-Dist: s3pathlib (>=2.3.6,<3.0.0)
+Requires-Dist: soft_deps (>=0.1.1,<1.0.0)
+Requires-Dist: sphinx-copybutton (>=0.5.2,<1.0.0) ; extra == "doc"
+Requires-Dist: sphinx-design (>=0.6.1,<1.0.0) ; extra == "doc"
+Requires-Dist: sphinx-jinja (>=2.0.2,<3.0.0) ; extra == "doc"
+Requires-Dist: tiktoken (>=0.12.0,<1.0.0)
+Requires-Dist: twine (>=6.0.0,<7.0.0) ; extra == "dev"
+Requires-Dist: vislog (>=0.1.2,<1.0.0)
+Requires-Dist: wheel (>=0.45.0,<1.0.0) ; extra == "dev"
+Project-URL: Changelog, https://github.com/easyscalecloud/esc_mini_tools_lib-project/blob/main/release-history.rst
+Project-URL: Documentation, https://esc-mini-tools-lib.readthedocs.io/en/latest/
+Project-URL: Download, https://pypi.org/pypi/esc-mini-tools-lib#files
+Project-URL: Homepage, https://github.com/easyscalecloud/esc_mini_tools_lib-project
+Project-URL: Issues, https://github.com/easyscalecloud/esc_mini_tools_lib-project/issues
+Project-URL: Repository, https://github.com/easyscalecloud/esc_mini_tools_lib-project
+Description-Content-Type: text/x-rst
+
+
+.. image:: https://readthedocs.org/projects/esc-mini-tools-lib/badge/?version=latest
+    :target: https://esc-mini-tools-lib.readthedocs.io/en/latest/
+    :alt: Documentation Status
+
+.. image:: https://github.com/easyscalecloud/esc_mini_tools_lib-project/actions/workflows/main.yml/badge.svg
+    :target: https://github.com/easyscalecloud/esc_mini_tools_lib-project/actions?query=workflow:CI
+
+.. image:: https://codecov.io/gh/easyscalecloud/esc_mini_tools_lib-project/branch/main/graph/badge.svg
+    :target: https://codecov.io/gh/easyscalecloud/esc_mini_tools_lib-project
+
+.. image:: https://img.shields.io/pypi/v/esc-mini-tools-lib.svg
+    :target: https://pypi.python.org/pypi/esc-mini-tools-lib
+
+.. image:: https://img.shields.io/pypi/l/esc-mini-tools-lib.svg
+    :target: https://pypi.python.org/pypi/esc-mini-tools-lib
+
+.. image:: https://img.shields.io/pypi/pyversions/esc-mini-tools-lib.svg
+    :target: https://pypi.python.org/pypi/esc-mini-tools-lib
+
+.. image:: https://img.shields.io/badge/✍️_Release_History!--None.svg?style=social&logo=github
+    :target: https://github.com/easyscalecloud/esc_mini_tools_lib-project/blob/main/release-history.rst
+
+.. image:: https://img.shields.io/badge/⭐_Star_me_on_GitHub!--None.svg?style=social&logo=github
+    :target: https://github.com/easyscalecloud/esc_mini_tools_lib-project
+
+------
+
+.. image:: https://img.shields.io/badge/Link-API-blue.svg
+    :target: https://esc-mini-tools-lib.readthedocs.io/en/latest/py-modindex.html
+
+.. image:: https://img.shields.io/badge/Link-Install-blue.svg
+    :target: `install`_
+
+.. image:: https://img.shields.io/badge/Link-GitHub-blue.svg
+    :target: https://github.com/easyscalecloud/esc_mini_tools_lib-project
+
+.. image:: https://img.shields.io/badge/Link-Submit_Issue-blue.svg
+    :target: https://github.com/easyscalecloud/esc_mini_tools_lib-project/issues
+
+.. image:: https://img.shields.io/badge/Link-Request_Feature-blue.svg
+    :target: https://github.com/easyscalecloud/esc_mini_tools_lib-project/issues
+
+.. image:: https://img.shields.io/badge/Link-Download-blue.svg
+    :target: https://pypi.org/pypi/esc-mini-tools-lib#files
+
+
+Welcome to ``esc_mini_tools_lib`` Documentation
+==============================================================================
+.. image:: https://esc-mini-tools-lib.readthedocs.io/en/latest/_static/esc_mini_tools_lib-logo.png
+    :target: https://esc-mini-tools-lib.readthedocs.io/en/latest/
+
+``esc_mini_tools_lib`` is a collection of reusable mini-tools that provides core business logic for multi-platform deployment scenarios. Each tool implements the Command Pattern using Pydantic models, enabling built-in validation, type safety, and easy OpenAPI specification generation. The library is designed to be pip-installed and seamlessly integrated into various applications: as web app endpoints, as AWS Lambda functions for remote capabilities, or as MCP (Model Context Protocol) servers for AI assistants. By extracting core logic into this standalone library, you can deploy the same validated functionality across different platforms without code duplication.
+
+
+.. _install:
+
+Install
+------------------------------------------------------------------------------
+
+``esc_mini_tools_lib`` is released on PyPI, so all you need is to:
+
+.. code-block:: console
+
+    $ pip install esc-mini-tools-lib
+
+To upgrade to latest version:
+
+.. code-block:: console
+
+    $ pip install --upgrade esc-mini-tools-lib
+
