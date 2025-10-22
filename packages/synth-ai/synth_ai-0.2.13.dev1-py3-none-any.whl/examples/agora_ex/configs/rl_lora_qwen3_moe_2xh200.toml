@@ -1,0 +1,121 @@
+# Agora EX RL Training - Qwen3 MoE (30B-A3B) on 2xH200
+# Small MoE model: 30B total parameters, 3B activated per token
+# Task app provides rewards via human judge (no external judge service needed)
+
+[algorithm]
+type = "online"
+method = "policy_gradient"
+variety = "gspo"
+
+[services]
+# Task app URL - set via environment or CLI flag
+# The task app includes the reward function, so no separate judge service needed
+task_url = "http://localhost:8101"  # Local task app or Modal deployment
+
+[model]
+base = "Qwen/Qwen3-30B-A3B"
+trainer_mode = "lora"
+label = "agora-ex-qwen3-moe-rl"
+
+[lora]
+r = 16
+alpha = 32
+dropout = 0.05
+target_modules = ["all-linear"]  # MoE benefits from wider LoRA coverage
+
+[policy]
+# inference_url is auto-configured by the RL orchestrator
+max_tokens = 3072
+temperature = 0.15
+# system_hint is included in the task app's system prompt
+
+[data]
+split = "train"
+dataset_id = "agora_ex_prompts_v1"
+seed_start = 0
+episodes_per_iteration = 32         # 16 episodes × 2 batches
+evaluation_split = "train"
+evaluation_episodes = 16
+
+[training]
+num_epochs = 3
+gradient_accumulation_steps = 8
+max_accumulated_minibatch = 16
+max_turns = 1
+batch_size = 2
+group_size = 4                      # GSPO group size for advantage computation
+learning_rate = 3e-5
+log_interval = 1
+weight_sync_interval = 1
+iterations_per_epoch = 4
+weight_sync_verify_checksums = false
+warmup_steps = 10
+
+[training.weight_sync]
+enable = true
+targets = ["policy"]
+mode = "full"                       # Full weight sync for LoRA
+direct = true
+verify_every_k = 0
+chunk_bytes = 0
+
+[compute]
+gpu_type = "H200"
+gpu_count = 2
+
+[topology]
+type = "single_node_split"
+gpus_for_vllm = 1                   # Inference on GPU 0
+gpus_for_training = 1               # Training on GPU 1
+gpus_for_ref = 0                    # No reference model
+tensor_parallel = 1
+
+[vllm]
+tensor_parallel_size = 1
+max_model_len = 4096
+
+[reference]
+placement = "none"
+
+[rollout]
+env_name = "agora-ex-landing-page"
+policy_name = "agora-ex-moe-policy"
+max_turns = 1
+episodes_per_batch = 16             # 16 episodes per batch
+max_concurrent_rollouts = 4         # Conservative: human judge takes 5-30 min
+batches_per_step = 2                # 32 episodes per training step
+ops = ["agent", "env"]
+
+  [rollout.env_config]
+  # No special env config needed for single-turn generation
+
+  [rollout.policy_config]
+  temperature = 0.15
+  max_tokens = 3072
+
+[evaluation]
+instances = 16
+every_n_iters = 2                   # More frequent due to slow judge
+seeds = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+
+[tags]
+experiment = "agora_ex_qwen3_moe_lora_v1"
+owner = "agora"
+model_type = "moe"
+
+[checkpoint]
+interval = 25
+directory = "/checkpoints"
+keep_last_n = 3
+save_optimizer = true
+save_scheduler = true
+enabled = true
+
+[telemetry]
+supabase = true
+device_snapshots = false
+perf_metrics = true
+weight_sync = false
+train_step_interval = 3
+clickhouse_batch_mode = "rollup"
+
