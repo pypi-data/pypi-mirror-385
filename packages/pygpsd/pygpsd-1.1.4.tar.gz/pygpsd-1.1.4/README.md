@@ -1,0 +1,74 @@
+# pygpsd
+
+A tiny, typed Python client for polling gpsd. It opens a plain TCP connection to a running gpsd instance (default localhost:2947) and returns structured data.
+
+## Installation
+
+You can use either uv (recommended) or pip.
+
+- Using uv (recommended)
+  - In an existing project: `uv add pygpsd`
+  - For a standalone virtual environment:
+    1) Create/activate a venv: `uv venv && source .venv/bin/activate`
+    2) Install: `uv pip install pygpsd`
+
+- Using pip
+  - `pip install pygpsd`
+
+Python 3.8+ is supported.
+
+## Quickstart
+
+```python
+from pygpsd import GPSD, GPSInactiveWarning, NoGPSDeviceFoundException
+
+# Connect to gpsd (defaults: host="127.0.0.1", port=2947)
+try:
+    gpsd = GPSD()
+    data = gpsd.poll()
+except NoGPSDeviceFoundException:
+    print("No GPS device reported by gpsd")
+except GPSInactiveWarning:
+    print("gpsd is up, but GPS is inactive (no fix)")
+else:
+    # Data is a typed object with geo/ecef and satellites
+    print("Mode:", data.mode)
+    print("Timestamp:", data.time)
+    print("Satellites (used/total):", len(data.get_used_satellites()), "/", data.get_satellite_count())
+    print("Latitude, Longitude:", data.geo.position.lat, data.geo.position.lon)
+```
+
+## API overview
+
+- `GPSD(host: str = "127.0.0.1", port: int = 2947)` — opens a connection to gpsd and enables WATCH.
+- `GPSD.poll() -> Data` — issues a `?POLL;` request and returns a `Data` object.
+- Exceptions / warnings:
+  - `UnexpectedMessageException` — gpsd responded with an unexpected payload.
+  - `NoGPSDeviceFoundException` — gpsd reports zero devices.
+  - `GPSInactiveWarning` — gpsd is running, but there is no active fix.
+- `Data` contains:
+  - `mode` (Fix), `time` (datetime), `leap_seconds` (int)
+  - `satellites: list[Satellite]` (with fields like `used`, `ss`, `prn`, ...)
+  - `geo` (lat/lon/alt etc.) and `ecef` positions/velocities
+  - Helpers: `get_used_satellites()`, `get_satellite_count()`
+
+## Developing with uv
+
+1. Clone the repo and create a venv:
+   - `uv venv`
+   - `source .venv/bin/activate` (Linux/macOS) or `.venv\\Scripts\\activate` (Windows)
+2. Install the project in editable mode:
+   - `uv pip install -e .`
+3. Try it quickly:
+   - `python -c "from pygpsd import GPSD; print(GPSD().poll())"`
+
+This project uses standard PEP 621 metadata (Hatchling backend) and ships an `uv.lock` for reproducible dev installs.
+
+## Requirements
+
+- A running gpsd instance reachable from where you run your code (default port 2947).
+- Python 3.8 or newer.
+
+## License
+
+MIT License. See LICENSE for details.
