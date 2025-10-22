@@ -1,0 +1,90 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools-scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pydhis2"
+version = "0.2.1"
+description = "Reproducible DHIS2 Python SDK for LMIC scenarios"
+readme = "README.md"
+license = {text = "Apache-2.0"}
+authors = [
+    {name = "pydhis2 contributors", email = "pydhis2@github.com"}
+]
+maintainers = [
+    {name = "pydhis2 contributors", email = "pydhis2@github.com"}
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Healthcare Industry",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Medical Science Apps.",
+]
+requires-python = ">=3.9"
+dependencies = [
+    "aiohttp>=3.8.0,<4.0.0",
+    "aiofiles>=23.0.0,<26.0.0",
+    "aiolimiter>=1.0.0,<2.0.0",
+    "tenacity>=8.0.0,<10.0.0",
+    "pandas>=1.5.0,<3.0.0",
+    "pyarrow>=10.0.0,<22.0.0",
+    "numpy>=1.20.0,<3.0.0",
+    "pydantic>=2.0.0,<3.0.0",
+    "pyyaml>=6.0,<7.0",
+    "click>=8.0.0,<9.0.0",
+    "typer>=0.9.0,<1.0.0",
+    "cookiecutter>=2.1.0,<3.0.0",
+    "opentelemetry-api>=1.15.0,<2.0.0",
+    "opentelemetry-sdk>=1.15.0,<2.0.0",
+    "opentelemetry-exporter-jaeger-thrift>=1.15.0,<2.0.0",
+    "opentelemetry-exporter-prometheus>=0.36b0,<1.0.0",
+    "opentelemetry-instrumentation-aiohttp-client>=0.36b0,<1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0,<9.0.0",
+    "pytest-asyncio>=0.21.0,<1.0.0",
+    "pytest-mock>=3.10.0,<4.0.0",
+    "pytest-cov>=4.0.0,<6.0.0",
+    "ruff>=0.1.0,<1.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/HzaCode/pyDHIS2"
+Documentation = "https://hzacode.github.io/pyDHIS2"
+Repository = "https://github.com/HzaCode/pyDHIS2"
+Issues = "https://github.com/HzaCode/pyDHIS2/issues"
+Changelog = "https://github.com/HzaCode/pyDHIS2/blob/main/CHANGELOG.md"
+Discussions = "https://github.com/HzaCode/pyDHIS2/discussions"
+
+[project.scripts]
+pydhis2 = "pydhis2.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["pydhis2*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+asyncio_mode = "auto"
+
+[tool.ruff]
+line-length = 88
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "A", "C4", "PT"]
+ignore = ["E501", "N806", "N803"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["A002", "A003"]

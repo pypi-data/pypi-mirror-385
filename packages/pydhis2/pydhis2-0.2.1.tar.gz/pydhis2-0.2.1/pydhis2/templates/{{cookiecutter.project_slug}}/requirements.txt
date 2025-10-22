@@ -1,0 +1,18 @@
+# Base requirements for the project
+pydhis2>=0.2.0
+pandas
+pyarrow
+openpyxl
+# Add other dependencies here
+
+{% if cookiecutter.use_notebooks == "yes" -%}
+# Jupyter notebooks
+jupyter>=1.0.0
+jupyterlab>=3.0.0
+matplotlib>=3.5.0
+seaborn>=0.11.0
+plotly>=5.0.0
+{%- endif %}
+
+# Configuration management
+python-dotenv>=0.19.0
