@@ -1,0 +1,158 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build]
+include = ["src"]
+
+[tool.hatch.build.targets.wheel]
+sources = ["src"]
+exclude = [
+  "**/__pycache__",
+  "**/*.pyc",
+  "**/.venv",
+  "**/venv",
+  "**/.pytest_cache",
+  "**/.ruff_cache",
+  "**/*.egg-info",
+  "**/*.log",
+  "**/*.db",
+  "**/models/*.gguf",
+  "**/models/*.bin",
+  "**/.env_dev",
+]
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+  "**/__pycache__",
+  "**/*.pyc",
+  "**/.venv",
+  "**/venv",
+  "**/.pytest_cache",
+  "**/.ruff_cache",
+  "**/*.egg-info",
+  "**/*.log",
+  "**/*.db",
+  "**/models/*.gguf",
+  "**/models/*.bin",
+  "**/.env_dev",
+]
+
+[project]
+name = "fastapi-gen"
+dynamic = ["version"]
+description = "Set up a modern REST API by running one command."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+keywords = [
+  "fastapi",
+  "cli",
+  "hello world",
+  "huggingface",
+  "langchain",
+  "summarization",
+  "nlp",
+  "ner",
+  "named-entity recognition",
+  "text generation",
+  "llama",
+  "llama.cpp",
+]
+authors = [
+  { name = "Miroslav Pokrovskii", email = "miroslavpokrovskiy@gmail.com" },
+]
+classifiers = [
+  "Intended Audience :: Information Technology",
+  "Intended Audience :: System Administrators",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python",
+  "Topic :: Internet",
+  "Topic :: Software Development :: Libraries :: Application Frameworks",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Software Development :: Libraries",
+  "Topic :: Software Development",
+  "Typing :: Typed",
+  "Development Status :: 4 - Beta",
+  "Environment :: Web Environment",
+  "Framework :: AsyncIO",
+  "Framework :: FastAPI",
+  "Framework :: Pydantic",
+  "Framework :: Pydantic :: 1",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+  "Topic :: Internet :: WWW/HTTP",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = ["click==8.3.0", "colorama==0.4.6", "importlib_resources==6.5.2"]
+
+[project.optional-dependencies]
+dev = ["ruff==0.14.1", "pytest==8.4.2", "coverage[toml]==7.11.0"]
+
+[project.urls]
+Documentation = "https://github.com/mirpo/fastapi-gen#readme"
+Issues = "https://github.com/mirpo/fastapi-gen/issues"
+Source = "https://github.com/mirpo/fastapi-gen"
+
+[project.scripts]
+fastapi-gen = "cli.__main__:main"
+
+[tool.hatch.version]
+source = "vcs"
+
+[[tool.hatch.envs.all.matrix]]
+python = ["3.12", "3.13"]
+
+[tool.uv.workspace]
+members = []
+
+[tool.black]
+target-version = ["py312"]
+line-length = 120
+skip-string-normalization = true
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+  "ANN",     # Type hints related, let mypy handle these.
+  "B027",    # Allow non-abstract empty methods in abstract base classes
+  "D",       # Docstring errors. Should add proper documentation at some point.
+  "FBT003",  # Allow boolean positional values in function calls, like `dict.get(... True)`
+  "S105",    # Ignore checks for possible passwords
+  "S106",
+  "S107",
+  "C901",    # Ignore complexity
+  "PLR0911",
+  "PLR0912",
+  "PLR0913",
+  "PLR0915",
+  "PTH",     # User Pathlib stuff over os.*. Should migrate to Pathlib at some point.
+  "S603",
+  "S607",
+  "S101",
+  "PLR2004",
+  "COM812",  # Conflicts with ruff formatter
+]
+unfixable = [
+  # Don't touch unused imports
+  "F401",
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["src"]
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.ruff.lint.per-file-ignores]
+# Tests can use magic values, assertions, and relative imports
+"tests/**/*" = ["PLR2004", "S101", "TID252"]
