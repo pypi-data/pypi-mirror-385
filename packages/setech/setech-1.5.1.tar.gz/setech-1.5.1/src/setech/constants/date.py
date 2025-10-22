@@ -1,0 +1,28 @@
+LATVIAN_MONTH_MAP_NOM = {
+    1: "janvāris",
+    2: "februāris",
+    3: "marts",
+    4: "aprīlis",
+    5: "maijs",
+    6: "jūnijs",
+    7: "jūlijs",
+    8: "augusts",
+    9: "septembris",
+    10: "oktobris",
+    11: "novembris",
+    12: "decembris",
+}
+LATVIAN_MONTH_MAP_ACU = {
+    1: "janvārī",
+    2: "februārī",
+    3: "martā",
+    4: "aprīlī",
+    5: "maijā",
+    6: "jūnijā",
+    7: "jūlijā",
+    8: "augustā",
+    9: "septembrī",
+    10: "oktobrī",
+    11: "novembrī",
+    12: "decembrī",
+}
