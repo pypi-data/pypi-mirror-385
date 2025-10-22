@@ -1,0 +1,27 @@
+repos:
+  - repo: local
+    hooks:
+      - id: ruff-format
+        language: python
+        name: ruff-format
+        pass_filenames: false
+        language_version: python3.13
+        entry: uv run ruff format gh_pydantic_ai
+
+  - repo: local
+    hooks:
+      - id: ruff
+        language: python
+        name: ruff
+        pass_filenames: false
+        language_version: python3.13
+        entry: uv run ruff check --fix --exit-non-zero-on-fix --show-fixes gh_pydantic_ai
+
+  - repo: local
+    hooks:
+      - id: ty
+        language: python
+        name: ty
+        pass_filenames: false
+        language_version: python3.13
+        entry: uv run ty check gh_pydantic_ai
