@@ -1,0 +1,109 @@
+{% extends "admin/login.html" %}
+{% load i18n static django_simple_tags %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "django-admin-safe-login/css/django-admin-safe-login.css" %}" />
+    <script src="{% static "jquery/jquery.js" %}"></script>
+    <script src="{% static "django-admin-safe-login/js/django-admin-safe-login.js" %}"></script>
+    {% get_setting "DJANGO_ADMIN_SAFE_LOGIN_BACKGROUND_IMAGE" None as login_background_image %}
+    {% if login_background_image %}<style>body.login { background-image: url({% static login_background_image %}); }</style>{% endif %}
+    {% get_setting "DJANGO_ADMIN_SAFE_LOGIN_BOX_MARGIN_LEFT" None as django_admin_safe_login_box_margin_left %}
+    {% if django_admin_safe_login_box_margin_left %}
+    <style>.login #container { margin-left: {{django_admin_safe_login_box_margin_left}}; }</style>
+    {% endif %}
+    {% get_setting "DJANGO_ADMIN_SAFE_LOGIN_BOX_MARGIN_RIGHT" None as django_admin_safe_login_box_margin_right %}
+    {% if django_admin_safe_login_box_margin_right %}
+    <style>.login #container { margin-right: {{django_admin_safe_login_box_margin_right}}; }</style>
+    {% endif %}
+    {% get_setting "DJANGO_ADMIN_SAFE_LOGIN_BOX_MARGIN_TOP" None as django_admin_safe_login_box_margin_top %}
+    {% if django_admin_safe_login_box_margin_top %}
+    <style>.login #container { margin-top: {{django_admin_safe_login_box_margin_top}}; }</style>
+    {% endif %}
+    {% get_setting "DJANGO_ADMIN_SAFE_LOGIN_BOX_MARGIN_BOTTOM" None as django_admin_safe_login_box_margin_bottom %}
+    {% if django_admin_safe_login_box_margin_bottom %}
+    <style>.login #container { margin-bottom: {{django_admin_safe_login_box_margin_bottom}}; }</style>
+    {% endif %}
+{% endblock %}
+
+
+
+{% block content %}
+{% if form.errors and not form.non_field_errors %}
+<p class="errornote">
+{% if form.errors.items|length == 1 %}{% trans "Please correct the error below." %}{% else %}{% trans "Please correct the errors below." %}{% endif %}
+</p>
+{% endif %}
+
+{% if form.non_field_errors %}
+{% for error in form.non_field_errors %}
+<p class="errornote">
+    {{ error }}
+</p>
+{% endfor %}
+{% endif %}
+
+<div id="content-main">
+
+{% if user.is_authenticated %}
+<p class="errornote">
+{% blocktrans trimmed %}
+    You are authenticated as {{ username }}, but are not authorized to
+    access this page. Would you like to login to a different account?
+{% endblocktrans %}
+</p>
+{% endif %}
+
+{% block form %}
+<form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
+  {% block form-row-username %}
+  <div class="form-row">
+    {{ form.username.errors }}
+    {{ form.username.label_tag }} {{ form.username }}
+  </div>
+  {% endblock %}
+
+  {% block form-row-password %}
+  <div class="form-row">
+    {{ form.password.errors }}
+    {{ form.password.label_tag }} {{ form.password }}
+    <input type="hidden" name="next" value="{{ next }}">
+  </div>
+  {% endblock %}
+
+  {% block form-row-extra %}
+  {% block form-row-captcha %}
+  {% get_setting "DJANGO_ADMIN_SAFE_LOGIN_ENABLE_CAPTCHA" True as django_admin_safe_login_enable_captcha %}
+  {% if django_admin_safe_login_enable_captcha %}
+  <div class="form-row">
+    {{ form.captcha.label_tag }}    
+    <div class="captcha-input" captcha-refresh-url="{% url "captcha-refresh" %}">
+        {{ form.captcha }}
+    </div>
+    {% if not form.this_is_the_login_form.errors %}{{ form.captcha.errors }}{% endif %}
+  </div>
+  {% endif %}
+  {% endblock %}
+  {% endblock %}
+
+  {% block password-reset-url %}
+  {% url 'admin_password_reset' as password_reset_url %}
+  {% if password_reset_url %}
+  <div class="password-reset-link">
+    <a href="{{ password_reset_url }}">{% trans 'Forgotten your password or username?' %}</a>
+  </div>
+  {% endif %}
+  {% endblock %}
+
+  {% block before-submit-row %}{% endblock %}
+  {% block submit-row %}
+  <div class="submit-row">
+    <label>&nbsp;</label><input type="submit" value="{% trans 'Log in' %}">
+  </div>
+  {% endblock %}
+  {% block after-submit-row %}{% endblock %}
+</form>
+{% endblock %}
+
+</div>
+{% endblock %}
