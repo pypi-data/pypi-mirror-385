@@ -1,0 +1,77 @@
+div.highlight, div.literal-block-wrapper, [class*="highlight-"] {
+  position: relative;
+  display: flex;
+  width: unset;
+  flex-direction: column;
+  border-radius: var(--bz-border-radius);
+  break-inside: avoid;
+  color: var(--bz-code-block-color)!important;
+
+  pre {
+    overflow: auto;
+    line-height: 1.35!important;
+    border-radius: var(--bz-border-radius);
+    font-size: var(--bz-code-block-font-size);
+    font-family: var(--bz-code-block-font-family);
+    border: 1px solid var(--bz-code-block-border-color);
+    background-color: var(--bz-code-block-background-color);
+    padding: calc(var(--bz-spacing) * 4);
+  }
+}
+
+p + div:is([class*="highlight-"], .literal-block-wrapper) {
+  margin-top: 0;
+}
+
+div[class*="highlight-"], div.literal-block-wrapper {
+  margin-block: calc(var(--bz-spacing) * 4);
+}
+
+div.code-block-caption + div {
+  margin-block: 0;
+}
+
+.highlight .hll {
+  display: block;
+}
+
+.highlight :is(span.linenos, .gp) {
+  user-select: none;
+  pointer-events: none;
+}
+
+.highlight:has(span.linenos) pre {
+  padding-left: 3.25rem;
+}
+
+.highlight span.linenos {
+  position: absolute;
+  display: inline-block;
+  left: 1px;
+  width: 2.5rem;
+  text-align: right;
+  padding-inline: 0.5rem;
+  color: var(--bz-code-block-line-number-color)!important;
+  border-right: 1px solid var(--bz-code-block-border-color);
+  background-color: var(--bz-code-block-background-color)!important;
+}
+
+.literal-block-wrapper {
+  border-radius: var(--bz-border-radius);
+  border: 1px solid var(--bz-code-block-border-color);
+  background-color: var(--bz-code-block-background-color)!important;
+}
+
+.literal-block-wrapper div[class*="highlight-"] pre {
+  border: none;
+}
+
+.code-block-caption {
+  border-radius: var(--bz-border-radius) .5rem 0 0;
+  color: var(--bz-code-block-caption-color);
+  font-size: var(--bz-code-block-caption-font-size);
+  font-family: var(--bz-code-block-caption-font-family);
+  border-bottom: 1px solid var(--bz-code-block-border-color);
+  background-color: var(--bz-code-block-caption-background-color);
+  padding: calc(var(--bz-spacing) * 2) calc(var(--bz-spacing) * 4);
+}

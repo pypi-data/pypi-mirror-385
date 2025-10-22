@@ -1,0 +1,24 @@
+div.math, span.math {
+  align-items: center;
+  max-width: 100%;
+}
+
+span.math {
+  display: inline-flex;
+}
+
+div.math {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: calc(var(--bz-spacing) * 6);
+
+  mjx-container {
+    flex-grow: 1;
+    overflow: auto;
+    padding: calc(var(--bz-spacing) * 2);
+  }
+
+  mjx-assistive-mml {
+    height: 0;
+  }
+}

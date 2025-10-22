@@ -1,0 +1,33 @@
+.bz-search-form {
+  position: relative;
+
+  input {
+    width: 100%;
+    border-radius: var(--bz-border-radius);
+    font-size: var(--bz-search-form-input-font-size);
+    font-family: var(--bz-search-form-input-font-family);
+    color: var(--bz-search-form-input-color);
+    border: 1px solid var(--bz-search-form-input-border-color);
+    background-color: var(--bz-search-form-input-background-color);
+    padding: calc(var(--bz-spacing) * 1.5) calc(var(--bz-spacing) * 3);
+
+    &:focus {
+      outline: 1px solid var(--bz-search-form-input-border-color-focus);
+    }
+  }
+
+  button {
+    position: absolute;
+    top: calc(var(--bz-spacing) * 1.25);
+    right: calc(var(--bz-spacing) * 1.25);
+    color: var(--bz-search-form-button-color);
+    font-size: var(--bz-search-form-button-font-size);
+    font-family: var(--bz-search-form-button-font-family);
+    background-color: var(--bz-search-form-button-background-color);
+    border: 1px solid var(--bz-search-form-button-border-color);
+    border-bottom-width: 3px;
+    border-right-width: 2px;
+    border-radius: calc(var(--bz-border-radius) / 2);
+    opacity: .85;
+  }
+}
