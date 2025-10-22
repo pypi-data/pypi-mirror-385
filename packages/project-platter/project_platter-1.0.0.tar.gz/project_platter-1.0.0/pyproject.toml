@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "project-platter"
+version = "1.0.0"
+description = "A CLI tool to serve up ready-to-go AI/automation project templates with Git and GitHub setup."
+authors = [
+    { name = "Hamza Ghaffar", email = "hamza.ghaffar.edu@gmail.com" }
+]
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.8"
+dependencies = [
+    "requests>=2.25.0",
+]
+keywords = ["automation", "genai", "cli", "project-bootstrap", "platter"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.scripts]
+pp = "project_platter.cli:main"
