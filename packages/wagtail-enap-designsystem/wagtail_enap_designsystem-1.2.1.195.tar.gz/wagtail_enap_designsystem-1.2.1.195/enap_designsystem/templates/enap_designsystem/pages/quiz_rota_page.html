@@ -1,0 +1,443 @@
+{% extends "enap_designsystem/base.html" %}
+{% load static %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block title %}
+    <title>{{ page.page_title }}</title>
+{% endblock %}
+
+{%block govnavbar %}
+        <div style="background-color: #071E41;">
+            <div class="menu">
+                <div class="logo">
+                    <img style="width: 51px; height: 18px;" src="{% static 'enap_designsystem/icons/logo-white.png' %}" alt="Passar pro lado esquerdo" alt="Logo GovBR" height="40">
+                </div>
+                <a href="https://www.gov.br/secom/pt-br/acesso-a-informacao/comunicabr">Comunica BR</a>
+                <div class="separator"></div>
+                <a href="https://www.gov.br/acessoainformacao/pt-br">Acesso à informação</a>
+                <div class="separator"></div>
+                <a href="https://www.gov.br/pt-br/participacao-social/">Participe</a>
+                <div class="separator"></div>
+                <a href="https://www4.planalto.gov.br/legislacao/">Legislação</a>
+                <div class="separator"></div>
+                <a href="https://www.gov.br/pt-br/orgaos-do-governo">Órgãos do Governo</a>
+            </div>
+        </div>
+    {% endblock %}
+
+{% block navbar %}
+    {% if page.navbar %}
+        {% include "enap_designsystem/blocks/navbar/navbar_block.html" with navbar=page.navbar %}
+    {% else %}
+        <p style="color: red;">DEBUG: Nenhuma Navbar foi definida.</p>
+    {% endif %}
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    
+</style>
+{% endblock %}
+
+{% block content %}
+{% if e_resultado %}
+<!-- TELA DE RESULTADO -->
+<div class="resultado-rotas">
+    <div class="container">
+        <header class="resultado-header">
+            <h1>✅ Suas Recomendações Personalizadas</h1>
+            
+            <div class="resumo-respostas">
+                <h3>Com base no seu perfil:</h3>
+                <ul class="badges-respostas">
+                    {% for chave, resposta in respostas.items %}
+                        <li class="badge">
+                            {{ resposta.texto }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            
+            {% if page.texto_resultado %}
+                <div class="texto-resultado">
+                    {{ page.texto_resultado|richtext }}
+                </div>
+            {% endif %}
+        </header>
+        
+        <div class="acoes-resultado">
+            <button onclick="window.print()" class="button button-outline">
+                📄 Salvar / Imprimir PDF
+            </button>
+            
+            <a href="{{ page.url }}" class="button button-primary">
+                🔄 Fazer novo quiz
+            </a>
+        </div>
+        
+        <section class="capsulas-recomendadas">
+            <h2>
+                Encontramos {{ total_capsulas }} 
+                {% if total_capsulas == 1 %}cápsula{% else %}cápsulas{% endif %}
+                para você
+            </h2>
+            
+            {% if capsulas_recomendadas %}
+                <div class="recursos-grid">
+                    {% for capsula in capsulas_recomendadas %}
+                            <article class="recurso-card">
+                                <!-- Link principal que envolve todo o card -->
+                                <a href="{{ capsula.url }}" class="recurso-card-link" aria-labelledby="card-titulo-{{ forloop.counter }}">
+                                    <span class="sr-only">Acessar cápsula: {{ capsula.title }}</span>
+                                
+                                
+                                <div class="recurso-card-icone">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                    </svg>
+                                </div>
+                                
+                                <h2 class="recurso-card-titulo" id="card-titulo-{{ forloop.counter }}">
+                                    {{ capsula.title }}
+                                </h2>
+                                
+                                <p class="recurso-card-descricao">
+                                    {{ capsula.resumo_card|default:"Aprenda sobre este importante aspecto da acessibilidade digital." }}
+                                </p>
+                                
+                                {# Tags de deficiência #}
+                                {% if capsula.tipos_deficiencia %}
+                                    <div class="recurso-tags-categoria" aria-label="Tipos de deficiência abordados">
+                                        {% for tipo in capsula.tipos_deficiencia|slice:":2" %}
+                                            <span class="tag-categoria">
+                                                {{ tipo }}
+                                            </span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                
+                                {# Badge de prioridade #}
+                                {% if capsula.prioridade %}
+                                    <div class="recurso-badge recurso-badge-{{ capsula.prioridade }}" aria-label="Nível de prioridade">
+                                        <svg class="badge-icone" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        {% if capsula.prioridade == 'obrigatorio' %}
+                                            Obrigatório
+                                        {% else %}
+                                            Recomendado
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                                
+                                <div class="recurso-card-botao-wrapper">
+                                    <span class="recurso-card-botao">
+                                        Ler cápsula completa
+                                    </span>
+                                </div>
+                            </a>
+                            </article>
+                        {% endfor %}
+                </div>
+                
+            {% else %}
+                <div class="conteudo-vazio">
+                    <svg class="conteudo-vazio-icone" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <h2>Não encontramos cápsulas específicas para este perfil ainda.</h2>
+                    <p>Tente ajustar os filtros ou <a href="{{ page.url }}">limpe os filtros</a> para ver todas as cápsulas.</p>
+                </div>
+            {% endif %}
+        </section>
+    </div>
+</div>
+
+{% else %}
+<!-- TELA DO QUIZ -->
+<div class="quiz-container">
+    <!-- Lado esquerdo - informações e ilustração -->
+    <div class="quiz-info">
+        <div>
+            <a href="/" class="home-link">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19 12H5" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 19L5 12L12 5" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Inicio
+            </a>
+            
+            
+            
+            <h1 class="question-title">Vamos fazer o seu mapa?</h1>
+            <p class="question-subtitle">Nos diga o que você vai produzir</p>
+        </div>
+        
+        <div class="capsulas-illustration-card">
+            <img src="https://42f2671d685f51e10fc6-b9fcecea3e50b3b59bdc28dead054ebc.ssl.cf5.rackcdn.com/illustrations/Designer_re_5v95.svg" alt="Ilustração de implementação" class="capsulas-illustration">
+        </div>
+    </div>
+    
+    <!-- Lado direito - perguntas e opções -->
+    <div class="quiz-questions">
+        <!-- Pergunta 1 -->
+        <div class="pergunta-card" id="pergunta1" style="display: block;">
+            <div class="options-container">
+                <div class="capsulas-illustration">
+                    <img class="capsulas-illustration" src="https://42f2671d685f51e10fc6-b9fcecea3e50b3b59bdc28dead054ebc.ssl.cf5.rackcdn.com/illustrations/Questions_re_1fy7.svg" 
+                         alt="Ilustração representando o conceito da seção 'O que é'" 
+                         width="240" 
+                         height="240">
+                </div>
+                <div id="stepIndicator" class="step-indicator">step <span id="currentStep">1</span>/<span id="totalSteps">2</span></div>
+                <button class="option-button" onclick="responderPergunta1('designer_instrucional', 'Designer Instrucional')">
+                    <div class="option-circle"></div>
+                    <span class="option-text">Designer Instrucional</span>
+                </button>
+                
+                <button class="option-button" onclick="responderPergunta1('designer_grafico', 'Designer Gráfico')">
+                    <div class="option-circle"></div>
+                    <span class="option-text">Designer Gráfico</span>
+                </button>
+                
+                <button class="option-button" onclick="responderPergunta1('docente', 'Docente')">
+                    <div class="option-circle"></div>
+                    <span class="option-text">Docente</span>
+                </button>
+                
+                <button class="option-button" onclick="responderPergunta1('implementador_web', 'Implementador Web', true)">
+                    <div class="option-circle"></div>
+                    <span class="option-text">Implementador Web</span>
+                </button>
+                
+                <button class="option-button" onclick="responderPergunta1('editor_video', 'Editor de Vídeo', true)">
+                    <div class="option-circle"></div>
+                    <span class="option-text">Editor de Vídeo</span>
+                </button>
+                
+                <button class="option-button" onclick="responderPergunta1('curador_conteudo', 'Curador de Conteúdo')">
+                    <div class="option-circle"></div>
+                    <span class="option-text">Curador de Conteúdo</span>
+                </button>
+                
+                <button class="option-button" onclick="responderPergunta1('conteudista', 'Conteudista')">
+                    <div class="option-circle"></div>
+                    <span class="option-text">Conteudista</span>
+                </button>
+            </div>
+            
+            <div class="navigation-buttons">
+                <button class="button button-outline" onclick="window.location.href = '/'">Anterior</button>
+                <button id="nextButton1" class="button button-primary" disabled>Próximo</button>
+            </div>
+        </div>
+        
+        <!-- Pergunta 2a -->
+        <div class="pergunta-card" id="pergunta2a" style="display: none;">
+            <div class="options-container">
+                <button class="option-button" onclick="responderPergunta2a('imagem', 'Imagem')">
+                    <div class="option-circle"></div>
+                    <span class="option-text">Imagem</span>
+                </button>
+                
+                <button class="option-button" onclick="responderPergunta2a('video', 'Vídeo')">
+                    <div class="option-circle"></div>
+                    <span class="option-text">Vídeo</span>
+                </button>
+                
+                <button class="option-button" onclick="responderPergunta2a('tabela', 'Tabela')">
+                    <div class="option-circle"></div>
+                    <span class="option-text">Tabela</span>
+                </button>
+                
+                <button class="option-button" onclick="responderPergunta2a('grafico', 'Gráfico')">
+                    <div class="option-circle"></div>
+                    <span class="option-text">Gráfico</span>
+                </button>
+                
+                <button class="option-button" onclick="responderPergunta2a('texto', 'Texto')">
+                    <div class="option-circle"></div>
+                    <span class="option-text">Texto</span>
+                </button>
+                
+                <button class="option-button" onclick="responderPergunta2a('audio', 'Áudio')">
+                    <div class="option-circle"></div>
+                    <span class="option-text">Áudio</span>
+                </button>
+                
+                <button class="option-button" onclick="responderPergunta2a('botao', 'Botão/Interface')">
+                    <div class="option-circle"></div>
+                    <span class="option-text">Botão/Interface</span>
+                </button>
+                
+                <button class="option-button" onclick="responderPergunta2a('hiperlink', 'Hiperlink')">
+                    <div class="option-circle"></div>
+                    <span class="option-text">Hiperlink</span>
+                </button>
+                
+                <button class="option-button" onclick="responderPergunta2a('videoconferencia', 'Videoconferência')">
+                    <div class="option-circle"></div>
+                    <span class="option-text">Videoconferência</span>
+                </button>
+            </div>
+            
+            <div class="navigation-buttons">
+                <button class="button button-outline" onclick="voltarPergunta1()">Anterior</button>
+                <button id="nextButton2a" class="button button-primary" disabled>Próximo</button>
+            </div>
+        </div>
+        
+        <!-- Pergunta 2b -->
+        <div class="pergunta-card" id="pergunta2b" style="display: none;">
+            <div class="options-container">
+                <button class="option-button" onclick="responderPergunta2b('distancia_sincrono', 'A distância síncrono')">
+                    <div class="option-circle"></div>
+                    <span class="option-text">A distância síncrono</span>
+                </button>
+                
+                <button class="option-button" onclick="responderPergunta2b('distancia_assincrono', 'A distância assíncrono')">
+                    <div class="option-circle"></div>
+                    <span class="option-text">A distância assíncrono</span>
+                </button>
+                
+                <button class="option-button" onclick="responderPergunta2b('presencial', 'Presencial')">
+                    <div class="option-circle"></div>
+                    <span class="option-text">Presencial</span>
+                </button>
+                
+                <button class="option-button" onclick="responderPergunta2b('semipresencial', 'Semipresencial')">
+                    <div class="option-circle"></div>
+                    <span class="option-text">Semipresencial</span>
+                </button>
+            </div>
+            
+            <div class="navigation-buttons">
+                <button class="button button-outline" onclick="voltarPergunta1()">Anterior</button>
+                <button id="nextButton2b" class="button button-primary" disabled>Próximo</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<script>
+    let respostas = {};
+    
+    function construirUrlResultado() {
+        let params = new URLSearchParams();
+        
+        if (respostas.perfil_profissional) {
+            params.append('perfil', respostas.perfil_profissional.valor);
+            params.append('perfil_texto', respostas.perfil_profissional.texto);
+        }
+        
+        if (respostas.tipo_recurso) {
+            params.append('recurso', respostas.tipo_recurso.valor);
+            params.append('recurso_texto', respostas.tipo_recurso.texto);
+        }
+        
+        if (respostas.formato_acao) {
+            params.append('formato', respostas.formato_acao.valor);
+            params.append('formato_texto', respostas.formato_acao.texto);
+        }
+        
+        params.append('resultado', '1');
+        
+        return '{{ page.url }}?' + params.toString();
+    }
+    
+    function atualizarTituloPergunta(numero, texto) {
+        // Atualiza o título da questão no lado esquerdo
+        document.querySelector('.step-indicator #currentStep').textContent = numero;
+        document.querySelector('.question-title').textContent = texto;
+    }
+    
+    function responderPergunta1(valor, texto, irParaResultado = false) {
+        respostas['perfil_profissional'] = {
+            valor: valor,
+            texto: texto
+        };
+        
+        // Desmarca todas as opções
+        const botoes = document.querySelectorAll('#pergunta1 .option-button');
+        botoes.forEach(botao => botao.classList.remove('selected'));
+        
+        // Marca a opção selecionada
+        event.target.closest('.option-button').classList.add('selected');
+        
+        // Habilita o botão de próximo
+        document.getElementById('nextButton1').disabled = false;
+        
+        // Configura o botão próximo
+        document.getElementById('nextButton1').onclick = function() {
+            if (irParaResultado) {
+                window.location.href = construirUrlResultado();
+            } else if (valor === 'docente') {
+                document.getElementById('pergunta1').style.display = 'none';
+                document.getElementById('pergunta2b').style.display = 'block';
+                atualizarTituloPergunta(2, 'Qual formato de ação você trabalha?');
+            } else {
+                document.getElementById('pergunta1').style.display = 'none';
+                document.getElementById('pergunta2a').style.display = 'block';
+                atualizarTituloPergunta(2, 'Com qual tipo de recurso você trabalha?');
+            }
+        };
+    }
+    
+    function responderPergunta2a(valor, texto) {
+        respostas['tipo_recurso'] = {
+            valor: valor,
+            texto: texto
+        };
+        
+        // Desmarca todas as opções
+        const botoes = document.querySelectorAll('#pergunta2a .option-button');
+        botoes.forEach(botao => botao.classList.remove('selected'));
+        
+        // Marca a opção selecionada
+        event.target.closest('.option-button').classList.add('selected');
+        
+        // Habilita o botão de próximo
+        document.getElementById('nextButton2a').disabled = false;
+        
+        // Configura o botão próximo
+        document.getElementById('nextButton2a').onclick = function() {
+            window.location.href = construirUrlResultado();
+        };
+    }
+    
+    function responderPergunta2b(valor, texto) {
+        respostas['formato_acao'] = {
+            valor: valor,
+            texto: texto
+        };
+        
+        // Desmarca todas as opções
+        const botoes = document.querySelectorAll('#pergunta2b .option-button');
+        botoes.forEach(botao => botao.classList.remove('selected'));
+        
+        // Marca a opção selecionada
+        event.target.closest('.option-button').classList.add('selected');
+        
+        // Habilita o botão de próximo
+        document.getElementById('nextButton2b').disabled = false;
+        
+        // Configura o botão próximo
+        document.getElementById('nextButton2b').onclick = function() {
+            window.location.href = construirUrlResultado();
+        };
+    }
+    
+    function voltarPergunta1() {
+        document.getElementById('pergunta2a').style.display = 'none';
+        document.getElementById('pergunta2b').style.display = 'none';
+        document.getElementById('pergunta1').style.display = 'block';
+        atualizarTituloPergunta(1, 'O que você precisa?');
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        // Define o total de etapas do quiz
+        document.querySelector('.step-indicator #totalSteps').textContent = '2';
+    });
+</script>
+{% endblock %}
