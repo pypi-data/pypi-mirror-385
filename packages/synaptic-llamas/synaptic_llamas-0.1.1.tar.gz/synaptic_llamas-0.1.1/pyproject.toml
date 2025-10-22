@@ -1,0 +1,165 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "synaptic-llamas"
+version = "0.1.1"
+authors = [
+    {name = "BenevolentJoker-JohnL", email = "benevolentjoker@gmail.com"}
+]
+description = "Distributed Parallel AI Agent Orchestration with Intelligent Load Balancing - integrates with FlockParser for RAG and SOLLOL for distributed inference"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: System :: Distributed Computing",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Operating System :: OS Independent",
+]
+keywords = [
+    "ai",
+    "llm",
+    "distributed",
+    "orchestration",
+    "load-balancing",
+    "ollama",
+    "agents",
+    "flockparser",
+    "sollol",
+    "rag",
+    "multi-agent",
+]
+dependencies = [
+    "requests>=2.31.0",
+    "httpx>=0.24.0",
+    "ipaddress>=1.0.23",
+    "dask[distributed]>=2024.1.0",
+    "rich>=13.7.0",
+    "flask",
+    "flask-cors",
+    "flask-sock",
+    "waitress>=3.0.0",
+    "asyncio>=3.4.3",
+    "sollol>=0.9.31",
+    "flockparser>=1.0.4",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "mypy>=1.0.0",
+    "flake8>=6.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/BenevolentJoker-JohnL/SynapticLlamas"
+Documentation = "https://github.com/BenevolentJoker-JohnL/SynapticLlamas/blob/main/README.md"
+Repository = "https://github.com/BenevolentJoker-JohnL/SynapticLlamas"
+"Bug Tracker" = "https://github.com/BenevolentJoker-JohnL/SynapticLlamas/issues"
+
+[project.scripts]
+synaptic-llamas = "main:main"
+
+[tool.setuptools]
+packages = ["agents"]
+py-modules = [
+    "main",
+    "orchestrator",
+    "collaborative_workflow",
+    "json_pipeline",
+    "quality_assurance",
+    "aggregator",
+    "config",
+    "load_balancer",
+    "adaptive_strategy",
+    "input_validation",
+    "error_handling",
+    "sollol_adapter",
+    "benchmark",
+    "dask_executor",
+    "content_detector",
+    "node_cluster",
+    "network_utils",
+    "hybrid_router_sync",
+    "node_registry",
+    "json_to_markdown",
+    "flockparser_adapter",
+    "distributed_orchestrator",
+    "console_theme",
+    "ollama_node",
+    "trustcall",
+]
+
+[tool.setuptools.package-data]
+"*" = ["*.md", "*.yaml", "*.yml", "LICENSE"]
+
+[tool.black]
+line-length = 100
+target-version = ['py38', 'py39', 'py310', 'py311']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.venv
+  | venv
+  | build
+  | dist
+  | \.egg-info
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 100
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --cov=. --cov-report=html --cov-report=term-missing"
+
+[tool.coverage.run]
+omit = [
+    "tests/*",
+    "venv/*",
+    ".venv/*",
+    "examples/*"
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
