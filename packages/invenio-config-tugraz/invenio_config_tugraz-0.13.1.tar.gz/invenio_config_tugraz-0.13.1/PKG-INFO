@@ -1,0 +1,210 @@
+Metadata-Version: 2.4
+Name: invenio-config-tugraz
+Version: 0.13.1
+Summary: "Invenio module that adds tugraz configs."
+Home-page: https://github.com/tu-graz-library/invenio-config-tugraz
+Author: "Graz University of Technology"
+Author-email: info@tugraz.at
+License: MIT
+Keywords: invenio config TU-Graz
+Platform: any
+Classifier: Environment :: Web Environment
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Development Status :: 3 - Alpha
+Requires-Python: >=3.12
+License-File: LICENSE
+License-File: AUTHORS.rst
+Requires-Dist: invenio-cache>=1.1.1
+Requires-Dist: invenio-i18n>=2.0.0
+Requires-Dist: invenio-rdm-records<20.0.0,>=19.0.0
+Provides-Extra: tests
+Requires-Dist: invenio-app>=1.5.0; extra == "tests"
+Requires-Dist: invenio-search[opensearch2]>=2.1.0; extra == "tests"
+Requires-Dist: pytest-black>=0.6.0; extra == "tests"
+Requires-Dist: pytest-invenio>=2.1.0; extra == "tests"
+Requires-Dist: ruff>=0.5.3; extra == "tests"
+Requires-Dist: Sphinx>=4.5.0; extra == "tests"
+Dynamic: license-file
+
+..
+    Copyright (C) 2020-2021 Graz University of Technology.
+
+    invenio-config-tugraz is free software; you can redistribute it and/or
+    modify it under the terms of the MIT License; see LICENSE file for more
+    details.
+
+=======================
+ invenio-config-tugraz
+=======================
+
+.. image:: https://github.com/tu-graz-library/invenio-config-tugraz/workflows/CI/badge.svg
+        :target: https://github.com/tu-graz-library/invenio-config-tugraz/actions
+
+.. image:: https://img.shields.io/pypi/dm/invenio-config-tugraz.svg
+        :target: https://pypi.python.org/pypi/invenio-config-tugraz
+
+.. image:: https://img.shields.io/github/tag/tu-graz-library/invenio-config-tugraz.svg
+        :target: https://github.com/tu-graz-library/invenio-config-tugraz/releases
+
+.. image:: https://img.shields.io/github/license/tu-graz-library/invenio-config-tugraz.svg
+        :target: https://github.com/tu-graz-library/invenio-config-tugraz/blob/master/LICENSE
+
+.. image:: https://readthedocs.org/projects/invenio-config-tugraz/badge/?version=latest
+        :target: https://invenio-config-tugraz.readthedocs.io/en/latest/?badge=latest
+        
+.. image:: https://img.shields.io/coveralls/mb-wali/invenio-config-tugraz.svg
+        :target: https://coveralls.io/r/mb-wali/invenio-config-tugraz
+
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+        :target: https://github.com/psf/black
+
+invenio module that adds tugraz configs.
+
+Override configs from diffrent invenio modules to meet TU Graz requirement:
+
+* Invenio-App
+* Invenio-Mail
+* Invenio-shibboleth
+* Invenio-accounts
+* Flask-security
+* Defined routes for TUG
+
+Further documentation is available on
+https://invenio-config-tugraz.readthedocs.io/
+
+..
+    Copyright (C) 2020 - 2022 Graz University of Technology.
+    Copyright (C) 2025 Graz University of Technology.
+
+    invenio-config-tugraz is free software; you can redistribute it and/or
+    modify it under the terms of the MIT License; see LICENSE file for more
+    details.
+
+Changes
+=======
+
+Version v0.13.1 (released 2025-10-21)
+
+- fix(setup): pin for v13 dependencies
+- Revert "fix: sync policies' can_preview"
+- fix: sync policies' can_preview
+- fix: sync .can_draft_create_files with invenio-rdm
+- fix: allow absence of `.NEED_LABEL_TO_ACTION` attr
+- permission: add permissions for communities
+- fix: ruff PLC0415
+
+Version v0.13.0 (release 2025-06-16)
+
+- fix: changed permissions
+- global: upgrade rdm-records dep
+- chore: apply ruff updates
+- permission: add missing can_*
+- setup: relax upper pins
+
+
+Version v0.12.5 (release 2024-07-29)
+
+- fix: permission for ip
+
+
+Version v0.12.3 (release 2024-07-25)
+
+- fix(tugraz_authenticated): missmatch of role name
+
+
+Version v0.12.2 (release 2024-07-19)
+
+- setup: introduce ruff
+- perm: implement single-ip and ip-network
+- utils: add invenio_saml-compatible account-setup
+- add new permission-policy, add new role
+- fix deprecated `before_app_first_request`
+- setup: add support for python3.11 and 3.12
+
+
+Version v0.12.1 (release 2024-03-08)
+
+- setup: remove upper limit of rdm-records
+
+
+Version v0.12.0 (release 2023-11-10)
+
+- setup: remove python3.8 support
+- global: make it compatible with v12
+
+
+Version v0.11.0 (release 2023-04-20)
+
+- global: make package compatible with v11
+
+
+Version v0.10.4 (release 2023-02-10)
+
+
+
+
+Version v0.10.2 (release 2023-02-02)
+
+- change version name
+- footer: update guid
+
+
+Version v0.10.1 (release 2022-11-17)
+
+- global: add function
+
+Version 0.10.0 (released 2022-10-13)
+
+- global: migrate to v10 (#101)
+
+Version 0.9.1 (released 2022-05-30)
+
+- ci(publish): ping babel version (#99)
+
+Version 0.9.0 (released 2022-05-30)
+
+- config: adds new introduced configs v9
+- dep: compatible to v9 rdm
+- config: add deposit form quota variable (#91)
+- migrate setup py to cfg (#94)
+- fix: update email welcome template with SITE_UI_URL (#93)
+
+Version 0.8.4 (released 2022-03-11)
+
+- config: use gettext
+
+Version 0.8.3 (released 2022-03-10)
+
+- config: fix comment & import
+
+Version 0.8.2 (released 2022-03-03)
+
+- config: new introduced to v8 of invenioRDM
+
+Version 0.8.1 (released 2022-02-28)
+
+- config: set samesite cookie to strict
+- dep: bump in base dependencies
+
+Version 0.8.0 (released 2022-02-09)
+
+- dep: bump rdm-records version
+
+Version 0.7.1 (released 2021-12-07)
+
+- configs: adds new & changed configs for v7 #76
+
+Version 0.7.0 (released 2021-12-06)
+
+- fix: update blueprint reorder #74
+- dep: upgrade rdm-records version & OAI #72
+
+Version 0.1.0 (released TBD)
+
+- Initial public release.
