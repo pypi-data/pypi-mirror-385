@@ -1,0 +1,66 @@
+[project]
+name = "pypolestar"
+dynamic = ["version"]
+description = "Library to control Polestar"
+authors = [
+    { name= " Tuen Lee", email= "leeyuentuen@gmail.com" },
+    { name = "Jakob Schlyter", email = "jakob@kirei.se" }
+]
+license = "MIT"
+readme = "README.md"
+requires-python = ">=3.11,<4.0"
+dependencies = [
+    "gql[httpx]>=3.5.2",
+    "httpx>=0.28.1",
+]
+
+[project.urls]
+repository = "https://github.com/pypolestar/pypolestar"
+
+[project.scripts]
+polestar = "pypolestar.cli:main"
+
+[build-system]
+requires = ["hatchling", "uv-dynamic-versioning"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "uv-dynamic-versioning"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.uv-dynamic-versioning]
+pattern = "default-unprefixed"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.11.1",
+    "pytest>=8.3.5",
+    "pytest-ruff>=0.4.1",
+]
+
+[tool.ruff]
+line-length = 120
+required-version = ">=0.6.8"
+
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+]
+ignore = ["E501","SIM108","UP017"]
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+split-on-trailing-comma = false

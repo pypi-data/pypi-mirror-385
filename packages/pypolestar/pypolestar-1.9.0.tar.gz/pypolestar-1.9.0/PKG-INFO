@@ -1,0 +1,40 @@
+Metadata-Version: 2.4
+Name: pypolestar
+Version: 1.9.0
+Summary: Library to control Polestar
+Project-URL: repository, https://github.com/pypolestar/pypolestar
+Author-email:  Tuen Lee <leeyuentuen@gmail.com>, Jakob Schlyter <jakob@kirei.se>
+License-Expression: MIT
+License-File: LICENSE
+Requires-Python: <4.0,>=3.11
+Requires-Dist: gql[httpx]>=3.5.2
+Requires-Dist: httpx>=0.28.1
+Description-Content-Type: text/markdown
+
+# Python for Polestar
+
+This library is not affiliated with nor supported by [Polestar](https://www.polestar.com).
+
+
+## Data Models
+
+Data models for returned information are described in [`pypolestar/models.py`](pypolestar/models.py).
+
+
+## Example
+
+```python
+from pypolestar import PolestarApi
+
+api = PolestarApi(username=USERNAME, password=PASSWORD, vins=[VIN])
+
+# initialize API
+await api.async_init()
+
+# fetch latest telematics (contains both battery and odometer) for VIN
+await api.update_latest_data(vin=VIN, update_telematics=True)
+
+# get specific data for VIN
+car_information = api.get_car_information(vin=VIN)
+car_telematics = api.get_car_telematics(vin=VIN)
+```
