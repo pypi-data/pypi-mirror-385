@@ -1,0 +1,32 @@
+{
+  "manifest_version": 2,
+  "name": "MCPlaywright Test Addon",
+  "version": "1.0.0",
+  "description": "Test addon for MCPlaywright Firefox extension support",
+  "icons": {
+    "48": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Crect width='48' height='48' fill='%230f0'/%3E%3Ctext x='24' y='30' text-anchor='middle' font-size='24' fill='%23000'%3EMP%3C/text%3E%3C/svg%3E"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "browser_action": {
+    "default_title": "MCPlaywright Test",
+    "default_icon": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Crect width='48' height='48' fill='%230f0'/%3E%3Ctext x='24' y='30' text-anchor='middle' font-size='24' fill='%23000'%3EMP%3C/text%3E%3C/svg%3E"
+  },
+  "permissions": [
+    "activeTab"
+  ],
+  "applications": {
+    "gecko": {
+      "id": "mcplaywright-test@example.com",
+      "strict_min_version": "109.0"
+    }
+  }
+}

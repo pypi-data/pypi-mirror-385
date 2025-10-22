@@ -1,0 +1,46 @@
+services:
+  mcplaywright:
+    build: .
+    expose:
+      - "8000"
+    networks:
+      - caddy
+      - mcplaywright-internal
+    labels:
+      caddy: mcplaywright.${DOMAIN:-localhost}
+      caddy.reverse_proxy: "{{upstreams}}"
+    environment:
+      - DOMAIN=${DOMAIN:-localhost}
+      - STORAGE_BACKEND=${STORAGE_BACKEND:-sqlite}
+      - DEBUG_LEVEL=${DEBUG_LEVEL:-INFO}
+    volumes:
+      - ./artifacts:/app/artifacts
+      - ./data:/app/data
+    restart: unless-stopped
+
+  # Development service with hot-reload
+  mcplaywright-dev:
+    build:
+      context: .
+      target: dev
+    volumes:
+      - .:/app
+      - ./artifacts:/app/artifacts
+      - ./data:/app/data
+    networks:
+      - mcplaywright-internal
+    environment:
+      - STORAGE_BACKEND=sqlite
+      - DEBUG_LEVEL=DEBUG
+      - PYTHONPATH=/app/src
+    ports:
+      - "8000:8000"
+    command: ["uv", "run", "python", "-m", "mcplaywright.server", "--reload"]
+    profiles:
+      - dev
+
+networks:
+  caddy:
+    external: true
+  mcplaywright-internal:
+    internal: true
