@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gandol2-ocr"
+version = "0.0.4"
+description = "이미지를 시각적 경계 기준으로 안전하게 섹션 분리 & OCR (Korean, Chinese)"
+authors = [
+    {name = "gandol2", email = "sskim2333@gmail.com"}
+]
+readme = "README.md"
+license = {text = "MIT"}
+keywords = ["image", "section", "split", "opencv", "computer-vision"]
+requires-python = ">=3.9,<3.13"
+dependencies = [
+    "paddleocr>=3.2.0",    
+    "scipy>=1.13.1",
+    "matplotlib>=3.9.4",
+    "pandas>=2.3.3",
+    "opencv-python>=4.12.0.88",    
+]
+
+[project.optional-dependencies]
+gpu = [
+    "paddlepaddle-gpu==3.2.0",
+]
+
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.uv.sources]
+paddlepaddle-gpu = { index = "paddle" }
+
+[[tool.uv.index]]
+name = "paddle"
+url = "https://www.paddlepaddle.org.cn/packages/stable/cu126/"
+explicit = true
+
+
+
+[project.urls]
+Homepage = "https://github.com/gandol2/gandol2-ocr"
+Repository = "https://github.com/gandol2/gandol2-ocr"
+Documentation = "https://github.com/gandol2/gandol2-ocr#readme"
