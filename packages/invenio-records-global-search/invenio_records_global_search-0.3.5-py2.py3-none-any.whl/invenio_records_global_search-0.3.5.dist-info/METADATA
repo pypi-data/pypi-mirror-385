@@ -1,0 +1,141 @@
+Metadata-Version: 2.4
+Name: invenio-records-global-search
+Version: 0.3.5
+Summary: InvenioRDM module for the Dublin Core data model
+Home-page: https://github.com/tu-graz-library/invenio-records-global-search
+Author: TU Graz
+Author-email: 
+License: MIT
+Keywords: invenio rdm data model
+Platform: any
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.12
+License-File: LICENSE
+License-File: AUTHORS.rst
+Requires-Dist: invenio-records-resources>=4.11.3
+Requires-Dist: invenio-rdm-records>=19.0.0
+Requires-Dist: invenio-search-ui>=2.8.0
+Requires-Dist: invenio-indexer>=2.3.0
+Provides-Extra: tests
+Requires-Dist: invenio-app>=2.0.0; extra == "tests"
+Requires-Dist: invenio-search[opensearch2]<4.0.0,>=3.0.0; extra == "tests"
+Requires-Dist: pytest-black-ng>=0.4.0; extra == "tests"
+Requires-Dist: pytest-invenio<3.0.0,>=2.1.0; extra == "tests"
+Requires-Dist: ruff>=0.0.263; extra == "tests"
+Requires-Dist: sphinx>=4.5.0; extra == "tests"
+Dynamic: license-file
+
+..
+    Copyright (C) 2023 Graz University of Technology.
+
+    invenio-records-global-search is free software; you can redistribute it
+    and/or modify it under the terms of the MIT License; see LICENSE file for
+    more details.
+
+==============================
+ invenio-records-global-search
+==============================
+
+.. image:: https://github.com/tu-graz-library/invenio-records-global-search/workflows/CI/badge.svg
+        :target: https://github.com/tu-graz-library/invenio-records-global-search/actions?query=workflow%3ACI
+
+.. image:: https://img.shields.io/github/tag/tu-graz-library/invenio-records-global-search.svg
+        :target: https://github.com/tu-graz-library/invenio-records-global-search/releases
+
+.. image:: https://img.shields.io/pypi/dm/invenio-records-global-search.svg
+        :target: https://pypi.python.org/pypi/invenio-records-global-search
+
+.. image:: https://img.shields.io/github/license/tu-graz-library/invenio-records-global-search.svg
+        :target: https://github.com/tu-graz-library/invenio-records-global-search/blob/master/LICENSE
+
+Dublin Core data model for InvenioRDM
+
+Further documentation is available on
+https://invenio-records-global-search.readthedocs.io/
+
+Tests
+-----
+
+.. code-block:: console
+
+    pipenv run ./run-tests.sh
+
+..
+    Copyright (C) 2023-2025 Graz University of Technology.
+
+    invenio-records-global-search is free software; you can redistribute it
+    and/or modify it under the terms of the MIT License; see LICENSE file for
+    more details.
+
+Changes
+=======
+
+Version v0.3.5 (released 2025-10-21)
+
+- search: workaround for version search bug
+- search: fix for default app-rdm queries
+
+Version v0.3.4 (release 2025-05-15)
+
+- fix: setuptools require underscores instead of dashes
+- refactor: additional removed in marshmallow>=4
+- fix: naming of parameter
+
+
+Version v0.3.3 (release 2025-01-24)
+
+- setup: update ruff configuration
+
+
+Version v0.3.2 (release 2024-11-14)
+
+- fix: strip html tags
+
+
+Version v0.3.1 (release 2024-07-11)
+
+- fix: indexer_cls shared with rdm-records
+
+
+
+Version v0.3.0 (release 2024-06-12)
+
+- global: rely on finalize_app
+- schema: allow empty rights.
+  the license setting is not mondatory on the different datamodels
+  therefore it can't be required on the global search
+
+
+
+Version v0.2.3 (release 2024-02-14)
+
+- search: change to rdm multi style
+- fix: update should be allowed
+- ruff: fix noqa v0.1.14
+
+
+Version v0.2.2 (release 2024-01-07)
+
+- fix: add missing permission
+
+
+Version v0.2.1 (release 2023-11-23)
+
+- translations: update
+- facets: implement better wording for datamodel
+
+
+Version v0.2.0 (release 2023-11-09)
+
+
+
+
+Version v0.1.0 (release 2023-11-09)
+
+
+
