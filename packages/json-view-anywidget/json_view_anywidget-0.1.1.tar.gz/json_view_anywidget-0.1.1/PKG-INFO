@@ -1,0 +1,124 @@
+Metadata-Version: 2.4
+Name: json-view-anywidget
+Version: 0.1.1
+Summary: Interactive JSON viewer widget for Jupyter notebooks using React JSON View
+Project-URL: Homepage, https://github.com/bigeagle/anywidget-react-json-view
+Project-URL: Repository, https://github.com/bigeagle/anywidget-react-json-view
+Project-URL: Issues, https://github.com/bigeagle/anywidget-react-json-view/issues
+Author-email: Justin Wong <justin.w.xd@gmail.com>
+License: MIT
+Keywords: anywidget,json,jupyter,notebook,react,widget
+Requires-Python: >=3.7
+Requires-Dist: anywidget>=0.9.0
+Description-Content-Type: text/markdown
+
+# JSON View AnyWidget
+
+An interactive JSON viewer widget for Jupyter notebooks using React JSON View.
+
+## Features
+
+- 🔍 Interactive JSON tree view with expand/collapse
+- 🎨 Multiple theme support (monokai, solarized, etc.)
+- 🎯 Support Jupyter notebooks and marimo
+- 📝 Support Multi-line strings
+
+## Installation
+
+### From PyPI (Recommended)
+
+```bash
+pip install json-view-anywidget
+```
+
+### Using uv
+
+```bash
+uv pip install json-view-anywidget
+```
+
+### From Source
+
+```bash
+git clone https://github.com/bigeagle/anywidget-react-json-view.git
+cd anywidget-react-json-view
+uv pip install -e .
+```
+
+## Quick Start
+
+```python
+from rjv_anywidget import JsonWidget
+
+# Create a simple JSON viewer
+widget = JsonWidget({
+    "name": "John",
+    "age": 30,
+    "city": "New York"
+})
+widget
+```
+
+## Advanced Usage
+
+```python
+# Use different themes
+widget = JsonWidget(
+    data=your_data,
+    theme="monokai"  # Available themes: "rjv-default", "monokai", "solarized", etc.
+)
+
+# Display in Jupyter
+widget
+```
+
+## Development
+
+### Frontend Development
+
+```bash
+# Install dependencies
+pnpm install
+
+# Development mode (with hot reload)
+pnpm run dev
+
+# Build for production
+pnpm run build
+```
+
+### Python Package Development
+
+```bash
+# Build package
+uv build
+
+# Install locally for testing
+uv pip install -e .
+```
+
+## Project Structure
+
+```
+.
+├── src/
+│   ├── widget.tsx          # React component source
+│   ├── index.css           # Component styles
+│   └── rjv_anywidget/      # Python package
+│       ├── __init__.py
+│       ├── widget.py       # JsonWidget class
+│       └── static/         # React build output
+├── pyproject.toml          # Python package configuration
+├── package.json            # Frontend build configuration
+└── dist/                   # Build outputs
+```
+
+## License
+
+MIT License
+
+## Related Links
+
+- [AnyWidget](https://github.com/manzt/anywidget)
+- [AnyWidget React Demo](https://github.com/wangqianwen0418/anywidget_react_demo)
+- [React JSON View](https://github.com/mac-s-g/react-json-view)
