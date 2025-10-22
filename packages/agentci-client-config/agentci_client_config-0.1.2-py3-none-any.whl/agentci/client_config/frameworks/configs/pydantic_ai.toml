@@ -1,0 +1,16 @@
+[framework]
+name = "pydantic-ai"
+dependencies = ["pydantic-ai", "pydantic_ai"]
+
+[[agents]]
+path = "pydantic_ai.Agent"
+args.model = "model"
+args.prompt = "system_prompt"
+args.tools = "tools"
+execution.method = "run"
+execution.args.prompt = "user_prompt"
+
+[[tools]]
+type = "function"
+execution.method = "__call__"
+

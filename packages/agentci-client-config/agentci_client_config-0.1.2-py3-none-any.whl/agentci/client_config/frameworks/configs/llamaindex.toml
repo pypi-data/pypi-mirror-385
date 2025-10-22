@@ -1,0 +1,37 @@
+[framework]
+name = "llamaindex"
+dependencies = ["llama-index", "llama-index-core", "llama_index"]
+
+# Agent Discovery + Execution
+
+# FunctionAgent (recommended workflow-based agent)
+[[agents]]
+path = "llama_index.core.agent.workflow.FunctionAgent"
+type = "constructor"
+args.model = "llm"
+args.prompt = "system_prompt"
+args.tools = "tools"
+execution.method = "run"
+execution.args.prompt = "user_msg"
+
+# ReActAgent.from_tools (alternative reasoning agent)
+[[agents]]
+path = "llama_index.core.agent.ReActAgent.from_tools"
+type = "class_method"
+args.model = "llm"
+args.tools = "tools"
+execution.method = "chat"
+execution.args.prompt = "message"
+
+# Tool Discovery + Execution
+
+# FunctionTool.from_defaults (primary tool pattern)
+[[tools]]
+type = "constructor"
+path = "llama_index.core.tools.FunctionTool.from_defaults"
+execution.method = "__call__"
+
+# Plain functions used directly in agents
+[[tools]]
+type = "function"
+execution.method = "__call__"
