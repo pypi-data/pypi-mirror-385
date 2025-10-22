@@ -1,0 +1,485 @@
+Metadata-Version: 2.3
+Name: donkit-ragops-ce
+Version: 0.2.0
+Summary: Community Edition CLI agent for building RAG pipelines
+License: MIT
+Author: Donkit AI
+Author-email: opensource@donkit.ai
+Requires-Python: >=3.12,<4.0
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Requires-Dist: donkit-chunker (>=0.1.2,<0.2.0)
+Requires-Dist: donkit-embeddings (>=0.1.0,<0.2.0)
+Requires-Dist: donkit-read-engine (>=0.1.1,<0.2.0)
+Requires-Dist: donkit-vectorstore-loader (>=0.1.2,<0.2.0)
+Requires-Dist: google-genai (>=1.38.0,<2.0.0)
+Requires-Dist: httpx (>=0.28.1,<0.29.0)
+Requires-Dist: langchain (>=0.3.27,<0.4.0)
+Requires-Dist: langchain-community (>=0.3.31,<0.4.0)
+Requires-Dist: langchain-openai (>=0.3.35,<0.4.0)
+Requires-Dist: loguru (>=0.7.3,<0.8.0)
+Requires-Dist: mcp[cli] (>=1.14.0,<2.0.0)
+Requires-Dist: pydantic (>=2.7.4,<3.0.0)
+Requires-Dist: pydantic-settings (>=2.6.1,<3.0.0)
+Requires-Dist: python-dotenv (>=1.0.1,<2.0.0)
+Requires-Dist: rich (>=13.7.1,<14.0.0)
+Requires-Dist: sqlmodel (>=0.0.16,<0.0.17)
+Requires-Dist: typer (>=0.17.4,<0.18.0)
+Description-Content-Type: text/markdown
+
+# RagOps Agent CE (Community Edition)
+
+[![PyPI version](https://badge.fury.io/py/donkit-ragops-ce.svg)](https://badge.fury.io/py/donkit-ragops-ce)
+[![Python 3.12+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+An LLM-powered CLI agent that automates the creation and maintenance of Retrieval-Augmented Generation (RAG) pipelines. The agent orchestrates built-in tools and Model Context Protocol (MCP) servers to plan, chunk, and load documents into vector stores.
+
+Built by [Donkit AI](https://donkit.ai) - Open Source RAG Infrastructure.
+
+## Key Features
+
+* **Interactive REPL** — Start an interactive session with readline history and autocompletion
+* **Checklist-driven workflow** — The agent creates project checklists, asks for approval before each step, and tracks progress
+* **Multi-language support** — Automatically detects and responds in the user's language
+* **Session-scoped checklists** — Only current session checklists appear in the UI
+* **Integrated MCP servers** — Built-in support for planning, chunking, and vector loading
+* **Docker Compose orchestration** — Automated deployment of RAG infrastructure (Qdrant, RAG service)
+* **Multiple LLM providers** — Supports Vertex AI, OpenAI, Azure OpenAI, Anthropic Claude, Ollama
+
+## Installation
+
+### Option A: Using pip
+
+```bash
+pip install donkit-ragops-ce
+```
+
+### Option B: Using Poetry (Recommended for Python 3.12+)
+
+```bash
+# Create a new project directory
+mkdir ~/ragops-workspace
+cd ~/ragops-workspace
+
+# Initialize Poetry project
+poetry init --no-interaction --python="^3.13"
+
+# Add donkit-ragops-ce
+poetry add donkit-ragops-ce
+
+# Activate the virtual environment
+poetry shell
+```
+
+After activation, you can run the agent with:
+```bash
+donkit-ragops-ce
+```
+
+Or run directly without activating the shell:
+```bash
+poetry run donkit-ragops-ce
+```
+
+## Quick Start
+
+### Prerequisites
+
+- **Python 3.12+** installed
+- **Docker Desktop** installed and running (required for vector database)
+- API key for your chosen LLM provider (Vertex AI, OpenAI, or Anthropic)
+
+### Step 1: Install the package
+
+```bash
+pip install donkit-ragops-ce
+```
+
+### Step 2: Create a working directory
+
+Create a directory where you'll run the agent. This is where project files and configurations will be stored.
+
+```bash
+mkdir ~/ragops-workspace
+cd ~/ragops-workspace
+```
+
+### Step 3: Configure your LLM provider
+
+Create a `.env` file **in the current directory** (`~/ragops-workspace/.env`):
+
+**Option A: Vertex AI (Google Cloud)**
+```bash
+RAGOPS_LLM_PROVIDER=vertexai
+RAGOPS_VERTEX_CREDENTIALS=/Users/yourname/Downloads/your-service-account-key.json
+```
+
+**Option B: OpenAI**
+```bash
+RAGOPS_LLM_PROVIDER=openai
+RAGOPS_OPENAI_API_KEY=sk-proj-abc123...
+```
+
+**Option C: Anthropic Claude**
+```bash
+RAGOPS_LLM_PROVIDER=anthropic
+RAGOPS_ANTHROPIC_API_KEY=sk-ant-abc123...
+```
+
+> **Tip:** Use `nano .env` or `vim .env` to create the file from terminal, or create it with any text editor.
+
+### Step 4: Start the agent
+
+From the same directory where you created `.env`:
+
+```bash
+donkit-ragops-ce
+```
+
+### Step 5: Tell the agent what to do
+
+Example:
+```
+you> Create a RAG pipeline for my documents in /Users/myname/Documents/work_docs
+```
+
+The agent will:
+- ✅ Create a `projects/<project_id>/` directory
+- ✅ Plan RAG configuration
+- ✅ Process and chunk your documents
+- ✅ Start Qdrant vector database (via Docker)
+- ✅ Load data into the vector store
+- ✅ Deploy RAG query service
+
+### Directory structure after running
+
+```
+~/ragops-workspace/
+├── .env                          # Your configuration
+└── projects/
+    └── my-project-abc123/        # Auto-created by agent
+        ├── compose/              # Docker Compose files
+        │   ├── docker-compose.yml
+        │   └── .env
+        ├── chunks/               # Processed document chunks
+        └── rag_config.json       # RAG configuration
+```
+
+### Troubleshooting
+
+**"Docker is not running"**
+- Start Docker Desktop and wait until it's fully running
+- Try: `docker ps` to verify Docker is working
+
+**"API key not found"**
+- Make sure `.env` file is in the directory where you run `donkit-ragops-ce`
+- Check that variable names are correct (no spaces around `=`)
+
+**"Module not found"**
+- Reinstall: `pip install --upgrade donkit-ragops-ce`
+
+## Usage
+
+> **Note:** The command `ragops-agent` is also available as an alias for backward compatibility.
+> 
+> The agent starts in interactive REPL mode by default. Use subcommands like `ping` for specific actions.
+
+### Interactive Mode (REPL)
+
+```bash
+# Start interactive session
+donkit-ragops-ce
+
+# With specific provider
+donkit-ragops-ce -p vertexai
+
+# With custom model
+donkit-ragops-ce -p openai -m gpt-4
+```
+
+### Command-line Options
+
+- `-p, --provider` — Override LLM provider from settings
+- `-m, --model` — Specify model name
+- `-s, --system` — Custom system prompt
+- `--show-checklist/--no-checklist` — Toggle checklist panel (default: shown)
+- `--mcp-command` — Add custom MCP server (can be used multiple times)
+
+### Subcommands
+
+```bash
+# Health check
+donkit-ragops-ce ping
+```
+
+### Environment Variables
+
+- `RAGOPS_LLM_PROVIDER` — LLM provider name
+- `RAGOPS_LOG_LEVEL` — Logging level (default: INFO)
+- `RAGOPS_MCP_COMMANDS` — Comma-separated list of MCP commands
+- `RAGOPS_VERTEX_CREDENTIALS` — Path to Vertex AI service account JSON
+- `RAGOPS_OPENAI_API_KEY` — OpenAI API key
+- `RAGOPS_ANTHROPIC_API_KEY` — Anthropic API key
+- `RAGOPS_OLLAMA_BASE_URL` — Ollama server URL
+
+## Agent Workflow
+
+The agent follows a structured workflow:
+
+1. **Language Detection** — Detects user's language from first message
+2. **Project Creation** — Creates project directory structure
+3. **Checklist Creation** — Generates task checklist in user's language
+4. **Step-by-Step Execution**:
+   - Asks for permission before each step
+   - Marks item as `in_progress`
+   - Executes the task using appropriate MCP tool
+   - Reports results
+   - Marks item as `completed`
+5. **Deployment** — Sets up Docker Compose infrastructure
+6. **Data Loading** — Loads documents into vector store
+
+## MCP Servers
+
+RagOps Agent CE includes built-in MCP servers:
+
+### `ragops-rag-planner`
+
+Plans RAG pipeline configuration based on requirements.
+
+```bash
+# Example usage
+donkit-ragops-ce --mcp-command "ragops-rag-planner"
+```
+
+**Tools:**
+- `plan_rag_config` — Generate RAG configuration from requirements
+
+### `ragops-chunker`
+
+Chunks documents for vector storage.
+
+```bash
+# Example usage
+donkit-ragops-ce --mcp-command "ragops-chunker"
+```
+
+**Tools:**
+- `chunk_documents` — Split documents into chunks with configurable strategies
+- `list_chunked_files` — List processed chunk files
+
+### `ragops-vectorstore-loader`
+
+Loads chunks into vector databases.
+
+```bash
+# Example usage
+donkit-ragops-ce --mcp-command "ragops-vectorstore-loader"
+```
+
+**Tools:**
+- `vectorstore_load` — Load documents into Qdrant, Chroma, or Milvus
+- `delete_from_vectorstore` — Remove documents from vector store
+
+### `ragops-compose-manager`
+
+Manages Docker Compose infrastructure.
+
+```bash
+# Example usage
+donkit-ragops-ce --mcp-command "ragops-compose-manager"
+```
+
+**Tools:**
+- `init_project_compose` — Initialize Docker Compose for project
+- `compose_up` — Start services
+- `compose_down` — Stop services
+- `compose_status` — Check service status
+- `compose_logs` — View service logs
+
+### `ragops-checklist`
+
+Manages project checklists and progress tracking.
+
+**Tools:**
+- `create_checklist` — Create new checklist
+- `get_checklist` — Get current checklist
+- `update_checklist_item` — Update item status
+
+## Examples
+
+### Basic RAG Pipeline
+
+```bash
+donkit-ragops-ce
+```
+
+```
+you> Create a RAG pipeline for customer support docs in ./docs folder
+```
+
+The agent will:
+1. Create project structure
+2. Plan RAG configuration
+3. Chunk documents from `./docs`
+4. Set up Qdrant + RAG service
+5. Load data into vector store
+
+### Custom Configuration
+
+```bash
+donkit-ragops-ce -p vertexai -m gemini-1.5-pro
+```
+
+```
+you> Build RAG for legal documents with 1000 token chunks and reranking
+```
+
+### Multiple Projects
+
+Each project gets its own:
+- Project directory (`projects/<project_id>`)
+- Docker Compose setup
+- Vector store collection
+- Configuration
+
+## Development
+
+### Project Structure
+
+```
+donkit-ragops-ce/
+├── src/ragops_agent_ce/
+│   ├── agent/          # LLM agent core
+│   ├── llm/            # LLM provider integrations
+│   ├── mcp/            # MCP servers and client
+│   │   └── servers/    # Built-in MCP servers
+│   ├── cli.py          # CLI commands
+│   └── config.py       # Configuration
+├── tests/
+└── pyproject.toml
+```
+
+### Running Tests
+
+```bash
+poetry run pytest
+```
+
+### Code Quality
+
+```bash
+# Format code
+poetry run ruff format .
+
+# Lint code
+poetry run ruff check .
+```
+
+## Docker Compose Services
+
+The agent can deploy these services:
+
+### Qdrant (Vector Database)
+
+```yaml
+services:
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+```
+
+### RAG Service
+
+```yaml
+services:
+  rag-service:
+    image: donkit/rag-service:latest
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URI=http://qdrant:6333
+      - CONFIG=<base64-encoded-config>
+```
+
+## Architecture
+
+```
+┌─────────────────┐
+│  RagOps Agent   │
+│     (CLI)       │
+└────────┬────────┘
+         │
+         ├── MCP Servers ───────────────┐
+         │   ├── ragops-rag-planner     │
+         │   ├── ragops-chunker         │
+         │   ├── ragops-vectorstore     │
+         │   └── ragops-compose         │
+         │                              │
+         └── LLM Providers ─────────────┤
+             ├── Vertex AI              │
+             ├── OpenAI                 │
+             ├── Anthropic              │
+             └── Ollama                 │
+                                        │
+                                        ▼
+                            ┌──────────────────┐
+                            │ Docker Compose   │
+                            ├──────────────────┤
+                            │ • Qdrant         │
+                            │ • RAG Service    │
+                            └──────────────────┘
+```
+
+## Troubleshooting
+
+### MCP Server Connection Issues
+
+If MCP servers fail to start:
+
+```bash
+# Check MCP server logs
+RAGOPS_LOG_LEVEL=DEBUG donkit-ragops-ce
+```
+
+### Vector Store Connection
+
+Ensure Docker services are running:
+
+```bash
+cd projects/<project_id>
+docker-compose ps
+docker-compose logs qdrant
+```
+
+### Credentials Issues
+
+Verify your credentials:
+
+```bash
+# Vertex AI
+gcloud auth application-default print-access-token
+
+# OpenAI
+echo $RAGOPS_OPENAI_API_KEY
+```
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+
+## Related Projects
+
+- [donkit-chunker](https://pypi.org/project/donkit-chunker/) — Document chunking library
+- [donkit-vectorstore-loader](https://pypi.org/project/donkit-vectorstore-loader/) — Vector store loading utilities
+- [donkit-read-engine](https://pypi.org/project/donkit-read-engine/) — Document parsing engine
+
+---
+
+Built with ❤️ by [Donkit AI](https://donkit.ai)
+
