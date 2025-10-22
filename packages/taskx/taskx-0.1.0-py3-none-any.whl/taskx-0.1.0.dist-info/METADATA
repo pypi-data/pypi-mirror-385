@@ -1,0 +1,488 @@
+Metadata-Version: 2.4
+Name: taskx
+Version: 0.1.0
+Summary: Modern Python task runner - npm scripts for Python
+Project-URL: Homepage, https://github.com/vipin08/taskx
+Project-URL: Repository, https://github.com/vipin08/taskx
+Project-URL: Bug Tracker, https://github.com/vipin08/taskx/issues
+Author: taskx Project
+License: Proprietary - See LICENSE file
+License-File: LICENSE
+Keywords: automation,build tool,cli,make,npm scripts,python,task runner,workflow
+Classifier: Development Status :: 3 - Alpha
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: License :: Other/Proprietary License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Software Development :: Build Tools
+Classifier: Topic :: System :: Systems Administration
+Requires-Python: >=3.8
+Requires-Dist: click>=8.0.0
+Requires-Dist: python-dotenv>=1.0.0
+Requires-Dist: questionary>=2.0.0
+Requires-Dist: rich>=13.0.0
+Requires-Dist: tomli>=2.0.0; python_version < '3.11'
+Requires-Dist: watchfiles>=0.18.0
+Provides-Extra: dev
+Requires-Dist: black>=23.0.0; extra == 'dev'
+Requires-Dist: isort>=5.12.0; extra == 'dev'
+Requires-Dist: mypy>=1.0.0; extra == 'dev'
+Requires-Dist: pre-commit>=3.0.0; extra == 'dev'
+Requires-Dist: pytest-asyncio>=0.21.0; extra == 'dev'
+Requires-Dist: pytest-cov>=4.0.0; extra == 'dev'
+Requires-Dist: pytest-timeout>=2.1.0; extra == 'dev'
+Requires-Dist: pytest>=7.0.0; extra == 'dev'
+Requires-Dist: ruff>=0.1.0; extra == 'dev'
+Requires-Dist: types-setuptools; extra == 'dev'
+Description-Content-Type: text/markdown
+
+# taskx - Modern Python Task Runner
+
+> npm scripts for Python. Task automation that just works.
+
+[![PyPI](https://img.shields.io/pypi/v/taskx.svg)](https://pypi.org/project/taskx/)
+[![Python](https://img.shields.io/pypi/pyversions/taskx.svg)](https://pypi.org/project/taskx/)
+[![License](https://img.shields.io/badge/license-Proprietary-red.svg)](https://github.com/vipin08/taskx/blob/main/LICENSE)
+[![Tests](https://github.com/vipin08/taskx/workflows/tests/badge.svg)](https://github.com/vipin08/taskx/actions)
+
+---
+
+## ✨ Why taskx?
+
+Stop fighting with Makefiles. taskx brings the simplicity of npm scripts to Python with the power you actually need.
+
+```toml
+# pyproject.toml
+[tool.taskx.tasks]
+test = "pytest tests/"
+dev = "uvicorn app:app --reload"
+lint = "ruff check ."
+
+deploy = {
+    depends = ["lint", "test", "build"],
+    cmd = "twine upload dist/*"
+}
+```
+
+```bash
+$ taskx list
+Available tasks:
+  test       Run test suite
+  dev        Start development server
+  lint       Run linting
+  deploy     Deploy to PyPI
+
+$ taskx deploy
+→ Running: lint
+✓ Completed: lint (1.2s)
+→ Running: test
+✓ Completed: test (3.4s)
+→ Running: build
+✓ Completed: build (2.1s)
+→ Running: deploy
+✓ Completed: deploy (0.8s)
+```
+
+---
+
+## 🚀 Quick Start
+
+### Installation
+
+```bash
+pip install taskx
+```
+
+**Requirements**: Python 3.8 or higher
+
+### Verify Installation
+
+```bash
+$ taskx --version
+taskx version 0.1.0
+```
+
+### Initialize
+
+```bash
+$ taskx init
+✓ Created pyproject.toml with example tasks
+```
+
+### Define Tasks
+
+Add tasks to your `pyproject.toml`:
+
+```toml
+[tool.taskx.tasks]
+hello = "echo 'Hello from taskx!'"
+test = "pytest"
+dev = "python manage.py runserver"
+```
+
+### Run Tasks
+
+```bash
+$ taskx hello
+Hello from taskx!
+
+$ taskx test
+===== test session starts =====
+...
+```
+
+---
+
+## 🎯 Features
+
+### ✅ Python-Native
+- Uses `pyproject.toml` (Python standard)
+- Integrates with Poetry, Hatch, PDM
+- No new config files needed
+
+### ✅ Cross-Platform
+- **Perfect Windows support** (no Make headaches!)
+- Works on macOS, Linux, Windows
+- Consistent behavior everywhere
+
+### ✅ Task Dependencies
+```toml
+[tool.taskx.tasks]
+lint = "ruff check ."
+test = "pytest"
+deploy = { depends = ["lint", "test"], cmd = "python deploy.py" }
+```
+
+### ✅ Parallel Execution
+```toml
+[tool.taskx.tasks]
+check = {
+    parallel = ["ruff check", "mypy .", "pytest --quick"],
+    description = "Run all checks in parallel"
+}
+```
+**3-4x faster** than running sequentially!
+
+### ✅ Environment Variables
+```toml
+[tool.taskx.env]
+APP_NAME = "myapp"
+PORT = "8000"
+
+[tool.taskx.tasks]
+dev = "uvicorn ${APP_NAME}:app --port ${PORT}"
+prod = { cmd = "uvicorn ${APP_NAME}:app", env = { PORT = "80" } }
+```
+
+### ✅ Hooks & Watch Mode
+```toml
+[tool.taskx.tasks]
+test = { cmd = "pytest", pre = "echo 'Starting tests...'", post = "coverage report" }
+
+dev = { cmd = "uvicorn app:app --reload", watch = ["**/*.py"] }
+```
+
+Run watch mode:
+```bash
+$ taskx watch dev
+👀 Watching for changes...
+▶ Running initial execution...
+✓ Initial execution completed
+
+📝 Detected 1 change(s):
+   → src/app.py
+▶ Re-running task 'dev'...
+✓ Execution completed successfully
+```
+
+### ✅ Beautiful Output
+- Color-coded task status
+- Progress bars for parallel tasks
+- Helpful error messages
+- Time tracking
+
+---
+
+## 📊 Comparison
+
+| Feature | taskx | Make | Poetry Scripts | Invoke | Taskipy |
+|---------|-------|------|---------------|--------|---------|
+| Python-native | ✅ | ❌ | ✅ | ✅ | ✅ |
+| Easy syntax | ✅ | ❌ | ✅ | ⚠️ | ✅ |
+| Cross-platform | ✅ | ⚠️ | ✅ | ✅ | ✅ |
+| Task dependencies | ✅ | ✅ | ❌ | ✅ | ❌ |
+| Parallel execution | ✅ | ✅ | ❌ | ✅ | ❌ |
+| Environment vars | ✅ | ✅ | ❌ | ✅ | ❌ |
+| Watch mode | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Dependency graphs | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Pre/post hooks | ✅ | ⚠️ | ❌ | ✅ | ⚠️ |
+| Security focused | ✅ | ❌ | ❌ | ❌ | ❌ |
+
+**Legend**: ✅ Full support | ⚠️ Partial support | ❌ Not supported
+
+---
+
+## 🎓 Examples
+
+### Django Project
+```toml
+[tool.taskx.tasks]
+dev = "python manage.py runserver"
+migrate = "python manage.py migrate"
+shell = "python manage.py shell"
+test = "pytest"
+lint = { parallel = ["ruff check .", "mypy ."] }
+```
+
+### Data Science Project
+```toml
+[tool.taskx.tasks]
+notebook = "jupyter lab"
+train = "python train_model.py"
+evaluate = "python evaluate.py"
+deploy = { depends = ["test", "evaluate"], cmd = "python deploy.py" }
+```
+
+### FastAPI Application
+```toml
+[tool.taskx.env]
+APP_MODULE = "app.main:app"
+
+[tool.taskx.tasks]
+dev = "uvicorn ${APP_MODULE} --reload"
+prod = { cmd = "uvicorn ${APP_MODULE}", env = { WORKERS = "4" } }
+test = "pytest tests/ -v"
+```
+
+More examples in [`examples/`](./examples) directory.
+
+---
+
+## 📚 Documentation
+
+### Commands
+
+- **`taskx list`** - List all available tasks with descriptions and dependencies
+- **`taskx <task>`** - Run a specific task (with automatic dependency resolution)
+- **`taskx run <task>`** - Explicit task execution
+- **`taskx watch <task>`** - Watch files and auto-restart task on changes
+- **`taskx graph`** - Visualize task dependencies (supports tree, mermaid, dot formats)
+- **`taskx init`** - Initialize taskx configuration in your project
+- **`taskx --version`** - Show version information
+- **`taskx --help`** - Show help for all commands
+
+### Graph Visualization
+
+```bash
+# Show ASCII tree of all tasks
+$ taskx graph
+
+# Show dependencies for specific task
+$ taskx graph --task deploy
+
+# Export as Mermaid diagram
+$ taskx graph --format mermaid > tasks.mmd
+
+# Export as Graphviz DOT
+$ taskx graph --format dot > tasks.dot | dot -Tpng -o tasks.png
+```
+
+### Configuration Reference
+
+#### Basic Task
+```toml
+[tool.taskx.tasks]
+hello = "echo 'Hello!'"
+```
+
+#### Task with Description
+```toml
+[tool.taskx.tasks]
+test = { cmd = "pytest", description = "Run test suite" }
+```
+
+#### Task with Dependencies
+```toml
+[tool.taskx.tasks]
+deploy = { depends = ["lint", "test"], cmd = "deploy.sh" }
+```
+
+#### Parallel Tasks
+```toml
+[tool.taskx.tasks]
+check = { parallel = ["ruff", "mypy", "pytest"] }
+```
+
+#### Task with Environment Variables
+```toml
+[tool.taskx.tasks]
+prod = { cmd = "uvicorn app:app", env = { PORT = "80", WORKERS = "4" } }
+```
+
+#### Task with Hooks
+```toml
+[tool.taskx.tasks]
+test = "pytest"
+test.pre = "echo 'Starting...'"
+test.post = "coverage report"
+test.on_error = "notify-send 'Tests failed!'"
+```
+
+#### Watch Mode
+```toml
+[tool.taskx.tasks]
+dev = { cmd = "uvicorn app:app", watch = ["**/*.py"] }
+```
+
+Full documentation: **[GitHub Repository](https://github.com/vipin08/taskx)**
+
+---
+
+## 🛣️ Roadmap
+
+### v0.1.0 (Current Release) ✅
+- [x] Core task execution with dependencies
+- [x] Parallel task execution
+- [x] Watch mode with file monitoring
+- [x] Environment variable support
+- [x] Lifecycle hooks (pre/post/error/success)
+- [x] Dependency graph visualization
+- [x] Multi-layer security validation
+- [x] Beautiful terminal output
+- [x] Cross-platform support
+
+### v0.2.0 (Planned)
+- [ ] Interactive prompts and confirmations
+- [ ] Shell completion scripts (bash, zsh, fish)
+- [ ] Task aliases
+- [ ] Task caching (skip unchanged)
+- [ ] Remote task execution
+- [ ] Plugin system
+- [ ] Enhanced error recovery
+
+See [FINAL_SUMMARY.md](./FINAL_SUMMARY.md) for complete implementation details.
+
+---
+
+## 🤝 Contributing
+
+We love contributions! Check out our [Contributing Guide](./CONTRIBUTING.md).
+
+### Quick Links
+- [Code of Conduct](./CODE_OF_CONDUCT.md)
+- [Development Setup](./docs/development.md)
+- [Architecture](./ARCHITECTURE.md)
+- [Testing Guide](./docs/testing.md)
+
+### Ways to Contribute
+- 🐛 Report bugs
+- 💡 Suggest features
+- 📝 Improve documentation
+- 🔧 Submit pull requests
+- ⭐ Star the project!
+
+---
+
+## 🙋 FAQ
+
+### Why not just use Make?
+- Make syntax is complex and error-prone (tabs!)
+- Poor Windows support
+- Not Python-native
+- taskx is simpler and more powerful
+
+### Why not Poetry scripts?
+- Poetry scripts are too basic (no dependencies, parallelization)
+- taskx is complementary - use Poetry for deps, taskx for tasks
+
+### Why not Invoke?
+- Invoke requires writing Python code for simple tasks
+- taskx uses declarative config (faster, simpler)
+- Use Invoke for complex logic, taskx for 90% of tasks
+
+### Can I use taskx with Poetry/Hatch/PDM?
+- Yes! taskx reads `pyproject.toml` and works with all tools
+
+### Does it work on Windows?
+- **Yes!** Cross-platform support designed from day one
+- Works on Windows, macOS, and Linux
+
+### How fast is it?
+- <100ms startup time
+- Parallel execution for independent tasks
+- Efficient file watching with Rust-based watchfiles library
+
+### Is it secure?
+- **Yes!** Multi-layer security validation
+- Prevents command injection attacks
+- Blocks dangerous patterns (rm -rf /, fork bombs, etc.)
+- Proper environment variable escaping
+- Optional strict mode for production
+
+---
+
+## 📄 License
+
+**Proprietary License** - taskx is free to use but comes with restrictions.
+
+### What You CAN Do:
+- ✅ **Use taskx freely** for personal or commercial projects
+- ✅ **Install and run** taskx without limitations
+- ✅ **View the source code** for reference and learning
+
+### What You CANNOT Do:
+- ❌ **Modify** the source code or create derivative works
+- ❌ **Copy or redistribute** the software
+- ❌ **Remove or alter** license notices or attribution
+- ❌ **Create competing products** based on taskx
+
+### Requirements:
+- ⚠️ **Must preserve license notices** - Cannot remove copyright or license information
+- ⚠️ **Must include attribution** - If using taskx in production, include: "Powered by taskx"
+
+**Full license terms**: See [LICENSE](./LICENSE) file for complete legal details.
+
+**Why proprietary?** This license protects the integrity of taskx while allowing free usage. You get all the benefits without restrictions on how you use it, but the code itself remains protected from unauthorized modification or redistribution.
+
+---
+
+## 🌟 Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=vipin08/taskx&type=Date)](https://star-history.com/#vipin08/taskx&Date)
+
+---
+
+## 💬 Community
+
+- **GitHub**: [github.com/vipin08/taskx](https://github.com/vipin08/taskx)
+- **Issues**: [Report bugs or request features](https://github.com/vipin08/taskx/issues)
+
+---
+
+## 🙏 Acknowledgments
+
+Inspired by:
+- **npm scripts** - Simplicity and developer experience
+- **Make** - Power and reliability
+- **Invoke** - Python-native task execution
+- **Poetry** - Modern Python tooling
+
+Built with:
+- [Click](https://click.palletsprojects.com/) - CLI framework
+- [Rich](https://rich.readthedocs.io/) - Beautiful terminal output
+- [watchfiles](https://github.com/samuelcolvin/watchfiles) - Fast file watching
+
+---
+
+<p align="center">
+  Made with ❤️ for Python developers everywhere
+</p>
+
+<p align="center">
+  <sub>Stop fighting with Makefiles. Start using taskx.</sub>
+</p>
