@@ -1,0 +1,12 @@
+{% for line in warning.splitlines() -%}
+# {{ line }}
+{% endfor %}
+
+HEADER: str = r"""
+{{ types }}
+{{ states }}
+"""
+
+CORE: str = r"""
+{{ geometry }}
+"""

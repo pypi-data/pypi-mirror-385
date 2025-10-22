@@ -1,0 +1,57 @@
+{% for line in warning.splitlines() -%}
+.. {{ line }}
+{% endfor %}
+
+{{ model.name }}
+{{ "=" * model.name|length }}
+
+**Key:** ``{{ key }}``
+
+{{ model.description.strip() }}
+
+{% if model.dois %}
+References
+----------
+{% for doi in model.dois %}
+{{ loop.index }}. {{ doi }}
+{% endfor %}
+{% endif %}
+
+Variables
+---------
+{% for name, value in model.variables.items() %}
+{{ loop.index0 }}. ``{{ name }} = {{ value }}``
+{% endfor %}
+
+Parameters
+----------
+{% for name, value in model.diffusivity.items() %}
+- ``diffusivity_{{ name }} = {{ value }}``
+{% endfor %}
+{% for name, value in model.parameters.items() %}
+- ``{{ name }} = {{ value }}``
+{% endfor %}
+
+Source code
+-----------
+.. raw:: html
+
+    <details>
+    <summary>OpenCL kernel</summary>
+
+.. code-block:: c
+
+    {{ model.code|indent(4) }}
+
+.. raw:: html
+
+    </details>
+
+{% if meta %}
+Additional metadata
+-------------------
+
+.. code-block:: yaml
+
+    {{ meta|toyaml(indent=2)|indent(4) }}
+{% endif %}
