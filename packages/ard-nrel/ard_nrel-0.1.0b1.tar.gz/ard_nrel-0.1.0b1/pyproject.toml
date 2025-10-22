@@ -1,0 +1,74 @@
+
+# Project configuration for Ard
+# TOML spec: https://toml.io/en/v1.0.0
+
+[build-system]
+requires = [
+  "setuptools",
+]
+build-backend = "setuptools.build_meta"
+
+# https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["ard", "ard.*"]
+
+[tool.setuptools.package-data]
+"ard.api.default_systems" = ["*.yaml"]
+
+[project]
+name = "ard-nrel"
+version = "0.1.0-beta1"
+authors = [
+  {name = "Cory Frontin", email = "cory.frontin@nrel.gov"},
+  {name = "Rafael Mudafort", email = "rafael.mudafort@nrel.gov"},
+  {name = "Jared Thomas", email = "jared.thomas@nrel.gov"},
+]
+description = "A package for multidisciplinary and/or multifidelity wind farm design"
+readme= "README.md"
+requires-python = ">=3.10, <3.13"
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "License :: OSI Approved :: Apache Software License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  # "Programming Language :: Python :: 3.13",
+]
+dependencies = [
+  "numpy<2.3",
+  "floris>=4.3",
+  "wisdem>=3.21",
+  "NLopt",
+  "marmot-agents",
+  "openmdao",
+  "shapely",
+  "jax",
+  "optiwindnet>=0.0.6",
+  "statsmodels",
+  "highspy",
+  "pyyaml",
+  "windio",
+]
+[project.optional-dependencies]
+dev = [
+  "black[jupyter]",
+  "jupyter",
+  "pytest",
+  "pytest-cov",
+  "pytest-subtests",
+]
+docs = [
+  "pyxdsm",
+  "jupyter-book",
+  "sphinx-book-theme",
+  "sphinx-autodoc-typehints",
+]
+[project.urls]
+# Homepage = "https://example.com"
+Documentation = "https://wisdem.github.io/Ard"
+Repository = "https://github.com/wisdem/Ard.git"
+Issues = "https://github.com/wisdem/Ard/issues"
+# Changelog = "https://github.com/wisdem/Ard/blob/main/CHANGELOG.md"
