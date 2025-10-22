@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = []
+
+[project]
+name = "DifferentialAlgebra"
+version = "5.3"
+description = "The Differential Algebra package"
+authors = [
+  { name="François Boulier", email="francois.boulier@univ-lille.fr" },
+]
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = ["sympy"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: C",
+    "Programming Language :: Cython",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Mathematics"
+]
+
