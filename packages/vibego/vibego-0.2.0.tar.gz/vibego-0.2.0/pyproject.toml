@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=70.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vibego"
+version = "0.2.0"
+description = "vibego CLI：用于初始化与管理 Telegram Master Bot 的工具"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    { name = "Hypha" }
+]
+license = "LicenseRef-Proprietary"
+dependencies = [
+    "aiogram>=3.0.0,<4.0.0",
+    "aiohttp-socks>=0.10.0",
+    "aiosqlite>=0.19.0",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Operating System :: MacOS",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Build Tools",
+    "Environment :: Console"
+]
+
+[project.scripts]
+vibego = "vibego_cli.main:main"
+
+[tool.setuptools]
+include-package-data = true
+py-modules = ["bot", "master", "logging_setup", "project_repository"]
+
+[tool.setuptools.packages.find]
+include = ["vibego_cli", "tasks", "scripts"]
+
+[tool.setuptools.package-data]
+"vibego_cli" = ["data/*.txt"]
+"scripts" = ["*.sh", "models/*.sh"]
