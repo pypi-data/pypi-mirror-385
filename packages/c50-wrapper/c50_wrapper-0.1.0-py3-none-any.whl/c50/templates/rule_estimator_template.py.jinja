@@ -1,0 +1,102 @@
+# -*- coding: utf-8 -*-
+"""
+Module estimartor_template.py
+--------------------------------------------
+A template for rendering estimators from a parsed output of the C5.0 decision tree; 
+"""
+import pandas as pd
+import numpy as np
+from scipy.special import softmax
+
+
+class {{ estimator_name }}(object):
+
+    def __init__(self):
+        self.labels_map = {lab:i for i, lab in enumerate({{ labels }})}
+        self.idx_map = {i: lab for i, lab in  enumerate({{ labels }})}
+            
+    
+    {% for rule in rule_set.rules %}
+    def rule_{{ rule.rule_number }}(self, X):
+        {%- for condition in rule.conditions %}
+        {{ '    ' * loop.index0 }}if X['{{ condition.feature_name }}'] {{ condition.operator }} {{ condition.value }}:
+        {%- endfor %}
+        {{ '    ' * rule.conditions.__len__() }}return {{ rule.label }}, {{ rule.confidence }}
+
+        return {{ rule.label }}, 0.
+    {% endfor %}
+
+
+    def eval_rule(self, X):
+
+        scores = np.zeros(
+            shape={{ rule_set.labels.__len__() }}, 
+            dtype=np.float32
+        )
+
+        {% for rule in rule_set.rules %}
+        label, confidence = self.rule_{{ rule.rule_number }}(X)
+        scores[self.labels_map[label]] += confidence
+        {% endfor %}
+
+        # scores = scores / scores.sum()
+        scores = softmax(scores, axis=1)
+        arg_max = scores.argmax()
+
+        # if sample has not activated any rule
+        # then return the default label
+        if scores[arg_max] == 0.:
+            return {% if rule_set.default is string %}"{{ rule_set.default }}"{% else %}{{ rule_set.default }}{% endif %}
+        
+        return self.idx_map[arg_max]
+
+    def predict(self, X: pd.DataFrame):
+        scores = self.predict_proba(X)
+        predictions = scores.argmax(axis=1)
+        return predictions
+    
+    def predict_proba(self, X):
+        scores = np.zeros(
+            shape=(
+                X.shape[0], 
+                {{ labels.__len__() }}
+            ), 
+            dtype=np.float32
+        )
+        scores += 1e-5
+
+        for r in self.rules:
+            rule = r['rule']
+            conditions = rule.split('&')
+            if len(conditions) > 15:
+                qs = [' & '.join(conditions[i-15:i]) for i in range(15, len(conditions), 15)]
+                select = np.all([X.eval(q).values for q in qs], axis=0)
+            else:
+                select = X.eval(rule)
+            
+            _idx = self.labels_map[r['label']]
+            scores[select, _idx] += r['confidence'] 
+        
+        {# scores /= scores.sum(axis=1) #}
+        scores = softmax(scores, axis=1)
+        return scores
+
+
+    @property
+    def rules(self):
+
+        rules = [
+        {% for rule in rule_set.rules -%}
+            {
+                "rule": "{%- for condition in rule.conditions -%}
+                `{{ condition.feature_name }}` {{ condition.operator }} {{ condition.value }} {{ '& ' if not loop.last }}
+                {%- endfor %}",
+                "label": {{ rule.label }},
+                "confidence": {{ rule.confidence }}
+            },
+
+        {% endfor %}
+        ]
+
+        return rules
+

@@ -1,0 +1,85 @@
+# -*- coding: utf-8 -*-
+"""
+Module estimartor_template.py
+--------------------------------------------
+A template for rendering estimators from a parsed output of the C5.0 decision tree; 
+"""
+import pandas as pd
+import numpy as np
+from scipy.special import softmax
+
+
+class {{ estimator_name }}(object):
+
+    def __init__(self):
+        self.labels_map = {lab:i for i, lab in enumerate({{ labels }})}
+        self.idx_map = {i: lab for i, lab in  enumerate({{ labels }})}
+    
+    def eval_tree(self, X):
+        {% for node in tree %}
+        {{ '    ' * node.node_level }}if X['{{ node.feature_name }}'] {{ node.operator }} {{ node.value }}:
+        {%- if node.is_terminal %}
+            {{ '    ' * node.node_level }}return {{ node.label }}
+        {% elif node.has_subtree_call %}
+            {{ '    ' * node.node_level }}return self.{{ node.subtree_name }}(X)
+
+        {% endif %}
+        {%- endfor %}
+    
+    {% for sub_tree in sub_trees %}
+    def {{ sub_tree.name }}(self, X):
+        {% for node in sub_tree.nodes %}
+        {{ '    ' * node.node_level }}if X['{{ node.feature_name }}'] {{ node.operator }} {{ node.value }}:
+        {%- if node.is_terminal %}
+            {{ '    ' * node.node_level }}return {{ node.label }}
+        {% elif node.has_subtree_call %}
+            {{ '    ' * node.node_level }}return self.{{ node.subtree_name }}(X)
+
+        {% endif %}
+        {%- endfor %}
+    {%- endfor %}
+    
+    def predict(self, X: pd.DataFrame):
+
+        scores = self.predict_proba(X)        
+        {# X.loc[X.eval("{{ rule }}"), 'prediction'] = {{ predictions[loop.index0] }} #}
+        {# preds = X.pop('prediction') #}
+        {# return preds #}
+        predictions = scores.argmax(axis=1)
+        return predictions
+    
+    def predict_proba(self, X):
+        scores = np.zeros(
+            shape=(
+                X.shape[0], 
+                {{ labels.__len__() }}
+            ), 
+            dtype=np.float32
+        )
+        
+        scores += 1e-5
+
+        {% for rule in rules -%}
+        _filter = X.eval("{{ rule }}").values
+        _idx = self.labels_map[{{ predictions[loop.index0] }}]
+        scores[_filter, _idx] += {{ confidences[loop.index0] }}
+        {% endfor -%}
+        scores = softmax(scores, axis=1)
+        return scores
+    
+    @property
+    def rules(self):
+
+        rules = [
+        {% for rule in rules -%}
+            {
+                "rule": "{{ rule }}",
+                "label": {{ predictions[loop.index0] }},
+                "confidence": {{ confidences[loop.index0] }}
+            },
+        {% endfor %}
+        ]
+
+        return rules
+
+

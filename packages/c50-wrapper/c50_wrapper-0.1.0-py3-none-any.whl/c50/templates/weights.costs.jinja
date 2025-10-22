@@ -1,0 +1,3 @@
+{% for w in weights -%}
+    {{w['predicted']}}, {{w['true_class']}}: {{w['cost']}}
+{% endfor -%}
