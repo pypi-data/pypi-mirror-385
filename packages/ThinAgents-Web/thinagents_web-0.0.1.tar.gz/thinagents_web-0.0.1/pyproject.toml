@@ -1,0 +1,26 @@
+[project]
+name = "ThinAgents_Web"
+description = "Web application for ThinAgents"
+authors = [{ name = "Prabhu Kiran Konda" }]
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+keywords = ["AI", "LLM", "Agentic AI", "AI Agents"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = ["thinagents>=0.0.16", "fastapi>=0.104.0", "uvicorn>=0.24.0"]
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "https://github.com/PrabhuKiran8790/thinagents"
+
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+version_scheme = "post-release"
+local_scheme = "no-local-version"
