@@ -1,0 +1,87 @@
+[16:44:34] DEBUG    No default namespace provided, trying to load one from disk                                                                  program.py:467
+           DEBUG    FilesystemLoader find starting at '/Users/nahueldefosse/workspace/OSS/invoke-toolkit'                                         loader.py:124
+           DEBUG    Found module: ModuleSpec(name='tasks', loader=<_frozen_importlib_external.SourceFileLoader object at 0x10752ba10>,            loader.py:148
+                    origin='/Users/nahueldefosse/workspace/OSS/invoke-toolkit/tasks.py')                                                                       
+           DEBUG    Didn't see any /Users/nahueldefosse/workspace/OSS/invoke-toolkit/invoke.yaml, skipping.                                       config.py:903
+           DEBUG    Didn't see any /Users/nahueldefosse/workspace/OSS/invoke-toolkit/invoke.yml, skipping.                                        config.py:903
+           DEBUG    Didn't see any /Users/nahueldefosse/workspace/OSS/invoke-toolkit/invoke.json, skipping.                                       config.py:903
+           DEBUG    Merging config sources in order onto new empty _config...                                                                     config.py:947
+           DEBUG    Defaults: {'run': {'asynchronous': False, 'disown': False, 'dry': False, 'echo': False, 'echo_stdin': None, 'encoding': None, config.py:949
+                    'env': {}, 'err_stream': None, 'fallback': True, 'hide': None, 'in_stream': None, 'out_stream': None, 'echo_format':                       
+                    '[bold]{command}[/bold]', 'pty': False, 'replace_env': False, 'shell': '/bin/bash', 'warn': False, 'watchers': []},                        
+                    'runners': {'local': <class 'invoke_toolkit.runners.rich.NoStdoutRunner'>}, 'sudo': {'password': None, 'prompt': '[sudo]                   
+                    password: ', 'user': None}, 'tasks': {'auto_dash_names': True, 'collection_name': 'tasks', 'dedupe': True, 'executor_class':               
+                    None, 'ignore_unknown_help': False, 'search_root': None}, 'timeouts': {'command': None}}                                                   
+           DEBUG    Collection-driven: {}                                                                                                         config.py:951
+           DEBUG    System-wide config file (/etc/invoke.py): {}                                                                                  config.py:977
+           DEBUG    Per-user config file (/Users/nahueldefosse/.invoke.py): {'docker': {'command': 'podman'}}                                     config.py:977
+           DEBUG    Per-project config file (/Users/nahueldefosse/workspace/OSS/invoke-toolkit/invoke.py): {}                                     config.py:977
+           DEBUG    Environment variable config: {}                                                                                               config.py:956
+           DEBUG    Runtime config file has not been loaded yet, skipping                                                                         config.py:974
+           DEBUG    Overrides: {}                                                                                                                 config.py:959
+           DEBUG    Modifications: {}                                                                                                             config.py:961
+           DEBUG    Deletions: {}                                                                                                                 config.py:963
+           DEBUG    Trying to load internal invoke-toolkit collections                                                                           program.py:167
+           INFO     Importing submodules in invoke_toolkit.extensions.tasks                                                                   collections.py:34
+           ERROR    Error loading config: No module named 'yaml'                                                                              collections.py:49
+           DEBUG    🔧 Adding config to module 📦 collections: dict_keys(['a'])                                                              collections.py:163
+           DEBUG    Adding root collection configuration: None                                                                               collections.py:174
+           DEBUG    Adding <parser/Context 'version'>                                                                                              parser.py:78
+           DEBUG    Adding <parser/Context 'build': {'target': <Argument: target_ (t) [list]>, 'output': <Argument: output (o)>}>                  parser.py:78
+           DEBUG    Adding <parser/Context 'clean'>                                                                                                parser.py:78
+           DEBUG    Adding <parser/Context 'test' (t): {'debug': <Argument: debug (d) [bool]>, 'verbose': <Argument: verbose (v) [bool]>,          parser.py:78
+                    'capture-output': <Argument: capture_output (c) [bool]>, 'picked': <Argument: picked (p) [bool]>}>                                         
+           DEBUG    Adding <parser/Context 'release': {'skip-sync': <Argument: skip_sync (s) [bool]>}>                                             parser.py:78
+           DEBUG    Adding <parser/Context 'docs-api-build' (b): {'config': <Argument: config (c)>, 'filter': <Argument: filter_ (f)>, 'dry-run':  parser.py:78
+                    <Argument: dry_run (d) [bool]>, 'watch': <Argument: watch (w) [bool]>, 'verbose': <Argument: verbose (v) [bool]>}>                         
+           DEBUG    Adding <parser/Context 'docs-preview' (p)>                                                                                     parser.py:78
+           DEBUG    Adding <parser/Context 'run-in-container': {'image': <Argument: image (i)>, 'container-tool': <Argument: container_tool (c)>,  parser.py:78
+                    'command': <Argument: command (o)>, 'rm': <Argument: rm (r) [bool]>, 'interactive': <Argument: interactive (n) [bool]>, 'tty':             
+                    <Argument: tty (t) [bool]>}>                                                                                                               
+           DEBUG    Adding <parser/Context 'venv-search' (v)>                                                                                      parser.py:78
+           DEBUG    Adding <parser/Context 'env': {'clear': <Argument: clear (c) [bool]>}>                                                         parser.py:78
+           DEBUG    Adding <parser/Context 'collections.list' (collections)>                                                                       parser.py:78
+           DEBUG    Adding <parser/Context 'collections.add': {'plugin-spec': <Argument: plugin_spec (p) *>}>                                      parser.py:78
+           DEBUG    Adding <parser/Context 'collections.remove': {'name': <Argument: name (n) *>}>                                                 parser.py:78
+           DEBUG    Parsing tasks against <Collection 'tasks': build, clean, docs-api-build, docs-preview, env, release, run-in-container, test, program.py:765
+                    venv-search, version, collections..., dist...>                                                                                             
+           DEBUG    Initialized with context: <parser/Context: {'command-timeout': <Argument: command-timeout (T) [int]>, 'complete': <Argument:  parser.py:238
+                    complete [bool]>, 'config': <Argument: config (f)>, 'debug': <Argument: debug (d) [bool]>, 'dry': <Argument: dry (R) [bool]>,              
+                    'echo': <Argument: echo (e) [bool]>, 'help': <Argument: help (h) ?>, 'hide': <Argument: hide>, 'list': <Argument: list (l)                 
+                    ?>, 'list-depth': <Argument: list-depth (D) [int]>, 'list-format': <Argument: list-format (F)>, 'print-completion-script':                 
+                    <Argument: print-completion-script>, 'prompt-for-sudo-password': <Argument: prompt-for-sudo-password [bool]>, 'pty':                       
+                    <Argument: pty (p) [bool]>, 'version': <Argument: version (V) [bool]>, 'warn-only': <Argument: warn-only (w) [bool]>,                      
+                    'write-pyc': <Argument: write-pyc [bool]>, 'internal-col': <Argument: internal-col (x) [bool]>, 'collection': <Argument:                   
+                    collection (c)>, 'no-dedupe': <Argument: no-dedupe [bool]>, 'search-root': <Argument: search-root (r)>}>                                   
+           DEBUG    Available contexts: {'version': <parser/Context 'version'>, 'build': <parser/Context 'build': {'target': <Argument: target_   parser.py:243
+                    (t) [list]>, 'output': <Argument: output (o)>}>, 'clean': <parser/Context 'clean'>, 'test': <parser/Context 'test' (t):                    
+                    {'debug': <Argument: debug (d) [bool]>, 'verbose': <Argument: verbose (v) [bool]>, 'capture-output': <Argument:                            
+                    capture_output (c) [bool]>, 'picked': <Argument: picked (p) [bool]>}>, 'release': <parser/Context 'release': {'skip-sync':                 
+                    <Argument: skip_sync (s) [bool]>}>, 'docs-api-build': <parser/Context 'docs-api-build' (b): {'config': <Argument: config                   
+                    (c)>, 'filter': <Argument: filter_ (f)>, 'dry-run': <Argument: dry_run (d) [bool]>, 'watch': <Argument: watch (w) [bool]>,                 
+                    'verbose': <Argument: verbose (v) [bool]>}>, 'docs-preview': <parser/Context 'docs-preview' (p)>, 'run-in-container':                      
+                    <parser/Context 'run-in-container': {'image': <Argument: image (i)>, 'container-tool': <Argument: container_tool (c)>,                     
+                    'command': <Argument: command (o)>, 'rm': <Argument: rm (r) [bool]>, 'interactive': <Argument: interactive (n) [bool]>,                    
+                    'tty': <Argument: tty (t) [bool]>}>, 'venv-search': <parser/Context 'venv-search' (v)>, 'env': <parser/Context 'env':                      
+                    {'clear': <Argument: clear (c) [bool]>}>, 'collections.list': <parser/Context 'collections.list' (collections)>,                           
+                    'collections.add': <parser/Context 'collections.add': {'plugin-spec': <Argument: plugin_spec (p) *>}>, 'collections.remove':               
+                    <parser/Context 'collections.remove': {'name': <Argument: name (n) *>}>}                                                                   
+           DEBUG    Wrapping up context None                                                                                                      parser.py:336
+           DEBUG    Starting argv: []                                                                                                             parser.py:123
+           DEBUG    ParseMachine: 'context' => 'end'                                                                                              parser.py:227
+           DEBUG    Wrapping up context None                                                                                                      parser.py:336
+           DEBUG    Resulting task contexts: []                                                                                                  program.py:772
+build                                               Builds distributable package                                                                               
+clean                                               Cleans dist                                                                                                
+docs-api-build (b)                                  Runs uv run quartodoc build with the provided arguments.                                                   
+docs-preview (p)                                    Runs quarto preview to visualize the documentation.                                                        
+env                                                 (re)creates the virtual environment (with uv)                                                              
+release                                             Tags (if the git repo is clean) proposing the next tag                                                     
+run-in-container                                    Runs invoke-toolkit in a container.                                                                        
+test (t)                                            Runs pytest and exposes some commonly used flags                                                           
+venv-search (v)                                                                                                                                                
+version                                             Shows package version (git based)                                                                          
+collections.add                                     Adds a collection from a local path or a remote git repository                                             
+collections.list (collections)                      List all the collections available to invoke-toolkit                                                       
+collections.remove                                  Removes a collection previously added with collections.add                                                 
+           DEBUG    Received a possibly-skippable exception: Exit()                                                                              program.py:400

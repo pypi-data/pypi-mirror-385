@@ -1,0 +1,2288 @@
+versions pytest-8.4.2, python-3.13.7.final.0
+invocation_dir=/Users/nahueldefosse/workspace/OSS/invoke-toolkit
+cwd=/Users/nahueldefosse/workspace/OSS/invoke-toolkit
+args=('-k', 'test_console_stream_pattern_setup', '--last-failed', '--debug')
+
+  pytest_cmdline_main [hook]
+      config: <_pytest.config.Config object at 0x108a216a0>
+    pytest_plugin_registered [hook]
+        plugin: <Session  exitstatus='<UNSET>' testsfailed=0 testscollected=0>
+        plugin_name: session
+        manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+    finish pytest_plugin_registered --> [] [hook]
+    pytest_configure [hook]
+        config: <_pytest.config.Config object at 0x108a216a0>
+    early skip of rewriting module: plistlib [assertion]
+    early skip of rewriting module: xml.parsers [assertion]
+    early skip of rewriting module: xml.parsers.expat [assertion]
+    early skip of rewriting module: importlib.metadata._adapters [assertion]
+    early skip of rewriting module: email.message [assertion]
+    early skip of rewriting module: quopri [assertion]
+    early skip of rewriting module: email.utils [assertion]
+    early skip of rewriting module: email._parseaddr [assertion]
+    early skip of rewriting module: email.errors [assertion]
+    early skip of rewriting module: email._policybase [assertion]
+    early skip of rewriting module: email.header [assertion]
+    early skip of rewriting module: email.quoprimime [assertion]
+    early skip of rewriting module: email.base64mime [assertion]
+    early skip of rewriting module: email.charset [assertion]
+    early skip of rewriting module: email.encoders [assertion]
+    early skip of rewriting module: email._encoded_words [assertion]
+    early skip of rewriting module: email.iterators [assertion]
+    early skip of rewriting module: importlib.metadata._text [assertion]
+    early skip of rewriting module: email.parser [assertion]
+    early skip of rewriting module: email.feedparser [assertion]
+      pytest_metadata [hook]
+          metadata: {'Python': '3.13.7', 'Platform': 'macOS-26.0.1-arm64-arm-64bit-Mach-O', 'Packages': {'pytest': '8.4.2', 'pluggy': '1.6.0'}, 'Plugins': {'html': '4.1.1', 'metadata': '3.1.1', 'sugar': '1.1.1', 'picked': '0.5.1', 'cov': '7.0.0'}}
+          config: <_pytest.config.Config object at 0x108a216a0>
+      finish pytest_metadata --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.cacheprovider.LFPluginCollWrapper object at 0x109469be0>
+          plugin_name: lfplugin-collwrapper
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.cacheprovider.LFPlugin object at 0x109469e80>
+          plugin_name: lfplugin
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.cacheprovider.NFPlugin object at 0x109469fd0>
+          plugin_name: nfplugin
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+    early skip of rewriting module: faulthandler [assertion]
+      pytest_plugin_registered [hook]
+          plugin: <class '_pytest.legacypath.LegacyTmpdirPlugin'>
+          plugin_name: legacypath-tmpdir
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+    early skip of rewriting module: pdb [assertion]
+    early skip of rewriting module: code [assertion]
+    early skip of rewriting module: codeop [assertion]
+    early skip of rewriting module: fancycompleter [assertion]
+    early skip of rewriting module: rlcompleter [assertion]
+    early skip of rewriting module: fancycompleter.version [assertion]
+    early skip of rewriting module: pdbpp_utils [assertion]
+    early skip of rewriting module: pdbpp_utils._version [assertion]
+    early skip of rewriting module: cmd [assertion]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+          plugin_name: 4438502640
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.config.Config object at 0x108a216a0>
+          plugin_name: pytestconfig
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.mark' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/mark/__init__.py'>
+          plugin_name: mark
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.main' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/main.py'>
+          plugin_name: main
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.runner' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/runner.py'>
+          plugin_name: runner
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.fixtures' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/fixtures.py'>
+          plugin_name: fixtures
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.helpconfig' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/helpconfig.py'>
+          plugin_name: helpconfig
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.python' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/python.py'>
+          plugin_name: python
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.terminal' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/terminal.py'>
+          plugin_name: terminal
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.debugging' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/debugging.py'>
+          plugin_name: debugging
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.unittest' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/unittest.py'>
+          plugin_name: unittest
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.capture' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/capture.py'>
+          plugin_name: capture
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.skipping' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/skipping.py'>
+          plugin_name: skipping
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.legacypath' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/legacypath.py'>
+          plugin_name: legacypath
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.tmpdir' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/tmpdir.py'>
+          plugin_name: tmpdir
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.monkeypatch' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/monkeypatch.py'>
+          plugin_name: monkeypatch
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.recwarn' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/recwarn.py'>
+          plugin_name: recwarn
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.pastebin' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/pastebin.py'>
+          plugin_name: pastebin
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.assertion' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/assertion/__init__.py'>
+          plugin_name: assertion
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.junitxml' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/junitxml.py'>
+          plugin_name: junitxml
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.doctest' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/doctest.py'>
+          plugin_name: doctest
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.cacheprovider' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/cacheprovider.py'>
+          plugin_name: cacheprovider
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.freeze_support' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/freeze_support.py'>
+          plugin_name: freeze_support
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.setuponly' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/setuponly.py'>
+          plugin_name: setuponly
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.setupplan' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/setupplan.py'>
+          plugin_name: setupplan
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.stepwise' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/stepwise.py'>
+          plugin_name: stepwise
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.unraisableexception' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/unraisableexception.py'>
+          plugin_name: unraisableexception
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.threadexception' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/threadexception.py'>
+          plugin_name: threadexception
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.warnings' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/warnings.py'>
+          plugin_name: warnings
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.logging' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/logging.py'>
+          plugin_name: logging
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.reports' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/reports.py'>
+          plugin_name: reports
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.faulthandler' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/faulthandler.py'>
+          plugin_name: faulthandler
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module 'pytest_html.plugin' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/pytest_html/plugin.py'>
+          plugin_name: html
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module 'pytest_html.fixtures' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/pytest_html/fixtures.py'>
+          plugin_name: html_fixtures
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module 'pytest_metadata.plugin' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/pytest_metadata/plugin.py'>
+          plugin_name: metadata
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module 'pytest_sugar' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/pytest_sugar.py'>
+          plugin_name: sugar
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module 'pytest_picked.plugin' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/pytest_picked/plugin.py'>
+          plugin_name: picked
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module 'pytest_cov.plugin' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/pytest_cov/plugin.py'>
+          plugin_name: pytest_cov
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <CaptureManager _method='fd' _global_capturing=<MultiCapture out=<FDCapture 1 oldfd=5 _state='suspended' tmpfile=<EncodedFile name="<_io.FileIO name=6 mode='rb+' closefd=True>" mode='r+' encoding='utf-8'>> err=<FDCapture 2 oldfd=7 _state='suspended' tmpfile=<EncodedFile name="<_io.FileIO name=8 mode='rb+' closefd=True>" mode='r+' encoding='utf-8'>> in_=<FDCapture 0 oldfd=3 _state='started' tmpfile=<_io.TextIOWrapper name='/dev/null' mode='r' encoding='utf-8'>> _state='suspended' _in_suspended=False> _capture_fixture=None>
+          plugin_name: capturemanager
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <pytest_cov.plugin.CovPlugin object at 0x108d94590>
+          plugin_name: _cov
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module 'tests.conftest' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/conftest.py'>
+          plugin_name: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/conftest.py
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <Session  exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+          plugin_name: session
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.cacheprovider.LFPluginCollWrapper object at 0x109469be0>
+          plugin_name: lfplugin-collwrapper
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.cacheprovider.LFPlugin object at 0x109469e80>
+          plugin_name: lfplugin
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.cacheprovider.NFPlugin object at 0x109469fd0>
+          plugin_name: nfplugin
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <class '_pytest.legacypath.LegacyTmpdirPlugin'>
+          plugin_name: legacypath-tmpdir
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.terminal.TerminalReporter object at 0x10946b230>
+          plugin_name: terminalreporter
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.logging.LoggingPlugin object at 0x1095146e0>
+          plugin_name: logging-plugin
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+          plugin_name: 4438502640
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.config.Config object at 0x108a216a0>
+          plugin_name: pytestconfig
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.mark' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/mark/__init__.py'>
+          plugin_name: mark
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.main' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/main.py'>
+          plugin_name: main
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.runner' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/runner.py'>
+          plugin_name: runner
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.fixtures' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/fixtures.py'>
+          plugin_name: fixtures
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.helpconfig' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/helpconfig.py'>
+          plugin_name: helpconfig
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.python' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/python.py'>
+          plugin_name: python
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.terminal' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/terminal.py'>
+          plugin_name: terminal
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.debugging' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/debugging.py'>
+          plugin_name: debugging
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.unittest' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/unittest.py'>
+          plugin_name: unittest
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.capture' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/capture.py'>
+          plugin_name: capture
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.skipping' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/skipping.py'>
+          plugin_name: skipping
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.legacypath' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/legacypath.py'>
+          plugin_name: legacypath
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.tmpdir' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/tmpdir.py'>
+          plugin_name: tmpdir
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.monkeypatch' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/monkeypatch.py'>
+          plugin_name: monkeypatch
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.recwarn' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/recwarn.py'>
+          plugin_name: recwarn
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.pastebin' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/pastebin.py'>
+          plugin_name: pastebin
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.assertion' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/assertion/__init__.py'>
+          plugin_name: assertion
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.junitxml' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/junitxml.py'>
+          plugin_name: junitxml
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.doctest' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/doctest.py'>
+          plugin_name: doctest
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.cacheprovider' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/cacheprovider.py'>
+          plugin_name: cacheprovider
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.freeze_support' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/freeze_support.py'>
+          plugin_name: freeze_support
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.setuponly' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/setuponly.py'>
+          plugin_name: setuponly
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.setupplan' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/setupplan.py'>
+          plugin_name: setupplan
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.stepwise' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/stepwise.py'>
+          plugin_name: stepwise
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.unraisableexception' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/unraisableexception.py'>
+          plugin_name: unraisableexception
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.threadexception' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/threadexception.py'>
+          plugin_name: threadexception
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.warnings' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/warnings.py'>
+          plugin_name: warnings
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.logging' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/logging.py'>
+          plugin_name: logging
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.reports' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/reports.py'>
+          plugin_name: reports
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.faulthandler' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/faulthandler.py'>
+          plugin_name: faulthandler
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module 'pytest_html.plugin' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/pytest_html/plugin.py'>
+          plugin_name: html
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module 'pytest_html.fixtures' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/pytest_html/fixtures.py'>
+          plugin_name: html_fixtures
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module 'pytest_metadata.plugin' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/pytest_metadata/plugin.py'>
+          plugin_name: metadata
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module 'pytest_sugar' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/pytest_sugar.py'>
+          plugin_name: sugar
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module 'pytest_picked.plugin' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/pytest_picked/plugin.py'>
+          plugin_name: picked
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module 'pytest_cov.plugin' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/pytest_cov/plugin.py'>
+          plugin_name: pytest_cov
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <CaptureManager _method='fd' _global_capturing=<MultiCapture out=<FDCapture 1 oldfd=5 _state='suspended' tmpfile=<EncodedFile name="<_io.FileIO name=6 mode='rb+' closefd=True>" mode='r+' encoding='utf-8'>> err=<FDCapture 2 oldfd=7 _state='suspended' tmpfile=<EncodedFile name="<_io.FileIO name=8 mode='rb+' closefd=True>" mode='r+' encoding='utf-8'>> in_=<FDCapture 0 oldfd=3 _state='started' tmpfile=<_io.TextIOWrapper name='/dev/null' mode='r' encoding='utf-8'>> _state='suspended' _in_suspended=False> _capture_fixture=None>
+          plugin_name: capturemanager
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <pytest_cov.plugin.CovPlugin object at 0x108d94590>
+          plugin_name: _cov
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module 'tests.conftest' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/conftest.py'>
+          plugin_name: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/conftest.py
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <Session  exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+          plugin_name: session
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.cacheprovider.LFPluginCollWrapper object at 0x109469be0>
+          plugin_name: lfplugin-collwrapper
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.cacheprovider.LFPlugin object at 0x109469e80>
+          plugin_name: lfplugin
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.cacheprovider.NFPlugin object at 0x109469fd0>
+          plugin_name: nfplugin
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <class '_pytest.legacypath.LegacyTmpdirPlugin'>
+          plugin_name: legacypath-tmpdir
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.terminal.TerminalReporter object at 0x10946b230>
+          plugin_name: terminalreporter
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.logging.LoggingPlugin object at 0x1095146e0>
+          plugin_name: logging-plugin
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <pytest_sugar.SugarTerminalReporter object at 0x109515010>
+          plugin_name: terminalreporter
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+    finish pytest_configure --> [] [hook]
+    pytest_sessionstart [hook]
+        session: <Session  exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+      pytest_report_header [hook]
+          config: <_pytest.config.Config object at 0x108a216a0>
+          start_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit
+          startdir: /Users/nahueldefosse/workspace/OSS/invoke-toolkit
+      finish pytest_report_header --> [['rootdir: /Users/nahueldefosse/workspace/OSS/invoke-toolkit', 'configfile: pyproject.toml', 'testpaths: tests', 'plugins: html-4.1.1, metadata-3.1.1, sugar-1.1.1, picked-0.5.1, cov-7.0.0'], ['using: pytest-8.4.2', 'registered third-party plugins:', '  pytest-html-4.1.1 at /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/pytest_html/plugin.py', '  pytest-html-4.1.1 at /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/pytest_html/fixtures.py', '  pytest-metadata-3.1.1 at /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/pytest_metadata/plugin.py', '  pytest-sugar-1.1.1 at /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/pytest_sugar.py', '  pytest-picked-0.5.1 at /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/pytest_picked/plugin.py', '  pytest-cov-7.0.0 at /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/pytest_cov/plugin.py']] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+          plugin_name: 4438502640
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.config.Config object at 0x108a216a0>
+          plugin_name: pytestconfig
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.mark' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/mark/__init__.py'>
+          plugin_name: mark
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.main' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/main.py'>
+          plugin_name: main
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.runner' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/runner.py'>
+          plugin_name: runner
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.fixtures' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/fixtures.py'>
+          plugin_name: fixtures
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.helpconfig' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/helpconfig.py'>
+          plugin_name: helpconfig
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.python' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/python.py'>
+          plugin_name: python
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.terminal' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/terminal.py'>
+          plugin_name: terminal
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.debugging' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/debugging.py'>
+          plugin_name: debugging
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.unittest' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/unittest.py'>
+          plugin_name: unittest
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.capture' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/capture.py'>
+          plugin_name: capture
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.skipping' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/skipping.py'>
+          plugin_name: skipping
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.legacypath' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/legacypath.py'>
+          plugin_name: legacypath
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.tmpdir' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/tmpdir.py'>
+          plugin_name: tmpdir
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.monkeypatch' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/monkeypatch.py'>
+          plugin_name: monkeypatch
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.recwarn' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/recwarn.py'>
+          plugin_name: recwarn
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.pastebin' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/pastebin.py'>
+          plugin_name: pastebin
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.assertion' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/assertion/__init__.py'>
+          plugin_name: assertion
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.junitxml' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/junitxml.py'>
+          plugin_name: junitxml
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.doctest' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/doctest.py'>
+          plugin_name: doctest
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.cacheprovider' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/cacheprovider.py'>
+          plugin_name: cacheprovider
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.freeze_support' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/freeze_support.py'>
+          plugin_name: freeze_support
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.setuponly' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/setuponly.py'>
+          plugin_name: setuponly
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.setupplan' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/setupplan.py'>
+          plugin_name: setupplan
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.stepwise' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/stepwise.py'>
+          plugin_name: stepwise
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.unraisableexception' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/unraisableexception.py'>
+          plugin_name: unraisableexception
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.threadexception' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/threadexception.py'>
+          plugin_name: threadexception
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.warnings' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/warnings.py'>
+          plugin_name: warnings
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.logging' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/logging.py'>
+          plugin_name: logging
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.reports' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/reports.py'>
+          plugin_name: reports
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module '_pytest.faulthandler' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/faulthandler.py'>
+          plugin_name: faulthandler
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module 'pytest_html.plugin' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/pytest_html/plugin.py'>
+          plugin_name: html
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module 'pytest_html.fixtures' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/pytest_html/fixtures.py'>
+          plugin_name: html_fixtures
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module 'pytest_metadata.plugin' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/pytest_metadata/plugin.py'>
+          plugin_name: metadata
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module 'pytest_sugar' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/pytest_sugar.py'>
+          plugin_name: sugar
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module 'pytest_picked.plugin' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/pytest_picked/plugin.py'>
+          plugin_name: picked
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module 'pytest_cov.plugin' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/pytest_cov/plugin.py'>
+          plugin_name: pytest_cov
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <CaptureManager _method='fd' _global_capturing=<MultiCapture out=<FDCapture 1 oldfd=5 _state='suspended' tmpfile=<EncodedFile name="<_io.FileIO name=6 mode='rb+' closefd=True>" mode='r+' encoding='utf-8'>> err=<FDCapture 2 oldfd=7 _state='suspended' tmpfile=<EncodedFile name="<_io.FileIO name=8 mode='rb+' closefd=True>" mode='r+' encoding='utf-8'>> in_=<FDCapture 0 oldfd=3 _state='started' tmpfile=<_io.TextIOWrapper name='/dev/null' mode='r' encoding='utf-8'>> _state='suspended' _in_suspended=False> _capture_fixture=None>
+          plugin_name: capturemanager
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <pytest_cov.plugin.CovPlugin object at 0x108d94590>
+          plugin_name: _cov
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <module 'tests.conftest' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/conftest.py'>
+          plugin_name: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/conftest.py
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <Session  exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+          plugin_name: session
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.cacheprovider.LFPluginCollWrapper object at 0x109469be0>
+          plugin_name: lfplugin-collwrapper
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.cacheprovider.LFPlugin object at 0x109469e80>
+          plugin_name: lfplugin
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.cacheprovider.NFPlugin object at 0x109469fd0>
+          plugin_name: nfplugin
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <class '_pytest.legacypath.LegacyTmpdirPlugin'>
+          plugin_name: legacypath-tmpdir
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.terminal.TerminalReporter object at 0x10946b230>
+          plugin_name: terminalreporter
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.logging.LoggingPlugin object at 0x1095146e0>
+          plugin_name: logging-plugin
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <pytest_sugar.SugarTerminalReporter object at 0x109515010>
+          plugin_name: terminalreporter
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+      pytest_plugin_registered [hook]
+          plugin: <_pytest.fixtures.FixtureManager object at 0x108c8b770>
+          plugin_name: funcmanage
+          manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+      finish pytest_plugin_registered --> [] [hook]
+    finish pytest_sessionstart --> [] [hook]
+    pytest_collection [hook]
+        session: <Session  exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+    perform_collect <Session  exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0> ['tests'] [collection]
+        pytest_collectstart [hook]
+            collector: <Session  exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+        finish pytest_collectstart --> [] [hook]
+        pytest_make_collect_report [hook]
+            collector: <Session  exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+        processing argument CollectionArgument(path=PosixPath('/Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests'), parts=[], module_name=None) [collection]
+            pytest_collect_directory [hook]
+                path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit
+                parent: <Session  exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+            finish pytest_collect_directory --> <Dir invoke-toolkit> [hook]
+            pytest_collectstart [hook]
+                collector: <Dir invoke-toolkit>
+            finish pytest_collectstart --> [] [hook]
+            pytest_make_collect_report [hook]
+                collector: <Dir invoke-toolkit>
+              pytest_ignore_collect [hook]
+                  config: <_pytest.config.Config object at 0x108a216a0>
+                  collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.DS_Store
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.DS_Store
+              finish pytest_ignore_collect --> None [hook]
+              pytest_collect_file [hook]
+                  parent: <Dir invoke-toolkit>
+                  file_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.DS_Store
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.DS_Store
+              finish pytest_collect_file --> [] [hook]
+              pytest_ignore_collect [hook]
+                  config: <_pytest.config.Config object at 0x108a216a0>
+                  collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.env
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.env
+              finish pytest_ignore_collect --> None [hook]
+              pytest_collect_file [hook]
+                  parent: <Dir invoke-toolkit>
+                  file_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.env
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.env
+              finish pytest_collect_file --> [] [hook]
+              pytest_ignore_collect [hook]
+                  config: <_pytest.config.Config object at 0x108a216a0>
+                  collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.envrc
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.envrc
+              finish pytest_ignore_collect --> None [hook]
+              pytest_collect_file [hook]
+                  parent: <Dir invoke-toolkit>
+                  file_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.envrc
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.envrc
+              finish pytest_collect_file --> [] [hook]
+              pytest_ignore_collect [hook]
+                  config: <_pytest.config.Config object at 0x108a216a0>
+                  collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.git
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.git
+              finish pytest_ignore_collect --> True [hook]
+              pytest_ignore_collect [hook]
+                  config: <_pytest.config.Config object at 0x108a216a0>
+                  collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.gitignore
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.gitignore
+              finish pytest_ignore_collect --> None [hook]
+              pytest_collect_file [hook]
+                  parent: <Dir invoke-toolkit>
+                  file_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.gitignore
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.gitignore
+              finish pytest_collect_file --> [] [hook]
+              pytest_ignore_collect [hook]
+                  config: <_pytest.config.Config object at 0x108a216a0>
+                  collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.pre-commit-config.yaml
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.pre-commit-config.yaml
+              finish pytest_ignore_collect --> None [hook]
+              pytest_collect_file [hook]
+                  parent: <Dir invoke-toolkit>
+                  file_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.pre-commit-config.yaml
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.pre-commit-config.yaml
+              finish pytest_collect_file --> [] [hook]
+              pytest_ignore_collect [hook]
+                  config: <_pytest.config.Config object at 0x108a216a0>
+                  collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.pytest_cache
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.pytest_cache
+              finish pytest_ignore_collect --> True [hook]
+              pytest_ignore_collect [hook]
+                  config: <_pytest.config.Config object at 0x108a216a0>
+                  collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.ripgrep
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.ripgrep
+              finish pytest_ignore_collect --> None [hook]
+              pytest_collect_file [hook]
+                  parent: <Dir invoke-toolkit>
+                  file_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.ripgrep
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.ripgrep
+              finish pytest_collect_file --> [] [hook]
+              pytest_ignore_collect [hook]
+                  config: <_pytest.config.Config object at 0x108a216a0>
+                  collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.ruff_cache
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.ruff_cache
+              finish pytest_ignore_collect --> True [hook]
+              pytest_ignore_collect [hook]
+                  config: <_pytest.config.Config object at 0x108a216a0>
+                  collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.secrets.baseline
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.secrets.baseline
+              finish pytest_ignore_collect --> None [hook]
+              pytest_collect_file [hook]
+                  parent: <Dir invoke-toolkit>
+                  file_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.secrets.baseline
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.secrets.baseline
+              finish pytest_collect_file --> [] [hook]
+              pytest_ignore_collect [hook]
+                  config: <_pytest.config.Config object at 0x108a216a0>
+                  collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv
+              finish pytest_ignore_collect --> True [hook]
+              pytest_ignore_collect [hook]
+                  config: <_pytest.config.Config object at 0x108a216a0>
+                  collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.vscode
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/.vscode
+              finish pytest_ignore_collect --> True [hook]
+              pytest_ignore_collect [hook]
+                  config: <_pytest.config.Config object at 0x108a216a0>
+                  collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/LICENSE.txt
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/LICENSE.txt
+              finish pytest_ignore_collect --> None [hook]
+              pytest_collect_file [hook]
+                  parent: <Dir invoke-toolkit>
+                  file_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/LICENSE.txt
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/LICENSE.txt
+              finish pytest_collect_file --> [] [hook]
+              pytest_ignore_collect [hook]
+                  config: <_pytest.config.Config object at 0x108a216a0>
+                  collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/README.md
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/README.md
+              finish pytest_ignore_collect --> None [hook]
+              pytest_collect_file [hook]
+                  parent: <Dir invoke-toolkit>
+                  file_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/README.md
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/README.md
+              finish pytest_collect_file --> [] [hook]
+              pytest_ignore_collect [hook]
+                  config: <_pytest.config.Config object at 0x108a216a0>
+                  collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/__pycache__
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/__pycache__
+              finish pytest_ignore_collect --> True [hook]
+              pytest_ignore_collect [hook]
+                  config: <_pytest.config.Config object at 0x108a216a0>
+                  collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/_scratchpad.py
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/_scratchpad.py
+              finish pytest_ignore_collect --> None [hook]
+              pytest_collect_file [hook]
+                  parent: <Dir invoke-toolkit>
+                  file_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/_scratchpad.py
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/_scratchpad.py
+              finish pytest_collect_file --> [] [hook]
+              pytest_ignore_collect [hook]
+                  config: <_pytest.config.Config object at 0x108a216a0>
+                  collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/_tasks.py
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/_tasks.py
+              finish pytest_ignore_collect --> None [hook]
+              pytest_collect_file [hook]
+                  parent: <Dir invoke-toolkit>
+                  file_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/_tasks.py
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/_tasks.py
+              finish pytest_collect_file --> [] [hook]
+              pytest_ignore_collect [hook]
+                  config: <_pytest.config.Config object at 0x108a216a0>
+                  collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/_test
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/_test
+              finish pytest_ignore_collect --> None [hook]
+              pytest_collect_directory [hook]
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/_test
+                  parent: <Dir invoke-toolkit>
+              finish pytest_collect_directory --> <Dir _test> [hook]
+              pytest_ignore_collect [hook]
+                  config: <_pytest.config.Config object at 0x108a216a0>
+                  collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/dist
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/dist
+              finish pytest_ignore_collect --> True [hook]
+              pytest_ignore_collect [hook]
+                  config: <_pytest.config.Config object at 0x108a216a0>
+                  collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/docs
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/docs
+              finish pytest_ignore_collect --> None [hook]
+              pytest_collect_directory [hook]
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/docs
+                  parent: <Dir invoke-toolkit>
+              finish pytest_collect_directory --> <Dir docs> [hook]
+              pytest_ignore_collect [hook]
+                  config: <_pytest.config.Config object at 0x108a216a0>
+                  collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/output.log
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/output.log
+              finish pytest_ignore_collect --> None [hook]
+              pytest_collect_file [hook]
+                  parent: <Dir invoke-toolkit>
+                  file_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/output.log
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/output.log
+              finish pytest_collect_file --> [] [hook]
+              pytest_ignore_collect [hook]
+                  config: <_pytest.config.Config object at 0x108a216a0>
+                  collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/pyproject.toml
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/pyproject.toml
+              finish pytest_ignore_collect --> None [hook]
+              pytest_collect_file [hook]
+                  parent: <Dir invoke-toolkit>
+                  file_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/pyproject.toml
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/pyproject.toml
+              finish pytest_collect_file --> [] [hook]
+              pytest_ignore_collect [hook]
+                  config: <_pytest.config.Config object at 0x108a216a0>
+                  collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/pytestdebug.log
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/pytestdebug.log
+              finish pytest_ignore_collect --> None [hook]
+              pytest_collect_file [hook]
+                  parent: <Dir invoke-toolkit>
+                  file_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/pytestdebug.log
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/pytestdebug.log
+              finish pytest_collect_file --> [] [hook]
+              pytest_ignore_collect [hook]
+                  config: <_pytest.config.Config object at 0x108a216a0>
+                  collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/report.html
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/report.html
+              finish pytest_ignore_collect --> None [hook]
+              pytest_collect_file [hook]
+                  parent: <Dir invoke-toolkit>
+                  file_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/report.html
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/report.html
+              finish pytest_collect_file --> [] [hook]
+              pytest_ignore_collect [hook]
+                  config: <_pytest.config.Config object at 0x108a216a0>
+                  collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/src
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/src
+              finish pytest_ignore_collect --> None [hook]
+              pytest_collect_directory [hook]
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/src
+                  parent: <Dir invoke-toolkit>
+              finish pytest_collect_directory --> <Dir src> [hook]
+              pytest_ignore_collect [hook]
+                  config: <_pytest.config.Config object at 0x108a216a0>
+                  collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tasks.py
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tasks.py
+              finish pytest_ignore_collect --> None [hook]
+              pytest_collect_file [hook]
+                  parent: <Dir invoke-toolkit>
+                  file_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tasks.py
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tasks.py
+              finish pytest_collect_file --> [] [hook]
+              pytest_collect_directory [hook]
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests
+                  parent: <Dir invoke-toolkit>
+              finish pytest_collect_directory --> <Package tests> [hook]
+              pytest_ignore_collect [hook]
+                  config: <_pytest.config.Config object at 0x108a216a0>
+                  collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/uv.lock
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/uv.lock
+              finish pytest_ignore_collect --> None [hook]
+              pytest_collect_file [hook]
+                  parent: <Dir invoke-toolkit>
+                  file_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/uv.lock
+                  path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/uv.lock
+              finish pytest_collect_file --> [] [hook]
+            finish pytest_make_collect_report --> <CollectReport '.' lenresult=4 outcome='passed'> [hook]
+        finish pytest_make_collect_report --> <CollectReport '' lenresult=1 outcome='passed'> [hook]
+        pytest_collectreport [hook]
+            report: <CollectReport '' lenresult=1 outcome='passed'>
+        finish pytest_collectreport --> [] [hook]
+    genitems <Package tests> [collection]
+      pytest_collectstart [hook]
+          collector: <Package tests>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Package tests>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x108a216a0>
+            collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/__init__.py
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/__init__.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package tests>
+            file_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/__init__.py
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/__init__.py
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x108a216a0>
+            collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/__pycache__
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/__pycache__
+        finish pytest_ignore_collect --> True [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x108a216a0>
+            collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/conftest.py
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/conftest.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package tests>
+            file_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/conftest.py
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/conftest.py
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x108a216a0>
+            collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/program
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/program
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_directory [hook]
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/program
+            parent: <Package tests>
+        finish pytest_collect_directory --> <Dir program> [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x108a216a0>
+            collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/script
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/script
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_directory [hook]
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/script
+            parent: <Package tests>
+        finish pytest_collect_directory --> <Dir script> [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x108a216a0>
+            collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/tasks
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/tasks
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_directory [hook]
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/tasks
+            parent: <Package tests>
+        finish pytest_collect_directory --> <Dir tasks> [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x108a216a0>
+            collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_cofig_class.py
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_cofig_class.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package tests>
+            file_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_cofig_class.py
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_cofig_class.py
+          pytest_pycollect_makemodule [hook]
+              parent: <Package tests>
+              module_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_cofig_class.py
+              path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_cofig_class.py
+          finish pytest_pycollect_makemodule --> <Module test_cofig_class.py> [hook]
+        finish pytest_collect_file --> [<Module test_cofig_class.py>] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x108a216a0>
+            collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_collection.py
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_collection.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package tests>
+            file_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_collection.py
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_collection.py
+          pytest_pycollect_makemodule [hook]
+              parent: <Package tests>
+              module_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_collection.py
+              path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_collection.py
+          finish pytest_pycollect_makemodule --> <Module test_collection.py> [hook]
+        finish pytest_collect_file --> [<Module test_collection.py>] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x108a216a0>
+            collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_console.py
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_console.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package tests>
+            file_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_console.py
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_console.py
+          pytest_pycollect_makemodule [hook]
+              parent: <Package tests>
+              module_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_console.py
+              path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_console.py
+          finish pytest_pycollect_makemodule --> <Module test_console.py> [hook]
+        finish pytest_collect_file --> [<Module test_console.py>] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x108a216a0>
+            collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_context_class.py
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_context_class.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package tests>
+            file_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_context_class.py
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_context_class.py
+          pytest_pycollect_makemodule [hook]
+              parent: <Package tests>
+              module_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_context_class.py
+              path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_context_class.py
+          finish pytest_pycollect_makemodule --> <Module test_context_class.py> [hook]
+        finish pytest_collect_file --> [<Module test_context_class.py>] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x108a216a0>
+            collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_executor.py
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_executor.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package tests>
+            file_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_executor.py
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_executor.py
+          pytest_pycollect_makemodule [hook]
+              parent: <Package tests>
+              module_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_executor.py
+              path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_executor.py
+          finish pytest_pycollect_makemodule --> <Module test_executor.py> [hook]
+        finish pytest_collect_file --> [<Module test_executor.py>] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x108a216a0>
+            collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_loader.py
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_loader.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package tests>
+            file_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_loader.py
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_loader.py
+          pytest_pycollect_makemodule [hook]
+              parent: <Package tests>
+              module_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_loader.py
+              path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_loader.py
+          finish pytest_pycollect_makemodule --> <Module test_loader.py> [hook]
+        finish pytest_collect_file --> [<Module test_loader.py>] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x108a216a0>
+            collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_parsing.py
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_parsing.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package tests>
+            file_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_parsing.py
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_parsing.py
+          pytest_pycollect_makemodule [hook]
+              parent: <Package tests>
+              module_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_parsing.py
+              path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_parsing.py
+          finish pytest_pycollect_makemodule --> <Module test_parsing.py> [hook]
+        finish pytest_collect_file --> [<Module test_parsing.py>] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'tests' lenresult=10 outcome='passed'> [hook]
+    genitems <Dir script> [collection]
+      pytest_collectstart [hook]
+          collector: <Dir script>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Dir script>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x108a216a0>
+            collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/script/__pycache__
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/script/__pycache__
+        finish pytest_ignore_collect --> True [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x108a216a0>
+            collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/script/test_script.py
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/script/test_script.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir script>
+            file_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/script/test_script.py
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/script/test_script.py
+          pytest_pycollect_makemodule [hook]
+              parent: <Dir script>
+              module_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/script/test_script.py
+              path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/script/test_script.py
+          finish pytest_pycollect_makemodule --> <Module test_script.py> [hook]
+        finish pytest_collect_file --> [<Module test_script.py>] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'tests/script' lenresult=1 outcome='passed'> [hook]
+    genitems <Module test_script.py> [collection]
+      pytest_collectstart [hook]
+          collector: <Module test_script.py>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Module test_script.py>
+      find_module called for: test_script [assertion]
+      matched test file '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/script/test_script.py' [assertion]
+      found cached rewritten pyc for /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/script/test_script.py [assertion]
+      early skip of rewriting module: invoke_toolkit.scripts [assertion]
+      early skip of rewriting module: invoke_toolkit.scripts.loader [assertion]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_script.py>
+            name: @py_builtins
+            obj: <module 'builtins' (built-in)>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_script.py>
+            name: @pytest_ar
+            obj: <module '_pytest.assertion.rewrite' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/assertion/rewrite.py'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_script.py>
+            name: task
+            obj: <function task at 0x108ee3a60>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_script.py>
+            name: Context
+            obj: <class 'invoke.context.Context'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_script.py>
+            name: inspect
+            obj: <module 'inspect' from '/Users/nahueldefosse/Library/Application Support/uv/python/cpython-3.13.7-macos-aarch64-none/lib/python3.13/inspect.py'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_script.py>
+            name: Path
+            obj: <class 'pathlib._local.Path'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_script.py>
+            name: run
+            obj: <function run at 0x10953f920>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_script.py>
+            name: sample_task
+            obj: <Task 'sample_task'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_script.py>
+            name: add_lines
+            obj: <function add_lines at 0x10953f4c0>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_script.py>
+            name: test_script_with_uv_run
+            obj: <function test_script_with_uv_run at 0x10953fa60>
+          pytest_generate_tests [hook]
+              metafunc: <_pytest.python.Metafunc object at 0x109516270>
+          finish pytest_generate_tests --> [] [hook]
+        finish pytest_pycollect_makeitem --> [<Function test_script_with_uv_run>] [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_script.py>
+            name: test_frame_inspect
+            obj: <function test_frame_inspect at 0x10953f9c0>
+          pytest_generate_tests [hook]
+              metafunc: <_pytest.python.Metafunc object at 0x1095265d0>
+          finish pytest_generate_tests --> [] [hook]
+        finish pytest_pycollect_makeitem --> [<Function test_frame_inspect>] [hook]
+        pytest_plugin_registered [hook]
+            plugin: <_pytest.cacheprovider.LFPluginCollSkipfiles object at 0x109516270>
+            plugin_name: lfplugin-collskip
+            manager: <_pytest.config.PytestPluginManager object at 0x1088e2cf0>
+        finish pytest_plugin_registered --> [] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'tests/script/test_script.py' lenresult=2 outcome='passed'> [hook]
+    genitems <Function test_script_with_uv_run> [collection]
+      pytest_itemcollected [hook]
+          item: <Function test_script_with_uv_run>
+      finish pytest_itemcollected --> [] [hook]
+    genitems <Function test_frame_inspect> [collection]
+      pytest_itemcollected [hook]
+          item: <Function test_frame_inspect>
+      finish pytest_itemcollected --> [] [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'tests/script/test_script.py' lenresult=2 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'tests/script' lenresult=1 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+    genitems <Dir tasks> [collection]
+      pytest_collectstart [hook]
+          collector: <Dir tasks>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Dir tasks>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x108a216a0>
+            collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/tasks/__pycache__
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/tasks/__pycache__
+        finish pytest_ignore_collect --> True [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x108a216a0>
+            collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/tasks/test_extensions_config.py
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/tasks/test_extensions_config.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir tasks>
+            file_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/tasks/test_extensions_config.py
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/tasks/test_extensions_config.py
+          pytest_pycollect_makemodule [hook]
+              parent: <Dir tasks>
+              module_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/tasks/test_extensions_config.py
+              path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/tasks/test_extensions_config.py
+          finish pytest_pycollect_makemodule --> <Module test_extensions_config.py> [hook]
+        finish pytest_collect_file --> [<Module test_extensions_config.py>] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'tests/tasks' lenresult=1 outcome='passed'> [hook]
+    genitems <Module test_extensions_config.py> [collection]
+      pytest_collectstart [hook]
+          collector: <Module test_extensions_config.py>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Module test_extensions_config.py>
+      find_module called for: test_extensions_config [assertion]
+      matched test file '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/tasks/test_extensions_config.py' [assertion]
+      found cached rewritten pyc for /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/tasks/test_extensions_config.py [assertion]
+      early skip of rewriting module: invoke_toolkit.program [assertion]
+      early skip of rewriting module: invoke_toolkit.program.program [assertion]
+      early skip of rewriting module: invoke_toolkit.log [assertion]
+      early skip of rewriting module: invoke_toolkit.log.logger [assertion]
+      early skip of rewriting module: rich.logging [assertion]
+      early skip of rewriting module: rich.traceback [assertion]
+      early skip of rewriting module: rich.columns [assertion]
+      early skip of rewriting module: invoke_toolkit.collections [assertion]
+      early skip of rewriting module: invoke_toolkit.utils.inspection [assertion]
+      early skip of rewriting module: invoke_toolkit.executor [assertion]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_extensions_config.py>
+            name: @py_builtins
+            obj: <module 'builtins' (built-in)>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_extensions_config.py>
+            name: @pytest_ar
+            obj: <module '_pytest.assertion.rewrite' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/assertion/rewrite.py'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_extensions_config.py>
+            name: ast
+            obj: <module 'ast' from '/Users/nahueldefosse/Library/Application Support/uv/python/cpython-3.13.7-macos-aarch64-none/lib/python3.13/ast.py'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_extensions_config.py>
+            name: dedent
+            obj: <function dedent at 0x1033222a0>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_extensions_config.py>
+            name: ToolkitProgram
+            obj: <class 'invoke_toolkit.program.program.ToolkitProgram'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_extensions_config.py>
+            name: pytest
+            obj: <module 'pytest' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/pytest/__init__.py'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_extensions_config.py>
+            name: test_collection
+            obj: <function test_collection at 0x10953f420>
+          pytest_generate_tests [hook]
+              metafunc: <_pytest.python.Metafunc object at 0x109526490>
+          finish pytest_generate_tests --> [] [hook]
+        finish pytest_pycollect_makeitem --> [<Function test_collection>] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'tests/tasks/test_extensions_config.py' lenresult=1 outcome='passed'> [hook]
+    genitems <Function test_collection> [collection]
+      pytest_itemcollected [hook]
+          item: <Function test_collection>
+      finish pytest_itemcollected --> [] [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'tests/tasks/test_extensions_config.py' lenresult=1 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'tests/tasks' lenresult=1 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+    genitems <Module test_cofig_class.py> [collection]
+      pytest_collectstart [hook]
+          collector: <Module test_cofig_class.py>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Module test_cofig_class.py>
+      find_module called for: tests.test_cofig_class [assertion]
+      matched test file '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_cofig_class.py' [assertion]
+      found cached rewritten pyc for /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_cofig_class.py [assertion]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_cofig_class.py>
+            name: @py_builtins
+            obj: <module 'builtins' (built-in)>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_cofig_class.py>
+            name: @pytest_ar
+            obj: <module '_pytest.assertion.rewrite' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/assertion/rewrite.py'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_cofig_class.py>
+            name: DataProxy
+            obj: <class 'invoke.config.DataProxy'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_cofig_class.py>
+            name: Config
+            obj: <class 'tests.test_cofig_class.Config'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_cofig_class.py>
+            name: test_class_attributes_overrides
+            obj: <function test_class_attributes_overrides at 0x10956bba0>
+          pytest_generate_tests [hook]
+              metafunc: <_pytest.python.Metafunc object at 0x1094f3230>
+          finish pytest_generate_tests --> [] [hook]
+        finish pytest_pycollect_makeitem --> [<Function test_class_attributes_overrides>] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'tests/test_cofig_class.py' lenresult=1 outcome='passed'> [hook]
+    genitems <Function test_class_attributes_overrides> [collection]
+      pytest_itemcollected [hook]
+          item: <Function test_class_attributes_overrides>
+      finish pytest_itemcollected --> [] [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'tests/test_cofig_class.py' lenresult=1 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+    genitems <Module test_collection.py> [collection]
+      pytest_collectstart [hook]
+          collector: <Module test_collection.py>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Module test_collection.py>
+      find_module called for: tests.test_collection [assertion]
+      matched test file '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_collection.py' [assertion]
+      found cached rewritten pyc for /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_collection.py [assertion]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_collection.py>
+            name: @py_builtins
+            obj: <module 'builtins' (built-in)>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_collection.py>
+            name: @pytest_ar
+            obj: <module '_pytest.assertion.rewrite' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/assertion/rewrite.py'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_collection.py>
+            name: Path
+            obj: <class 'pathlib._local.Path'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_collection.py>
+            name: sys
+            obj: <module 'sys' (built-in)>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_collection.py>
+            name: dedent
+            obj: <function dedent at 0x1033222a0>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_collection.py>
+            name: ast
+            obj: <module 'ast' from '/Users/nahueldefosse/Library/Application Support/uv/python/cpython-3.13.7-macos-aarch64-none/lib/python3.13/ast.py'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_collection.py>
+            name: ToolkitCollection
+            obj: <class 'invoke_toolkit.collections.ToolkitCollection'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_collection.py>
+            name: test_collection_load_submodules
+            obj: <function test_collection_load_submodules at 0x10953efc0>
+          pytest_generate_tests [hook]
+              metafunc: <_pytest.python.Metafunc object at 0x1094f3230>
+          finish pytest_generate_tests --> [] [hook]
+        finish pytest_pycollect_makeitem --> [<Function test_collection_load_submodules>] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'tests/test_collection.py' lenresult=1 outcome='passed'> [hook]
+    genitems <Function test_collection_load_submodules> [collection]
+      pytest_itemcollected [hook]
+          item: <Function test_collection_load_submodules>
+      finish pytest_itemcollected --> [] [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'tests/test_collection.py' lenresult=1 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+    genitems <Module test_console.py> [collection]
+      pytest_collectstart [hook]
+          collector: <Module test_console.py>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Module test_console.py>
+      find_module called for: tests.test_console [assertion]
+      matched test file '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_console.py' [assertion]
+      found cached rewritten pyc for /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_console.py [assertion]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_console.py>
+            name: @py_builtins
+            obj: <module 'builtins' (built-in)>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_console.py>
+            name: @pytest_ar
+            obj: <module '_pytest.assertion.rewrite' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/assertion/rewrite.py'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_console.py>
+            name: os
+            obj: <module 'os' (frozen)>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_console.py>
+            name: pytest
+            obj: <module 'pytest' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/pytest/__init__.py'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_console.py>
+            name: debug
+            obj: <bound method Logger.debug of <Logger invoke (WARNING)>>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_console.py>
+            name: Console
+            obj: <class 'rich.console.Console'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_console.py>
+            name: Context
+            obj: <class 'invoke_toolkit.context.context.ToolkitContext'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_console.py>
+            name: task
+            obj: <function task at 0x108d85b20>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_console.py>
+            name: ToolkitCollection
+            obj: <class 'invoke_toolkit.collections.ToolkitCollection'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_console.py>
+            name: SecretScrubberConsole
+            obj: <class 'invoke_toolkit.output.console.SecretScrubberConsole'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_console.py>
+            name: get_console
+            obj: <bound method ConsoleManager.get_console of <invoke_toolkit.output.console.ConsoleManager object at 0x1092ff4d0>>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_console.py>
+            name: ToolkitProgram
+            obj: <class 'invoke_toolkit.program.program.ToolkitProgram'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_console.py>
+            name: test_console_object
+            obj: <function test_console_object at 0x10956bec0>
+          pytest_generate_tests [hook]
+              metafunc: <_pytest.python.Metafunc object at 0x10956d130>
+          finish pytest_generate_tests --> [] [hook]
+        finish pytest_pycollect_makeitem --> [<Function test_console_object>] [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_console.py>
+            name: test_console_stream_pattern_setup
+            obj: <function test_console_stream_pattern_setup at 0x10956bf60>
+          pytest_generate_tests [hook]
+              metafunc: <_pytest.python.Metafunc object at 0x109473790>
+          early skip of rewriting module: encodings.unicode_escape [assertion]
+          finish pytest_generate_tests --> [] [hook]
+        finish pytest_pycollect_makeitem --> [<Function test_console_stream_pattern_setup[none]>, <Function test_console_stream_pattern_setup[pattern_only]>, <Function test_console_stream_pattern_setup[out]>, <Function test_console_stream_pattern_setup[err]>] [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_console.py>
+            name: test_console_scrubber
+            obj: <function test_console_scrubber at 0x109574040>
+          pytest_generate_tests [hook]
+              metafunc: <_pytest.python.Metafunc object at 0x109473790>
+          finish pytest_generate_tests --> [] [hook]
+        finish pytest_pycollect_makeitem --> [<Function test_console_scrubber>] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'tests/test_console.py' lenresult=3 outcome='passed'> [hook]
+    genitems <Function test_console_stream_pattern_setup[out]> [collection]
+      pytest_itemcollected [hook]
+          item: <Function test_console_stream_pattern_setup[out]>
+      finish pytest_itemcollected --> [] [hook]
+    genitems <Function test_console_stream_pattern_setup[err]> [collection]
+      pytest_itemcollected [hook]
+          item: <Function test_console_stream_pattern_setup[err]>
+      finish pytest_itemcollected --> [] [hook]
+    genitems <Function test_console_scrubber> [collection]
+      pytest_itemcollected [hook]
+          item: <Function test_console_scrubber>
+      finish pytest_itemcollected --> [] [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'tests/test_console.py' lenresult=3 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+    genitems <Module test_context_class.py> [collection]
+      pytest_collectstart [hook]
+          collector: <Module test_context_class.py>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Module test_context_class.py>
+      find_module called for: tests.test_context_class [assertion]
+      matched test file '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_context_class.py' [assertion]
+      found cached rewritten pyc for /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_context_class.py [assertion]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_context_class.py>
+            name: @py_builtins
+            obj: <module 'builtins' (built-in)>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_context_class.py>
+            name: @pytest_ar
+            obj: <module '_pytest.assertion.rewrite' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/assertion/rewrite.py'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_context_class.py>
+            name: task
+            obj: <function task at 0x108d85b20>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_context_class.py>
+            name: Context
+            obj: <class 'invoke_toolkit.context.context.ToolkitContext'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_context_class.py>
+            name: ToolkitProgram
+            obj: <class 'invoke_toolkit.program.program.ToolkitProgram'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_context_class.py>
+            name: ToolkitCollection
+            obj: <class 'invoke_toolkit.collections.ToolkitCollection'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_context_class.py>
+            name: task_test
+            obj: <Task 'task_test'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_context_class.py>
+            name: test_context_class
+            obj: <function test_context_class at 0x1095745e0>
+          pytest_generate_tests [hook]
+              metafunc: <_pytest.python.Metafunc object at 0x1095bf550>
+          finish pytest_generate_tests --> [] [hook]
+        finish pytest_pycollect_makeitem --> [<Function test_context_class>] [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_context_class.py>
+            name: test_context_class_pint_err
+            obj: <function test_context_class_pint_err at 0x109574860>
+          pytest_generate_tests [hook]
+              metafunc: <_pytest.python.Metafunc object at 0x1095bf650>
+          finish pytest_generate_tests --> [] [hook]
+        finish pytest_pycollect_makeitem --> [<Function test_context_class_pint_err>] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'tests/test_context_class.py' lenresult=2 outcome='passed'> [hook]
+    genitems <Function test_context_class> [collection]
+      pytest_itemcollected [hook]
+          item: <Function test_context_class>
+      finish pytest_itemcollected --> [] [hook]
+    genitems <Function test_context_class_pint_err> [collection]
+      pytest_itemcollected [hook]
+          item: <Function test_context_class_pint_err>
+      finish pytest_itemcollected --> [] [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'tests/test_context_class.py' lenresult=2 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+    genitems <Module test_executor.py> [collection]
+      pytest_collectstart [hook]
+          collector: <Module test_executor.py>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Module test_executor.py>
+      find_module called for: tests.test_executor [assertion]
+      matched test file '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_executor.py' [assertion]
+      found cached rewritten pyc for /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_executor.py [assertion]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_executor.py>
+            name: @py_builtins
+            obj: <module 'builtins' (built-in)>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_executor.py>
+            name: @pytest_ar
+            obj: <module '_pytest.assertion.rewrite' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/assertion/rewrite.py'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_executor.py>
+            name: ToolkitCollection
+            obj: <class 'invoke_toolkit.collections.ToolkitCollection'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_executor.py>
+            name: ToolkitProgram
+            obj: <class 'invoke_toolkit.program.program.ToolkitProgram'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_executor.py>
+            name: task
+            obj: <function task at 0x108d85b20>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_executor.py>
+            name: Context
+            obj: <class 'invoke_toolkit.context.context.ToolkitContext'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_executor.py>
+            name: test_auto_print_uses_rich
+            obj: <function test_auto_print_uses_rich at 0x109574e00>
+          pytest_generate_tests [hook]
+              metafunc: <_pytest.python.Metafunc object at 0x10946fe30>
+          finish pytest_generate_tests --> [] [hook]
+        finish pytest_pycollect_makeitem --> [<Function test_auto_print_uses_rich>] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'tests/test_executor.py' lenresult=1 outcome='passed'> [hook]
+    genitems <Function test_auto_print_uses_rich> [collection]
+      pytest_itemcollected [hook]
+          item: <Function test_auto_print_uses_rich>
+      finish pytest_itemcollected --> [] [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'tests/test_executor.py' lenresult=1 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+    genitems <Module test_loader.py> [collection]
+      pytest_collectstart [hook]
+          collector: <Module test_loader.py>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Module test_loader.py>
+      find_module called for: tests.test_loader [assertion]
+      matched test file '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_loader.py' [assertion]
+      found cached rewritten pyc for /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_loader.py [assertion]
+      early skip of rewriting module: tomlkit [assertion]
+      early skip of rewriting module: tomlkit.api [assertion]
+      early skip of rewriting module: tomlkit._utils [assertion]
+      early skip of rewriting module: tomlkit._compat [assertion]
+      early skip of rewriting module: tomlkit.container [assertion]
+      early skip of rewriting module: tomlkit._types [assertion]
+      early skip of rewriting module: tomlkit.exceptions [assertion]
+      early skip of rewriting module: tomlkit.items [assertion]
+      early skip of rewriting module: tomlkit.parser [assertion]
+      early skip of rewriting module: tomlkit.source [assertion]
+      early skip of rewriting module: tomlkit.toml_char [assertion]
+      early skip of rewriting module: tomlkit.toml_document [assertion]
+      early skip of rewriting module: invoke_toolkit.loader [assertion]
+      early skip of rewriting module: invoke_toolkit.loader.entrypoint [assertion]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_loader.py>
+            name: @py_builtins
+            obj: <module 'builtins' (built-in)>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_loader.py>
+            name: @pytest_ar
+            obj: <module '_pytest.assertion.rewrite' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/assertion/rewrite.py'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_loader.py>
+            name: pytest
+            obj: <module 'pytest' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/pytest/__init__.py'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_loader.py>
+            name: Path
+            obj: <class 'pathlib._local.Path'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_loader.py>
+            name: dedent
+            obj: <function dedent at 0x1033222a0>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_loader.py>
+            name: Any
+            obj: typing.Any
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_loader.py>
+            name: Union
+            obj: typing.Union
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_loader.py>
+            name: TempPathFactory
+            obj: <class '_pytest.tmpdir.TempPathFactory'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_loader.py>
+            name: TOMLDocument
+            obj: <class 'tomlkit.toml_document.TOMLDocument'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_loader.py>
+            name: dump
+            obj: <function dump at 0x1095f00e0>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_loader.py>
+            name: parse
+            obj: <function parse at 0x1095f0180>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_loader.py>
+            name: Context
+            obj: <class 'invoke_toolkit.context.context.ToolkitContext'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_loader.py>
+            name: COLLECTION_ENTRY_POINT
+            obj: invoke_toolkit.collection
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_loader.py>
+            name: add_entrypoint
+            obj: <function add_entrypoint at 0x109574220>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_loader.py>
+            name: test_loader_from_entrypoints
+            obj: <function test_loader_from_entrypoints at 0x1095f0f40>
+          pytest_generate_tests [hook]
+              metafunc: <_pytest.python.Metafunc object at 0x109587a70>
+          finish pytest_generate_tests --> [] [hook]
+        finish pytest_pycollect_makeitem --> [<Function test_loader_from_entrypoints>] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'tests/test_loader.py' lenresult=0 outcome='passed'> [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'tests/test_loader.py' lenresult=0 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+    genitems <Module test_parsing.py> [collection]
+      pytest_collectstart [hook]
+          collector: <Module test_parsing.py>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Module test_parsing.py>
+      find_module called for: tests.test_parsing [assertion]
+      matched test file '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_parsing.py' [assertion]
+      found cached rewritten pyc for /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/test_parsing.py [assertion]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_parsing.py>
+            name: @py_builtins
+            obj: <module 'builtins' (built-in)>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_parsing.py>
+            name: @pytest_ar
+            obj: <module '_pytest.assertion.rewrite' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/_pytest/assertion/rewrite.py'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_parsing.py>
+            name: pytest
+            obj: <module 'pytest' from '/Users/nahueldefosse/workspace/OSS/invoke-toolkit/.venv/lib/python3.13/site-packages/pytest/__init__.py'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_parsing.py>
+            name: Program
+            obj: <class 'invoke.program.Program'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_parsing.py>
+            name: Collection
+            obj: <class 'invoke.collection.Collection'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_parsing.py>
+            name: task
+            obj: <function task at 0x108d85b20>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_parsing.py>
+            name: ToolkitCollection
+            obj: <class 'invoke_toolkit.collections.ToolkitCollection'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_parsing.py>
+            name: ToolkitContext
+            obj: <class 'invoke_toolkit.context.context.ToolkitContext'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_parsing.py>
+            name: ToolkitProgram
+            obj: <class 'invoke_toolkit.program.program.ToolkitProgram'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_parsing.py>
+            name: boolean_flag
+            obj: <Task 'boolean_flag'>
+        finish pytest_pycollect_makeitem --> None [hook]
+        pytest_pycollect_makeitem [hook]
+            collector: <Module test_parsing.py>
+            name: test_parsing_boolean_flag
+            obj: <function test_parsing_boolean_flag at 0x1095f16c0>
+          pytest_generate_tests [hook]
+              metafunc: <_pytest.python.Metafunc object at 0x10968a970>
+            pytest_make_parametrize_id [hook]
+                config: <_pytest.config.Config object at 0x108a216a0>
+                val: <class 'invoke.program.Program'>
+                argname: program_class
+            finish pytest_make_parametrize_id --> None [hook]
+            pytest_make_parametrize_id [hook]
+                config: <_pytest.config.Config object at 0x108a216a0>
+                val: <class 'invoke.collection.Collection'>
+                argname: collection_class
+            finish pytest_make_parametrize_id --> None [hook]
+            pytest_make_parametrize_id [hook]
+                config: <_pytest.config.Config object at 0x108a216a0>
+                val: <class 'invoke_toolkit.program.program.ToolkitProgram'>
+                argname: program_class
+            finish pytest_make_parametrize_id --> None [hook]
+            pytest_make_parametrize_id [hook]
+                config: <_pytest.config.Config object at 0x108a216a0>
+                val: <class 'invoke_toolkit.collections.ToolkitCollection'>
+                argname: collection_class
+            finish pytest_make_parametrize_id --> None [hook]
+          finish pytest_generate_tests --> [] [hook]
+        finish pytest_pycollect_makeitem --> [<Function test_parsing_boolean_flag[Program-Collection]>, <Function test_parsing_boolean_flag[ToolkitProgram-ToolkitCollection]>] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'tests/test_parsing.py' lenresult=2 outcome='passed'> [hook]
+    genitems <Function test_parsing_boolean_flag[Program-Collection]> [collection]
+      pytest_itemcollected [hook]
+          item: <Function test_parsing_boolean_flag[Program-Collection]>
+      finish pytest_itemcollected --> [] [hook]
+    genitems <Function test_parsing_boolean_flag[ToolkitProgram-ToolkitCollection]> [collection]
+      pytest_itemcollected [hook]
+          item: <Function test_parsing_boolean_flag[ToolkitProgram-ToolkitCollection]>
+      finish pytest_itemcollected --> [] [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'tests/test_parsing.py' lenresult=2 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+    genitems <Dir program> [collection]
+      pytest_collectstart [hook]
+          collector: <Dir program>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Dir program>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x108a216a0>
+            collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/program/__pycache__
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/program/__pycache__
+        finish pytest_ignore_collect --> True [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x108a216a0>
+            collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/program/main.py
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/program/main.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Dir program>
+            file_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/program/main.py
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/program/main.py
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x108a216a0>
+            collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/program/tasks
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/program/tasks
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_directory [hook]
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/program/tasks
+            parent: <Dir program>
+        finish pytest_collect_directory --> <Package tasks> [hook]
+      finish pytest_make_collect_report --> <CollectReport 'tests/program' lenresult=1 outcome='passed'> [hook]
+    genitems <Package tasks> [collection]
+      pytest_collectstart [hook]
+          collector: <Package tasks>
+      finish pytest_collectstart --> [] [hook]
+      pytest_make_collect_report [hook]
+          collector: <Package tasks>
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x108a216a0>
+            collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/program/tasks/__init__.py
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/program/tasks/__init__.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package tasks>
+            file_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/program/tasks/__init__.py
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/program/tasks/__init__.py
+        finish pytest_collect_file --> [] [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x108a216a0>
+            collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/program/tasks/__pycache__
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/program/tasks/__pycache__
+        finish pytest_ignore_collect --> True [hook]
+        pytest_ignore_collect [hook]
+            config: <_pytest.config.Config object at 0x108a216a0>
+            collection_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/program/tasks/coll1.py
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/program/tasks/coll1.py
+        finish pytest_ignore_collect --> None [hook]
+        pytest_collect_file [hook]
+            parent: <Package tasks>
+            file_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/program/tasks/coll1.py
+            path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit/tests/program/tasks/coll1.py
+        finish pytest_collect_file --> [] [hook]
+      finish pytest_make_collect_report --> <CollectReport 'tests/program/tasks' lenresult=0 outcome='passed'> [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'tests/program/tasks' lenresult=0 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'tests/program' lenresult=1 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+      pytest_collectreport [hook]
+          report: <CollectReport 'tests' lenresult=10 outcome='passed'>
+      finish pytest_collectreport --> [] [hook]
+      pytest_collection_modifyitems [hook]
+          session: <Session  exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+          config: <_pytest.config.Config object at 0x108a216a0>
+          items: [<Function test_script_with_uv_run>, <Function test_frame_inspect>, <Function test_collection>, <Function test_class_attributes_overrides>, <Function test_collection_load_submodules>, <Function test_console_stream_pattern_setup[out]>, <Function test_console_stream_pattern_setup[err]>, <Function test_console_scrubber>, <Function test_context_class>, <Function test_context_class_pint_err>, <Function test_auto_print_uses_rich>, <Function test_parsing_boolean_flag[Program-Collection]>, <Function test_parsing_boolean_flag[ToolkitProgram-ToolkitCollection]>]
+        pytest_deselected [hook]
+            items: [<Function test_script_with_uv_run>, <Function test_frame_inspect>, <Function test_collection>, <Function test_class_attributes_overrides>, <Function test_collection_load_submodules>, <Function test_console_scrubber>, <Function test_context_class>, <Function test_context_class_pint_err>, <Function test_auto_print_uses_rich>, <Function test_parsing_boolean_flag[Program-Collection]>, <Function test_parsing_boolean_flag[ToolkitProgram-ToolkitCollection]>]
+        finish pytest_deselected --> [] [hook]
+        pytest_deselected [hook]
+            items: []
+        finish pytest_deselected --> [] [hook]
+      finish pytest_collection_modifyitems --> [] [hook]
+      pytest_collection_finish [hook]
+          session: <Session  exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=0>
+        pytest_report_collectionfinish [hook]
+            config: <_pytest.config.Config object at 0x108a216a0>
+            items: [<Function test_console_stream_pattern_setup[out]>, <Function test_console_stream_pattern_setup[err]>]
+            start_path: /Users/nahueldefosse/workspace/OSS/invoke-toolkit
+            startdir: /Users/nahueldefosse/workspace/OSS/invoke-toolkit
+        finish pytest_report_collectionfinish --> ['run-last-failure: rerun previous 2 failures'] [hook]
+      finish pytest_collection_finish --> [] [hook]
+    finish pytest_collection --> None [hook]
+    pytest_runtestloop [hook]
+        session: <Session  exitstatus=<ExitCode.OK: 0> testsfailed=0 testscollected=2>
+      pytest_runtest_protocol [hook]
+          item: <Function test_console_stream_pattern_setup[out]>
+          nextitem: <Function test_console_stream_pattern_setup[err]>
+        pytest_runtest_logstart [hook]
+            nodeid: tests/test_console.py::test_console_stream_pattern_setup[out]
+            location: ('tests/test_console.py', 23, 'test_console_stream_pattern_setup[out]')
+        finish pytest_runtest_logstart --> [] [hook]
+        pytest_runtest_setup [hook]
+            item: <Function test_console_stream_pattern_setup[out]>
+          pytest_fixture_setup [hook]
+              fixturedef: <FixtureDef argname='monkeypatch' scope='function' baseid=''>
+              request: <SubRequest 'monkeypatch' for <Function test_console_stream_pattern_setup[out]>>
+          finish pytest_fixture_setup --> <_pytest.monkeypatch.MonkeyPatch object at 0x1094f2650> [hook]
+          pytest_fixture_setup [hook]
+              fixturedef: <FixtureDef argname='pattern' scope='function' baseid=''>
+              request: <SubRequest 'pattern' for <Function test_console_stream_pattern_setup[out]>>
+          finish pytest_fixture_setup --> ['SUPER_SECRET'] [hook]
+          pytest_fixture_setup [hook]
+              fixturedef: <FixtureDef argname='stream_args' scope='function' baseid=''>
+              request: <SubRequest 'stream_args' for <Function test_console_stream_pattern_setup[out]>>
+          finish pytest_fixture_setup --> ['--scrub-stderr'] [hook]
+          pytest_fixture_setup [hook]
+              fixturedef: <FixtureDef argname='out_patterns' scope='function' baseid=''>
+              request: <SubRequest 'out_patterns' for <Function test_console_stream_pattern_setup[out]>>
+          finish pytest_fixture_setup --> [] [hook]
+          pytest_fixture_setup [hook]
+              fixturedef: <FixtureDef argname='err_patterns' scope='function' baseid=''>
+              request: <SubRequest 'err_patterns' for <Function test_console_stream_pattern_setup[out]>>
+          finish pytest_fixture_setup --> ['SUPER_SECRET'] [hook]
+        finish pytest_runtest_setup --> None [hook]
+        pytest_runtest_makereport [hook]
+            item: <Function test_console_stream_pattern_setup[out]>
+            call: <CallInfo when='setup' result: None>
+        finish pytest_runtest_makereport --> <TestReport 'tests/test_console.py::test_console_stream_pattern_setup[out]' when='setup' outcome='passed'> [hook]
+        pytest_runtest_logreport [hook]
+            report: <TestReport 'tests/test_console.py::test_console_stream_pattern_setup[out]' when='setup' outcome='passed'>
+        finish pytest_runtest_logreport --> [] [hook]
+        pytest_runtest_call [hook]
+            item: <Function test_console_stream_pattern_setup[out]>
+          pytest_pyfunc_call [hook]
+              pyfuncitem: <Function test_console_stream_pattern_setup[out]>
+          finish pytest_pyfunc_call --> True [hook]
+        finish pytest_runtest_call --> None [hook]
+        pytest_runtest_makereport [hook]
+            item: <Function test_console_stream_pattern_setup[out]>
+            call: <CallInfo when='call' result: None>
+        finish pytest_runtest_makereport --> <TestReport 'tests/test_console.py::test_console_stream_pattern_setup[out]' when='call' outcome='passed'> [hook]
+        pytest_runtest_logreport [hook]
+            report: <TestReport 'tests/test_console.py::test_console_stream_pattern_setup[out]' when='call' outcome='passed'>
+        finish pytest_runtest_logreport --> [] [hook]
+        pytest_runtest_teardown [hook]
+            item: <Function test_console_stream_pattern_setup[out]>
+            nextitem: <Function test_console_stream_pattern_setup[err]>
+          pytest_fixture_post_finalizer [hook]
+              fixturedef: <FixtureDef argname='err_patterns' scope='function' baseid=''>
+              request: <SubRequest 'err_patterns' for <Function test_console_stream_pattern_setup[out]>>
+          finish pytest_fixture_post_finalizer --> [] [hook]
+          pytest_fixture_post_finalizer [hook]
+              fixturedef: <FixtureDef argname='out_patterns' scope='function' baseid=''>
+              request: <SubRequest 'out_patterns' for <Function test_console_stream_pattern_setup[out]>>
+          finish pytest_fixture_post_finalizer --> [] [hook]
+          pytest_fixture_post_finalizer [hook]
+              fixturedef: <FixtureDef argname='stream_args' scope='function' baseid=''>
+              request: <SubRequest 'stream_args' for <Function test_console_stream_pattern_setup[out]>>
+          finish pytest_fixture_post_finalizer --> [] [hook]
+          pytest_fixture_post_finalizer [hook]
+              fixturedef: <FixtureDef argname='pattern' scope='function' baseid=''>
+              request: <SubRequest 'pattern' for <Function test_console_stream_pattern_setup[out]>>
+          finish pytest_fixture_post_finalizer --> [] [hook]
+          pytest_fixture_post_finalizer [hook]
+              fixturedef: <FixtureDef argname='monkeypatch' scope='function' baseid=''>
+              request: <SubRequest 'monkeypatch' for <Function test_console_stream_pattern_setup[out]>>
+          finish pytest_fixture_post_finalizer --> [] [hook]
+        finish pytest_runtest_teardown --> None [hook]
+        pytest_runtest_makereport [hook]
+            item: <Function test_console_stream_pattern_setup[out]>
+            call: <CallInfo when='teardown' result: None>
+        finish pytest_runtest_makereport --> <TestReport 'tests/test_console.py::test_console_stream_pattern_setup[out]' when='teardown' outcome='passed'> [hook]
+        pytest_runtest_logreport [hook]
+            report: <TestReport 'tests/test_console.py::test_console_stream_pattern_setup[out]' when='teardown' outcome='passed'>
+        finish pytest_runtest_logreport --> [] [hook]
+        pytest_runtest_logfinish [hook]
+            nodeid: tests/test_console.py::test_console_stream_pattern_setup[out]
+            location: ('tests/test_console.py', 23, 'test_console_stream_pattern_setup[out]')
+        finish pytest_runtest_logfinish --> [] [hook]
+      finish pytest_runtest_protocol --> True [hook]
+      pytest_runtest_protocol [hook]
+          item: <Function test_console_stream_pattern_setup[err]>
+          nextitem: None
+        pytest_runtest_logstart [hook]
+            nodeid: tests/test_console.py::test_console_stream_pattern_setup[err]
+            location: ('tests/test_console.py', 23, 'test_console_stream_pattern_setup[err]')
+        finish pytest_runtest_logstart --> [] [hook]
+        pytest_runtest_setup [hook]
+            item: <Function test_console_stream_pattern_setup[err]>
+          pytest_fixture_setup [hook]
+              fixturedef: <FixtureDef argname='monkeypatch' scope='function' baseid=''>
+              request: <SubRequest 'monkeypatch' for <Function test_console_stream_pattern_setup[err]>>
+          finish pytest_fixture_setup --> <_pytest.monkeypatch.MonkeyPatch object at 0x1094f2650> [hook]
+          pytest_fixture_setup [hook]
+              fixturedef: <FixtureDef argname='pattern' scope='function' baseid=''>
+              request: <SubRequest 'pattern' for <Function test_console_stream_pattern_setup[err]>>
+          finish pytest_fixture_setup --> ['SUPER_SECRET'] [hook]
+          pytest_fixture_setup [hook]
+              fixturedef: <FixtureDef argname='stream_args' scope='function' baseid=''>
+              request: <SubRequest 'stream_args' for <Function test_console_stream_pattern_setup[err]>>
+          finish pytest_fixture_setup --> ['--scrub-stderr'] [hook]
+          pytest_fixture_setup [hook]
+              fixturedef: <FixtureDef argname='out_patterns' scope='function' baseid=''>
+              request: <SubRequest 'out_patterns' for <Function test_console_stream_pattern_setup[err]>>
+          finish pytest_fixture_setup --> ['SUPER_SECRET'] [hook]
+          pytest_fixture_setup [hook]
+              fixturedef: <FixtureDef argname='err_patterns' scope='function' baseid=''>
+              request: <SubRequest 'err_patterns' for <Function test_console_stream_pattern_setup[err]>>
+          finish pytest_fixture_setup --> [] [hook]
+        finish pytest_runtest_setup --> None [hook]
+        pytest_runtest_makereport [hook]
+            item: <Function test_console_stream_pattern_setup[err]>
+            call: <CallInfo when='setup' result: None>
+        finish pytest_runtest_makereport --> <TestReport 'tests/test_console.py::test_console_stream_pattern_setup[err]' when='setup' outcome='passed'> [hook]
+        pytest_runtest_logreport [hook]
+            report: <TestReport 'tests/test_console.py::test_console_stream_pattern_setup[err]' when='setup' outcome='passed'>
+        finish pytest_runtest_logreport --> [] [hook]
+        pytest_runtest_call [hook]
+            item: <Function test_console_stream_pattern_setup[err]>
+          pytest_pyfunc_call [hook]
+              pyfuncitem: <Function test_console_stream_pattern_setup[err]>
+            pytest_assertrepr_compare [hook]
+                config: <_pytest.config.Config object at 0x108a216a0>
+                op: ==
+                left: []
+                right: ['SUPER_SECRET']
+            finish pytest_assertrepr_compare --> [["[] == ['SUPER_SECRET']", '', "Right contains one more item: \x1b[0m\x1b[33m'\x1b[39;49;00m\x1b[33mSUPER_SECRET\x1b[39;49;00m\x1b[33m'\x1b[39;49;00m\x1b[90m\x1b[39;49;00m", 'Use -v to get more diff']] [hook]
+        pytest_runtest_makereport [hook]
+            item: <Function test_console_stream_pattern_setup[err]>
+            call: <CallInfo when='call' excinfo=<ExceptionInfo AssertionError("assert [] == ['SUPER_SECRET']\n  \n  Right contains one more item: \x1b[0m\x1b[33m'\x1b[39;49;00m\x1b[33mSUPER_SECRET\x1b[39;49;00m\x1b[33m'\x1b[39;49;00m\x1b[90m\x1b[39;49;00m\n  Use -v to get more diff") tblen=32>>
+        finish pytest_runtest_makereport --> <TestReport 'tests/test_console.py::test_console_stream_pattern_setup[err]' when='call' outcome='failed'> [hook]
+        pytest_runtest_logreport [hook]
+            report: <TestReport 'tests/test_console.py::test_console_stream_pattern_setup[err]' when='call' outcome='failed'>
+        finish pytest_runtest_logreport --> [] [hook]
+        pytest_exception_interact [hook]
+            node: <Function test_console_stream_pattern_setup[err]>
+            call: <CallInfo when='call' excinfo=<ExceptionInfo AssertionError("assert [] == ['SUPER_SECRET']\n  \n  Right contains one more item: \x1b[0m\x1b[33m'\x1b[39;49;00m\x1b[33mSUPER_SECRET\x1b[39;49;00m\x1b[33m'\x1b[39;49;00m\x1b[90m\x1b[39;49;00m\n  Use -v to get more diff") tblen=32>>
+            report: <TestReport 'tests/test_console.py::test_console_stream_pattern_setup[err]' when='call' outcome='failed'>
+        finish pytest_exception_interact --> [] [hook]
+        pytest_runtest_teardown [hook]
+            item: <Function test_console_stream_pattern_setup[err]>
+            nextitem: None
+          pytest_fixture_post_finalizer [hook]
+              fixturedef: <FixtureDef argname='err_patterns' scope='function' baseid=''>
+              request: <SubRequest 'err_patterns' for <Function test_console_stream_pattern_setup[err]>>
+          finish pytest_fixture_post_finalizer --> [] [hook]
+          pytest_fixture_post_finalizer [hook]
+              fixturedef: <FixtureDef argname='out_patterns' scope='function' baseid=''>
+              request: <SubRequest 'out_patterns' for <Function test_console_stream_pattern_setup[err]>>
+          finish pytest_fixture_post_finalizer --> [] [hook]
+          pytest_fixture_post_finalizer [hook]
+              fixturedef: <FixtureDef argname='stream_args' scope='function' baseid=''>
+              request: <SubRequest 'stream_args' for <Function test_console_stream_pattern_setup[err]>>
+          finish pytest_fixture_post_finalizer --> [] [hook]
+          pytest_fixture_post_finalizer [hook]
+              fixturedef: <FixtureDef argname='pattern' scope='function' baseid=''>
+              request: <SubRequest 'pattern' for <Function test_console_stream_pattern_setup[err]>>
+          finish pytest_fixture_post_finalizer --> [] [hook]
+          pytest_fixture_post_finalizer [hook]
+              fixturedef: <FixtureDef argname='monkeypatch' scope='function' baseid=''>
+              request: <SubRequest 'monkeypatch' for <Function test_console_stream_pattern_setup[err]>>
+          finish pytest_fixture_post_finalizer --> [] [hook]
+        finish pytest_runtest_teardown --> None [hook]
+        pytest_runtest_makereport [hook]
+            item: <Function test_console_stream_pattern_setup[err]>
+            call: <CallInfo when='teardown' result: None>
+        finish pytest_runtest_makereport --> <TestReport 'tests/test_console.py::test_console_stream_pattern_setup[err]' when='teardown' outcome='passed'> [hook]
+        pytest_runtest_logreport [hook]
+            report: <TestReport 'tests/test_console.py::test_console_stream_pattern_setup[err]' when='teardown' outcome='passed'>
+        finish pytest_runtest_logreport --> [] [hook]
+        pytest_runtest_logfinish [hook]
+            nodeid: tests/test_console.py::test_console_stream_pattern_setup[err]
+            location: ('tests/test_console.py', 23, 'test_console_stream_pattern_setup[err]')
+        finish pytest_runtest_logfinish --> [] [hook]
+      finish pytest_runtest_protocol --> True [hook]
+    finish pytest_runtestloop --> True [hook]
+    pytest_sessionfinish [hook]
+        session: <Session  exitstatus=<ExitCode.TESTS_FAILED: 1> testsfailed=1 testscollected=2>
+        exitstatus: 1
+      pytest_terminal_summary [hook]
+          terminalreporter: <pytest_sugar.SugarTerminalReporter object at 0x109515010>
+          exitstatus: 1
+          config: <_pytest.config.Config object at 0x108a216a0>
+        pytest_report_teststatus [hook]
+            report: <TestReport 'tests/test_console.py::test_console_stream_pattern_setup[err]' when='call' outcome='failed'>
+            config: <_pytest.config.Config object at 0x108a216a0>
+        finish pytest_report_teststatus --> ('failed', '\x1b[31m⨯\x1b[0m', 'FAILED') [hook]
+      finish pytest_terminal_summary --> [] [hook]
+    finish pytest_sessionfinish --> [] [hook]
+    pytest_unconfigure [hook]
+        config: <_pytest.config.Config object at 0x108a216a0>
+    finish pytest_unconfigure --> [] [hook]
