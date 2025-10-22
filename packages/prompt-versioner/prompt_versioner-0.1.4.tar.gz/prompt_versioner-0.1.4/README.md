@@ -1,0 +1,202 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/pepes97/prompt-versioner/main/docs/images/logo.svg" alt="Prompt Versioner Logo" width="250" height="250">
+</p>
+
+**A comprehensive Python library for managing and versioning LLM prompts, with built-in A/B testing, metric tracking, and performance monitoring capabilities.**
+
+<p align="center">
+  <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.11+-blue.svg" alt="Python 3.11+"></a>
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License MIT"></a>
+  <a href="https://github.com/psf/black"><img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="Code Style: Black"></a>
+</p>
+
+---
+
+## 🎯 Why Prompt Versioner?
+
+Prompt Versioner provides enterprise-grade prompt management with:
+
+- **🔄 Version Control**: Full versioning of prompts
+- **📊 Performance Tracking**: Metrics and regression detection
+- **🧪 A/B Testing**: Built-in statistical framework
+- **⚡ Real-time Monitoring**: Alerts and dashboards
+- **👥 Team Collaboration**: Annotations and reviews
+- **🎨 Modern UI**: Responsive web dashboard
+
+---
+
+## ✨ Features
+
+### 🔧 Core Functionality
+- Automatic MAJOR/MINOR/PATCH versioning
+- Metrics tracking: tokens, latency, quality, cost
+- Export & share prompt history
+- Optional Git integration
+
+### 🧪 Advanced Testing & Monitoring
+- A/B Testing framework
+- Automated regression detection
+- Live metrics dashboards
+- Custom alert thresholds
+
+### 👥 Collaboration & Management
+- Team annotations and feedback
+- Version comparison & visual diff
+- Search & filtering by metadata, performance, and tags
+
+### 🎨 Modern Web Interface
+- Interactive dashboard with responsive layout
+- Dark/Light themes
+- Tab navigation for Prompts, Testing, Comparison, Alerts
+- Real-time updates
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/pepes97/prompt-versioner/main/docs/images/dashboard-overview.png" alt="Dashboard Overview">
+</p>
+
+---
+
+## 📦 Installation
+
+### Prerequisites
+- Python 3.11+
+- Poetry (recommended) or pip
+- Git (optional)
+
+### Using PyPI
+```bash
+pip install prompt-versioner
+```
+
+---
+
+## 🚀 Quick Start
+
+```python
+from prompt_versioner import PromptVersioner, VersionBump
+
+pv = PromptVersioner(project_name="my-first-project", enable_git=False)
+pv.save_version(
+    name="assistant",
+    system_prompt="You are a helpful assistant.",
+    user_prompt="Please answer the following question: {question}",
+    bump_type=VersionBump.MAJOR
+)
+
+print("✅ Created first prompt version 1.0.0!")
+```
+
+---
+
+## 🎨 Web Dashboard
+
+### Core Features
+
+#### 📋 Prompts Management
+
+* Version history with visual diff
+* Semantic search
+* Bulk operations
+* Live preview
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/pepes97/prompt-versioner/main/docs/images/prompts-management.png" alt="Prompts Management">
+</p>
+
+#### 📊 Metrics & Analytics
+
+* Token usage, latency, cost analysis
+* Quality score tracking
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/pepes97/prompt-versioner/main/docs/images/metrics-analytics.png" alt="Metrics Dashboard">
+</p>
+
+#### 🧪 A/B Testing
+
+* Split testing
+* Real-time results
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/pepes97/prompt-versioner/main/docs/images/ab-testing.png" alt="AB Testing Interface">
+</p>
+
+#### 🔍 Version Comparison
+
+* Side-by-side visual diff
+* Metadata & performance delta
+* Smart annotations
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/pepes97/prompt-versioner/main/docs/images/version-comparison.png" alt="Version Comparison">
+</p>
+
+#### ⚠️ Smart Alerts
+
+* Automatic detection of regressions
+* Cost and error monitoring
+* Custom metrics & thresholds
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/pepes97/prompt-versioner/main/docs/images/alerts-system.png" alt="Alerts System">
+</p>
+
+---
+
+## 💻 CLI Interface
+
+```bash
+pv init
+pv list
+pv versions <prompt>
+pv show <prompt> <version>
+pv diff <prompt> <v1> <v2>
+pv compare <prompt> <v1> <v2>
+pv delete <prompt> <version>
+pv rollback <prompt> <version>
+pv dashboard --port 5000
+```
+
+---
+
+## 📖 Examples
+
+Examples in [`examples/`](examples/) are fully functional:
+
+| File                      | Description              |
+| ------------------------- | ------------------------ |
+| basic_usage.py            | Getting started          |
+| version_management.py     | Advanced version control |
+| metrics_tracking.py       | Metrics logging          |
+| ab_testing.py             | Statistical testing      |
+| performance_monitoring.py | Automated monitoring     |
+| summarization_example.py  | Real-world summarization |
+| run_dashboard.py          | Launch dashboard         |
+| clear_db.py               | Reset database           |
+
+---
+
+## 🌟 Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
+
+---
+
+## 📄 License
+
+MIT License - [LICENSE](LICENSE)
+
+---
+
+## 📞 Support
+
+* Documentation: [https://pepes97.github.io/prompt-versioner/](https://pepes97.github.io/prompt-versioner/)
+* Issues: [GitHub Issues](https://github.com/pepes97/prompt-versioner/issues)
+* Discussions: [GitHub Discussions](https://github.com/pepes97/prompt-versioner/discussions)
+
+---
+
+<p align="center">
+<strong>Build by Sveva Pepe, NLP Engineer</strong><br>
+<sub>⭐ Star this project if it helps you build better AI applications!</sub>
+</p>
