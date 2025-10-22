@@ -1,0 +1,33 @@
+[project]
+name = "markdowntest"
+version = "0.0.1"
+authors = [
+  { name="Leon Johnson", email="leonjohn@iu.edu" },
+]
+description = 'markdowntest: A unit test runner that renders a markdown file.'
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "unittest",
+  "functools"
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Education"
+]
+license = "MIT"
+license-files = ["LICENSE*"]
+keywords = ["autograder", "higher ed", "coding exercises", "python education"]
+
+
+[project.urls]
+Homepage = "https://github.com/leontoddjohnson/markdowntest"
+Issues = "https://github.com/leontoddjohnson/markdowntest/issues"
+# Documentation = ...
+
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
