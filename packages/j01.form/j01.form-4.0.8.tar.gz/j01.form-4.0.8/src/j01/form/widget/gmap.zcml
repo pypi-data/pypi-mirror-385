@@ -1,0 +1,56 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    xmlns:z3c="http://namespaces.zope.org/z3c"
+    i18n_domain="p01">
+
+  <configure zcml:condition="installed m01.gmap">
+
+    <!-- IGMapWidget -->
+    <class class=".gmap.GMapWidget">
+      <require
+          permission="zope.Public"
+          interface="j01.form.interfaces.IGMapWidget"
+          />
+    </class>
+
+    <z3c:widgetTemplate
+        mode="display"
+        widget="j01.form.interfaces.IGMapWidget"
+        layer="j01.form.layer.IFormLayer"
+        template="gmap_display.pt"
+        />
+
+    <z3c:widgetTemplate
+        mode="input"
+        widget="j01.form.interfaces.IGMapWidget"
+        layer="j01.form.layer.IFormLayer"
+        template="gmap_input.pt"
+        />
+
+
+    <!-- IGeoPointGMapWidget -->
+    <class class=".gmap.GeoPointGMapWidget">
+      <require
+          permission="zope.Public"
+          interface="j01.form.interfaces.IGeoPointGMapWidget"
+          />
+    </class>
+
+    <z3c:widgetTemplate
+        mode="display"
+        widget="j01.form.interfaces.IGeoPointGMapWidget"
+        layer="j01.form.layer.IFormLayer"
+        template="gmap_display.pt"
+        />
+
+    <z3c:widgetTemplate
+        mode="input"
+        widget="j01.form.interfaces.IGeoPointGMapWidget"
+        layer="j01.form.layer.IFormLayer"
+        template="gmap_input.pt"
+        />
+
+  </configure>
+
+</configure>

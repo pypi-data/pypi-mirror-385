@@ -1,0 +1,14 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:p01="http://namespaces.zope.org/p01"
+    i18n_domain="p01">
+
+  <p01:jsonrpc
+      for="j01.form.interfaces.IForm"
+      class=".jsonrpc.J01Validator"
+      methods="j01Validate"
+      permission="zope.Public"
+      layer="p01.jsonrpc.layer.IJSONRPCLayer"
+      />
+
+</configure>

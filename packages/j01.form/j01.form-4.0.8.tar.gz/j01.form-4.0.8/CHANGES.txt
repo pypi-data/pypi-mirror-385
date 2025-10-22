@@ -1,0 +1,348 @@
+=======
+CHANGES
+=======
+
+4.0.8 (unreleased)
+------------------
+
+- feature; added JSONRPCIconRightClickButton using the icon right after the
+  text label.
+
+
+4.0.7 (2025-10-21)
+------------------
+
+- feature; added j01.jsonrpc.btn JSONRPCIconClickButton and JSONRPCSingleIconClickButton
+
+
+4.0.6 (2025-06-11)
+------------------
+
+- bugfix: switch more z3c.jsonrpc to p01.jsonrpc
+
+
+4.0.5 (2025-06-11)
+------------------
+
+- switch more z3c.jsonrpc to p01.jsonrpc
+
+
+4.0.4 (2025-06-06)
+------------------
+
+- switch from z3c.jsonrpc to p01.jsonrpc
+
+
+4.0.3 (2023-07-20)
+------------------
+
+- Bugfix: added isRequiredMissingValue and use them for validation in the
+  extractData method. Ensure that 0 (zero) is a valid widget input by default.
+  An enpty text input is a missing value but 0 (zero) is not a missing input
+  by default.
+
+- Bugfix: locate the widget after setup and before calling the update method
+
+- Feature: use widgetIgnoreContexts in widget setup if available for given
+  field name
+
+
+4.0.2 (2021-05-18)
+------------------
+
+- bugfix; use better expression for radio and checkbox picker widget. Use name
+  instead of startswith name expression. This prevents to apply the picker
+  widget to similar starting filed/widget names.
+
+
+4.0.1 (2021-05-14)
+------------------
+
+- bugfix: added structure to description in display widget layout template. This
+  makes it consistent with the input widget and allows to render urls in the
+  widget description.
+
+
+4.0.0 (2021-01-04)
+------------------
+
+- switch to new layout style concept. Replace old bootstrap 3 and 4
+  styles with new independent layout styles.
+
+
+2.5.0 (2020-04-21)
+-------------------
+
+- headsup: reflect changes in j01.select2 which got updated to version 4.0.*.
+  Some global declarations imported from j01.select2 got removed in j01.select2.
+  Please review sour Select2 widget implementations and adjust them to the new
+  Selet2 Version 4.0.* and up.
+
+
+2.4.10 (2019-05-14)
+
+- bugfix: fix issues with latest z3c.form py3 changes. Ensure that the ordered
+  dict used in buttons get initialized.
+
+- feature: added DDSlick select widget including an optional widget using
+  MCustomScrollbar.
+
+
+2.4.9 (2018-11-08)
+------------------
+
+- feature: added getPromptSingleSelect2Widget providing no value and force
+  selecting a value via widget prompt option.
+
+
+2.4.8 (2018-10-05)
+------------------
+
+- bugfix: fix missing _type in password widget
+
+
+2.4.7 (2018-09-17)
+------------------
+
+- bugfix: don't render not checked checkbox items in hidden mode
+
+- bugfix: fix tal markup for different display widgets
+
+
+2.4.6 (2018-06-05)
+------------------
+
+- feature: added ProxyWidget supporting multiple ':' as separator between key
+  value. The first : is used as key, value separator. Any following ':' get
+  joined as value e.g. <proto>:<host:port>
+
+
+2.4.5 (2018-04-30)
+------------------
+
+- feature: added j01.rater widget. But only if j01.rater package is installed.
+  There is no new dependency. It's just conditinal and provides the coorect
+  j01.form input and layout templates.
+
+
+2.4.4 (2018-04-24)
+------------------
+
+- feature: added m01.gmap widget. But only if m01.gmap package is installed.
+  There is no new dependency. It's just conditinal and provides the coorect
+  j01.form input and layout templates.
+
+
+2.4.3 (2018-04-09)
+------------------
+
+- updated autosize javascript to version 4.0.1
+
+
+2.4.2 (2018-03-15)
+------------------
+
+- feature: added showNoValueItem option for RadioWidget. This option allows to
+  render an additional "No value" item for select None as value. This can get
+  enabled if the schema defines required=False. If schema required=True is
+  defined, you need to add None as valid value to your source or vocabulary
+  and adjust the schema messing_value to something else then None for make
+  None a valid value. By default, the showNoValueItem is set to False and
+  forces not rendering "No value" as option for not required fields.
+
+- feature: added structure to widget description. This allows to render
+  html as widget description. Take care if you do some wired things with
+  the widget and render custom user input in the widget description. Because
+  this whould not be safe and could lead in a cross site injection. But normaly
+  this is save if you control the translation process and only render schema
+  field description as widget description.
+
+
+2.4.1 (2018-02-15)
+------------------
+
+- feature: added bootstrap 3 DateTimePickerWidget. This widget is available if
+  the j01.datetimepicker package is installed
+
+
+2.4.0 (2017-09-18)
+------------------
+
+- bugfix: make sure we don't apply widget changes for widgets defined in
+  widgetIgnoreContexts in applyChanges method
+
+- bugfix: adjust ignoreRequiredOnValidations implementation. use new
+  J01FieldWidgets and make sure that the ignoreRequiredOnValidation will not
+  get override by the default FieldWidgets ignoreRequiredOnExtract attribute
+
+- security: remove structure for widget label in checkbox widget and
+  widget layout template. Make sure widget label can't get used for a
+  script injection. This is only relevant if you implement persistent
+  widgets or the translator provides unsecure code.
+
+- feature: implemented custom FieldWidgets (J01FieldWidgets) which reflects
+  the form field/widget conditions like widgetRequireds, widgetIgnoreRequests,
+  ignoreRequiredOnValidations
+
+- feature: implemented widgetIgnoreApplyChanges and customized applyChanges
+  method which is able to ignore apply data handling for fields defined
+  in widgetIgnoreApplyChanges. This is usefull if a field should get ignored
+  in applyChanges because we handled them with a different button handler
+
+
+2.3.0 (2017-06-29)
+------------------
+
+- feature: added contentRenderMethodName for rendering the response content
+  based on additional javascript methods
+
+- bugfix: support no value in RadioWidget
+
+
+2.2.1 (2017-03-10)
+------------------
+
+- bugfix: fix broken select_display.pt tal markup
+
+
+2.2.0 (2017-01-11)
+------------------
+
+- feature: implemented getLabel method in checkbox widget. This allows use to
+  render enhanced labels including links and more. This is usefull for custom
+  single checkbox widgets e.g. render a href link to the AGB etc.
+
+- bugfix: fix ignoreRequest setup. Since there is no concept for apply the
+  ignoreRequest value per field, we need to apply the ignoreRequest value
+  on the widget. But since the widget update call will setup the widget and
+  also call the widget update method, we need to apply the ignoreRequest
+  value after this widget update call and call the update method again.
+  Since the ignoreRequest per field/widget concept was broken, we also changed
+  the applyIgnoreRequest to applyWidgetIgnoreRequest.
+
+- reorganize less files and support better support for reuse the files in other
+  projects. The generated css files and original less files provide the same
+  code as before. We just added another indirection and moved the real less
+  code to a folder called source and removed every include in this source
+  files.
+
+- feature: new layout mixin helper class offering html and body element id and
+  css class mixins in page and forms.
+
+- feature: update to autosize 3.0.17
+
+
+2.1.0 (2015-07-19)
+------------------
+
+- feature: update to bootstrap v3.3.5
+
+- feature: update to bootstrap-select v1.7.2
+
+- feature: update to autosize v3.0.8
+
+
+2.0.3 (2015-06-30)
+------------------
+
+- bugfix: prefix datepicker widget class and use bootstrap-datepicker. This
+  prevents to messup with the div.datepicker box.
+
+
+2.0.2 (2015-06-29)
+------------------
+
+- bugfix: catch TypeError based on broken absolutURL lookup. This can happen
+  if an error view or breadcrumb is not locatable.
+
+- bugfix: added missing WidgetMixin to MultiWidget.This was failing because of
+  the missing showRequired condition.
+
+- feature: added showWidgetLabel and showKeyWidgetLabel options for disable
+  labels in multi widget
+
+- feature: added widgetShowLabels and widgetShowRequireds to form mixin for
+  disable widget label and required elements at form level
+
+
+2.0.1 (2015-06-09)
+------------------
+
+- bugfix: changed widgetIgnoreRequiredOnExtracts to ignoreRequiredOnValidations
+  because the widget property name is called ignoreRequiredOnValidation
+
+- feature: update to bootstrap v3.3.4
+
+- feature: remove shadow and transition
+
+- feature: support ordered select widget if j01.selectordered package is
+  available
+
+- feature: implemented default widget and widget template setup usable for
+  doc test setup where we need widgets and don't have a full zcml basedtesting
+  setup.
+
+- feature: improve styles and added more variables
+
+- added more samples to j01.demo (not in this package, see j01.demo package)
+
+
+2.0.0 (2015-03-17)
+------------------
+
+- switch to improved j01.jsonrpc implementation and support p01.testbrowser
+
+- feature: added MultiWidget
+
+- changed form and MultiWidget row class to widget-row for better compatibility
+  with twitter bootstrap where row is used for the layout grid
+
+- moved j01.form.demo to j01.demo package which provides a full zope server
+  setup and some demo pages
+
+
+1.0.1 (2015-01-20)
+------------------
+
+- feature: implemented form status javascript for show a progress line based on
+  filled widgets
+
+- feature: support new browser history api attributes given from j01.jsonrpc
+
+- feature: ensure default form name and id if an empty prefix get used.
+  This makes button click handler working with an empty form prefix. Usable for
+  simple login form handling.
+
+- bugfix: fix missing updateWidgets call. Only updateWidgets from super class
+  was called.
+
+
+1.0.0 (2014-04-04)
+------------------
+
+- implemented new button concept based on new j01.jsonrpc.btn implementation.
+  Use buttons from btn module instead of jsbutton.
+
+
+0.5.1 (2014-03-25)
+------------------
+
+- removed p01.form configuration
+
+
+0.5.0 (2014-03-25)
+------------------
+
+- initial release
+
+- enhanced z3c.form widgtes and form classes supporting form-control as input
+  css class. The form-control class is used as marker for twitter bootstrap 3
+  form fields/controls. This makes it simple to use with twitter bootstrap 3 but
+  could also get used with your own css styles. The j01.form package also
+  provides a radio/checkbox widget using overlay icons and styles for
+  rendering nicer radio and checkbox controls. Other enhanced widgets provide
+  nicer select and multi select rendering.
+
+- implemented html5 input widgets
+
+- use new p01.schema package supporting html5 schema fields

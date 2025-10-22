@@ -1,0 +1,23 @@
+======
+README
+======
+
+Let's test the source code with our custom checker:
+
+from __future__ import absolute_import
+  >>> import p01.checker
+  >>> import j01.jsonrpc
+  >>> skipFileNames = [
+  ...   'jquery-migrate-1.4.1.js',
+  ...   'jquery-migrate-1.4.1.min.js',
+  ... ]
+
+  >>> checker = p01.checker.Checker(p01.checker.CHECKERS)
+  >>> checker.check(j01.jsonrpc, skipFileNames=skipFileNames)
+  -------------------
+  css/j01.loading.css
+  -------------------
+  63: Unknown @ rule: @-ms-keyframes.
+        @-ms-keyframes pulse {
+  73: Unexpected token '}' at line 73, col 1.
+        }

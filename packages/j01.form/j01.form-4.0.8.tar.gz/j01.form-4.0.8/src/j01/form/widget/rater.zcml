@@ -1,0 +1,72 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    xmlns:z3c="http://namespaces.zope.org/z3c"
+    i18n_domain="p01">
+
+  <configure zcml:condition="installed j01.rater">
+
+    <!-- IRatingWidget -->
+    <class class=".rater.RatingWidget">
+      <require
+          permission="zope.Public"
+          interface="j01.form.interfaces.IRatingWidget"
+          />
+    </class>
+
+    <!-- IFiveStarRatingWidget -->
+    <class class=".rater.FiveStarRatingWidget">
+      <require
+          permission="zope.Public"
+          interface="j01.form.interfaces.IFiveStarRatingWidget"
+          />
+    </class>
+
+    <!-- IFiveHalfStarRatingWidget -->
+    <class class=".rater.FiveHalfStarRatingWidget">
+      <require
+          permission="zope.Public"
+          interface="j01.form.interfaces.IFiveHalfStarRatingWidget"
+          />
+    </class>
+
+    <!-- IFiveHalfStarFullRatingWidget -->
+    <class class=".rater.FiveHalfStarFullRatingWidget">
+      <require
+          permission="zope.Public"
+          interface="j01.form.interfaces.IFiveHalfStarFullRatingWidget"
+          />
+    </class>
+
+
+    <!-- adapters -->
+    <adapter
+        factory=".rater.getFiveStarRatingWidget"
+        />
+
+    <adapter
+        factory=".rater.getFiveHalfStarRatingWidget"
+        />
+
+    <adapter
+        factory=".rater.getFiveHalfStarFullRatingWidget"
+        />
+
+
+    <z3c:widgetTemplate
+        mode="display"
+        widget="j01.form.interfaces.IRatingWidget"
+        layer="j01.form.layer.IFormLayer"
+        template="rater_display.pt"
+        />
+
+    <z3c:widgetTemplate
+        mode="input"
+        widget="j01.form.interfaces.IRatingWidget"
+        layer="j01.form.layer.IFormLayer"
+        template="rater_input.pt"
+        />
+
+  </configure>
+
+</configure>

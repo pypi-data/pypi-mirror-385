@@ -1,0 +1,133 @@
+// j01.form.ddslick.less
+.ddslick-widget {
+    .dd-container {
+        // width: 100%; // defned in widget setup
+        position: relative;
+        // display: inline-block;
+        outline: none;
+    }
+    .dd-select {
+        position: relative;
+        height: @ddslick-height;
+        line-height: @ddslick-height;
+        background-color: @ddslick-bg;
+        border: 1px solid @ddslick-border-color;
+        cursor: pointer;
+        outline: none;
+    }
+    .dd-desc {
+        display: inline-block;
+        overflow:  hidden;
+        line-height:  1.4em;
+    }
+    .dd-selected {
+        // button
+        width: 100%;
+        height: @ddslick-button-height;
+        line-height:@ddslick-button-height;
+        text-align: left;
+        position: relative;
+        display: block;
+        padding: 0 10px;
+        overflow: hidden;
+        border: 0;
+        color: @ddslick-color;
+        background-color: @ddslick-bg;
+        outline: none;
+    }
+    .dd-selected:focus {
+        z-index: 2001;
+    }
+    .dd-pointer {
+        width: 0;
+        height: 0;
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        margin-top: -3px;
+    }
+    .dd-selected:focus + .dd-pointer{
+        z-index: 2002;
+    }
+    .dd-pointer-down {
+        border: solid 5px transparent;
+        border-top: solid 5px #000;
+    }
+    .dd-pointer-up {
+        border: solid 5px transparent !important;
+        border-bottom: solid 5px #000 !important;
+        margin-top: -8px;
+    }
+    .dd-options {
+        border: solid 1px @ddslick-border-color;
+        border-top: none;
+        list-style: none;
+        display: none;
+        position: absolute;
+        z-index: 2000;
+        margin: 0;
+        padding: 0;
+        background: #fff;
+        // overflow: visible;
+        height: 250px;
+        overflow: visible;
+        overflow-x: hidden;
+        outline: none;
+        .dd-option {
+            padding: 5px 10px;
+            display: block;
+            width: 100%;
+            text-align: left;
+            border-bottom: solid 1px @ddslick-border-color;
+            overflow: visible;
+            text-decoration: none;
+            color: @ddslick-color;
+            background-color: @ddslick-bg;
+            cursor: pointer;
+            -webkit-transition: all 0.25s ease-in-out;
+            -moz-transition:  all 0.25s ease-in-out;
+            -o-transition:  all 0.25s ease-in-out;
+            -ms-transition:  all 0.25s ease-in-out;
+            box-sizing: border-box;
+        }
+        .dd-option-text {
+            display: block;
+        }
+        .dd-option-description {
+            display: block;
+        }
+        .dd-option:hover,
+        .dd-option:active,
+        .dd-option:focus {
+            // background: #f3f3f3;
+            // color: #000;
+            z-index: 2001;
+        }
+        .dd-option-selected {
+            color: @ddslick-selected-color;
+            background-color: @ddslick-selected-bg;
+        }
+        .dd-option-image,
+        .dd-selected-image {
+            vertical-align: middle;
+            float: left;
+            margin-right: 5px;
+            max-width: 64px;
+        }
+        .dd-image-right {
+            float: right;
+            margin-right: 15px;
+            margin-left: 5px;
+        }
+    }
+    // .dd-options:focus {
+    //     outline: 0;
+    // }
+    .dd-options > .dd-option:last-child {
+        border-bottom: none;
+    }
+    .dd-selected-description-truncated {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}

@@ -1,0 +1,10 @@
+====
+TODO
+====
+
+- implemented validator for IList field and compare missing_value
+  with == instead of is. Because mutable object likve an empty list [] does not
+  compare with another empty list.
+
+  [] is [] -> False
+  [] == [] -> True

@@ -1,0 +1,52 @@
+/* flex/grid/core.less */
+// http://opensource.ngengs.com/bootstrap-grid-flexbox/
+
+// create the columns
+.columns {
+    .make-flex-columns-basics();
+    // Default grid
+    .make-flex-columns();
+}
+
+// non class cls
+.columns {
+    .make-flex-cols-init();
+}
+
+// extra small (xs)
+.columns {
+    .make-flex-cols(xs);
+}
+
+// small (sm)
+@media (min-width: @screen-sm-min) {
+    .columns {
+        //.make-aligment(sm);
+        .make-flex-cols(sm);
+    }
+}
+
+// medium (md)
+@media (min-width: @screen-md-min) {
+    .columns {
+        //.make-aligment(md);
+        .make-flex-cols(md);
+    }
+}
+
+// large (lg)
+@media (min-width: @screen-lg-min) {
+    .columns {
+        //.make-aligment(lg);
+        .make-flex-cols(lg);
+    }
+}
+
+
+// flex space between items
+.margin-right-auto {
+    margin-right: auto;
+}
+.margin-left-auto {
+    margin-left: auto;
+}
