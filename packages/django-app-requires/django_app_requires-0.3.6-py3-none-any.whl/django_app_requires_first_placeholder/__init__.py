@@ -1,0 +1,2 @@
+default_app_config = "django_app_requires_first_placeholder.apps.DjangoAppRequiresFirstPlaceholderConfig"
+
