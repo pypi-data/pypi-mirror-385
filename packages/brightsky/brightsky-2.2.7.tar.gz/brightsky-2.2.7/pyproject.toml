@@ -1,0 +1,70 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "brightsky"
+dynamic = ["version"]
+requires-python = ">= 3.8"
+dependencies = [
+  "astral",
+  "asyncpg",
+  "click",
+  "coloredlogs",
+  "dwdparse[all]",
+  "falcon>=3",
+  "fastapi",
+  "gunicorn",
+  "httpx",
+  "huey",
+  "isal",
+  "numpy",
+  "orjson",
+  "parsel",
+  "psycopg2-binary",
+  "pyproj",
+  "python-dateutil",
+  "redis",
+  "requests",
+  "sentry-sdk",
+  "shapely",
+  "uvicorn",
+]
+authors = [
+  {name = "Jakob de Maeyer", email = "jakob@brightsky.dev"},
+]
+description = "JSON API for DWD's open weather data."
+readme = "README.md"
+license = {text = "MIT"}
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://brightsky.dev/"
+Documentation = "https://brightsky.dev/docs/"
+Source = "https://github.com/jdemaeyer/brightsky/"
+Tracker = "https://github.com/jdemaeyer/brightsky/issues/"
+
+[tool.setuptools.dynamic]
+version = {attr = "brightsky.__version__"}
+
+[tool.setuptools.packages.find]
+include = ["brightsky*"]
+
+[tool.pytest.ini_options]
+required_plugins = "pytest-env"
+
+[tool.pytest_env]
+BRIGHTSKY_LOAD_DOTENV = 0
+
+[tool.ruff]
+line-length = 79
+
+[tool.ruff.lint]
+select = ["E", "F"]
+
+[tool.ruff.lint.isort]
+lines-after-imports = 2
