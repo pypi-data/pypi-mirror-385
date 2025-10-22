@@ -1,0 +1,23 @@
+name: Security Scan
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+      security-events: write
+      pull-requests: write
+
+    steps:
+      - name: Run Fraim Security Scan
+        id: fraim-scan
+        uses: fraim-dev/fraim-action@423d9d6b3c80923557887930d80eec4ca22a5c24
+        with:
+          model: gemini/gemini-2.5-pro
+          gemini-api-key: ${{ secrets.GEMINI_API_KEY }}
+          workflow: code
