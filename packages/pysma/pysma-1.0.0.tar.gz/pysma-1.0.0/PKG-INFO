@@ -1,0 +1,94 @@
+Metadata-Version: 2.3
+Name: pysma
+Version: 1.0.0
+Summary: Library to interface an SMA Solar devices
+Author: Johann Kellerman, René Klomp
+Author-email: Johann Kellerman <kellerza@gmail.com>
+License: The MIT License (MIT)
+         
+         Copyright (c) 2016-2025 kellerza
+         
+         Permission is hereby granted, free of charge, to any person obtaining a copy
+         of this software and associated documentation files (the "Software"), to deal
+         in the Software without restriction, including without limitation the rights
+         to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+         copies of the Software, and to permit persons to whom the Software is
+         furnished to do so, subject to the following conditions:
+         
+         The above copyright notice and this permission notice shall be included in all
+         copies or substantial portions of the Software.
+         
+         THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+         IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+         FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+         AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+         LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+         OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+         SOFTWARE.
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Requires-Dist: aiohttp>=3,<4
+Requires-Dist: attrs
+Requires-Dist: jmespath
+Requires-Python: >=3.12
+Description-Content-Type: text/markdown
+
+# pysma library
+
+[![Workflow Status](https://github.com/kellerza/pysma/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/kellerza/pysma/actions)
+[![Codecov](https://codecov.io/gh/kellerza/pysma/branch/master/graph/badge.svg)](https://codecov.io/gh/kellerza/pysma)
+[![Documentation Status](https://readthedocs.org/projects/pysma/badge/?version=latest)](https://pysma.readthedocs.io/en/latest/?badge=latest)
+
+SMA Webconnect library for Python 3. The library was created
+to integrate SMA inverters with HomeAssistant
+
+See <http://www.sma-solar.com> for more information on the SMA solar
+inverters
+
+Other SMA interfaces include [SBFspot](https://github.com/SBFspot/SBFspot/) and a
+Python [adaptation](https://github.com/TD22057/T-Home/)
+
+## Example usage
+
+See [example.py](./example.py) for a basic usage and tests
+
+# Home Assistant
+
+The Home Assistant sma sensor documentation can be found
+[here](https://www.home-assistant.io/components/sma)
+
+> ---
+>
+> **This library uses Webconnect.** ~Modbus~ is not supported
+>
+> **If you can access your SMA via your browser, this might work for you.**
+>
+> ---
+
+If you access your SMA WebConnect via `https://` you should set both
+`ssl: true` and `verify_ssl: false`.
+
+Daily usage is not always available from the SMA WebConnect interface.
+It is possible to get around this by using a
+[utility meter](https://www.home-assistant.io/components/utility_meter)
+or more recently from the Energy management feature in Home Assistant
+
+### How to debug this addon
+
+1. Ensure you can access your SMA from your browser
+
+To enable detailed logging in Home Assistant, you can add the following to your configuration
+
+```yaml
+logger:
+  default: info
+  logs:
+    homeassistant.components.sma: debug
+    pysma: debug
+```
+
+## Energy Meter
+
+This library can read the second version of the emnergy meter, there is a separate Home Assistant OS Addon that could also read older Energy Meters directly. See [Energy Meter](https://github.com/kellerza/hassio-sma-em)
