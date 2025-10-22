@@ -1,0 +1,44 @@
+# SLURM Profile for HPC Genomics Workflows
+# Usage: vigil run --profile slurm --cores 100
+
+# Core Snakemake settings
+printshellcmds: true
+reason: true
+show-failed-logs: true
+keep-going: false
+rerun-incomplete: true
+
+# Cluster configuration
+cluster: slurm
+cores: 100
+nodes: 10
+local-cores: 2
+
+# SLURM-specific settings
+cluster-config: app/code/configs/profiles/slurm_cluster.yaml
+cluster-status: app/code/configs/profiles/slurm_status.py
+
+# Job submission command
+cluster: |
+  sbatch \
+    --partition={cluster.partition} \
+    --cpus-per-task={threads} \
+    --mem={cluster.mem} \
+    --time={cluster.time} \
+    --job-name={rule}.{wildcards} \
+    --output=logs/slurm/{rule}.{wildcards}.%j.out \
+    --error=logs/slurm/{rule}.{wildcards}.%j.err \
+    --parsable
+
+# Default resources for all rules
+default-resources:
+  - partition=genomics
+  - mem=8GB
+  - time=01:00:00
+  - tmpdir=/scratch/$USER
+
+# Latency wait (for shared filesystems)
+latency-wait: 60
+
+# Job restart on failure
+restart-times: 3
