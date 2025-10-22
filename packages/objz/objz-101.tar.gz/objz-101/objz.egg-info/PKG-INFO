@@ -1,0 +1,69 @@
+Metadata-Version: 2.4
+Name: objz
+Version: 101
+Summary: objects
+Author-email: Bart Thate <bthate@dds.nl>
+License-Expression: Unlicense
+Project-URL: home, https://pypi.org/project/objz
+Project-URL: bugs, https://github.com/botlibX/objz/issues
+Project-URL: source, https://github.com/botlibX/objz
+Classifier: Development Status :: 3 - Alpha
+Classifier: Operating System :: Unix
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Utilities
+Description-Content-Type: text/x-rst
+
+OBJz
+====
+
+
+**NAME**
+
+
+|
+| ``objz`` - a clean namespace
+|
+
+
+**SYNOPSIS**
+
+::
+
+    >>> from objz.objects import Object
+    >>> from objz.serials import dumps, loads
+    >>> o = Object()
+    >>> o.a = "b"
+    >>> print(loads(dumps(o)))
+    {'a': 'b'}
+
+
+**DESCRIPTION**
+
+
+``objz`` contains python3 code to program objz in a functional
+way. it provides an “clean namespace” Object class that only has
+dunder methods, so the namespace is not cluttered with method names.
+
+This makes reading to/from json possible.
+
+
+**INSTALL**
+
+
+installation is done with pip
+
+|
+| ``$ pip install objz``
+|
+
+**AUTHOR**
+
+|
+| Bart Thate <``bthate@dds.nl``>
+|
+
+**COPYRIGHT**
+
+|
+| ``objz`` is Public Domain.
+|
