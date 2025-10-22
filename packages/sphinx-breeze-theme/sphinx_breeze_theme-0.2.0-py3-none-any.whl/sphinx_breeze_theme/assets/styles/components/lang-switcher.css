@@ -1,0 +1,36 @@
+.bz-lang-switcher {
+  button {
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    border-radius: var(--bz-border-radius);
+    padding-inline: 0;
+    background: none;
+    border: none;
+    gap: calc(var(--bz-spacing) * 1.5);
+    color: var(--bz-lang-switcher-color);
+    transition: color 0.1s ease-in-out;
+
+    &::after {
+      content: "";
+      display: block;
+      width: .9rem;
+      height: .9rem;
+      transform: rotate(90deg);
+      background-color: currentColor;
+      mask-image: var(--bz-icon-chevron);
+    }
+  }
+
+  &:hover button {
+    color: var(--bz-lang-switcher-color-hover);
+  }
+
+  svg {
+    font-size: var(--bz-lang-switcher-font-size);
+  }
+
+  ul {
+    right: -1rem;
+  }
+}
