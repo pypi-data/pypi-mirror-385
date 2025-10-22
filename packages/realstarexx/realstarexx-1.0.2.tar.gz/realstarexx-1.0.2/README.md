@@ -1,0 +1,141 @@
+# Starexx
+It provides a structured way to build Python programs through object composition rather than writing code directly.
+
+## Installation
+**Step 1**: `pip install starexx`<br>
+**Step 2**: Implement in your code
+```python
+from starexx import *
+```
+
+## Basic Usage
+**Simple Calculator Example**
+```python
+from starexx import *
+
+program = src(
+    var("a", 10),
+    var("b", 5),
+    
+    p("a =", get("a")),
+    p("b =", get("b")),
+    p("a + b =", add(get("a"), get("b"))),
+    p("a - b =", subtract(get("a"), get("b"))),
+    p("a * b =", multiply(get("a"), get("b"))),
+    p("a / b =", divide(get("a"), get("b")))
+)
+
+program.run()
+```
+
+**Output**:
+```sh
+a = 10
+b = 5
+a + b = 15
+a - b = 5
+a * b = 50
+a / b = 2.0
+```
+
+
+**Variables and Conditions**
+```python
+from starexx import *
+
+program = src(
+    var("name", "Alice"),
+    var("age", 25),
+    
+    p("Name:", get("name")),
+    p("Age:", get("age")),
+    
+    if_(
+        gt(get("age"), 18),
+        p(get("name"), "is an adult"),
+        else_=p(get("name"), "is a minor")
+    )
+)
+
+program.run()
+```
+
+**Output:**
+```sh
+Name: Alice
+Age: 25
+Alice is an adult
+```
+
+## Core Components
+
+**Basic Structure**:<br>
+· `src(*nodes)` - Main program container<br>
+· `var(name, value)` - Variable declaration<br>
+· `p(*values)` - Print statement<br>
+· `get(name)` - Variable reference<br>
+
+**Control Flow**:<br>
+· `if_(condition, then_branch, else_branch)` - If statement<br>
+· `for_(item, iterable, body)` - For loop<br>
+· `while_(condition, body)` - While loop<br>
+
+**Functions**:<br>
+· `function(name, params, *body)` - Function definition<br>
+· `call(name, args)` - Function call<br>
+· `return_(value)` - Return statement<br>
+
+**Data Structures**:<br>
+· `list_(*items)` - List literal<br>
+· `dict_(**items)` - Dictionary literal<br>
+
+**Operations**:<br>
+· `add(a, b)`, `subtract(a, b)`, `multiply(a, b)`, `divide(a, b)`<br>
+· `eq(a, b)`, `neq(a, b)`, `gt(a, b)`, `lt(a, b)`<br>
+· `and_(a, b)`, `or_(a, b)`, `not_(a)`<br>
+
+## Advanced Examples
+
+**Function with Loop**
+```python
+from starexx import *
+
+program = src(
+    function(
+        "calculate_sum",
+        ["numbers"],
+        var("total", 0),
+        for_("num", get("numbers"), src(
+            set_("total", add(get("total"), get("num")))
+        )),
+        return_(get("total"))
+    ),
+    
+    var("scores", list_(85, 92, 78, 96)),
+    var("total_score", call("calculate_sum", [get("scores")])),
+    p("Scores:", get("scores")),
+    p("Total:", get("total_score"))
+)
+
+program.run()
+```
+
+**List Operations**
+```python
+from starexx import *
+
+program = src(
+    var("fruits", list_("apple", "banana", "orange")),
+    p("Fruits:", get("fruits")),
+    p("First fruit:", call("fruits.__getitem__", [0])),
+    
+    # Add a new fruit
+    call("fruits.append", ["grape"]),
+    p("Updated fruits:", get("fruits")),
+    
+    # List length
+    p("Number of fruits:", len_(get("fruits")))
+)
+
+program.run()
+```
