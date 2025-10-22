@@ -1,0 +1,93 @@
+name: Benchmark Validation
+
+on:
+  workflow_dispatch:  # Manual trigger
+  push:
+    branches: [master]
+    paths:
+      - 'cert/**'
+      - 'tests/test_benchmark_validation.py'
+      - 'tests/test_minimal_embedding.py'
+
+jobs:
+  validate-embeddings:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Cache sentence transformers models
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/torch/sentence_transformers
+          key: sentence-transformers-${{ runner.os }}-${{ hashFiles('setup.py') }}
+          restore-keys: |
+            sentence-transformers-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -e .
+          pip install pytest datasets
+
+      - name: Run minimal embedding test
+        run: |
+          python3 tests/test_minimal_embedding.py
+
+      - name: Run STS-Benchmark validation (sample)
+        run: |
+          pytest tests/test_benchmark_validation.py::TestSTSBenchmarkValidation::test_dev_split_sample -v
+
+      - name: Run threshold tuning
+        run: |
+          pytest tests/test_benchmark_validation.py::TestSTSBenchmarkValidation::test_threshold_tuning -v
+
+  full-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    if: github.event_name == 'workflow_dispatch'  # Only run full validation manually
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Cache sentence transformers models
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/torch/sentence_transformers
+          key: sentence-transformers-${{ runner.os }}-${{ hashFiles('setup.py') }}
+          restore-keys: |
+            sentence-transformers-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -e .
+          pip install pytest datasets
+
+      - name: Run full STS-Benchmark validation
+        run: |
+          pytest -v -m slow tests/test_benchmark_validation.py::TestSTSBenchmarkValidation::test_full_dev_split
+
+      - name: Run test set validation
+        run: |
+          pytest -v -m slow tests/test_benchmark_validation.py::TestSTSBenchmarkValidation::test_full_test_split
+
+      - name: Upload results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: benchmark-results
+          path: test-results/
