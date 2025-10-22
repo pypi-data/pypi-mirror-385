@@ -1,0 +1,30 @@
+Metadata-Version: 2.4
+Name: kio-dataprocessing
+Version: 0.1.0
+Summary: A data processing library for KI-Opti-Pack project. It provides addtional data preprocessing and postprocessing functionalities to support machine learning workflows in the context of optimizing plastic packaging solutions by extending sklearn's pipeline operations.
+Author: Alexander Nasuta, Mats Gesenhues
+Author-email: Mats Gesenhues <mats.gesenhues@wzl-iqs.rwth-aachen.de>, Alexander Nasuta <alexander.nasuta@wzl-iqs.rwth-aachen.de>
+Project-URL: Homepage, https://ki-hub-kunststoffverpackungen.de/ki-opti-pack/ueber
+Platform: unix
+Platform: linux
+Platform: osx
+Platform: cygwin
+Platform: win32
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pandas>=2.3.0
+Requires-Dist: scikit-learn>=1.6.1
+Provides-Extra: dev
+Requires-Dist: flake8>=7.2.0; extra == "dev"
+Requires-Dist: mypy>=1.16.0; extra == "dev"
+Requires-Dist: pytest>=8.4.0; extra == "dev"
+Requires-Dist: furo>=2024.8.6; extra == "dev"
+Requires-Dist: myst-parser>=4.0.1; extra == "dev"
+Requires-Dist: sphinx>=8.2.3; extra == "dev"
+Requires-Dist: sphinx-autobuild>=2024.10.3; extra == "dev"
+Provides-Extra: tox
+Requires-Dist: tox>=4.26.0; extra == "tox"
+Dynamic: license-file
+
+## README Contenct

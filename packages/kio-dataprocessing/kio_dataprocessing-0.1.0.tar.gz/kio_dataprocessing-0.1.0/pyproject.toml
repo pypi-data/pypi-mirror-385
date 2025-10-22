@@ -1,0 +1,56 @@
+[project]
+name = "kio-dataprocessing"
+version = "0.1.0"
+description = "A data processing library for KI-Opti-Pack project. It provides addtional data preprocessing and postprocessing functionalities to support machine learning workflows in the context of optimizing plastic packaging solutions by extending sklearn's pipeline operations."
+readme = "README.md"
+authors = [
+    { name = "Mats Gesenhues", email = "mats.gesenhues@wzl-iqs.rwth-aachen.de" },
+    { name = "Alexander Nasuta", email = "alexander.nasuta@wzl-iqs.rwth-aachen.de" }
+]
+urls = { "Homepage" = "https://ki-hub-kunststoffverpackungen.de/ki-opti-pack/ueber" }
+requires-python = ">=3.11"
+dependencies = [
+    "pandas>=2.3.0",
+    "scikit-learn>=1.6.1",
+]
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project.optional-dependencies]
+dev = [
+    "flake8>=7.2.0",
+    "mypy>=1.16.0",
+    "pytest>=8.4.0",
+
+    "furo>=2024.8.6",
+    "myst-parser>=4.0.1",
+    "sphinx>=8.2.3",
+    "sphinx-autobuild>=2024.10.3",
+]
+tox = [
+    "tox>=4.26.0",
+]
+
+# pyproject.toml
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+    "tests",
+]
+
+[tool.mypy]
+mypy_path = "src"
+check_untyped_defs = true
+disallow_any_generics = true
+ignore_missing_imports = true
+no_implicit_optional = true
+show_error_codes = true
+strict_equality = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unreachable = true
+warn_unused_configs = true
+no_implicit_reexport = true
