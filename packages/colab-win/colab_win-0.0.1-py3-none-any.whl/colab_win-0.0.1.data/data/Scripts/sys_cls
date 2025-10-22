@@ -1,0 +1,24 @@
+# import sys; import os; sys.path = [p for p in sys.path if "site-packages" not in p or ".vscode" in p]
+
+
+
+#  "argv": [
+#   "F:\\colab\\.vscode\\Scripts\\python.exe",
+#   "-m",
+#   "ipykernel_launcher",
+#   "-f",
+#   "{connection_file}",
+#   "-c",
+#   "import sys; sys.path=[p for p in sys.path if 'site-packages' not in p or '.vscode' in p]"
+#  ],
+
+# %sys_cls
+from IPython.core.magic import register_line_magic
+
+@register_line_magic
+def sys_cls(line):
+    import sys
+    # 保留 venv (.vscode) 的模組，排除全域 site-packages
+    sys.path = [p for p in sys.path if 'site-packages' not in p or '.vscode' in p]
+    #print("sys.path 已隔離，只保留 .vscode 相關模組")
+    print("site-packages 已隔離，只保留 .vscode 相關模組")
