@@ -1,0 +1,264 @@
+interactions:
+- request:
+    body: '{"model":"ibm-granite/granite-3.3-8b-instruct","prompt":"<|start_of_role|>system<|end_of_role|>Knowledge
+      Cutoff Date: April 2024.\nToday''s Date: April 1, 2025.\nYou are Granite, developed
+      by IBM. You are a helpful AI assistant.<|end_of_text|>\n<|start_of_role|>assistant<|end_of_role|>Welcome
+      to pet questions!<|end_of_text|>\n<|start_of_role|>user<|end_of_role|>I have
+      two pets, a dog named Rex and a cat named Lucy.<|end_of_text|>\n<|start_of_role|>assistant<|end_of_role|>Great,
+      what would you like to share about them?<|end_of_text|>\n<|start_of_role|>user<|end_of_role|>Rex
+      spends a lot of time in the backyard and outdoors, and Luna is always inside.<|end_of_text|>\n<|start_of_role|>assistant<|end_of_role|>Sounds
+      good! Rex must love exploring outside, while Lucy probably enjoys her cozy indoor
+      life.<|end_of_text|>\n<|start_of_role|>user<|end_of_role|>But is he more likely
+      to get fleas because of that?<|end_of_text|>\n<|start_of_role|>assistant<|end_of_role|>","max_tokens":512,"temperature":0.0,"top_p":1.0}'
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate, zstd
+      connection:
+      - keep-alive
+      content-length:
+      - '1019'
+      content-type:
+      - application/json
+      host:
+      - localhost:35782
+      user-agent:
+      - AsyncOpenAI/Python 1.90.0
+      x-stainless-arch:
+      - x64
+      x-stainless-async:
+      - async:asyncio
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Linux
+      x-stainless-package-version:
+      - 1.90.0
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.11.13
+    method: POST
+    uri: http://localhost:35782/v1/completions
+  response:
+    body:
+      string: '{"id":"cmpl-4fd4a664ccc24fcdaa28fdc0bc8676c8","object":"text_completion","created":1752852778,"model":"ibm-granite/granite-3.3-8b-instruct","choices":[{"index":0,"text":"Yes,
+        Rex, being an outdoor dog, is indeed more likely to encounter fleas compared
+        to Lucy, who stays indoors. Fleas can easily jump from one host to another,
+        and they thrive in warm, moist environments, which outdoor spaces often provide.
+        Regularly checking both pets for fleas and using preventative treatments recommended
+        by a vet can help manage this issue.","logprobs":null,"finish_reason":"stop","stop_reason":null,"prompt_logprobs":null}],"usage":{"prompt_tokens":180,"total_tokens":268,"completion_tokens":88,"prompt_tokens_details":null}}'
+    headers:
+      content-length:
+      - '716'
+      content-type:
+      - application/json
+      date:
+      - Fri, 18 Jul 2025 15:32:57 GMT
+      server:
+      - uvicorn
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"model":"ibm-granite/granite-3.3-8b-instruct","prompt":"Generate a single
+      question for the given answer.\n        [[Answer]]\n        Albert Einstein
+      was born in Germany.\n        [[Question]]\n        Where was Albert Einstein
+      born?\n        [[Answer]]\n        Yes, Rex, being an outdoor dog, is indeed
+      more likely to encounter fleas compared to Lucy, who stays indoors. Fleas can
+      easily jump from one host to another, and they thrive in warm, moist environments,
+      which outdoor spaces often provide. Regularly checking both pets for fleas and
+      using preventative treatments recommended by a vet can help manage this issue.\n        [[Question]]\n        ","max_tokens":512,"stop":["[[Answer]]"],"temperature":0.0,"top_p":1.0}'
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate, zstd
+      connection:
+      - keep-alive
+      content-length:
+      - '727'
+      content-type:
+      - application/json
+      host:
+      - localhost:35782
+      user-agent:
+      - AsyncOpenAI/Python 1.90.0
+      x-stainless-arch:
+      - x64
+      x-stainless-async:
+      - async:asyncio
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Linux
+      x-stainless-package-version:
+      - 1.90.0
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.11.13
+    method: POST
+    uri: http://localhost:35782/v1/completions
+  response:
+    body:
+      string: '{"id":"cmpl-247beed9645449d79fb387468b86346c","object":"text_completion","created":1752852787,"model":"ibm-granite/granite-3.3-8b-instruct","choices":[{"index":0,"text":"
+        How does the outdoor lifestyle of Rex, compared to Lucy''s indoor lifestyle,
+        affect their likelihood of encountering fleas?\n        ","logprobs":null,"finish_reason":"stop","stop_reason":"[[Answer]]","prompt_logprobs":null}],"usage":{"prompt_tokens":135,"total_tokens":172,"completion_tokens":37,"prompt_tokens_details":null}}'
+    headers:
+      content-length:
+      - '497'
+      content-type:
+      - application/json
+      date:
+      - Fri, 18 Jul 2025 15:33:07 GMT
+      server:
+      - uvicorn
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"model":"ibm-granite/granite-3.3-8b-instruct","prompt":"You are given
+      a multi-turn conversation between a user and an assistant. Reformulate the last-turn
+      user query into a synonymous standalone query by replacing key terms with appropriate
+      synonyms or closely related phrases, while preserving the original intent and
+      meaning. This rewritten query will be used to retrieve relevant passages from
+      a corpus, so it must remain faithful to the user''s information need. Only output
+      the rewritten query.\n\n[[Input]]\nassistant: Welcome to pet questions!\nuser:
+      I have two pets, a dog named Rex and a cat named Lucy.\nassistant: Great, what
+      would you like to share about them?\nuser: Rex spends a lot of time in the backyard
+      and outdoors, and Luna is always inside.\nassistant: Sounds good! Rex must love
+      exploring outside, while Lucy probably enjoys her cozy indoor life.\nuser: But
+      is he more likely to get fleas because of that?\n\n[[Output]]\n","max_tokens":512,"stop":["[[Input]]"],"temperature":0.0,"top_p":1.0}'
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate, zstd
+      connection:
+      - keep-alive
+      content-length:
+      - '1013'
+      content-type:
+      - application/json
+      host:
+      - localhost:35782
+      user-agent:
+      - AsyncOpenAI/Python 1.90.0
+      x-stainless-arch:
+      - x64
+      x-stainless-async:
+      - async:asyncio
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Linux
+      x-stainless-package-version:
+      - 1.90.0
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.11.13
+    method: POST
+    uri: http://localhost:35782/v1/completions
+  response:
+    body:
+      string: "{\"id\":\"cmpl-638fd1f046c04c8a98ea5ae509a14020\",\"object\":\"text_completion\",\"created\":1752852787,\"model\":\"ibm-granite/granite-3.3-8b-instruct\",\"choices\":[{\"index\":0,\"text\":\"\U0001F916\\nIs
+        Rex, my outdoor dog, at a higher risk of contracting fleas compared to my
+        indoor cat, Lucy?\\n\\n\",\"logprobs\":null,\"finish_reason\":\"stop\",\"stop_reason\":\"[[Input]]\",\"prompt_logprobs\":null}],\"usage\":{\"prompt_tokens\":215,\"total_tokens\":253,\"completion_tokens\":38,\"prompt_tokens_details\":null}}"
+    headers:
+      content-length:
+      - '467'
+      content-type:
+      - application/json
+      date:
+      - Fri, 18 Jul 2025 15:33:07 GMT
+      server:
+      - uvicorn
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"model":"query_rewrite","prompt":"<|start_of_role|>system<|end_of_role|>Knowledge
+      Cutoff Date: April 2024.\nToday''s Date: April 1, 2025.\nYou are Granite, developed
+      by IBM. You are a helpful AI assistant.<|end_of_text|>\n<|start_of_role|>assistant<|end_of_role|>Welcome
+      to pet questions!<|end_of_text|>\n<|start_of_role|>user<|end_of_role|>I have
+      two pets, a dog named Rex and a cat named Lucy.<|end_of_text|>\n<|start_of_role|>assistant<|end_of_role|>Great,
+      what would you like to share about them?<|end_of_text|>\n<|start_of_role|>user<|end_of_role|>Rex
+      spends a lot of time in the backyard and outdoors, and Luna is always inside.<|end_of_text|>\n<|start_of_role|>assistant<|end_of_role|>Sounds
+      good! Rex must love exploring outside, while Lucy probably enjoys her cozy indoor
+      life.<|end_of_text|>\n<|start_of_role|>user<|end_of_role|>But is he more likely
+      to get fleas because of that?<|end_of_text|>\n<|start_of_role|>query_to_rewrite<|end_of_role|>But
+      is he more likely to get fleas because of that?<|end_of_text|>\n<|start_of_role|>rewrite:
+      Given the conversation history above and the specific query provided in the
+      ''query_to_rewrite'' role, rewrite that query into a standalone question that
+      captures the user''s intent without requiring the conversation context. If the
+      query is already clear and standalone, output it as is.\nYour output should
+      be a JSON structure with the rewritten question:\n```json\n{\n    \"rewritten_question\":
+      \"YOUR_REWRITTEN_QUESTION_HERE\"\n}\n```<|end_of_role|>","max_tokens":256,"temperature":0.0,"guided_regex":"```json\\n\\{\\s*\\\"rewritten_question\\\"\\s*:\\s*\\\"[^\\\"]*\\\"\\s*\\}\\n```"}'
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate, zstd
+      connection:
+      - keep-alive
+      content-length:
+      - '1636'
+      content-type:
+      - application/json
+      host:
+      - localhost:35782
+      user-agent:
+      - AsyncOpenAI/Python 1.90.0
+      x-stainless-arch:
+      - x64
+      x-stainless-async:
+      - async:asyncio
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Linux
+      x-stainless-package-version:
+      - 1.90.0
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.11.13
+    method: POST
+    uri: http://localhost:35782/v1/completions
+  response:
+    body:
+      string: '{"id":"cmpl-f13da4a0090b4867a7addd0ffe592f2b","object":"text_completion","created":1752852787,"model":"query_rewrite","choices":[{"index":0,"text":"```json\n{\n    \"rewritten_question\":
+        \"Is Rex more likely to get fleas because he spends a lot of time in the backyard
+        and outdoors?\"\n}\n```","logprobs":null,"finish_reason":"stop","stop_reason":null,"prompt_logprobs":null}],"usage":{"prompt_tokens":301,"total_tokens":345,"completion_tokens":44,"prompt_tokens_details":null}}'
+    headers:
+      content-length:
+      - '479'
+      content-type:
+      - application/json
+      date:
+      - Fri, 18 Jul 2025 15:33:07 GMT
+      server:
+      - uvicorn
+    status:
+      code: 200
+      message: OK
+version: 1

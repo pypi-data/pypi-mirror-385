@@ -1,0 +1,72 @@
+interactions:
+- request:
+    body: '{"model":"granite3.2:2b","prompt":"<|start_of_role|>system<|end_of_role|>Knowledge
+      Cutoff Date: April 2024.\nToday''s Date: April 1, 2025.\nYou are Granite, developed
+      by IBM. You are a helpful AI assistant.<|end_of_text|>\n<|start_of_role|>user<|end_of_role|>Hello,
+      how are you?<|end_of_text|>\n<|start_of_role|>assistant<|end_of_role|>I''m doing
+      great. How can I help you today?<|end_of_text|>\n<|start_of_role|>user<|end_of_role|>I''d
+      like to show off how chat templating works!<|end_of_text|>\n<|start_of_role|>assistant<|end_of_role|>"}'
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate, zstd
+      connection:
+      - keep-alive
+      content-length:
+      - '537'
+      content-type:
+      - application/json
+      host:
+      - localhost:11434
+      user-agent:
+      - AsyncOpenAI/Python 1.90.0
+      x-stainless-arch:
+      - x64
+      x-stainless-async:
+      - async:asyncio
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Linux
+      x-stainless-package-version:
+      - 1.90.0
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.11.13
+    method: POST
+    uri: http://localhost:11434/v1/completions
+  response:
+    body:
+      string: '{"id":"cmpl-96","object":"text_completion","created":1752852576,"model":"granite3.2:2b","system_fingerprint":"fp_ollama","choices":[{"text":"Absolutely,
+        I''d be happy to demonstrate chat templates with you. Let''s say we have a
+        simple greeting template for the city of \"Wonderland\". Here it is:\n\n```\n{\n  \"greeting\":
+        \"Welcome to {city}! It''s a wonderful place where [description]. Today''s
+        weather is {weather}.\",\n  \"description\": \"{city} is famous for its magnificent
+        {landmark}, where the wind whispers tales of adventure.\",\n  \"weather\":
+        \"Currently, it''s a bit chilly with gentle breezes.\"\n}\n```\n\nNow, let''s
+        see how you can use this template in conversation:\n\n**User:** I''m about
+        to visit Wonderland. Can you give me an idea of what to expect?\n\n**Chat
+        System (using the template):** \"Welcome to Wonderland! It''s a wonderful
+        place where the wind whispers tales of adventure. Today, it''s a bit chilly
+        with gentle breezes.\"\n\nThis shows how a template can dynamically incorporate
+        placeholders for personalized content while providing context from a pre-defined
+        structure. Do you have any other examples or topics in mind?","index":0,"finish_reason":"stop"}],"usage":{"prompt_tokens":141,"completion_tokens":256,"total_tokens":397}}
+
+        '
+    headers:
+      Content-Length:
+      - '1258'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Jul 2025 15:29:36 GMT
+    status:
+      code: 200
+      message: OK
+version: 1

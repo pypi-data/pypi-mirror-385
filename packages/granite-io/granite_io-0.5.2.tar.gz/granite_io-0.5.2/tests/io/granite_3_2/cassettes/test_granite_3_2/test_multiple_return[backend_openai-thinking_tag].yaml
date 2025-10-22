@@ -1,0 +1,110 @@
+interactions:
+- request:
+    body: '{"model":"granite3.2:2b","prompt":"<|start_of_role|>system<|end_of_role|>Knowledge
+      Cutoff Date: April 2024.\nToday''s Date: April 1, 2025.\nYou are Granite, developed
+      by IBM. You are a helpful AI assistant.\nRespond to every user query in a comprehensive
+      and detailed way. You can write down your thoughts and reasoning process before
+      responding. In the thought process, engage in a comprehensive cycle of analysis,
+      summarization, exploration, reassessment, reflection, backtracing, and iteration
+      to develop well-considered thinking process. In the response section, based
+      on various attempts, explorations, and reflections from the thoughts section,
+      systematically present the final solution that you deem correct. The response
+      should summarize the thought process. Write your thoughts after ''Here is my
+      thought process:'' and write your response after ''Here is my response:'' for
+      each user query.<|end_of_text|>\n<|start_of_role|>user<|end_of_role|>How much
+      wood could a wood chuck chuck?<|end_of_text|>\n<|start_of_role|>assistant<|end_of_role|>","max_tokens":1024,"n":3}'
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate, zstd
+      connection:
+      - keep-alive
+      content-length:
+      - '1071'
+      content-type:
+      - application/json
+      host:
+      - localhost:11434
+      user-agent:
+      - AsyncOpenAI/Python 1.90.0
+      x-stainless-arch:
+      - x64
+      x-stainless-async:
+      - async:asyncio
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Linux
+      x-stainless-package-version:
+      - 1.90.0
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.11.13
+    method: POST
+    uri: http://localhost:11434/v1/completions
+  response:
+    body:
+      string: "{\"id\":\"cmpl-956\",\"object\":\"text_completion\",\"created\":1752800639,\"model\":\"granite3.2:2b\",\"system_fingerprint\":\"fp_ollama\",\"choices\":[{\"text\":\"Here
+        is my thought process:\\n\\nThe phrase \\\"How much wood could a woodchuck
+        chuck?\\\" begins as a tongue-twister, but it's actually taken from a popular
+        English language saying based on the real behavior of groundhogs (woodchucks).
+        These creatures are known for digging burrows in the wild. The question implies
+        an exaggeration about how much they could move with their powerful claws when
+        excavating.\\n\\nBurrowing is their primary use for wood, as they cut and
+        push dirt out behind them to expand their tunnel system\u2014a behavior studied
+        scientifically by those interested in groundhog biology. However, there's
+        no precise data on how many cubic feet of earth a single woodchuck could move
+        because this isn't measured in wildlife biology studies; instead, it serves
+        as an adverbial phrase describing the digging process.\\n\\nWhen considered
+        metaphorically or humorously:\\n\\n- One might estimate a woodchuck could
+        clear around 700 pounds of soil annually to maintain and expand its tunnel
+        networks. Using this hypothetical figure, in a more fanciful light one could
+        say \\\"Well, if you were to weigh all the dirt a woodchuck took out over
+        the course of a year to build or improve its burrow system...\\\"\\n- Given
+        they don't eat their nest material (unlike some birds), there isn't actual
+        restriction on the volume\u2014woodchucks would likely use that capacity if
+        the opportunity arose, but we'll stick with soil for this context.\\n- A rounded
+        figure often used in such fanciful retellings of the phrase might then be
+        around 700 pounds (or approximately one ton), although it's more a question
+        of available material than a literal determination of how much wood a chuck
+        could possibly chuck under controlled circumstances.\\n\\nHere is my response:\\n\\nA
+        popular tongue-twister asks, \\\"How much wood would a woodchuck chuck, if
+        a woodchuck could chuck wood?\\\" Although the question stems from anthropomorphic
+        folklore involving these burrowing animals and isn't based on any factual
+        observation or scientific research, we can use it as a fun exercise to explore
+        hypothetical scenarios.\\n\\nGroundhogs, known as woodchucks, don't spend
+        their lives chopping down trees; instead, they spend much of their time digging
+        elaborate networks beneath the Earth's surface for shelter during their winter
+        hibernation. This burrowing behavior involves excavating large amounts of
+        soil and dirt\u2014often comprising rocks, sod, and leaf-matted earth\u2014to
+        expand their underground living spaces or to create fresh openings if needed.\\n\\nIf
+        we were to consider this playful statement metaphorically:\\n\\n- According
+        to rough estimates based on wildlife studies focusing more on burrow construction
+        rather than the capacity of wood chucking (cutting down trees), groundhogs
+        might expel about 700 pounds of soil annually. \\n\\nThis is an estimate and
+        not a precise measurement; it's merely used for entertainment or tongue-twisting
+        effect. So, in this fanciful context: \\\"A woodchuck could theoretically
+        chuck approximately 700 pounds of dirt if transforming its burrow excavation
+        into actual timber harvesting.\\\"\\n\\nWhile there's no scientific evidence
+        supporting the notion that woodchucks, when hypothetically converted into
+        logging equipment, would log wood at any capacity akin to modern logging machinery
+        - it\u2019s important to remember this answer is a playful response based
+        on what a groundhog dutifully and literally does with burrowing\u2014moving
+        soil.\",\"index\":0,\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":245,\"completion_tokens\":822,\"total_tokens\":1067}}\n"
+    headers:
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Jul 2025 01:03:59 GMT
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+version: 1

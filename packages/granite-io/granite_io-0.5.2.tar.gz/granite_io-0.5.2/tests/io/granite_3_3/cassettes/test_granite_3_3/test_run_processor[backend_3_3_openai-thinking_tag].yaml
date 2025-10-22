@@ -1,0 +1,97 @@
+interactions:
+- request:
+    body: '{"model":"granite3.3:2b","prompt":"<|start_of_role|>system<|end_of_role|>Knowledge
+      Cutoff Date: April 2024.\nToday''s Date: April 1, 2025.\nYou are Granite, developed
+      by IBM. You are a helpful AI assistant.\nRespond to every user query in a comprehensive
+      and detailed way. You can write down your thoughts and reasoning process before
+      responding. In the thought process, engage in a comprehensive cycle of analysis,
+      summarization, exploration, reassessment, reflection, backtracing, and iteration
+      to develop well-considered thinking process. In the response section, based
+      on various attempts, explorations, and reflections from the thoughts section,
+      systematically present the final solution that you deem correct. The response
+      should summarize the thought process. Write your thoughts between <think></think>
+      and write your response between <response></response> for each user query.<|end_of_text|>\n<|start_of_role|>user<|end_of_role|>How
+      much wood could a wood chuck chuck?<|end_of_text|>\n<|start_of_role|>assistant<|end_of_role|>"}'
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate, zstd
+      connection:
+      - keep-alive
+      content-length:
+      - '1036'
+      content-type:
+      - application/json
+      host:
+      - localhost:11434
+      user-agent:
+      - AsyncOpenAI/Python 1.90.0
+      x-stainless-arch:
+      - x64
+      x-stainless-async:
+      - async:asyncio
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Linux
+      x-stainless-package-version:
+      - 1.90.0
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.11.13
+    method: POST
+    uri: http://localhost:11434/v1/completions
+  response:
+    body:
+      string: "{\"id\":\"cmpl-663\",\"object\":\"text_completion\",\"created\":1752852499,\"model\":\"granite3.3:2b\",\"system_fingerprint\":\"fp_ollama\",\"choices\":[{\"text\":\"\\u003cthink\\u003eThis
+        phrase is a popular tongue twister, often attributed to children's rhymes
+        or American folklore. The expression \\\"how much wood would a woodchuck chuck
+        if a woodchuck could chuck wood?\\\" is meant to be a nonsensical question,
+        similar to the famous \\\"how many rop\xE9s in a leopard?\\\" riddle. \\n\\nThe
+        amusing part lies in the lack of real-world logic applied directly:\\n\\n1.
+        The animal known as a \\\"chuck\\\" (or woodchuck) is actually a burrowing
+        marmot and not capable of chucking (throwing) actual wood. \\n2. Humorous
+        stories often attribute grand, exaggerated capabilities to nonsensical creatures
+        like the woodchuck due to playful language usage.\\n3. The phrase serves as
+        an example of a pun played on wordplay or the inherent oddity of the question
+        itself\u2014there's no logical answer rooted in reality since these animals
+        don't engage in chucking trees.\\n\\nTherefore, while it's tempting to explore
+        potential clever answers based on volume (e.g., tons), this is just a playful
+        linguistic construction designed for amusement rather than factual measurement.\\u003c/think\\u003e\\n\\n\\u003cresponse\\u003e###
+        The Tongue Twister Known as \\\"A Wood Chuck Chuck\\\":\\nThis phrase, often
+        posed rhetorically rather than seriously, is a classic example of wordplay.
+        The question asks \\\"How much wood would a woodchuck chuck if a woodchuck
+        could chuck wood?\\\" \\n\\n**Reality Behind the Question:**\\n- Woodchucks
+        (also called groundhogs or prairie dogs) are burrowing mammals that are primarily
+        herbivores, but they don't have hands to move logs and don\u2019t live near
+        lumberyards or forests to consume such quantities. \\n- They are known more
+        for digging burrows than chucking (throwing) large quantities of wood by themselves.\\n\\n**The
+        Humor:**\\nThis type of question leverages the nature of puns: exaggerated
+        capabilities and logical incongruity\u2014hence, there's no factual answer
+        because a real woodchuck can't actually chuck wood.\\n\\n### The Common Folks'
+        Response (Humorous/Mythical):\\nTo satisfy the playful spirit without providing
+        a realistic figure:\\n- A common humorous response might be to propose \\\"a
+        variety,\\\" perhaps stating \\\"A woodchuck could potentially chuck a whopping
+        amount, say, about 300 pounds\\\"\u2014though it's purely a jest based on
+        perceived strength rather than practical ability. \\n\\n### Conclusion:\\nIn
+        essence, the answer to this question is nonsensical and not derived from scientific
+        understanding because woodchucks are non-wood-toting mammals in nature. This
+        punning phrase is enjoyed more for its cleverness and amusement than as a
+        serious query about woodmoving abilities.\\u003c/response\\u003e\",\"index\":0,\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":242,\"completion_tokens\":672,\"total_tokens\":914}}\n"
+    headers:
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Jul 2025 15:28:19 GMT
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+version: 1

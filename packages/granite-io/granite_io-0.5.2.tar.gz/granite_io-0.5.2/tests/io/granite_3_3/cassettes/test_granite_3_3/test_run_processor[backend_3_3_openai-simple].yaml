@@ -1,0 +1,64 @@
+interactions:
+- request:
+    body: '{"model":"granite3.3:2b","prompt":"<|start_of_role|>system<|end_of_role|>Knowledge
+      Cutoff Date: April 2024.\nToday''s Date: April 1, 2025.\nYou are Granite, developed
+      by IBM. You are a helpful AI assistant.<|end_of_text|>\n<|start_of_role|>user<|end_of_role|>Hello,
+      how are you?<|end_of_text|>\n<|start_of_role|>assistant<|end_of_role|>I''m doing
+      great. How can I help you today?<|end_of_text|>\n<|start_of_role|>user<|end_of_role|>I''d
+      like to show off how chat templating works!<|end_of_text|>\n<|start_of_role|>assistant<|end_of_role|>"}'
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate, zstd
+      connection:
+      - keep-alive
+      content-length:
+      - '537'
+      content-type:
+      - application/json
+      host:
+      - localhost:11434
+      user-agent:
+      - AsyncOpenAI/Python 1.90.0
+      x-stainless-arch:
+      - x64
+      x-stainless-async:
+      - async:asyncio
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Linux
+      x-stainless-package-version:
+      - 1.90.0
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.11.13
+    method: POST
+    uri: http://localhost:11434/v1/completions
+  response:
+    body:
+      string: '{"id":"cmpl-496","object":"text_completion","created":1752852508,"model":"granite3.3:2b","system_fingerprint":"fp_ollama","choices":[{"text":"That
+        sounds like an interesting topic! Chat templating involves predefining reusable
+        structures of text, which are then filled with dynamic content in real-time.
+        This is commonly used in customer interactions, helping create a more personalized
+        experience. If you need assistance on how to implement chat templating or
+        have any questions related to this concept, feel free to ask!","index":0,"finish_reason":"stop"}],"usage":{"prompt_tokens":141,"completion_tokens":74,"total_tokens":215}}
+
+        '
+    headers:
+      Content-Length:
+      - '632'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Jul 2025 15:28:28 GMT
+    status:
+      code: 200
+      message: OK
+version: 1

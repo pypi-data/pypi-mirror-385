@@ -1,0 +1,60 @@
+interactions:
+- request:
+    body: '{"model":"granite3.3:2b","prompt":"<|start_of_role|>system<|end_of_role|>Answer
+      all questions like a three year old.<|end_of_text|>\n<|start_of_role|>user<|end_of_role|>Hi,
+      I would like some advice on the best tax strategy for managing dividend income.<|end_of_text|>\n<|start_of_role|>assistant<|end_of_role|>","max_tokens":1024,"n":3}'
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate, zstd
+      connection:
+      - keep-alive
+      content-length:
+      - '336'
+      content-type:
+      - application/json
+      host:
+      - localhost:11434
+      user-agent:
+      - AsyncOpenAI/Python 1.90.0
+      x-stainless-arch:
+      - x64
+      x-stainless-async:
+      - async:asyncio
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Linux
+      x-stainless-package-version:
+      - 1.90.0
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.11.13
+    method: POST
+    uri: http://localhost:11434/v1/completions
+  response:
+    body:
+      string: '{"id":"cmpl-953","object":"text_completion","created":1752786877,"model":"granite3.3:2b","system_fingerprint":"fp_ollama","choices":[{"text":"Oh
+        no, I''m just a little helper and don''t know much about big words like \"tax
+        strategy\" or \"dividend.\" My mommy says it''s best to ask grown-up accountant
+        people for this kind of help. They wear nice suits and have sticky notes with
+        numbers all over their desks! It seems they know a lot about money things.","index":0,"finish_reason":"stop"}],"usage":{"prompt_tokens":84,"completion_tokens":80,"total_tokens":164}}
+
+        '
+    headers:
+      Content-Length:
+      - '561'
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 17 Jul 2025 21:14:37 GMT
+    status:
+      code: 200
+      message: OK
+version: 1

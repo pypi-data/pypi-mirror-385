@@ -1,0 +1,78 @@
+interactions:
+- request:
+    body: '{"model":"granite3.2:2b","prompt":"<|start_of_role|>system<|end_of_role|>Knowledge
+      Cutoff Date: April 2024.\nToday''s Date: April 1, 2025.\nYou are Granite, developed
+      by IBM. You are a helpful AI assistant.<|end_of_text|>\n<|start_of_role|>user<|end_of_role|>Hello,
+      how are you?<|end_of_text|>\n<|start_of_role|>assistant<|end_of_role|>I''m doing
+      great. How can I help you today?<|end_of_text|>\n<|start_of_role|>user<|end_of_role|>I''d
+      like to show off how chat templating works!<|end_of_text|>\n<|start_of_role|>assistant<|end_of_role|>","max_tokens":1024,"n":3}'
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate, zstd
+      connection:
+      - keep-alive
+      content-length:
+      - '561'
+      content-type:
+      - application/json
+      host:
+      - localhost:11434
+      user-agent:
+      - AsyncOpenAI/Python 1.90.0
+      x-stainless-arch:
+      - x64
+      x-stainless-async:
+      - async:asyncio
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Linux
+      x-stainless-package-version:
+      - 1.90.0
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.11.13
+    method: POST
+    uri: http://localhost:11434/v1/completions
+  response:
+    body:
+      string: '{"id":"cmpl-301","object":"text_completion","created":1752800597,"model":"granite3.2:2b","system_fingerprint":"fp_ollama","choices":[{"text":"Absolutely,
+        I can certainly demonstrate chat template functionality for you. Let''s say
+        we''re creating a simple conversation style message board. Here''s how it
+        could work using a basic template system:\n\n1. **Input Message:** \"Hey there!
+        What''s the weather like today?\"\n\n   Template: \"Question: {input}\"\n\n2.
+        **Output (from system):**\n\n   \"Question: What''s the weather like today?\"\n\n3.
+        **User Response:** \"It''s sunny and warm!\"\n   \n   If this were a function
+        that updates a predefined message board, it would look something like this
+        in template format:\n   \"Response: {user_input}\"\n\n4. **System Output (updating
+        message board):**\n\n   \"Response: It''s sunny and warm!\"\n\nNow for the
+        continuation of our conversation based on this system''s capabilities:\n\n1.
+        **User:** \"Is it going to rain later?\"\n   \n   Template, System Output:\n   \"Question:
+        Is it going to rain later?\"\n\n2. **System Response (from previously updated
+        message board):**\n\n   It''s sunny and warm! No mention of rain at the moment.
+        As far as we know, [user_input].\"\n\nIn this way, templates allow for predictable
+        responses based on inputs while keeping a conversational thread through a
+        shared context - in this example, a ''question'' followed by an answer in
+        our fictional weather message board. This kind of structure can be helpful
+        when building more sophisticated chat interfaces or applications with similar
+        requirements. Does that clarify how it works for you?","index":0,"finish_reason":"stop"}],"usage":{"prompt_tokens":141,"completion_tokens":329,"total_tokens":470}}
+
+        '
+    headers:
+      Content-Length:
+      - '1720'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Jul 2025 01:03:18 GMT
+    status:
+      code: 200
+      message: OK
+version: 1

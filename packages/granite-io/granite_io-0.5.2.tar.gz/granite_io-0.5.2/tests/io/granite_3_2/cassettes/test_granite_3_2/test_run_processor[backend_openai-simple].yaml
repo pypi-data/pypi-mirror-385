@@ -1,0 +1,77 @@
+interactions:
+- request:
+    body: '{"model":"granite3.2:2b","prompt":"<|start_of_role|>system<|end_of_role|>Knowledge
+      Cutoff Date: April 2024.\nToday''s Date: April 1, 2025.\nYou are Granite, developed
+      by IBM. You are a helpful AI assistant.<|end_of_text|>\n<|start_of_role|>user<|end_of_role|>Hello,
+      how are you?<|end_of_text|>\n<|start_of_role|>assistant<|end_of_role|>I''m doing
+      great. How can I help you today?<|end_of_text|>\n<|start_of_role|>user<|end_of_role|>I''d
+      like to show off how chat templating works!<|end_of_text|>\n<|start_of_role|>assistant<|end_of_role|>"}'
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate, zstd
+      connection:
+      - keep-alive
+      content-length:
+      - '537'
+      content-type:
+      - application/json
+      host:
+      - localhost:11434
+      user-agent:
+      - AsyncOpenAI/Python 1.90.0
+      x-stainless-arch:
+      - x64
+      x-stainless-async:
+      - async:asyncio
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Linux
+      x-stainless-package-version:
+      - 1.90.0
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.11.13
+    method: POST
+    uri: http://localhost:11434/v1/completions
+  response:
+    body:
+      string: "{\"id\":\"cmpl-562\",\"object\":\"text_completion\",\"created\":1752800022,\"model\":\"granite3.2:2b\",\"system_fingerprint\":\"fp_ollama\",\"choices\":[{\"text\":\"Absolutely,
+        I'd be delighted to demonstrate chat template features with you! Chat templates
+        allow users like us to reuse parts of conversations efficiently. Here's a
+        simple example: let's say we're often discussing the same set of questions
+        about local events around town, such as when they're happening and any amenities
+        available at those venues.\\n\\n```markdown\\n**Chat Template: Local Event
+        Information Check**\\n\\n**User:** Hey [Your Name], do you know what events
+        are happening next week?\\n\\n**Template Assistant (Me):** Of course! I can
+        help with that. Here\u2019s a snapshot of this week's top local events:\\n\\n-
+        **Event 1:** *Name*\\n  - When: [Date]\\n  - Venue: [Place]. It offers [Amenity].\\n\\n-
+        **Event 2:** *Name*\\n  - When: [Date]\\n  - Venue: [Place]. Here, you'll
+        find [Amenity].\\n\\n**User:** What's the parking situation like for Event
+        1?\\n\\n**Template Assistant (Me):** In this case, it's [Parking Information].
+        Remember to allow enough time for navigation and potential traffic.\\n```\\n\\nIn
+        this template, I've used `[Your Name]` as a placeholder that will fill in
+        with each user's personalized greeting when they engage the template again.
+        This way, we don't have to retype the entire conversation if the user asks
+        about events on multiple occasions within one week. It saves everyone time
+        and keeps our interaction consistent while accommodating individual preferences.\\n\\nWould
+        you like an example of a different type of chat template or another aspect
+        of templating?\",\"index\":0,\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":141,\"completion_tokens\":358,\"total_tokens\":499}}\n"
+    headers:
+      Content-Length:
+      - '1734'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Jul 2025 00:53:42 GMT
+    status:
+      code: 200
+      message: OK
+version: 1
