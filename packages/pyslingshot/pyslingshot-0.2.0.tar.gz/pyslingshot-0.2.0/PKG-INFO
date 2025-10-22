@@ -1,0 +1,50 @@
+Metadata-Version: 2.4
+Name: pyslingshot
+Version: 0.2.0
+Summary: Python implementation of the Slingshot pseudotime algorithm
+Project-URL: Repository, https://github.com/mossjacob/pyslingshot
+Author-email: Jacob Moss <cob.mossy@gmail.com>
+License-Expression: MIT
+Requires-Python: >=3.9
+Requires-Dist: anndata>=0.10.9
+Requires-Dist: matplotlib<4,>=3.6.0
+Requires-Dist: networkx
+Requires-Dist: notebook
+Requires-Dist: numpy<2,>=1.23.0
+Requires-Dist: pcurvepy2>=0.2.1
+Requires-Dist: scikit-learn
+Requires-Dist: seaborn>=0.12.0
+Requires-Dist: tqdm
+Provides-Extra: dev
+Requires-Dist: mypy>=1.0.0; extra == 'dev'
+Requires-Dist: pre-commit>=3.0.0; extra == 'dev'
+Requires-Dist: pytest-cov>=4.0.0; extra == 'dev'
+Requires-Dist: pytest>=7.0.0; extra == 'dev'
+Requires-Dist: ruff>=0.1.0; extra == 'dev'
+Description-Content-Type: text/markdown
+
+# Slingshot in Python
+
+This is a Python implementation of the Slingshot pseudotime algorithm (Street et al., 2018).
+The original implementation is written in R: https://github.com/kstreet13/slingshot.
+
+A complete working example is located in `slingshot.ipynb`, using a synthetically generated dataset.
+
+## Installation:
+
+- `pip install pyslingshot`
+
+
+### Deprecated version
+Older versions if pyslingshot (before v0.1.0) requires manually installing `numpy`, `scipy`, `sklearn`, and my fork
+of `pcurvepy` (https://github.com/mossjacob/pcurvepy).
+
+
+<img src=readme_example.png height="200">
+
+## Contributing
+
+- Fork & download source
+- Install requirements with `poetry install`
+
+[1] Street, K., Risso, D., Fletcher, R.B., Das, D., Ngai, J., Yosef, N., Purdom, E. and Dudoit, S., 2018. Slingshot: cell lineage and pseudotime inference for single-cell transcriptomics. BMC genomics, 19(1), pp.1-16.
