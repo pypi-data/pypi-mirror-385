@@ -1,0 +1,220 @@
+# MarkDup
+
+[![Pypi Releases](https://img.shields.io/pypi/v/markdup.svg)](https://pypi.python.org/pypi/markdup)
+[![Downloads](https://pepy.tech/badge/markdup)](https://pepy.tech/project/markdup)
+[![Development Status](https://img.shields.io/badge/status-alpha-orange.svg)](https://github.com/y9c/markdup)
+
+A comprehensive Python tool for deduplicating BAM files with **automatic UMI detection** and intelligent UMI-based or coordinate-based clustering.
+
+> **⚠️ Early Development Stage**: This tool is currently in alpha development. While functional, it may have bugs and the API may change. Please report any issues you encounter.
+
+## 🚀 Features
+
+- **🔬 UMI-based deduplication** with intelligent extraction from query names or BAM tags
+- **📍 Coordinate-based deduplication** for files without UMIs
+- **🧬 Biological positioning** for strand-aware clustering (start-only, end-only, or full fragment)
+- **🔄 Auto-detection** of UMI presence and format
+- **🧬 Strand awareness** for forward/reverse strand reads
+- **📏 CIGAR handling** for reads with indels and complex alignments
+- **⚖️ Frequency balancing** to prevent over-clustering of high-frequency UMIs
+- **🎯 Advanced clustering** with edit distance and frequency-aware algorithms
+- **🔧 Quality selection** with multiple metrics and automatic fallback
+- **⚡ Parallelized processing** for multi-core performance
+- **📊 Comprehensive statistics** and progress tracking
+
+## 📦 Installation
+
+### From PyPI (Recommended)
+
+```bash
+pip install markdup
+```
+
+### From Source
+
+```bash
+git clone https://github.com/y9c/markdup.git
+cd markdup
+pip install .
+```
+
+### Using uv (Development)
+
+```bash
+git clone https://github.com/y9c/markdup.git
+cd markdup
+uv sync
+```
+
+## 🚀 Quick Start
+
+### Automatic UMI Detection and Processing
+
+```bash
+# Tool automatically detects UMIs and chooses appropriate method
+markdup input.bam output.bam
+
+# With multiple threads
+markdup input.bam output.bam --threads 8
+
+# Keep duplicates and mark them
+markdup input.bam output.bam --keep-duplicates
+```
+
+### Explicit Method Selection
+
+```bash
+# Default: Auto-detect UMI presence and use appropriate method
+markdup input.bam output.bam
+
+# Force coordinate-based deduplication (ignore UMIs)
+markdup input.bam output.bam --no-umi
+```
+
+### Advanced Positioning Options
+
+```bash
+# Start-only positioning (e.g., for ChIP-seq)
+markdup input.bam output.bam --start-only
+
+# End-only positioning (e.g., for reverse-complemented reads)
+markdup input.bam output.bam --end-only
+
+# Full fragment positioning (default, handles both start and end)
+markdup input.bam output.bam
+```
+
+### UMI Clustering Tuning
+
+```bash
+# Custom edit distance threshold
+markdup input.bam output.bam --min-edit-dist-frac 0.17
+
+# Frequency-aware clustering to prevent over-merging
+markdup input.bam output.bam --min-frequency-ratio 0.1
+
+# Custom UMI separator
+markdup input.bam output.bam --umi-sep ":"
+
+# Extract UMIs from BAM tags instead of query names
+markdup input.bam output.bam --umi-tag UB
+```
+
+## 📋 Command Line Interface
+
+### Global Options
+
+| Option      | Description              | Default |
+| ----------- | ------------------------ | ------- |
+| `--help`    | Show help message        | -       |
+| `--version` | Show version information | -       |
+
+### Input/Output Options
+
+| Option       | Description                        | Default  |
+| ------------ | ---------------------------------- | -------- |
+| `INPUT_BAM`  | Input BAM file path                | Required |
+| `OUTPUT_BAM` | Output BAM file path               | Required |
+| `--force`    | Overwrite output file if it exists | False    |
+
+### Deduplication (UMI) Method
+
+| Option                  | Description                                                 | Default     |
+| ----------------------- | ----------------------------------------------------------- | ----------- |
+| `--no-umi`              | Force coordinate-based deduplication (ignore detected UMIs) | Auto-detect |
+| `--umi-sep`             | Separator for extracting UMIs from read names               | `_`         |
+| `--umi-tag`             | BAM tag name for UMI extraction (e.g., 'UB')                | None        |
+| `--min-edit-dist-frac`  | Minimum UMI edit distance as fraction of UMI length         | `0.1`       |
+| `--min-frequency-ratio` | Minimum frequency ratio for UMI clustering                  | `0.1`       |
+
+### Positioning Options
+
+| Option         | Description                        | Default |
+| -------------- | ---------------------------------- | ------- |
+| `--start-only` | Group reads by start position only | False   |
+| `--end-only`   | Group reads by end position only   | False   |
+
+### Filtering Options
+
+| Option              | Description                                     | Default |
+| ------------------- | ----------------------------------------------- | ------- |
+| `--fragment-paired` | Keep only fragments with both reads present     | False   |
+| `--fragment-mapped` | Keep only fragments where both reads are mapped | False   |
+
+### Quality Selection
+
+| Option           | Description                               | Default      |
+| ---------------- | ----------------------------------------- | ------------ |
+| `--best-read-by` | Select best read by: `mapq`, `avg_base_q` | `avg_base_q` |
+
+### Processing Options
+
+| Option              | Description                               | Default  |
+| ------------------- | ----------------------------------------- | -------- |
+| `--threads`         | Number of threads for parallel processing | `1`      |
+| `--window-size`     | Size of genomic windows for processing    | `100000` |
+| `--keep-duplicates` | Keep duplicate reads and mark them        | False    |
+
+## 🧬 Algorithm Details
+
+### Automatic Condition Detection
+
+The tool automatically detects and handles:
+
+1. **UMI Presence**: Scans read names for UMI patterns
+2. **Read Type**: Single-end vs. paired-end detection
+3. **Strand Orientation**: Forward vs. reverse strand handling
+4. **CIGAR Complexity**: Indel and complex alignment handling
+5. **Quality Metrics**: Available quality scores and selection criteria
+
+### Biological Positioning
+
+MarkDup uses strand-aware positioning to ensure proper grouping regardless of read orientation:
+
+- **Forward strand**: Biological start = reference start, Biological end = reference end
+- **Reverse strand**: Biological start = reference end, Biological end = reference start
+- **Strand-aware clustering**: Ensures proper grouping regardless of strand orientation
+- **CIGAR-aware positioning**: Properly handles indels and complex alignments
+
+### UMI-based Deduplication
+
+1. **Fragment Creation**: Reads are grouped into fragments (single-end or paired-end)
+2. **Position Grouping**: Fragments are grouped by biological position and strand
+3. **UMI Clustering**: Within each position group, UMIs are clustered using:
+   - Exact matching for identical UMIs
+   - Edit distance clustering for similar UMIs
+   - Frequency-aware clustering to prevent unrealistic merging
+4. **Quality Selection**: The highest quality read from each cluster is selected
+5. **Output Generation**: Selected reads are written with comprehensive cluster information
+
+### Coordinate-based Deduplication
+
+1. **Fragment Creation**: Reads are grouped into fragments
+2. **Position Grouping**: Fragments are grouped by genomic coordinates
+3. **Quality Selection**: The highest quality read from each group is selected
+4. **Output Generation**: Selected reads are written
+
+## 📊 Output Format
+
+### BAM Tags
+
+| Tag  | Description                                                                        |
+| ---- | ---------------------------------------------------------------------------------- |
+| `cn` | Cluster name with genomic coordinates and UMI (format: `chr:start-end:strand:UMI`) |
+| `cs` | Cluster size (number of reads in cluster)                                          |
+
+### Example Output
+
+```
+read1_UMI123    0    chr1    1001    60    50M    *    0    0    ATGC...    IIII...    cn:Z:chr1:1001-1050:+:UMI123    cs:i:3
+read2_UMI123    1024  chr1    1001    50    50M    *    0    0    ATGC...    IIII...    cn:Z:chr1:1001-1050:+:UMI123    cs:i:3
+read3_UMI123    1024  chr1    1001    45    50M    *    0    0    ATGC...    IIII...    cn:Z:chr1:1001-1050:+:UMI123    cs:i:3
+```
+
+## 📚 Documentation
+
+- [Installation Guide](docs/installation.md)
+- [Usage Guide](docs/usage.md)
+- [Algorithm Details](docs/algorithm.md)
+- [FAQ](docs/faq.md)
+- [Contributing](docs/contributing.md)
