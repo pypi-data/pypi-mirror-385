@@ -1,0 +1,62 @@
+name: Publish
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Installing Python
+        run: |
+          sudo apt-get update -qy
+          sudo apt-get install -y \
+            gfortran libopenblas-dev liblapack-dev \
+            python3-dev \
+            python3-pip \
+            python3-venv \
+            meson \
+            ninja-build
+          python3 -m venv ../venv
+          source ../venv/bin/activate
+          pip install build
+
+      - name: Build source package
+        run: |
+          source ../venv/bin/activate
+          python3 -m build . -s
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sdist
+          path: dist/*.tar.gz
+          if-no-files-found: error
+
+      - name: Test installation of source package
+        run: |
+          source ../venv/bin/activate
+          pip install dist/*.tar.gz
+
+      - name: Check tag
+        id: check-tag
+        run: |
+          if [[ ${{ github.ref }} =~ ^refs/tags/[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+              echo ::set-output name=match::true
+          fi
+        shell: bash
+
+      - name: Deploy to PyPI
+        if: steps.check-tag.outputs.match == 'true'
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_PASSWORD }}
