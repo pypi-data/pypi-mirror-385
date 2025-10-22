@@ -1,0 +1,111 @@
+#!python
+# -*- coding: utf-8 -*-
+#
+#    py-ard
+#    Copyright (c) 2023 Be The Match operated by National Marrow Donor Program. All Rights Reserved.
+#
+#    This library is free software; you can redistribute it and/or modify it
+#    under the terms of the GNU Lesser General Public License as published
+#    by the Free Software Foundation; either version 3 of the License, or (at
+#    your option) any later version.
+#
+#    This library is distributed in the hope that it will be useful, but WITHOUT
+#    ANY WARRANTY; with out even the implied warranty of MERCHANTABILITY or
+#    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+#    License for more details.
+#
+#    You should have received a copy of the GNU Lesser General Public License
+#    along with this library;  if not, write to the Free Software Foundation,
+#    Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA.
+#
+#    > http://www.fsf.org/licensing/licenses/lgpl.html
+#    > http://www.opensource.org/licenses/lgpl-license.php
+#
+import argparse
+import os
+import re
+
+import pyard
+import pyard.mappings
+from pyard import db, data_repository
+from pyard.misc import get_data_dir
+
+LONG_DASH_LINE_LENGTH = 45
+
+
+def get_latest_imgt_version() -> int:
+    """
+    Gets the list of db versions and returns the maximum
+    version numbered db
+    @return: int
+    """
+    return max(map(int, pyard.db_versions()[:-1]))
+
+
+def get_file_size(file_name: str) -> float:
+    return os.path.getsize(file_name) / 1024 / 1024
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="""
+        py-ard tool to provide a status report for reference SQLite databases.
+        """
+    )
+    parser.add_argument(
+        "-d",
+        "--data-dir",
+        dest="data_dir",
+        help="Data directory to store imported data",
+    )
+
+    args = parser.parse_args()
+    data_dir = get_data_dir(args.data_dir)
+
+    imgt_regex = re.compile(r"pyard-(.+)\.sqlite3")
+    for _, _, filenames in os.walk(data_dir):
+        for filename in filenames:
+            # Get imgt version from the filename
+            # eg: get 3440 from 'pyard-3440.sqlite3'
+            match = imgt_regex.match(filename)
+            imgt_version = match.group(1)  # Get first group
+            db_connection, db_filename = db.create_db_connection(
+                data_dir, imgt_version, ro=True
+            )
+            print("=" * LONG_DASH_LINE_LENGTH)
+            if imgt_version == "Latest":
+                db_version = data_repository.get_db_version(db_connection)
+                print(f"IMGT DB Version: {imgt_version} ({db_version})")
+                latest_version = get_latest_imgt_version()
+                if latest_version == db_version:
+                    print(
+                        f"You're up to date. {db_version} is the most recent version."
+                    )
+                else:
+                    print(f"There is a newer IMGT release than version {db_version}")
+                    print(
+                        f"Upgrade to latest version '{latest_version}'",
+                        "with 'pyard-import --re-install'",
+                    )
+            else:
+                print(f"IMGT DB Version: {imgt_version}")
+            file_size = get_file_size(db_filename)
+            print(f"File: {db_filename}")
+            print(f"Size: {file_size:.2f}MB")
+            print("-" * LONG_DASH_LINE_LENGTH)
+            print(f"|{'Table Name':30}|{'Rows':>12}|")
+            print(f"|{'-' * (LONG_DASH_LINE_LENGTH - 2)}|")
+            for table in sorted(
+                pyard.mappings.ars_mapping_tables
+                + pyard.mappings.code_mapping_tables
+                + pyard.mappings.allele_tables
+                + pyard.mappings.serology_tables
+                + pyard.mappings.misc_tables
+            ):
+                if db.table_exists(db_connection, table):
+                    total_rows = db.count_rows(db_connection, table)
+                    print(f"|{table:30}|{int(total_rows):12,d}|")
+                else:
+                    print(f"MISSING: {table} table")
+            print("-" * LONG_DASH_LINE_LENGTH)
+            db_connection.close()
