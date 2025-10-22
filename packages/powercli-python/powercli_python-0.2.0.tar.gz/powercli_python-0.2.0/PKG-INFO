@@ -1,0 +1,146 @@
+Metadata-Version: 2.3
+Name: powercli-python
+Version: 0.2.0
+Summary: Build powerful command-line applications in Python
+License: GPLv3
+Keywords: cli,command-line
+Author: Jonas da Silva
+Requires-Python: >=3.13
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Terminals
+Classifier: Topic :: Utilities
+Classifier: Typing :: Typed
+Provides-Extra: dev
+Provides-Extra: docs
+Requires-Dist: Sphinx (>=8.1.3,<8.2.0) ; extra == "docs"
+Requires-Dist: adorable2 (>=0.1.0,<0.2.0)
+Requires-Dist: astroid (>=3.3.8,<3.4.0) ; extra == "docs"
+Requires-Dist: attrs (>=23.1.0)
+Requires-Dist: codespell (>=2.4.1) ; extra == "dev"
+Requires-Dist: coverage (>=7.6.12) ; extra == "dev"
+Requires-Dist: docstr-coverage (>=2.3.2) ; extra == "dev"
+Requires-Dist: furo (>=2024.8.6,<2024.9.0) ; extra == "docs"
+Requires-Dist: isort (>=6.0.0) ; extra == "dev"
+Requires-Dist: loguru (>=0.7.2)
+Requires-Dist: mypy (>=1.15.0) ; extra == "dev"
+Requires-Dist: myst-parser (>=4.0.1,<4.1.0) ; extra == "docs"
+Requires-Dist: nox (==2025.2.9) ; extra == "dev"
+Requires-Dist: pytest (>=7.4.3,<7.5.0) ; extra == "dev"
+Requires-Dist: rich (>=13.7.0,<13.8.0) ; extra == "dev"
+Requires-Dist: ruff (>=0.9.6) ; extra == "dev"
+Requires-Dist: sphinx-autodoc2 (>=0.5.0,<0.6.0) ; extra == "docs"
+Requires-Dist: sphinx-inline-tabs ; extra == "docs"
+Requires-Dist: wraptext (==1.0.1)
+Project-URL: Bug Tracker, https://github.com/phoenixr-codes/powercli/issues
+Project-URL: Documentation, https://phoenixr-codes.github.io/powercli
+Project-URL: Repository, https://github.com/phoenixr-codes/powercli
+Description-Content-Type: text/markdown
+
+![PowerCLI](./assets/logo.svg)
+
+> Build powerful command-line applications in Python 🐍⚡
+
+- 📖 [Documentation](https://phoenixr-codes.github.io/powercli)
+- 💡 [Examples](https://github.com/phoenixr-codes/powercli/tree/stable/examples)
+- 🖥️ [Source Code](https://github.com/phoenixr-codes/powercli)
+
+## Features
+
+- ✅ Simple API
+- ✅ Highly configurable
+- ✅ Flags, Positionals & Subcommands
+- ✅ Type Hints
+- ✅ Easy to test
+- ✅ Well documented
+
+## Installation
+
+### Poetry
+
+```console
+poetry add powercli-python
+```
+
+### uv
+
+```console
+uv add powercli-python
+```
+
+### Manual Installation
+
+Add `powercli-python` as a dependency in your `pyproject.toml` file.
+
+```toml
+dependencies = [
+  "powercli-python"
+]
+```
+
+## Overview
+
+### Highly Configurable
+
+Commands and arguments are highly configurable yet provide good defaults to work
+well out of the box.
+
+```python
+import sys
+from powercli import Command
+
+cmd = Command(
+    # Windows-style flag prefixes
+    prefix_short=None,
+    prefix_long="/",
+
+    # use other stream
+    file=sys.stderr,
+)
+```
+
+### Object Oriented
+
+Arguments are classes which can be instantiated dynamically and are not directly
+bound to a parser class.
+
+```python
+from pathlib import Path
+from powercli import Flag
+
+cmd = Command()
+
+flag = Flag(
+    identifier="foo",
+    short="f",
+    values=[("PATH", Path)],
+)
+cmd.add_arg(flag)
+
+# ... or use the shorthand ...
+
+cmd.flag(
+    identifier="foo",
+    short="f",
+    values=[("PATH", Path)]
+)
+```
+
+### Generate man pages
+
+```console
+$ python3 -m powerdoc path/to/file.py --man
+$ python3 -m powerdoc path/to/file.py --man | groff -T utf8 -man
+```
+
+### Colored output
+
+The built-in provided flags and commands make use of colored output respecting
+the user's preference.
+
