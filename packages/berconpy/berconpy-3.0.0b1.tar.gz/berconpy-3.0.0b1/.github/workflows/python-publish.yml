@@ -1,0 +1,41 @@
+name: Upload Python Package
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+      - uses: actions/setup-python@v6
+        with:
+          cache: pip
+          cache-dependency-path: pyproject.toml
+          python-version-file: pyproject.toml
+      - run: pip install build
+      - run: python -m build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ runner.os }}
+          path: dist/
+
+  publish:
+    environment: production
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    needs:
+      - build
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          pattern: dist-*
+          path: dist/
+          merge-multiple: true
+      - uses: pypa/gh-action-pypi-publish@v1.13.0

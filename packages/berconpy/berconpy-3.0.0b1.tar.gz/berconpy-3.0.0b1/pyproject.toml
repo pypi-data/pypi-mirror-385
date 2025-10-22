@@ -1,0 +1,72 @@
+[build-system]
+requires = ["setuptools>=77", "setuptools-scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "berconpy"
+description = "An async wrapper for the BattlEye RCON protocol"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "thegamecracks" }]
+license = "MIT"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Framework :: AsyncIO",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: System :: Networking",
+]
+dynamic = ["version"]
+
+[tool.setuptools_scm]
+
+[project.optional-dependencies]
+docs = ["sphinx>=5.1.1", "sphinx-autodoc-typehints>=1.19.2"]
+tests = ["pytest>=7.2.2", "coverage>=7.2.1"]
+types = ["typing-extensions>=4.5.0"]
+
+[project.urls]
+"Homepage" = "https://github.com/thegamecracks/berconpy"
+"Documentation" = "https://berconpy.readthedocs.io/en/latest"
+"Issue Tracker" = "https://github.com/thegamecracks/berconpy/issues"
+
+[tool.coverage.run]
+branch = true
+source_pkgs = ["berconpy"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if (typing\\.)?TYPE_CHECKING:",
+    "if __name__ == \"__main__\":",
+    "\\s*\\.\\.\\.$",
+    "raise NotImplementedError",
+    "def __repr__",
+]
+include_namespace_packages = true
+
+[tool.mypy]
+allow_redefinition = true
+
+[tool.pyright]
+include = ["src"]
+# typeCheckingMode = "strict"
+# reportImportCycles = "none"
+# reportMissingParameterType = "none"
+# reportMissingTypeArgument = "none"
+# reportPrivateUsage = "none"
+# reportUnknownArgumentType = "none"
+# reportUnknownMemberType = "none"
+# reportUnknownParameterType = "none"
+# reportUnknownVariableType = "none"
+# reportUnusedImport = "none"
+typeCheckingMode = "basic"
+
+[tool.pytest.ini_options]
+addopts = ["--import-mode=prepend"]
