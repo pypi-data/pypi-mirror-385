@@ -1,0 +1,33 @@
+#
+# Set up system
+#
+boundary p p p
+units metal
+atom_style atomic
+
+read_data data.lammps.gz
+velocity all create 5000 4384387
+
+
+#
+# Interaction
+#
+pair_style atomistica Tersoff
+pair_coeff * * Si
+
+
+#
+# Screen output
+#
+thermo 100
+thermo_style custom step ke pe etotal temp fnorm press vol
+thermo_modify format float "%14.8f" norm no flush yes
+
+
+#
+# Langevin molecular dynamics
+#
+timestep 0.0001
+fix nve all nve
+run 1000
+
