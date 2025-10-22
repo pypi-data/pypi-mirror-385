@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkray_dashboard_client=self.webpackChunkray_dashboard_client||[]).push([[962],{21962:(e,a,r)=>{r.r(a),r.d(a,{InfoModule:()=>s.H,createInfoServices:()=>s.M});var s=r(61511);r(74707)}}]);
