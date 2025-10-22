@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "solarmoonpy"
+version = "1.0.4"
+description = "Precise solar and lunar calculations for astronomical applications"
+readme = "README.md"
+authors = [{ name = "figorr", email = "jdcuartero@yahoo.es" }]
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+keywords = ["astronomy", "solar", "lunar", "sunrise", "moonphase", "python"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Astronomy"
+]
+
+[project.urls]
+Homepage = "https://github.com/figorr/solarmoonpy"
+Repository = "https://github.com/figorr/solarmoonpy.git"
+"Issues" = "https://github.com/figorr/solarmoonpy/issues"
+
+[tool.setuptools]
+packages = ["solarmoonpy"]
