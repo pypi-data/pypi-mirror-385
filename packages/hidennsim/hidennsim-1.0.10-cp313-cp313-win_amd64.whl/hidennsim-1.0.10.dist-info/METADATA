@@ -1,0 +1,386 @@
+Metadata-Version: 2.4
+Name: hidennsim
+Version: 1.0.10
+Summary: Secure MCP server with JAX-based numerical tools
+Home-page: https://github.com/yourusername/hidennsim
+Author: HIDENNSIM Team
+Author-email: HIDENNSIM Team <support@hidennsim.com>
+License: Proprietary
+Project-URL: Homepage, https://github.com/yourusername/hidennsim
+Project-URL: Documentation, https://hidennsim.readthedocs.io
+Project-URL: Issues, https://github.com/yourusername/hidennsim/issues
+Keywords: mcp,jax,numerical,llm,claude
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: mcp>=1.0.0
+Requires-Dist: cryptography>=41.0.0
+Provides-Extra: cpu
+Requires-Dist: jax[cpu]>=0.4.20; extra == "cpu"
+Provides-Extra: cuda
+Requires-Dist: jax[cuda12]>=0.4.20; extra == "cuda"
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0.0; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.21.0; extra == "dev"
+Requires-Dist: black>=23.0.0; extra == "dev"
+Requires-Dist: mypy>=1.0.0; extra == "dev"
+Requires-Dist: cibuildwheel>=2.16.0; extra == "dev"
+Dynamic: author
+Dynamic: home-page
+Dynamic: requires-python
+
+# HIDENNSIM - Secure MCP Server with JAX Integration
+
+A licensed Model Context Protocol (MCP) server providing JAX-based numerical computation tools with hardware-bound license validation.
+
+## Features
+
+- ✅ MCP server with `add_jax` tool for floating-point addition using JAX
+- ✅ Layered security with Cython binary compilation (source code protected)
+- ✅ Hardware-bound license validation system
+- ✅ Cross-platform support (Windows, macOS, Linux)
+- ✅ Available on PyPI - simple `pip install` installation
+- ✅ Integration guides for Claude Desktop, Cursor, and ChatGPT
+
+## Security
+
+HIDENNSIM uses multiple layers of protection:
+
+1. **Cython Compilation**: Core modules compiled to binary (.pyd/.so) for source code protection
+2. **License Validation**: Hardware-bound licenses tied to machine fingerprint
+3. **Encrypted Licensing**: Secure license file encryption with runtime validation
+4. **Legal Protection**: Proprietary license terms and copyright protection
+
+When installed via PyPI, users receive only compiled binaries - source code for security-sensitive modules is not distributed.
+
+## Quick Start
+
+### Installation Checklist
+
+Follow these steps in order for successful setup:
+
+- [ ] **Step 1:** Create virtual environment (`python -m venv hidennsim-env`)
+- [ ] **Step 2:** Activate virtual environment
+- [ ] **Step 3:** Install hidennsim (`pip install hidennsim`)
+- [ ] **Step 4:** ⚠️ **REQUIRED:** Install JAX (`pip install "jax[cpu]"`)
+- [ ] **Step 5:** Verify JAX works (`python -c "import jax"`)
+- [ ] **Step 6:** Get hardware fingerprint (`hidennsim-license hardware`)
+- [ ] **Step 7:** Obtain and activate license
+- [ ] **Step 8:** Configure your LLM (Claude Desktop or Cursor IDE) with full path to `hidennsim.exe`
+- [ ] **Step 9:** Restart your LLM application
+
+### 1. Create Virtual Environment (Recommended)
+
+Creating a virtual environment isolates HIDENNSIM and its dependencies from your system Python, preventing conflicts with other projects.
+
+**macOS/Linux:**
+```bash
+python3 -m venv hidennsim-env
+source hidennsim-env/bin/activate
+```
+
+**Windows (PowerShell):**
+```powershell
+python -m venv hidennsim-env
+.\hidennsim-env\Scripts\Activate.ps1
+```
+
+**Windows (Command Prompt):**
+```cmd
+python -m venv hidennsim-env
+hidennsim-env\Scripts\activate.bat
+```
+
+> **Note:** Your terminal prompt should now show `(hidennsim-env)` indicating the virtual environment is active.
+
+### 2. Install HIDENNSIM
+
+> **Important:** Ensure your virtual environment is activated before running pip install commands. Your terminal prompt should show `(hidennsim-env)`.
+
+**Standard Installation (PyPI):**
+
+```bash
+pip install hidennsim
+```
+
+**Alternative: Install from Wheel File**
+
+If you received a wheel file (.whl) directly:
+
+**Windows (PowerShell):**
+```powershell
+pip install C:\Path\To\hidennsim-1.0.0-cp313-cp313-win_amd64.whl
+```
+
+**macOS/Linux:**
+```bash
+pip install /path/to/hidennsim-1.0.0-cp313-cp313-win_amd64.whl
+```
+
+> **Note:** For wheel-based installation details, see [CLIENT_INSTALLATION.md](CLIENT_INSTALLATION.md).
+
+### 3. Install JAX (REQUIRED)
+
+> **⚠️ CRITICAL:** JAX must be installed in the same virtual environment as HIDENNSIM. The MCP server will fail to start without it.
+
+Ensure your virtual environment is activated (you should see `(hidennsim-env)` in your terminal prompt), then install JAX:
+
+**CPU-Only (Recommended for most users):**
+```bash
+pip install "jax[cpu]"
+```
+
+**GPU-Accelerated (NVIDIA GPU with CUDA 12):**
+```bash
+pip install "jax[cuda12]"
+```
+
+**Verify Installation:**
+```bash
+python -c "import jax; print('JAX', jax.__version__, 'installed successfully')"
+```
+
+Expected output:
+```
+JAX 0.8.0 installed successfully
+```
+
+### 4. Get Hardware Fingerprint
+
+```bash
+hidennsim-license hardware
+```
+
+**Example output:**
+```
+🖥️  Hardware Fingerprint:
+   sha256:a1b2c3d4e5f6...
+
+📝 Provide this fingerprint when purchasing a license.
+```
+
+**Important:** Copy this fingerprint - you'll need it to obtain your license.
+
+### 5. Obtain License Key
+
+Contact **sales@hidennsim.com** with:
+- Your email address
+- Hardware fingerprint from Step 4
+- Desired license duration (1 year, 2 years, etc.)
+
+You will receive a `license.key` file via email.
+
+### 6. Activate License
+
+Once you receive your `license.key` file:
+
+```bash
+hidennsim-license activate /path/to/license.key
+```
+
+**Success message:**
+```
+✅ License activated successfully!
+
+📄 License Information:
+   License ID: HNNS-A1B2-C3D4-E5F6-G7H8
+   Issued to:  user@example.com
+   Expires:    2026-10-18
+```
+
+### 7. Configure LLM
+
+#### Claude Desktop Configuration
+
+1. **Open Settings:**
+   - Click on the Claude icon in the top-right corner
+   - Select **Settings** from the menu
+
+2. **Navigate to Developer Settings:**
+   - In the Settings window, go to the **Developer** tab
+   - Find the **Edit Config** button and click it
+
+3. **Add MCP Server Configuration:**
+
+   Add the following configuration to the JSON file:
+
+   **macOS/Linux:**
+   ```json
+   {
+     "mcpServers": {
+       "hidennsim": {
+         "command": "/full/path/to/hidennsim-env/bin/hidennsim",
+         "args": []
+       }
+     }
+   }
+   ```
+
+   **Windows:**
+   ```json
+   {
+     "mcpServers": {
+       "hidennsim": {
+         "command": "C:\\full\\path\\to\\hidennsim-env\\Scripts\\hidennsim.exe",
+         "args": []
+       }
+     }
+   }
+   ```
+
+   > **Important:** Replace `/full/path/to/hidennsim-env` with the actual absolute path to your virtual environment.
+
+4. **Save and Restart:**
+   - Save the configuration file
+   - Restart Claude Desktop for changes to take effect
+
+#### Cursor IDE Configuration
+
+1. **Open Settings:**
+   - Press `Ctrl+Shift+P` (Windows/Linux) or `Cmd+Shift+P` (macOS)
+   - Type "Settings" and select **Preferences: Open Settings (UI)**
+
+2. **Navigate to MCP Settings:**
+   - In the Settings search bar, type "MCP"
+   - Click on **Cline > MCP: Servers**
+   - Click **Edit in settings.json** or find the **MCP Servers** section
+
+   **Alternative Method:**
+   - Go to **Cursor Settings** → **Cline** → **Tools & MCP**
+   - Click **New MCP Server**
+
+3. **Add MCP Server Configuration:**
+
+   Add the following configuration:
+
+   **macOS/Linux:**
+   ```json
+   {
+     "mcpServers": {
+       "hidennsim": {
+         "command": "/full/path/to/hidennsim-env/bin/hidennsim",
+         "args": []
+       }
+     }
+   }
+   ```
+
+   **Windows:**
+   ```json
+   {
+     "mcpServers": {
+       "hidennsim": {
+         "command": "C:\\full\\path\\to\\hidennsim-env\\Scripts\\hidennsim.exe",
+         "args": []
+       }
+     }
+   }
+   ```
+
+   > **Important:** Replace the path with the actual absolute path to your virtual environment.
+
+4. **Save and Restart:**
+   - Save the settings
+   - Restart Cursor IDE for changes to take effect
+
+<details>
+<summary>Advanced: Manual Configuration File Locations</summary>
+
+If you prefer to edit configuration files directly:
+
+**Claude Desktop:**
+- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
+- Linux: `~/.config/Claude/claude_desktop_config.json`
+
+**Cursor IDE:**
+- macOS: `~/Library/Application Support/Cursor/User/globalStorage/saoudrizwan.claude-dev/settings/cline_mcp_settings.json`
+- Windows: `%APPDATA%\Cursor\User\globalStorage\saoudrizwan.claude-dev\settings\cline_mcp_settings.json`
+- Linux: `~/.config/Cursor/User/globalStorage/saoudrizwan.claude-dev/settings/cline_mcp_settings.json`
+
+</details>
+
+## Troubleshooting
+
+### MCP Server Fails to Start
+
+If Claude Desktop or Cursor IDE shows connection errors for the hidennsim MCP server:
+
+**Error: "ModuleNotFoundError: No module named 'jax'"**
+
+This means JAX is not installed in the virtual environment. Fix:
+
+```bash
+# Activate your virtual environment first
+# Windows PowerShell:
+.\hidennsim-env\Scripts\Activate.ps1
+
+# macOS/Linux:
+source hidennsim-env/bin/activate
+
+# Install JAX
+pip install "jax[cpu]"
+
+# Verify
+python -c "import jax; print('JAX installed successfully')"
+```
+
+**Error: "spawn ... hidennsim.exe ENOENT"**
+
+The executable path in your Claude Desktop config is incorrect. Verify:
+
+1. Check the path exists:
+   - Windows: `C:\path\to\hidennsim-env\Scripts\hidennsim.exe`
+   - macOS/Linux: `/path/to/hidennsim-env/bin/hidennsim`
+
+2. Use absolute paths (not relative) in your config file
+
+3. Restart Claude Desktop or Cursor IDE after config changes
+
+### Verify Complete Installation
+
+Run these commands to confirm everything is installed correctly:
+
+```bash
+# Check hidennsim installation
+pip show hidennsim
+
+# Check JAX installation
+pip show jax
+
+# Test the MCP server can start
+hidennsim --help
+```
+
+All commands should complete without errors.
+
+## Documentation
+
+### User Documentation
+- [Installation Guide](docs/installation.md)
+- [Configuration Guide](docs/configuration.md)
+- [License Activation](docs/license-activation.md)
+- [Troubleshooting](docs/troubleshooting.md)
+- [Client Installation (Wheel-based)](CLIENT_INSTALLATION.md)
+
+### Developer Documentation
+- [PyPI Implementation Complete](PYPI_IMPLEMENTATION_COMPLETE.md) - Implementation summary and quick commands
+- [Cython Security Analysis](CYTHON_PYPI_SECURITY_ANALYSIS.md) - Security architecture and threat model
+- [License Issue Resolution](build_scripts/LICENSE_ISSUE_RESOLUTION.md) - License signature validation troubleshooting
+- [Critical Update Required](CRITICAL_UPDATE_REQUIRED.md) - **IMPORTANT:** PyPI package update status
+
+## System Requirements
+
+- **Python:** 3.10 or higher
+- **Operating System:** Windows 10+, macOS 12+, or Linux (Ubuntu 20.04+)
+- **RAM:** 4GB minimum (8GB recommended for GPU acceleration)
+- **Disk Space:** 1GB for installation
+
+## License
+
+Proprietary - Contact support@hidennsim.com for licensing information.
+
+## Support
+
+- **Email:** support@hidennsim.com
+- **Documentation:** https://hidennsim.readthedocs.io
+- **Issues:** https://github.com/yourusername/hidennsim/issues
