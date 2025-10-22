@@ -1,0 +1,110 @@
+name: Feature Request
+description: Suggest a new feature or enhancement for Clauxton
+labels: ["enhancement", "triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a feature! We appreciate your input on how to make Clauxton better.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or Use Case
+      description: Is your feature request related to a problem? Please describe the use case.
+      placeholder: |
+        Example: I'm always frustrated when...
+        Example: It would be helpful to...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe the solution you'd like to see
+      placeholder: |
+        A clear and concise description of what you want to happen.
+        Example: Add a command like `clauxton kb export --format json`
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Have you considered any alternative solutions or workarounds?
+      placeholder: Describe any alternative solutions or features you've considered
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      description: Which component would this feature affect?
+      options:
+        - Knowledge Base
+        - Task Management
+        - Search (TF-IDF)
+        - MCP Server
+        - CLI
+        - Documentation
+        - Other (please specify in description)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority (Your Opinion)
+      description: How important is this feature to you?
+      options:
+        - Critical (blocking my work)
+        - High (would significantly improve my workflow)
+        - Medium (nice to have)
+        - Low (minor improvement)
+    validations:
+      required: true
+
+  - type: textarea
+    id: examples
+    attributes:
+      label: Usage Examples
+      description: Provide examples of how this feature would be used
+      placeholder: |
+        Example command usage:
+        ```bash
+        clauxton kb export --format json > kb.json
+        ```
+
+        Or code example:
+        ```python
+        kb = KnowledgeBase(Path("."))
+        kb.export(format="json")
+        ```
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Add any other context, screenshots, or references
+      placeholder: |
+        - Links to similar features in other tools
+        - Screenshots or mockups
+        - Related discussions or issues
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-submission Checklist
+      description: Please confirm the following
+      options:
+        - label: I have searched existing issues and discussions to avoid duplicates
+          required: true
+        - label: I have described the problem or use case clearly
+          required: true
+        - label: I have provided usage examples or context
+          required: true
+        - label: I am willing to help test this feature if implemented
+          required: false

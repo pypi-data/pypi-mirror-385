@@ -1,0 +1,92 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "clauxton"
+version = "0.10.0"
+description = "Context that persists for Claude Code - Knowledge Base, Task Management, and Conflict Detection"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [
+    { name = "Nakishiyama", email = "noreply@example.com" }
+]
+keywords = [
+    "claude",
+    "claude-code",
+    "context",
+    "knowledge-base",
+    "task-management",
+    "mcp",
+    "ai-assistant",
+    "plugin"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+dependencies = [
+    "pydantic>=2.0",
+    "click>=8.1",
+    "pyyaml>=6.0",
+    "gitpython>=3.1",
+    "mcp>=1.0",
+    "scikit-learn>=1.3",
+    "numpy>=1.24",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+    "pytest-cov>=4.1",
+    "pytest-asyncio>=0.21",
+    "mypy>=1.5",
+    "ruff>=0.1",
+    "types-pyyaml>=6.0",
+    "bandit>=1.7",
+]
+
+[project.urls]
+Homepage = "https://github.com/nakishiyaman/clauxton"
+Documentation = "https://github.com/nakishiyaman/clauxton/wiki"
+Repository = "https://github.com/nakishiyaman/clauxton"
+Issues = "https://github.com/nakishiyaman/clauxton/issues"
+
+[project.scripts]
+clauxton = "clauxton.cli.main:cli"
+clauxton-mcp = "clauxton.mcp.server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["clauxton"]
+
+[tool.hatch.build.targets.wheel.force-include]
+".claude-plugin" = ".claude-plugin"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W"]
+ignore = []
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+strict = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "--cov=clauxton --cov-report=html --cov-report=term"

@@ -1,0 +1,22 @@
+[bandit]
+# Exclude directories
+exclude_dirs =
+    /tests/
+    /docs/
+    /.venv/
+    /build/
+    /dist/
+    /.pytest_cache/
+
+# Skips - tests that we intentionally don't want to run
+skips =
+    # B101: assert_used - OK in tests, but we're excluding tests directory anyway
+    B101
+
+# Severity level (LOW, MEDIUM, HIGH)
+# Only report issues of MEDIUM or higher severity
+severity = MEDIUM
+
+# Confidence level (LOW, MEDIUM, HIGH)
+# Only report issues where confidence is MEDIUM or higher
+confidence = MEDIUM

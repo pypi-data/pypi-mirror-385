@@ -1,0 +1,80 @@
+name: Question
+description: Ask a question about using Clauxton
+labels: ["question"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have a question about using Clauxton? We're here to help!
+
+        **Note**: For general discussions, feature ideas, or sharing use cases, please use [GitHub Discussions](https://github.com/nakishiyaman/clauxton/discussions) instead.
+
+  - type: input
+    id: version
+    attributes:
+      label: Clauxton Version
+      description: Run `clauxton --version`
+      placeholder: "e.g., 0.8.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: topic
+    attributes:
+      label: Question Topic
+      description: What is your question about?
+      options:
+        - Installation / Setup
+        - Knowledge Base Usage
+        - Task Management
+        - Search (TF-IDF)
+        - MCP Server Integration
+        - CLI Commands
+        - Configuration
+        - Best Practices
+        - Performance
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      description: What would you like to know?
+      placeholder: Ask your question here...
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Provide any relevant context that might help us understand your question better
+      placeholder: |
+        - What are you trying to accomplish?
+        - What have you tried so far?
+        - Any relevant configuration or setup details
+
+  - type: textarea
+    id: examples
+    attributes:
+      label: Code or Commands (if applicable)
+      description: Share any relevant commands or code you're using
+      placeholder: Paste commands or code here
+      render: shell
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-submission Checklist
+      description: Please confirm the following
+      options:
+        - label: I have checked the [documentation](https://github.com/nakishiyaman/clauxton/tree/main/docs)
+          required: true
+        - label: I have searched existing issues and discussions
+          required: true
+        - label: This is a specific question, not a feature request or bug report
+          required: true
