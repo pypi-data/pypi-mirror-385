@@ -1,0 +1,106 @@
+Metadata-Version: 2.4
+Name: vigil-science
+Version: 0.3.5
+Summary: Vigil Science: Complete reproducible science platform
+Project-URL: Homepage, https://vigil.cofactor.app
+Project-URL: Documentation, https://docs.vigil.cofactor.app
+Project-URL: Repository, https://github.com/cofactor/vigil
+Project-URL: Issues, https://github.com/cofactor/vigil/issues
+Author: Science Abundance
+License: Apache-2.0
+License-File: LICENSE
+Keywords: cli,cryptography,provenance,reproducible,science
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.11
+Requires-Dist: vigil-client>=0.3.5
+Requires-Dist: vigil-core>=0.3.0
+Description-Content-Type: text/markdown
+
+# Vigil Science
+
+**Complete reproducible science platform**
+
+Vigil Science provides a unified CLI for reproducible science workflows, combining cryptographic provenance with platform integration.
+
+## Installation
+
+```bash
+pip install vigil-science
+```
+
+## Quick Start
+
+```bash
+# Initialize a new project
+vigil init my-project
+cd my-project
+
+# Generate signing keys
+vigil signing generate-keypair
+
+# Run experiments
+vigil run python experiment.py
+
+# Generate receipt
+vigil promote
+
+# Verify reproducibility
+vigil verify
+
+# Upload to platform (optional)
+vigil login
+vigil push
+```
+
+## What's Included
+
+This package provides the complete Vigil platform:
+
+- **vigil-core**: Cryptographic operations, local reproducibility, CLI tools
+- **vigil-client**: Platform integration, authentication, artifact management
+
+## Commands
+
+### Core Commands
+- `vigil init` - Initialize new project
+- `vigil run` - Execute reproducible workflows
+- `vigil promote` - Generate cryptographic receipts
+- `vigil verify` - Verify reproducibility
+- `vigil doctor` - Health check and diagnostics
+
+### Platform Commands
+- `vigil login` - Authenticate with platform
+- `vigil push` - Upload verified artifacts
+- `vigil pull` - Download artifacts
+- `vigil search` - Search platform artifacts
+
+### Utility Commands
+- `vigil signing generate-keypair` - Generate Ed25519 keys
+- `vigil signing sign` - Sign receipts
+- `vigil signing verify` - Verify signatures
+- `vigil completion` - Generate shell completions
+
+## Documentation
+
+- [Getting Started](https://docs.vigil.cofactor.app/getting-started)
+- [CLI Reference](https://docs.vigil.cofactor.app/cli-reference)
+- [Architecture](https://docs.vigil.cofactor.app/architecture)
+
+## Support
+
+- [GitHub Issues](https://github.com/cofactor/vigil/issues)
+- [Documentation](https://docs.vigil.cofactor.app)
+- [Community](https://discord.gg/vigil)
+
+## License
+
+Apache 2.0 - see [LICENSE](LICENSE) for details.
