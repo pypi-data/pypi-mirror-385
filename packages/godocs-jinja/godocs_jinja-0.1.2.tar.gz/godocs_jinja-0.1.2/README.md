@@ -1,0 +1,194 @@
+# Godocs Jinja
+
+**Godocs Jinja** is a **plugin** for the **Godocs CLI** that provides a **[Jinja2](https://jinja.palletsprojects.com/en/stable/) based constructor** implementation to generate documentation.
+
+## 🤔 How to Use
+
+To use this plugin you'll **need** to also have installed the **main godocs package**, which has the **core functionality** for the CLI.
+
+Once **both packages are installed**, `godocs-jinja` will **automatically** be **detected** as a plugin and **registered** in the main **Godocs** program, thanks to its definition in the `project.entry-points."godocs.plugins"` table in the `pyproject.toml`.
+
+## 📥 Installation
+
+To start using this plugin with the **Godocs CLI**, you can **install** both the packages through **PIP**.
+
+Here's the commands necessary to achieve that:
+
+``` sh
+# To install the main CLI:
+pip install godocs
+
+# To install this Jinja2 based constructor:
+pip install godocs-jinja
+```
+
+> 💡 **HINT**: Depending on your needs, it may be useful to install packages in a **virtual environment**, as to not pollute your global env. Sometimes you may want to install stuff globally, though, it really depends.<br>
+Generally speaking, I'd recommend **installing globally** if you're in a **CI/ CD runner**, for example, and installing in an **environment** if you're in your **local computer testing** out in a single repository.
+
+If you desire to **isolate installation** in a `venv`, you should previously have run these **commands**:
+
+``` sh
+# To create a venv in a .venv folder:
+python -m venv .venv
+
+# To activate the created venv on Windows:
+.venv/Scripts/activate
+# Or, on Unix systems or Git Bash, for example:
+source .venv/Scripts/activate
+```
+
+## 📚 Concepts
+
+In this section you'll find some information about important concepts used in this project, which are nice to know to get a better understanding.
+
+### 🗃️ Models
+
+**Models** in this package are considered to be a certain **directory structures** that store **files used** in the doc **generation process** in a **predetermined way**.
+
+By **default**, **one model** for `rst` documentation is defined, here's its structure as an example:
+
+```
+rst
+├── templates
+│   ├── index
+│   │   └── index.jinja
+│   └── class 
+│   │   ├── index.jinja
+│   │   ├── heading.jinja
+│   │   ├── description.jinja
+│   │   ├── property_index.jinja
+│   │   ├── method_index.jinja
+│   │   ├── constant_descriptions.jinja
+│   │   ├── enum_descriptions.jinja
+│   │   ├── property_descriptions.jinja
+│   │   ├── method_descriptions.jinja
+│   │   └── signal_descriptions.jinja
+└── filters.py 
+```
+
+**Custom models** can be **passed** to the program by specifying a **directory** in the `-M` or `--models` **option** from the `jinja` constructor.
+
+### 📐 Templates
+
+**Templates** are **folders with** an `index.jinja` file **or** a `.jinja` **file** by itself, which defines a **Jinja template** used for **documentation generation**.
+
+By **default**, there are **two templates** in the `rst` model: the **class template** and the **index template**. The **class template** defines how a **documentation page** about a **specific class** should be, and the **index template** specifies the output for an **index page** that allows **navigating between all classes with a toctree**. 
+
+**Custom templates** can be **passed** to the program by specifying a **directory** with templates in the `-T` or `--templates` **option** from the `jinja` constructor.
+
+### 🔨 Filters
+
+**Filters** are **functions** that **return** `strings` which can be **used by** the **Jinja construction** process, thanks to the `JinjaConstructor` defining them as [Jinja filters](https://jinja.palletsprojects.com/en/stable/api/#custom-filters).
+
+Filters can be **passed** to the **CLI** by **pointing to a file** with the given functions via the `-F` **or** `--filters` **option** in the `jinja` constructor.
+
+By **default**, the `rst` **model** comes with a few **filters**, which **stay** in the `filter.py` are used throughout the **built-in templates**.
+
+### 🏗️ Builders
+
+**Builders** are also **functions**, but these determine how the **construction should respond to specific templates**. This is done internally by **mapping each builder to a template name**.
+
+As an **example**, there are default builders for the **class** and **index** templates. The **class builder** generates output **files for each class** in the documentation, different from the **index builder**, which only generates **one index file** output.
+
+**For each template** that should be used, there should be an **equivalent builder**, so `godocs-jinja` knows how to generate its output specifically. That's why by **default** there are the `class` and `index` **builders** - because there are the `class` and `index` **templates**.
+
+For passing **custom builders**, you can use the `-B` or `--builders` option in the `jinja` constructor pointing to a **script with functions** representing the **builders**. The **names of the functions** should **match** the **name of the templates** they should build.
+
+## 🎛️ Commands
+
+This **plugin adds** the `jinja` constructor as a **subcommand** to the main CLI's `construct` command. This subcommand can then be used to effectively **generate docs** using **Jinja2**.
+
+Down below are some quick **examples** of how the commands, arguments and options added by `godocs-jinja` to **generate documentation** can be used (if you installed in a **virtual environment**, make sure to have it **activated** before effectively using the program).
+
+If you want a more **in depth overview** of the features available, you can always use the `-h` / `--help` option with **any command**.
+
+``` sh
+# Generates documentation based on the XML in the input-dir inside the output-dir, in the RST language, by default.
+godocs construct jinja <input-dir> <output-dir>
+
+# Generates documentation based on the XML from the input-dir inside the output-dir, in the RST language, by default, translating the syntax of any text within it using the custom translator in the translator-path.
+godocs construct jinja --translator <translator-path> <input-dir> <output-dir>
+
+# Generates documentation based on the XML from the input-dir inside the output-dir, using the model specified by md-model, with the md file suffix, translating the syntax of any text within the XML using the custom translator in the md-translator path.
+godocs construct jinja --translator <md-translator> --format md --model <md-model> <input-dir> <output-dir>
+```
+
+## 📝 Custom Options
+
+The documentation process often needs some **data that can't be obtained** directly from the **XML class reference** generated by **Godot**. That's why more **properties can be passed** via a special `godocs-options.json` file.
+
+You can write **any data** your documentation will potentially need **inside this file** and **specify its path** through the `--options-file` option in the `jinja` command. **Godocs** `construct` logic will then **parse its data** and make it **available in the building context inside an options property**.
+
+If you use the **default** `rst` **templates**, here's the **options** that you'll want to specify:
+
+- `name`: The title of the documentation in the index file
+- `description`: The description for the documentation in the index file
+- `toc_depth`: The depth of the main `toctree` of the documentation in the index file
+
+## 🧑‍💻 Developing
+
+For **development isolation**, it is recommended to be inside a **virtual environment**, which can be accomplished by following the **steps** described at the end of the **Installation section**, quickly recaping:
+
+``` sh
+python -m venv .venv
+
+# On Windows:
+.venv/Scripts/activate
+# Or, on Unix:
+source .venv/Scripts/activate
+```
+
+Now, the project comes with a `pyproject.toml`, which specifies its **dependencies** depending on the **environment**.
+
+The **main dependency** of this package is the `jinja2` tool. Besides that, this project has some **dev dependencies**, to allow **building and testing**. Finally, `godocs` is considered a **peer dependency** here, to allow users to use the version they want, based on their environment.
+
+If you want to **install** the dependencies, you can use the following **commands**:
+
+``` sh
+# For production only dependencies:
+pip install .
+
+# For development dependencies:
+pip install .[dev]
+
+# For peer dependencies:
+pip install .[peer]
+```
+
+If you're going to **develop**, though, I'd recommend you to rather **install the project itself** in **editable mode**, which would allow you to **make changes** and **test them** out in **real time**, **without having to rebuild and reinstall**. Here's the command to achieve that:
+
+``` sh
+pip install --editable .
+```
+
+## 🧪 Testing
+
+This project uses `pytest` as its **test framework**, which means in order to **execute tests**, you should use the **following command**:
+
+``` sh
+pytest
+```
+
+The **test files** are located under the `tests` directory, distributed under a **structure** that **mirrors the source code** arrangement.
+
+## 📦 Building
+
+To **build this project** for production, the `build` **dependency is needed**, which is specified in the **dev dependencies** from `pyproject.toml`.
+
+With that **dependency installed** (through the **installation of the dev dependencies**, or its manual installation), the following command can be used:
+
+``` sh
+python -m build .
+```
+
+This will use the `setuptools` **build backend** in an **isolated temporary environment** to **create the distributables**.
+
+When executed, **there should be** a `dist` folder with a `.tar.gz` archive and a `.whl` build.
+
+## 🚀 Deploying
+
+To deploy this package, the following command can be used:
+
+``` sh
+python -m twine upload dist/*
+```

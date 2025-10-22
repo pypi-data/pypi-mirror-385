@@ -1,0 +1,5 @@
+
+Description
+{{ "=" * "Description"|length }}
+
+{{ class.description }}

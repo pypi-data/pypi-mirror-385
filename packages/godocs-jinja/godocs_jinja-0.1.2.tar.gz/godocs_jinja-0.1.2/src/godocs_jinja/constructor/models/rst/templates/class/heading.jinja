@@ -1,0 +1,13 @@
+
+.. _{{ class.name | make_code_member_label_target(options.ref_prefix) }}:
+
+{{ "=" * class.name|length }}
+{{ class.name }}
+{{ "=" * class.name|length }}
+
+**Inherits:** {% for parent in class.parents -%}
+                {{ parent | make_code_member_ref(options.ref_prefix, parent) }}
+                {%- if not loop.last %} **<** {% endif -%}
+              {%- endfor %}
+
+{{ class.brief_description }}

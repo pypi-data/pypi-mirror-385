@@ -1,0 +1,15 @@
+
+Property Index
+{{ "=" * "Property Index"|length }}
+
+.. list-table::
+   :header-rows: 1
+
+   * - Type
+     - Name
+     - Default value
+   {% for property in class.properties -%}
+   * - {{ property.type | make_code_member_type_ref(options.ref_prefix) }}
+     - {{ property.name | join_code_member_name(class.name) | make_code_member_ref(options.ref_prefix, property.name) }}
+     - ``{{ property.default }}``
+   {% endfor %}
