@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "commit-bot"
+version = "1.1.7"
+description = "A brief description of your project."
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "pyhocon==0.3.61",
+    "litellm==1.76.3",
+    "vllm==0.10.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "jupyterlab",
+    "jupyterlab-vim",
+    "ipython",
+    "python-lsp-server[all]",
+    "pylint",
+    "flake8",
+    "flake8-quotes",
+    "pep8-naming",
+    "isort",
+    "openpyxl",
+    "visidata",
+    "csvkit",
+    "black",
+    "tabulate[widechars]",
+    "build",
+    "twine",
+]
+
+[project.scripts]
+commit-bot = "commit_bot.main:run"
+
+[tool.setuptools.package-data]
+"commit_bot" = ["conf/*.conf", "conf/*.md", "bin/*", "var/logs/.keep"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+norecursedirs = ["exploration"]
