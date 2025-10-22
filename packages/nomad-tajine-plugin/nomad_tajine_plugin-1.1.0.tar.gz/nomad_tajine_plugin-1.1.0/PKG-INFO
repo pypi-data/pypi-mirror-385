@@ -1,0 +1,176 @@
+Metadata-Version: 2.4
+Name: nomad-tajine-plugin
+Version: 1.1.0
+Summary: An example plugin showing how NOMAD can be used outside of material science for curating food recipes.
+Author-email: Hampus Näsström <hampus.naesstroem@physik.hu-berlin.de>, FAIRmat <fairmat@physik.hu-berlin.de>
+Maintainer-email: Hampus Näsström <hampus.naesstroem@physik.hu-berlin.de>, FAIRmat <fairmat@physik.hu-berlin.de>
+License: 
+        The MIT License (MIT)
+        
+        Copyright (c) 2025 Hampus Näsström
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in
+        all copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+        THE SOFTWARE.
+        
+Project-URL: Repository, https://github.com/FAIRmat-NFDI/nomad-tajine-plugin
+Project-URL: Homepage, https://fairmat-nfdi.github.io/nomad-tajine-plugin/
+Project-URL: Bug Tracker, https://github.com/FAIRmat-NFDI/nomad-tajine-plugin/issues
+Project-URL: Documentation, https://fairmat-nfdi.github.io/nomad-tajine-plugin/
+Classifier: Intended Audience :: Developers
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: License :: OSI Approved :: MIT License
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: nomad-lab>=1.3.0
+Requires-Dist: python-magic-bin; sys_platform == "win32"
+Provides-Extra: dev
+Requires-Dist: ruff; extra == "dev"
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: structlog; extra == "dev"
+Dynamic: license-file
+
+![](https://github.com/FAIRmat-NFDI/nomad-tajine-plugin/actions/workflows/actions.yml/badge.svg)
+![](https://coveralls.io/repos/github/FAIRmat-NFDI/nomad-tajine-plugin/badge.svg?branch=main)
+![](https://github.com/FAIRmat-NFDI/nomad-tajine-plugin/actions/workflows/python-publish.yml/badge.svg)
+![](https://img.shields.io/pypi/pyversions/nomad-tajine-plugin)
+![](https://img.shields.io/pypi/l/nomad-tajine-plugin)
+![](https://img.shields.io/pypi/v/nomad-tajine-plugin)
+
+# nomad-tajine-plugin
+
+An example plugin showing how NOMAD can be used outside of material science for curating food recipes.
+
+This `nomad` plugin was generated with `Cookiecutter` along with `@nomad`'s [`cookiecutter-nomad-plugin`](https://github.com/FAIRmat-NFDI/cookiecutter-nomad-plugin) template.
+
+## Development
+
+If you want to develop locally this plugin, clone the project and in the plugin folder, create a virtual environment (you can use Python 3.10, 3.11 or 3.12):
+```sh
+git clone https://github.com/FAIRmat-NFDI/nomad-tajine-plugin.git
+cd nomad-tajine-plugin
+python3.11 -m venv .pyenv
+. .pyenv/bin/activate
+```
+
+Make sure to have `pip` upgraded:
+```sh
+pip install --upgrade pip
+```
+
+We recommend installing `uv` for fast pip installation of the packages:
+```sh
+pip install uv
+```
+
+Install the `nomad-lab` package:
+```sh
+uv pip install -e '.[dev]'
+```
+
+### Run the tests
+
+You can run locally the tests:
+```sh
+python -m pytest -sv tests
+```
+
+where the `-s` and `-v` options toggle the output verbosity.
+
+Our CI/CD pipeline produces a more comprehensive test report using the `pytest-cov` package. You can generate a local coverage report:
+```sh
+uv pip install pytest-cov
+python -m pytest --cov=src tests
+```
+
+### Run linting and auto-formatting
+
+We use [Ruff](https://docs.astral.sh/ruff/) for linting and formatting the code. Ruff auto-formatting is also a part of the GitHub workflow actions. You can run locally:
+```sh
+ruff check .
+ruff format . --check
+```
+
+### Debugging
+
+For interactive debugging of the tests, use `pytest` with the `--pdb` flag. We recommend using an IDE for debugging, e.g., _VSCode_. If that is the case, add the following snippet to your `.vscode/launch.json`:
+```json
+{
+  "configurations": [
+      {
+        "name": "<descriptive tag>",
+        "type": "debugpy",
+        "request": "launch",
+        "cwd": "${workspaceFolder}",
+        "program": "${workspaceFolder}/.pyenv/bin/pytest",
+        "justMyCode": true,
+        "env": {
+            "_PYTEST_RAISE": "1"
+        },
+        "args": [
+            "-sv",
+            "--pdb",
+            "<path-to-plugin-tests>",
+        ]
+    }
+  ]
+}
+```
+
+where `<path-to-plugin-tests>` must be changed to the local path to the test module to be debugged.
+
+The settings configuration file `.vscode/settings.json` automatically applies the linting and formatting upon saving the modified file.
+
+### Documentation on Github pages
+
+To view the documentation locally, install the related packages using:
+```sh
+uv pip install -r requirements_docs.txt
+```
+
+Run the documentation server:
+```sh
+mkdocs serve
+```
+
+## Adding this plugin to NOMAD
+
+Currently, NOMAD has two distinct flavors that are relevant depending on your role as an user:
+1. [A NOMAD Oasis](#adding-this-plugin-in-your-nomad-oasis): any user with a NOMAD Oasis instance.
+2. [Local NOMAD installation and the source code of NOMAD](#adding-this-plugin-in-your-local-nomad-installation-and-the-source-code-of-nomad): internal developers.
+
+### Adding this plugin in your NOMAD Oasis
+
+Read the [NOMAD plugin documentation](https://nomad-lab.eu/prod/v1/staging/docs/howto/oasis/plugins_install.html) for all details on how to deploy the plugin on your NOMAD instance.
+
+### Adding this plugin in your local NOMAD installation and the source code of NOMAD
+
+We now recommend using the dedicated [`nomad-distro-dev`](https://github.com/FAIRmat-NFDI/nomad-distro-dev) repository to simplify the process. Please refer to that repository for detailed instructions.
+
+### Template update
+
+We use [`cruft`](https://github.com/cruft/cruft) to update the project based on template changes. To run the check for updates locally, run `cruft update` in the root of the project. More details see the instructions on [`cruft` website](https://cruft.github.io/cruft/#updating-a-project).
+
+## Main contributors
+| Name | E-mail     |
+|------|------------|
+| Hampus Näsström | [hampus.naesstroem@physik.hu-berlin.de](mailto:hampus.naesstroem@physik.hu-berlin.de)
