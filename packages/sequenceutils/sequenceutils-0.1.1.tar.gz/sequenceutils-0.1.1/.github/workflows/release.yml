@@ -1,0 +1,41 @@
+name: release
+on:
+  workflow_run:
+    workflows: ["test-on-push"]
+    types: [completed]
+jobs:
+  pypi-publish:
+    runs-on: ubuntu-latest
+    if: ${{ startsWith(github.event.workflow_run.head_branch, 'v') && github.event.workflow_run.conclusion == 'success' }}
+    environment: release
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      # It seems to be impossible to only run this workflow on tags, and
+      # there also doesn't seem to be a way to test head_branch against
+      # a regex in the if condition. So this will have to do.
+      - name: Verify tag format
+        run: |
+          if [[ ! ${{ github.event.workflow_run.head_branch }} =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Tag format is invalid. Expected format: vX.Y.Z"
+            exit 1
+          fi
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: refs/tags/${{ github.event.workflow_run.head_branch }}
+      - name: Verify that tag (without leading v) matches version in __about__.py
+        run: |
+          tag=${{ github.event.workflow_run.head_branch }}
+          tag_version=${tag#v}
+          if ! grep -q "^__version__ = \"${tag_version}\"$" src/sequenceutils/__about__.py; then
+            echo "Tag does not match version in __about__.py"
+            exit 1
+          fi
+      - name: Install Hatch
+        uses: pypa/hatch@install
+      - name: Build
+        run: hatch build
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
