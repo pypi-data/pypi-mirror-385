@@ -1,0 +1,41 @@
+Metadata-Version: 2.4
+Name: astra-haystack
+Version: 3.0.0
+Project-URL: Documentation, https://github.com/deepset-ai/haystack-core-integrations/tree/main/integrations/astra#readme
+Project-URL: Issues, https://github.com/deepset-ai/haystack-core-integrations/issues
+Project-URL: Source, https://github.com/deepset-ai/haystack-core-integrations/tree/main/integrations/astra
+Author-email: Anant Corporation <support@anant.us>
+License-Expression: Apache-2.0
+License-File: LICENSE
+Classifier: Development Status :: 4 - Beta
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Programming Language :: Python :: Implementation :: PyPy
+Requires-Python: >=3.9
+Requires-Dist: astrapy<2.0,>=1.5.0
+Requires-Dist: haystack-ai>=2.11.0
+Requires-Dist: pydantic
+Requires-Dist: typing-extensions
+Description-Content-Type: text/markdown
+
+# astra-haystack
+
+[![PyPI - Version](https://img.shields.io/pypi/v/astra-haystack.svg)](https://pypi.org/project/astra-haystack)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/astra-haystack.svg)](https://pypi.org/project/astra-haystack)
+
+- [Integration page](https://haystack.deepset.ai/integrations/astradb)
+- [Changelog](https://github.com/deepset-ai/haystack-core-integrations/blob/main/integrations/astra/CHANGELOG.md)
+
+---
+
+## Contributing
+
+Refer to the general [Contribution Guidelines](https://github.com/deepset-ai/haystack-core-integrations/blob/main/CONTRIBUTING.md).
+
+To run integration tests locally, you need to export the `ASTRA_DB_API_ENDPOINT` and `ASTRA_DB_APPLICATION_TOKEN` environment variables.
