@@ -1,0 +1,146 @@
+# MiddleMan Client - Python
+
+A Python client library for connecting to MiddleMan applications using SignalR WebSocket connections.
+
+## Installation
+
+Install from source (editable - useful for development):
+
+```bash
+pip install -e .
+```
+
+Or build and install the wheel/sdist locally:
+
+```bash
+python -m pip install --upgrade build
+python -m build
+pip install dist/middleman_client_python-*.whl
+```
+
+If you just want to install runtime dependencies from the repository, you can still use:
+
+```bash
+pip install -r requirements.txt
+```
+
+## Quick Start
+
+```python
+import asyncio
+from middleman_client import ClientConnectionBuilderFactory
+from middleman_client.method_processing.method_discovery import middleman_method
+
+class MyService:
+    @middleman_method
+    def my_method(self, value: str) -> str:
+        return f"Processed: {value}"
+
+async def main():
+    # Create connection
+    connection = (ClientConnectionBuilderFactory.create()
+                 .with_host("ws://localhost:5000/middlemanhub")
+                 .with_token("your-token")
+                 .with_reconnect()
+                 .build())
+    
+    # Register service
+    service = MyService()
+    connection.add_method_calling_handler(MyService, service)
+    
+    # Use current module for method discovery
+    import sys
+    connection.use_module(sys.modules[__name__])
+    
+    # Start connection
+    await connection.start_async()
+    
+    # Keep alive
+    while True:
+        await asyncio.sleep(1)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+## Features
+
+- **SignalR Integration**: Built on top of signalrcore for reliable WebSocket communication
+- **Method Discovery**: Automatic discovery of methods marked with `@middleman_method` decorator
+- **Type Safety**: Full type hint support for method parameters and return values
+- **Async Support**: Native support for both synchronous and asynchronous methods
+- **Auto Reconnection**: Optional automatic reconnection on connection loss
+- **Builder Pattern**: Fluent API for configuring connections
+
+## API Reference
+
+### ClientConnectionBuilderFactory
+
+Factory class for creating connection builders.
+
+- `create()` - Creates a new `IClientConnectionBuilder` instance
+
+### IClientConnectionBuilder
+
+Builder interface for configuring client connections.
+
+- `with_host(host: str)` - Set the SignalR hub URL
+- `with_token(token: str)` - Set authentication token
+- `with_reconnect()` - Enable automatic reconnection
+- `build()` - Create the `ClientConnection` instance
+
+### ClientConnection
+
+Main class for managing the SignalR connection and method registration.
+
+- `add_method_calling_handler(handler_type, handler)` - Register a service instance
+- `use_module(module)` - Set the module to discover methods from
+- `start_async()` - Start the connection and register methods
+
+### @middleman_method
+
+Decorator to mark methods as callable via the MiddleMan server.
+
+```python
+@middleman_method
+def my_method(self, param: int) -> str:
+    return f"Result: {param}"
+```
+
+## Method Discovery
+
+The client automatically discovers methods marked with the `@middleman_method` decorator. Methods can be:
+
+- Instance methods in classes
+- Static methods
+- Module-level functions
+
+## Type Support
+
+The client supports the following Python types:
+
+- Primitives: `int`, `float`, `str`, `bool`
+- Collections: `List[T]`
+- Optional types: `Optional[T]`
+- Custom classes with type annotations
+- Async return types
+
+## Error Handling
+
+The client includes proper error handling for:
+
+- Connection failures
+- Invalid client options
+- Method invocation errors
+- Serialization/deserialization errors
+
+## Requirements
+
+- Python 3.8+
+- signalrcore>=0.9.5
+- websockets>=11.0
+- typing-extensions>=4.0.0
+
+## License
+
+This project is licensed under the MIT License.
