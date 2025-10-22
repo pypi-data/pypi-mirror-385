@@ -1,0 +1,33 @@
+Metadata-Version: 2.4
+Name: arcadedb-embedded-minimal
+Version: 25.9.1.3
+Summary: ArcadeDB embedded Python driver - Minimal distribution (excludes Gremlin, GraphQL, MongoDB/Redis wire protocols)
+Author-email: Arcade Data Ltd <info@arcadedata.com>
+License: Apache-2.0
+Project-URL: Homepage, https://arcadedb.com
+Project-URL: Documentation, https://docs.arcadedb.com
+Project-URL: Repository, https://github.com/ArcadeData/arcadedb
+Project-URL: Bug Tracker, https://github.com/ArcadeData/arcadedb/issues
+Keywords: database,graph,document,multi-model,nosql,arcadedb,embedded
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Database
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: jpype1>=1.5.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0.0; extra == "dev"
+Requires-Dist: pytest-cov; extra == "dev"
+Requires-Dist: black; extra == "dev"
+Requires-Dist: isort; extra == "dev"
+Requires-Dist: mypy; extra == "dev"
+Provides-Extra: vector
+Requires-Dist: numpy>=1.20.0; extra == "vector"
