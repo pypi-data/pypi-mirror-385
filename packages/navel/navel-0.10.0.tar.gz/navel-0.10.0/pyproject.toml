@@ -1,0 +1,25 @@
+[build-system]
+requires = [
+    "setuptools>=42",
+    "wheel",
+    "bitstring",
+    "protobuf"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "navel"
+description = "SDK for the Navel platform"
+urls = {Homepage= "https://navelrobotics.com", Documentation="https://doc.navelrobotics.com/"}
+classifiers = ["Programming Language :: Python :: 3", "Operating System :: POSIX :: Linux"]
+
+dynamic = ["version"]
+dependencies = ["pyalsaaudio", "bitstring", "protobuf"]
+requires-python = ">=3.11"
+authors = [{ name = "navel robotics GmbH", email = "info@navelrobotics.com" }]
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.dynamic]
+version = { attr = "navel._version.__version__" }
