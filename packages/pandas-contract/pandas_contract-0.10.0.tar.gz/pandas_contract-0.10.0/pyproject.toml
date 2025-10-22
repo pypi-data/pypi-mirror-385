@@ -1,0 +1,113 @@
+[project]
+name = "pandas-contract"
+version = "0.10.0"
+description = "Define input and output columns for functions working on pandas dataframes."
+readme = "README.md"
+authors = [
+    {name = "Micha Scholl", email = "schollm-git@gmx.com"},
+]
+keywords = ["pandas", "pandera", "dependencies", "contract", "validation"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Typing :: Typed",
+    "Topic :: Documentation",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Testing",
+]
+
+
+requires-python = ">=3.9"
+dependencies = [
+    # Keep in sync with .github/workflows/python.yml
+    "pandas>=1.5.0",
+    "pandera[pandas]>=0.22.0",
+]
+[project.urls]
+homepage= "https://pandas-contract.readthedocs.io/en/latest/"
+issues = "https://github.com/schollm/pandas-contract/projects"
+source = "https://github.com/schollm/pandas-contract"
+changelog = "https://github.com/schollm/pandas-contract/blob/main/CHANGELOG.md"
+documentation = "https://pandas-contract.readthedocs.io/en/latest/"
+
+[dependency-groups]
+docs = [
+    "myst-parser>=3.0.1",
+    "sphinx>=5.3.0",
+    "sphinx-autodoc2>=0.5.0",
+    "sphinx-rtd-theme>=2.0.0",
+    "sphinx-autodoc2>=0.5.0",
+]
+
+dev = [
+    "pytest>=8.3.5",
+    "ruff>=0.11.0",
+    "pandas-stubs>=2.2.2.240807",
+    "pytest-mypy>=1.0.0",
+    "pyright>=1.1.398",
+    "pytest-cov>=6.1.1",
+    "setuptools>=78.1.0",
+]
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "D213",  #  `multi-line-summary-first-line` (D212) and `multi-line-summary-second-line` (D213) are incompatible.
+    "D203",  # `incorrect-blank-line-before-class` (D203) and `no-blank-line-before-class` (D211) are incompatible.
+    "COM812", # Missing trailing comma in a single-line list - already applied by ruff format.
+    "PD901", # Avoid using generic name 'df' for DataFrame
+    "TRY003", # Checks for long exception messages that are not defined in the exception class itself
+    "EM101", # Exception must not use a string literal, assign to variable first
+    "ANN401", # Dynamically typed expressions (typing.Any) are disallowed: This is also applied to *arg, **kwargs.
+    "D205", # 1 blank line required between summary line and description: ruff format disagrees.
+    "D407", # We want sub-headings in docstrsings.
+    "D416", # Example(s) is used as headings, so we do not want a column.
+
+]
+
+[tool.ruff.lint.flake8-pytest-style]
+parametrize-names-type = "csv"
+
+[tool.ruff.lint.per-file-ignores]
+"src/tests/**/*.py" = [
+    # at least this three should be fine in tests:
+    "S101", # asserts allowed in tests...
+    "ARG", # Unused function args -> fixtures nevertheless are functionally relevant...
+    "FBT", # Don't care about booleans as positional arguments in tests, e.g. via @pytest.mark.parametrize()
+]
+"docs/*.py" = [
+    "INP001",  # implicit namepsace
+]
+
+[tool.pytest.ini_options]
+addopts = """
+  --junit-xml=.out/junit-pytest.xml
+  --cov=src/pandas_contract
+  --cov-report=xml:.out/coverage.xml
+  --cov-report=html:.out/coverage-html
+  --cov-report term-missing
+  --cov-branch
+  --doctest-modules
+"""
+[tool.pyright]
+include = ["src/"]
+sttrict = ["src/"]
+reportIncompatibleMethodOverride = "none"
+
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
