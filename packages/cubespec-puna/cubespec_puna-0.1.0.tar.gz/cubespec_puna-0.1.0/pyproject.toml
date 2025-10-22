@@ -1,0 +1,12 @@
+[project]
+name = "cubespec-puna"
+version = "0.1.0"
+description = "Control the PUNA Hexapod for positioning cubespec optics"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "symetrie-hexapod",
+]
+
+[tool.uv.sources]
+symetrie-hexapod = { path = "../cgse/projects/generic/symetrie-hexapod", editable = true }
