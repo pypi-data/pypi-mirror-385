@@ -1,0 +1,31 @@
+[project]
+name = "pixtreme-legacy"
+version = "0.5.2"
+description = "Legacy compatibility functions for pixtreme (_cp functions)"
+authors = [{name = "minamik", email = "mia@sync.dev"}]
+readme = "README.md"
+license = "MIT"
+classifiers = [
+    "Development Status :: 7 - Inactive",
+    "Environment :: GPU :: NVIDIA CUDA :: 12",
+    "Intended Audience :: Developers",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Multimedia :: Graphics",
+]
+requires-python = ">=3.10"
+dependencies = ["pixtreme>=0.5.2"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pixtreme_legacy"]
+
+[tool.uv.sources]
+pixtreme = { path = "..", editable = true }
