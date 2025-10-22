@@ -1,0 +1,34 @@
+# Include documentation
+include README.md
+include LICENSE
+include QUICKSTART.md
+include INSTALL.md
+include USAGE.md
+
+# Include static files for the admin UI
+recursive-include rabbit_admin/static *
+recursive-include rabbit_admin/static/assets *
+recursive-include rabbit_admin/static/icons *
+
+# Exclude Python bytecode
+global-exclude __pycache__
+global-exclude *.py[co]
+global-exclude *.pyc
+global-exclude *.pyo
+
+# Exclude development and build files
+exclude example_app.py
+exclude admin.py
+exclude adminV2.py
+exclude decor.py
+exclude models.py
+exclude main.py
+exclude .gitignore
+exclude *.sqlite3
+exclude *.sqlite3-shm
+exclude *.sqlite3-wal
+prune migrations
+prune static
+prune tests
+prune __pycache__
+prune .pytest_cache
