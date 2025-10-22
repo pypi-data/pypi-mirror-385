@@ -1,0 +1,28 @@
+include README.md
+include LICENSE
+recursive-include herrkunft *.py py.typed
+recursive-include examples *.py
+recursive-include tests *.py
+
+# Exclude everything we don't want
+global-exclude *.pyc
+global-exclude __pycache__
+global-exclude *.so
+global-exclude *.dylib
+
+# Explicitly exclude esm_tools directory
+prune esm_tools
+prune docs
+prune AI-STATUS
+prune binder
+prune htmlcov
+prune .mypy_cache
+prune .pytest_cache
+prune .ruff_cache
+exclude .gitignore
+exclude .coverage
+exclude coverage.xml
+exclude coverage.json
+exclude benchmark_provenance.py
+exclude demo_dumper.py
+exclude memory_profile.py
