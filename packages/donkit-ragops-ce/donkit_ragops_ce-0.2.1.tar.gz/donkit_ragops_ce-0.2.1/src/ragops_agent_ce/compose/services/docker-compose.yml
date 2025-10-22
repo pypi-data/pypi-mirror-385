@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: qdrant
+    profiles:
+      - qdrant
+      - full-stack
+    ports:
+      - "${QDRANT_PORT_HTTP:-6333}:6333"  # HTTP API
+      - "${QDRANT_PORT_GRPC:-6334}:6334"  # gRPC API
+    volumes:
+      - qdrant_data:/qdrant/storage
+    environment:
+      - QDRANT__SERVICE__HTTP_PORT=6333
+      - QDRANT__SERVICE__GRPC_PORT=6334
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6333/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - ragops-network
+
+  rag-service:
+    image: donkitai/rag-service:latest
+    pull_policy: always
+    container_name: rag-service
+    profiles:
+      - rag-service
+      - full-stack
+    ports:
+      - "${RAG_SERVICE_PORT:-8000}:8000"
+    environment:
+      # Required: RAG configuration
+      - CONFIG=${CONFIG:-}
+
+      # LLM Provider settings
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - OPENAI_BASE_URL=${OPENAI_BASE_URL:-}
+      - AZURE_OPENAI_API_KEY=${AZURE_OPENAI_API_KEY:-}
+      - AZURE_OPENAI_AZURE_ENDPOINT=${AZURE_OPENAI_AZURE_ENDPOINT:-}
+      - AZURE_OPENAI_API_VERSION=${AZURE_OPENAI_API_VERSION:-}
+      - AZURE_OPENAI_DEPLOYMENT_NAME=${AZURE_OPENAI_DEPLOYMENT_NAME:-}
+      - RAGOPS_VERTEX_CREDENTIALS_JSON=${RAGOPS_VERTEX_CREDENTIALS_JSON:-}
+
+      # Server settings
+      - HOST=0.0.0.0
+      - PORT=8000
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    networks:
+      - ragops-network
+
+volumes:
+  qdrant_data:
+    driver: local
+
+networks:
+  ragops-network:
+    driver: bridge
