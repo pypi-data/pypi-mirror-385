@@ -1,0 +1,49 @@
+[build-system]
+requires = ["hatchling >= 1.26"]
+build-backend = "hatchling.build"
+
+[project]
+name = "scgeno"
+version = "0.1.5"
+description = "Single-cell genotyping using Hidden Markov Model"
+authors = [
+    {name = "Rosaria Tornisiello", email = "rosaria.tornisiello@hpi.de"},
+]
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.10",
+]
+dependencies = [
+    "hmmlearn>=0.3.3",
+    "natsort>=8.4.0",
+    "numpy>=1.22",
+    "pandas>=2.2.3",
+    "scanpy>=1.10.3",
+    "seaborn>=0.13.2",
+    "tqdm>=4.67.1"
+]
+
+[project.urls]
+Repository = "https://github.com/RosariaTornisiello/Genotype_HMM"
+
+[project.scripts]
+scgeno = "scgeno.main:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/scgeno"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src",
+    "/metadata",
+    "/images",
+    "/README.md",
+    "/LICENSE.md",
+    "/example_out",
+    "/example_in"
+]
