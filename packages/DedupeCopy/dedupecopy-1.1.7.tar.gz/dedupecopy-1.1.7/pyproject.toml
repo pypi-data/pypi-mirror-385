@@ -1,0 +1,72 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "DedupeCopy"
+version = "1.1.7"
+description = "Find duplicates / copy and restructure file layout command-line tool"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "BSD-2-Clause"}
+authors = [
+    {name = "Erik Schweller", email = "othererik@gmail.com"}
+]
+maintainers = [
+    {name = "Erik Schweller", email = "othererik@gmail.com"}
+]
+keywords = [
+    "de-duplication",
+    "file management",
+    "deduplication",
+    "file-copy",
+    "backup",
+    "cleanup",
+    "disk-space",
+    "file-organization",
+    "command-line",
+    "hashing",
+    "manifest",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Topic :: Utilities",
+    "Topic :: System :: Filesystems",
+]
+
+[project.optional-dependencies]
+color = ["colorama>=0.4.0"]
+fast_hash = ["xxhash>=3.4.1"]
+plot = ["pandas", "matplotlib"]
+
+[project.urls]
+Homepage = "https://pypi.python.org/pypi/DedupeCopy/"
+Repository = "https://www.github.com/othererik/dedupe_copy"
+
+[project.scripts]
+dedupecopy = "dedupe_copy.bin.dedupecopy_cli:run_cli"
+manifest_explorer = "dedupe_copy.bin.manifest_explorer_cli:main"
+
+[tool.setuptools]
+packages = ["dedupe_copy", "dedupe_copy.bin", "dedupe_copy.test"]
+
+[tool.coverage.run]
+relative_files = true
+
+[tool.coverage.report]
+omit = [
+    "dedupe_copy/test/record_disk_cache_dict_performance.py",
+]
+
+[tool.pylint."MESSAGES CONTROL"]
+disable = ["R0913", "R0914", "R0902", "R0801", "R0917"]
