@@ -1,0 +1,48 @@
+[build-system]
+requires      = ["setuptools>=61", "wheel"]  # wheel only needed when building wheels locally
+build-backend = "setuptools.build_meta"
+
+[project]
+name            = "cztile"
+version         = "2.0.0"
+description     = "A set of tiling utilities"
+readme          = "README.md"                # rendered as Markdown automatically
+requires-python = ">3.8,<3.14"
+license         = { file = "LICENSE.txt" }
+authors = [
+  { name = "Sebastian Rhode", email = "sebastian.rhode@zeiss.com" },
+]
+
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Topic :: Scientific/Engineering :: Image Processing",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "License :: OSI Approved :: Apache Software License",
+  "Operating System :: OS Independent",
+]
+
+# No runtime dependencies at the moment
+dependencies = []
+
+[tool.setuptools]
+license-files = ["LICENSE.txt", "NOTICE.txt"]
+
+# Replicates `setuptools.find_packages(exclude=["test", "test.*"])`
+[tool.setuptools.packages.find]
+exclude = ["test", "test.*"]
+
+[tool.pytest.ini_options]
+testpaths = ["test"]
+pythonpath = ["cztile"]
+
+[tool.black]
+line-length = 120
+
+[tool.flake8]
+max-line-length = 120
+
+
