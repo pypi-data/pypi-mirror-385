@@ -1,0 +1,2 @@
+# StreamDataPanel
+StreamDataPanel is a web app, which is used to show frequently-freshed data as line chart, bar chart, pie chart, radar chart, scatter chart or surface chart. It is based on eel with python, optimized for speed.
