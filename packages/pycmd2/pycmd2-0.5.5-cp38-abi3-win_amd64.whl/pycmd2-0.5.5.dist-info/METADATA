@@ -1,0 +1,57 @@
+Metadata-Version: 2.4
+Name: pycmd2
+Version: 0.5.5
+Requires-Dist: rich>=13.9.4
+Requires-Dist: tomli-w>=1.0.0 ; python_full_version < '3.11'
+Requires-Dist: tomli>=2.2.1 ; python_full_version < '3.11'
+Requires-Dist: typer>=0.15.1
+Requires-Dist: pycmd2[demo,gui,office] ; extra == 'all'
+Requires-Dist: pyqtgraph>=0.13.3 ; extra == 'demo'
+Requires-Dist: pyside2>=5.15 ; platform_system == 'Windows' and extra == 'gui'
+Requires-Dist: pyside2~=5.13 ; platform_system != 'Windows' and extra == 'gui'
+Requires-Dist: qdarkstyle>=3.2.3 ; extra == 'gui'
+Requires-Dist: numpy>=1.24.4 ; extra == 'office'
+Requires-Dist: pillow>=10 ; extra == 'office'
+Requires-Dist: pypdf>=5.9.0 ; extra == 'office'
+Requires-Dist: pywin32>=311 ; platform_system == 'Windows' and extra == 'office'
+Provides-Extra: all
+Provides-Extra: demo
+Provides-Extra: gui
+Provides-Extra: office
+License-File: LICENSE
+License-File: AUTHORS.rst
+Summary: Command tools build with python.
+Author-email: gooker_young <gooker_young@qq.com>
+Maintainer-email: gooker_young <gooker_young@qq.com>
+License: MIT license
+Requires-Python: >=3.8
+Description-Content-Type: text/x-rst; charset=UTF-8
+Project-URL: Documentation, https://pycmd2.readthedocs.io/zh-cn/stable/
+Project-URL: Issues, https://gitee.com/gooker_young/pycmd2/issues
+Project-URL: Repository, https://gitee.com/gooker_young/pycmd2
+
+pycmd2
+=================================
+
+简介
+------
+
+Command tools built with python.
+
+主要特性:
+
+TODO:
+
+-  xxx:
+-  xxx:
+-  xxx:
+
+快速开始
+----------
+
+在项目中使用 ``pycmd2`` ::
+
+    import pycmd2
+
+TODO:
+
