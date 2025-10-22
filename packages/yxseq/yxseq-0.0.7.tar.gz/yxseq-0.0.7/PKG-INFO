@@ -1,0 +1,36 @@
+Metadata-Version: 2.1
+Name: yxseq
+Version: 0.0.7
+Summary: Xu Yuxing's personal tools for biology sequence analysis
+Home-page: https://github.com/SouthernCD/yxseq
+Author: Yuxing Xu
+Author-email: xuyuxing@mail.kib.ac.cn
+Requires-Python: >=3.5
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: yxutil
+Requires-Dist: yxmath
+Requires-Dist: yxsql
+Requires-Dist: numpy>=1.18.1
+Requires-Dist: pyfaidx>=0.5.5.2
+Requires-Dist: interlap>=0.2.6
+Requires-Dist: biopython<=1.80
+Requires-Dist: bcbio-gff>=0.6.6
+Requires-Dist: tables
+
+# yxseq
+Xu Yuxing's personal tools for biology sequence analysis
+
+## Installation
+```bash
+pip install yxseq
+```
+
+## Usage
+---
+### 1. `fq2fa` Convert fastq to fasta
+```bash
+yxseq fq2fa -o output.fa -1 input.fq
+yxseq fq2fa -o output.fa -1 input_1.fq -2 input_2.fq
+```
+
