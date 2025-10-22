@@ -1,0 +1,9 @@
+{
+  "uri": "s3://your-bucket/your-data/data.parquet",
+  "format": "parquet",
+  "schema": { "columns": { "x":"int32","y":"int32","value":"float32","ground_truth":"int32" } },
+  "offline_fallback": "app/data/samples/data.csv",
+  "offline_format": "csv",
+  "consent": "public",
+  "use_restrictions": ["research", "education"]
+}
