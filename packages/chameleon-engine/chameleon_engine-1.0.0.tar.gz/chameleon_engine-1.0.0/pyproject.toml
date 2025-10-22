@@ -1,0 +1,284 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "chameleon-engine"
+version = "1.0.0"
+authors = [
+    { name = "Chameleon Engine Contributors", email = "maintainers@chameleon-engine.com" }
+]
+maintainers = [
+    { name = "Chameleon Engine Contributors", email = "maintainers@chameleon-engine.com" }
+]
+description = "Advanced stealth web scraping framework with browser fingerprinting and network obfuscation"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {file = "LICENSE"}
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Internet :: WWW/HTTP :: Indexing/Search",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Internet :: WWW/HTTP :: Browsers",
+    "Topic :: System :: Networking",
+    "Typing :: Typed"
+]
+keywords = [
+    "web-scraping",
+    "browser-fingerprinting",
+    "stealth-scraping",
+    "anti-bot",
+    "automation",
+    "data-collection",
+    "fingerprinting",
+    "proxy",
+    "microservices"
+]
+
+dependencies = [
+    "playwright>=1.40.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    "numpy>=1.24.0",
+    "scipy>=1.10.0",
+    "requests>=2.25.0",
+    "httpx>=0.25.0",
+    "aiofiles>=23.0.0",
+    "tenacity>=8.2.0",
+]
+
+[project.optional-dependencies]
+# Core dependencies - Python components only
+core = [
+    "playwright>=1.40.0",
+    "pydantic>=2.0.0",
+    "numpy>=1.24.0",
+    "scipy>=1.10.0",
+    "requests>=2.25.0",
+    "httpx>=0.25.0",
+    "aiofiles>=23.0.0",
+]
+
+# Development dependencies
+dev = [
+    "chameleon-engine[core]",
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.1.0",
+    "pytest-json-report>=1.5.0",
+    "pytest-mock>=3.11.0",
+    "pytest-xdist>=3.3.0",
+    "pytest-benchmark>=4.0.0",
+    "black>=23.7.0",
+    "ruff>=0.0.280",
+    "mypy>=1.5.0",
+    "pre-commit>=3.3.0",
+    "python-lsp-server>=1.7.0",
+    "tenacity>=8.2.0",
+    "psutil>=5.9.0",
+    "asyncio-throttle>=1.0.0",
+    "pillow>=10.0.0",
+]
+
+# Stealth browser automation
+stealth = [
+    "chameleon-engine[core]",
+    "patchright>=1.40.0",
+]
+
+# Fingerprint Service dependencies
+fingerprint = [
+    "chameleon-engine[core]",
+    "fastapi>=0.104.0",
+    "uvicorn>=0.24.0",
+    "sqlalchemy>=2.0.0",
+    "alembic>=1.12.0",
+]
+
+# Database dependencies
+database = [
+    "chameleon-engine[core]",
+    "psycopg2-binary>=2.9.0",
+    "sqlalchemy>=2.0.0",
+    "alembic>=1.12.0",
+]
+
+# Web scraping dependencies
+scraping = [
+    "chameleon-engine[core]",
+    "beautifulsoup4>=4.12.0",
+    "scrapy>=2.11.0",
+]
+
+# All service dependencies (Python only)
+services = [
+    "chameleon-engine[core,fingerprint,database,scraping]",
+]
+
+# Complete package with proxy binaries (includes Go binaries)
+full = [
+    "chameleon-engine[core,stealth,fingerprint,database,scraping,services]",
+]
+
+# Legacy compatibility
+all = [
+    "chameleon-engine[full]",
+]
+
+[project.urls]
+Homepage = "https://github.com/your-org/chameleon-engine"
+Documentation = "https://chameleon-engine.readthedocs.io"
+Repository = "https://github.com/your-org/chameleon-engine.git"
+"Bug Tracker" = "https://github.com/your-org/chameleon-engine/issues"
+Changelog = "https://github.com/your-org/chameleon-engine/blob/main/CHANGELOG.md"
+Discussions = "https://github.com/your-org/chameleon-engine/discussions"
+
+[project.scripts]
+chameleon-engine = "chameleon_engine.cli:main"
+chameleon-fingerprint = "chameleon_engine.fingerprint.cli:main"
+chameleon-proxy = "chameleon_engine.proxy_launcher:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.setuptools.package-data]
+chameleon_engine = [
+    "binaries/chameleon-proxy-*",
+    "binaries/platform_mapping.json",
+    "config/*.yaml",
+    "data/*.json",
+    "fingerprinting/data/*.json"
+]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = [
+    "-ra",
+    "--strict-markers",
+    "--strict-config",
+    "--tb=short",
+    "--cov=src/chameleon_engine",
+    "--cov-report=term-missing",
+    "--cov-report=html:htmlcov",
+    "--cov-report=xml",
+    "--cov-fail-under=95",
+]
+testpaths = [
+    "tests",
+]
+python_files = [
+    "test_*.py",
+    "*_test.py",
+]
+python_classes = [
+    "Test*",
+]
+python_functions = [
+    "test_*",
+]
+asyncio_mode = "auto"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+    "benchmark: marks tests as benchmarks",
+    "network: marks tests that require network access",
+    "browser: marks tests that require browser automation",
+]
+filterwarnings = [
+    "error",
+    "ignore::UserWarning",
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+]
+
+[tool.black]
+line-length = 88
+target-version = ['py39']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+known_first_party = ["chameleon_engine"]
+
+[tool.coverage.run]
+source = ["src/chameleon_engine"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "*/__pycache__/*",
+    "*/site-packages/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+precision = 2
+show_missing = true
+skip_covered = false
+
+[tool.coverage.html]
+directory = "htmlcov"
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = [
+    "playwright.*",
+    "scipy.*",
+    "numpy.*",
+    "playwright_extra.*",
+    "psutil.*",
+    "PIL.*",
+]
+ignore_missing_imports = true
