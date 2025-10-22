@@ -1,0 +1,206 @@
+// j01.form.picker.less
+.picker-element {
+    opacity: 0;
+    position: absolute;
+    transition: none;
+    z-index: -1;
+    .no-touch & {
+        left: -99999px;
+    }
+}
+
+.picker {
+    cursor: pointer;
+    margin: @picker-margin;
+    overflow: hidden;
+    .picker-label {
+        color: @picker-label-color;
+        cursor: pointer;
+        display: block;
+        float: left;
+        font-size: @picker-font-size;
+        line-height: @picker-line-height;
+        user-select: none;
+        padding: @picker-label-padding;
+    }
+    .picker-handle {
+        border: @picker-handle-border;
+        display: block;
+        float: left;
+        margin: @picker-handle-margin;
+    }
+    // Hover
+    .no-touch &:hover {
+        .picker-label {
+            color: @picker-label-color;
+        }
+        .picker-handle {
+            border-color: @picker-handle-border-color;
+        }
+    }
+
+    // Focus
+    &.focus {
+        .picker-label {
+            color: @picker-focus-label-color;
+        }
+        .picker-handle {
+            border-color: @picker-focus-handle-border-color;
+        }
+    }
+
+    // Radio
+    &.picker-radio {
+        .picker-handle {
+            border: @picker-radio-handle-border;
+            border-radius: @picker-radio-handle-border-radius;
+            margin: @picker-radio-handle-margin;
+        }
+        .picker-flag {
+            border: @picker-radio-flag-border;
+            border-radius: @picker-radio-flag-border-radius;
+            background: @picker-radio-flag-bg;
+            display: block;
+            height: @picker-radio-flag-height;
+            width: @picker-radio-flag-width;
+            margin: @picker-radio-flag-margin;
+        }
+        &.focus .picker-flag {
+            background: @picker-radio-flag-focus-bg;
+        }
+        &.checked .picker-flag {
+            border: @picker-radio-flag-checked-border;
+            background: @picker-radio-flag-checked-bg;
+        }
+        // Hover
+        .no-touch &:hover {
+            .picker-flag {
+                background: @picker-radio-flag-hover-bg;
+            }
+        }
+        .no-touch &.disabled:hover {
+            .picker-flag {
+                background: @picker-radio-flag-disabled-hover-bg;
+            }
+        }
+    }
+    // Checkbox
+    &.picker-checkbox {
+        .picker-handle {
+            border: @picker-checkbox-handle-border;
+            border-radius: @picker-checkbox-handle-border-radius;
+            margin: @picker-checkbox-handle-margin;
+        }
+        .picker-flag {
+            border: @picker-checkbox-flag-border;
+            border-radius: @picker-checkbox-flag-border-radius;
+            background: @picker-checkbox-flag-bg;
+            display: block;
+            height: @picker-checkbox-flag-height;
+            width: @picker-checkbox-flag-width;
+            margin: @picker-checkbox-flag-margin;
+        }
+        &.checked .picker-flag {
+            // background: #fff url(@picker-checkbox-icon) no-repeat center;
+            border: @picker-checkbox-flag-checked-border;
+            background: @picker-checkbox-flag-checked-bg;
+        }
+    }
+    // Toggle
+    &.picker-toggle {
+        padding: @picker-toggle-padding;
+        position: relative;
+        .picker-toggle-label {
+            color: @picker-toggle-label-color;
+            font-size: @picker-toggle-label-font-size;
+            position: absolute;
+            text-transform: uppercase;
+            top: 0;
+            &.on {
+                color: @picker-toggle-label-on-color;
+                left: 0;
+            }
+            &.off {
+                color: @picker-toggle-label-off-color;
+                right: 0;
+            }
+        }
+        .picker-label {
+            display: none;
+        }
+        .picker-handle {
+            border-radius: @picker-toggle-handle-border-radius;
+            height: @picker-toggle-handle-height;
+            position: relative;
+            width: @picker-toggle-handle-width;
+        }
+        .picker-flag {
+            background: @picker-toggle-flag-bg;
+            border-radius: @picker-toggle-handle-border-radius;
+            display: block;
+            height: @picker-toggle-flag-height;
+            left: @picker-toggle-flag-left;
+            margin: @picker-toggle-flag-margin;
+            position: absolute;
+            top: 0;
+            width: @picker-toggle-flag-width;
+            transition: left 0.1s linear;
+        }
+        &.checked {
+            .picker-toggle-label.on {
+                color: @picker-toggle-label-checked-on-color;
+            }
+            .picker-toggle-label.off {
+                color: @picker-toggle-label-checked-off-color;
+            }
+            .picker-flag {
+                background: @picker-toggle-flag-checked-bg;
+                left: 0;
+            }
+        }
+    }
+
+    // Disabled
+    &.disabled {
+        cursor: default;
+        opacity: 0.5;
+        .picker-label,
+        .picker-handle {
+            cursor: default;
+        }
+        .no-touch &:hover {
+            .picker-label {
+                color: @picker-disabled-label-hover-color;
+            }
+            .picker-handle {
+                border-color: @picker-disabled-handle-hover-color;
+            }
+        }
+    }
+}
+
+.radio-inline-picker-widget,
+.checkbox-inline-picker-widget,
+.single-radio-inline-picker-widget,
+.single-checkbox-inline-picker-widget {
+    .picker {
+        // inline checkbox, radio
+        display: inline-block;
+        padding: 0 20px 0 0;
+        label {
+            // block label for inline checkbox, radio
+            display: block;
+        }
+    }
+}
+
+.single-radio-widget,
+.single-checkbox-widget,
+.single-radio-picker-widget,
+.single-checkbox-picker-widget {
+    .radio,
+    .checkbox {
+        // adjust space from bootstrap
+        margin-top: 0;
+    }
+}

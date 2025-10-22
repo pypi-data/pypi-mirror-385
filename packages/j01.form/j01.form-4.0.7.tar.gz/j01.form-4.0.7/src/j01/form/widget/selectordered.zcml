@@ -1,0 +1,32 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    xmlns:z3c="http://namespaces.zope.org/z3c"
+    i18n_domain="p01">
+
+  <configure zcml:condition="installed j01.selectordered">
+
+    <class class=".selectordered.OrderedSelectWidget">
+      <require
+          permission="zope.Public"
+          interface="j01.form.interfaces.IOrderedSelectWidget"
+          />
+    </class>
+
+    <adapter
+        factory=".selectordered.SequenceChoiceSelectFieldWidget"
+        for="zope.schema.interfaces.IList
+             zope.schema.interfaces.IChoice
+             j01.form.layer.IFormLayer"
+        />
+
+    <adapter
+        factory=".selectordered.SequenceChoiceSelectFieldWidget"
+        for="zope.schema.interfaces.ITuple
+             zope.schema.interfaces.IChoice
+             j01.form.layer.IFormLayer"
+        />
+
+  </configure>
+
+</configure>

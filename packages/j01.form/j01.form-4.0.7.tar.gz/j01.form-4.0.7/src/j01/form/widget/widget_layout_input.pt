@@ -1,0 +1,15 @@
+<div id="" class="form-group" i18n:domain="p01"
+     tal:attributes="id string:${view/id}-widget;
+                     class python:view.getCSSClass(classPattern='%(class)s-widget', errorPattern='widget-error %(class)s-error') + ' form-group'">
+  <label class="control-label" tal:condition="view/showLabel" tal:attributes="for view/id">
+    <tal:block tal:content="view/label" i18n:translate="">label</tal:block>
+    <span class="control-required" tal:condition="view/showRequired">*</span>
+  </label>
+  <tal:block tal:content="structure view/render">widget</tal:block>
+  <div class="control-errors"
+        tal:condition="view/showError"
+        tal:content="structure view/error/render">error</div>
+  <div class="control-description"
+        tal:condition="view/showDescription"
+        tal:content="structure view/description">description</div>
+</div>

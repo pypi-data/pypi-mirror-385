@@ -1,0 +1,26 @@
+======
+README
+======
+
+Let's test the source code with our custom checker:
+
+  >>> import p01.checker
+  >>> import j01.form
+
+  >>> skipFileNames = [
+  ...     'j01.columns.css',
+  ...     'j01.form.css',
+  ...     'j01.form.css',
+  ...     'j01.form.dropdowns.css',
+  ...     'j01.form.forms.css',
+  ...     'j01.form.select.css',
+  ...     'reboot.css',
+  ... ]
+
+  >>> skipFolderNames = [
+  ...     'plugins',
+  ... ]
+
+  >>> checker = p01.checker.Checker()
+  >>> checker.check(j01.form, skipFileNames=skipFileNames,
+  ...     skipFolderNames=skipFolderNames)

@@ -1,0 +1,183 @@
+// variables
+
+// input
+@input-border-radius:                   0;
+
+// input group addons
+@input-group-addon-before-bg:           @input-group-addon-bg;
+@input-group-addon-after-bg:            @white;
+
+// error
+@widget-error-color:                    theme-color(danger);
+@widget-error-bg:                       @body-bg;
+
+
+// btns
+@btns-padding:                          5px 0px 5px 0px;
+
+@btn-padding:                           0;
+@btn-margin:                            0px 5px 0px 0px;
+@btn-input-margin:                      0;
+@btn-input-padding:                     0px 10px 0px 10px;
+
+@btn-height:                            25px;
+@btn-line-height:                       @btn-height;
+@btn-font-size:                         @font-size-base;
+@btn-font-family:                       Verdana, Arial, Helvetica, sans-serif;
+
+@btn-color:                             @white;
+@btn-hover-color:                       @btn-color;
+@btn-bg:                                @primary;
+@btn-hover-bg:                          @btn-bg;
+
+@btn-secondary-color:                   @black;
+@btn-secondary-hover-color:             @btn-secondary-color;
+@btn-secondary-bg:                      @gray-500;
+@btn-secondary-hover-bg:                @btn-secondary-bg;
+@btn-secondary-padding:                 0 0 0 25px;
+
+@btn-link-color:                        @primary;
+@btn-link-hover-color:                  @btn-link-color;
+@btn-link-bg:                           @white;
+@btn-link-hover-bg:                     @btn-link-bg;
+
+
+// dropdowns
+@dropdown-bg:                           #fff;
+@dropdown-font-size:                    1rem;
+@dropdown-line-height:                  1;
+// toggle
+// @dropdown-toggle-height:                40px;
+@dropdown-toggle-spacing:               20px;
+@dropdown-toggle-font-size:             @dropdown-font-size;
+@dropdown-toggle-bg:                    @dropdown-bg;
+// caret
+@dropdown-icon-size:                    8px;
+@dropdown-icon-color:                   @black;
+// menu
+@dropdown-menu-width:                   300px;
+@dropdown-menu-spacing:                 10px;
+@dropdown-menu-bg:                      @dropdown-bg;
+// header
+@dropdown-header-height:                (40px + @dropdown-menu-spacing);
+@dropdown-header-border:                #ccc;
+// title
+@dropdown-title-font-size:              @dropdown-font-size;
+// buttons
+@dropdown-button-font-size:             (@dropdown-font-size + 1px);
+@dropdown-button-width:                 @dropdown-header-height;
+@dropdown-button-height:                @dropdown-header-height;
+@dropdown-button-color:                 #aaa;
+// labels
+@dropdown-text-color:                   @input-color;
+@dropdown-label-font-size:              (@dropdown-font-size - 3px);
+@dropdown-label-color:                  @input-color;
+// Dividers
+@dropdown-border-color:                 @border-color;
+// links
+@dropdown-link-font-size:               @dropdown-font-size;
+@dropdown-label-font-widht:             bold;
+@dropdown-link-spacing:                 @dropdown-toggle-spacing;
+@dropdown-link-color:                   #0d659b;
+// hover
+@dropdown-hover-bg:                     rgba(0,0,0,.03);
+@dropdown-hover-color:                  @dropdown-link-color;
+// focused
+@dropdown-focused-bg:                   @dropdown-hover-bg;
+@dropdown-focused-color:                @dropdown-hover-color;
+// selected
+@dropdown-selected-bg:                  @primary;
+@dropdown-selected-color:               contrast(@dropdown-selected-bg);
+// overlay
+@dropdown-overlay-bg:                   fade( #000, 50% );
+// mobile
+@dropdown-mobile-spacing:               10px;
+@dropdown-mobile-breakpoint:            600px;
+
+
+// radio, checkbox picker
+@picker-line-height:                    1.5;
+@picker-font-size:                      @font-size-base;
+@picker-handle-width:                   24px;
+@picker-handle-height:                  24px;
+@picker-margin:                         0; //5px 0;
+
+@picker-label-color:                    @input-plaintext-color; //#555;
+@picker-disabled-label-hover-color:     #888;
+@picker-disabled-handle-hover-color:    #ccc;
+
+@picker-label-padding:                  0;  // reset bootstrap padding-left: 20px;
+
+@picker-handle-margin:                  0 5px 0 0;
+@picker-handle-border-width:            0; //1px solid #ccc;
+@picker-handle-border-color:            @input-border-color; //1px solid #ccc;
+@picker-handle-border-radius:           0; //8px;
+@picker-handle-border:                  @picker-handle-border-width solid @picker-handle-border-color;
+
+@picker-flag-focus-bg:                  #ddd;
+@picker-flag-hover-bg:                  #ddd;
+@picker-flag-disabled-hover-bg:         #fff;
+
+@picker-focus-handle-border-color:      @picker-handle-border-color;
+@picker-focus-label-color:              @picker-label-color;
+
+@picker-radio-handle-margin:            @picker-handle-margin;
+@picker-radio-handle-border:            0;
+@picker-radio-handle-border-radius:     4px;
+@picker-radio-flag-height:              @picker-handle-height;
+@picker-radio-flag-width:               @picker-handle-width;
+@picker-radio-flag-border-width:        1px;
+@picker-radio-flag-border:              @picker-radio-flag-border-width solid @input-border-color;
+@picker-radio-flag-checked-border:      @picker-radio-flag-border-width solid @primary;
+@picker-radio-flag-border-radius:       24px;
+@picker-radio-flag-margin:              0;
+@picker-radio-flag-bg:                  #fff;
+@picker-radio-flag-focus-bg:            @primary;
+@picker-radio-flag-hover-bg:            @primary;
+@picker-radio-flag-checked-bg:          @primary;
+@picker-radio-flag-disabled-hover-bg:   #fff;
+
+@picker-checkbox-handle-margin:         @picker-handle-margin;
+@picker-checkbox-handle-border:         0;
+@picker-checkbox-handle-border-radius:  0;
+@picker-checkbox-flag-height:           @picker-handle-height;
+@picker-checkbox-flag-width:            @picker-handle-width;
+@picker-checkbox-flag-border-width:     1px;
+@picker-checkbox-flag-border:           @picker-checkbox-flag-border-width solid @input-border-color;
+@picker-checkbox-flag-checked-border:   @picker-checkbox-flag-border-width solid @primary;
+@picker-checkbox-flag-border-radius:    4px;
+@picker-checkbox-flag-margin:           0;
+@picker-checkbox-flag-bg:               #fff;
+@picker-checkbox-flag-focus-bg:         @primary;
+@picker-checkbox-flag-hover-bg:         @primary;
+@picker-checkbox-flag-checked-bg:       @primary;
+
+@picker-toggle-handle-border-radius:    0;
+@picker-toggle-handle-width:            100%;
+@picker-toggle-handle-height:           20px;
+@picker-toggle-padding:                 20px 0 0;
+@picker-toggle-flag-height:             100%;
+@picker-toggle-flag-width:              50%;
+@picker-toggle-flag-left:               50%;
+@picker-toggle-flag-border-radius:      2px;
+@picker-toggle-flag-margin:             0px;
+@picker-toggle-flag-bg:                 #fff;
+@picker-toggle-flag-checked-bg:         @primary;
+@picker-toggle-label-font-size:         @picker-font-size;
+@picker-toggle-label-color:             #999;
+@picker-toggle-label-on-color:          @picker-toggle-label-color;
+@picker-toggle-label-off-color:         #333;
+@picker-toggle-label-checked-on-color:  #333;
+@picker-toggle-label-checked-off-color: #999;
+
+
+// ddslick
+@ddslick-color:                         @input-plaintext-color;
+@ddslick-bg:                            #FFFFFF;
+@ddslick-selected-color:                #FFFFFF;
+@ddslick-selected-bg:                   @primary;
+@ddslick-border-width:                  1px;
+@ddslick-border-color:                  @input-border-color;
+@ddslick-border:                        @ddslick-border-width solid @ddslick-border-color;
+@ddslick-height:                        @input-height;
+@ddslick-button-height:                 add(@input-height, 2px);

@@ -1,0 +1,58 @@
+<div class="multi-control" i18n:domain="p01"
+     tal:attributes="class view/klass">
+  <tal:block repeat="widget view/widgets">
+    <div id="" class="multi-control-row"
+         tal:attributes="id string:${widget/id}-row"
+         tal:condition="python:widget.mode != 'hidden'"
+         tal:define="key_widget python:view.key_widgets[repeat['widget'].index()];">
+      <div class="multi-control-key-widget"
+           tal:condition="key_widget/id|nothing">
+        <label class="multi-control-label"
+               tal:condition="key_widget/showLabel"
+               tal:attributes="for key_widget/id">
+          <tal:block content="key_widget/label"
+                     i18n:translate="">label</tal:block>
+          <span class="required"
+                tal:condition="key_widget/showRequired">*</span>
+        </label>
+        <div class="multi-control-input">
+          <input size="24" value="" type="text"
+                 tal:replace="structure key_widget/render" />
+        </div>
+        <div class="multi-control-errors"
+              tal:condition="key_widget/error"
+              tal:content="structure key_widget/error/render">error</div>
+      </div>
+      <div class="multi-control-widget">
+        <label class="multi-control-label"
+               tal:condition="widget/showLabel"
+               tal:attributes="for widget/id">
+          <tal:block content="widget/label"
+                     i18n:translate="">label</tal:block>
+          <span class="required"
+                tal:condition="widget/showRequired">*</span>
+        </label>
+        <div class="multi-control-checkbox">
+          <input id="" name=""
+                 class="multi-control-checkbox checkbox-control"
+                 type="checkbox" value="1"
+                 tal:attributes="id string:${widget/id}-remove;
+                                 name string:${widget/name}.remove" />
+        </div>
+        <div class="multi-control-input">
+          <input size="24" value="" type="text"
+                 tal:replace="structure widget/render" />
+        </div>
+        <div class="multi-control-errors"
+              tal:condition="widget/error"
+              tal:content="structure widget/error/render">error</div>
+      </div>
+    </div>
+  </tal:block>
+  <div class="btns">
+    <div class="btn" tal:repeat="action view/actions/values">
+      <input tal:replace="structure action/render" />
+    </div>
+  </div>
+</div>
+<input type="hidden" tal:replace="structure view/counterMarker" />

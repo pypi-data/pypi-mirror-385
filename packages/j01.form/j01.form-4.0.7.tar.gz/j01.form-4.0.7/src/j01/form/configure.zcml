@@ -1,0 +1,21 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    i18n_domain="p01">
+
+  <adapter
+      name="default"
+      factory=".getDefaultValueProvider"
+      />
+
+  <!-- Widget Manager for setup enhanced field and widget conditions -->
+  <adapter
+      factory=".field.J01FieldWidgets"
+      />
+
+  <include file="form.zcml" />
+  <include file="jsonrpc.zcml" />
+
+  <include package=".widget" />
+
+</configure>

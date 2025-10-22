@@ -1,0 +1,153 @@
+//== Mixins For Grid
+//
+// Get from Bootstrap Mixins
+
+// Create row
+.make-flex-columns-basics(@grid: @flex-gutter-width){
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-left: ceil((@grid / -2));
+  margin-right: floor((@grid / -2));
+  &.reverse{
+    flex-direction: row-reverse;
+  }
+}
+
+.make-flex-columns() {
+  // Common styles for all sizes of grid columns, widths 1-12
+  .col-flex(@index) { // initial
+    @item: ~".col@{index}, .col@{index}xs, .col@{index}sm, .col@{index}md, .col@{index}lg";
+    .col-flex((@index + 1), @item);
+  }
+  .col-flex(@index, @list) when (@index =< @grid-columns) { // general; "=<" isn't a typo
+    @item: ~".col@{index}, .col@{index}xs, .col@{index}sm, .col@{index}md, .col@{index}lg";
+    .col-flex((@index + 1), ~"@{list}, @{item}");
+  }
+  .col-flex(@index, @list) when (@index > @grid-columns) { // terminal
+    @{list} {
+      box-sizing: border-box;
+      flex: 0 0 auto;
+      min-height: 1px;
+      padding-left:  ceil((@flex-gutter-width / 2));
+      padding-right: floor((@flex-gutter-width / 2));
+      // Set default width to max column
+      //width: percentage((@grid-columns / @grid-columns));
+      //flex-basis: percentage((@grid-columns / @grid-columns));
+      //max-width: percentage((@grid-columns / @grid-columns));
+    }
+  }
+  .col-flex(1); // kickstart it
+}
+
+
+// Create grid for none class
+.calc-grid-flex-column-init(@index, @type) when (@type = width) and (@index > 0) {
+  .col@{index}{
+    width: percentage((@index / @grid-columns));
+    flex-basis: percentage((@index / @grid-columns));
+    max-width: percentage((@index / @grid-columns));
+  }
+}
+.loop-flex-columns-init(@index, @type) when (@index >= 0) {
+  .calc-grid-flex-column-init(@index, @type);
+  // next iteration
+  .loop-flex-columns-init((@index - 1), @type);
+}
+.make-flex-cols-init() {
+  .loop-flex-columns-init(@grid-columns, width);
+}
+
+
+// Create grid for specific class
+.calc-grid-flex-column(@index, @class, @type) when (@type = width) and (@index > 0) {
+  .col@{index}@{class} {
+    width: percentage((@index / @grid-columns));
+    flex-basis: percentage((@index / @grid-columns));
+    max-width: percentage((@index / @grid-columns));
+  }
+}
+.calc-grid-flex-column(@index, @class, @type) when (@type = push) and (@index > 0) {
+  .col@{index}@{class}-push {
+    left: percentage((@index / @grid-columns));
+  }
+}
+.calc-grid-flex-column(@index, @class, @type) when (@type = push) and (@index = 0) {
+  .col0@{class}-push {
+    left: auto;
+  }
+}
+.calc-grid-flex-column(@index, @class, @type) when (@type = pull) and (@index > 0) {
+  .col@{index}@{class}-pull {
+    right: percentage((@index / @grid-columns));
+  }
+}
+.calc-grid-flex-column(@index, @class, @type) when (@type = pull) and (@index = 0) {
+  .col0@{class}-pull {
+    right: auto;
+  }
+}
+.calc-grid-flex-column(@index, @class, @type) when (@type = offset) {
+  .col@{index}@{class}-offset {
+    margin-left: percentage((@index / @grid-columns));
+  }
+}
+
+// Basic looping in LESS
+.loop-flex-columns(@index, @class, @type) when (@index >= 0) {
+  .calc-grid-flex-column(@index, @class, @type);
+  // next iteration
+  .loop-flex-columns((@index - 1), @class, @type);
+}
+
+// Create grid for specific class
+.make-flex-cols(@class) {
+  .loop-flex-columns(@grid-columns, @class, width);
+  //.loop-flex-columns(@grid-columns, @class, pull);
+  //.loop-flex-columns(@grid-columns, @class, push);
+  //.loop-flex-columns(@grid-columns, @class, offset);
+}
+
+.make-generate-aligment-other(@aligment) when not (@aligment = center){
+  @value: ~"flex-@{aligment}";
+   justify-content: @value;
+}
+
+.make-generate-aligment-other(@aligment) when (@aligment = center){
+   justify-content: @aligment;
+}
+
+.make-generate-vertical-aligment-other(@aligment) when not (@aligment = center){
+  @value: ~"flex-@{aligment}";
+   align-items: @value;
+}
+
+.make-generate-vertical-aligment-other(@aligment) when (@aligment = center){
+   align-items: @aligment;
+}
+
+.make-generate-aligment(@class, @name){
+  .@{name}-@{class}{
+    .make-generate-aligment-other(@name);
+    &.text-@{name}{
+      text-align: @name;
+    }
+  }
+}
+
+.make-generate-vertical-aligment(@class, @name, @aligment){
+  .@{name}-@{class}{
+    .make-generate-vertical-aligment-other(@aligment);
+  }
+}
+
+.make-aligment(@class){
+  .make-generate-aligment(@class,start);
+  .make-generate-aligment(@class,center);
+  .make-generate-aligment(@class,end);
+  .make-generate-vertical-aligment(@class,top,start);
+  .make-generate-vertical-aligment(@class,middle,center);
+  .make-generate-vertical-aligment(@class,bottom,end);
+}
