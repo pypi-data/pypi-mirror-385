@@ -1,0 +1,89 @@
+[project]
+name = "aspire"
+version = "0.14.1"
+description = "Algorithms for Single Particle Reconstruction"
+readme = "README.md" # Optional
+requires-python = ">=3.9"
+license = "GPL-3.0-only"
+license-files = ["LICENSE"]
+maintainers = [
+  {name = "ASPIRE Developers", email = "ASPIRE-DEVS@princeton.edu"}
+]
+authors = [
+        {name = "Joakim Anden"},
+        {name = "Vineet Bansal"},
+        {name = "Josh Carmichael"},
+        {name = "Chris Langfield"},
+        {name = "Ayelet Heimowitz"},
+        {name = "Yoel Shkolnisky"},
+        {name = "Amit Singer"},
+        {name = "Kris Sowattanangkul"},
+        {name = "Garrett Wright"},
+        {name = "Junchao Xia"}
+]
+
+classifiers = [
+     "Development Status :: 3 - Alpha",
+     "Programming Language :: Python"
+]
+
+dependencies = [
+    "click",
+    "confuse >= 2.0.0",
+    "cvxpy",
+    "finufft==2.4.0 ; sys_platform!='darwin'",
+    "finufft==2.3.0 ; sys_platform=='darwin'",
+    "gemmi >= 0.6.5",
+    "joblib",
+    "matplotlib >= 3.2.0",
+    "mrcfile",
+    "numpy>=1.21.5",
+    "packaging",
+    "pooch>=1.7.0",
+    "pillow",
+    "psutil",
+    "pymanopt",
+    "PyWavelets",
+    "scipy >= 1.10.0",
+    "scikit-learn >= 1.5.0",
+    "scikit-image",
+    "setuptools >= 0.41",
+    "tqdm",
+]
+
+[project.urls]
+"Homepage" = "http://spr.math.princeton.edu/"
+"Bug Reports" = "https://github.com/ComputationalCryoEM/ASPIRE-Python/issues"
+"Source" = "https://github.com/ComputationalCryoEM/ASPIRE-Python"
+
+[project.optional-dependencies]
+gpu-12x = ["cupy-cuda12x", "cufinufft==2.4.0"]
+dev = [
+    "black",
+    "bumpversion",
+    "check-manifest",
+    "flake8 >= 3.7.0",
+    "isort",
+    "jupyter",
+    "pooch",
+    "pyflakes",
+    "pydocstyle",
+    "pytest",
+    "pytest-cov",
+    "pytest-random-order",
+    "pytest-xdist",
+    "requests",
+    "sphinxcontrib-bibtex",
+    "sphinxcontrib-mermaid",
+    "sphinx-gallery",
+    "sphinx-rtd-theme >= 0.4.2",
+    "snakeviz",
+    "tox",
+    "twine",]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project.scripts]
+aspire = "aspire.__main__:main_entry"
