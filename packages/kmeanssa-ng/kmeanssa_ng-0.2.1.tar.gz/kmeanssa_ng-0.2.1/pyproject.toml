@@ -1,0 +1,63 @@
+[project]
+name = "kmeanssa-ng"
+version = "0.2.1"
+description = "K-means clustering on quantum graphs and metric spaces using simulated annealing"
+authors = [
+    { name = "Nicolas Klutchnikoff", email = "nicolas.klutchnikoff@univ-rennes2.fr" },
+]
+dependencies = [
+    "numpy>=1.24.0",
+    "networkx>=3.0",
+    "pandas>=2.0.0",
+    "numba>=0.60.0",
+]
+requires-python = ">=3.9"
+readme = "README.md"
+keywords = [
+    "k-means",
+    "clustering",
+    "quantum-graphs",
+    "simulated-annealing",
+    "metric-spaces",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Mathematics",
+]
+
+[project.license]
+text = "MIT"
+
+[build-system]
+requires = [
+    "pdm-backend",
+]
+build-backend = "pdm.backend"
+
+[tool.pdm]
+distribution = true
+
+[tool.pdm.scripts]
+format = "ruff format"
+check = "ruff check"
+
+[tool.pdm.dev-dependencies]
+test = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "pytest-xdist>=3.3.0",
+]
+lint = [
+    "ruff>=0.1.0",
+]
+docs = [
+    "quarto-cli>=1.4.550",
+    "quartodoc>=0.4.2",
+]
