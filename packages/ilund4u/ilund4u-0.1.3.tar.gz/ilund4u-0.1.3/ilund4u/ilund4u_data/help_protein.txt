@@ -1,0 +1,51 @@
+iLund4u
+Home page and documentation: https://art-egorov.github.io/ilund4u/
+The Atkinson Lab 4U | AE
+-------- PROTEIN MODE ---------
+-------------------------------
+    COMMAND-LINE PARAMETERS
+-------------------------------
+[MANDATORY ARGUMENTS]
+-fa <path>
+    Path to a fasta file with query protein sequence.
+-db <path>
+    Path to iLund4u database.
+-------------------------------
+[OPTIONAL ARGUMENTS | DATA PROCESSING]
+-hsm, --homology-search-mode <best|all>
+    Mode to define homologous families from the database.
+    If "best" is selected, results are shown only for the
+    protein family which representative sequence is the closest
+    to the query. If "all" is selected, results for all families 
+    that pass the cutoffs are shown.
+    [default: all]
+-msqc, --mmseqs-query-cov <float>
+    MMseqs search query coverage cutoff [default: 0.65]
+-mstc, --mmseqs-target-cov <float>
+    MMseqs search query coverage cutoff [default: 0.65]
+-msf, --mmseqs-fident <float>
+    MMseqs search fident (fraction of identical matches) cutoff
+    [default: 0.25]
+-mse, --mmseqs-evalue
+    MMseqs search evalue cutoff [default: 1e-5]
+-rnf, --report-not-flanked
+    Report in results hotspots that have flanked conserved genes only on one
+    side (located on the end of non-circular sequences) [default: False]
+-ql, --query-label <str>
+    Label for query protein homologues on LoVis4u visualisation.
+    [default: database protein names]
+-------------------------------
+[OPTIONAL ARGUMENTS | OTHERS]
+-o <name>
+    Output dir name. This will be created if it does not exist.
+	[default: ilund4u_{current_date}; e.g. ilund4u_2022_07_25-20_41]
+-c <standard|<file.cfg>
+    Path to a configuration file or name of a premade config file
+    [default: standard]
+-------------------------------
+[MISCELLANEOUS ARGUMENTS]
+--debug
+    Provide a detailed stack trace for debugging purposes.
+-q, --quiet
+    Don't show progress messages.
+-------------------------------
