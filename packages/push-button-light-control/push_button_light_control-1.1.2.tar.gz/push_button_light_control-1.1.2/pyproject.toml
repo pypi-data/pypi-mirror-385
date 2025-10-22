@@ -1,0 +1,49 @@
+[build-system]
+requires = [
+    "setuptools>=45.0",
+    "wheel",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "push-button-light-control"
+version = "1.1.2"
+description = "API for PIC24FV-based Push button Light Control System"
+readme = "README.md"
+requires-python = ">=3.7"
+license = {text = "MIT"}
+authors = [
+    {name = "Basit Akram", email = "basit.akram@gaengineering.com"},
+]
+keywords = ["led", "controller", "serial", "uart", "protocol", "pic24fv"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Interface Engine/Protocol Translator",
+]
+
+dependencies = [
+    "pyserial>=3.5",
+]
+
+[project.optional-dependencies]
+dev = [
+    "twine>=4.0.0",
+    "build>=0.10.0",
+]
+
+[project.scripts]
+pb-api-demo = "pb_api.examples.quick_start:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["pb_api*"]
