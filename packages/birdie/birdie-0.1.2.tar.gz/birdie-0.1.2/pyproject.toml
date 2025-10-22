@@ -1,0 +1,14 @@
+[project]
+name = "birdie"
+version = "0.1.2"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi>=0.119.0",
+]
+
+[tool.uv.workspace]
+members = [
+    "translation",
+]
