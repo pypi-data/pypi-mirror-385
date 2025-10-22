@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "trayer"
+version = "0.1.0"
+description = "System tray icons for GTK4 applications - betray GNOME 3's philosophy with style!"
+readme = "README.md"
+authors = [
+    {name = "enne2"}
+]
+license = {text = "MIT"}
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Desktop Environment :: Gnome",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: System :: Monitoring",
+    "Operating System :: POSIX :: Linux",
+]
+keywords = ["gtk4", "tray", "system-tray", "statusnotifier", "dbusmenu", "gnome", "linux"]
+requires-python = ">=3.8"
+dependencies = [
+    "PyGObject>=3.42.0",
+    "dbus-python>=1.2.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/enne2/trayer"
+Repository = "https://github.com/enne2/trayer"
+"Bug Tracker" = "https://github.com/enne2/trayer/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["trayer*"]
+exclude = ["tests*", "docs*"]
