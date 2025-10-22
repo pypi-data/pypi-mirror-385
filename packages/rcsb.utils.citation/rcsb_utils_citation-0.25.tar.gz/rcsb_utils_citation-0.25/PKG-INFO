@@ -1,0 +1,63 @@
+Metadata-Version: 2.4
+Name: rcsb.utils.citation
+Version: 0.25
+Summary: RCSB Python Wrapper Module for Citation Utilities
+Author-email: John Westbrook <john.westbrook@rcsb.org>
+License-Expression: Apache-2.0
+Project-URL: Homepage, https://github.com/rcsb/py-rcsb_utils_citation
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.13
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: rcsb.utils.io>=1.15
+Requires-Dist: nltk>=3.2.5
+Requires-Dist: regex<2022.3.2,>=2019.11.1
+Provides-Extra: dev
+Requires-Dist: check-manifest; extra == "dev"
+Provides-Extra: tests
+Requires-Dist: tox; extra == "tests"
+Requires-Dist: pylint; extra == "tests"
+Requires-Dist: black>=21.5b1; extra == "tests"
+Requires-Dist: flake8; extra == "tests"
+Requires-Dist: coverage; extra == "tests"
+Dynamic: license-file
+
+# RCSB Python Citation Data Utility Classes
+
+[![Build Status](https://dev.azure.com/rcsb/RCSB%20PDB%20Python%20Projects/_apis/build/status/rcsb.py-rcsb_utils_citation?branchName=master)](https://dev.azure.com/rcsb/RCSB%20PDB%20Python%20Projects/_build/latest?definitionId=10&branchName=master)
+
+## Introduction
+
+This module containsA collection of Python utility classes for managing PDB citation data.
+
+### Installation
+
+Download the library source software from the project repository:
+
+```bash
+
+git clone --recurse-submodules https://github.com/rcsb/py-rcsb_utils_citation.git
+
+```
+
+Optionally, run test suite (Python versions 2.7 and 3.9) using
+[tox](http://tox.readthedocs.io/en/latest/example/platform.html):
+
+```bash
+tox
+```
+
+Installation is via the program [pip](https://pypi.python.org/pypi/pip).
+
+```bash
+pip install rcsb.utils.citation
+
+or install the local repository using:
+
+pip install -e .
+```
