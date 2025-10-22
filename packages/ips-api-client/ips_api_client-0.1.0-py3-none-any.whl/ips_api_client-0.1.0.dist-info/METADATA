@@ -1,0 +1,90 @@
+Metadata-Version: 2.4
+Name: ips-api-client
+Version: 0.1.0
+Summary: Async Python client for IPS Controllers pool monitoring system
+Home-page: https://github.com/stgarrity/ips-api-client
+Author: Steve Garrity
+Author-email: Steve Garrity <sgarrity@gmail.com>
+License: MIT
+Project-URL: Homepage, https://github.com/stgarrity/ips-api-client
+Project-URL: Documentation, https://github.com/stgarrity/ips-api-client#readme
+Project-URL: Repository, https://github.com/stgarrity/ips-api-client
+Project-URL: Issues, https://github.com/stgarrity/ips-api-client/issues
+Keywords: ips,pool,chemistry,monitoring,home-assistant
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Home Automation
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: aiohttp>=3.8.0
+Requires-Dist: beautifulsoup4>=4.11.0
+Dynamic: author
+Dynamic: home-page
+Dynamic: license-file
+Dynamic: requires-python
+
+# IPS Controllers API Client
+
+Python client library for the IPS Controllers pool monitoring system.
+
+## Installation
+
+```bash
+pip install ips-api-client
+```
+
+## Usage
+
+```python
+import asyncio
+from ips_api import IPSClient
+
+async def main():
+    async with IPSClient("your_email@example.com", "your_password") as client:
+        # Get all controllers
+        controllers = await client.get_controllers()
+
+        for controller in controllers:
+            print(f"Controller: {controller.name}")
+            print(f"  pH: {controller.current_reading.ph}")
+            print(f"  ORP: {controller.current_reading.orp} mV")
+            print(f"  Status: {controller.status}")
+
+            # Get detailed reading
+            detail = await client.get_controller_detail(controller.controller_id)
+            print(f"  pH Setpoint: {detail.ph_setpoint}")
+            print(f"  pH State: {detail.ph_state}")
+
+asyncio.run(main())
+```
+
+## Features
+
+- Async/await support
+- Automatic session management
+- Support for multiple controllers
+- Detailed pool chemistry readings (pH, ORP, temperature, chlorine)
+- Controller status monitoring
+
+## Data Available
+
+- pH level
+- ORP (Oxidation-Reduction Potential) in mV
+- Water temperature (when available)
+- Chlorine PPM (when available)
+- Controller status
+- Last reading timestamp
+- pH setpoint and state
+
+## License
+
+MIT
