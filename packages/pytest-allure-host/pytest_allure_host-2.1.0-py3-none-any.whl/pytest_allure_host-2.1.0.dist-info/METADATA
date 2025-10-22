@@ -1,0 +1,477 @@
+Metadata-Version: 2.4
+Name: pytest-allure-host
+Version: 2.1.0
+Summary: Publish Allure static reports to private S3 behind CloudFront with history preservation
+License-Expression: MIT
+License-File: LICENSE
+Keywords: allure,pytest,aws,s3,cloudfront,reporting
+Author: Allure Hosting Maintainers
+Requires-Python: >=3.9,<4.0
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Testing
+Classifier: Framework :: Pytest
+Classifier: Development Status :: 3 - Alpha
+Classifier: Operating System :: OS Independent
+Requires-Dist: PyYAML (>=6,<7)
+Requires-Dist: boto3 (>=1.28,<2.0)
+Project-URL: Bug Tracker, https://github.com/darrenrabbs/allurehosting/issues
+Project-URL: Changelog, https://darrenrabbs.github.io/allurehosting/changelog/
+Project-URL: Documentation, https://darrenrabbs.github.io/allurehosting/
+Project-URL: Homepage, https://github.com/darrenrabbs/allurehosting
+Project-URL: Repository, https://github.com/darrenrabbs/allurehosting
+Description-Content-Type: text/markdown
+
+# pytest-allure-host
+
+![CI](https://github.com/darrenrabbs/allurehosting/actions/workflows/ci.yml/badge.svg)
+![CodeQL](https://github.com/darrenrabbs/allurehosting/actions/workflows/codeql.yml/badge.svg)
+![PyPI - Version](https://img.shields.io/pypi/v/pytest-allure-host.svg)
+![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
+[![Docs](https://img.shields.io/badge/docs-site-blue)](https://darrenrabbs.github.io/allurehosting/)
+[![CDK Stack](https://img.shields.io/badge/CDK%20Stack-repo-blueviolet)](https://github.com/darrenrabbs/allurehosting-cdk)
+
+Publish Allure static reports to private S3 behind CloudFront with history preservation and SPA-friendly routing.
+
+Optional infrastructure (AWS CDK stack to provision the private S3 bucket + CloudFront OAC distribution) lives externally: https://github.com/darrenrabbs/allurehosting-cdk
+
+See `docs/architecture.md` and `.github/copilot-instructions.md` for architecture and design constraints.
+
+## Documentation
+
+Full documentation (quickstart, AWS setup, IAM least-privilege, CLI usage, changelog) is published at:
+
+https://darrenrabbs.github.io/allurehosting/
+
+The README intentionally stays lean—refer to the site for detailed guidance.
+
+## Features
+
+- Generate Allure static report from `allure-results`
+- Preserve history by pulling `latest/history` before generation
+- Upload to S3 under `<project>/<branch>/<run_id>/` and update `<project>/<branch>/latest/`
+- Two-phase latest update: upload to `latest_tmp/`, swap into `latest/`, write `LATEST_READY` marker
+- Optional retention: keep only N newest runs (`--max-keep-runs`)
+- Correct caching headers: `index.html` and `widgets/` → `no-cache`; assets → immutable
+- Optional TTL tagging on objects (`--ttl-days`) for S3 lifecycle policies
+- Optional summary JSON output for CI
+- Best-effort manifest at `runs/index.json` with new run metadata
+- Lightweight pointer file `latest.json` (branch root)
+- Human-friendly HTML index at `runs/index.html` for navigating past runs
+  - Columns: Run ID, raw epoch, UTC Time (human readable), Size (pretty units), P/F/B (passed/failed/broken counts), links to the immutable run and the moving latest
+  - Newest run highlighted with a star (★) and soft background
+
+## Quick start
+
+```bash
+# Install the publisher
+pip install pytest-allure-host
+
+# Run your test suite and produce allure-results/
+pytest --alluredir=allure-results
+
+# Plan (no uploads) – shows what would be published
+publish-allure \
+  --bucket my-allure-bucket \
+  --project myproj \
+  --branch main \
+  --dry-run --summary-json plan.json
+
+# Real publish (requires AWS creds: env vars, profile, or OIDC)
+publish-allure \
+  --bucket my-allure-bucket \
+  --project myproj \
+  --branch main
+```
+
+Notes:
+
+- `--prefix` defaults to `reports`; omit unless you need a different root.
+- `--branch` defaults to `$GIT_BRANCH` or `main` if unset.
+- Add `--cloudfront https://reports.example.com` to print CDN URLs.
+- Use `--check` to preflight (AWS / allure binary / inputs) before a real run.
+- Add `--context-url https://jira.example.com/browse/PROJ-123` to link a change ticket in the runs index.
+- Use `--dry-run` + `--summary-json` in CI for a planning stage artifact.
+- Provide `--ttl-days` and/or `--max-keep-runs` for lifecycle & cost controls.
+
+## Requirements
+
+- Python 3.9+
+- AWS credentials with S3 access to the target bucket
+- Allure commandline available on PATH (e.g., via Allure CLI or allure-pytest)
+
+## S3 layout and caching
+
+- Keys:
+  - `s3://<bucket>/<prefix>/<project>/<branch>/<run_id>/...`
+  - `s3://<bucket>/<prefix>/<project>/<branch>/latest/...`
+  - `s3://<bucket>/<prefix>/<project>/<branch>/runs/index.json` (manifest)
+  - `s3://<bucket>/<prefix>/<project>/<branch>/runs/index.html` (HTML index)
+  - `s3://<bucket>/<prefix>/<project>/<branch>/latest.json` (pointer)
+- Two-phase swap writes a `LATEST_READY` marker file under `latest/` when ready.
+- Cache-Control:
+  - `index.html`: `no-cache`
+  - files under `widgets/`: `no-cache`
+  - everything else: `public, max-age=31536000, immutable`
+
+## CLI usage
+
+Install locally for development:
+
+```bash
+pip install -e .[dev]
+```
+
+Run the publisher after tests generate `allure-results`:
+
+```bash
+publish-allure \
+  --bucket your-bucket \
+  --prefix reports \
+  --project demo \
+  --branch main \
+  --cloudfront https://reports.example.com \
+  --ttl-days 30 \
+  --max-keep-runs 10
+```
+
+Flags (CLI):
+
+- `--bucket` (required): S3 bucket name
+- `--prefix` (default: `reports`): Root prefix
+- `--project` (required): Project name
+- `--branch` (default: `$GIT_BRANCH` or `main`)
+- `--run-id` (default: `$ALLURE_RUN_ID` or `YYYYMMDD-HHMMSS`)
+- `--cloudfront` (optional; default: `$ALLURE_CLOUDFRONT`)
+- `--results` (default: `allure-results`): Input directory
+- `--report` (default: `allure-report`): Output directory
+- `--ttl-days` (optional): Add `ttl-days=<N>` object tag
+- `--max-keep-runs` (optional): Keep N newest run prefixes, delete older
+- `--summary-json <path>`: Write machine-readable summary
+- `--check`: Preflight validation (AWS access, allure, inputs)
+- `--dry-run`: Print planned prefixes and sample headers, no upload
+- `--skip-preflight`: Skip automatic preflight before publish (not recommended)
+- `--allow-duplicate-prefix-project`: Allow `prefix == project` (guard is on by default)
+- `--s3-endpoint`: Custom S3 endpoint (e.g. `http://localhost:4566` for LocalStack)
+
+Environment fallbacks:
+
+- `ALLURE_BUCKET` → `--bucket`
+- `ALLURE_PREFIX` → `--prefix`
+- `ALLURE_PROJECT` → `--project`
+- `GIT_BRANCH` → `--branch` default
+- `ALLURE_RUN_ID` → `--run-id` default
+- `ALLURE_CLOUDFRONT` → `--cloudfront` default
+- `ALLURE_AWS_REGION` → preferred region used in preflight comparison
+- `ALLURE_CLOUDFRONT_DISTRIBUTION_ID` → explicit distribution id for preflight
+- `ALLURE_S3_ENDPOINT` → `--s3-endpoint` default (LocalStack / custom S3)
+
+## Pytest plugin usage
+
+Run tests and publish during terminal summary:
+
+```bash
+pytest \
+  --allure-bucket your-bucket \
+  --allure-prefix reports \
+  --allure-project demo \
+  --allure-branch main \
+  --allure-cloudfront https://reports.example.com \
+  --allure-ttl-days 30 \
+  --allure-max-keep-runs 10
+```
+
+Flags (pytest):
+
+- `--allure-bucket` (required)
+- `--allure-prefix` (default: `reports`)
+- `--allure-project` (required)
+- `--allure-branch` (default: `$GIT_BRANCH` or `main`)
+- `--allure-run-id` (default: `$ALLURE_RUN_ID` or `YYYYMMDD-HHMMSS`)
+- `--allure-cloudfront` (optional; default: `$ALLURE_CLOUDFRONT`)
+- `--allure-ttl-days` (optional)
+- `--allure-max-keep-runs` (optional)
+- `--allure-summary-json <path>` (optional)
+- `--allure-check` / `--allure-dry-run` (optional)
+
+## Preflight and dry-run
+
+Preflight runs automatically before a real publish. You can also run it explicitly with `--check`. Use `--skip-preflight` only if you know what you’re doing.
+
+What preflight validates (read‑only):
+
+- Local inputs: `allure-results` exists and is non-empty; Allure CLI is available on PATH.
+- S3 bucket:
+  - `HeadBucket` and a small `ListObjectsV2` to confirm existence and access.
+  - Public Access Block: all four flags must be `true`.
+  - Bucket policy status: `IsPublic` must be `false`.
+  - Region detection and comparison against `ALLURE_AWS_REGION`/`aws_region` if provided.
+- CloudFront distribution:
+  - When `ALLURE_CLOUDFRONT_DISTRIBUTION_ID`/`cloudfront_distribution_id` is set, it is used directly.
+  - Otherwise, the distribution is discovered from `--cloudfront` domain/aliases.
+  - Status must be `Deployed`, and an Origin Access Control (OAC) must be attached to at least one origin (legacy OAI is not sufficient).
+
+On success, a concise line is printed in addition to the machine-readable dict:
+
+```
+[preflight] OK — bucket=my-bucket, region=eu-west-1, distribution=E123ABC456
+```
+
+`--dry-run`/`--allure-dry-run` prints planned S3 keys and cache headers; no uploads occur.
+
+Guardrails:
+
+- The CLI fails fast if `prefix == project` to avoid redundant S3 paths. If this is intentional, pass `--allow-duplicate-prefix-project`.
+
+Config keys (YAML or env) relevant to preflight:
+
+```yaml
+# application.yml / allure-host.yml
+bucket: my-bucket
+prefix: reports
+project: demo
+branch: main
+cloudfront: https://reports.example.com
+aws_region: us-east-1 # used for region comparison
+cloudfront_distribution_id: E123ABC456 # preferred for deterministic preflight
+```
+
+Environment equivalents:
+
+```
+ALLURE_BUCKET, ALLURE_PREFIX, ALLURE_PROJECT, ALLURE_BRANCH,
+ALLURE_CLOUDFRONT, ALLURE_AWS_REGION, ALLURE_CLOUDFRONT_DISTRIBUTION_ID
+```
+
+## Outputs
+
+- S3 prefixes: run and latest
+- Optional CDN URLs (if `--cloudfront` provided)
+- `runs/index.json` manifest updated with new run entry
+- `runs/index.html` HTML table of recent runs (newest first) with columns: Run ID, Epoch, UTC Time, Size, P/F/B, Run, Latest (newest row highlighted with ★)
+- `latest.json` pointer to current run (simple machine-readable metadata)
+- Optional `--summary-json` with sizes, file counts, and destination URLs
+- `latest/LATEST_READY` marker indicates the swap is complete
+
+## Security
+
+See `SECURITY.md` for how to report vulnerabilities. Never open a public issue containing sensitive details.
+
+## Badges / Status
+
+- CI: multi-version test matrix + lint/security
+- CodeQL: static code analysis
+
+## Contributing
+
+See `CONTRIBUTING.md` and follow the pre-commit hooks (`pre-commit install`).
+
+## Release
+
+Tagged versions (`vX.Y.Z`) are published to PyPI automatically via GitHub OIDC.
+
+## CI examples
+
+GitHub Actions (CLI):
+
+```yaml
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install .[dev]
+      - run: pytest -q
+      - name: Publish Allure
+        env:
+          AWS_REGION: us-east-1
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          GIT_BRANCH: ${{ github.ref_name }}
+        run: >-
+          publish-allure --bucket $BUCKET --prefix reports --project demo
+          --branch "$GIT_BRANCH" --cloudfront https://reports.example.com
+          --ttl-days 30 --max-keep-runs 10
+```
+
+Pytest-driven (plugin):
+
+```yaml
+- run: pytest -q \
+    --allure-bucket $BUCKET \
+    --allure-prefix reports \
+    --allure-project demo \
+    --allure-branch "$GIT_BRANCH" \
+    --allure-cloudfront https://reports.example.com \
+    --allure-ttl-days 30 \
+    --allure-max-keep-runs 10
+```
+
+### Minimal publish-only workflow
+
+Create `.github/workflows/allure-publish.yml` for a lightweight pipeline that runs tests, generates the report, and publishes it (using secrets for the bucket and AWS credentials):
+
+```yaml
+name: allure-publish
+on: [push, pull_request]
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install deps (minimal)
+        run: pip install pytest pytest-allure-host allure-pytest
+      - name: Run tests
+        run: pytest --alluredir=allure-results -q
+      - name: Publish Allure report (dry-run on PRs)
+        env:
+          AWS_REGION: us-east-1
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          ALLURE_BUCKET: ${{ secrets.ALLURE_BUCKET }}
+        run: |
+          EXTRA=""
+          if [ "${{ github.event_name }}" = "pull_request" ]; then EXTRA="--dry-run"; fi
+          publish-allure \
+            --bucket "$ALLURE_BUCKET" \
+            --project myproj \
+            --branch "${{ github.ref_name }}" \
+            --summary-json summary.json $EXTRA
+      - name: Upload publish summary (always)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-summary
+          path: summary.json
+```
+
+Notes:
+
+- Add `--cloudfront https://reports.example.com` if you have a CDN domain.
+- Add `--context-url ${{ github.server_url }}/${{ github.repository }}/pull/${{ github.event.pull_request.number }}` inside PRs to link the run to its PR.
+- Use `--max-keep-runs` / `--ttl-days` to manage storage costs.
+- For LocalStack-based tests, set `--s3-endpoint` and export `ALLURE_S3_ENDPOINT` in `env:`.
+
+## Troubleshooting
+
+- Missing Allure binary: ensure the Allure CLI is installed and on PATH.
+- Access denied: verify AWS credentials and bucket IAM for Put/Get/List/Delete.
+- SPA routing 403/404: configure CloudFront error mapping to `/index.html`.
+
+## Style tweaks (dashboard)
+
+You can adjust dashboard typography and KPI sizing via CSS variables without editing the stylesheet. Add these anywhere global (e.g., a small `<style>` tag or a site-wide CSS file):
+
+```css
+/* Example: make KPI label/value bigger and cards taller in v2 */
+body {
+  --kpi-title-size: 13px; /* KPI label, e.g., "FAILURES" */
+  --kpi-value-size: 20px; /* big number */
+  --kpi-delta-size: 13px; /* ▲ ▼ delta text */
+  --kpi-card-height: 180px; /* v2 KPI card height */
+}
+```
+
+Available variables (defaults shown):
+
+- `--kpi-title-size: 12px`
+- `--kpi-value-size: 18px`
+- `--kpi-delta-size: 12px`
+- `--kpi-card-height: 160px` (v2)
+- `--kpi-card-min-height-v1: 64px` (v1)
+
+The stylesheet `web/static/css/runs-polish.css` is now organized with clear section headers for quick navigation:
+
+- Section: KPI cards (v1)
+- Section: V2 overrides (top-level, high specificity)
+- Section: V2 failure summary sidebar
+- Section: V2 general card chrome and text sizes
+
+## Development
+
+- Install with Poetry: `poetry install`
+- Run tests: `poetry run pytest -q`
+- Lint (security quick): `poetry run bandit -r pytest_allure_host`
+- Unified lint helper (mirrors CI):
+  ```bash
+  scripts/lint.sh           # check mode (ruff lint+format check, bandit, pip-audit)
+  scripts/lint.sh --fix     # apply ruff fixes + format
+  scripts/lint.sh pre-commit  # also run pre-commit hooks on all files
+  ```
+
+## Quick local trial (macOS)
+
+This section walks you through a minimal end-to-end run locally.
+
+1. Prereqs
+
+- AWS credentials configured (via `AWS_PROFILE` or access keys); set `AWS_REGION`.
+- Allure CLI installed on PATH:
+  ```bash
+  brew install allure
+  ```
+- Python deps installed:
+  ```bash
+  poetry install
+  # or
+  pip install -e .[dev]
+  ```
+
+2. Generate Allure results
+
+- Create a tiny test (optional example):
+  ```bash
+  mkdir -p tests
+  cat > tests/test_sample.py <<'PY'
+  def test_ok():
+      assert True
+  PY
+  ```
+- Run pytest to emit results:
+  ```bash
+  poetry run pytest --alluredir=allure-results
+  ```
+
+3. Preflight and dry-run
+
+```bash
+poetry run publish-allure \
+  --bucket <bucket> \
+  --prefix reports \
+  --project demo \
+  --branch $(git rev-parse --abbrev-ref HEAD) \
+  --cloudfront https://<cloudfront_domain> \
+  --check \
+  --dry-run
+```
+
+4. Publish
+
+```bash
+poetry run publish-allure \
+  --bucket <bucket> \
+  --prefix reports \
+  --project demo \
+  --branch $(git rev-parse --abbrev-ref HEAD) \
+  --cloudfront https://<cloudfront_domain> \
+  --ttl-days 30 \
+  --max-keep-runs 5
+```
+
+5. Verify
+
+- S3: `reports/demo/<branch>/<run_id>/...` and `reports/demo/<branch>/latest/` with `LATEST_READY`.
+- CDN: open printed `run_url` / `latest_url`.
+
