@@ -1,0 +1,29 @@
+{% if css_local_path %}
+<link rel="stylesheet" href="{{ url_for('static', filename=css_local_path) }}" crossorigin=""/>
+{% else %}
+ <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     {% if csp_nonce_callback is not none %} 
+     nonce="{{ csp_nonce_callback() }}" 
+     {% endif %}
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin="" />
+{% endif %}
+{% if js_local_path %}
+<script src="{{ url_for('static', filename=js_local_path) }}"></script>
+{% else %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     {% if csp_nonce_callback is not none %} 
+     nonce="{{ csp_nonce_callback() }}" 
+     {% endif %}
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+{% endif %}
+<script {% if csp_nonce_callback is not none %} 
+     nonce="{{ csp_nonce_callback() }}" 
+     {% endif %}>
+     var leaflet_default_icon = L.icon({
+          iconUrl: "{{ leaflet.default_icon_marker_url or url_for('leaflet.static', filename='images/marker-icon.png') }}",
+          shadowUrl: "{{ leaflet.default_icon_marker_shadow_url or url_for('leaflet.static', filename='images/marker-shadow.png') }}",
+          iconAnchor: [12.5,41],
+     }) 
+</script>
