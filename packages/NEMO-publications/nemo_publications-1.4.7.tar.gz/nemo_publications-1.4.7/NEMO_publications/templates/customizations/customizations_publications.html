@@ -1,0 +1,213 @@
+{% load custom_tags_and_filters %}
+<form method="POST" action="{% url 'customize' 'publications' %}" class="form-horizontal">
+    <div class="panel-body">
+        {% csrf_token %}
+        <h3 class="customization-section-title">General settings</h3>
+        <div class="form-group">
+            <label class="control-label col-md-5 col-lg-4" for="publications_notification_expiration_days">
+                Show suggested publications badge for
+            </label>
+            <div class="col-md-3">
+                <div class="input-group">
+                    <input type="number"
+                           step="1"
+                           min="0"
+                           id="publications_notification_expiration_days"
+                           name="publications_notification_expiration_days"
+                           class="form-control text-right"
+                           value="{{ publications_notification_expiration_days }}" />
+                    <span class="input-group-addon">days</span>
+                </div>
+            </div>
+            <div class="col-lg-offset-4 col-md-offset-5 col-md-7 col-lg-8 help-block light-grey">
+                The number of days after which the suggested publication notifications will expire
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-5 col-lg-4"
+                   for="publications_enable_landing_warning_pending_publications">Landing page warning</label>
+            <div class="col-md-7 col-lg-8">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"
+                               id="publications_enable_landing_warning_pending_publications"
+                               name="publications_enable_landing_warning_pending_publications"
+                               {% if publications_enable_landing_warning_pending_publications %}checked{% endif %}
+                               value="enabled">
+                        Enable
+                    </label>
+                </div>
+            </div>
+            <div class="col-lg-offset-4 col-md-offset-5 col-md-7 col-lg-8 help-block light-grey"
+                 style="margin-bottom: 0">
+                Check this box to add a warning at the top of the landing page when the user has publications to review.
+            </div>
+        </div>
+        <div class="customization-separation" style="margin-bottom: 15px"></div>
+        <h3 class="customization-section-title">Carousel</h3>
+        <div class="form-group">
+            <div class="col-md-offset-1 col-md-11 help-block light-grey">
+                These settings apply to both carousel: the one on the <a href="{% url "landing" %}">landing page</a> (if enabled) and the general jumbotron pages available at:
+                <ul>
+                    <li>
+                        <a target="_blank" href="{% url 'publications_jumbotron' 'leaderboard' %}">{% absolute_url 'publications_jumbotron' 'leaderboard' %}</a>
+                    </li>
+                    <li>
+                        <a target="_blank" href="{% url 'publications_jumbotron' 'publications' %}">{% absolute_url 'publications_jumbotron' 'publications' %}</a>
+                    </li>
+                    <li>
+                        <a target="_blank" href="{% url 'publications_jumbotron' 'mixed' %}">{% absolute_url 'publications_jumbotron' 'mixed' %}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4 col-lg-3" for="publications_enable_landing_carousel">Landing page carousel</label>
+            <div class="col-md-8 col-lg-9">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"
+                               id="publications_enable_landing_carousel"
+                               name="publications_enable_landing_carousel"
+                               {% if publications_enable_landing_carousel %}checked{% endif %}
+                               value="enabled">
+                        Enable
+                    </label>
+                </div>
+            </div>
+            <div class="col-lg-offset-3 col-md-offset-4 col-md-8 col-lg-9 help-block light-grey"
+                 style="margin-bottom: 0">Check this box to enable the carousel at the top of the landing page.</div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4 col-lg-3" for="publications_carousel_show_date">Thumbnails</label>
+            <div class="col-md-8 col-lg-9">
+                <div class="checkbox">
+                    <label>
+                        <input type="hidden" name="publications_carousel_show_date" value="off">
+                        <input type="checkbox"
+                               name="publications_carousel_show_date"
+                               {% if publications_carousel_show_date == "enabled" %}checked{% endif %}
+                               value="enabled">
+                        Show date
+                    </label>
+                    <br />
+                    <label>
+                        <input type="hidden" name="publications_carousel_show_authors" value="off">
+                        <input type="checkbox"
+                               name="publications_carousel_show_authors"
+                               {% if publications_carousel_show_authors == "enabled" %}checked{% endif %}
+                               value="enabled">
+                        Show authors
+                    </label>
+                    <br />
+                    <label>
+                        <input type="hidden" name="publications_carousel_show_tools" value="off">
+                        <input type="checkbox"
+                               name="publications_carousel_show_tools"
+                               {% if publications_carousel_show_tools == "enabled" %}checked{% endif %}
+                               value="enabled">
+                        Show tools
+                    </label>
+                    <br>
+                    <label>
+                        <input type="hidden" name="publications_carousel_show_projects" value="off">
+                        <input type="checkbox"
+                               name="publications_carousel_show_projects"
+                               {% if publications_carousel_show_projects == "enabled" %}checked{% endif %}
+                               value="enabled">
+                        Show projects
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4 col-lg-3" for="publications_carousel_latest_display_order">
+                Order of publications
+            </label>
+            <div class="col-md-8 col-lg-9">
+                <div class="radio">
+                    <label>
+                        <input type="radio"
+                               id="publications_carousel_latest_display_order"
+                               name="publications_carousel_latest_display_order"
+                               {% if publications_carousel_latest_display_order == '["-creation_time"]' %}checked{% endif %}
+                               value='["-creation_time"]'>
+                        Creation time
+                    </label>
+                    <label>
+                        <input type="radio"
+                               name="publications_carousel_latest_display_order"
+                               {% if publications_carousel_latest_display_order == '["-year", "-month"]' %}checked{% endif %}
+                               value='["-year", "-month"]'>
+                        Publication date
+                    </label>
+                </div>
+            </div>
+            <div class="col-lg-offset-3 col-md-offset-4 col-md-8 col-lg-9 help-block light-grey">
+                The order to show publications in the carousel
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4 col-lg-3" for="publications_carousel_tiles_per_item">Publications per page</label>
+            <div class="col-md-3">
+                <input type="number"
+                       step="1"
+                       min="1"
+                       id="publications_carousel_tiles_per_item"
+                       name="publications_carousel_tiles_per_item"
+                       class="form-control text-right"
+                       value="{{ publications_carousel_tiles_per_item }}" />
+            </div>
+            <div class="col-lg-offset-3 col-md-offset-4 col-md-8 col-lg-9 help-block light-grey">
+                The number of publications to display per tile
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4 col-lg-3" for="publications_carousel_latest_display_count">
+                Number of publications
+            </label>
+            <div class="col-md-5">
+                <div class="input-group">
+                    <span class="input-group-addon">Most recent</span>
+                    <input type="number"
+                           step="1"
+                           min="0"
+                           id="publications_carousel_latest_display_count"
+                           name="publications_carousel_latest_display_count"
+                           class="form-control text-right"
+                           value="{{ publications_carousel_latest_display_count }}" />
+                    <span class="input-group-addon">publications</span>
+                </div>
+            </div>
+            <div class="col-lg-offset-3 col-md-offset-4 col-md-8 col-lg-9 help-block light-grey">
+                The number of most recent publications ( by
+                {% if publications_carousel_latest_display_order == '["-creation_time"]' %}
+                    added date
+                {% else %}
+                    publication date
+                {% endif %}
+                ) to show in the carousel
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4 col-lg-3" for="publications_carousel_interval_time">Interval time</label>
+            <div class="col-md-3">
+                <div class="input-group">
+                    <input type="number"
+                           step="1"
+                           min="0"
+                           id="publications_carousel_interval_time"
+                           name="publications_carousel_interval_time"
+                           class="form-control text-right"
+                           value="{{ publications_carousel_interval_time }}" />
+                    <span class="input-group-addon">seconds</span>
+                </div>
+            </div>
+            <div class="col-lg-offset-3 col-md-offset-4 col-md-8 col-lg-9 help-block light-grey">
+                The interval time before the carousel slides to the next item
+            </div>
+        </div>
+        <div class="customization-separation" style="margin-bottom: 15px"></div>
+        <div class="text-center">{% button type="save" value="Save settings" %}</div>
+    </div>
+</form>

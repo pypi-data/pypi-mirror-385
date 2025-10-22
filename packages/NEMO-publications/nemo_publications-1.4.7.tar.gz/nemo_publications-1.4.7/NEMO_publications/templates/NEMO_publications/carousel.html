@@ -1,0 +1,68 @@
+{% if publication_counts or publications %}
+    <div id="publication_carousel">
+        <div id="myCarousel"
+             class="carousel slide"
+             data-ride="carousel"
+             data-interval="{{ interval_time }}"
+             data-pause="null"
+             style="margin: auto">
+            <div class="carousel-inner" role="listbox">
+                {% if publication_counts %}
+                    {% if content == "mixed" or content == "leaderboard" %}
+                        <div class="item active" style="margin: 0 40px">
+                            {% for publication_count in publication_counts %}
+                                <div class="{% if publication_counts|length == 1 %}col-sm-12{% else %}col-sm-6{% endif %}">
+                                    <div class="thumbnail">
+                                        <table class="table table-bordered table-condensed table-align-top table-striped table-hover thead-light"
+                                               style="margin-bottom: 0">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="2" class="text-center">{{ publication_count.0 }} Leaderboard</th>
+                                                </tr>
+                                            </thead>
+                                            <thead>
+                                                <tr>
+                                                    <th>Author</th>
+                                                    <th># of publications</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for item in publication_count.1 %}
+                                                    <tr>
+                                                        <td>{{ item.get_full_name }}</td>
+                                                        <td>{{ item.publication_count }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endif %}
+                {% if content == "mixed" or content == "publications" %}
+                    <div class="item {% if content == "publications" %}active{% endif %}" style="margin: 0 40px">
+                        {% for publication in publications %}
+                            {% include 'NEMO_publications/publication_thumbnail.html' %}
+                            {% if forloop.counter|divisibleby:tiles_per_item %}
+                            </div>
+                            <div class="item" style="margin: 0 40px">
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <!-- Carousel controls -->
+            <a class="carousel-control left" href="#myCarousel" data-slide="prev" style="width: 5%">
+                <span class="icon-prev" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control right" href="#myCarousel" data-slide="next" style="width: 5%">
+                <span class="icon-next" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+        </div>
+    </div>
+    <script>set_interval_when_visible(document, refresh_pub_jumbotron, {{ refresh_time }});</script>
+{% endif %}

@@ -1,0 +1,47 @@
+{% extends 'NEMO_publications/publications_base.html' %}
+{% load custom_tags_and_filters %}
+{% block before_pagination %}
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-1 control-label" for="year">Year:</label>
+            <div class="col-sm-2">
+                <select class="form-control" id="year" name="year" onchange="change_year(this.value)">
+                    {% for year in years %}
+                        <option value="{% url 'publications_leaderboard' year=year %}"
+                                {% if year == selected_year %}selected{% endif %}>{{ year }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+    <script>
+        function change_year(selectedYearOptionURL)
+		{
+        	window.location.href = selectedYearOptionURL;
+        }
+	
+    </script>
+{% endblock %}
+{% block pagination_content %}
+    <table id="leaderboard_table"
+           class="table table-bordered table-condensed table-align-top table-striped table-hover thead-light"
+           style="margin-bottom: 0">
+        <thead>
+            <tr>
+                <th>Author</th>
+                <th>Number of publications</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in page %}
+                <tr>
+                    <td>{{ item.get_full_name }}</td>
+                    <td>{{ item.publication_count }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+{% block table_empty_content %}
+    There are no publications for the year {{ selected_year }}. <a href="{% url 'search_publication' %}">Be the first to enter your publication!</a>
+{% endblock %}

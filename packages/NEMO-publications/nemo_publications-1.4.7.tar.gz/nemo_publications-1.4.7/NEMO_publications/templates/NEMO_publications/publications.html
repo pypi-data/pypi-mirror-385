@@ -1,0 +1,203 @@
+{% extends 'NEMO_publications/publications_base.html' %}
+{% load custom_tags_and_filters %}
+{% block add_button %}
+    {% url 'search_publication' as create_publication_url %}
+    <a class="btn btn-success"
+       style="position: relative"
+       href="/search_publication/"
+       title="{% if publication_notifications %}Click Add to review and acknowledge new publication records{% else %}Add{% endif %}"
+       aria-label="Add">
+        <i class="glyphicon glyphicon-plus-sign"></i> Add
+        {% if publication_notifications %}
+            <span class="badge badge-tab-top active">{{ publication_notifications|length }}</span>
+        {% endif %}
+    </a>
+{% endblock %}
+{% block before_pagination %}
+    <div class="col-sm-12" style="margin-left: -15px;">
+        <div class="checkbox">
+            <span class="control-label">Columns:</span>
+            <label>
+                <input id="publications_col_2" type="checkbox" onchange="toggle_column(2, this.checked)">
+                Journal
+            </label>
+            <label>
+                <input id="publications_col_3" type="checkbox" onchange="toggle_column(3, this.checked)">
+                Month
+            </label>
+            <label>
+                <input id="publications_col_4" type="checkbox" onchange="toggle_column(4, this.checked)">
+                Year
+            </label>
+            <label>
+                <input id="publications_col_5" type="checkbox" onchange="toggle_column(5, this.checked)">
+                Doi
+            </label>
+            <label>
+                <input id="publications_col_6" type="checkbox" onchange="toggle_column(6, this.checked)">
+                Image
+            </label>
+        </div>
+    </div>
+    <div class="form-horizontal col-sm-10" style="margin-left: -15px;margin-top: 15px; margin-bottom: -15px">
+        <div class="form-group">
+            <label for="tool_search" class="control-label text-left col-sm-1">Tool</label>
+            <div class="col-sm-7">
+                <input id="tool_search" class="form-control" type="text" value="" placeholder="Filter by tool" />
+                <input type="button"
+                       id="selected_tool"
+                       class="btn btn-default"
+                       onclick="remove_item('tool')"
+                       style="display:none">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="author_search" class="control-label text-left col-sm-1">Author</label>
+            <div class="col-sm-7">
+                <input id="author_search" class="form-control" type="text" value="" placeholder="Filter by author" />
+                <input type="button"
+                       id="selected_author"
+                       class="btn btn-default"
+                       onclick="remove_item('author')"
+                       style="display:none">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="project_search" class="control-label text-left col-sm-1">Project</label>
+            <div class="col-sm-7">
+                <input id="project_search" class="form-control" type="text" value="" placeholder="Filter by project" />
+                <input type="button"
+                       id="selected_project"
+                       class="btn btn-default"
+                       onclick="remove_item('project')"
+                       style="display:none">
+            </div>
+        </div>
+    </div>
+    <script>
+        function toggle_column(column_number, checked)
+		{
+            $("#publications_col_"+column_number).prop("checked", checked);
+            localStorage.setItem("publications_col_"+column_number, ""+checked);
+            $('#publication_table td:nth-child(' + column_number + '),#publication_table th:nth-child(' + column_number + ')').toggle(checked);
+        }
+
+		function select_item(jquery_event, search_selection, dataset_name)
+		{
+            $('#' + dataset_name + '_search').typeahead('val', search_selection.id).hide();
+            if (jquery_event)
+            {
+                window.location.href = "?selected_tool="+$('#tool_search').val()+"&selected_author="+$('#author_search').val()+"&selected_project="+$('#project_search').val();
+            }
+            $("#selected_" + dataset_name).val(search_selection.name).show();
+		}
+
+		function remove_item(item_element)
+		{
+            $('#' + item_element + '_search').typeahead('val', '').show().focus();
+            $("#selected_" + item_element).hide();
+            window.location.href = "?selected_tool="+$('#tool_search').val()+"&selected_author="+$('#author_search').val()+"&selected_project="+$('#project_search').val();
+		}
+
+        window.addEventListener('load', function ()
+        {
+			toggle_column(2, localStorage.getItem("publications_col_2") === "true");
+			toggle_column(3, localStorage.getItem("publications_col_3") === "true");
+			toggle_column(4, localStorage.getItem("publications_col_4") === "true");
+			toggle_column(5, localStorage.getItem("publications_col_5") === "true");
+			toggle_column(6, localStorage.getItem("publications_col_6") === "true");
+
+            $('#author_search').autocomplete('author', select_item, '{% url 'publication_user_search' %}', true);
+            $('#tool_search').autocomplete('tool', select_item, {{ tools|json_search_base }});
+            $('#project_search').autocomplete('project', select_item, {{ projects }});
+
+            {% if selected_tool %}
+				 select_item(false, {'id': '{{ selected_tool.id }}', 'name': '{{ selected_tool.name }}' }, 'tool');
+            {% endif %}
+            {% if selected_author %}
+				 select_item(false, {'id': '{{ selected_author.id }}', 'name': '{{ selected_author }}' }, 'author');
+            {% endif %}
+            {% if selected_project %}
+				 select_item(false, {'id': '{{ selected_project.id }}', 'name': '{{ selected_project.name }}' }, 'project');
+            {% endif %}
+        })
+	
+    </script>
+    {{ block.super }}
+{% endblock %}
+{% block pagination_content %}
+    <table id="publication_table"
+           class="table table-bordered table-condensed table-align-top table-striped table-hover thead-light"
+           style="margin-bottom: 0">
+        <thead>
+            <tr>
+                <th style="min-width: 300px;">{% include 'pagination/pagination_column.html' with order_by='title' name='Title' %}</th>
+                <th style="display: none">{% include 'pagination/pagination_column.html' with order_by='journal' name='Journal' %}</th>
+                <th style="display: none">{% include 'pagination/pagination_column.html' with order_by='month' name='Month' %}</th>
+                <th style="display: none">{% include 'pagination/pagination_column.html' with order_by='year' name='Year' %}</th>
+                <th style="display: none">{% include 'pagination/pagination_column.html' with order_by='doi' name='DOI' %}</th>
+                <th style="display: none">{% include 'pagination/pagination_column.html' with order_by='image_url' name='Image' %}</th>
+                <th>Authors</th>
+                <th>Tools</th>
+                <th>Projects</th>
+                <th class="text-right button-column-minimum">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for publication in page %}
+                {% with user_data|get_item:publication.id as user_data_entry %}
+                    <tr>
+                        <td>
+                            <a href="{{ publication.get_doi_url }}" target="_blank">{{ publication.title }}</a>
+                        </td>
+                        <td style="display: none">{{ publication.journal }}</td>
+                        <td class="text-nowrap" style="display: none">{{ publication.get_month_display|default_if_none:''|title }}</td>
+                        <td class="text-nowrap" style="display: none">{{ publication.year }}</td>
+                        <td class="text-nowrap" style="display: none">
+                            <a href="{{ publication.get_doi_url }}" target="_blank">{{ publication.doi }}</a>
+                        </td>
+                        <td class="text-nowrap"
+                            style="display: none;
+                                   {% if publication.image_url %}min-width: 200px{% endif %}">
+                            {% if publication.image_url %}
+                                <img class="img-thumbnail" src="{{ publication.image_url }}" alt="{{ publication.title }} image">
+                            {% endif %}
+                        </td>
+                        <td class="text-nowrap">
+                            {% for author in publication.get_authors %}
+                                <span>{{ author }}</span>
+                                <br>
+                            {% endfor %}
+                        </td>
+                        <td class="text-nowrap">
+                            {% for tool in publication.get_tools %}
+                                <span>{{ tool }}</span>
+                                <br>
+                            {% endfor %}
+                        </td>
+                        <td class="text-nowrap">
+                            {% for project in publication.get_projects %}
+                                <span>{{ project }}</span>
+                                <br>
+                            {% endfor %}
+                        </td>
+                        <td class="text-right text-nowrap">
+                            {% if user_data_entry %}
+                                {% url 'edit_publication' user_data_entry.id as edit_publication_url %}
+                                {% button type="edit" value="Edit" size="small" title="Edit" url=edit_publication_url %}
+                                <form method="post" style="display: inline" action="{% url 'delete_publication' user_data_entry.id %}">
+                                    {% csrf_token %}
+                                    {% button type="delete" submit="true" size="small" value="Remove my info" title="Remove" onclick="return confirm('Are you sure you want to remove your information from this publication?');" %}
+                                </form>
+                            {% else %}
+                                {% url 'create_publication' publication.id as create_publication_data_url %}
+                                {% button type="add" size="small" submit="true" value="Add Information"  url=create_publication_data_url %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endwith %}
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+{% block table_empty_content %}There are no publications.{% endblock %}

@@ -1,0 +1,57 @@
+[project]
+name = "NEMO-publications"
+version = '1.4.7'
+description = "Plugin adding publications that users can submit and link to tools/projects using the DOI"
+keywords = ["NEMO"]
+readme = "README.md"
+authors = [{name = "Atlantis Labs LLC", email = "atlantis@atlantislabs.io"}]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Framework :: Django :: 4.2",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+requires-python = ">=3.9"
+dependencies = [
+    "django",
+    "bibtexparser",
+    "python-dateutil",
+    "requests"
+]
+license = {file = "LICENSE"}
+
+[project.urls]
+Homepage = "https://gitlab.com/nemo-community/atlantis-labs/nemo-publications"
+Changelog = "https://gitlab.com/nemo-community/atlantis-labs/nemo-publications/-/releases"
+Issues = "https://gitlab.com/nemo-community/atlantis-labs/nemo-publications/-/issues"
+CI = "https://gitlab.com/nemo-community/atlantis-labs/nemo-publications/-/pipelines"
+
+[project.optional-dependencies]
+NEMO-CE = ["NEMO-CE>=7.0.0",]
+NEMO = ["NEMO>=7.0.0",]
+dev-tools = ["pre-commit", "djlint", "black"]
+
+[tool.setuptools.packages.find]
+include = ["NEMO_publications*"]
+
+[tool.setuptools.package-data]
+"NEMO_publications" = ["templates/**/*", "static/**/*"]
+
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.black]
+line-length = 120
+target-version = ['py311']
+
+[tool.djlint]
+profile = "django"
+max_attribute_length=100
+max_line_length=120
+ignore = "H031"

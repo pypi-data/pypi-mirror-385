@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load custom_tags_and_filters %}
+{% load static %}
+{% load tz %}
+{% block title %}Create publication{% endblock %}
+{% block content %}
+    <h1 class="form-group">
+        {% if user_publications %}
+            Add
+        {% else %}
+            Create
+        {% endif %}
+        publication
+    </h1>
+    <form class="well" action="{% url 'search_publication' %}" method="post">
+        {% csrf_token %}
+        {% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
+        <div class="row">
+            <div class="col-md-12">
+                <label for="doi">
+                    {% if user_publications %}
+                        Select a DOI from the drop-down
+                    {% else %}
+                        Search Publication By DOI
+                    {% endif %}
+                </label>
+            </div>
+            <div class="col-md-10 col-sm-10">
+                {% if user_publications %}
+                    <div class="input-group">
+                        <input type="text" id="doi" name="doi" class="form-control" required>
+                        <div class="input-group-addon"
+                             style="cursor: pointer"
+                             onclick="$('#doi').val('').trigger('input').focus();">
+                            <span class="caret"></span>
+                        </div>
+                    </div>
+                {% else %}
+                    <input type="text" id="doi" name="doi" class="form-control" required>
+                {% endif %}
+            </div>
+            <div class="col-md-2 col-sm-2">
+                {% button type="view" submit="true" value=user_publications|yesno:"Select,Search" %}
+            </div>
+        </div>
+    </form>
+    <script>
+	$("#doi").autocomplete("user_pub_status", function(){}, {{ user_publications|json_search_base:"doi" }}, false, true)
+	$('#doi').on('focus', function()
+	{
+	  const $menu = $('.tt-dropdown-menu');
+	  const inputHeight = $(this).innerHeight();
+	  $menu.css('top', inputHeight + 'px');
+	});
+    </script>
+{% endblock %}
