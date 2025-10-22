@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/qgis-deployment/qgis-deployment-toolbelt-cli/raw/main/docs/schemas/scenario/jobs/manage-env-vars.json",
+  "description": "Job in charge of setting/updating/removing environment variables on target computer.",
+  "title": "Environment variables manager.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "action": {
+        "default": "add",
+        "description": "Tell the job what to do with the environment variable.",
+        "enum": [
+          "add",
+          "remove"
+        ],
+        "type": "string"
+      },
+      "name": {
+        "description": "Name of the environment variable.",
+        "type": "string"
+      },
+      "scope": {
+        "default": "user",
+        "description": "Level of the environment variable.",
+        "enum": [
+          "user",
+          "system"
+        ],
+        "type": "string"
+      },
+      "value": {
+        "description": "Value to set to the environment variable.",
+        "type": [
+          "boolean",
+          "string"
+        ]
+      },
+      "value_type": {
+        "description": "Value type to avoid ambiguity when interpreting it.",
+        "enum": [
+          "bool",
+          "path",
+          "str",
+          "url"
+        ],
+        "type": "string"
+      }
+    },
+    "allOf": [
+      {
+        "if": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "const": "add"
+            }
+          }
+        },
+        "then": {
+          "required": [
+            "value"
+          ]
+        }
+      }
+    ],
+    "required": [
+      "name"
+    ]
+  }
+}

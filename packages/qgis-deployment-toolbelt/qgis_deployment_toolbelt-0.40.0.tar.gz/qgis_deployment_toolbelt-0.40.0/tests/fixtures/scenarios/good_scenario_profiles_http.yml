@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=../../../docs/schemas/scenario/qdt_scenario.json
+
+# This is a sample of a YAML file for the QGIS Deployment Toolbelt scenario.
+# For now, it's more a roadmap than a real description of what it's implemented.
+
+metadata:
+  title: "Tests scenario of QGIS Deployment Toolbelt"
+  id: test-scenario-profiles-sync-http
+  description: >-
+    This is an example a scenario YAML file for the QGIS Deployment Toolbelt to
+    demonstrate capabilities.
+
+settings:
+  LOCAL_WORK_DIR: ~/.cache/qgis-deployment-toolbelt/tests/
+  SCENARIO_VALIDATION: true
+
+steps:
+  - name: Download QGIS profiles from remote location
+    uses: qprofiles-downloader
+    with:
+      protocol: http
+      source: https://raw.githubusercontent.com/qgis-deployment/qgis-deployment-toolbelt-cli/examples/
+
+  - name: Synchronize downloaded profiles with installed ones
+    uses: qprofiles-synchronizer
+    with:
+      sync_mode: overwrite

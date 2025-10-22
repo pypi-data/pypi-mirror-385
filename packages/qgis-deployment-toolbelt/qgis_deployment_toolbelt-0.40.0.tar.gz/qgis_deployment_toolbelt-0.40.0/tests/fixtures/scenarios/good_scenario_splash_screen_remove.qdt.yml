@@ -1,0 +1,65 @@
+# yaml-language-server: $schema=../../../docs/schemas/scenario/qdt_scenario.json
+
+# This is a sample of a YAML file for the QGIS Deployment Toolbelt scenario.
+# For now, it's more a roadmap than a real description of what it's implemented.
+
+metadata:
+  title: "Test scenario removing splash screens"
+  id: test-scenario-good-splash-removal
+  description: >-
+    Test scenario with splash screen removing
+
+settings:
+  DEBUG: false
+  LOCAL_WORK_DIR: ~/.cache/qgis-deployment-toolbelt/tests/
+  QGIS_EXE_PATH:
+    linux: /usr/bin/qgis
+    mac: /usr/bin/qgis
+    windows: "%PROGRAMFILES%/QGIS/3_22/bin/qgis-bin.exe"
+  SCENARIO_VALIDATION: true
+
+steps:
+  - name: Download profiles from remote git repository
+    uses: qprofiles-downloader
+    with:
+      source: https://github.com/qgis-deployment/qgis-deployment-toolbelt-cli.git
+      protocol: git_remote
+      branch: main
+
+  - name: Synchronize downloaded profiles with installed ones
+    uses: qprofiles-synchronizer
+    with:
+      sync_mode: only_different_version
+
+  - name: Download plugins
+    uses: qplugins-downloader
+    with:
+      force: false
+      threads: 5
+
+  - name: Synchronize plugins
+    uses: qplugins-synchronizer
+    with:
+      action: create_or_restore
+      profile_ref: downloaded
+      source: ~/.cache/qgis-deployment-toolbelt/plugins
+
+  - name: Create shortcuts for profiles
+    uses: shortcuts-manager
+    with:
+      action: create_or_restore
+      include:
+        - profile: qdt_demo
+          label: "TEST QDT - Demo profile"
+          desktop: true
+          start_menu: true
+        - profile: QDT Viewer Mode
+          label: "TEST QDT - Viewer profile"
+          desktop: true
+          start_menu: true
+
+  - name: Set splash screen
+    uses: splash-screen-manager
+    with:
+      action: remove
+      strict: false

@@ -1,0 +1,86 @@
+name: "🛃 Security checks"
+
+# Triggers
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/security.yml"
+      - "qgis_deployment_toolbelt"
+      - pyproject.toml
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/security.yml"
+      - "qgis_deployment_toolbelt"
+      - pyproject.toml
+
+# Allow one concurrent run of this workflow per branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+# Globals
+env:
+  PROJECT_FOLDER: "qgis_deployment_toolbelt"
+  PYTHON_VERSION: "3.13"
+
+# Sets permissions of the GITHUB_TOKEN
+permissions:
+  contents: read
+
+# Jobs definition
+jobs:
+  check-bandit:
+    name: "🦹‍♂️ Bandit"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get source code
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: "pip"
+          cache-dependency-path: pyproject.toml
+
+      - name: Install Python requirements
+        run: python -m pip install -U pip setuptools wheel
+
+      - name: Install security dependencies
+        run: python -m pip install -U -e .[security]
+
+      - name: Run Bandit check
+        run: bandit --configfile bandit.yaml --format screen -r qgis_deployment_toolbelt
+
+  check-safety:
+    name: "🛡 Safety PyUp"
+    runs-on: ubuntu-latest
+    if: github.event.repository.fork != true
+
+    steps:
+      - name: Get source code
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: "pip"
+          cache-dependency-path: pyproject.toml
+
+      - name: Install project requirements
+        run: python -m pip install -U pip setuptools wheel
+
+      - name: Install security dependencies
+        run: python -m pip install -U -e .[security]
+
+      - name: Run Safety scan (pyupio)
+        uses: pyupio/safety-action@v1
+        with:
+          api-key: ${{ secrets.SAFETY_API_KEY }}

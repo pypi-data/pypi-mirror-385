@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/qgis-deployment/qgis-deployment-toolbelt-cli/raw/main/docs/schemas/scenario/metadata.json",
+  "description": "QGIS Deployment Toolbelt - Scenario metadata",
+  "title": "Define scenario's metadata.",
+  "type": "object",
+  "properties": {
+    "title": {
+      "description": "The title of the job.",
+      "type": "string"
+    },
+    "id": {
+      "description": "Unique identifier of the job. Like the title but slugified and without special characters.",
+      "type": "string",
+      "pattern": "^[_a-zA-Z][a-zA-Z0-9_-]*$"
+    },
+    "description": {
+      "description": "Short or long description of what this scenario does. Multilines accepted.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "title"
+  ],
+  "additionalProperties": false
+}

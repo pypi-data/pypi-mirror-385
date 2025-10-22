@@ -1,0 +1,98 @@
+{
+    // Editor
+    "editor.bracketPairColorization.enabled": true,
+    "editor.guides.bracketPairs": "active",
+    "files.associations": {
+        "**/shortcuts/*.template": "ini",
+        "**/builder/*.cnf": "ini"
+    },
+    // JSON
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features",
+        "editor.formatOnSave": true,
+        "editor.quickSuggestions": {
+            "strings": true
+        },
+        "editor.suggest.insertMode": "replace",
+        "files.insertFinalNewline": true
+    },
+    // Markdown
+    "markdown.updateLinksOnFileMove.enabled": "prompt",
+    "markdown.updateLinksOnFileMove.enableForDirectories": true,
+    "markdown.validate.enabled": true,
+    "markdown.validate.fileLinks.markdownFragmentLinks": "warning",
+    "markdown.validate.fragmentLinks.enabled": "warning",
+    "[markdown]": {
+        "editor.defaultFormatter": "DavidAnson.vscode-markdownlint",
+        "editor.formatOnSave": true,
+        "files.trimTrailingWhitespace": false,
+    },
+    // Python
+    "python.analysis.autoFormatStrings": true,
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.typeCheckingMode": "basic",
+    "python.terminal.activateEnvInCurrentTerminal": true,
+    "python.terminal.activateEnvironment": true,
+        "python.testing.pytestArgs": [
+        "-c",
+        "pyproject.toml",
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+        },
+        "editor.rulers": [
+            88
+        ],
+        "editor.wordWrapColumn": 88,
+    },
+    // TOML
+    "[toml]": {
+        "editor.formatOnSave": true,
+    },
+    // YAML
+    "[yaml]": {
+        "editor.autoIndent": "keep",
+        "editor.formatOnSave": true,
+        "editor.insertSpaces": true,
+        "editor.tabSize": 2,
+        "diffEditor.ignoreTrimWhitespace": false,
+        "editor.quickSuggestions": {
+            "other": true,
+            "comments": false,
+            "strings": true
+        }
+    },
+    // extensions
+    "autoDocstring.guessTypes": true,
+    "autoDocstring.docstringFormat": "google",
+    "autoDocstring.generateDocstringOnEnter": false,
+    "yaml.schemas": {
+        "docs/schemas/scenario/schema.json": [
+            "scenario*qdt.yml",
+            "tests/fixtures/scenarios/*.qdt.yml",
+        ],
+        "https://json.schemastore.org/github-workflow.json": ".github/workflows/*.yml"
+    },
+    "markdownlint.config": {
+        "MD007": {
+            "indent": 4
+        },
+        "MD024": {
+            "siblings_only": true
+        },
+    },
+    "markdown-mermaid.languages": [
+        "mermaid",
+        "{mermaid}"
+    ],
+    "sonarlint.connectedMode.project": {
+        "connectionId": "oslandia",
+        "projectKey": "Guts_qgis-deployment-cli"
+    }
+}

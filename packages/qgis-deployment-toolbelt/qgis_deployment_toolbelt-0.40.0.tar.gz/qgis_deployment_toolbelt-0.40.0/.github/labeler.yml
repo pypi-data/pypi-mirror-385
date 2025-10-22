@@ -1,0 +1,68 @@
+bug:
+    - head-branch:
+          - ^fix
+          - fix
+          - ^hotfix
+          - hotfix
+
+ci-cd:
+    - changed-files:
+          - any-glob-to-any-file:
+                - .github/**
+
+dependencies:
+    - changed-files:
+          - any-glob-to-any-file:
+                - pyproject.toml
+
+documentation:
+    - changed-files:
+          - any-glob-to-any-file:
+                - "*.md"
+                - docs/**
+                - examples/**
+                - scripts/*.ps1
+    - head-branch:
+          - ^docs
+          - documentation
+
+enhancement:
+    - head-branch:
+          - ^feature
+          - feature
+          - ^improve
+          - improve
+
+jobs:
+    - changed-files:
+          - any-glob-to-any-file:
+                - qgis_deployment_toolbelt/jobs/**/*
+
+packaging:
+    - changed-files:
+          - any-glob-to-any-file:
+                - .dockerignore
+                - builder/**/*
+                - Dockerfile
+                - pyproject.toml
+                - .dockerignore
+    - head-branch:
+          - ^packaging
+          - packaging
+
+quality:
+    - changed-files:
+          - any-glob-to-any-file:
+                - tests/**/*
+
+tooling:
+    - changed-files:
+          - any-glob-to-any-file:
+                - ".*"
+                - codecov.yml
+                - pyproject.toml
+                - sonar-project.properties
+                - .vscode/**/*
+    - head-branch:
+          - ^tooling
+          - tooling
