@@ -1,0 +1,70 @@
+cmake_minimum_required(VERSION 3.8)
+project({{pkg_name}})
+
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
+
+#######################
+## Find dependencies ##
+#######################
+find_package(ament_cmake_auto REQUIRED)
+
+# Add more dependencies as needed
+# find_package(<dependency> REQUIRED)
+
+ament_auto_find_build_dependencies()
+
+###########
+## Build ##
+###########
+
+aux_source_directory(src ${PROJECT_NAME}_SRC_LIST)
+file(GLOB_RECURSE ${PROJECT_NAME}_HEADER_LIST "include/*.hpp" "include/*.h")
+
+
+# Display found source and header files for debugging
+message(STATUS "[${PROJECT_NAME}]  Source files found for ${PROJECT_NAME}:")
+foreach(src_file ${${PROJECT_NAME}_SRC_LIST})
+  message("[${PROJECT_NAME}] -> ${src_file}")
+endforeach()
+
+message(STATUS "[${PROJECT_NAME}]  Header files found for ${PROJECT_NAME}:")
+foreach(header_file ${${PROJECT_NAME}_HEADER_LIST})
+  message("[${PROJECT_NAME}] -> ${header_file}")
+endforeach()
+
+ament_auto_add_library(${PROJECT_NAME} SHARED
+  ${${PROJECT_NAME}_SRC_LIST}
+  ${${PROJECT_NAME}_HEADER_LIST}
+)
+
+## register node to component
+rclcpp_components_register_node(${PROJECT_NAME}
+  PLUGIN {{namespace}}{{class_name}}
+  EXECUTABLE {{node_name}}
+)
+
+#############
+## Testing ##
+#############
+
+if(BUILD_TESTING)
+  find_package(ament_lint_auto REQUIRED)
+  # the following line skips the linter which checks for copyrights
+  # comment the line when a copyright and license is added to all source files
+  set(ament_cmake_copyright_FOUND TRUE)
+  # the following line skips cpplint (only works in a git repo)
+  # comment the line when this package is in a git repo and when
+  # a copyright and license is added to all source files
+  set(ament_cmake_cpplint_FOUND TRUE)
+  ament_lint_auto_find_test_dependencies()
+endif()
+
+#############
+## Install ##
+#############
+
+ament_auto_package(
+  INSTALL_TO_SHARE
+)
