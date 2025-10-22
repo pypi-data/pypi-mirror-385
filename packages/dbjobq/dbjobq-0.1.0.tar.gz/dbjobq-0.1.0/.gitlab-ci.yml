@@ -1,0 +1,153 @@
+image: ghcr.io/astral-sh/uv:python3.12-bookworm-slim
+
+stages:
+  - lint
+  - test
+  - build
+  - publish
+  - docs
+
+variables:
+  UV_VERSION: "0.9.5"
+
+lint:
+  stage: lint
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_BRANCH
+      allow_failure: true
+  script:
+    - uv sync --all-extras
+    - uv run ruff check
+    - uv run ruff format
+
+
+test:
+  stage: test
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_BRANCH
+      allow_failure: true
+  parallel:
+    matrix:
+      - PYTHON_VERSION: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+  image: ghcr.io/astral-sh/uv:python${PYTHON_VERSION}-bookworm-slim
+  retry: 2
+  script:
+    - uv sync --all-extras
+    - uv run pytest
+  coverage: '/TOTAL\s+\d+\s+\d+\s+(\d+\%)/'
+  artifacts:
+    reports:
+      junit: pytest-report.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+
+build:
+  stage: build
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - if: $CI_COMMIT_BRANCH && $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
+  before_script:
+    - apt-get update && apt-get install -y jq curl git
+    - curl -sL https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -o /usr/bin/yq && chmod +x /usr/bin/yq
+    - yq --version
+    - uv pip install -U commitizen --system # install commitizen
+  script:
+    - |
+      git remote set-url origin https://oauth2:$DEPLOY_TOKEN@gitlab.com/$CI_PROJECT_PATH.git
+      git config --global user.email "${CI_EMAIL}" && git config --global user.name "${CI_USERNAME}"
+      git checkout -b $CI_COMMIT_BRANCH
+      git pull origin $CI_COMMIT_BRANCH
+      cz bump --yes --files-only --prerelease beta || true
+    - uv build -o dist
+  artifacts:
+    paths:
+      - dist/*
+    when: on_success
+
+build-publish:
+  stage: publish
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: on_success
+      allow_failure: false
+  id_tokens:
+    PYPI_ID_TOKEN:
+      aud: pypi
+  environment:
+    name: release
+  variables:
+    GIT_DEPTH: 0
+  before_script:
+    - apt-get update && apt-get install -y jq curl git
+    - curl -sL https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -o /usr/bin/yq && chmod +x /usr/bin/yq
+    - yq --version
+    - uv pip install -U commitizen twine --system # install commitizen
+  script:
+    - |
+      git remote set-url origin https://oauth2:$DEPLOY_TOKEN@gitlab.com/$CI_PROJECT_PATH.git
+      git config --global user.email "${CI_EMAIL}" && git config --global user.name "${CI_USERNAME}"
+      git checkout -b $CI_COMMIT_BRANCH
+      git pull origin $CI_COMMIT_BRANCH
+      cz bump --yes || { echo "No commits to bump version"; exit 0; }
+    - |
+      echo "Parsing pyproject.toml"
+      PACKAGE_NAME=$(yq '.project.name' pyproject.toml || { echo "Failed to parse name"; exit 1; })
+      CURRENT_VERSION=$(yq '.project.version' pyproject.toml || { echo "Failed to parse version"; exit 1; })
+      echo "Package: $PACKAGE_NAME, Version: $CURRENT_VERSION"
+      LATEST_VERSION=$(curl -s https://pypi.org/pypi/$PACKAGE_NAME/json | jq -r '.info.version' || echo "none")
+      echo "PyPI Version: $LATEST_VERSION"
+      if [ "$CURRENT_VERSION" != "$LATEST_VERSION" ]; then
+        echo "Repo version ($CURRENT_VERSION) does not match PyPI ($LATEST_VERSION), building new version"
+        uv build -o dist
+
+        echo "Uploading to PyPI"
+        twine upload dist/*
+
+        echo "Pushing commit and tags to GitLab"
+        git push origin $CI_COMMIT_BRANCH:$CI_COMMIT_REF_NAME
+        git push origin --tags
+
+        echo "Available tags:"
+        git tag -l
+
+        echo "Creating GitLab Release"  
+        curl --request POST \
+          --header "PRIVATE-TOKEN: $DEPLOY_TOKEN" \
+          --form "name=v$CURRENT_VERSION" \
+          --form "tag_name=v$CURRENT_VERSION" \
+          --form "description=Release for $PACKAGE_NAME v$CURRENT_VERSION" \
+          "https://gitlab.com/api/v4/projects/$CI_PROJECT_ID/releases" > release_response.json
+        cat release_response.json
+        jq . release_response.json || { echo "Failed to create release"; exit 1; }
+
+        echo "Merging commit into develop"
+        git fetch origin develop:develop
+        git checkout develop
+        git pull origin develop
+        git merge $CI_COMMIT_BRANCH
+        git push origin develop
+      fi
+      
+
+docs:
+  stage: docs
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  script:
+    - uv sync --all-extras
+    - uv run mkdocs build
+    - mv site public
+  artifacts:
+    paths:
+      - public
+  pages: true

@@ -1,0 +1,190 @@
+[project]
+name = "dbjobq"
+version = "0.1.0"
+description = "A very simple async job queue with a database"
+requires-python = ">=3.9, <3.14"
+readme = "README.md"
+authors = [
+    { name = "Scott Caratozzolo", email = "scott@caratozzolo.dev" }
+]
+keywords = ["job", "queue", "database", "async", "background"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "croniter>=5.0.1",
+]
+
+[project.optional-dependencies]
+sqlalchemy = [
+    "sqlalchemy[asyncio]>=2.0.36",
+    "aiosqlite>=0.20.0",
+    "asyncpg>=0.30.0",
+    "aioodbc>=0.5.0",
+]
+mongo = ["pymongo>=4.7.2"]
+redis = ["redis[hiredis]>=5.2.1"]
+dynamo = [
+    "aioboto3>=13.3.0",
+    "boto3>=1.35.3",
+]
+all = [
+    "dbjobq[sqlalchemy,mongo,redis,dynamo]",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.commitizen]
+tag_format = "v$version"
+version_provider = "uv"
+bump_message = "bump: version $current_version → $new_version [skip ci]"
+
+[tool.pytest.ini_options]
+# Pytest configuration for async testing
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+
+# Test discovery patterns
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+# Markers
+markers = [
+    "asyncio: marks tests as async (used by pytest-asyncio)",
+    "integration: marks tests as integration tests (may require external services)",
+    "slow: marks tests as slow running",
+]
+
+# Output options and coverage settings
+addopts = [
+    "-n", "auto",
+    "-v",
+    "--tb=short",
+    "--cov=dbjobq",
+    "--cov-report=term-missing",
+    "--junitxml=pytest-report.xml",
+    "--cov-report=xml:coverage.xml",
+    "--cov-fail-under=80",
+]
+
+# Default test path
+testpaths = ["tests"]
+
+# Coverage configuration
+[tool.coverage.run]
+source = ["dbjobq"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+
+[tool.ruff]
+target-version = "py39"
+line-length = 120
+
+[tool.ruff.lint]
+select = [
+    # flake8-2020
+    "YTT",
+    # flake8-bandit
+    "S",
+    # flake8-bugbear
+    "B",
+    # flake8-builtins
+    "A",
+    # flake8-comprehensions
+    "C4",
+    # flake8-debugger
+    "T10",
+    # flake8-simplify
+    "SIM",
+    # flake8-unused-arguments
+    "ARG",
+    # flake8-use-pathlib
+    "PTH",
+    # flake8-annotations
+    "ANN001", "ANN201", "ANN202", "ANN204", "ANN205", "ANN206",
+    # isort
+    "I",
+    # mccabe
+    "C90",
+    # pycodestyle
+    "E", "W",
+    # pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # ruff
+    "RUF",
+    # pydocstyle
+    "D102", "D103", "D417",
+    # pylint
+    "PL",
+    # pep8-naming
+    "N",
+    # flake8-datetimez
+    "DTZ002", "DTZ003", "DTZ004", "DTZ011", "DTZ012",
+    # flake8-logging-format
+    "G",
+    # flake8-print
+    "T20",
+]
+
+ignore = [
+    # LineTooLong
+    "E501",
+    # builtin-open
+    "PTH123",
+    # Magic value used in comparison
+    "PLR2004",
+    # Logging statement uses %
+    "G002",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"**/tests/*" = [
+    # Use of `assert` detected
+    "S101",
+    # Missing docstring
+    "D",
+    # Missing type annotation
+    "ANN",
+]
+"hello.py" = [
+    # Allow print statements in example
+    "T20",
+    # Allow missing docstrings in example
+    "D",
+    # Allow missing type annotations in example
+    "ANN",
+    # Allow import not at top level in example
+    "PLC0415",
+]
+
+[dependency-groups]
+dev = [
+    "commitizen>=4.9.1",
+    "mkdocs-material>=9.5.51",
+    "mkdocstrings[python]>=0.27.0",
+    "prek>=0.2.10",
+    "pytest>=8.4.2",
+    "pytest-asyncio>=1.2.0",
+    "pytest-cov>=6.0.0",
+    "pytest-mock>=3.15.1",
+    "pytest-xdist>=3.6.1",
+    "ruff>=0.9.1",
+]
