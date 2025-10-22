@@ -1,0 +1,112 @@
+# DRES: Danish Resilient Encryption Scheme
+
+[![PyPI version](https://img.shields.io/pypi/v/dres.svg?style=flat-square)](https://pypi.org/project/dres/)
+[![Python Version](https://img.shields.io/pypi/pyversions/dres.svg?style=flat-square)](https://pypi.org/project/dres/)
+[![License](https://img.shields.io/pypi/l/dres.svg?style=flat-square)](https://github.com/1Danish-00/HtmlWebShot/blob/main/LICENSE)
+<!-- [![Build Status](https://img.shields.io/github/actions/workflow/status/your-username/DRES/python-package.yml?branch=main&style=flat-square)](https://github.com/your-username/DRES/actions) -->
+
+A pure-Python hybrid cryptosystem, introducing a novel mode of operation called Evolving-Key Chaining (EKC).
+
+---
+
+## 1. The DRES Hybrid System
+
+DRES is a "hybrid" cryptosystem, meaning it combines the best of asymmetric and symmetric cryptography to achieve a secure, authenticated pipeline:
+
+1.  **Asymmetric Key Exchange (DH):** Alice and Bob use the **Diffie-Hellman** protocol to securely establish a `Shared Secret` over an insecure channel. This provides **Perfect Forward Secrecy (PFS)**.
+2.  **Secure Key Derivation (HKDF):** The `Shared Secret` is fed into the **HMAC-based Key Derivation Function (HKDF)**. This derives two separate, cryptographically isolated master keys:
+    * `K_chain`: For the novel EKC encryption.
+    * `K_hmac`: For the final message authentication.
+3.  **Symmetric Encryption (AES & EKC):** The actual plaintext is encrypted using the novel **Evolving-Key Chaining (EKC)** mode, which uses AES-128 as its core primitive.
+4.  **Symmetric Authentication (HMAC):** The *entire* resulting ciphertext is authenticated using **HMAC-SHA256** (with `K_hmac`) in an "Encrypt-then-MAC" scheme, making it impossible to tamper with the message.
+
+## 2. Core Innovation: Evolving-Key Chaining (EKC)
+
+This is the unique contribution of the DRES project. Instead of using a standard mode like CBC (which uses one static key), EKC is a new mode where the **AES key evolves with every block of data**.
+
+This creates a strong, non-parallelizable dependency chain, offering unique security properties.
+
+### How EKC Works
+
+For every 16-byte block of plaintext (`P_i`), the encryption process is as follows:
+
+1.  **Derive Block Key:** A unique AES key (`K_i`) is derived by hashing the master `K_chain` with the *ciphertext of the previous block* (`C_i-1`).
+    * `K_i = HMAC(K_chain, C_i-1).digest()[:16]`
+2.  **Chain Plaintext:** The current plaintext block (`P_i`) is XORed with the previous ciphertext block (`C_i-1`) for chaining.
+    * `P_i_mod = P_i XOR C_i-1`
+3.  **Encrypt Block:** The modified plaintext is encrypted with the **unique, single-use key `K_i`**.
+    * `C_i = AES_Encrypt(K_i, P_i_mod)`
+
+### Key Security Properties of EKC
+
+* **Resists Key-Reuse Attacks:** The AES key is new for every single block. A key is never used more than once.
+* **Strong Avalanche Effect:** A one-bit change in any ciphertext block (`C_i`) will cause the *next* block's key (`K_i+1`) to become completely different, turning all subsequent blocks into random noise.
+* **Sequential-Only Decryption:** An attacker *must* decrypt Block 1 to derive the key for Block 2, and so on. This defeats parallel analysis and makes brute-force attacks exponentially harder.
+* **Academic Trade-off:** This mode is (by design) much slower than standard CBC because it performs one HMAC operation *per block*. This is the core of the project's **security-performance trade-off analysis**.
+
+## 3. Installation
+
+The package is available on the Python Package Index (PyPI):
+
+```bash
+pip install DRES
+```
+
+## 4. Quick Start: Encrypt & Decrypt
+
+
+This example shows a simple, secure encryption from Alice to Bob.
+
+```python
+from dres import DRESCipher, KeyExchange
+from dres.exceptions import AuthenticationError
+
+# 1. Initialize the cipher engine
+cipher = DRESCipher()
+
+# 2. Both parties generate their long-term key pairs.
+#    (They would share their public keys beforehand)
+alice_private, alice_public = KeyExchange.generate_keypair()
+bob_private, bob_public = KeyExchange.generate_keypair()
+
+# 3. Alice encrypts a message for Bob using his public key.
+#    The EKC mode is used automatically.
+message = b"This message is secured by the Evolving-Key Chaining (EKC) mode!"
+print("Encrypting...")
+
+encrypted_package = cipher.encrypt(message, bob_public)
+print(f"Package size: {len(encrypted_package)} bytes")
+
+# 4. Bob receives the package and decrypts it with his private key.
+print("Decrypting...")
+try:
+    decrypted_message = cipher.decrypt(encrypted_package, bob_private)
+    
+    print(f"\n✅ SUCCESS: Decrypted message matches original!")
+    print(f"   '{decrypted_message.decode()}'")
+    assert message == decrypted_message
+
+except AuthenticationError:
+    print("\n❌ FAILED: Message authentication failed! Package was tampered with.")
+except Exception as e:
+    print(f"\n❌ FAILED: An unexpected error occurred: {e}")
+```
+
+## 5. Core Utilities (Pure Python)
+This library is a self-contained educational tool. All major cryptographic components are implemented in pure Python, allowing for easy study and analysis:
+
+KeyExchange: A pure-Python implementation of the Diffie-Hellman protocol, using the 2048-bit MODP group from RFC 3526.
+
+AESCipher: A self-contained, pure-Python implementation of AES-128 (FIPS 197), including SubBytes, ShiftRows, MixColumns, and AddRoundKey.
+
+HKDF: A pure-Python implementation of the RFC 5869 "Extract-and-Expand" Key Derivation Function.
+
+Other Primitives: Utilizes the built-in hashlib (for SHA-256) and hmac modules as the secure foundation for HKDF and EKC.
+
+## 6. License
+
+This project is open-sourced under the **MIT License**. See the [LICENSE](https://www.google.com/search?q=LICENSE) file for more details.
+
+-----
+
+*This library was created with ❤️ by **Danish** as part of a Master of Technology project.*
