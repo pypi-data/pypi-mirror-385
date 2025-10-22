@@ -1,0 +1,44 @@
+Metadata-Version: 2.4
+Name: dedi-link
+Version: 1.0.0a1
+Summary: Decentralised Discovery Link
+Author-email: Firefox2100 <wangyunze16@gmail.com>
+License-Expression: MIT
+Project-URL: Homepage, https://github.com/Firefox2100/dedi-link
+Project-URL: Repository, https://github.com/Firefox2100/dedi-link.git
+Project-URL: Issues, https://github.com/Firefox2100/dedi-link/issues
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Intended Audience :: Science/Research
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: cffi~=2.0.0
+Requires-Dist: cryptography~=46.0.3
+Requires-Dist: pydantic~=2.11.9
+Provides-Extra: test
+Requires-Dist: deepdiff~=8.6.1; extra == "test"
+Requires-Dist: pytest~=8.4.2; extra == "test"
+Requires-Dist: pytest-asyncio~=1.2.0; extra == "test"
+Requires-Dist: pytest-cov~=7.0.0; extra == "test"
+Requires-Dist: pylint~=4.0.1; extra == "test"
+Dynamic: license-file
+
+# Decentralised Discovery Link
+
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Firefox2100_dedi-link2&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Firefox2100_dedi-link2) [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=Firefox2100_dedi-link2&metric=bugs)](https://sonarcloud.io/summary/new_code?id=Firefox2100_dedi-link2) [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=Firefox2100_dedi-link2&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=Firefox2100_dedi-link2) [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=Firefox2100_dedi-link2&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=Firefox2100_dedi-link2)
+
+A library to provide core data structures and algorithms for implementations of Decentralised Discovery Link protocol in Python.
+
+This library implements the core data structures and algorithms defined in the [Decentralised Discovery Link specification](https://github.com/Firefox2100/dedi-link-specification). For more details about the protocol, please refer to the specification document.
+
+## Usage
+
+This library is published on PyPI and can be installed via pip:
+
+```bash
+pip install dedi-link
+```
