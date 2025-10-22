@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=61.0", "build"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "colvar-toolkit"
+version = "0.1.0"
+description = "A Python library for PLUMED-style colvar files"
+readme = "README.rst"
+authors = [
+  {name = "Da Teng", email = "tengda1997@gmail.com"}
+]
+maintainers = [
+  {name = "Da Teng", email = "tengda1997@gmail.com"}
+]
+classifiers = [
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python"
+]
+license = {text = "MIT license"}
+requires-python = ">= 3.10"
+dependencies = [
+  "numpy"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",  # testing
+    "ruff"  # linting
+]
+
+[project.urls]
+bugs = "https://github.com/k9cdt/colvar/issues"
+homepage = "https://github.com/k9cdt/colvar"
+
+[tool.setuptools.packages.find]
+where = ["."]        
