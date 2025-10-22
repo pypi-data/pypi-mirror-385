@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+
+{% block title %}Create New Campaign{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">Campaign Creation Wizard</h2>
+                    <p class="text-muted mb-0">Answer these questions and AI will generate optimized copy for your lead capture page</p>
+                </div>
+
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <h3 class="h5 mb-3">Project Details</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                {% bootstrap_field form.project_name %}
+                            </div>
+                            <div class="col-md-6">
+                                {% bootstrap_field form.project_type %}
+                            </div>
+                        </div>
+
+                        {% bootstrap_field form.target_audience %}
+                        {% bootstrap_field form.launch_timeframe %}
+
+                        <hr class="my-4">
+
+                        <h3 class="h5 mb-3">Value Proposition</h3>
+                        {% bootstrap_field form.main_problem_solved %}
+                        {% bootstrap_field form.primary_benefit %}
+                        {% bootstrap_field form.unique_differentiator %}
+
+                        <hr class="my-4">
+
+                        <h3 class="h5 mb-3">Audience Insights</h3>
+                        {% bootstrap_field form.current_struggle %}
+                        {% bootstrap_field form.desired_outcome %}
+
+                        <hr class="my-4">
+
+                        <h3 class="h5 mb-3">Offer Details</h3>
+                        {% bootstrap_field form.signup_incentive %}
+                        {% bootstrap_field form.scarcity_element %}
+
+                        <hr class="my-4">
+
+                        <h3 class="h5 mb-3">Social Proof (Optional)</h3>
+                        {% bootstrap_field form.early_testimonials %}
+                        {% bootstrap_field form.partner_logos %}
+                        {% bootstrap_field form.relevant_metrics %}
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                Generate Campaign with AI
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

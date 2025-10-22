@@ -1,0 +1,111 @@
+[project]
+name = "django-lead-capture"
+version = "0.1.0"
+description = "AI-powered lead capture and coming soon pages for Django with LiteLLM integration"
+authors = [
+    { name = "Directory Platform Team" }
+]
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+keywords = ["django", "lead-capture", "coming-soon", "landing-page", "ai", "litellm", "email-verification"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "Framework :: Django :: 4.2",
+    "Framework :: Django :: 5.0",
+    "Framework :: Django :: 5.1",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+
+dependencies = [
+    "django>=4.2",
+    "django-solo>=2.0",
+    "litellm>=1.0",
+    "django-bootstrap5>=24.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.1.0",
+    "mypy>=1.7.0",
+    "django-stubs>=4.2.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/heysamtexas/django-lead-capture"
+Repository = "https://github.com/heysamtexas/django-lead-capture"
+Issues = "https://github.com/heysamtexas/django-lead-capture/issues"
+Changelog = "https://github.com/heysamtexas/django-lead-capture/blob/main/CHANGELOG.md"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/django_lead_capture"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+]
+ignore = [
+    "E501",  # line too long (handled by formatter)
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["django_lead_capture"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = false
+warn_return_any = false
+warn_unused_ignores = false
+plugins = ["mypy_django_plugin.main"]
+exclude = [
+    "tests/",
+]
+
+[[tool.mypy.overrides]]
+module = "django.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+ignore_errors = true
+
+[tool.django-stubs]
+django_settings_module = "tests.settings"
+
+[tool.coverage.run]
+source = ["django_lead_capture"]
+omit = ["*/migrations/*", "*/tests/*"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "def __str__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]

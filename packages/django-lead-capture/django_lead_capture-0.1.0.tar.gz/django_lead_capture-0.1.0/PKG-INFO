@@ -1,0 +1,271 @@
+Metadata-Version: 2.4
+Name: django-lead-capture
+Version: 0.1.0
+Summary: AI-powered lead capture and coming soon pages for Django with LiteLLM integration
+Project-URL: Homepage, https://github.com/heysamtexas/django-lead-capture
+Project-URL: Repository, https://github.com/heysamtexas/django-lead-capture
+Project-URL: Issues, https://github.com/heysamtexas/django-lead-capture/issues
+Project-URL: Changelog, https://github.com/heysamtexas/django-lead-capture/blob/main/CHANGELOG.md
+Author: Directory Platform Team
+License: MIT
+License-File: LICENSE
+Keywords: ai,coming-soon,django,email-verification,landing-page,lead-capture,litellm
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Django
+Classifier: Framework :: Django :: 4.2
+Classifier: Framework :: Django :: 5.0
+Classifier: Framework :: Django :: 5.1
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Internet :: WWW/HTTP
+Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Typing :: Typed
+Requires-Python: >=3.12
+Requires-Dist: django-bootstrap5>=24.0
+Requires-Dist: django-solo>=2.0
+Requires-Dist: django>=4.2
+Requires-Dist: litellm>=1.0
+Provides-Extra: dev
+Requires-Dist: django-stubs>=4.2.0; extra == 'dev'
+Requires-Dist: mypy>=1.7.0; extra == 'dev'
+Requires-Dist: ruff>=0.1.0; extra == 'dev'
+Description-Content-Type: text/markdown
+
+# django-lead-capture
+
+Django app for creating AI-powered lead capture and "coming soon" landing pages with email collection, verification, and analytics.
+
+## Features
+
+- 🤖 **AI-Powered Copy Generation** - Automatically generate compelling landing page copy using LiteLLM (OpenAI, Anthropic, Groq, etc.)
+- 📧 **Email Capture & Verification** - Collect and verify email addresses with automated welcome emails
+- 📊 **Analytics Dashboard** - Track page views, conversion rates, and lead sources
+- 📤 **CSV Export** - Export leads for email marketing platforms
+- ⏱️ **Countdown Timers** - Optional launch countdown functionality
+- 👥 **Social Proof** - Display lead counts to increase conversions
+- 🎨 **Bootstrap 5 Templates** - Clean, responsive landing pages out of the box
+- 🛡️ **Spam Protection** - Honeypot fields and duplicate detection
+- ⚙️ **Django Admin Integration** - Manage campaigns and configuration via Django admin
+
+## Installation
+
+```bash
+pip install django-lead-capture
+```
+
+Or with uv:
+
+```bash
+uv add django-lead-capture
+```
+
+## Quick Start
+
+### 1. Add to INSTALLED_APPS
+
+```python
+# settings.py
+INSTALLED_APPS = [
+    # ...
+    'django_lead_capture',
+    'solo',  # Required dependency
+    'django_bootstrap5',  # Required dependency
+]
+```
+
+### 2. Include URLs
+
+```python
+# urls.py
+from django.urls import path, include
+
+urlpatterns = [
+    # ...
+    path("", include("django_lead_capture.urls")),
+]
+```
+
+### 3. Run Migrations
+
+```bash
+python manage.py migrate
+```
+
+### 4. Configure LLM API Key
+
+After running the server, you'll see a system check warning:
+
+```
+? django_lead_capture.W001: Lead Capture API key not configured
+  HINT: Configure your LLM API key in Django Admin: Lead Capture Configuration
+```
+
+Go to **Django Admin → Lead Capture Configuration** and enter:
+- **API Key**: Your LiteLLM-compatible API key (OpenAI, Anthropic, Groq, etc.)
+- **Model Name**: e.g., `gpt-4`, `claude-3-sonnet-20240229`, `groq/llama-3.1-8b-instant`
+- **API Endpoint** (optional): Custom endpoint if using a proxy
+
+### 5. Create a Campaign
+
+1. Go to Django Admin → Lead Capture → Campaign wizard
+2. Fill out the questionnaire about your product
+3. AI will generate optimized copy
+4. Customize and activate your campaign
+
+## Configuration
+
+The package uses Django Solo for configuration. All settings are managed through the Django admin interface.
+
+### LiteLLM Model Examples
+
+**OpenAI:**
+- `gpt-4` or `gpt-4o-mini`
+
+**Anthropic:**
+- `claude-3-opus-20240229`
+- `claude-3-sonnet-20240229`
+
+**Groq:**
+- `groq/llama-3.1-8b-instant`
+- `groq/compound`
+
+**Custom/Proxy:**
+- Set `api_endpoint` to your proxy URL
+- Use any LiteLLM-compatible model identifier
+
+See [LiteLLM docs](https://docs.litellm.ai/docs/providers) for the full list of supported providers.
+
+## Usage
+
+### Campaign Creation Workflow
+
+1. **Wizard** (`/lead-capture/wizard/`) - Staff-only questionnaire
+2. **Edit** - Customize AI-generated copy
+3. **Preview** - Test before going live
+4. **Activate** - Make campaign public
+5. **Analytics** - Track performance
+
+### Public Campaign URLs
+
+Campaigns are available at: `/launch/{slug}/`
+
+Example: `/launch/my-awesome-product/`
+
+### Email Verification
+
+Welcome emails include a verification link: `/verify/{token}/`
+
+### CSV Export
+
+Use the Django admin action "Export selected leads to CSV" to export lead data.
+
+## Templates
+
+All templates extend `base.html`. Override them by creating files in your project's templates directory:
+
+```
+your_project/templates/django_lead_capture/
+├── wizard.html          # Campaign creation form
+├── edit.html            # Edit campaign
+├── preview.html         # Preview campaign
+├── campaign.html        # Public landing page
+├── thank_you.html       # Post-submission page
+├── list.html            # Campaign list
+├── analytics.html       # Analytics dashboard
+├── no_models.html       # API key not configured
+└── emails/
+    └── welcome.html     # Welcome email template
+```
+
+## Models
+
+### ComingSoonCampaign
+
+Core model for lead capture campaigns with fields for:
+- Generated content (headline, subheadline, benefits, etc.)
+- SEO metadata
+- Display options (countdown, social proof)
+- Analytics (page views, conversion tracking)
+
+### Lead
+
+Email capture model with:
+- Email verification status
+- Traffic source tracking
+- IP address and user agent
+- Timestamps
+
+### LeadCaptureConfiguration
+
+Singleton model for LLM configuration:
+- API key
+- Model name
+- Custom API endpoint
+
+## Email Configuration
+
+Make sure Django email settings are configured:
+
+```python
+# settings.py
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'your-email@gmail.com'
+EMAIL_HOST_PASSWORD = 'your-password'
+DEFAULT_FROM_EMAIL = 'noreply@yourdomain.com'
+```
+
+## System Checks
+
+The package includes a Django system check that warns if the API key is not configured. This is non-blocking - the app will still work, but the AI wizard will not function until configured.
+
+## Development
+
+### Running Tests
+
+```bash
+python manage.py test django_lead_capture
+```
+
+### Local Development
+
+The package uses UV for development. Clone the repository and:
+
+```bash
+uv sync
+uv run python manage.py migrate
+uv run python manage.py runserver
+```
+
+## Requirements
+
+- Django >= 4.2
+- Python >= 3.10
+- django-solo >= 2.0
+- litellm >= 1.0
+- django-bootstrap5 >= 24.0
+
+## License
+
+MIT License - see LICENSE file for details
+
+## Contributing
+
+Contributions welcome! Please open an issue or pull request.
+
+## Support
+
+- **Issues**: [GitHub Issues](https://github.com/heysamtexas/django-lead-capture/issues)
+- **Docs**: [Full Documentation](https://github.com/heysamtexas/django-lead-capture)
+
+## Credits
+
+Built by SimpleCTO for the Directory Platform project.

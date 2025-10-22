@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Campaign Analytics{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Campaign Analytics</h1>
+                <a href="{% url 'lead_capture:campaign_wizard' %}" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Create New Campaign
+                </a>
+            </div>
+
+            {% if campaigns %}
+                <div class="row">
+                    {% for campaign in campaigns %}
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0">{{ campaign.title }}</h5>
+                                    {% if campaign.is_active %}
+                                        <span class="badge bg-success">Active</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Inactive</span>
+                                    {% endif %}
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text">{{ campaign.headline|truncatechars:80 }}</p>
+
+                                    <div class="row text-center mb-3">
+                                        <div class="col-4">
+                                            <div class="h4 mb-0">{{ campaign.page_views }}</div>
+                                            <small class="text-muted">Views</small>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="h4 mb-0">{{ campaign.conversion_count }}</div>
+                                            <small class="text-muted">Leads</small>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="h4 mb-0">{{ campaign.conversion_rate }}%</div>
+                                            <small class="text-muted">Rate</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-grid gap-2">
+                                        <a href="{% url 'lead_capture:campaign_preview' campaign.slug %}" class="btn btn-outline-primary btn-sm">
+                                            Preview
+                                        </a>
+                                        <a href="{% url 'lead_capture:campaign_edit' campaign.slug %}" class="btn btn-outline-secondary btn-sm">
+                                            Edit
+                                        </a>
+                                        <a href="{% url 'lead_capture:campaign_analytics' campaign.slug %}" class="btn btn-outline-info btn-sm">
+                                            Analytics
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="card-footer text-muted text-center">
+                                    Created {{ campaign.created_at|date:"M j, Y" }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="bi bi-graph-up" style="font-size: 4rem; color: #dee2e6;"></i>
+                    <h3 class="mt-3">No campaigns yet</h3>
+                    <p class="text-muted">Create your first lead capture campaign to get started</p>
+                    <a href="{% url 'lead_capture:campaign_wizard' %}" class="btn btn-primary">
+                        <i class="bi bi-magic"></i> Create First Campaign
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

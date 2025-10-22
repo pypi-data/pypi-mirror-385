@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}AI Models Required{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="text-center py-5">
+                <!-- Error Icon -->
+                <i class="bi bi-exclamation-triangle text-warning" style="font-size: 4rem;"></i>
+
+                <h1 class="h3 mt-4 mb-3">No AI Models Configured</h1>
+
+                <p class="lead text-muted mb-4">
+                    To use the Lead Capture Wizard, you need to configure at least one AI model.
+                </p>
+
+                <div class="alert alert-info text-start">
+                    <h6 class="alert-heading">
+                        <i class="bi bi-info-circle"></i> What you need to do:
+                    </h6>
+                    <ol class="mb-0">
+                        <li>Go to the Django Admin panel</li>
+                        <li>Navigate to "LLM Suite" → "API Keys"</li>
+                        <li>Add a new API key for your preferred AI provider (OpenAI, Anthropic, etc.)</li>
+                        <li>Make sure the API key is marked as "Active"</li>
+                        <li>Return here to create your campaign</li>
+                    </ol>
+                </div>
+
+                <div class="d-grid gap-2 mt-4">
+                    <a href="{{ admin_url }}" class="btn btn-primary btn-lg" target="_blank">
+                        <i class="bi bi-gear"></i> Configure AI Models
+                    </a>
+                    <a href="{% url 'lead_capture:campaign_list' %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> Back to Campaigns
+                    </a>
+                </div>
+
+                <div class="mt-4">
+                    <small class="text-muted">
+                        <strong>Need help?</strong>
+                        The AI models are used to automatically generate compelling copy for your lead capture pages.
+                        Popular options include OpenAI's GPT-4, Anthropic's Claude, or other supported providers.
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .alert-info {
+        border-left: 4px solid #0dcaf0;
+    }
+
+    .bi-exclamation-triangle {
+        opacity: 0.8;
+    }
+</style>
+{% endblock %}
