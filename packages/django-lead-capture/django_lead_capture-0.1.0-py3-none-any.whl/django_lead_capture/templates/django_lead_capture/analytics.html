@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics: {{ campaign.title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Campaign Analytics</h1>
+                <div>
+                    <a href="{% url 'lead_capture:campaign_preview' campaign.slug %}" class="btn btn-outline-primary">
+                        <i class="bi bi-eye"></i> Preview
+                    </a>
+                    <a href="{% url 'lead_capture:campaign_edit' campaign.slug %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-pencil"></i> Edit
+                    </a>
+                    <a href="{% url 'lead_capture:campaign_list' %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> Back to Campaigns
+                    </a>
+                </div>
+            </div>
+
+            <!-- Campaign Overview -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="mb-0">{{ campaign.title }}</h3>
+                    <small class="text-muted">{{ campaign.headline }}</small>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-3">
+                            <div class="card bg-primary text-white">
+                                <div class="card-body">
+                                    <div class="h2 mb-0">{{ campaign.page_views }}</div>
+                                    <small>Total Views</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-success text-white">
+                                <div class="card-body">
+                                    <div class="h2 mb-0">{{ total_leads }}</div>
+                                    <small>Total Leads</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-info text-white">
+                                <div class="card-body">
+                                    <div class="h2 mb-0">{{ verified_leads }}</div>
+                                    <small>Verified Leads</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-warning text-dark">
+                                <div class="card-body">
+                                    <div class="h2 mb-0">{{ campaign.conversion_rate }}%</div>
+                                    <small>Conversion Rate</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <p><strong>Status:</strong>
+                                {% if campaign.is_active %}
+                                    <span class="badge bg-success">Active</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Inactive</span>
+                                {% endif %}
+                            </p>
+                            <p><strong>Created:</strong> {{ campaign.created_at|date:"M j, Y g:i A" }}</p>
+                            <p><strong>Last Updated:</strong> {{ campaign.updated_at|date:"M j, Y g:i A" }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            {% if campaign.launch_date %}
+                                <p><strong>Launch Date:</strong> {{ campaign.launch_date|date:"M j, Y g:i A" }}</p>
+                            {% endif %}
+                            {% if campaign.questionnaire_data.llm_model_name %}
+                                <p><strong>AI Model Used:</strong> {{ campaign.questionnaire_data.llm_model_name }}</p>
+                            {% endif %}
+                            <p><strong>Template:</strong> {{ campaign.get_template_type_display }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lead List -->
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">Recent Leads</h4>
+                    <div>
+                        <a href="{% url 'admin:lead_capture_lead_changelist' %}?campaign__id__exact={{ campaign.id }}" class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-download"></i> Export All
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% if leads %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Email</th>
+                                        <th>Source</th>
+                                        <th>Verified</th>
+                                        <th>Submitted</th>
+                                        <th>IP Address</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for lead in leads %}
+                                        <tr>
+                                            <td>
+                                                <strong>{{ lead.email }}</strong>
+                                                {% if lead.email_verified %}
+                                                    <i class="bi bi-check-circle-fill text-success" title="Email verified"></i>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if lead.source %}
+                                                    <span class="badge bg-secondary">{{ lead.source }}</span>
+                                                {% else %}
+                                                    <span class="text-muted">Direct</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if lead.email_verified %}
+                                                    <span class="badge bg-success">Yes</span>
+                                                    {% if lead.verified_at %}
+                                                        <br><small class="text-muted">{{ lead.verified_at|date:"M j, g:i A" }}</small>
+                                                    {% endif %}
+                                                {% else %}
+                                                    <span class="badge bg-warning">Pending</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {{ lead.created_at|date:"M j, Y" }}
+                                                <br><small class="text-muted">{{ lead.created_at|date:"g:i A" }}</small>
+                                            </td>
+                                            <td>
+                                                {% if lead.ip_address %}
+                                                    <small class="text-muted">{{ lead.ip_address|truncatechars:15 }}</small>
+                                                {% else %}
+                                                    <span class="text-muted">-</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {% if leads|length >= 20 %}
+                            <div class="text-center mt-3">
+                                <p class="text-muted">Showing most recent 20 leads.</p>
+                                <a href="{% url 'admin:lead_capture_lead_changelist' %}?campaign__id__exact={{ campaign.id }}" class="btn btn-outline-primary">
+                                    View All {{ total_leads }} Leads in Admin
+                                </a>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="bi bi-envelope" style="font-size: 3rem; color: #dee2e6;"></i>
+                            <h5 class="mt-3">No leads yet</h5>
+                            <p class="text-muted">
+                                Once people start submitting their emails, you'll see them here.
+                            </p>
+                            <a href="{{ campaign.get_absolute_url }}" class="btn btn-primary" target="_blank">
+                                <i class="bi bi-eye"></i> View Live Page
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Performance Tips -->
+            {% if campaign.conversion_rate < 10 %}
+                <div class="alert alert-info mt-4">
+                    <h6 class="alert-heading">
+                        <i class="bi bi-lightbulb"></i> Optimization Tips
+                    </h6>
+                    <p class="mb-2">Your conversion rate is {{ campaign.conversion_rate }}%. Here are some ways to improve it:</p>
+                    <ul class="mb-0">
+                        <li><strong>Strengthen your headline</strong> - Make it more specific and benefit-focused</li>
+                        <li><strong>Add urgency</strong> - Use phrases like "Limited time" or "Early access"</li>
+                        <li><strong>Improve benefits</strong> - Focus on outcomes, not features</li>
+                        <li><strong>Test different CTAs</strong> - Try "Get Free Access" instead of "Sign Up"</li>
+                        <li><strong>Add social proof</strong> - Show how many others have joined</li>
+                    </ul>
+                </div>
+            {% elif campaign.conversion_rate >= 20 %}
+                <div class="alert alert-success mt-4">
+                    <h6 class="alert-heading">
+                        <i class="bi bi-trophy"></i> Excellent Performance!
+                    </h6>
+                    <p class="mb-0">
+                        Your conversion rate of {{ campaign.conversion_rate }}% is excellent!
+                        Consider using this campaign as a template for future projects.
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border: 1px solid #e3e6f0;
+        border-radius: 0.35rem;
+    }
+
+    .card-header {
+        background-color: #f8f9fc;
+        border-bottom: 1px solid #e3e6f0;
+    }
+
+    .table th {
+        border-top: none;
+        font-weight: 600;
+    }
+
+    .alert-info {
+        border-left: 4px solid #36b9cc;
+    }
+
+    .alert-success {
+        border-left: 4px solid #1cc88a;
+    }
+</style>
+{% endblock %}
