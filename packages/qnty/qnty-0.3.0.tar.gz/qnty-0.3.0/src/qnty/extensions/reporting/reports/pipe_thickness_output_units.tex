@@ -1,0 +1,281 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\title{Engineering Calculation Report: Pressure Design of a Straight Pipe Under Internal Pressure}
+\date{October 08, 2025}
+
+\begin{document}
+\maketitle
+
+\section*{Description}
+Calculate the minimum wall thickness of a straight pipe under internal pressure according to ASME B31.3.
+
+\section{Known Variables}
+
+\begin{longtable}{llll}
+\toprule
+Symbol & Name & Value & Unit \\
+\midrule
+\endhead
+$D$ & Outside Diameter & 0.84 & in \\
+$E$ & Quality Factor & 0.8 &  \\
+$P$ & Design Pressure & 90 & psi \\
+$S$ & Allowable Stress & 20000 & psi \\
+$\overline{T}$ & Nominal Wall Thickness & 0.147 & in \\
+$U_{m}$ & Mill Undertolerance & 0.125 &  \\
+$W$ & Weld Joint Strength Reduction Factor & 1 &  \\
+$Y$ & Y Coefficient & 0.4 &  \\
+$c$ & Mechanical Allowances & 0 & in \\
+\bottomrule
+\end{longtable}
+
+\section{Unknown Variables (To Calculate)}
+
+\begin{longtable}{lll}
+\toprule
+Symbol & Name & Unit \\
+\midrule
+\endhead
+$P_{max}$ & Maximum Pressure & psi \\
+$T$ & Wall Thickness & in \\
+$d$ & Inside Diameter & in \\
+$t$ & Pressure Design Thickness & in \\
+$t_{m}$ & Minimum Required Thickness & in \\
+\bottomrule
+\end{longtable}
+
+\section{Equations Used}
+
+\begin{enumerate}
+\item $\Large T = \overline{T}  \cdot  (1  - U_m)$
+\item $\Large t = \frac{P  \cdot  D}{2   \cdot  (S  \cdot  E  \cdot  W + P  \cdot  Y)}$
+\item $\Large P_{max} = \frac{2   \cdot  (T - c)  \cdot  S  \cdot  E  \cdot  W}{D - 2   \cdot  (T - c)  \cdot  Y}$
+\item $\Large d = D - 2   \cdot  T$
+\item $\Large t_{m} = t + c$
+\end{enumerate}
+
+\section{Step-by-Step Solution}
+
+\begin{enumerate}[label=\textbf{Step \arabic*:},leftmargin=2cm]
+\item \textbf{Solve for $T$}
+
+\begin{description}[leftmargin=2cm]
+\item[\textbf{Equation:}] \mbox{}
+
+\[
+\begin{aligned}
+\Large T &= \overline{T}  \cdot  (1  - U_m)
+\end{aligned}
+\]
+
+\item[\textbf{Substitution:}] \mbox{}
+
+\[
+\begin{aligned}
+\Large T &= 0.147\,\text{in}  \cdot  (1  - 0.125 )
+\end{aligned}
+\]
+
+\item[\textbf{Result:}] \mbox{}
+
+\[
+\begin{aligned}
+\Large T &= 0.128625\,in
+\end{aligned}
+\]
+
+\end{description}
+
+\item \textbf{Solve for $t$}
+
+\begin{description}[leftmargin=2cm]
+\item[\textbf{Equation:}] \mbox{}
+
+\[
+\begin{aligned}
+\Large t &= \frac{P  \cdot  D}{2   \cdot  (S  \cdot  E  \cdot  W + P  \cdot  Y)}
+\end{aligned}
+\]
+
+\item[\textbf{Substitution:}] \mbox{}
+
+\[
+\begin{aligned}
+\Large t &= \frac{90\,\text{psi}  \cdot  0.84\,\text{in}}{2   \cdot  (20000\,\text{psi}  \cdot  0.8   \cdot  1  + 90\,\text{psi}  \cdot  0.4 )}
+\end{aligned}
+\]
+
+\item[\textbf{Result:}] \mbox{}
+
+\[
+\begin{aligned}
+\Large t &= 0.0023572\,in
+\end{aligned}
+\]
+
+\end{description}
+
+\item \textbf{Solve for $P_{max}$}
+
+\begin{description}[leftmargin=2cm]
+\item[\textbf{Equation:}] \mbox{}
+
+\[
+\begin{aligned}
+\Large P_{max} &= \frac{2   \cdot  (T - c)  \cdot  S  \cdot  E  \cdot  W}{D - 2   \cdot  (T - c)  \cdot  Y}
+\end{aligned}
+\]
+
+\item[\textbf{Substitution:}] \mbox{}
+
+\[
+\begin{aligned}
+\Large P_{max} &= \frac{2   \cdot  (0.128625\,\text{in} - 0\,\text{in})  \cdot  20000\,\text{psi}  \cdot  0.8   \cdot  1}{0.84\,\text{in} - 2   \cdot  (0.128625\,\text{in} - 0\,\text{in})  \cdot  0.4}
+\end{aligned}
+\]
+
+\item[\textbf{Result:}] \mbox{}
+
+\[
+\begin{aligned}
+\Large P_{max} &= 5584.05\,psi
+\end{aligned}
+\]
+
+\end{description}
+
+\item \textbf{Solve for $d$}
+
+\begin{description}[leftmargin=2cm]
+\item[\textbf{Equation:}] \mbox{}
+
+\[
+\begin{aligned}
+\Large d &= D - 2   \cdot  T
+\end{aligned}
+\]
+
+\item[\textbf{Substitution:}] \mbox{}
+
+\[
+\begin{aligned}
+\Large d &= 0.84\,\text{in} - 2   \cdot  0.128625\,\text{in}
+\end{aligned}
+\]
+
+\item[\textbf{Result:}] \mbox{}
+
+\[
+\begin{aligned}
+\Large d &= 0.58275\,in
+\end{aligned}
+\]
+
+\end{description}
+
+\item \textbf{Solve for $t_{m}$}
+
+\begin{description}[leftmargin=2cm]
+\item[\textbf{Equation:}] \mbox{}
+
+\[
+\begin{aligned}
+\Large t_{m} &= t + c
+\end{aligned}
+\]
+
+\item[\textbf{Substitution:}] \mbox{}
+
+\[
+\begin{aligned}
+\Large t_{m} &= 0.0023572\,\text{in} + 0\,\text{in}
+\end{aligned}
+\]
+
+\item[\textbf{Result:}] \mbox{}
+
+\[
+\begin{aligned}
+\Large t_{m} &= 0.0023572\,in
+\end{aligned}
+\]
+
+\end{description}
+
+\end{enumerate}
+
+
+\section{Summary of Results}
+
+\begin{longtable}{llll}
+\toprule
+Variable & Name & Final Value & Unit \\
+\midrule
+\endhead
+$P_{max}$ & Maximum Pressure & 5584.05 & psi \\
+$T$ & Wall Thickness & 0.128625 & in \\
+$d$ & Inside Diameter & 0.58275 & in \\
+$t$ & Pressure Design Thickness & 0.0023572 & in \\
+$t_{m}$ & Minimum Required Thickness & 0.0023572 & in \\
+\bottomrule
+\end{longtable}
+
+\clearpage
+
+\section*{Disclaimer}
+\addcontentsline{toc}{section}{Disclaimer}
+
+\begin{center}
+\rule{\textwidth}{0.4pt}
+\end{center}
+
+\noindent\textbf{IMPORTANT NOTICE:}
+
+\noindent While every effort has been made to ensure the accuracy and reliability of the calculations provided, we do not guarantee that the information is complete, up-to-date, or suitable for any specific purpose. Users must independently verify the results and assume full responsibility for any decisions or actions taken based on its output. Use of this calculator is entirely at your own risk, and we expressly disclaim any liability for errors or omissions in the information provided.
+
+\vspace{1em}
+
+\noindent\textbf{Report Details:}
+\begin{itemize}
+\item \textbf{Generated Date:} October 08, 2025
+\item \textbf{Generated Using:} Qnty Library
+\item \textbf{Version:} Beta (Independent verification required for production use)
+\end{itemize}
+
+\vspace{2em}
+
+\noindent\textbf{Professional Review and Approval:}
+
+\vspace{1em}
+
+\begin{longtable}{|p{3cm}|p{4cm}|p{4cm}|p{2.5cm}|}
+\hline
+\textbf{Role} & \textbf{Name} & \textbf{Signature} & \textbf{Date} \\
+\hline
+\hline
+Calculated By & \rule{0pt}{1.5cm} & & \\
+\hline
+Reviewed By & \rule{0pt}{1.5cm} & & \\
+\hline
+Approved By & \rule{0pt}{1.5cm} & & \\
+\hline
+\end{longtable}
+
+\vspace{1em}
+
+\begin{center}
+\rule{\textwidth}{0.4pt}
+\vspace{0.5em}
+\textit{Report generated using Qnty Library}
+\vspace{0.5em}
+{\footnotesize For questions or support, please refer to the Qnty documentation}
+\end{center}
+
+\end{document}
