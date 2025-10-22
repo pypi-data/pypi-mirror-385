@@ -1,0 +1,74 @@
+configMap:
+  enabled: false
+  config: {}
+  annotations: {}
+  labels: {}
+
+deployment:
+
+  image:
+    name: ghcr.io/mbrunhoej/mocktrics-exporter
+    # default to Chart.appVersion
+    tag:
+    pullPolicy: IfNotPresent
+
+  podLabels: {}
+  podAnnotations: {}
+
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 250m
+      memory: 256Mi
+
+  livenessProbe:
+    enabled: true
+    path: /healthz
+    port: 8080
+    scheme: HTTP
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 2
+    failureThreshold: 3
+    successThreshold: 1
+
+  readinessProbe:
+    enabled: true
+    path: /healthz
+    port: 8080
+    scheme: HTTP
+    initialDelaySeconds: 2
+    periodSeconds: 10
+    timeoutSeconds: 2
+    failureThreshold: 3
+    successThreshold: 1
+
+    annotations: {}
+    labels: {}
+
+  tolerations: []
+  nodeSelector: {}
+
+persistence:
+  enabled: false
+  storageClass: ""
+  size: 1Gi
+  accessModes:
+  - ReadWriteOnce
+  annotations: {}
+  labels: {}
+
+service:
+  apiPort: 8080
+  metricsPort: 8000
+  annotations: {}
+  labels: {}
+
+serviceMonitor:
+  enabled: true
+  interval: 30s
+  scrapeTimeout: 10s
+  annotations: {}
+  labels: {}

@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    {{- if .Values.service.annotations }}
+    {{- toYaml .Values.service.annotations | nindent 4 }}
+    {{- end }}
+  labels:
+    app.kubernetes.io/name: mocktrics-exporter
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    {{- if .Values.service.labels }}
+    {{- toYaml .Values.service.labels | nindent 4 }}
+    {{- end }}
+spec:
+  selector:
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/name: mocktrics-exporter
+  ports:
+    - name: http-api
+      port: {{ .Values.service.apiPort }}
+      targetPort: http-api
+    - name: http-metrics
+      port: {{ .Values.service.metricsPort }}
+      targetPort: http-metrics
