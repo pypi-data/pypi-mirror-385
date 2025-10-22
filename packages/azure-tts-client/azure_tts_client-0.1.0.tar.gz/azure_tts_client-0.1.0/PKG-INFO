@@ -1,0 +1,118 @@
+Metadata-Version: 2.4
+Name: azure-tts-client
+Version: 0.1.0
+Summary: Azure Text-to-Speech Terminal Client
+Author-email: Your Name <your.email@example.com>
+Keywords: azure,cli,speech-synthesis,terminal,text-to-speech,tts
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Python: >=3.10
+Requires-Dist: azure-cognitiveservices-speech>=1.46.0
+Requires-Dist: textual>=6.3.0
+Description-Content-Type: text/markdown
+
+# Azure TTS Client
+
+A terminal-based Text-to-Speech client for Azure Cognitive Services, built with [Textual](https://textual.textualize.io/).
+
+## Features
+
+- Multiple voice options (English, French, German, Spanish, Chinese)
+- Beautiful terminal UI with live playback
+- Save audio to WAV files
+- Secure API key storage
+- Fast and lightweight
+
+## Usage
+
+### Running the app
+
+Run directly without installation:
+
+```bash
+uvx azure-tts-client
+```
+
+### First-time setup
+
+On first launch, you'll be prompted to enter your Azure Speech API key. The key will be saved securely to `~/.azure_tts_env`.
+
+To get an Azure Speech API key:
+1. Go to [Azure Portal](https://portal.azure.com)
+2. Create a Speech Service resource
+3. Copy the API key from the resource
+
+### Using the app
+
+1. **Type your text** in the text area
+2. **Select a voice** from the dropdown menu
+3. **Click Play** to hear the speech
+4. **Click Save** to export audio to `output.wav`
+5. **Click Clear Text** to reset the input
+
+## Development
+
+### Local development
+
+Clone the repository:
+
+```bash
+git clone <repository-url>
+cd azure-client-tts
+```
+
+Run with uv:
+
+```bash
+uv run -m azure_tts_client
+```
+
+## Requirements
+
+- Python 3.10+
+- Azure Speech API key
+
+## Publishing to PyPI
+
+### Prerequisites
+
+1. Set up PyPI credentials:
+   - Create an account on [PyPI](https://pypi.org)
+   - Generate an API token at https://pypi.org/manage/account/token/
+   - Store the token for publishing
+
+### Publishing Steps
+
+1. Update the version in [pyproject.toml](pyproject.toml)
+
+2. Build the package:
+```bash
+uv build
+```
+
+3. Publish to PyPI:
+```bash
+uv publish
+```
+
+You'll be prompted for your PyPI token during publish.
+
+Alternatively, set the token as an environment variable:
+```bash
+export UV_PUBLISH_TOKEN=pypi-your-api-token-here
+uv publish
+```
+
+To publish to TestPyPI first:
+```bash
+uv publish --publish-url https://test.pypi.org/legacy/
+```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
