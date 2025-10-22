@@ -1,0 +1,61 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rossum_api"
+version = "3.2.0"
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">= 3.8"
+dependencies = [
+    "aiofiles",
+    # The code uses the "case conversion" feature added in this version.
+    # See deserialize_default function in models/__init__.py.
+    "dacite>=1.9.0",
+    "inflect",
+    "httpx",
+    "inflect",
+    "tenacity",
+]
+
+[project.optional-dependencies]
+tests = [
+  "codecov",
+  "pytest",
+  "pytest-asyncio",
+  "pytest-httpx<=0.22.0",  # 0.22 is the last release working with Python 3.8
+  "pytest-cov",
+  "ruff",
+  "types-aiofiles",
+  "pre-commit",
+]
+
+[tools.setuptools]
+include-package-data = true
+packages = ["find"]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+pythonpath = [
+  "."
+]
+
+[tool.black]
+line-length = 99
+target-version = ["py38"]
+include = '\.pyi?$'
+
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+line_length = 100
+ensure_newline_before_comments = true
+
+[tool.semantic_release]
+upload_to_repository = false
+branch = "main"
+version_variables = ["rossum_api/__init__.py:__version__"]
+version_toml = ["pyproject.toml:project.version"]
