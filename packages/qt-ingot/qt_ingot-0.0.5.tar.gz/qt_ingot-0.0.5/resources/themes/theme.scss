@@ -1,0 +1,326 @@
+/*
+ * Default Ingot Theme
+ * A clean, modern, and dark theme to get you started.
+ *
+ * Enhanced with styles for MenuBar, Menus, and Side Panels.
+ */
+
+@import "_colors";
+
+/* Main Window */
+QMainWindow {
+  background-color: $background;
+  color: $foreground-light;
+}
+
+/* Menu Bar & Menus */
+QMenuBar {
+  background-color: $background;
+  color: $foreground-light; /* White text as requested */
+  border-bottom: 1px solid $border;
+  /* Adds a subtle separator line */
+}
+
+QMenuBar::item {
+  background-color: transparent;
+  padding: 5px 10px;
+  color: $foreground-light; /* White text */
+  font-style: italic; /* Italic as requested */
+}
+
+QMenuBar::item:selected {
+  /* When hovering over the menu title (e.g., "File") */
+  background-color: $background-light;
+  color: $foreground-light;
+}
+
+QMenu {
+  background-color: $background-light;
+  color: $foreground-light; /* White text for menu items */
+  border: 1px solid $border;
+}
+
+QMenu::item {
+  padding: 5px 25px;
+  color: $foreground-light; /* White text */
+  /* More padding for readability */
+}
+
+QMenu::item:selected {
+  /* When hovering over a menu action (e.g., "Exit") */
+  background-color: $primary;
+  color: $foreground-light;
+}
+
+QMenu::separator {
+  height: 1px;
+  background-color: $border;
+  margin: 5px 0;
+}
+
+/* Side Panel */
+/* This style now targets any QWidget with the specific object name */
+QWidget#ingotSidePanel_left,
+QWidget#ingotSidePanel_right {
+  background-color: $background-light;
+  border-right: 1px solid $border;
+  color: $foreground-light; /* White text in panels as requested */
+}
+
+/* Side panel labels */
+QWidget#ingotSidePanel_left QLabel,
+QWidget#ingotSidePanel_right QLabel {
+  color: $foreground-light; /* Ensure text is white */
+}
+
+/* Tab Workspace */
+/* Change generic QTabWidget to a specific ID for precision */
+QTabWidget#ingotWorkspace::pane {
+  background-color: $background;
+  border-top: 2px solid $primary;
+  border-left: none; /* Remove default border to avoid double lines with the side panel */
+}
+
+/* Target the specific tab bar */
+QTabBar#ingotWorkspaceTabBar::tab {
+  background: $background-light;
+  color: $foreground-dark;
+  padding: 8px 12px;
+  border: 1px solid $border;
+  border-bottom: none;
+}
+
+QTabBar#ingotWorkspaceTabBar::tab:selected {
+  background: $primary;
+  color: $foreground-light;
+}
+
+QTabBar#ingotWorkspaceTabBar::tab:not(:selected):hover {
+  background: $primary-light;
+  color: $foreground;
+}
+
+/* Buttons */
+QPushButton {
+  background-color: $primary;
+  color: $foreground-light;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+}
+
+QPushButton:hover {
+  background-color: $primary-light;
+}
+
+QPushButton:pressed {
+  background-color: $primary-dark;
+}
+
+/* Add Tab Button */
+QPushButton#ingotAddTabButton {
+  background-color: $background-light;
+  color: $foreground-light;
+  border: 1px solid $border;
+  border-radius: 4px;
+  width: 24px;
+  height: 24px;
+  font-weight: bold;
+}
+
+QPushButton#ingotAddTabButton:hover {
+  background-color: $primary;
+}
+
+/*
+ * Toolbars
+ */
+QFrame#ingotMainToolbar {
+  background-color: $background;
+  border-bottom: 1px solid $border;
+}
+
+QFrame#ingotToolbarLeft {
+  background-color: transparent;
+}
+
+QFrame#ingotToolbarCenter {
+  background-color: transparent;
+}
+
+QFrame#ingotToolbarRight {
+  background-color: transparent;
+}
+
+/* Button styles for toolbar */
+QPushButton#ingotMenuButton,
+QPushButton#ingotBackButton,
+QPushButton#ingotForwardButton,
+QPushButton#ingotLeftPanelToggle,
+QPushButton#ingotRightPanelToggle {
+  background-color: $background-light;
+  color: $foreground-light; /* White text */
+  border: 1px solid $border;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+QPushButton#ingotMenuButton:hover,
+QPushButton#ingotBackButton:hover,
+QPushButton#ingotForwardButton:hover,
+QPushButton#ingotLeftPanelToggle:hover,
+QPushButton#ingotRightPanelToggle:hover {
+  background-color: $primary;
+  color: $foreground-light;
+}
+
+/* App icon styling with requested white color and italic */
+QLabel#ingotAppIcon {
+  color: $foreground-light;
+  font-weight: bold;
+  font-size: 14px;
+  font-style: italic; /* Makes it italic as requested */
+  padding: 0 5px;
+}
+
+/* Current tab label styling */
+QLabel#ingotCurrentTabLabel {
+  color: $foreground-light; /* White text */
+  font-weight: bold;
+  font-size: 12px;
+}
+
+/*
+ * Status Bar
+ */
+QWidget#ingotStatusBar {
+  background-color: $background;
+  color: $foreground-light; /* Fixes black text */
+  border-top: 1px solid $border;
+  font-size: 12px;
+}
+
+QWidget#ingotStatusBar QLabel {
+  color: $foreground-light; /* Explicitly set label color */
+}
+
+/* The rich text in the color label */
+QLabel#ingotColorLabel {
+  font-size: 12px;
+  color: $foreground-light;
+}
+
+/* The zoom label */
+QLabel#ingotZoomLabel {
+  font-size: 12px;
+  color: $foreground-light;
+}
+
+/* The coordinates label */
+QLabel#ingotCoordsLabel {
+  font-size: 12px;
+  color: $foreground-light;
+}
+
+/* The color swatch */
+QWidget#ingotColorVisualization {
+  border: 1px solid $foreground-dark;
+  min-width: 20px; /* Ensure it doesn't collapse */
+  border-radius: 2px;
+  qproperty-currentColor: rgb(255, 255, 255); /* Default color */
+  background-color: qproperty-currentColor;
+}
+
+/*
+ * Canvas Widgets
+ */
+QLabel#ingotSmallCanvasWidget {
+  border-radius: 4px;
+  padding: 20px;
+  text-align: center;
+  background-color: rgba(255, 100, 100, 150);
+  border: 2px solid $primary;
+  color: $foreground-light; /* White text */
+}
+
+/* Canvas Widgets */
+QLabel#ingotSmallCanvasWidget {
+  border-radius: 4px;
+  padding: 20px;
+  text-align: center;
+  background-color: rgba(255, 100, 100, 150);
+  border: 2px solid $primary;
+  color: $foreground-light; /* White text */
+}
+
+/* Main Canvas Widget */
+QWidget#ingotCanvasWidget {
+  background-color: $background;
+  border: 1px solid $border;
+}
+
+/*
+ * Scrollbars - macOS style
+ */
+QScrollBar:vertical {
+  background: transparent;
+  width: 12px;
+  border-radius: 6px;
+}
+
+QScrollBar::handle:vertical {
+  background: rgba($foreground-dark, 150); /* Semi-transparent dark handle */
+  border-radius: 6px;
+  min-height: 20px;
+}
+
+QScrollBar::handle:vertical:hover {
+  background: rgba($foreground, 200); /* Lighter on hover */
+}
+
+QScrollBar:horizontal {
+  background: transparent;
+  height: 12px;
+  border-radius: 6px;
+}
+
+QScrollBar::handle:horizontal {
+  background: rgba($foreground-dark, 150); /* Semi-transparent dark handle */
+  border-radius: 6px;
+  min-width: 20px;
+}
+
+QScrollBar::handle:horizontal:hover {
+  background: rgba($foreground, 200); /* Lighter on hover */
+}
+
+/*
+ * Example Tab Labels
+ */
+QLabel#ingotTabNumberLabel {
+  font-size: 24px;
+  color: $foreground-light;
+  background-color: $primary;
+  padding: 50px;
+  border: 2px solid $border;
+  border-radius: 8px;
+}
+
+QLabel#ingotInstructionLabel {
+  font-size: 16px;
+  color: $primary-light;
+  padding: 10px;
+}
+
+QLabel#ingotLowerContentLabel {
+  font-size: 14px;
+  color: $primary;
+  padding: 10px;
+}
+
+QLabel#ingotEndLabel {
+  font-size: 16px;
+  color: $primary-light;
+  font-weight: bold;
+  padding: 10px;
+}
