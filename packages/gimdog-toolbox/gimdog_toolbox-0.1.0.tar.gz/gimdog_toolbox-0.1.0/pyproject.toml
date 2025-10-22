@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gimdog-toolbox"  # must be unique on PyPI
+version = "0.1.0"
+description = "Python utility functions that I always had to rewrite"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "CC by 4.0"}
+authors = [
+    { name="Áron Gimesi", email="aron.gimesi@tecnico.ulisboa.pt" }
+]
+dependencies = [
+    "torch",
+    "numpy",
+    "opencv-python"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/gimesia/gimdog-toolbox"
+"Issues" = "https://github.com/gimesia/gimdog-toolbox/issues"
