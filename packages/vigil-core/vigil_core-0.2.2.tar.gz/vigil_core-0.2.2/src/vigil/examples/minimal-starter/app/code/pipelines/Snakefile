@@ -1,0 +1,40 @@
+"""Minimal Snakemake pipeline."""
+
+import json
+from pathlib import Path
+
+# Load configuration
+configfile: "app/code/configs/params.yaml"
+
+# Define paths
+INPUT_DATA = "app/data/samples/data.csv"
+PROCESSED_DATA = "app/code/artifacts/processed.parquet"
+METRICS_JSON = "app/code/artifacts/metrics.json"
+PARAMS_JSON = json.dumps(config.get("process", {}))
+
+rule all:
+    input:
+        PROCESSED_DATA,
+        METRICS_JSON
+
+rule process:
+    input:
+        INPUT_DATA
+    output:
+        PROCESSED_DATA
+    params:
+        params=PARAMS_JSON
+    shell:
+        """
+        python app/code/lib/steps/process.py {input} {output} '{params.params}'
+        """
+
+rule metrics:
+    input:
+        PROCESSED_DATA
+    output:
+        METRICS_JSON
+    shell:
+        """
+        python app/code/lib/steps/metrics.py {input} {output}
+        """
