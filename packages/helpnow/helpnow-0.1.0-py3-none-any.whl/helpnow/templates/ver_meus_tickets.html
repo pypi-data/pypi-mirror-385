@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block title %}Meus Tickets{% endblock %}
+
+{% block content %}
+<header class="page-header">
+    <h2>Meus tickets de suporte</h2>
+    <p>Consulte seus chamados, acompanhe o andamento e registre avaliações quando o atendimento for concluído.</p>
+</header>
+
+{% set ticket_list = tickets or [] %}
+{% set total = ticket_list|length %}
+{% set stats = namespace(abertos=0, fechados=0) %}
+{% for ticket in ticket_list %}
+    {% set status_label_tmp = (ticket.status.value if ticket.status.__class__.__name__ != 'str' else ticket.status) or 'Desconhecido' %}
+    {% if status_label_tmp == 'Fechado' %}
+        {% set stats.fechados = stats.fechados + 1 %}
+    {% else %}
+        {% set stats.abertos = stats.abertos + 1 %}
+    {% endif %}
+{% endfor %}
+
+<div class="page-stack">
+    <section class="card table-card">
+        <div class="card-header table-card-header">
+            <div>
+                <h3>Histórico de tickets</h3>
+                <p class="muted">Acesse os detalhes, envie mensagens e finalize sua avaliação quando o chamado for resolvido.</p>
+            </div>
+            <div class="card-insights">
+                <span class="insight-pill">
+                    <span class="insight-value">{{ total }}</span>
+                    <span class="insight-label">Ticket{% if total != 1 %}s{% endif %}</span>
+                </span>
+                <span class="insight-pill">
+                    <span class="insight-value">{{ stats.abertos }}</span>
+                    <span class="insight-label">Em andamento</span>
+                </span>
+                <span class="insight-pill">
+                    <span class="insight-value">{{ stats.fechados }}</span>
+                    <span class="insight-label">Finalizados</span>
+                </span>
+            </div>
+        </div>
+        <div class="card-body">
+            {% if ticket_list %}
+                <div class="table-section">
+                    <table class="table table-lined">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Assunto</th>
+                                <th>Status</th>
+                                <th>Data de criação</th>
+                                <th style="width: 220px;">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                              {% for ticket in ticket_list %}
+                            {% set status_label = (ticket.status.value if ticket.status.__class__.__name__ != 'str' else ticket.status) or 'Desconhecido' %}
+                            {% set status_slug = status_label|lower|replace(' ', '_') %}
+                            <tr>
+                                <td>#{{ ticket.id_ticket[:8] }}...</td>
+                                <td>{{ ticket.assunto }}</td>
+                                <td><span class="status-badge {{ status_slug }}">{{ status_label }}</span></td>
+                                <td>{{ ticket.data_criacao.strftime('%d/%m/%Y %H:%M') }}</td>
+                                <td>
+                                    <div class="table-actions">
+                                        <a href="{{ url_for('adicionar_mensagem', ticket_id=ticket.id_ticket) }}" class="btn btn-soft-neutral">
+                                            <span>Ver detalhes</span>
+                                        </a>
+                                        {% if status_label == 'Fechado' %}
+                                            {% set feedback = feedbacks.get(ticket.id_ticket) %}
+                                            <a href="{{ url_for('avaliar_ticket', ticket_id=ticket.id_ticket) }}" class="btn btn-soft-success">
+                                                <span>{{ 'Editar avaliação' if feedback else 'Avaliar ticket' }}</span>
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <h4>Você ainda não abriu tickets</h4>
+                    <p>Use a opção <strong>Abrir novo ticket</strong> no menu para registrar o primeiro chamado.</p>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+</div>
+{% endblock %}

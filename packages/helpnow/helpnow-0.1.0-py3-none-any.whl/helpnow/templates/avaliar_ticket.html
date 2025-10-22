@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Avaliar Ticket{% endblock %}
+
+{% block content %}
+{% set status_label = (ticket.status.value if ticket.status.__class__.__name__ != 'str' else ticket.status) or 'Desconhecido' %}
+{% set status_slug = status_label|lower|replace(' ', '_') %}
+
+<header class="page-header">
+  <h2>Avaliar ticket #{{ ticket.id_ticket[:8] }}...</h2>
+  <p>Conte como foi sua experiência para melhorarmos continuamente o atendimento.</p>
+</header>
+
+<div class="page-stack">
+  <section class="card form-card">
+    <div class="card-header">
+      <h3>{{ ticket.assunto }}</h3>
+      <p class="muted">Aberto em {{ ticket.data_criacao.strftime('%d/%m/%Y %H:%M') }}</p>
+    </div>
+    <div class="card-body">
+      <div class="ticket-overview-grid">
+        <div>
+          <span class="meta-label">Status</span>
+          <span class="meta-value"><span class="status-badge {{ status_slug }}">{{ status_label }}</span></span>
+        </div>
+        <div>
+          <span class="meta-label">Categoria</span>
+          <span class="meta-value">{{ detalhes.categoria.nome if detalhes.categoria else 'Sem categoria' }}</span>
+        </div>
+        {% if detalhes.agente %}
+        <div>
+          <span class="meta-label">Agente responsável</span>
+          <span class="meta-value">{{ detalhes.agente.nome_completo }}</span>
+        </div>
+        {% endif %}
+      </div>
+      <article class="descricao-ticket">
+        <h4>Descrição original</h4>
+        <p>{{ ticket.descricao }}</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="card form-card">
+    <div class="card-header">
+      <h3>Sua avaliação</h3>
+      <p class="muted">Notas de 1 a 5 ajudam a identificar oportunidades de melhoria.</p>
+    </div>
+    <div class="card-body">
+      <form method="POST" class="form-grid form-avaliacao">
+        <div class="form-group">
+          <label for="nota">Como você avalia o atendimento?</label>
+          <div class="rating-group">
+            {% for n in range(1, 6) %}
+              <label class="rating-option">
+                <input type="radio" name="nota" value="{{ n }}" {% if feedback and feedback.nota == n %}checked{% endif %} required>
+                <span>{{ n }}</span>
+              </label>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="form-group" style="grid-column: 1 / -1;">
+          <label for="comentario">Comentários adicionais</label>
+          <textarea id="comentario" name="comentario" class="form-control" rows="4" placeholder="Compartilhe pontos positivos ou o que podemos melhorar.">{{ feedback.comentario if feedback else '' }}</textarea>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-soft-success">{{ 'Atualizar avaliação' if feedback else 'Registrar avaliação' }}</button>
+          <a href="{{ url_for('ver_meus_tickets') }}" class="btn btn-soft-neutral">Voltar</a>
+        </div>
+      </form>
+    </div>
+  </section>
+</div>
+{% endblock %}

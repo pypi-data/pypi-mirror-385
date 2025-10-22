@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Detalhes do Ticket{% endblock %}
+
+{% block content %}
+{% set status_label = (ticket.status.value if ticket.status.__class__.__name__ != 'str' else ticket.status) or 'Desconhecido' %}
+{% set status_slug = status_label|lower|replace(' ', '_') %}
+
+<header class="page-header">
+    <h2>Detalhes do ticket</h2>
+    <p>Acompanhe o histórico de mensagens, envie atualizações e acompanhe a evolução do chamado.</p>
+</header>
+
+<div class="page-stack">
+    <section class="card form-card">
+        <div class="card-header">
+            <h3>{{ ticket.assunto }}</h3>
+            <p class="muted">Aberto em {{ ticket.data_criacao.strftime('%d/%m/%Y %H:%M') }}</p>
+        </div>
+        <div class="card-body">
+            <div class="ticket-overview-grid">
+                <div>
+                    <span class="meta-label">Status atual</span>
+                    <span class="meta-value"><span class="status-badge {{ status_slug }}">{{ status_label }}</span></span>
+                </div>
+                <div>
+                    <span class="meta-label">Prioridade</span>
+                    <span class="meta-value">{{ ticket.prioridade.value }}</span>
+                </div>
+            </div>
+            <article class="descricao-ticket">
+                <h4>Descrição do ticket</h4>
+                <p>{{ ticket.descricao }}</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="card form-card conversation-card">
+        <div class="card-header">
+            <h3>Histórico de mensagens</h3>
+            <p class="muted">Visualize todas as interações registradas neste ticket.</p>
+        </div>
+        <div class="card-body">
+            <div class="chat-container" id="chat">
+                {% if ticket.historico_mensagens %}
+                    {% for msg in ticket.historico_mensagens %}
+                        {% set minha_msg = (msg.autor_id == session.usuario_id) %}
+                        <div class="chat-message {{ 'from-me' if minha_msg else 'from-them' }}">
+                            <div class="bubble">
+                                <div class="meta">
+                                    {% if not minha_msg %}
+                                        <span class="author">{{ msg.autor_nome }}</span>
+                                    {% endif %}
+                                    <span class="time">{{ msg.timestamp.strftime('%d/%m/%Y %H:%M') }}</span>
+                                </div>
+                                <div class="text">{{ msg.texto }}</div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="no-messages">Nenhuma mensagem neste ticket ainda.</p>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <section class="card form-card">
+        <div class="card-header">
+            <h3>Adicionar nova mensagem</h3>
+            <p class="muted">Compartilhe atualizações ou informe novas evidências para o time de suporte.</p>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('adicionar_mensagem', ticket_id=ticket.id_ticket) }}" class="form-grid">
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label for="texto">Mensagem</label>
+                    <textarea class="form-control" id="texto" name="texto" rows="4" required></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-soft-success">Enviar mensagem</button>
+                    <a href="{{ url_for('ver_meus_tickets') }}" class="btn btn-soft-neutral">Voltar</a>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var chat = document.getElementById('chat');
+        if (chat) { chat.scrollTop = chat.scrollHeight; }
+    });
+</script>
+{% endblock %}

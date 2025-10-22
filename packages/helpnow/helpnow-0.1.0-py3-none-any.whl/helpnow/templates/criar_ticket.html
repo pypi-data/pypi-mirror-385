@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Abrir Novo Ticket{% endblock %}
+
+{% block content %}
+<header class="page-header">
+    <h2>Abrir novo ticket</h2>
+    <p>Descreva o problema com detalhes e informe a categoria correta para direcionarmos o chamado ao time ideal.</p>
+</header>
+
+<div class="page-stack">
+    <section class="card form-card">
+        <div class="card-header">
+            <h3>Informações do chamado</h3>
+            <p class="muted">Campos marcados com * são obrigatórios.</p>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('criar_ticket') }}" class="form-grid">
+                <div class="form-group">
+                    <label for="categoria_id">Categoria *</label>
+                    <select class="form-control" id="categoria_id" name="categoria_id" required>
+                        {% for categoria in categorias %}
+                            <option value="{{ categoria.id_categoria }}">{{ categoria.nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="assunto">Assunto *</label>
+                    <input type="text" class="form-control" id="assunto" name="assunto" placeholder="Ex.: Problemas para acessar o sistema" required>
+                </div>
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label for="descricao">Descrição detalhada *</label>
+                    <textarea class="form-control" id="descricao" name="descricao" rows="5" placeholder="Conte em detalhes o que está acontecendo, incluindo mensagens de erro ou impactos." required></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-soft-success">Enviar ticket</button>
+                    <a href="{{ url_for('ver_meus_tickets') }}" class="btn btn-soft-neutral">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+{% endblock %}
+

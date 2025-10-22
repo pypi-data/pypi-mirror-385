@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Cadastrar Agente{% endblock %}
+
+{% block content %}
+<header class="page-header">
+    <h2>Cadastrar novo agente</h2>
+    <p>Inclua profissionais na equipe de suporte e defina as especialidades para direcionamento inteligente.</p>
+</header>
+
+<div class="page-stack">
+    <section class="card form-card">
+        <div class="card-header">
+            <h3>Dados do agente</h3>
+            <p class="muted">Preencha as informações essenciais para liberar o acesso ao painel de atendimento.</p>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('cadastrar_agente_admin') }}" class="form-grid">
+                <div class="form-group">
+                    <label for="nome">Nome completo</label>
+                    <input type="text" class="form-control" id="nome" name="nome" placeholder="Ex.: Ana Silva" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email corporativo</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="ana.silva@empresa.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="matricula">Matrícula</label>
+                    <input type="text" class="form-control" id="matricula" name="matricula" placeholder="Ex.: 123456" required>
+                </div>
+                <div class="form-group">
+                    <label for="senha">Senha</label>
+                    <input type="password" class="form-control" id="senha" name="senha" placeholder="Defina uma senha" required>
+                </div>
+                <div class="form-group">
+                    <label for="especialidade">Especialidade</label>
+                    <select class="form-control" id="especialidade" name="especialidade" onchange="toggleEspecialidadePersonalizada()">
+                        <option value="">Geral</option>
+                        {% for esp in especialidades %}
+                            <option value="{{ esp.nome }}">{{ esp.nome }}</option>
+                        {% endfor %}
+                        <option value="__personalizada__">Outra (especificar)</option>
+                    </select>
+                </div>
+                <div class="form-group" id="grupo-especialidade-personalizada" style="display:none;">
+                    <label for="especialidade_personalizada">Nova especialidade</label>
+                    <input type="text" class="form-control" id="especialidade_personalizada" name="especialidade_personalizada" placeholder="Digite a especialidade desejada">
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-soft-success">Cadastrar agente</button>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+<script>
+    function toggleEspecialidadePersonalizada() {
+        const select = document.getElementById('especialidade');
+        const grupo = document.getElementById('grupo-especialidade-personalizada');
+        if (select.value === '__personalizada__') {
+            grupo.style.display = '';
+            document.getElementById('especialidade_personalizada').focus();
+        } else {
+            grupo.style.display = 'none';
+            const input = document.getElementById('especialidade_personalizada');
+            if (input) {
+                input.value = '';
+            }
+        }
+    }
+</script>
+{% endblock %}

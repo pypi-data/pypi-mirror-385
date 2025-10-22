@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HelpNow - {% block title %}Início{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <aside class="sidebar">
+        <h1>HelpNow</h1>
+        <nav>
+            {% if session.usuario_id %}
+                <p>Olá, {{ session.nome_usuario }}!</p>
+                
+                {% if session.tipo_usuario == 'Solicitante' %}
+                    <a href="{{ url_for('ver_meus_tickets') }}">Meus Tickets</a>
+                    <a href="{{ url_for('criar_ticket') }}">Abrir Novo Ticket</a>
+                {% elif session.tipo_usuario == 'Agente' %}
+                    <a href="{{ url_for('painel_agente') }}">Painel de Tickets</a>
+                    <a href="{{ url_for('atribuir_ticket') }}">Atribuir Ticket</a>
+                    <a href="{{ url_for('relatorio_status') }}">Relatórios</a>
+                {% elif session.tipo_usuario == 'Admin' %}
+                    <a href="{{ url_for('painel_agente') }}">Painel de Tickets</a>
+                    <a href="{{ url_for('atribuir_ticket') }}">Atribuir Ticket</a>
+                    <a href="{{ url_for('gerenciar_slas') }}">Gerenciar SLAs</a>
+                    <a href="{{ url_for('gerenciar_categorias') }}">Gerenciar Categorias</a>
+                    <a href="{{ url_for('gerenciar_especialidades') }}">Gerenciar Especialidades</a>
+                    <a href="{{ url_for('gerenciar_ativos') }}">Inventário de Ativos</a>
+                    <a href="{{ url_for('gerenciar_usuarios') }}">Gerenciar Usuários</a>
+                    <a href="{{ url_for('cadastrar_agente_admin') }}">Cadastrar Agente</a>
+                    <a href="{{ url_for('relatorio_status') }}">Relatórios</a>
+                    <a href="{{ url_for('listar_feedbacks') }}">Feedbacks</a>
+                {% endif %}
+                
+                <a href="{{ url_for('logout') }}">Sair</a>
+            {% else %}
+                <a href="{{ url_for('login') }}">Login</a>
+                <a href="{{ url_for('cadastrar_usuario') }}">Cadastrar</a>
+            {% endif %}
+        </nav>
+    </aside>
+    <main class="main-content">
+        <div class="container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <ul class="flash-messages">
+                    {% for category, message in messages %}
+                        <li class="flash {{ category }}">{{ message }}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+            
+            {% block content %}
+            {% endblock %}
+        </div>
+    </main>
+</body>
+</html>

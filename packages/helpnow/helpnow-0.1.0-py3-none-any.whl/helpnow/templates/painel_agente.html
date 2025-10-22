@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Painel do Agente{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>Painel do Agente (Tickets Ativos)</h2>
+    </div>
+    <div class="card-body">
+        {% if tickets_detalhes %}
+            <div class="tickets-grid">
+                {% for detalhe in tickets_detalhes %}
+                    {% set ticket = detalhe.ticket %}
+                    {% set is_mine = detalhe.agente and detalhe.agente.id_usuario == session.usuario_id %}
+                    <div class="ticket-card{% if is_mine %} ticket-card-mine{% endif %}">
+                        <div class="ticket-card-header">
+                            <span class="status-badge {{ ticket.status.value|lower|replace(' ', '_') }}">{{ ticket.status.value }}</span>
+                            <span class="ticket-id">#{{ ticket.id_ticket[:8] }}...</span>
+                        </div>
+                        <div class="ticket-card-body">
+                            <h3 class="ticket-title">{{ ticket.assunto }}</h3>
+                            <p class="ticket-meta"><strong>Solicitante:</strong> {{ detalhe.solicitante.nome_completo }}</p>
+                            <p class="ticket-meta"><strong>Agente:</strong>
+                                {% if detalhe.agente %}
+                                    {% if is_mine %}<span class="badge-mine">Você</span>{% endif %}
+                                    {{ detalhe.agente.nome_completo }}
+                                {% else %}
+                                    Não atribuído
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div class="ticket-card-actions">
+                            <a href="{{ url_for('adicionar_mensagem', ticket_id=ticket.id_ticket) }}" class="btn btn-primary">Abrir</a>
+                            {% if ticket.status.value == 'Em Andamento' %}
+                            <form method="POST" action="{{ url_for('fechar_ticket', ticket_id=ticket.id_ticket) }}">
+                                <button type="submit" class="btn btn-success">Fechar</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>Nenhum ticket ativo no momento.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
