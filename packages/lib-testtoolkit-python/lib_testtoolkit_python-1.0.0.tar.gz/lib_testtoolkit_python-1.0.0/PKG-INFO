@@ -1,0 +1,41 @@
+Metadata-Version: 2.4
+Name: lib-testtoolkit-python
+Version: 1.0.0
+Summary: Reusable utilities for Python test automation projects
+Home-page: https://bitbucket.org/entinco/bt-templates-harnesses/lib-testtoolkit-python/
+Author: QA Team
+Author-email: QA Team <qa@backend.com>
+Maintainer-email: QA Team <qa@backend.com>
+License: Commercial
+Project-URL: Homepage, https://bitbucket.org/entinco/bt-templates-harnesses/lib-testtoolkit-python/
+Project-URL: Repository, https://bitbucket.org/entinco/bt-templates-harnesses/src/master/lib-testtoolkit-python/
+Project-URL: Issues, https://bitbucket.org/entinco/bt-templates-harnesses/issues
+Keywords: testing,automation,configuration,utilities
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Testing
+Classifier: License :: Other/Proprietary License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pyyaml>=6.0
+Requires-Dist: pystache>=0.6.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.0; extra == "dev"
+Requires-Dist: black>=22.0; extra == "dev"
+Requires-Dist: flake8>=5.0; extra == "dev"
+Requires-Dist: mypy>=1.0; extra == "dev"
+Provides-Extra: docs
+Requires-Dist: sphinx>=5.0; extra == "docs"
+Requires-Dist: sphinx-rtd-theme>=1.0; extra == "docs"
+Dynamic: author
+Dynamic: home-page
+Dynamic: license-file
+Dynamic: requires-python
