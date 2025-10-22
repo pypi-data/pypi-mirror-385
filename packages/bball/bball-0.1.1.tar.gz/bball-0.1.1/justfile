@@ -1,0 +1,131 @@
+# bball project justfile
+# Use `just --list` to see all available commands
+
+# Default recipe - show available commands
+default:
+    @just --list
+
+# Clean all build artifacts and caches
+clean:
+    @echo "Cleaning build artifacts..."
+    rm -rf dist/ build/ *.egg-info
+    rm -rf src/**/*.egg-info
+    rm -rf packages/*/dist packages/*/build packages/*/*.egg-info
+    find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+    find . -type f -name "*.pyc" -delete 2>/dev/null || true
+    @echo "Clean complete!"
+
+# Build the root bball package
+build-root:
+    @echo "Building root bball package..."
+    uv build
+
+# Build all packages in the workspace
+build-packages:
+    @echo "Building bball-cli..."
+    cd packages/bball-cli && uv build
+    @echo "Building bball-api..."
+    cd packages/bball-api && uv build
+    @echo "Building bball-data..."
+    cd packages/bball-data && uv build
+    @echo "Building bball-strategies..."
+    cd packages/bball-strategies && uv build
+    @echo "Building bball-reports..."
+    cd packages/bball-reports && uv build
+
+# Build everything (root + all packages)
+build: build-root build-packages
+    @echo "All packages built successfully!"
+
+# Publish the root bball package to PyPI
+publish-root: build-root
+    @echo "Publishing root bball package to PyPI..."
+    uv publish
+
+# Publish all packages to PyPI
+publish-packages:
+    @echo "Publishing bball-cli..."
+    cd packages/bball-cli && uv build && uv publish
+    @echo "Publishing bball-api..."
+    cd packages/bball-api && uv build && uv publish
+    @echo "Publishing bball-data..."
+    cd packages/bball-data && uv build && uv publish
+    @echo "Publishing bball-strategies..."
+    cd packages/bball-strategies && uv build && uv publish
+    @echo "Publishing bball-reports..."
+    cd packages/bball-reports && uv build && uv publish
+
+# Publish everything (root + all packages) to PyPI
+publish: publish-root publish-packages
+    @echo "All packages published successfully!"
+
+# Publish to TestPyPI (root package)
+publish-test-root: build-root
+    @echo "Publishing root bball package to TestPyPI..."
+    uv publish --publish-url https://test.pypi.org/legacy/
+
+# Publish all packages to TestPyPI
+publish-test-packages:
+    @echo "Publishing bball-cli to TestPyPI..."
+    cd packages/bball-cli && uv build && uv publish --publish-url https://test.pypi.org/legacy/
+    @echo "Publishing bball-api to TestPyPI..."
+    cd packages/bball-api && uv build && uv publish --publish-url https://test.pypi.org/legacy/
+    @echo "Publishing bball-data to TestPyPI..."
+    cd packages/bball-data && uv build && uv publish --publish-url https://test.pypi.org/legacy/
+    @echo "Publishing bball-strategies to TestPyPI..."
+    cd packages/bball-strategies && uv build && uv publish --publish-url https://test.pypi.org/legacy/
+    @echo "Publishing bball-reports to TestPyPI..."
+    cd packages/bball-reports && uv build && uv publish --publish-url https://test.pypi.org/legacy/
+
+# Publish everything to TestPyPI
+publish-test: publish-test-root publish-test-packages
+    @echo "All packages published to TestPyPI successfully!"
+
+# Run tests for all packages
+test:
+    @echo "Running tests..."
+    uv run pytest
+
+# Run linting with ruff
+lint:
+    @echo "Running ruff linter..."
+    uv run ruff check .
+
+# Run type checking with pyright
+typecheck:
+    @echo "Running pyright type checker..."
+    uv run pyright
+
+# Format code with ruff
+format:
+    @echo "Formatting code with ruff..."
+    uv run ruff format .
+
+# Run all quality checks (lint, typecheck, test)
+check: lint typecheck test
+    @echo "All checks passed!"
+
+# Bump version for all packages (requires VERSION argument)
+bump-version VERSION:
+    @echo "Bumping version to {{VERSION}}..."
+    @echo "Updating root package..."
+    sed -i '' 's/version = "[^"]*"/version = "{{VERSION}}"/' pyproject.toml
+    @echo "Updating bball-cli..."
+    sed -i '' 's/version = "[^"]*"/version = "{{VERSION}}"/' packages/bball-cli/pyproject.toml
+    @echo "Updating bball-api..."
+    sed -i '' 's/version = "[^"]*"/version = "{{VERSION}}"/' packages/bball-api/pyproject.toml
+    @echo "Updating bball-data..."
+    sed -i '' 's/version = "[^"]*"/version = "{{VERSION}}"/' packages/bball-data/pyproject.toml
+    @echo "Updating bball-strategies..."
+    sed -i '' 's/version = "[^"]*"/version = "{{VERSION}}"/' packages/bball-strategies/pyproject.toml
+    @echo "Updating bball-reports..."
+    sed -i '' 's/version = "[^"]*"/version = "{{VERSION}}"/' packages/bball-reports/pyproject.toml
+    @echo "Version bumped to {{VERSION}} for all packages!"
+
+# Full release workflow: check, build, and publish
+release: check clean build publish
+    @echo "Release complete!"
+
+# Full test release workflow: check, build, and publish to TestPyPI
+release-test: check clean build publish-test
+    @echo "Test release complete!"
