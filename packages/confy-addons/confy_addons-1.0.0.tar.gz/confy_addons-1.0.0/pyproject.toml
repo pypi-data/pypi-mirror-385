@@ -1,0 +1,84 @@
+[project]
+name = "confy-addons"
+version = "1.0.0"
+description = "Componentes adicionais de aplicativos clientes Confy"
+authors = [
+    {name = "Henrique Sebastião",email = "contato@henriquesebastiao.com"}
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Telecommunications Industry",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Natural Language :: English",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: MacOS",
+    "Operating System :: Unix",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Communications :: Chat",
+    "Topic :: Security :: Cryptography",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities",
+]
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.9.2,<4.0"
+dependencies = [
+    "cryptography (>=45.0.7,<46.0.0)"
+]
+
+[tool.poetry]
+packages = [{include = "confy_addons"}]
+
+[tool.poetry.urls]
+"Source" = "https://github.com/confy-security/confy-addons"
+"Bug Tracker" = "https://github.com/confy-security/confy-addons/issues"
+"Changelog" = "https://github.com/confy-security/confy-addons/blob/main/CHANGELOG"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.12.12"
+taskipy = "^1.14.1"
+radon = "^6.0.1"
+bandit = "^1.8.6"
+pytest = "^8.4.2"
+pytest-cov = "^7.0.0"
+mypy = "^1.18.2"
+
+[tool.ruff]
+line-length = 99
+
+[tool.ruff.lint]
+preview = true
+select = ['I', 'F', 'E', 'W', 'PL', 'PT', 'D', 'DOC', 'UP', 'PERF']
+
+[tool.ruff.format]
+preview = true
+quote-style = 'single'
+
+[tool.ruff.lint.per-file-ignores]
+'tests/*.py' = ['D100', 'D103']
+'__init__.py' = ['D104', 'F403', 'F401']
+'*.py' = ['D205']
+
+[tool.pytest.ini_options]
+pythonpath = "."
+addopts = '-p no:warnings'
+
+[tool.taskipy.tasks]
+lint = 'poetry run ruff check .; poetry run ruff check . --diff'
+format = 'poetry run ruff format .; poetry run ruff check . --fix'
+mypy = 'poetry run mypy -p confy_addons -p tests'
+radon = 'poetry run radon cc ./confy_addons -a -na'
+bandit = 'poetry run bandit -r ./confy_addons'
+pre_test = 'poetry run ruff check .; poetry run ruff check . --diff; poetry run mypy -p confy_addons -p tests'
+test = 'poetry run pytest -s -x --cov=confy_addons -vv'
+post_test = 'poetry run coverage html'
