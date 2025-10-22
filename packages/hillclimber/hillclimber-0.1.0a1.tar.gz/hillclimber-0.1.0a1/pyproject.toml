@@ -1,0 +1,29 @@
+[project]
+name = "hillclimber"
+version = "0.1.0a1"
+description = "Python interfaces for the plumed library with enhanced sampling."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "ase>=3.25.0",
+    "plumed>=2.9.0",
+    "rdkit2ase>=0.1.13",
+    "zntrack>=0.8.9",
+]
+
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "ipykernel>=6.30.1",
+    "pytest>=8.4.1",
+]
+
+[project.entry-points.'zntrack.nodes']
+hillclimber = 'hillclimber.nodes:nodes'
+
+[project.entry-points.'zntrack.interfaces']
+hillclimber = 'hillclimber.interfaces:interfaces'
