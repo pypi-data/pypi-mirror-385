@@ -1,0 +1,12 @@
+{% for line in warning.splitlines() -%}
+# {{ line }}
+{% endfor %}
+
+"""
+Pre-defined models
+------------------
+"""
+
+from typing import Any
+
+available: dict[str, dict[str, Any]] = {{ models }}
