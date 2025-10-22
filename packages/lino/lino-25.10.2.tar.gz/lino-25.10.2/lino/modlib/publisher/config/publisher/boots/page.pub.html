@@ -1,0 +1,30 @@
+{% extends "bootstrap5/base.html" %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+      {% set homepage, children = obj.home_and_children(ar) %}
+      <a class="navbar-brand" href="{{ar.obj2url(homepage)}}"><span class="pi pi-home"/></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#bs-navbar-collapsible-content" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="bs-navbar-collapsible-content">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              {% for child in children %}
+              <li class="nav-item">
+                  <a class="nav-link" href="{{ar.obj2url(child)}}">{{str(child)}}</a>
+              </li>
+              {% endfor %}
+          </ul>
+      </div>
+   </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="row-fluid ql-editor">
+  {% for chunk in obj.as_page(ar) %}
+    {{ chunk }}
+  {% endfor %}
+</div>
+{% endblock %}
