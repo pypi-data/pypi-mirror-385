@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=69.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "open-compute"
+version = "0.0.7"
+description = "Open Compute - multi-agent systems for healthtech"
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+  { name = "Jori Health", email = "bryan@jori.health" }
+]
+license = { text = "MIT" }
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent"
+]
+dependencies = [
+  "requests>=2.31.0",
+  "firecrawl-py>=1.5.0",
+  "fhir.resources>=7.1.0",
+  "openai>=1.0.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/jori-health/open-compute"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["jori_health*", "open_compute*"]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=7.3.0",
+  "pytest-cov>=4.0.0"
+]
+
+[project.scripts]
+firecrawl-crawl = "open_compute.utils.firecrawl:main"
+fhir-docs-download = "open_compute.utils.fhir_docs_downloader:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+
