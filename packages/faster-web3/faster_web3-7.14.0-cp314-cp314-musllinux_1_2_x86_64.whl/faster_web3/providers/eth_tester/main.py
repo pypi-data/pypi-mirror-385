@@ -1,0 +1,257 @@
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    Dict,
+    Final,
+    Literal,
+    Optional,
+    Union,
+    cast,
+)
+
+from faster_eth_abi import (
+    abi,
+)
+from faster_eth_abi.exceptions import (
+    DecodingError,
+)
+from faster_eth_utils import (
+    is_bytes,
+)
+
+from faster_web3.providers import (
+    BaseProvider,
+)
+from faster_web3.providers.async_base import (
+    AsyncBaseProvider,
+)
+from faster_web3.types import (
+    RPCEndpoint,
+    RPCError,
+    RPCResponse,
+    RPCResponseCoro,
+)
+
+from ...exceptions import (
+    Web3TypeError,
+)
+from ...middleware import (
+    async_combine_middleware,
+    combine_middleware,
+)
+from .middleware import (
+    default_transaction_fields_middleware,
+    ethereum_tester_middleware,
+)
+
+if TYPE_CHECKING:
+    from eth_tester import EthereumTester  # noqa: F401
+    from eth_tester.backends.base import BaseChainBackend  # noqa: F401
+
+    from faster_web3 import (  # noqa: F401
+        AsyncWeb3,
+        Web3,
+    )
+    from faster_web3.middleware.base import (  # noqa: F401
+        MiddlewareOnion,
+    )
+
+
+class AsyncEthereumTesterProvider(AsyncBaseProvider):
+    _middleware: Final = (
+        default_transaction_fields_middleware,
+        ethereum_tester_middleware,
+    )
+
+    def __init__(self) -> None:
+        super().__init__()
+
+        # do not import eth_tester until runtime, it is not a default dependency
+        from eth_tester import (
+            EthereumTester,
+        )
+
+        from faster_web3.providers.eth_tester.defaults import (
+            API_ENDPOINTS,
+        )
+
+        self.ethereum_tester: Final = EthereumTester()
+        self.api_endpoints: Final = API_ENDPOINTS.copy()
+
+        self._current_request_id = 0
+
+    async def request_func(
+        self, async_w3: "AsyncWeb3[Any]", middleware_onion: "MiddlewareOnion"
+    ) -> Callable[..., RPCResponseCoro]:
+        # override the request_func to add the ethereum_tester_middleware
+
+        middleware = middleware_onion.as_tuple_of_middleware() + tuple(self._middleware)
+
+        cache_key, func = self._request_func_cache
+        if cache_key != middleware:
+            func = await async_combine_middleware(
+                middleware=middleware,
+                async_w3=async_w3,
+                provider_request_fn=self.make_request,
+            )
+            self._request_func_cache = middleware, func
+        return cast(Callable[..., RPCResponseCoro], func)
+
+    async def make_request(self, method: RPCEndpoint, params: Any) -> RPCResponse:
+        response = _make_request(
+            method,
+            params,
+            self.api_endpoints,
+            self.ethereum_tester,
+            repr(self._current_request_id),
+        )
+        self._current_request_id += 1
+        return response
+
+    async def is_connected(self, show_traceback: bool = False) -> Literal[True]:
+        return True
+
+
+class EthereumTesterProvider(BaseProvider):
+    _middleware: Final = (
+        default_transaction_fields_middleware,
+        ethereum_tester_middleware,
+    )
+
+    def __init__(
+        self,
+        ethereum_tester: Optional[Union["EthereumTester", "BaseChainBackend"]] = None,
+        api_endpoints: Optional[
+            Dict[str, Dict[str, Callable[..., RPCResponse]]]
+        ] = None,
+    ) -> None:
+        # do not import eth_tester until runtime, it is not a default dependency
+        super().__init__()
+        from eth_tester import EthereumTester  # noqa: F811
+        from eth_tester.backends.base import (
+            BaseChainBackend,
+        )
+
+        def make_tester() -> EthereumTester:
+            if ethereum_tester is None:
+                return EthereumTester()
+            elif isinstance(ethereum_tester, EthereumTester):
+                return ethereum_tester
+            elif isinstance(ethereum_tester, BaseChainBackend):
+                return EthereumTester(ethereum_tester)
+            raise Web3TypeError(
+                "Expected ethereum_tester to be of type `eth_tester.EthereumTester` or "
+                "a subclass of `eth_tester.backends.base.BaseChainBackend`, "
+                f"instead received {type(ethereum_tester)}. "
+                "If you would like a custom eth-tester instance to test with, see the "
+                "eth-tester documentation. https://github.com/ethereum/eth-tester."
+            )
+
+        self.ethereum_tester: Final = make_tester()
+
+        def import_endpoints() -> Dict[str, Dict[str, Callable[..., RPCResponse]]]:
+            # do not import eth_tester derivatives until runtime,
+            # it is not a default dependency
+            from .defaults import (
+                API_ENDPOINTS,
+            )
+
+            return API_ENDPOINTS.copy()
+
+        self.api_endpoints: Final = (
+            import_endpoints() if api_endpoints is None else api_endpoints
+        )
+
+        self._current_request_id = 0
+
+    def request_func(
+        self, w3: "Web3", middleware_onion: "MiddlewareOnion"
+    ) -> Callable[..., RPCResponse]:
+        # override the request_func to add the ethereum_tester_middleware
+
+        middleware = middleware_onion.as_tuple_of_middleware() + tuple(self._middleware)
+
+        cache_key, func = self._request_func_cache
+        if cache_key != middleware:
+            func = combine_middleware(
+                middleware=middleware,
+                w3=w3,
+                provider_request_fn=self.make_request,
+            )
+            self._request_func_cache = middleware, func
+        return func
+
+    def make_request(self, method: RPCEndpoint, params: Any) -> RPCResponse:
+        response = _make_request(
+            method,
+            params,
+            self.api_endpoints,
+            self.ethereum_tester,
+            repr(self._current_request_id),
+        )
+        self._current_request_id += 1
+        return response
+
+    def is_connected(self, show_traceback: bool = False) -> Literal[True]:
+        return True
+
+
+def _make_response(result: Any, response_id: str, message: str = "") -> RPCResponse:
+    if isinstance(result, Exception):
+        return cast(
+            RPCResponse,
+            {
+                "id": response_id,
+                "jsonrpc": "2.0",
+                "error": cast(RPCError, {"code": -32601, "message": message}),
+            },
+        )
+
+    return cast(RPCResponse, {"id": response_id, "jsonrpc": "2.0", "result": result})
+
+
+def _make_request(
+    method: RPCEndpoint,
+    params: Any,
+    api_endpoints: Dict[str, Dict[str, Any]],
+    ethereum_tester_instance: "EthereumTester",
+    request_id: str,
+) -> RPCResponse:
+    # do not import eth_tester derivatives until runtime,
+    # it is not a default dependency
+    from eth_tester.exceptions import (
+        TransactionFailed,
+    )
+
+    namespace, _, endpoint = method.partition("_")
+
+    try:
+        delegator = api_endpoints[namespace][endpoint]
+    except KeyError as e:
+        return _make_response(e, request_id, message=f"Unknown RPC Endpoint: {method}")
+    try:
+        response = delegator(ethereum_tester_instance, params)
+    except NotImplementedError as e:
+        return _make_response(
+            e,
+            request_id,
+            message=f"RPC Endpoint has not been implemented: {method}",
+        )
+    except TransactionFailed as e:
+        first_arg = e.args[0]
+        try:
+            # sometimes eth-tester wraps an exception in another exception
+            raw_error_msg = (
+                first_arg if not isinstance(first_arg, Exception) else first_arg.args[0]
+            )
+            reason = (
+                abi.decode(["string"], raw_error_msg[4:])[0]
+                if is_bytes(raw_error_msg)
+                else raw_error_msg
+            )
+        except DecodingError:
+            reason = first_arg
+        raise TransactionFailed(f"execution reverted: {reason}")
+    else:
+        return _make_response(response, request_id)
