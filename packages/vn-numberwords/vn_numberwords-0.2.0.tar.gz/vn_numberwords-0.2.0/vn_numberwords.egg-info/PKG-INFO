@@ -1,0 +1,93 @@
+Metadata-Version: 2.4
+Name: vn-numberwords
+Version: 0.2.0
+Summary: Convert numbers to Vietnamese words and Vietnamese words to numbers (with North/South variants)
+Author: Nguyen Huu Vuong
+License: MIT
+Project-URL: Homepage, https://github.com/rato-kaz/vn-numberwords
+Project-URL: Repository, https://github.com/rato-kaz/vn-numberwords
+Keywords: vietnamese,number to words,numberwords,currency,locale
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Text Processing :: Linguistic
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Provides-Extra: dev
+Requires-Dist: pytest>=8.0; extra == "dev"
+Requires-Dist: pre-commit>=3.5; extra == "dev"
+Requires-Dist: mypy>=1.10; extra == "dev"
+Requires-Dist: ruff>=0.6; extra == "dev"
+Dynamic: license-file
+
+# vn-numberwords
+
+Convert numbers to Vietnamese words and Vietnamese words to numbers (supports Northern and Southern variants).
+
+## Install (from source)
+
+```bash
+pip install -e .
+```
+
+## Usage
+
+```python
+from vn_numberwords import number_to_words, number_to_currency, words_to_number, currency_words_to_number, SouthDictionary
+
+# Convert numbers to Vietnamese words
+print(number_to_words(1234))                       # "một nghìn hai trăm linh bốn"
+print(number_to_currency(1234, "đồng"))           # "một nghìn hai trăm linh bốn đồng"
+print(number_to_words(21, SouthDictionary()))      # "hai mươi mốt"
+
+# Convert Vietnamese words to numbers
+print(words_to_number("một nghìn hai trăm linh bốn"))  # 1234
+print(words_to_number("mười một"))                     # 11
+print(words_to_number("một trăm ngàn tỷ"))             # 100000000000000
+print(currency_words_to_number("một nghìn đồng"))      # 1000
+```
+
+Parse Vietnamese-formatted strings:
+
+```python
+from vn_numberwords import vietnamese_string_to_words
+
+print(vietnamese_string_to_words("1.234.56"))     # decimal example
+```
+
+## Features
+
+### Number to Words
+- Convert numbers to Vietnamese words
+- Support for Northern and Southern Vietnamese variants
+- Currency formatting
+- Large number support (up to trillions)
+
+### Words to Number
+- Convert Vietnamese words back to numbers
+- Support for both accented and non-accented Vietnamese
+- Handle complex numbers with multiple magnitude keywords
+- Currency parsing
+
+### Supported Number Formats
+- Units: không, một, hai, ba, bốn, năm, sáu, bảy, tám, chín
+- Tens: mười, mươi, chục
+- Hundreds: trăm
+- Thousands: nghìn, ngàn, nghàn
+- Millions: triệu
+- Billions: tỷ, tỉ
+
+## CLI / Demo
+
+Run the demo script:
+
+```bash
+python number2word.py
+```
+
+## License
+
+MIT
+
+
