@@ -1,0 +1,325 @@
+Metadata-Version: 2.4
+Name: vigil-core
+Version: 0.3.7
+Summary: Vigil Core: Cryptographic kernel for reproducible science
+Author: Science Abundance
+License: Apache-2.0
+Keywords: cryptography,pipeline,provenance,receipts,reproducible,science
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Requires-Python: >=3.11
+Requires-Dist: cryptography>=41.0.0
+Requires-Dist: pydantic>=2.0.0
+Requires-Dist: pyyaml>=6.0.0
+Requires-Dist: rich>=14.0.0
+Requires-Dist: snakemake>=8.0.0
+Requires-Dist: typer>=0.19.0
+Provides-Extra: dev
+Requires-Dist: mypy>=1.8.0; extra == 'dev'
+Requires-Dist: pytest>=8.3.0; extra == 'dev'
+Requires-Dist: ruff>=0.1.0; extra == 'dev'
+Provides-Extra: platform
+Requires-Dist: vigil-client; extra == 'platform'
+Description-Content-Type: text/markdown
+
+# Vigil CLI
+
+Observable, collaborative, reproducible science platform.
+
+## ✨ What's New in v0.2.0
+
+**Major update with genomics support, interactive setup, and cloud execution!**
+
+### 🎯 Interactive Project Setup (P3)
+```bash
+vigil new genomics-starter my-project --interactive
+```
+- Smart prompts with email validation
+- Automatic placeholder replacement
+- **97% faster** (30+ min → <1 min)
+
+### 🧬 Genomics Template (P0)
+- Complete variant analysis workflow (filter → annotate → metrics)
+- 40 synthetic variants across 10 cancer genes
+- Ti/Tv ratio, depth stats, quality metrics
+- Parquet format (5-10x compression)
+
+### ☁️ Cloud & HPC Support (P1 + P3)
+- **HPC**: SLURM, PBS, SGE profiles (400+ line guide)
+- **Cloud**: AWS Batch, Google Cloud Life Sciences, Azure Batch, Kubernetes (600+ line guide)
+- Cost optimization: 70-80% savings with spot instances
+
+### 🗄️ Database Integration (P1)
+- Ensembl, ClinVar, gnomAD clients
+- Local caching for offline work
+- Rate limiting and error handling
+
+### 📊 Genomics Metrics Library (P2)
+- Ti/Tv ratio calculation
+- Het/Hom ratio
+- Depth and quality statistics
+- Scientifically validated
+
+### 🔍 Version Management (P0)
+- `vigil doctor` now detects version mismatches
+- Automatic upgrade recommendations
+
+**Upgrade now:** `uv tool upgrade vigil-core` or `pipx upgrade vigil-core`
+
+**Full details:** See [CHANGELOG.md](../../CHANGELOG.md)
+
+---
+
+## Installation
+
+### Core Installation
+
+```bash
+# Install vigil-core (cryptographic kernel)
+pip install vigil-core
+
+# Or install vigil-client (includes vigil-core + platform integration)
+pip install vigil-client
+```
+
+### Package Structure
+
+- **`vigil-core`**: Cryptographic kernel for reproducible science (like `git`)
+  - Local operations: `run`, `promote`, `verify`, `anchor`
+  - Offline-first, deterministic execution
+  - Receipt generation and cryptographic verification
+
+- **`vigil-client`**: Platform bridge and collaboration layer (like `gh`)
+  - Platform integration: `client login`, `client push`, `client pull`
+  - Authentication and synchronization
+  - Artifact management and provenance linking
+
+### Unified CLI
+
+Both packages provide a unified `vigil` command:
+
+```bash
+# Core commands (available with vigil-core)
+vigil run
+vigil promote
+vigil verify
+
+# Platform commands (available with vigil-client)
+vigil client login
+vigil client push
+vigil client pull
+```
+
+## Hybrid Architecture
+
+`vigil-core` provides both a **CLI tool** and an **importable library**:
+
+### CLI Usage (Command Line)
+
+```bash
+# Create a new project
+vigil new imaging-starter my-project
+cd my-project
+
+# Run pipeline
+vigil run --cores 4
+
+# Generate receipt
+vigil promote
+
+# Verify receipt
+vigil verify receipt.json
+```
+
+### Library Usage (Python API)
+
+```python
+from vigil.core import run_pipeline, generate_receipt, ReceiptManager
+
+# Run pipeline programmatically
+result = run_pipeline("python train.py", dry_run=False)
+
+# Generate receipt
+artifacts = [{"uri": "model.pkl", "checksum": "abc123", "kind": "model"}]
+receipt = generate_receipt(artifacts, pipeline_cmd="python train.py")
+
+# Manage receipts
+manager = ReceiptManager()
+manager.save_receipt(receipt)
+```
+
+### Core API Modules
+
+- **`vigil.core.receipts`** - Receipt generation and verification
+- **`vigil.core.pipeline`** - Pipeline execution and management
+- **`vigil.core.signer`** - Cryptographic signing (Ed25519)
+- **`vigil.core.policy`** - Policy enforcement and evaluation
+- **`vigil.core.env`** - Environment capture and analysis
+
+### Entry Points
+
+- **CLI**: `vigil` command (installed globally)
+- **Module**: `python -m vigil` (runs CLI)
+- **Library**: `from vigil.core import ...` (programmatic access)
+
+### MCP Server Installation
+
+To use the MCP server (`vigil mcp serve`), install with the `mcp` extras:
+
+```bash
+# Install with MCP server support
+pip install "vigil-core[mcp]"
+
+# Or with vigil-client
+pip install "vigil-client[mcp]"
+```
+
+The `mcp` extras include:
+- `mcp>=1.1.0` - MCP protocol server
+- `polars>=0.20.0` - Fast data frame library for data previews
+
+## Quick Start
+
+### Local Development (vigil-core)
+
+```bash
+# Create a new project from a template (with interactive setup)
+vigil new genomics-starter my-project --interactive
+cd my-project
+
+# Install dependencies
+uv sync
+
+# Sync workspace spec
+vigil spec --sync
+
+# Preview the pipeline (dry-run)
+vigil dev
+
+# Execute the pipeline
+vigil run --cores 4
+
+# Promote artifacts to receipts
+vigil promote
+
+# Verify receipts
+vigil verify app/code/receipts/*.json
+```
+
+### Platform Integration (vigil-client)
+
+```bash
+# Install vigil-client for platform integration
+pip install vigil-client
+
+# Authenticate with the platform
+vigil client login
+
+# Upload receipts and artifacts
+vigil client push
+
+# Search for artifacts
+vigil client artifacts-search "genomics"
+
+# Download an artifact
+vigil client pull artifact-id
+
+# Create provenance links
+vigil client link artifact-1 artifact-2 --relation INPUT_OF
+```
+
+## Commands
+
+### Core Commands (vigil-core)
+
+#### Project Management
+- `vigil new <template> [path]` - Create a new project from a template
+- `vigil new <template> [path] --interactive` - Interactive setup with smart prompts (NEW in v0.2.0)
+- `vigil new --list` - List available templates (now includes genomics-starter)
+
+#### Development
+- `vigil dev` - Dry-run the pipeline and preview the DAG
+- `vigil build` - Execute the pipeline without promotion
+- `vigil run` - Execute targets and optionally promote
+- `vigil conformance` - Check outputs against golden baselines (project-specific, not all templates include this)
+
+#### Receipt Management
+- `vigil promote` - Generate Vigil receipts from artifacts
+- `vigil anchor` - Create Merkle anchors for receipts
+- `vigil url` - Print the vigil:// URL for the project
+- `vigil verify` - Verify receipt checksums and attestations
+
+#### Health & Maintenance
+- `vigil doctor` - Run repository health checks (includes version mismatch detection)
+- `vigil spec --sync` - Sync workspace.spec.json with vigil.yaml
+- `vigil spec --dry-run` - Preview workspace spec changes
+- `vigil version` - Show installed version (alias for `vigil --version`)
+
+#### Documentation & Collaboration
+- `vigil card init` - Create experiment or dataset cards
+- `vigil card lint` - Validate card format and required fields
+- `vigil notes new` - Create timestamped lab notebook entries
+- `vigil notes index` - Regenerate lab notebook index
+
+#### Workbench & AI
+- `vigil ui bootstrap` - Generate Workbench configuration
+- `vigil mcp serve` - Start the MCP server for assistants
+- `vigil ai propose` - Generate auto-target suggestions
+- `vigil ai apply` - Execute auto-target proposal
+
+### Platform Commands (vigil-client)
+
+#### Authentication
+- `vigil client login` - Authenticate with Vigil platform
+- `vigil client logout` - Log out and clear stored credentials
+- `vigil client whoami` - Show current user information
+
+#### Synchronization
+- `vigil client push` - Upload receipts and artifacts to the platform
+- `vigil client pull` - Download an artifact from the platform
+- `vigil client link` - Create a provenance link between artifacts
+
+#### Artifact Management
+- `vigil client artifacts` - List artifacts in the platform
+- `vigil client artifacts-get <id>` - Get detailed information about a specific artifact
+- `vigil client artifacts-search <query>` - Search for artifacts by name or description
+
+#### Configuration
+- `vigil client config` - Show current configuration
+- `vigil client config-set-project <id>` - Set default project ID
+- `vigil client config-set-remote <url>` - Set remote platform URL
+
+**Version Management**: The `vigil doctor` command now checks for version mismatches between local and global installations, helping prevent issues from outdated CLI versions.
+
+## Templates
+
+Available starter templates:
+
+- **imaging-starter**: Full-featured imaging pipeline with sciencecast timeline
+- **genomics-starter**: Comprehensive genomics workflow with variant filtering, annotation, and QC metrics (includes large file handling strategies)
+- **minimal-starter**: Smallest viable template for getting started
+
+### Genomics Template Features
+
+The `genomics-starter` template demonstrates:
+- Variant quality filtering (PHRED scores, depth, allele frequency)
+- Functional annotation with gene and pathway information
+- Comprehensive QC metrics (Ti/Tv ratio, depth distribution, pathogenicity)
+- Large file handling strategies for NGS data (BAM, VCF, CRAM)
+- Data handles with offline fallbacks for disconnected development
+- Parquet format for efficient variant storage
+
+## Documentation
+
+- [Getting Started](../../docs/getting-started.md)
+- [CLI Reference](../../docs/cli-reference.md)
+- [Creating Custom Templates](../../docs/creating-starters.md)
+
+## License
+
+Apache-2.0
