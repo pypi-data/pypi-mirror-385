@@ -1,0 +1,27 @@
+[project]
+name = "proto-explorer"
+version = "0.3.6"
+description = "A tool to visualize .proto file hierarchies"
+authors = [
+    {name = "Lei Yuan",email = "lee14159@gmail.com"}
+]
+license = "MIT"
+license-files = ["LICENSE"]
+repository = "https://github.com/yuanlott/grpc"
+keywords = ["protobuf", "grpc", "schema", "explorer", "streamlit"]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "protobuf (>=6.31.0,<7.0.0)",
+    "grpcio-tools (>=1.75.0)",
+    "streamlit (>=1.50.0,<2.0.0)",
+    "requests (>=2.0.0)",
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+proto-explorer = "proto_explorer:cli_entry_point"
