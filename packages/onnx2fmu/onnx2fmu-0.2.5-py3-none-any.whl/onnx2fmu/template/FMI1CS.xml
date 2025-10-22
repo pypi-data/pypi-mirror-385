@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fmiModelDescription
+  fmiVersion="1.0"
+  modelName="{{ model_name}}"
+  modelIdentifier="{{ model_name }}"
+  description="{{ model_description }}"
+  generationTool="ONNX2FMU"
+  guid="{{ model_GUID }}"
+  numberOfContinuousStates="0"
+  numberOfEventIndicators="0">
+
+  <DefaultExperiment startTime="0" stopTime="1"/>
+
+  <ModelVariables>
+    <ScalarVariable name="time" valueReference="0" causality="internal" variability="continuous" description="Simulation time">
+      <Real/>
+    </ScalarVariable>
+    <ScalarVariable name="y" valueReference="1" description="Value of the first character in resources/y.txt" causality="output" variability="discrete">
+      <Integer/>
+    </ScalarVariable>
+  </ModelVariables>
+
+  <Implementation>
+    <CoSimulation_StandAlone>
+      <Capabilities canHandleVariableCommunicationStepSize="true" canHandleEvents="true"/>
+    </CoSimulation_StandAlone>
+  </Implementation>
+
+</fmiModelDescription>

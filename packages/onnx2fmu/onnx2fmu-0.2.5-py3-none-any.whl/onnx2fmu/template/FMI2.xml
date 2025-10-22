@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fmiModelDescription
+  fmiVersion="2.0"
+  modelName="{{ name }}"
+  description="{{ description }}"
+  generationTool="ONNX2FMU"
+  guid="{{ GUID }}"
+  numberOfEventIndicators="0"
+  generationDateAndTime="{{ generationDateAndTime }}">
+
+  <CoSimulation
+    modelIdentifier="{{ name }}"
+    canHandleVariableCommunicationStepSize="{{ canHandleVariableCommunicationStepSize|lower }}"
+    canNotUseMemoryManagementFunctions="{{ canNotUseMemoryManagementFunctions|lower }}"
+    canGetAndSetFMUstate="{{ canGetAndSetFMUstate|lower }}"
+    canSerializeFMUstate="{{ canSerializeFMUstate|lower }}">
+    <SourceFiles>
+      <File name="all.c"/>
+    </SourceFiles>
+  </CoSimulation>
+
+  <LogCategories>
+    <Category name="logEvents" description="Log events"/>
+    <Category name="logStatusError" description="Log error messages"/>
+  </LogCategories>
+
+  <DefaultExperiment startTime="{{ startTime }}" stopTime="{{ stopTime }}"/>
+
+  <ModelVariables>
+    <ScalarVariable name="time" valueReference="0" causality="independent" variability="continuous" description="Simulation time">
+      <Real/>
+    </ScalarVariable>
+    {%- for input in inputs %}
+    {%- for scalar in input.scalarValues %}
+    <ScalarVariable name="{{ scalar.name }}" valueReference="{{ scalar.valueReference }}" causality="{{ input.causality }}" variability="{{ input.variability }}" description="{%if scalar.label %}{{ scalar.label }}{% else %}{{ input.description }}{% endif %}">
+      <{{ input.vType.FMIType }} start="{{ scalar.start }}"/>
+    </ScalarVariable>
+    {%- endfor %}
+    {%- endfor %}
+    {%- for output in outputs %}
+    {%- for scalar in output.scalarValues %}
+    <ScalarVariable name="{{ scalar.name }}" valueReference="{{ scalar.valueReference }}" causality="{{ output.causality }}" variability="{{ output.variability }}" description="{%if scalar.label %}{{ scalar.label }}{% else %}{{ output.description }}{% endif %}">
+      <Real />
+    </ScalarVariable>
+    {%- endfor %}
+    {%- endfor %}
+    {%- for local in locals %}
+    {%- for scalar in local.scalarValues %}
+    <ScalarVariable name="{{ scalar.name }}" valueReference="{{ scalar.valueReference }}" causality="{{ local.causality }}" variability="{{ local.variability }}" description="{%if scalar.label %}{{ scalar.label }}{% else %}{{ local.description }}{% endif %}" initial="{{ local.initial }}">
+      <{{ local.vType.FMIType }} start="{{ scalar.start }}"/>
+    </ScalarVariable>
+    {%- endfor %}
+    {%- endfor %}
+  </ModelVariables>
+
+  <ModelStructure>
+    <Outputs>
+    {%- for output in outputs %}
+    {%- for scalar in output.scalarValues %}
+      <Unknown index="{{ scalar.valueReference + 1 }}"/>
+    {%- endfor %}
+    {%- endfor %}
+    </Outputs>
+    <InitialUnknowns>
+    {%- for output in outputs %}
+    {%- for scalar in output.scalarValues %}
+      <Unknown index="{{ scalar.valueReference + 1 }}"/>
+    {%- endfor %}
+    {%- endfor %}
+    </InitialUnknowns>
+  </ModelStructure>
+
+</fmiModelDescription>
