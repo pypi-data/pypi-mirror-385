@@ -1,0 +1,65 @@
+[project]
+name = "apkit"
+dynamic = ["version"]
+description = "Powerful Toolkit for ActivityPub Implementations."
+readme = "README.md"
+authors = [
+    { name = "AmaseCocoa", email = "cocoa@amase.cc" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "aiohttp>=3.12.15",
+    "apmodel>=0.4.1",
+    "apsig>=0.5.4",
+    "charset-normalizer>=3.4.3",
+    "httpcore[http2,socks]>=1.0.9",
+    "httpx>=0.28.1",
+    "requests>=2.32.5",
+    "types-requests>=2.32.4.20250913",
+]
+
+[project.urls]
+Repository = "https://github.com/fedi-libs/apkit"
+Issues = "https://github.com/fedi-libs/apkit/issues"
+Changelog = "https://github.com/fedi-libs/apkit/blob/main/CHANGELOG.md"
+
+[project.optional-dependencies]
+redis = [
+    "redis>=5.0.4",
+]
+server = [
+    "fastapi>=0.116.1",
+    "uvicorn>=0.35.0",
+]
+
+[tool.uv.sources]
+apmodel = { git = "https://github.com/fedi-libs/apmodel.git" }
+apsig = { git = "https://github.com/fedi-libs/apsig.git" }
+
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "vcs"
+fallback-version = "0.0.0"
+
+[tool.hatch.version.raw-options] 
+version_scheme = "no-guess-dev"  
+
+[tool.hatch.build.hooks.vcs]
+version-file = "src/apkit/_version.py"
+
+[tool.ruff]
+# In addition to the standard set of exclusions, omit all tests, plus a specific file.
+extend-exclude = ["tests", "src/apkit/_version.py"]
+
+[dependency-groups]
+dev = [
+    "coverage>=7.10.7",
+    "pytest>=8.4.1",
+]
+docs = [
+    "mkdocs>=1.6.1",
+    "mkdocs-material>=9.6.19",
+]
