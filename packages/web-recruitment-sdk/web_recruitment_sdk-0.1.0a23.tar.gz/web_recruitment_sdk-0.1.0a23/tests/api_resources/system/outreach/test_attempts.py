@@ -1,0 +1,270 @@
+# File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+
+from __future__ import annotations
+
+import os
+from typing import Any, cast
+
+import pytest
+
+from tests.utils import assert_matches_type
+from web_recruitment_sdk import WebRecruitmentSDK, AsyncWebRecruitmentSDK
+from web_recruitment_sdk.types.system.outreach import (
+    AttemptCreateOutreachActionResponse,
+)
+
+base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
+
+
+class TestAttempts:
+    parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_method_create_outreach_action_overload_1(self, client: WebRecruitmentSDK) -> None:
+        attempt = client.system.outreach.attempts.create_outreach_action(
+            path_attempt_id=0,
+            tenant_db_name="tenant_db_name",
+            body_attempt_id=0,
+            status="STARTED",
+            type="PHONE_CALL",
+        )
+        assert_matches_type(AttemptCreateOutreachActionResponse, attempt, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_raw_response_create_outreach_action_overload_1(self, client: WebRecruitmentSDK) -> None:
+        response = client.system.outreach.attempts.with_raw_response.create_outreach_action(
+            path_attempt_id=0,
+            tenant_db_name="tenant_db_name",
+            body_attempt_id=0,
+            status="STARTED",
+            type="PHONE_CALL",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        attempt = response.parse()
+        assert_matches_type(AttemptCreateOutreachActionResponse, attempt, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_streaming_response_create_outreach_action_overload_1(self, client: WebRecruitmentSDK) -> None:
+        with client.system.outreach.attempts.with_streaming_response.create_outreach_action(
+            path_attempt_id=0,
+            tenant_db_name="tenant_db_name",
+            body_attempt_id=0,
+            status="STARTED",
+            type="PHONE_CALL",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            attempt = response.parse()
+            assert_matches_type(AttemptCreateOutreachActionResponse, attempt, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_path_params_create_outreach_action_overload_1(self, client: WebRecruitmentSDK) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `tenant_db_name` but received ''"):
+            client.system.outreach.attempts.with_raw_response.create_outreach_action(
+                path_attempt_id=0,
+                tenant_db_name="",
+                body_attempt_id=0,
+                status="STARTED",
+                type="PHONE_CALL",
+            )
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_method_create_outreach_action_overload_2(self, client: WebRecruitmentSDK) -> None:
+        attempt = client.system.outreach.attempts.create_outreach_action(
+            path_attempt_id=0,
+            tenant_db_name="tenant_db_name",
+            body_attempt_id=0,
+            message="message",
+            status="SENT",
+            type="SMS",
+        )
+        assert_matches_type(AttemptCreateOutreachActionResponse, attempt, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_raw_response_create_outreach_action_overload_2(self, client: WebRecruitmentSDK) -> None:
+        response = client.system.outreach.attempts.with_raw_response.create_outreach_action(
+            path_attempt_id=0,
+            tenant_db_name="tenant_db_name",
+            body_attempt_id=0,
+            message="message",
+            status="SENT",
+            type="SMS",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        attempt = response.parse()
+        assert_matches_type(AttemptCreateOutreachActionResponse, attempt, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_streaming_response_create_outreach_action_overload_2(self, client: WebRecruitmentSDK) -> None:
+        with client.system.outreach.attempts.with_streaming_response.create_outreach_action(
+            path_attempt_id=0,
+            tenant_db_name="tenant_db_name",
+            body_attempt_id=0,
+            message="message",
+            status="SENT",
+            type="SMS",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            attempt = response.parse()
+            assert_matches_type(AttemptCreateOutreachActionResponse, attempt, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_path_params_create_outreach_action_overload_2(self, client: WebRecruitmentSDK) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `tenant_db_name` but received ''"):
+            client.system.outreach.attempts.with_raw_response.create_outreach_action(
+                path_attempt_id=0,
+                tenant_db_name="",
+                body_attempt_id=0,
+                message="message",
+                status="SENT",
+                type="SMS",
+            )
+
+
+class TestAsyncAttempts:
+    parametrize = pytest.mark.parametrize(
+        "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
+    )
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_method_create_outreach_action_overload_1(self, async_client: AsyncWebRecruitmentSDK) -> None:
+        attempt = await async_client.system.outreach.attempts.create_outreach_action(
+            path_attempt_id=0,
+            tenant_db_name="tenant_db_name",
+            body_attempt_id=0,
+            status="STARTED",
+            type="PHONE_CALL",
+        )
+        assert_matches_type(AttemptCreateOutreachActionResponse, attempt, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_raw_response_create_outreach_action_overload_1(self, async_client: AsyncWebRecruitmentSDK) -> None:
+        response = await async_client.system.outreach.attempts.with_raw_response.create_outreach_action(
+            path_attempt_id=0,
+            tenant_db_name="tenant_db_name",
+            body_attempt_id=0,
+            status="STARTED",
+            type="PHONE_CALL",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        attempt = await response.parse()
+        assert_matches_type(AttemptCreateOutreachActionResponse, attempt, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_streaming_response_create_outreach_action_overload_1(
+        self, async_client: AsyncWebRecruitmentSDK
+    ) -> None:
+        async with async_client.system.outreach.attempts.with_streaming_response.create_outreach_action(
+            path_attempt_id=0,
+            tenant_db_name="tenant_db_name",
+            body_attempt_id=0,
+            status="STARTED",
+            type="PHONE_CALL",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            attempt = await response.parse()
+            assert_matches_type(AttemptCreateOutreachActionResponse, attempt, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_path_params_create_outreach_action_overload_1(self, async_client: AsyncWebRecruitmentSDK) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `tenant_db_name` but received ''"):
+            await async_client.system.outreach.attempts.with_raw_response.create_outreach_action(
+                path_attempt_id=0,
+                tenant_db_name="",
+                body_attempt_id=0,
+                status="STARTED",
+                type="PHONE_CALL",
+            )
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_method_create_outreach_action_overload_2(self, async_client: AsyncWebRecruitmentSDK) -> None:
+        attempt = await async_client.system.outreach.attempts.create_outreach_action(
+            path_attempt_id=0,
+            tenant_db_name="tenant_db_name",
+            body_attempt_id=0,
+            message="message",
+            status="SENT",
+            type="SMS",
+        )
+        assert_matches_type(AttemptCreateOutreachActionResponse, attempt, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_raw_response_create_outreach_action_overload_2(self, async_client: AsyncWebRecruitmentSDK) -> None:
+        response = await async_client.system.outreach.attempts.with_raw_response.create_outreach_action(
+            path_attempt_id=0,
+            tenant_db_name="tenant_db_name",
+            body_attempt_id=0,
+            message="message",
+            status="SENT",
+            type="SMS",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        attempt = await response.parse()
+        assert_matches_type(AttemptCreateOutreachActionResponse, attempt, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_streaming_response_create_outreach_action_overload_2(
+        self, async_client: AsyncWebRecruitmentSDK
+    ) -> None:
+        async with async_client.system.outreach.attempts.with_streaming_response.create_outreach_action(
+            path_attempt_id=0,
+            tenant_db_name="tenant_db_name",
+            body_attempt_id=0,
+            message="message",
+            status="SENT",
+            type="SMS",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            attempt = await response.parse()
+            assert_matches_type(AttemptCreateOutreachActionResponse, attempt, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_path_params_create_outreach_action_overload_2(self, async_client: AsyncWebRecruitmentSDK) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `tenant_db_name` but received ''"):
+            await async_client.system.outreach.attempts.with_raw_response.create_outreach_action(
+                path_attempt_id=0,
+                tenant_db_name="",
+                body_attempt_id=0,
+                message="message",
+                status="SENT",
+                type="SMS",
+            )
