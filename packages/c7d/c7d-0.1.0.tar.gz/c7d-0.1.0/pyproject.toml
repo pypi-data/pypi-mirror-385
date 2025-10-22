@@ -1,0 +1,45 @@
+[build-system]
+requires = ["uv_build>=0.9.4,<0.10.0"]
+build-backend = "uv_build"
+
+[project]
+name = "c7d"
+version = "0.1.0"
+description = "Tiny Cisco Type 7 (c7) encoder/decoder with a CLI."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [ { name = "Emil Bisgaard Commerou" } ]
+keywords = ["cisco", "type7", "password", "decoder", "encoder", "security", "networking"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Intended Audience :: System Administrators",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Security :: Cryptography",
+  "Topic :: Utilities",
+]
+
+[project.urls]
+Homepage = "https://example.com/c7d"  # Update before publishing
+Repository = "https://example.com/c7d" # Update before publishing
+
+# CLI entry point (console script) – this is the script destination name
+[project.scripts]
+c7d = "c7d.cli:main"
+
+[tool.hatch.build.targets.wheel]
+# src-layout discovery for hatchling
+packages = ["src/c7d"]
+
+[dependency-groups]
+# Local-only development dependencies (uv understands dependency groups)
+dev = ["pytest>=7"]

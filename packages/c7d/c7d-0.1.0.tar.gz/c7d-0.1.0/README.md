@@ -1,0 +1,58 @@
+
+# c7d
+
+> Tiny Cisco Type 7 (c7) encoder/decoder with a CLI.
+
+⚠️ **Security warning:** Cisco *Type 7* is a simple XOR **obfuscation**, *not* cryptography.Do not rely on it to protect secrets.
+
+## Installation
+
+```bash
+pip install c7d
+```
+
+## Usage
+
+### CLI
+
+```bash
+# Decrypt a Type 7 string
+c7d decrypt 060506324F41
+# => cisco
+
+# Encrypt plaintext (seed defaults to 00)
+c7d encrypt cisco --seed 6
+# => 060506324F41
+```
+
+#### Run without installation
+
+```bash
+uvx c7d --help
+```
+
+### Library
+
+```python
+from c7d import encrypt, decrypt
+
+cipher = encrypt("cisco", seed=6)  # '060506324F41'
+plain  = decrypt(cipher)            # 'cisco'
+```
+
+## API
+
+- `c7d.encrypt(plain: str, seed: int = 0) -> str`
+- `c7d.decrypt(x: str) -> str`
+
+## Rationale
+
+This implements the well-known Cisco Type 7 algorithm using the 53-character key string
+`dsfd;kfoA,.iyewrkldJKDHSUBsgvca69834ncxv9873254k;fg87`. The algorithm XORs each
+plaintext byte with a position-dependent character from this key, starting at an index
+based on a two-digit decimal seed (00–99). The output is the seed followed by uppercase
+hex bytes.
+
+## License
+
+MIT
