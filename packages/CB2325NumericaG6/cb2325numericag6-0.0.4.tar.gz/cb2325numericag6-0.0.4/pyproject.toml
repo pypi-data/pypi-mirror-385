@@ -1,0 +1,33 @@
+[build-system]
+requires = [
+    "pdm-backend>=2.4.0",
+]
+build-backend = "pdm.backend"
+
+[project]
+name = "CB2325NumericaG6"
+version = "0.0.4"
+description = "Alpha version of NumericaG6"
+requires-python = ">=3.9"
+authors = [
+    { name = "Mateus Almeida Oliveira", email = "al.mateus.oliveira@impatech.edu.br" },
+]
+dependencies = [
+    "matplotlib",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+readme = "README.md"
+
+[project.license]
+text = "MIT"
+
+[dependency-groups]
+dev = [
+    "twine>=1.12.1",
+]
+
+[tool.pdm]
+package-dir = "."
