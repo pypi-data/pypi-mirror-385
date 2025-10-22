@@ -1,0 +1,56 @@
+[build-system]
+requires = ["maturin>=1.8,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "photoncube"
+description = "Utilities to process and preview single photon data."
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent"
+]
+dynamic = ["version"]
+dependencies = [
+    "typing_extensions",
+    "numpy"
+]
+
+[tool.maturin]
+features = ["pyo3/extension-module"]
+
+[tool.ruff]
+line-length = 121
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "black",
+    "imageio",
+    "natsort>=8.4.0",
+    "pytest-benchmark>=4.0.0",
+]
+
+[project.urls]
+"GitHub" = "https://github.com/WISION-Lab/photoncube"
+
+[project.scripts]
+photoncube = "photoncube:cli_entrypoint"
+pcube = "photoncube:cli_entrypoint"
+
+[tool.uv]
+# Rebuild package when any rust files change
+cache-keys = [{file = "pyproject.toml"}, {file = "rust/Cargo.toml"}, {file = "**/*.rs"}]
+# Uncomment to build rust code in development mode
+# config-settings = { build-args = '--profile=dev' }
