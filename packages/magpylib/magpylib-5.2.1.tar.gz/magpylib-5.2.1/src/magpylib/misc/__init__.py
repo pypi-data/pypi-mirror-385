@@ -1,0 +1,7 @@
+"""Miscellaneous source objects."""
+
+__all__ = ["CustomSource", "Dipole", "Triangle"]
+
+from magpylib._src.obj_classes.class_misc_CustomSource import CustomSource
+from magpylib._src.obj_classes.class_misc_Dipole import Dipole
+from magpylib._src.obj_classes.class_misc_Triangle import Triangle

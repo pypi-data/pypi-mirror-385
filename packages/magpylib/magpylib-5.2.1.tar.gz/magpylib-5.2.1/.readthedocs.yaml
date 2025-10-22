@@ -1,0 +1,20 @@
+version: 2
+
+build:
+  os: ubuntu-22.04
+  tools:
+    python: "3.12"
+  apt_packages:
+    - libgl1-mesa-dev # pyvista/VTK needs OpenGL libs
+  jobs:
+    pre_install:
+      - python -m pip install -U uv
+      - uv pip install -e . # install magpylib first (breaks MMR→magpylib cycle)
+      - uv pip install --group docs # then your docs deps
+    pre_build:
+      # optional: only if you include docs/_autogen/* in your toctrees
+      - sphinx-apidoc -f -T -e -E -M -o docs/_autogen src/magpylib
+        # append "src/magpylib/magnet/__init__.py" here if you hit duplicate package-page warnings
+
+sphinx:
+  configuration: docs/conf.py
