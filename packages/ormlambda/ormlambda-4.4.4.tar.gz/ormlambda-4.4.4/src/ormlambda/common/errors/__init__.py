@@ -1,0 +1,102 @@
+from __future__ import annotations
+import inspect
+import typing as tp
+
+from ormlambda import util
+
+if tp.TYPE_CHECKING:
+    from ormlambda.sql.clause_info import ClauseInfo
+    from ormlambda.sql import Column
+
+
+class UnmatchedLambdaParameterError(Exception):
+    def __init__(self, expected_params: int, function: tp.Callable[..., tp.Any], *args: object) -> None:
+        super().__init__(*args)
+        self.expected_params = expected_params
+        self.found_param: tuple[str, ...] = tuple(inspect.signature(function).parameters)
+
+    def __str__(self) -> str:
+        return f"Unmatched number of parameters in lambda function with the number of tables: Expected {self.expected_params} parameters but found {str(self.found_param)}."
+
+
+class NotKeysInIFunctionError(Exception):
+    def __init__(self, match_regex: list[str], *args: object) -> None:
+        super().__init__(*args)
+        self._match_regex: list[str] = match_regex
+
+    def __str__(self) -> str:
+        return f"We cannot use placeholders in IFunction class. You used {self._match_regex}"
+
+
+class FunctionFunctionError[T](Exception):
+    def __init__(self, clause: ClauseInfo[T], *args):
+        self.clause = clause
+        super().__init__(*args)
+
+    def __str__(self):
+        agg_methods = self.__get_all_aggregate_method(self.clause)
+        return f"You cannot use aggregation method like '{agg_methods}' to return model objects. Try specifying 'flavour' attribute as 'dict'."
+
+    @util.preload_module("ormlambda.sql.functions")
+    def __get_all_aggregate_method(self, clauses: list[ClauseInfo]) -> str:
+        """
+        Get the class name of those classes that inherit from 'IFunction' class in order to create a better error message.
+        """
+
+        IFunction = util.preloaded.sql_functions.IFunction
+        res: set[str] = set()
+        if not isinstance(clauses, tp.Iterable):
+            return clauses.__class__.__name__
+        for clause in clauses:
+            if isinstance(clause, IFunction):
+                res.add(clause.__class__.__name__)
+        return ", ".join(res)
+
+
+class NotCallableError(ValueError):
+    def __init__(self, *args):
+        super().__init__(*args)
+
+    def __str__(self) -> str:
+        return f"You must provide a function or callable to proceed with the query creation. Passed '{self.args[0].__class__.__name__}' "
+
+
+class CompileError(Exception):
+    """Exception raised for errors in the compilation process."""
+
+    def __init__(self, message):
+        super().__init__(message)
+        self.message = message
+
+    def __str__(self):
+        return f"CompileError: {self.message}"
+
+
+class NoSuchModuleError(Exception):
+    """Raised when a dynamically-loaded module (usually a database dialect)
+    of a particular name cannot be located."""
+
+    def __str__(self):
+        return f"NoSuchModuleError: {self.args[0]}"
+
+
+class DuplicatedClauseNameError(Exception):
+    def __init__(self, names: tuple[str], **kw):
+        self.names = names
+        super().__init__(**kw)
+
+    def __str__(self):
+        return f"Some clauses has the same alias. {self.names}\nTry wrapping the clause with the 'Alias' class first or setting 'avoid_duplicates' param as 'True'"
+
+
+class ColumnError(ValueError):
+    def __init__(self, column: Column, *args):
+        super().__init__(*args)
+        self.column = column
+        self.clause: str = ""
+
+    def set_clause(self, value: str) -> None:
+        self.clause = value
+
+    def __str__(self):
+        return f"The column '{self.column.column_name}' does not exist. Check the name you used inside of '{self.clause}' clause."
